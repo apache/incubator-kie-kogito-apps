@@ -49,7 +49,7 @@ describe('FormsListChannelApiImpl tests', () => {
     const formsData: FormInfo = {
       name: 'form1',
       type: 'tsx',
-      lastModified: new Date(2020, 6, 2)
+      lastModified: new Date(new Date('2020-07-11T18:30:00.000Z'))
     };
     api.formsList__openForm(formsData);
     expect(driver.openForm).toHaveBeenCalledWith(formsData);

@@ -34,18 +34,19 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
 }) => {
   const getFormLanguage = (): Language => {
     if (isSource && formType) {
-      switch (formType) {
+      switch (formType.toLowerCase()) {
         case 'tsx':
           return Language.typescript;
         case 'html':
           return Language.html;
       }
+      /* istanbul ignore else */
     } else if (isConfig) {
       return Language.json;
     }
   };
 
-  const editorDidMount = (editor, monaco) => {
+  const editorDidMount = (editor, monaco): void => {
     setTimeout(() => {
       editor.trigger('anyString', 'editor.action.formatDocument');
     }, 500);

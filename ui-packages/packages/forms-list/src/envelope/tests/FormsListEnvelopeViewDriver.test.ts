@@ -60,7 +60,7 @@ describe('FormsListEnvelopeViewDriver tests', () => {
       const formData: FormInfo = {
         name: 'form1',
         type: 'html',
-        lastModified: new Date(2020, 6, 12)
+        lastModified: new Date(new Date('2020-07-11T18:30:00.000Z'))
       };
       driver.openForm(formData);
       expect(requests.formsList__openForm).toHaveBeenCalledWith(formData);

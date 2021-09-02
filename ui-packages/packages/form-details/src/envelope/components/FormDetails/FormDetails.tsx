@@ -32,7 +32,7 @@ import {
 import FormView from '../FormView/FormView';
 import { ServerErrors } from '@kogito-apps/components-common';
 import _ from 'lodash';
-import { Form } from 'packages/form-details/src/api';
+import { Form } from '../../../api';
 import FormDisplayerContainer from '../../containers/FormDisplayerContainer/FormDisplayerContainer';
 
 export interface FormDetailsProps {
@@ -52,24 +52,24 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
   const [formContent, setFormContent] = useState<Form>(null);
   const [error, setError] = useState<any>(null);
   useEffect(() => {
+    /* istanbul ignore else */
     if (isEnvelopeConnectedToChannel) {
       init();
     }
   }, [isEnvelopeConnectedToChannel]);
 
-  const init = async () => {
+  const init = async (): Promise<void> => {
     try {
+      /* istanbul ignore else */
       if (formData) {
         const response = await driver.getFormContent(formData.name);
-        console.log('formdata', response);
         setFormContent(response);
       }
     } catch (error) {
       setError(error);
     }
   };
-  console.log('formContent', formContent);
-  const panelContent = (
+  const panelContent: JSX.Element = (
     <DrawerPanelContent isResizable defaultSize={'800px'} minSize={'700px'}>
       <DrawerHead>
         <span>
@@ -79,19 +79,26 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
     </DrawerPanelContent>
   );
 
-  const onTabSelect = (event, tabIndex) => {
+  const onTabSelect = (event, tabIndex: number): void => {
     setActiveTab(tabIndex);
   };
 
-  const getSource = () => {
+  const getSource = (): string => {
+    /* istanbul ignore else */
     if (!_.isEmpty(formContent)) {
-      return formContent['source']['sourceContent'];
+      return formContent.source['source-content'];
     }
   };
-
-  const getConfig = () => {
+  const getType = (): string => {
+    /* istanbul ignore else */
+    if (!_.isEmpty(formData)) {
+      return formData.type;
+    }
+  };
+  const getConfig = (): string => {
+    /* istanbul ignore else */
     if (!_.isEmpty(formContent)) {
-      return JSON.stringify(formContent['formConfiguration']['resources']);
+      return JSON.stringify(formContent.formConfiguration.resources);
     }
   };
 
@@ -104,25 +111,31 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
       <Drawer isStatic>
         <DrawerContent panelContent={panelContent}>
           <Tabs isFilled activeKey={activeTab} onSelect={onTabSelect}>
-            <Tab eventKey={0} title={<TabTitleText>Source</TabTitleText>}>
+            <Tab
+              eventKey={0}
+              title={<TabTitleText>Source</TabTitleText>}
+              id="source-tab"
+              aria-labelledby="source-tab"
+            >
               <DrawerContentBody
                 style={{
                   background: 'var(--pf-c-page__main-section--BackgroundColor)'
                 }}
               >
                 {activeTab === 0 && (
-                  <FormView
-                    code={getSource()}
-                    isSource
-                    formType={formData && formData.type}
-                  />
+                  <FormView code={getSource()} isSource formType={getType()} />
                 )}
                 <Button variant="primary" className="pf-u-mt-md">
                   Refresh
                 </Button>
               </DrawerContentBody>
             </Tab>
-            <Tab eventKey={1} title={<TabTitleText>Connections</TabTitleText>}>
+            <Tab
+              eventKey={1}
+              title={<TabTitleText>Connections</TabTitleText>}
+              id="config-tab"
+              aria-labelledby="config-tab"
+            >
               <DrawerContentBody
                 style={{
                   background: 'var(--pf-c-page__main-section--BackgroundColor)'

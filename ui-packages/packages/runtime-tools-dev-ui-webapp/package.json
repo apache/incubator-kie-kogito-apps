@@ -88,7 +88,8 @@
       "**/tests/*.(ts|tsx)"
     ],
     "moduleNameMapper": {
-      "\\.(scss|sass|css)$": "identity-obj-proxy"
+      "\\.(scss|sass|css)$": "identity-obj-proxy",
+      "monaco-editor":"<rootDir>/__mocks__/monacoMock.js"
     }
   },
   "lint-staged": {

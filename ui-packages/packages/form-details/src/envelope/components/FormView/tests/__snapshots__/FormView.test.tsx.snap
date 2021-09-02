@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormView test render config 1`] = `
+<FormView
+  code="{\\"1\\":\\"1\\",\\"2\\":\\"2\\"}"
+  isConfig={true}
+  isSource={false}
+>
+  <div
+    data-ouia-component-type="form-view"
+    data-ouia-safe={true}
+  >
+    <CodeEditor
+      code="{\\"1\\":\\"1\\",\\"2\\":\\"2\\"}"
+      height="800px"
+      isCopyEnabled={true}
+      isDarkTheme={false}
+      isLanguageLabelVisible={true}
+      isLineNumbersVisible={true}
+      isMinimapVisible={false}
+      isReadOnly={false}
+      language="json"
+      onEditorDidMount={[Function]}
+    >
+      <MockedComponent />
+    </CodeEditor>
+  </div>
+</FormView>
+`;
+
+exports[`FormView test render source - html 1`] = `
+<FormView
+  code="<div><span>1</span></div>"
+  formType="html"
+  isConfig={false}
+  isSource={true}
+>
+  <div
+    data-ouia-component-type="form-view"
+    data-ouia-safe={true}
+  >
+    <CodeEditor
+      code="<div><span>1</span></div>"
+      height="800px"
+      isCopyEnabled={true}
+      isDarkTheme={false}
+      isLanguageLabelVisible={true}
+      isLineNumbersVisible={true}
+      isMinimapVisible={false}
+      isReadOnly={false}
+      language="html"
+      onEditorDidMount={[Function]}
+    >
+      <MockedComponent />
+    </CodeEditor>
+  </div>
+</FormView>
+`;
+
+exports[`FormView test render source - tsx 1`] = `
+<FormView
+  code="<React.FC><div><span>1</span></div></React.FC>"
+  formType="tsx"
+  isConfig={false}
+  isSource={true}
+>
+  <div
+    data-ouia-component-type="form-view"
+    data-ouia-safe={true}
+  >
+    <CodeEditor
+      code="<React.FC><div><span>1</span></div></React.FC>"
+      height="800px"
+      isCopyEnabled={true}
+      isDarkTheme={false}
+      isLanguageLabelVisible={true}
+      isLineNumbersVisible={true}
+      isMinimapVisible={false}
+      isReadOnly={false}
+      language="typescript"
+      onEditorDidMount={[Function]}
+    >
+      <MockedComponent />
+    </CodeEditor>
+  </div>
+</FormView>
+`;

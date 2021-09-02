@@ -5,7 +5,6 @@ const _ = require('lodash');
 const confirmTravelForm = require('./forms/ConfirmTravel');
 const applyForVisaForm = require('./forms/ApplyForVisa');
 const emptyForm = require('./forms/EmptyForm');
-const formData = require('../MockData/forms/formData');
 const formContentData =require('../MockData/forms/FormContent');
 const tasksUnableToTransition = [
   '047ec38d-5d57-4330-8c8d-9bd67b53a529',
@@ -284,30 +283,10 @@ module.exports = controller = {
     res.send(JSON.stringify(getTaskSchema(req.params.taskName, true)));
   },
 
-  getForms:(req,res)=>{
-    if(req.body.length===0){
-      res.send(formData)
-    }else{
-      const filteredForms=[];
-      req.body.forEach((name)=>{
-        formData.forEach((form)=>{
-          if(form.name===name){
-            filteredForms.push(form);
-          }
-        });
-      });
-      res.send(filteredForms)
-    }
-  },
-
   getFormContent:(req,res)=>{
-    const formName = req.params.formName;
-    const formContent = formContentData.filter((content)=>content.name===formName);
-    if(formContent){
-      res.send(formContent[0]);
+      res.send(formContentData[0]);
     }
-  }
-};
+  };
 
 
 function getTaskSchema(taskName, clearPhases) {
