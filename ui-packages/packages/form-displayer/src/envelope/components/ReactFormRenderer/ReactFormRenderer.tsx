@@ -55,8 +55,27 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
 
       container.appendChild(formContainer);
 
+      const reactReg = /import React, {[^}]*}.*(?='react').*/gim;
+      const patternflyReg = /import {[^}]*}.*(?='@patternfly\/react-core').*/gim;
+      const regexvalueReact = new RegExp(reactReg);
+      const reactImport = regexvalueReact.exec(source);
+      const reg = /\{([^)]+)\}/;
+      const reactElements = reg.exec(reactImport[0])[1];
+      console.log('react', reactElements);
+      const regexvaluePat = new RegExp(patternflyReg);
+      const patternflyImport = regexvaluePat.exec(source);
+      const patternflyElements = reg.exec(patternflyImport[0])[1];
+      console.log('pat', patternflyElements);
+      const trimmedSource = source
+        .split(reactReg)
+        .join('')
+        .trim()
+        .split(patternflyReg)
+        .join('')
+        .trim();
+      console.log('final', trimmedSource);
       try {
-        const react = Babel.transform(source, {
+        const react = Babel.transform(trimmedSource, {
           presets: [
             'react',
             [
@@ -81,8 +100,8 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
         scriptElement.type = 'module';
 
         const content = `
-        const { useState } = React;
-        const { Form, Checkbox, Card, CardBody, FormGroup, TextInput } = PatternFlyReact;
+        const {${reactElements}} = React;
+        const {${patternflyElements}} = PatternFlyReact;
        
         
         ${compiledReact}
@@ -90,6 +109,7 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
         const element = window.React.createElement(${formName}, {});
         window.ReactDOM.render(element, target);
         `;
+        console.log('cone', content);
         scriptElement.text = content;
 
         container.appendChild(scriptElement);
