@@ -21,22 +21,26 @@ import {
   ActionGroup,
   Button,
   Form,
-  FormGroup,
-  TextArea,
-  TextInput,
   Grid,
   GridItem
 } from '@patternfly/react-core';
 import * as Babel from '@babel/standalone';
 import ReactDOM from 'react-dom';
 import * as Patternfly from '@patternfly/react-core';
+import { FormArgs } from '../../../api';
 
-const ReactFormRenderer: React.FC<any> = props => {
+interface ReactFormRendererProps {
+  content: FormArgs;
+}
+
+const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
+  // @ts-ignore
   const [formName, setFormName] = useState<string>();
-  const [source, setSource] = useState<string>();
+  // const [source, setSource] = useState<string>();
 
   const renderform = () => {
-    if (source) {
+    if (content && content.source) {
+      const source = content.source['source-content'];
       window.React = React;
       window.ReactDOM = ReactDOM;
 
@@ -77,7 +81,7 @@ const ReactFormRenderer: React.FC<any> = props => {
         scriptElement.type = 'module';
 
         const content = `
-         const { useState } = React;
+        const { useState } = React;
         const { Form, Checkbox, Card, CardBody, FormGroup, TextInput } = PatternFlyReact;
        
         
@@ -99,7 +103,7 @@ const ReactFormRenderer: React.FC<any> = props => {
     <Grid hasGutter>
       <GridItem span={6}>
         <Form>
-          <FormGroup fieldId={'formName'} label={'Form Name'}>
+          {/* <FormGroup fieldId={'formName'} label={'Form Name'}>
             <TextInput onChange={setFormName} value={formName} />
           </FormGroup>
           <FormGroup fieldId={'source'} label={'Source Code'}>
@@ -112,7 +116,7 @@ const ReactFormRenderer: React.FC<any> = props => {
             >
               {source}
             </TextArea>
-          </FormGroup>
+          </FormGroup> */}
           <ActionGroup>
             <Button variant="primary" onClick={renderform}>
               Render Form

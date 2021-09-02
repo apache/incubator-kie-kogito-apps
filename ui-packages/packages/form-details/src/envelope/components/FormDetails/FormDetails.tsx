@@ -72,9 +72,11 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
   const panelContent: JSX.Element = (
     <DrawerPanelContent isResizable defaultSize={'800px'} minSize={'700px'}>
       <DrawerHead>
-        <span>
-          <FormDisplayerContainer formContent={formContent} />
-        </span>
+        {formContent && Object.keys(formContent)[0].length > 0 && (
+          <span>
+            <FormDisplayerContainer formContent={formContent} />
+          </span>
+        )}
       </DrawerHead>
     </DrawerPanelContent>
   );

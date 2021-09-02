@@ -27,5 +27,26 @@ export interface Association {
 }
 
 export interface FormDisplayerInitArgs {
-  formContent: any;
+  formContent: FormArgs;
+}
+
+interface FormResources {
+  scripts: {
+    [key: string]: string;
+  };
+  styles: {
+    [key: string]: string;
+  };
+}
+interface FormConfiguration {
+  schema: string;
+  resources: FormResources;
+}
+
+export interface FormArgs {
+  source: {
+    'source-content': string;
+  };
+  name: string;
+  formConfiguration: FormConfiguration;
 }

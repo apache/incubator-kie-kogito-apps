@@ -42,6 +42,6 @@ export class FormDisplayerEnvelopeApiImpl implements FormDisplayerEnvelopeApi {
       association.origin,
       association.envelopeServerId
     );
-    this.args.view().setTask(initArgs.formContent);
+    this.args.view().setFormContent(initArgs.formContent);
   }
 }

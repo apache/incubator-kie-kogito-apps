@@ -18,7 +18,8 @@ import React, { useCallback, useMemo } from 'react';
 import {
   FormDisplayerApi,
   FormDisplayerChannelApi,
-  FormDisplayerEnvelopeApi
+  FormDisplayerEnvelopeApi,
+  FormArgs
 } from '../api';
 import { ContainerType } from '@kogito-tooling/envelope/dist/api';
 import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
@@ -28,7 +29,7 @@ import { init } from '../envelope';
 
 export type Props = {
   targetOrigin: string;
-  formContent: any;
+  formContent: FormArgs;
 };
 
 export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
@@ -70,7 +71,7 @@ export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
       },
       [props.formContent]
     );
-
+    console.log('content-displayer', props.formContent);
     const refDelegate = useCallback(
       (
         envelopeServer: EnvelopeServer<
