@@ -97,6 +97,21 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
     }
 
     @Test
+    void testProcessInstanceVariablesUpdate() {
+        String processId = "travels";
+        String variablesUpdated = "variablesUpdated";
+        String processInstanceId = UUID.randomUUID().toString();
+
+        KogitoProcessCloudEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
+        indexProcessCloudEvent(startEvent);
+
+        checkOkResponse("{ \"query\" : \"mutation{ ProcessInstanceVariablesUpdate ( id: \\\"" + processInstanceId + "\\\", variables: \\\"" + variablesUpdated + "\\\")}\"}");
+
+        verify(dataIndexApiClient).updateProcessInstanceVariables(eq("http://localhost:8080"),
+                eq(getProcessInstance(processId, processInstanceId, 1, null, null)), eq(variablesUpdated));
+    }
+
+    @Test
     void testProcessInstanceNodeDefinitions() {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
@@ -119,6 +134,48 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
 
         verify(dataIndexApiClient).getProcessInstanceDiagram(eq("http://localhost:8080"),
                 eq(getProcessInstance(processId, processInstanceId, 1, null, null)));
+    }
+
+    @Test
+    void testTriggerNodeInstance() {
+        String processId = "travels";
+        String nodeId = "nodeIdToTrigger";
+        String processInstanceId = UUID.randomUUID().toString();
+        KogitoProcessCloudEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
+        indexProcessCloudEvent(startEvent);
+
+        checkOkResponse("{ \"query\" : \"mutation{ TriggerNodeInstance ( id: \\\"" + processInstanceId + "\\\", nodeId: \\\"" + nodeId + "\\\")}\"}");
+
+        verify(dataIndexApiClient).triggerNodeInstance(eq("http://localhost:8080"),
+                eq(getProcessInstance(processId, processInstanceId, 1, null, null)), eq(nodeId));
+    }
+
+    @Test
+    void testRetriggerNodeInstance() {
+        String processId = "travels";
+        String nodeInstanceId = "nodeInstanceIdToRetrigger";
+        String processInstanceId = UUID.randomUUID().toString();
+        KogitoProcessCloudEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
+        indexProcessCloudEvent(startEvent);
+
+        checkOkResponse("{ \"query\" : \"mutation{ RetriggerNodeInstance ( id: \\\"" + processInstanceId + "\\\", nodeInstanceId: \\\"" + nodeInstanceId + "\\\")}\"}");
+
+        verify(dataIndexApiClient).retriggerNodeInstance(eq("http://localhost:8080"),
+                eq(getProcessInstance(processId, processInstanceId, 1, null, null)), eq(nodeInstanceId));
+    }
+
+    @Test
+    void testCancelNodeInstance() {
+        String processId = "travels";
+        String nodeInstanceId = "nodeInstanceIdToRetrigger";
+        String processInstanceId = UUID.randomUUID().toString();
+        KogitoProcessCloudEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
+        indexProcessCloudEvent(startEvent);
+
+        checkOkResponse("{ \"query\" : \"mutation{ CancelNodeInstance ( id: \\\"" + processInstanceId + "\\\", nodeInstanceId: \\\"" + nodeInstanceId + "\\\")}\"}");
+
+        verify(dataIndexApiClient).cancelNodeInstance(eq("http://localhost:8080"),
+                eq(getProcessInstance(processId, processInstanceId, 1, null, null)), eq(nodeInstanceId));
     }
 
     private void checkOkResponse(String body) {

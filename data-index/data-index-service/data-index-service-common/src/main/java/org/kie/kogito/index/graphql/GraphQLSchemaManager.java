@@ -114,6 +114,10 @@ public class GraphQLSchemaManager {
                     builder.dataFetcher("ProcessInstanceAbort", this::abortProcessInstance);
                     builder.dataFetcher("ProcessInstanceRetry", this::retryProcessInstance);
                     builder.dataFetcher("ProcessInstanceSkip", this::skipProcessInstance);
+                    builder.dataFetcher("ProcessInstanceVariablesUpdate", this::updateProcessInstanceVariables);
+                    builder.dataFetcher("TriggerNodeInstance", this::triggerNodeInstance);
+                    builder.dataFetcher("RetriggerNodeInstance", this::retriggerNodeInstance);
+                    builder.dataFetcher("CancelNodeInstance", this::cancelNodeInstance);
                     return builder;
                 })
                 .type("ProcessInstance", builder -> {
@@ -161,6 +165,32 @@ public class GraphQLSchemaManager {
     public CompletableFuture<String> skipProcessInstance(DataFetchingEnvironment env) {
         ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
         return dataIndexApiExecutor.skipProcessInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance);
+    }
+
+    public CompletableFuture<String> updateProcessInstanceVariables(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.updateProcessInstanceVariables(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance, env.getArgument("variables"));
+    }
+
+    public CompletableFuture<String> triggerNodeInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.triggerNodeInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                processInstance,
+                env.getArgument("nodeId"));
+    }
+
+    public CompletableFuture<String> retriggerNodeInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.retriggerNodeInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                processInstance,
+                env.getArgument("nodeInstanceId"));
+    }
+
+    public CompletableFuture<String> cancelNodeInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.cancelNodeInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                processInstance,
+                env.getArgument("nodeInstanceId"));
     }
 
     public CompletableFuture getProcessInstanceDiagram(DataFetchingEnvironment env) {
