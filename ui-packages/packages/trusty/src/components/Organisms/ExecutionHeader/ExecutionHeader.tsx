@@ -16,7 +16,10 @@ const ExecutionHeader = (props: ExecutionHeaderProps) => {
   const { execution } = props;
 
   return (
-    <section className="execution-header">
+    <section
+      className="execution-header"
+      {...attributeOuiaId('execution-header')}
+    >
       <Flex>
         <FlexItem>
           {execution.status === RemoteDataStatus.LOADING && (
@@ -31,11 +34,7 @@ const ExecutionHeader = (props: ExecutionHeaderProps) => {
             />
           )}
           {execution.status === RemoteDataStatus.SUCCESS && (
-            <Title
-              size="3xl"
-              headingLevel="h2"
-              {...attributeOuiaId('execution-title')}
-            >
+            <Title size="3xl" headingLevel="h2" {...attributeOuiaId('title')}>
               <span className="execution-header__uuid">
                 Execution <ExecutionId id={execution.data.executionId} />
               </span>
@@ -67,11 +66,12 @@ const ExecutionHeader = (props: ExecutionHeaderProps) => {
                 </div>
               }
             >
-              <div {...attributeOuiaId('execution-status')}>
+              <div>
                 <ExecutionStatus
                   result={
                     execution.data.executionSucceeded ? 'success' : 'failure'
                   }
+                  ouiaId="status"
                 />
               </div>
             </Tooltip>

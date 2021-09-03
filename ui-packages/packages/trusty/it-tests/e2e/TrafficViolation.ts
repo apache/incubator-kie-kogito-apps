@@ -47,7 +47,11 @@ describe('Traffic Violation', () => {
   it('open Audit Details', () => {
     cy.visit('/');
     cy.ouiaId('refresh-button').click();
-    cy.ouiaId(reqId).click();
+    cy.ouiaId(reqId)
+      .ouiaId('status')
+      .should('have.text', 'Completed')
+      .ouiaId('show-detail')
+      .click();
     cy.url().should('contains', auditDetailsUrl);
   });
 
@@ -71,12 +75,14 @@ describe('Traffic Violation', () => {
               expect($items.eq(2)).have.text('Outcomes');
             });
         });
-      cy.ouiaId('execution-title')
-        .should('be.visible')
-        .should('contain', title);
-      cy.ouiaId('execution-status')
-        .should('be.visible')
-        .should('contain', 'Completed');
+      cy.ouiaId('execution-header').within(() => {
+        cy.ouiaId('title')
+          .should('be.visible')
+          .should('have.text', title);
+        cy.ouiaId('status')
+          .should('be.visible')
+          .should('have.text', 'Completed');
+      });
       cy.ouiaId('nav-audit-detail')
         .should('exist')
         .within($nav => {

@@ -1,15 +1,23 @@
 import React from 'react';
 import { CheckCircleIcon, ErrorCircleOIcon } from '@patternfly/react-icons';
 import './ExecutionStatus.scss';
+import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 
 type ExecutionStatusProps = {
   result: 'success' | 'failure';
 };
 
-const ExecutionStatus = (props: ExecutionStatusProps) => {
-  const { result } = props;
+const ExecutionStatus: React.FC<ExecutionStatusProps & OUIAProps> = ({
+  result,
+  ouiaId,
+  ouiaSafe
+}) => {
+  //const { result } = props;
   return (
-    <span className="execution-status">
+    <span
+      className="execution-status"
+      {...componentOuiaProps(ouiaId, 'execution-status', ouiaSafe)}
+    >
       {result === 'success' && (
         <>
           <CheckCircleIcon
