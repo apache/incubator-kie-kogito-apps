@@ -52,7 +52,7 @@ public class LimeConfigOptimizer {
 
     private long timeLimit;
     private int stepCountLimit;
-    private transient Optional<Long> seed;
+    private Optional<Long> seed;
     private boolean proximityEntities;
     private boolean samplingEntities;
     private boolean encodingEntities;
