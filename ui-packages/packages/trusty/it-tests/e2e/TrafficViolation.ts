@@ -47,11 +47,10 @@ describe('Traffic Violation', () => {
   it('open Audit Details', () => {
     cy.visit('/');
     cy.ouiaId('refresh-button').click();
-    cy.ouiaId(reqId)
-      .ouiaId('status')
-      .should('have.text', 'Completed')
-      .ouiaId('show-detail')
-      .click();
+    cy.ouiaId(reqId).within(() => {
+      cy.ouiaId('status').should('have.text', 'Completed');
+      cy.ouiaId('show-detail').click();
+    });
     cy.url().should('contains', auditDetailsUrl);
   });
 
