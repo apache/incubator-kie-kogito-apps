@@ -186,7 +186,7 @@ class OpenNLPLimeExplainerTest {
     }
 
     @Test
-    void testExplanationImpactScoreWithOptimization() throws ExecutionException, InterruptedException, TimeoutException, IOException {
+    void testExplanationImpactScoreWithOptimization() throws ExecutionException, InterruptedException, IOException {
         PredictionProvider model = getModel();
         List<PredictionInput> samples = getSamples(getTokenizer());
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();

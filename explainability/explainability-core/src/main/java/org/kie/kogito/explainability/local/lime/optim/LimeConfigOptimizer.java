@@ -18,6 +18,7 @@ package org.kie.kogito.explainability.local.lime.optim;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -51,7 +52,7 @@ public class LimeConfigOptimizer {
 
     private long timeLimit;
     private int stepCountLimit;
-    private long seed;
+    private transient Optional<Long> seed;
     private boolean proximityEntities;
     private boolean samplingEntities;
     private boolean encodingEntities;
@@ -65,7 +66,7 @@ public class LimeConfigOptimizer {
         this.samplingEntities = DEFAULT_SAMPLING_ENTITIES;
         this.encodingEntities = DEFAULT_ENCODING_ENTITIES;
         this.weightingEntities = DEFAULT_WEIGHTING_ENTITIES;
-        this.seed = Long.MIN_VALUE;
+        this.seed = Optional.empty();
         this.stepCountLimit = 0;
     }
 
@@ -156,8 +157,8 @@ public class LimeConfigOptimizer {
         solverConfig.setTerminationConfig(terminationConfig);
 
         LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig();
-        if (seed != Long.MIN_VALUE) {
-            solverConfig.setRandomSeed(seed);
+        if (seed.isPresent()) {
+            solverConfig.setRandomSeed(seed.get());
             solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
         }
         localSearchPhaseConfig.setLocalSearchType(LocalSearchType.LATE_ACCEPTANCE);
@@ -205,8 +206,8 @@ public class LimeConfigOptimizer {
         return this;
     }
 
-    public LimeConfigOptimizer withDeterministicExecution(int seed) {
-        this.seed = seed;
+    public LimeConfigOptimizer withDeterministicExecution(long seed) {
+        this.seed = Optional.of(seed);
         return this;
     }
 }
