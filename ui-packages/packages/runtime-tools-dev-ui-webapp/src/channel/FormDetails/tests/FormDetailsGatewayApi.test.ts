@@ -39,7 +39,7 @@ describe('FormDetailsGatewayApi tests', () => {
     expect(getFormContent).toHaveBeenCalledWith(formName);
   });
 
-  it('openProcessDetails', () => {
+  it('openFormDetails', () => {
     const listener: OnOpenFormDetailsListener = {
       onOpen: jest.fn()
     };

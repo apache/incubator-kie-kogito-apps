@@ -313,7 +313,6 @@ export const getFormContent = (formName: string): Promise<Form> => {
     axios
       .get(`/forms/formName/${formName}`)
       .then(result => {
-        console.log(result);
         resolve(result.data.Form);
       })
       .catch(error => reject(error));
