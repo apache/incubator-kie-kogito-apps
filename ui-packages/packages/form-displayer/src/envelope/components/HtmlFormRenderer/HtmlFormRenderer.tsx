@@ -16,6 +16,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FormArgs, FormInfo } from '../../../api';
+// import uuidv4 from 'uuid';
 
 interface HtmlFormRendererProps {
   content: FormArgs;
@@ -24,12 +25,41 @@ interface HtmlFormRendererProps {
 
 const HtmlFormRenderer: React.FC<HtmlFormRendererProps> = ({ content }) => {
   const [source, setSource] = useState<string>();
+  let resources = {} as any;
+
   useEffect(() => {
     if (content && content.source) {
       setSource(content.source['source-content']);
+      resources = { ...content.formConfiguration.resources };
+      renderResources();
     }
   }, [content]);
-  return <div dangerouslySetInnerHTML={{ __html: source }} />;
+
+  const renderResources = () => {
+    const container: HTMLElement = document.getElementById('script-container');
+    for (const key in resources.scripts) {
+      const script = document.createElement('script');
+
+      script.src = resources.scripts[key];
+      script.async = true;
+      container.appendChild(script);
+    }
+
+    for (const key in resources.styles) {
+      const script = document.createElement('script');
+
+      script.src = resources.styles[key];
+      script.async = true;
+      container.appendChild(script);
+    }
+  };
+
+  return (
+    <>
+      <div id="script-container"> {}</div>
+      <div dangerouslySetInnerHTML={{ __html: source }} />
+    </>
+  );
 };
 
 export default HtmlFormRenderer;
