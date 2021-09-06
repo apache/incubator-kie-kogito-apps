@@ -52,6 +52,7 @@ export class FormDetailsGatewayApiImpl implements FormDetailsGatewayApi {
 
     const unSubscribe = () => {
       const index = this.listeners.indexOf(listener);
+      /* istanbul ignore else */
       if (index > -1) {
         this.listeners.splice(index, 1);
       }

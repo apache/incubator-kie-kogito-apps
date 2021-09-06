@@ -23,7 +23,7 @@ import {
   TextVariants
 } from '@patternfly/react-core';
 import { OUIAProps, ouiaPageTypeAndObjectId } from '@kogito-apps/ouia-tools';
-import FormDetailsContainer from '../../containers/FromDetailsContainer/FormDetailsContainer';
+import FormDetailsContainer from '../../containers/FormDetailsContainer/FormDetailsContainer';
 import '../../styles.css';
 import { useHistory } from 'react-router-dom';
 import { FormInfo } from '@kogito-apps/forms-list';

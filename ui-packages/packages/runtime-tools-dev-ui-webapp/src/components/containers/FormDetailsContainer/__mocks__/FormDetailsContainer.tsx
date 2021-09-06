@@ -13,16 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import React from 'react';
 
-import { ApolloClient } from 'apollo-client';
-/* eslint-disable @typescript-eslint/no-empty-interface */
-export interface FormDetailsQueries {}
+const MockedFormDetailsContainer = (): React.ReactElement => {
+  return <></>;
+};
 
-export class GraphQLFormDetailsQueries implements FormDetailsQueries {
-  //@ts-ignore
-  private readonly client: ApolloClient<any>;
-
-  constructor(client: ApolloClient<any>) {
-    this.client = client;
-  }
-}
+export default MockedFormDetailsContainer;
