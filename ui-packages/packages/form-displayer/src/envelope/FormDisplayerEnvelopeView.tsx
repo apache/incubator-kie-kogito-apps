@@ -24,7 +24,7 @@ import FormDisplayer from './components/FormDisplayer/FormDisplayer';
 import '@patternfly/patternfly/patternfly.css';
 
 export interface FormDisplayerEnvelopeViewApi {
-  setFormContent(formContent: FormArgs, formData: FormInfo): void;
+  setFormContent: (formContent: FormArgs, formData: FormInfo) => void;
 }
 
 interface Props {
@@ -37,6 +37,10 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
 >((props, forwardedRef) => {
   const [content, setContent] = useState<FormArgs>();
   const [config, setConfig] = useState<FormInfo>();
+  const [
+    isEnvelopeConnectedToChannel,
+    setEnvelopeConnectedToChannel
+  ] = useState<boolean>(false);
 
   useImperativeHandle(
     forwardedRef,
@@ -46,11 +50,18 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
           console.log('content', content, config);
           setContent(formContent);
           setConfig(formData);
+          setEnvelopeConnectedToChannel(true);
         }
       };
     },
     []
   );
 
-  return <FormDisplayer content={content} config={config} />;
+  return (
+    <FormDisplayer
+      isEnvelopeConnectedToChannel={isEnvelopeConnectedToChannel}
+      content={content}
+      config={config}
+    />
+  );
 });

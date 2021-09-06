@@ -56,7 +56,7 @@ export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
             targetOrigin?: string,
             transfer?: any
           ) {
-            window.parent.postMessage(message, '*', transfer);
+            window.postMessage(message, '*', transfer);
           }
         }
       });

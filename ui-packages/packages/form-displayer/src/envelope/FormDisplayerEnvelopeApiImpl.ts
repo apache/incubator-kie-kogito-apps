@@ -25,6 +25,7 @@ import { FormDisplayerEnvelopeViewApi } from './FormDisplayerEnvelopeView';
 import { FormDisplayerEnvelopeContext } from './FormDisplayerEnvelopeContext';
 import _ from 'lodash';
 export class FormDisplayerEnvelopeApiImpl implements FormDisplayerEnvelopeApi {
+  private capturedInitRequestYet = false;
   constructor(
     private readonly args: EnvelopeApiFactoryArgs<
       FormDisplayerEnvelopeApi,
@@ -33,6 +34,14 @@ export class FormDisplayerEnvelopeApiImpl implements FormDisplayerEnvelopeApi {
       FormDisplayerEnvelopeContext
     >
   ) {}
+
+  private hasCapturedInitRequestYet() {
+    return this.capturedInitRequestYet;
+  }
+
+  private ackCapturedInitRequest() {
+    this.capturedInitRequestYet = true;
+  }
 
   public async formDisplayer__init(
     association: Association,
@@ -43,6 +52,13 @@ export class FormDisplayerEnvelopeApiImpl implements FormDisplayerEnvelopeApi {
       association.envelopeServerId
     );
     let tempContent = {};
+
+    if (this.hasCapturedInitRequestYet()) {
+      return;
+    }
+
+    this.ackCapturedInitRequest();
+
     if (!_.isEqual(tempContent, initArgs.formContent)) {
       tempContent = initArgs.formContent;
       this.args.view().setFormContent(initArgs.formContent, initArgs.formData);

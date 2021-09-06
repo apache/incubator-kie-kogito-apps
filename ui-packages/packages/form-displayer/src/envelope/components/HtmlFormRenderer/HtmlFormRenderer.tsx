@@ -41,24 +41,21 @@ const HtmlFormRenderer: React.FC<HtmlFormRendererProps> = ({ content }) => {
       const script = document.createElement('script');
 
       script.src = resources.scripts[key];
-      script.async = true;
       container.appendChild(script);
     }
 
     for (const key in resources.styles) {
-      const script = document.createElement('script');
-
-      script.src = resources.styles[key];
-      script.async = true;
-      container.appendChild(script);
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = resources.styles[key];
+      container.appendChild(link);
     }
   };
 
   return (
-    <>
-      <div id="script-container"> {}</div>
+    <div id="script-container">
       <div dangerouslySetInnerHTML={{ __html: source }} />
-    </>
+    </div>
   );
 };
 

@@ -20,14 +20,19 @@ import ReactFormRenderer from '../ReactFormRenderer/ReactFormRenderer';
 import HtmlFormRenderer from '../HtmlFormRenderer/HtmlFormRenderer';
 
 interface FormDisplayerProps {
+  isEnvelopeConnectedToChannel: boolean;
   content: FormArgs;
   config: FormInfo;
 }
 
-const FormDisplayer: React.FC<FormDisplayerProps> = ({ content, config }) => {
+const FormDisplayer: React.FC<FormDisplayerProps> = ({
+  isEnvelopeConnectedToChannel,
+  content,
+  config
+}) => {
   return (
     <>
-      {config && config.type === 'TSX' ? (
+      {isEnvelopeConnectedToChannel && config && config.type === 'TSX' ? (
         <ReactFormRenderer content={content} />
       ) : (
         <HtmlFormRenderer content={content} config={config} />
