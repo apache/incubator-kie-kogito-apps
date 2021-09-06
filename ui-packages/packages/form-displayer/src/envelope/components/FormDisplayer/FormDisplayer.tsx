@@ -27,7 +27,7 @@ interface FormDisplayerProps {
 const FormDisplayer: React.FC<FormDisplayerProps> = ({ content, config }) => {
   return (
     <>
-      {config && config.type === 'tsx' ? (
+      {config && config.type === 'TSX' ? (
         <ReactFormRenderer content={content} />
       ) : (
         <HtmlFormRenderer content={content} config={config} />

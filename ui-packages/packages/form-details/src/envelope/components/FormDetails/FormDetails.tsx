@@ -106,7 +106,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
       return JSON.stringify(formContent.formConfiguration.resources);
     }
   };
-
+  console.log('details', formContent);
   if (error) {
     return <ServerErrors error={error} variant={'large'} />;
   }

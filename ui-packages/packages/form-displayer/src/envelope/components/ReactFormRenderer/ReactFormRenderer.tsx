@@ -17,7 +17,6 @@
 import React, { useEffect, useState } from 'react';
 
 import uuidv4 from 'uuid';
-import { Button } from '@patternfly/react-core';
 import * as Babel from '@babel/standalone';
 import ReactDOM from 'react-dom';
 import * as Patternfly from '@patternfly/react-core';
@@ -28,12 +27,12 @@ interface ReactFormRendererProps {
 }
 
 const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
-  const [formName, setFormName] = useState<string>();
   const [source, setSource] = useState<string>();
 
   useEffect(() => {
     if (content && content.source) {
       setSource(content.source['source-content']);
+      renderform();
     }
   }, [content]);
 
@@ -72,8 +71,7 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
         .join('')
         .trim();
       const tempSource = trimmedSource;
-      const name = tempSource.split(':')[0].split('const ')[1];
-      setFormName(name);
+      const formName = tempSource.split(':')[0].split('const ')[1];
       try {
         const react = Babel.transform(trimmedSource, {
           presets: [
@@ -120,19 +118,13 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
   };
 
   return (
-    <div>
-      <Button variant="primary" onClick={renderform}>
-        Render Form
-      </Button>
-
-      <div
-        style={{
-          height: '100%'
-        }}
-        id={'formContainer'}
-      >
-        {}
-      </div>
+    <div
+      style={{
+        height: '100%'
+      }}
+      id={'formContainer'}
+    >
+      {}
     </div>
   );
 };

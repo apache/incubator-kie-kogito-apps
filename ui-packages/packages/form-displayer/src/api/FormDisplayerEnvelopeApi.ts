@@ -54,6 +54,6 @@ export interface FormArgs {
 
 export interface FormInfo {
   name: string;
-  type: 'html' | 'tsx';
+  type: 'HTML' | 'TSX';
   lastModified: Date;
 }

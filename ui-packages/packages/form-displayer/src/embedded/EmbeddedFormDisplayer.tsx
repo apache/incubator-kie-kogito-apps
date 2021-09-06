@@ -36,44 +36,41 @@ export type Props = {
 
 export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
   (props, forwardedRef) => {
-    const pollInit = useCallback(
-      (
-        // eslint-disable-next-line
-        envelopeServer: EnvelopeServer<
-          FormDisplayerChannelApi,
-          FormDisplayerEnvelopeApi
-        >,
-        container: () => HTMLDivElement
-      ) => {
-        init({
-          config: {
-            containerType: ContainerType.DIV,
-            envelopeId: envelopeServer.id
-          },
-          container: container(),
-          bus: {
-            postMessage<D, Type>(
-              message: EnvelopeBusMessage<D, Type>,
-              targetOrigin?: string,
-              transfer?: any
-            ) {
-              window.parent.postMessage(message, '*', transfer);
-            }
+    const pollInit = useCallback((
+      // eslint-disable-next-line
+      envelopeServer: EnvelopeServer<
+        FormDisplayerChannelApi,
+        FormDisplayerEnvelopeApi
+      >,
+      container: () => HTMLDivElement
+    ) => {
+      init({
+        config: {
+          containerType: ContainerType.DIV,
+          envelopeId: envelopeServer.id
+        },
+        container: container(),
+        bus: {
+          postMessage<D, Type>(
+            message: EnvelopeBusMessage<D, Type>,
+            targetOrigin?: string,
+            transfer?: any
+          ) {
+            window.parent.postMessage(message, '*', transfer);
           }
-        });
-        return envelopeServer.envelopeApi.requests.formDisplayer__init(
-          {
-            origin: envelopeServer.origin,
-            envelopeServerId: envelopeServer.id
-          },
-          {
-            formContent: props.formContent,
-            formData: props.formData
-          }
-        );
-      },
-      [props.formContent]
-    );
+        }
+      });
+      return envelopeServer.envelopeApi.requests.formDisplayer__init(
+        {
+          origin: envelopeServer.origin,
+          envelopeServerId: envelopeServer.id
+        },
+        {
+          formContent: props.formContent,
+          formData: props.formData
+        }
+      );
+    }, []);
     console.log('content-displayer', props.formContent);
     const refDelegate = useCallback(
       (

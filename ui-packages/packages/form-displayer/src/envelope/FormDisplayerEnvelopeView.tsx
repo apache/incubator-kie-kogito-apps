@@ -43,6 +43,7 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
     () => {
       return {
         setFormContent: (formContent: FormArgs, formData: FormInfo) => {
+          console.log('content', content, config);
           setContent(formContent);
           setConfig(formData);
         }
@@ -50,6 +51,6 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
     },
     []
   );
-  console.log('content', content, config);
+
   return <FormDisplayer content={content} config={config} />;
 });

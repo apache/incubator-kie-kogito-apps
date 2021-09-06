@@ -23,7 +23,7 @@ import {
 } from '../api';
 import { FormDisplayerEnvelopeViewApi } from './FormDisplayerEnvelopeView';
 import { FormDisplayerEnvelopeContext } from './FormDisplayerEnvelopeContext';
-
+import _ from 'lodash';
 export class FormDisplayerEnvelopeApiImpl implements FormDisplayerEnvelopeApi {
   constructor(
     private readonly args: EnvelopeApiFactoryArgs<
@@ -42,6 +42,10 @@ export class FormDisplayerEnvelopeApiImpl implements FormDisplayerEnvelopeApi {
       association.origin,
       association.envelopeServerId
     );
-    this.args.view().setFormContent(initArgs.formContent, initArgs.formData);
+    let tempContent = {};
+    if (!_.isEqual(tempContent, initArgs.formContent)) {
+      tempContent = initArgs.formContent;
+      this.args.view().setFormContent(initArgs.formContent, initArgs.formData);
+    }
   }
 }
