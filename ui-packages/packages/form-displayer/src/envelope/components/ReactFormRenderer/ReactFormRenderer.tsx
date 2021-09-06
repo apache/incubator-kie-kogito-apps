@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import uuidv4 from 'uuid';
-import {
-  ActionGroup,
-  Button,
-  Form,
-  Grid,
-  GridItem
-} from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core';
 import * as Babel from '@babel/standalone';
 import ReactDOM from 'react-dom';
 import * as Patternfly from '@patternfly/react-core';
@@ -34,13 +28,17 @@ interface ReactFormRendererProps {
 }
 
 const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
-  // @ts-ignore
   const [formName, setFormName] = useState<string>();
-  // const [source, setSource] = useState<string>();
+  const [source, setSource] = useState<string>();
+
+  useEffect(() => {
+    if (content && content.source) {
+      setSource(content.source['source-content']);
+    }
+  }, [content]);
 
   const renderform = () => {
-    if (content && content.source) {
-      const source = content.source['source-content'];
+    if (source) {
       window.React = React;
       window.ReactDOM = ReactDOM;
 
@@ -73,7 +71,9 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
         .split(patternflyReg)
         .join('')
         .trim();
-      console.log('final', trimmedSource);
+      const tempSource = trimmedSource;
+      const name = tempSource.split(':')[0].split('const ')[1];
+      setFormName(name);
       try {
         const react = Babel.transform(trimmedSource, {
           presets: [
@@ -120,41 +120,20 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
   };
 
   return (
-    <Grid hasGutter>
-      <GridItem span={6}>
-        <Form>
-          {/* <FormGroup fieldId={'formName'} label={'Form Name'}>
-            <TextInput onChange={setFormName} value={formName} />
-          </FormGroup>
-          <FormGroup fieldId={'source'} label={'Source Code'}>
-            <TextArea
-              onChange={setSource}
-              rows={20}
-              style={{
-                fontFamily: 'monospace'
-              }}
-            >
-              {source}
-            </TextArea>
-          </FormGroup> */}
-          <ActionGroup>
-            <Button variant="primary" onClick={renderform}>
-              Render Form
-            </Button>
-          </ActionGroup>
-        </Form>
-      </GridItem>
-      <GridItem span={6}>
-        <div
-          style={{
-            height: '100%'
-          }}
-          id={'formContainer'}
-        >
-          {}
-        </div>
-      </GridItem>
-    </Grid>
+    <div>
+      <Button variant="primary" onClick={renderform}>
+        Render Form
+      </Button>
+
+      <div
+        style={{
+          height: '100%'
+        }}
+        id={'formContainer'}
+      >
+        {}
+      </div>
+    </div>
   );
 };
 
