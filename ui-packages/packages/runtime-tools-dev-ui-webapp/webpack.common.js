@@ -31,10 +31,9 @@ module.exports = {
       events: {
         onEnd: {
           copy: [
-            { source: './dist/*.js', destination: './dist/resources/resources/webapp' },
-            { source: './dist/*.map', destination: './dist/resources/resources/webapp' },
-            { source: './fonts', destination: './dist/resources/resources/webapp' },
-
+            { source: './dist/*.js', destination: './dist/resources/webapp' },
+            { source: './dist/*.map', destination: './dist/resources/webapp' },
+            { source: './fonts', destination: './dist/resources/webapp' }
           ]
         },
       },

@@ -600,13 +600,7 @@ exports[`form details tests render form details - source 1`] = `
               isResizable={true}
               minSize="700px"
             >
-              <DrawerHead>
-                <span>
-                  <FormDisplayerContainer
-                    formContent={null}
-                  />
-                </span>
-              </DrawerHead>
+              <DrawerHead />
             </DrawerPanelContent>
           }
         >
@@ -1063,22 +1057,7 @@ exports[`form details tests render form details - source 1`] = `
                         >
                           <div
                             className="pf-c-drawer__head"
-                          >
-                            <span>
-                              <FormDisplayerContainer
-                                formContent={null}
-                              >
-                                <ForwardRef
-                                  formContent={null}
-                                  targetOrigin="*"
-                                >
-                                  <ForwardRef>
-                                    <div />
-                                  </ForwardRef>
-                                </ForwardRef>
-                              </FormDisplayerContainer>
-                            </span>
-                          </div>
+                          />
                         </div>
                       </DrawerPanelBody>
                     </DrawerHead>

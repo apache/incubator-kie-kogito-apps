@@ -22,13 +22,14 @@ module.exports = merge(common, {
     hot: true,
     overlay: true,
     open: true,
-    proxy: {
-      '/svg': {
-          target: 'http://localhost:4000',
+    proxy: [
+      {
+        context:['/svg','/forms'],
+        target: 'http://localhost:4000',
           secure: false,
           changeOrigin: true
-      },
-    },
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
