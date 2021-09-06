@@ -28,6 +28,7 @@ export interface Association {
 
 export interface FormDisplayerInitArgs {
   formContent: FormArgs;
+  formData: FormInfo;
 }
 
 interface FormResources {
@@ -49,4 +50,10 @@ export interface FormArgs {
   };
   name: string;
   formConfiguration: FormConfiguration;
+}
+
+export interface FormInfo {
+  name: string;
+  type: 'html' | 'tsx';
+  lastModified: Date;
 }

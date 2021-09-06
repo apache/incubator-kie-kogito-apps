@@ -19,7 +19,8 @@ import {
   FormDisplayerApi,
   FormDisplayerChannelApi,
   FormDisplayerEnvelopeApi,
-  FormArgs
+  FormArgs,
+  FormInfo
 } from '../api';
 import { ContainerType } from '@kogito-tooling/envelope/dist/api';
 import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
@@ -30,6 +31,7 @@ import { init } from '../envelope';
 export type Props = {
   targetOrigin: string;
   formContent: FormArgs;
+  formData: FormInfo;
 };
 
 export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
@@ -65,7 +67,8 @@ export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
             envelopeServerId: envelopeServer.id
           },
           {
-            formContent: props.formContent
+            formContent: props.formContent,
+            formData: props.formData
           }
         );
       },

@@ -17,15 +17,24 @@
 import React from 'react';
 import { EmbeddedFormDisplayer } from '@kogito-apps/form-displayer';
 import { Form } from 'packages/form-details/src/api';
+import { FormInfo } from 'packages/forms-list';
 
 interface FormDisplayerContainerProps {
   formContent: Form;
+  formData: FormInfo;
 }
 
 const FormDisplayerContainer: React.FC<FormDisplayerContainerProps> = ({
-  formContent
+  formContent,
+  formData
 }) => {
-  return <EmbeddedFormDisplayer targetOrigin={'*'} formContent={formContent} />;
+  return (
+    <EmbeddedFormDisplayer
+      targetOrigin={'*'}
+      formContent={formContent}
+      formData={formData}
+    />
+  );
 };
 
 export default FormDisplayerContainer;

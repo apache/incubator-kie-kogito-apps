@@ -74,7 +74,10 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
       <DrawerHead>
         {formContent && Object.keys(formContent)[0].length > 0 && (
           <span>
-            <FormDisplayerContainer formContent={formContent} />
+            <FormDisplayerContainer
+              formContent={formContent}
+              formData={formData}
+            />
           </span>
         )}
       </DrawerHead>

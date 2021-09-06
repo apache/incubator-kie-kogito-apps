@@ -14,22 +14,26 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { FormArgs, FormInfo } from '../../../api';
+import ReactFormRenderer from '../ReactFormRenderer/ReactFormRenderer';
+import HtmlFormRenderer from '../HtmlFormRenderer/HtmlFormRenderer';
 
-interface HtmlFormRendererProps {
+interface FormDisplayerProps {
   content: FormArgs;
   config: FormInfo;
 }
 
-const HtmlFormRenderer: React.FC<HtmlFormRendererProps> = ({ content }) => {
-  const [source, setSource] = useState<string>();
-  useEffect(() => {
-    if (content && content.source) {
-      setSource(content.source['source-content']);
-    }
-  }, [content]);
-  return <div dangerouslySetInnerHTML={{ __html: source }} />;
+const FormDisplayer: React.FC<FormDisplayerProps> = ({ content, config }) => {
+  return (
+    <>
+      {config && config.type === 'tsx' ? (
+        <ReactFormRenderer content={content} />
+      ) : (
+        <HtmlFormRenderer content={content} config={config} />
+      )}
+    </>
+  );
 };
 
-export default HtmlFormRenderer;
+export default FormDisplayer;

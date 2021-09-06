@@ -17,14 +17,14 @@
 import * as React from 'react';
 import { useImperativeHandle, useState } from 'react';
 
-import { FormDisplayerChannelApi, FormArgs } from '../api';
+import { FormDisplayerChannelApi, FormArgs, FormInfo } from '../api';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
-import ReactFormRenderer from './components/ReactFormRenderer/ReactFormRenderer';
+import FormDisplayer from './components/FormDisplayer/FormDisplayer';
 
 import '@patternfly/patternfly/patternfly.css';
 
 export interface FormDisplayerEnvelopeViewApi {
-  setFormContent(formContent: FormArgs): void;
+  setFormContent(formContent: FormArgs, formData: FormInfo): void;
 }
 
 interface Props {
@@ -35,20 +35,21 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
   FormDisplayerEnvelopeViewApi,
   Props
 >((props, forwardedRef) => {
-  // @ts-ignore
   const [content, setContent] = useState<FormArgs>();
+  const [config, setConfig] = useState<FormInfo>();
 
   useImperativeHandle(
     forwardedRef,
     () => {
       return {
-        setFormContent: (formContent: FormArgs) => {
+        setFormContent: (formContent: FormArgs, formData: FormInfo) => {
           setContent(formContent);
+          setConfig(formData);
         }
       };
     },
     []
   );
-  console.log('content', content);
-  return <ReactFormRenderer content={content} />;
+  console.log('content', content, config);
+  return <FormDisplayer content={content} config={config} />;
 });
