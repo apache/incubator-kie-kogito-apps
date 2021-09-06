@@ -20,6 +20,7 @@ import { FormDetailsDriver } from '../../../api/FormDetailsDriver';
 import { FormInfo } from '@kogito-apps/forms-list';
 import {
   Button,
+  Card,
   Drawer,
   DrawerContent,
   DrawerContentBody,
@@ -30,7 +31,7 @@ import {
   TabTitleText
 } from '@patternfly/react-core';
 import FormView from '../FormView/FormView';
-import { ServerErrors } from '@kogito-apps/components-common';
+import { ServerErrors, KogitoSpinner } from '@kogito-apps/components-common';
 import _ from 'lodash';
 import { Form } from '../../../api';
 import FormDisplayerContainer from '../../containers/FormDisplayerContainer/FormDisplayerContainer';
@@ -51,6 +52,8 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
   const [activeTab, setActiveTab] = useState<number>(0);
   const [formContent, setFormContent] = useState<Form>(null);
   const [error, setError] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
   useEffect(() => {
     /* istanbul ignore else */
     if (isEnvelopeConnectedToChannel) {
@@ -64,6 +67,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
       if (formData) {
         const response = await driver.getFormContent(formData.name);
         setFormContent(response);
+        setIsLoading(false);
       }
     } catch (error) {
       setError(error);
@@ -113,48 +117,60 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
 
   return (
     <div {...componentOuiaProps(ouiaId, 'form-details', ouiaSafe)}>
-      <Drawer isStatic>
-        <DrawerContent panelContent={panelContent}>
-          <Tabs isFilled activeKey={activeTab} onSelect={onTabSelect}>
-            <Tab
-              eventKey={0}
-              title={<TabTitleText>Source</TabTitleText>}
-              id="source-tab"
-              aria-labelledby="source-tab"
-            >
-              <DrawerContentBody
-                style={{
-                  background: 'var(--pf-c-page__main-section--BackgroundColor)'
-                }}
+      {!isLoading ? (
+        <Drawer isStatic>
+          <DrawerContent panelContent={panelContent}>
+            <Tabs isFilled activeKey={activeTab} onSelect={onTabSelect}>
+              <Tab
+                eventKey={0}
+                title={<TabTitleText>Source</TabTitleText>}
+                id="source-tab"
+                aria-labelledby="source-tab"
               >
-                {activeTab === 0 && (
-                  <FormView code={getSource()} isSource formType={getType()} />
-                )}
-                <Button variant="primary" className="pf-u-mt-md">
-                  Refresh
-                </Button>
-              </DrawerContentBody>
-            </Tab>
-            <Tab
-              eventKey={1}
-              title={<TabTitleText>Connections</TabTitleText>}
-              id="config-tab"
-              aria-labelledby="config-tab"
-            >
-              <DrawerContentBody
-                style={{
-                  background: 'var(--pf-c-page__main-section--BackgroundColor)'
-                }}
+                <DrawerContentBody
+                  style={{
+                    background:
+                      'var(--pf-c-page__main-section--BackgroundColor)'
+                  }}
+                >
+                  {activeTab === 0 && (
+                    <FormView
+                      code={getSource()}
+                      isSource
+                      formType={getType()}
+                    />
+                  )}
+                  <Button variant="primary" className="pf-u-mt-md">
+                    Refresh
+                  </Button>
+                </DrawerContentBody>
+              </Tab>
+              <Tab
+                eventKey={1}
+                title={<TabTitleText>Connections</TabTitleText>}
+                id="config-tab"
+                aria-labelledby="config-tab"
               >
-                {activeTab === 1 && <FormView code={getConfig()} isConfig />}
-                <Button variant="primary" className="pf-u-mt-md">
-                  Refresh
-                </Button>
-              </DrawerContentBody>
-            </Tab>
-          </Tabs>
-        </DrawerContent>
-      </Drawer>
+                <DrawerContentBody
+                  style={{
+                    background:
+                      'var(--pf-c-page__main-section--BackgroundColor)'
+                  }}
+                >
+                  {activeTab === 1 && <FormView code={getConfig()} isConfig />}
+                  <Button variant="primary" className="pf-u-mt-md">
+                    Refresh
+                  </Button>
+                </DrawerContentBody>
+              </Tab>
+            </Tabs>
+          </DrawerContent>
+        </Drawer>
+      ) : (
+        <Card>
+          <KogitoSpinner spinnerText="Loading form ..." />
+        </Card>
+      )}
     </div>
   );
 };

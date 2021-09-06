@@ -33,7 +33,7 @@ module.exports = {
           copy: [
             { source: './dist/*.js', destination: './dist/resources/webapp' },
             { source: './dist/*.map', destination: './dist/resources/webapp' },
-            { source: './fonts', destination: './dist/resources/webapp' }
+            { source: './dist/fonts', destination: './dist/resources/webapp' }
           ]
         },
       },
