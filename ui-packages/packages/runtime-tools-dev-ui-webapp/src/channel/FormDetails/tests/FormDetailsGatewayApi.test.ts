@@ -17,8 +17,7 @@
 import { getFormContent } from '../../apis/apis';
 import {
   FormDetailsGatewayApi,
-  FormDetailsGatewayApiImpl,
-  OnOpenFormDetailsListener
+  FormDetailsGatewayApiImpl
 } from '../FormDetailsGatewayApi';
 
 jest.mock('../../apis/apis', () => ({
@@ -37,17 +36,5 @@ describe('FormDetailsGatewayApi tests', () => {
     const formName = 'form1';
     await gatewayApi.getFormContent(formName);
     expect(getFormContent).toHaveBeenCalledWith(formName);
-  });
-
-  it('openFormDetails', () => {
-    const listener: OnOpenFormDetailsListener = {
-      onOpen: jest.fn()
-    };
-
-    const unsubscribe = gatewayApi.onOpenFormDetailsListener(listener);
-    gatewayApi.openFormDetails('formName');
-    gatewayApi.onOpenFormDetailsListener(listener);
-    expect(listener.onOpen).toHaveBeenCalled();
-    unsubscribe.unSubscribe();
   });
 });

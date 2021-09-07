@@ -13,15 +13,7 @@ exports[`FormDetailsContainer tests Snapshot 1`] = `
   <ForwardRef
     data-ouia-component-type="form-details-container"
     data-ouia-safe={true}
-    driver={
-      FormDetailsGatewayApiImpl {
-        "listeners": Array [
-          Object {
-            "onOpen": [Function],
-          },
-        ],
-      }
-    }
+    driver={FormDetailsGatewayApiImpl {}}
     formData={
       Object {
         "lastModified": 2021-08-23T13:26:02.130Z,

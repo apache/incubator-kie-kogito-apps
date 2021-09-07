@@ -39,6 +39,7 @@ describe('form details tests', () => {
     await act(async () => {
       wrapper = mount(<FormDetails {...props} />);
     });
+    wrapper = wrapper.update();
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -55,6 +56,9 @@ describe('form details tests', () => {
     let wrapper;
     await act(async () => {
       wrapper = mount(<FormDetails {...props} />);
+    });
+    wrapper = wrapper.update();
+    await act(async () => {
       wrapper
         .find('TabButton')
         .at(1)
