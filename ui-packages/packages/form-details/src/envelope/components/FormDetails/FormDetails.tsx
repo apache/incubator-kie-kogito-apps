@@ -19,7 +19,6 @@ import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 import { FormDetailsDriver } from '../../../api/FormDetailsDriver';
 import { FormInfo } from '@kogito-apps/forms-list';
 import {
-  Button,
   Card,
   Drawer,
   DrawerContent,
@@ -110,7 +109,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
       return JSON.stringify(formContent.formConfiguration.resources);
     }
   };
-  console.log('details', formContent);
+
   if (error) {
     return <ServerErrors error={error} variant={'large'} />;
   }
@@ -136,13 +135,13 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                   {activeTab === 0 && (
                     <FormView
                       code={getSource()}
+                      editorType="Source"
+                      formContent={formContent}
+                      setFormContent={setFormContent}
                       isSource
                       formType={getType()}
                     />
                   )}
-                  <Button variant="primary" className="pf-u-mt-md">
-                    Refresh
-                  </Button>
                 </DrawerContentBody>
               </Tab>
               <Tab
@@ -157,10 +156,15 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                       'var(--pf-c-page__main-section--BackgroundColor)'
                   }}
                 >
-                  {activeTab === 1 && <FormView code={getConfig()} isConfig />}
-                  <Button variant="primary" className="pf-u-mt-md">
-                    Refresh
-                  </Button>
+                  {activeTab === 1 && (
+                    <FormView
+                      code={getConfig()}
+                      editorType="Connections"
+                      formContent={formContent}
+                      setFormContent={setFormContent}
+                      isConfig
+                    />
+                  )}
                 </DrawerContentBody>
               </Tab>
             </Tabs>

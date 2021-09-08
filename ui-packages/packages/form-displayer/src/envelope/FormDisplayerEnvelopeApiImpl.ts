@@ -17,6 +17,7 @@
 import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
 import {
   Association,
+  FormArgs,
   FormDisplayerChannelApi,
   FormDisplayerEnvelopeApi,
   FormDisplayerInitArgs
@@ -64,4 +65,8 @@ export class FormDisplayerEnvelopeApiImpl implements FormDisplayerEnvelopeApi {
       this.args.view().setFormContent(initArgs.formContent, initArgs.formData);
     }
   }
+  formDisplayer__notify = (formContent: FormArgs): Promise<void> => {
+    this.args.view().notify(formContent);
+    return Promise.resolve();
+  };
 }

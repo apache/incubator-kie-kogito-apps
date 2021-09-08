@@ -35,7 +35,7 @@ export interface Association {
   envelopeServerId: string;
 }
 
-interface FormResources {
+export interface FormResources {
   scripts: {
     [key: string]: string;
   };

@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import { EmbeddedFormDisplayer } from '@kogito-apps/form-displayer';
-import { Form } from 'packages/form-details/src/api';
-import { FormInfo } from 'packages/forms-list';
+import React, { useEffect } from 'react';
+import {
+  EmbeddedFormDisplayer,
+  FormDisplayerApi
+} from '@kogito-apps/form-displayer';
+import { Form } from '../../../api';
+import { FormInfo } from '@kogito-apps/forms-list';
+import { useFormDetailsContext } from '../../components/contexts/FormDetailsContext';
 
 interface FormDisplayerContainerProps {
   formContent: Form;
@@ -28,11 +32,26 @@ const FormDisplayerContainer: React.FC<FormDisplayerContainerProps> = ({
   formContent,
   formData
 }) => {
+  const appContext = useFormDetailsContext();
+  const formDisplayerApiRef = React.useRef<FormDisplayerApi>();
+
+  useEffect(() => {
+    const unsubscribeUserChange = appContext.onUpdateContent({
+      onUpdateContent(formContent) {
+        formDisplayerApiRef.current.formDisplayer__notify(formContent);
+      }
+    });
+    return () => {
+      unsubscribeUserChange.unSubscribe();
+    };
+  }, []);
+
   return (
     <EmbeddedFormDisplayer
       targetOrigin={'*'}
       formContent={formContent}
       formData={formData}
+      ref={formDisplayerApiRef}
     />
   );
 };

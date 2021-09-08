@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import { useImperativeHandle, useState } from 'react';
-
+import _ from 'lodash';
 import { FormDisplayerChannelApi, FormArgs, FormInfo } from '../api';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
 import FormDisplayer from './components/FormDisplayer/FormDisplayer';
@@ -25,6 +25,7 @@ import '@patternfly/patternfly/patternfly.css';
 
 export interface FormDisplayerEnvelopeViewApi {
   setFormContent: (formContent: FormArgs, formData: FormInfo) => void;
+  notify: (userName: FormArgs) => Promise<void>;
 }
 
 interface Props {
@@ -51,6 +52,13 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
           setContent(formContent);
           setConfig(formData);
           setEnvelopeConnectedToChannel(true);
+        },
+        notify: (formContent: FormArgs) => {
+          if (!_.isEmpty(formContent)) {
+            console.log('check', formContent);
+            setContent(formContent);
+          }
+          return Promise.resolve();
         }
       };
     },

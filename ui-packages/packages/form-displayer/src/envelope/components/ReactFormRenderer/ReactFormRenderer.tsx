@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import uuidv4 from 'uuid';
 import * as Babel from '@babel/standalone';
@@ -27,11 +27,13 @@ interface ReactFormRendererProps {
 }
 
 const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
-  const [source, setSource] = useState<string>();
+  // const [source, setSource] = useState<string>();
+  let source;
 
   useEffect(() => {
     if (content && content.source) {
-      setSource(content.source['source-content']);
+      // setSource(content.source['source-content']);
+      source = content.source['source-content'];
       renderform();
     }
   }, [content]);

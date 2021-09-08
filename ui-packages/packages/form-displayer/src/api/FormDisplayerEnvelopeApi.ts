@@ -19,6 +19,7 @@ export interface FormDisplayerEnvelopeApi {
     association: Association,
     initArgs: FormDisplayerInitArgs
   ): Promise<void>;
+  formDisplayer__notify(formContent: FormArgs): Promise<void>;
 }
 
 export interface Association {

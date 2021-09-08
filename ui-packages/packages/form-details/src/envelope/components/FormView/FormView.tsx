@@ -14,24 +14,40 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
-import { CodeEditor, Language } from '@patternfly/react-code-editor';
+import {
+  CodeEditor,
+  CodeEditorControl,
+  Language
+} from '@patternfly/react-code-editor';
+import { SyncAltIcon } from '@patternfly/react-icons';
+import { Form } from '../../../api';
+import { useFormDetailsContext } from '../contexts/FormDetailsContext';
 export interface FormViewProps {
   formType?: string;
   isSource?: boolean;
   isConfig?: boolean;
+  editorType: string;
+  formContent: Form;
   code: string;
+  setFormContent: any;
 }
 
 const FormView: React.FC<FormViewProps & OUIAProps> = ({
   code,
   formType,
+  formContent,
+  setFormContent,
+  editorType,
   isSource = false,
   isConfig = false,
   ouiaId,
   ouiaSafe
 }) => {
+  const appContext = useFormDetailsContext();
+  const [contentChange, setContentChange] = useState<Form>(null);
+
   const getFormLanguage = (): Language => {
     if (isSource && formType) {
       switch (formType.toLowerCase()) {
@@ -47,7 +63,8 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
   };
 
   const editorDidMount = (editor, monaco): void => {
-    if (formType.toLowerCase() === 'tsx') {
+    console.log('mount', editor, monaco);
+    if (formType && formType.toLowerCase() === 'tsx') {
       monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
         jsx: 'react'
       });
@@ -62,6 +79,32 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
     }, 500);
   };
 
+  const handleChange = (value): void => {
+    console.log('view', formContent);
+    if (Object.keys(formContent)[0].length > 0 && editorType === 'Source') {
+      const temp: Form = formContent;
+      temp.source['source-content'] = value;
+      setContentChange({ ...formContent, ...temp });
+    } else {
+      setContentChange((formContent.formConfiguration['resources'] = value));
+    }
+  };
+
+  const onRefreshCode = (): void => {
+    appContext.updateContent(contentChange);
+    setFormContent(contentChange);
+  };
+
+  const customControl = (
+    <CodeEditorControl
+      icon={<SyncAltIcon />}
+      aria-label="Refresh code"
+      toolTipText="Refresh code"
+      onClick={onRefreshCode}
+      isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
+    />
+  );
+
   return (
     <div {...componentOuiaProps(ouiaId, 'form-view', ouiaSafe)}>
       <CodeEditor
@@ -71,10 +114,12 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
         isReadOnly={false}
         isMinimapVisible={false}
         isLanguageLabelVisible
+        customControls={customControl}
         code={code}
         language={getFormLanguage()}
         height="800px"
         onEditorDidMount={editorDidMount}
+        onChange={handleChange}
       />
     </div>
   );

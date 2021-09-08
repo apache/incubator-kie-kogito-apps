@@ -78,9 +78,10 @@ export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
           FormDisplayerChannelApi,
           FormDisplayerEnvelopeApi
         >
-      ): FormDisplayerApi => {
-        return {};
-      },
+      ): FormDisplayerApi => ({
+        formDisplayer__notify: formContent =>
+          envelopeServer.envelopeApi.requests.formDisplayer__notify(formContent)
+      }),
       []
     );
 
