@@ -47,6 +47,16 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
   };
 
   const editorDidMount = (editor, monaco): void => {
+    if (formType.toLowerCase() === 'tsx') {
+      monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
+        jsx: 'react'
+      });
+
+      monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+        noSemanticValidation: false,
+        noSyntaxValidation: false
+      });
+    }
     setTimeout(() => {
       editor.trigger('anyString', 'editor.action.formatDocument');
     }, 500);
