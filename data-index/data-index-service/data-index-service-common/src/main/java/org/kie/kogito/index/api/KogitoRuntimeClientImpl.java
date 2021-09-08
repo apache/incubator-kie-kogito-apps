@@ -180,10 +180,7 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
                         if (res.succeeded() && (res.result().statusCode() == 200)) {
                             future.complete(res.result().bodyAsString());
                         } else {
-                            future.completeExceptionally(
-                                    new DataIndexServiceException("FAILED: " + logMessage +
-                                            " errorCode:" + res.result().statusCode() +
-                                            " errorStatus:" + res.result().statusMessage()));
+                            future.completeExceptionally(new DataIndexServiceException(getErrorMessage(logMessage, res.result())));
                         }
                     });
         } catch (Exception e) {
