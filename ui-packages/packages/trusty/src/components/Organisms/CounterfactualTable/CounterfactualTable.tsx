@@ -78,6 +78,7 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   const [isInputSelectionEnabled, setIsInputSelectionEnabled] = useState<
     boolean
   >();
+  const [newResults, setNewResults] = useState<string[]>([]);
 
   const scrollbars = useRef(null);
 
@@ -164,6 +165,17 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   const canSelectInput = (input: CFSearchInput) => {
     return ['string', 'number', 'boolean'].includes(typeof input.value);
   };
+
+  useEffect(() => {
+    if (results.length > 0) {
+      const ids = results.map(item => item.solutionId);
+      const firstNewIndex = ids.findIndex(x => newResults.includes(x));
+      const newItems = firstNewIndex > -1 ? ids.slice(0, firstNewIndex) : ids;
+      if (newItems.length > 0 && newItems.join() !== newResults.join()) {
+        setNewResults(newItems);
+      }
+    }
+  }, [results, newResults]);
 
   useEffect(() => {
     setRows(inputs);
@@ -277,8 +289,15 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                           </Th>
                         )}
                         {displayedResults.length > 0 &&
-                          displayedResults[0].map((result, index) => (
-                            <Th key={`result ${index}`}>
+                          displayedResults[0].map(result => (
+                            <Th
+                              key={`result ${result.value}`}
+                              className={
+                                newResults.includes(result.value)
+                                  ? 'cf-table__result--new'
+                                  : ''
+                              }
+                            >
                               <span>Counterfactual Result</span>
                             </Th>
                           ))}
@@ -331,18 +350,23 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                           <Td key="id-row_3" />
                           <Td key="id-row_4" />
                           {displayedResults.length > 0 &&
-                            displayedResults[0].map((resultId, index) => (
+                            displayedResults[0].map(result => (
                               <Td
-                                key={`id-row_${index + 4}`}
+                                key={`id-row_${result.value}`}
                                 dataLabel={'Counterfactual Result'}
+                                className={
+                                  newResults.includes(result.value)
+                                    ? 'cf-table__result--new'
+                                    : ''
+                                }
                               >
-                                {resultId.stage === 'INTERMEDIATE' ? (
+                                {result.stage === 'INTERMEDIATE' ? (
                                   <Label variant="outline" color="blue">
-                                    ID #{resultId.value.substring(0, 7)}
+                                    ID #{result.value.substring(0, 7)}
                                   </Label>
                                 ) : (
                                   <Label icon={<StarIcon />} color="green">
-                                    ID #{resultId.value.substring(0, 7)}
+                                    ID #{result.value.substring(0, 7)}
                                   </Label>
                                 )}
                               </Td>
@@ -405,14 +429,24 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                             displayedResults[rowIndex + 1].map(
                               (value, index) => (
                                 <Td
-                                  key={`${rowIndex}_${index + 4}`}
+                                  key={displayedResults[0][index].value}
                                   dataLabel={'Counterfactual Result'}
-                                  className={
+                                  className={`cf-table__result-id${
+                                    displayedResults[0][index].value
+                                  } ${
+                                    newResults.includes(
+                                      displayedResults[0][index].value
+                                    )
+                                      ? 'cf-table__result--new'
+                                      : ''
+                                  }
+                                  ${
                                     value !== row.value &&
                                     row.components === null
                                       ? 'cf-table__result-value--changed'
                                       : 'cf-table__result-value'
                                   }
+                                  `}
                                 >
                                   <FormattedValue value={value} round={true} />
                                 </Td>

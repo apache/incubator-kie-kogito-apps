@@ -31,6 +31,9 @@
     padding-top: var(--pf-global--spacer--sm);
     padding-bottom: var(--pf-global--spacer--sm);
   }
+  &__result--new {
+    animation: result-blink 1s forwards;
+  }
 }
 
 @media screen and (min-width: 768px) {
@@ -197,5 +200,14 @@
 @media screen and (min-width: 1600px) {
   .cf-table__scroll-track--horizontal {
     width: calc(100% - 750px - 53px - 70px);
+  }
+}
+
+@keyframes result-blink {
+  from {
+    background-color: rgba(115, 188, 247, 1);
+  }
+  to {
+    background-color: rgba(115, 188, 247, 0);
   }
 }
