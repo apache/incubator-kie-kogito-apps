@@ -3,7 +3,7 @@ import { Progress, ProgressSize } from '@patternfly/react-core';
 
 const CounterfactualProgressBar = () => {
   const [value, setValue] = useState(0);
-  const timeLimit = 60;
+  const timeLimit = 20;
   const intervalID = useRef(null);
 
   useEffect(() => {
