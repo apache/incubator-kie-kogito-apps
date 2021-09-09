@@ -248,7 +248,7 @@ public abstract class AbstractProcessDataIndexIT {
                 await()
                         .atMost(TIMEOUT)
                         .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                                .body("{ \"query\" : \"mutation{ ProcessInstanceVariablesUpdate(id:\\\"" + pId2 + "\\\", variables:\\\"" +
+                                .body("{ \"query\" : \"mutation{ ProcessInstanceUpdateVariables(id:\\\"" + pId2 + "\\\", variables:\\\"" +
                                         vars.replace("Darth", "Anakin")
                                                 .replace("\"", "\\\\\\\"")
                                         + "\\\")}\"}")
@@ -264,21 +264,21 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("data.ProcessInstances[0].variables", containsString("Anakin"));
             }
             given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ TriggerNodeInstance(id:\\\"" + pId2 + "\\\", nodeId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
+                    .body("{ \"query\" : \"mutation{ NodeInstanceTrigger(id:\\\"" + pId2 + "\\\", nodeId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
                     .when().post("/graphql")
                     .then()
                     .statusCode(200)
                     .body("errors", nullValue());
 
             given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ RetriggerNodeInstance(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
+                    .body("{ \"query\" : \"mutation{ NodeInstanceRetrigger(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
                     .when().post("/graphql")
                     .then()
                     .statusCode(200)
                     .body("errors[0].message", containsString("FAILED: Retrigger NodeInstance"));
 
             given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ CancelNodeInstance(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
+                    .body("{ \"query\" : \"mutation{ NodeInstanceCancel(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
                     .when().post("/graphql")
                     .then()
                     .statusCode(200)
@@ -317,25 +317,25 @@ public abstract class AbstractProcessDataIndexIT {
                     .body("errors[0].message", containsString("Field 'UndefinedMutation' in type 'Mutation' is undefined"));
         } else {
             given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ ProcessInstanceVariablesUpdate(id:\\\"" + pId2 + "\\\", variables:\\\"{}\\\")}\"}")
+                    .body("{ \"query\" : \"mutation{ ProcessInstanceUpdateVariables(id:\\\"" + pId2 + "\\\", variables:\\\"{}\\\")}\"}")
                     .when().post("/graphql")
                     .then()
                     .statusCode(200);
 
             given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ TriggerNodeInstance(id:\\\"" + pId2 + "\\\", nodeId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
+                    .body("{ \"query\" : \"mutation{ NodeInstanceTrigger(id:\\\"" + pId2 + "\\\", nodeId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
                     .when().post("/graphql")
                     .then()
                     .statusCode(200);
 
             given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ RetriggerNodeInstance(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
+                    .body("{ \"query\" : \"mutation{ NodeInstanceRetrigger(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
                     .when().post("/graphql")
                     .then()
                     .statusCode(200);
 
             given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ CancelNodeInstance(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
+                    .body("{ \"query\" : \"mutation{ NodeInstanceCancel(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
                     .when().post("/graphql")
                     .then()
                     .statusCode(200);

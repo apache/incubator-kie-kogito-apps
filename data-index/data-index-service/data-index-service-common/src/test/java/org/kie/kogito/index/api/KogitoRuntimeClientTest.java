@@ -42,13 +42,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.ABORT_PROCESS_INSTANCE_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.CANCEL_NODE_INSTANCE_PATH;
 import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_DIAGRAM_PATH;
 import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_NODE_DEFINITIONS_PATH;
-import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.RETRIGGER_NODE_INSTANCE_URI;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.RETRIGGER_NODE_INSTANCE_PATH;
 import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.RETRY_PROCESS_INSTANCE_PATH;
 import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.SKIP_PROCESS_INSTANCE_PATH;
-import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.TRIGGER_NODE_INSTANCE_URI;
-import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.UPDATE_VARIABLES_PROCESS_INSTANCE_URI;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.TRIGGER_NODE_INSTANCE_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.UPDATE_VARIABLES_PROCESS_INSTANCE_PATH;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -168,7 +169,7 @@ public class KogitoRuntimeClientTest {
 
         client.updateProcessInstanceVariables(SERVICE_URL, pI, pI.getVariables().toString());
         verify(client).sendPutClientRequest(webClientMock,
-                format(UPDATE_VARIABLES_PROCESS_INSTANCE_URI, pI.getProcessId(), pI.getId()),
+                format(UPDATE_VARIABLES_PROCESS_INSTANCE_PATH, pI.getProcessId(), pI.getId()),
                 "UPDATE VARIABLES of ProcessInstance with id: " + pI.getId(), pI.getVariables().toString());
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
         JsonObject jsonOject = new JsonObject(pI.getVariables().toString());
@@ -192,7 +193,7 @@ public class KogitoRuntimeClientTest {
 
         client.triggerNodeInstance(SERVICE_URL, pI, nodeDefId);
         verify(client).sendPostClientRequest(webClientMock,
-                format(TRIGGER_NODE_INSTANCE_URI, pI.getProcessId(), pI.getId(), nodeDefId),
+                format(TRIGGER_NODE_INSTANCE_PATH, pI.getProcessId(), pI.getId(), nodeDefId),
                 "Trigger Node " + nodeDefId + "from ProcessInstance with id: " + pI.getId());
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
         verify(httpRequestMock).send(handlerCaptor.capture());
@@ -215,7 +216,7 @@ public class KogitoRuntimeClientTest {
 
         client.retriggerNodeInstance(SERVICE_URL, pI, nodeInstanceId);
         verify(client).sendPostClientRequest(webClientMock,
-                format(RETRIGGER_NODE_INSTANCE_URI, pI.getProcessId(), pI.getId(), nodeInstanceId),
+                format(RETRIGGER_NODE_INSTANCE_PATH, pI.getProcessId(), pI.getId(), nodeInstanceId),
                 "Retrigger NodeInstance " + nodeInstanceId +
                         "from ProcessInstance with id: " + pI.getId());
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
@@ -239,7 +240,7 @@ public class KogitoRuntimeClientTest {
 
         client.cancelNodeInstance(SERVICE_URL, pI, nodeInstanceId);
         verify(client).sendDeleteClientRequest(webClientMock,
-                format(RETRIGGER_NODE_INSTANCE_URI, pI.getProcessId(), pI.getId(), nodeInstanceId),
+                format(CANCEL_NODE_INSTANCE_PATH, pI.getProcessId(), pI.getId(), nodeInstanceId),
                 "Cancel NodeInstance " + nodeInstanceId +
                         "from ProcessInstance with id: " + pI.getId());
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);

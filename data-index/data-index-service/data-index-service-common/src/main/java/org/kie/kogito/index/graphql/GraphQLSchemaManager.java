@@ -114,10 +114,10 @@ public class GraphQLSchemaManager {
                     builder.dataFetcher("ProcessInstanceAbort", this::abortProcessInstance);
                     builder.dataFetcher("ProcessInstanceRetry", this::retryProcessInstance);
                     builder.dataFetcher("ProcessInstanceSkip", this::skipProcessInstance);
-                    builder.dataFetcher("ProcessInstanceVariablesUpdate", this::updateProcessInstanceVariables);
-                    builder.dataFetcher("TriggerNodeInstance", this::triggerNodeInstance);
-                    builder.dataFetcher("RetriggerNodeInstance", this::retriggerNodeInstance);
-                    builder.dataFetcher("CancelNodeInstance", this::cancelNodeInstance);
+                    builder.dataFetcher("ProcessInstanceUpdateVariables", this::updateProcessInstanceVariables);
+                    builder.dataFetcher("NodeInstanceTrigger", this::triggerNodeInstance);
+                    builder.dataFetcher("NodeInstanceRetrigger", this::retriggerNodeInstance);
+                    builder.dataFetcher("NodeInstanceCancel", this::cancelNodeInstance);
                     return builder;
                 })
                 .type("ProcessInstance", builder -> {

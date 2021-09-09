@@ -97,7 +97,7 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
     }
 
     @Test
-    void testProcessInstanceVariablesUpdate() {
+    void testProcessInstanceUpdateVariables() {
         String processId = "travels";
         String variablesUpdated = "variablesUpdated";
         String processInstanceId = UUID.randomUUID().toString();
@@ -105,7 +105,7 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
         KogitoProcessCloudEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
         indexProcessCloudEvent(startEvent);
 
-        checkOkResponse("{ \"query\" : \"mutation{ ProcessInstanceVariablesUpdate ( id: \\\"" + processInstanceId + "\\\", variables: \\\"" + variablesUpdated + "\\\")}\"}");
+        checkOkResponse("{ \"query\" : \"mutation{ ProcessInstanceUpdateVariables ( id: \\\"" + processInstanceId + "\\\", variables: \\\"" + variablesUpdated + "\\\")}\"}");
 
         verify(dataIndexApiClient).updateProcessInstanceVariables(eq("http://localhost:8080"),
                 eq(getProcessInstance(processId, processInstanceId, 1, null, null)), eq(variablesUpdated));
@@ -137,42 +137,42 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
     }
 
     @Test
-    void testTriggerNodeInstance() {
+    void testNodeInstanceTrigger() {
         String processId = "travels";
         String nodeId = "nodeIdToTrigger";
         String processInstanceId = UUID.randomUUID().toString();
         KogitoProcessCloudEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
         indexProcessCloudEvent(startEvent);
 
-        checkOkResponse("{ \"query\" : \"mutation{ TriggerNodeInstance ( id: \\\"" + processInstanceId + "\\\", nodeId: \\\"" + nodeId + "\\\")}\"}");
+        checkOkResponse("{ \"query\" : \"mutation{ NodeInstanceTrigger ( id: \\\"" + processInstanceId + "\\\", nodeId: \\\"" + nodeId + "\\\")}\"}");
 
         verify(dataIndexApiClient).triggerNodeInstance(eq("http://localhost:8080"),
                 eq(getProcessInstance(processId, processInstanceId, 1, null, null)), eq(nodeId));
     }
 
     @Test
-    void testRetriggerNodeInstance() {
+    void testNodeInstanceRetrigger() {
         String processId = "travels";
         String nodeInstanceId = "nodeInstanceIdToRetrigger";
         String processInstanceId = UUID.randomUUID().toString();
         KogitoProcessCloudEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
         indexProcessCloudEvent(startEvent);
 
-        checkOkResponse("{ \"query\" : \"mutation{ RetriggerNodeInstance ( id: \\\"" + processInstanceId + "\\\", nodeInstanceId: \\\"" + nodeInstanceId + "\\\")}\"}");
+        checkOkResponse("{ \"query\" : \"mutation{ NodeInstanceRetrigger ( id: \\\"" + processInstanceId + "\\\", nodeInstanceId: \\\"" + nodeInstanceId + "\\\")}\"}");
 
         verify(dataIndexApiClient).retriggerNodeInstance(eq("http://localhost:8080"),
                 eq(getProcessInstance(processId, processInstanceId, 1, null, null)), eq(nodeInstanceId));
     }
 
     @Test
-    void testCancelNodeInstance() {
+    void testNodeInstanceCancel() {
         String processId = "travels";
-        String nodeInstanceId = "nodeInstanceIdToRetrigger";
+        String nodeInstanceId = "nodeInstanceIdToCancel";
         String processInstanceId = UUID.randomUUID().toString();
         KogitoProcessCloudEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
         indexProcessCloudEvent(startEvent);
 
-        checkOkResponse("{ \"query\" : \"mutation{ CancelNodeInstance ( id: \\\"" + processInstanceId + "\\\", nodeInstanceId: \\\"" + nodeInstanceId + "\\\")}\"}");
+        checkOkResponse("{ \"query\" : \"mutation{ NodeInstanceCancel ( id: \\\"" + processInstanceId + "\\\", nodeInstanceId: \\\"" + nodeInstanceId + "\\\")}\"}");
 
         verify(dataIndexApiClient).cancelNodeInstance(eq("http://localhost:8080"),
                 eq(getProcessInstance(processId, processInstanceId, 1, null, null)), eq(nodeInstanceId));
