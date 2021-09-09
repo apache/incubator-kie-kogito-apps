@@ -28,7 +28,10 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
@@ -36,18 +39,22 @@ import java.util.stream.IntStream;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
+import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.local.lime.HighScoreNumericFeatureZones;
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.IndependentFeaturesDataDistribution;
 import org.kie.kogito.explainability.model.NumericFeatureDistribution;
+import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PartialDependenceGraph;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
@@ -500,7 +507,7 @@ public class DataUtils {
 
     /**
      * Persist a {@link PartialDependenceGraph} into a CSV file.
-     * 
+     *
      * @param partialDependenceGraph the PDP to persist
      * @param path the path to the CSV file to be created
      * @throws IOException whether any IO error occurs while writing the CSV
@@ -560,10 +567,13 @@ public class DataUtils {
      * @param featureDistributionSize desired size of generated feature distributions
      * @param draws number of times sampling from feature values is performed
      * @param sampleSize size of each sample draw
+     * @param numericFeatureZonesMap high feature score zones
      * @return a map feature name -> generated feature distribution
      */
     public static Map<String, FeatureDistribution> boostrapFeatureDistributions(DataDistribution dataDistribution,
-            PerturbationContext perturbationContext, int featureDistributionSize, int draws, int sampleSize) {
+            PerturbationContext perturbationContext,
+            int featureDistributionSize, int draws,
+            int sampleSize, Map<String, HighScoreNumericFeatureZones> numericFeatureZonesMap) {
         Map<String, FeatureDistribution> featureDistributions = new HashMap<>();
         for (FeatureDistribution featureDistribution : dataDistribution.asFeatureDistributions()) {
             Feature feature = featureDistribution.getFeature();
@@ -576,9 +586,17 @@ public class DataUtils {
                 for (int i = 0; i < draws; i++) {
                     List<Value> sampledValues =
                             DataUtils.sampleWithReplacement(values, sampleSize, perturbationContext.getRandom());
-                    double mean = DataUtils.getMean(sampledValues.stream().mapToDouble(Value::asNumber).toArray());
+                    double[] data = sampledValues.stream().mapToDouble(Value::asNumber).toArray();
+
+                    // only use high score points, if possible
+                    HighScoreNumericFeatureZones highScoreNumericFeatureZones = numericFeatureZonesMap.get(feature.getName());
+                    if (highScoreNumericFeatureZones != null) {
+                        data = Arrays.stream(data).filter(highScoreNumericFeatureZones::accept).toArray();
+                    }
+
+                    double mean = DataUtils.getMean(data);
                     double stdDev = Math
-                            .pow(DataUtils.getStdDev(sampledValues.stream().mapToDouble(Value::asNumber).toArray(), mean), 2);
+                            .pow(DataUtils.getStdDev(data, mean), 2);
                     double min = sampledValues.stream().mapToDouble(Value::asNumber).min().orElse(Double.MIN_VALUE);
                     double max = sampledValues.stream().mapToDouble(Value::asNumber).max().orElse(Double.MAX_VALUE);
                     means[i] = mean;
@@ -598,5 +616,43 @@ public class DataUtils {
             }
         }
         return featureDistributions;
+    }
+
+    public static List<Prediction> getScoreSortedPredictions(String outputName, PredictionProvider predictionProvider,
+            DataDistribution dataDistribution)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        List<PredictionInput> inputs = dataDistribution.getAllSamples();
+        List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
+                .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+        List<Prediction> predictions = DataUtils.getPredictions(inputs, predictionOutputs);
+
+        // sort the predictions by Output#getScore, in descending order
+        return predictions.stream().sorted((p1, p2) -> {
+            Optional<Output> optionalOutput1 = p1.getOutput().getByName(outputName);
+            Optional<Output> optionalOutput2 = p2.getOutput().getByName(outputName);
+            if (optionalOutput1.isPresent() && optionalOutput2.isPresent()) {
+                Output o1 = optionalOutput1.get();
+                Output o2 = optionalOutput2.get();
+                return Double.compare(o2.getScore(), o1.getScore());
+            } else {
+                return 0;
+            }
+        }).collect(Collectors.toList());
+    }
+
+    public static List<Prediction> getScoreSortedPredictions(PredictionProvider predictionProvider,
+            DataDistribution dataDistribution)
+            throws InterruptedException, ExecutionException, TimeoutException {
+        List<PredictionInput> inputs = dataDistribution.getAllSamples();
+        List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
+                .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
+        List<Prediction> predictions = DataUtils.getPredictions(inputs, predictionOutputs);
+
+        // sort the predictions by Output#getScore, in descending order
+        return predictions.stream().sorted((p1, p2) -> {
+            List<Output> o1 = p1.getOutput().getOutputs();
+            List<Output> o2 = p2.getOutput().getOutputs();
+            return Double.compare(o2.stream().mapToDouble(Output::getScore).sum(), o1.stream().mapToDouble(Output::getScore).sum());
+        }).collect(Collectors.toList());
     }
 }
