@@ -92,7 +92,8 @@ public class CounterfactualExplainerServiceHandler
                 ModelIdentifier.from(dto.getModelIdentifier()),
                 dto.getOriginalInputs(),
                 dto.getGoals(),
-                dto.getSearchDomains());
+                dto.getSearchDomains(),
+                dto.getMaxRunningTimeSeconds());
     }
 
     @Override
@@ -107,6 +108,7 @@ public class CounterfactualExplainerServiceHandler
         Map<String, TypedValue> originalInputs = request.getOriginalInputs();
         Map<String, TypedValue> goals = request.getGoals();
         Map<String, CounterfactualSearchDomainDto> searchDomains = request.getSearchDomains();
+        Long maxRunningTimeSeconds = request.getMaxRunningTimeSeconds();
 
         // If the incoming is not flat we cannot perform CF on it so fail fast
         // See https://issues.redhat.com/browse/FAI-473 and https://issues.redhat.com/browse/FAI-474
@@ -124,7 +126,8 @@ public class CounterfactualExplainerServiceHandler
                 featureDomain,
                 featureConstraints,
                 null,
-                UUID.fromString(request.getExecutionId()));
+                UUID.fromString(request.getExecutionId()),
+                maxRunningTimeSeconds);
     }
 
     private boolean isUnsupportedModel(Map<String, TypedValue> originalInputs,

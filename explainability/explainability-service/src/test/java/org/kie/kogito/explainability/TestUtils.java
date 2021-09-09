@@ -49,6 +49,8 @@ import static java.util.Collections.singletonMap;
 
 public class TestUtils {
 
+    private static final Long MAX_RUNNING_TIME_SECONDS = 60L;
+
     private TestUtils() {
         // prevent initialization
     }
@@ -90,7 +92,8 @@ public class TestUtils {
                     MODEL_IDENTIFIER,
                     INPUTS,
                     OUTPUTS,
-                    SEARCH_DOMAINS);
+                    SEARCH_DOMAINS,
+                    MAX_RUNNING_TIME_SECONDS);
     public static final LIMEExplainabilityRequestDto LIME_REQUEST_DTO = new LIMEExplainabilityRequestDto(EXECUTION_ID,
             SERVICE_URL,
             MODEL_IDENTIFIER,

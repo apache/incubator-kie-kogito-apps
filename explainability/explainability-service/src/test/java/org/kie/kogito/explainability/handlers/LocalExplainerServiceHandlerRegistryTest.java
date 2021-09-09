@@ -55,6 +55,8 @@ public class LocalExplainerServiceHandlerRegistryTest {
 
     private static final String COUNTERFACTUAL_ID = "counterfactualId";
 
+    private static final Long MAX_RUNNING_TIME_SECONDS = 60L;
+
     private LimeExplainerServiceHandler limeExplainerServiceHandler;
     private CounterfactualExplainerServiceHandler counterfactualExplainerServiceHandler;
     private PredictionProvider predictionProvider;
@@ -113,7 +115,8 @@ public class LocalExplainerServiceHandlerRegistryTest {
                 MODEL_IDENTIFIER_DTO,
                 Collections.emptyMap(),
                 Collections.emptyMap(),
-                Collections.emptyMap());
+                Collections.emptyMap(),
+                MAX_RUNNING_TIME_SECONDS);
 
         assertTrue(registry.explainabilityRequestFrom(request) instanceof CounterfactualExplainabilityRequest);
 
@@ -128,7 +131,8 @@ public class LocalExplainerServiceHandlerRegistryTest {
                 MODEL_IDENTIFIER,
                 Collections.emptyMap(),
                 Collections.emptyMap(),
-                Collections.emptyMap());
+                Collections.emptyMap(),
+                MAX_RUNNING_TIME_SECONDS);
 
         registry.explainAsyncWithResults(request, callback);
 
