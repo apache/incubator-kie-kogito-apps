@@ -51,14 +51,14 @@ public class HighScoreNumericFeatureZonesProvider {
      * having a score between the mean and the maximum are selected (feature-wise), with an associated tolerance
      * (the stdDev of the high score feature points).
      *
-     * @param dataDistribution   a data distribution
+     * @param dataDistribution a data distribution
      * @param predictionProvider the model used to score the inputs
-     * @param features           the list of features to associate high score points with
+     * @param features the list of features to associate high score points with
      * @return a map feature name -> high score numeric feature zones
      */
     public static Map<String, HighScoreNumericFeatureZones> getHighScoreFeatureZones(DataDistribution dataDistribution,
-                                                                                     PredictionProvider predictionProvider,
-                                                                                     List<Feature> features) {
+            PredictionProvider predictionProvider,
+            List<Feature> features) {
         Map<String, HighScoreNumericFeatureZones> numericFeatureZonesMap = new HashMap<>();
 
         List<Prediction> scoreSortedPredictions = new ArrayList<>();
