@@ -14,25 +14,26 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react';
-
+import React, { useState, useEffect } from 'react';
+import _ from 'lodash';
 import uuidv4 from 'uuid';
 import * as Babel from '@babel/standalone';
 import ReactDOM from 'react-dom';
 import * as Patternfly from '@patternfly/react-core';
 import { FormArgs } from '../../../api';
-
+import Text = Patternfly.Text;
+import TextContent = Patternfly.TextContent;
+import TextVariants = Patternfly.TextVariants;
 interface ReactFormRendererProps {
   content: FormArgs;
 }
 
 const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
-  // const [source, setSource] = useState<string>();
+  const [errorMessage, setErrorMessage] = useState<any>(null);
   let source;
 
   useEffect(() => {
     if (content && content.source) {
-      // setSource(content.source['source-content']);
       source = content.source['source-content'];
       renderform();
     }
@@ -75,20 +76,9 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
       const tempSource = trimmedSource;
       const formName = tempSource.split(':')[0].split('const ')[1];
       try {
-        const react = Babel.transform(trimmedSource, {
-          presets: [
-            'react',
-            [
-              'typescript',
-              {
-                allExtensions: true,
-                isTSX: true
-              }
-            ]
-          ]
-        }).code;
+        // const compiledReact = react;
 
-        const compiledReact = react;
+        const compiledReact = trimmedSource;
 
         const scriptElement: HTMLScriptElement = document.createElement(
           'script'
@@ -102,32 +92,63 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
         const content = `
         const {${reactElements}} = React;
         const {${patternflyElements}} = PatternFlyReact;
-       
-        
         ${compiledReact}
         const target = document.getElementById("${id}");
         const element = window.React.createElement(${formName}, {});
         window.ReactDOM.render(element, target);
         `;
         console.log('cone', content);
-        scriptElement.text = content;
+        const react = Babel.transform(content.trim(), {
+          presets: [
+            'react',
+            [
+              'typescript',
+              {
+                allExtensions: true,
+                isTSX: true
+              }
+            ]
+          ]
+        }).code;
+        scriptElement.text = react;
 
         container.appendChild(scriptElement);
       } catch (e) {
-        console.error(e);
+        console.log('here on error id:', e);
+        setErrorMessage(e);
       }
     }
   };
 
   return (
-    <div
-      style={{
-        height: '100%'
-      }}
-      id={'formContainer'}
-    >
-      {}
-    </div>
+    <>
+      {_.isEmpty(errorMessage) ? (
+        <div
+          style={{
+            height: '100%'
+          }}
+          id={'formContainer'}
+        >
+          {}
+        </div>
+      ) : (
+        <>
+          <TextContent>
+            <Text component={TextVariants.h2} className="pf-u-danger-color-100">
+              {errorMessage.name}
+            </Text>
+          </TextContent>
+          <TextContent>
+            <Text
+              component={TextVariants.blockquote}
+              className="pf-u-danger-color-100"
+            >
+              {errorMessage.message}
+            </Text>
+          </TextContent>
+        </>
+      )}
+    </>
   );
 };
 
