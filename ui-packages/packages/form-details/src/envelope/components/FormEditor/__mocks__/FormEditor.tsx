@@ -15,8 +15,8 @@
  */
 import React from 'react';
 
-const MockedFormView = (): React.ReactElement => {
+const MockedFormEditor = (): React.ReactElement => {
   return <></>;
 };
 
-export default MockedFormView;
+export default MockedFormEditor;

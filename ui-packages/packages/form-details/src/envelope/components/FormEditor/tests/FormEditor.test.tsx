@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount } from 'enzyme';
-import FormView from '../FormView';
+import FormEditor from '../FormEditor';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
@@ -26,7 +26,7 @@ const formContent = {
       '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"candidate":{"type":"object","properties":{"email":{"type":"string"},"name":{"type":"string"},"salary":{"type":"integer"},"skills":{"type":"string"}},"input":true},"approve":{"type":"boolean","output":true}}}'
   }
 };
-describe('FormView test', () => {
+describe('FormEditor test', () => {
   it('render source - html', () => {
     const props = {
       code: '<div><span>1</span></div>',
@@ -36,7 +36,7 @@ describe('FormView test', () => {
       formContent: formContent,
       setFormContent: jest.fn()
     };
-    const wrapper = mount(<FormView {...props} />);
+    const wrapper = mount(<FormEditor {...props} />);
     expect(wrapper).toMatchSnapshot();
   });
   it('render source - tsx', () => {
@@ -48,7 +48,7 @@ describe('FormView test', () => {
       formContent: formContent,
       setFormContent: jest.fn()
     };
-    const wrapper = mount(<FormView {...props} />);
+    const wrapper = mount(<FormEditor {...props} />);
     expect(wrapper).toMatchSnapshot();
   });
   it('render config', () => {
@@ -62,7 +62,7 @@ describe('FormView test', () => {
       formContent: formContent,
       setFormContent: jest.fn()
     };
-    const wrapper = mount(<FormView {...props} />);
+    const wrapper = mount(<FormEditor {...props} />);
     expect(wrapper).toMatchSnapshot();
   });
 });

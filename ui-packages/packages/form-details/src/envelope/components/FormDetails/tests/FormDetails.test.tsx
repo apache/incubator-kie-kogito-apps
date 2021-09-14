@@ -20,7 +20,7 @@ import FormDetails from '../FormDetails';
 import { MockedFormDetailsDriver } from '../../../tests/mocks/MockedFormDetailsDriver';
 import { act } from 'react-dom/test-utils';
 
-jest.mock('../../FormView/FormView');
+jest.mock('../../FormEditor/FormEditor');
 
 describe('form details tests', () => {
   const driver = new MockedFormDetailsDriver();

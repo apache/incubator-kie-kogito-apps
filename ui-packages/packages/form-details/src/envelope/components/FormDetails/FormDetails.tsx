@@ -29,7 +29,7 @@ import {
   Tabs,
   TabTitleText
 } from '@patternfly/react-core';
-import FormView from '../FormView/FormView';
+import FormEditor from '../FormEditor/FormEditor';
 import { ServerErrors, KogitoSpinner } from '@kogito-apps/components-common';
 import _ from 'lodash';
 import { Form } from '../../../api';
@@ -142,7 +142,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                   }}
                 >
                   {activeTab === 0 && (
-                    <FormView
+                    <FormEditor
                       code={getSource()}
                       formContent={formContent}
                       setFormContent={setFormContent}
@@ -166,7 +166,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                   }}
                 >
                   {activeTab === 1 && (
-                    <FormView
+                    <FormEditor
                       code={getConfig()}
                       formContent={formContent}
                       setFormContent={setFormContent}

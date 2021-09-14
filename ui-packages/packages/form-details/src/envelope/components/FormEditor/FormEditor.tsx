@@ -25,7 +25,7 @@ import { SyncAltIcon } from '@patternfly/react-icons';
 import { Form } from '../../../api';
 import { useFormDetailsContext } from '../contexts/FormDetailsContext';
 import { ResizableContent } from '../FormDetails/FormDetails';
-export interface FormViewProps {
+export interface FormEditorProps {
   formType?: string;
   isSource?: boolean;
   isConfig?: boolean;
@@ -34,9 +34,9 @@ export interface FormViewProps {
   setFormContent: any;
 }
 
-export const FormView = React.forwardRef<
+export const FormEditor = React.forwardRef<
   ResizableContent,
-  FormViewProps & OUIAProps
+  FormEditorProps & OUIAProps
 >(
   (
     {
@@ -141,4 +141,4 @@ export const FormView = React.forwardRef<
   }
 );
 
-export default FormView;
+export default FormEditor;
