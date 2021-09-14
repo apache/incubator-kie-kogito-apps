@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 import { FormDetailsDriver } from '../../../api/FormDetailsDriver';
 import { FormInfo } from '@kogito-apps/forms-list';
@@ -41,6 +41,10 @@ export interface FormDetailsProps {
   formData: FormInfo;
 }
 
+export interface ResizableContent {
+  doResize();
+}
+
 const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
   isEnvelopeConnectedToChannel,
   driver,
@@ -52,7 +56,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
   const [formContent, setFormContent] = useState<Form>(null);
   const [error, setError] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-
+  const editorResize = useRef<ResizableContent>();
   useEffect(() => {
     /* istanbul ignore else */
     if (isEnvelopeConnectedToChannel) {
@@ -73,7 +77,14 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
     }
   };
   const panelContent: JSX.Element = (
-    <DrawerPanelContent isResizable defaultSize={'800px'} minSize={'700px'}>
+    <DrawerPanelContent
+      isResizable
+      defaultSize={'800px'}
+      minSize={'700px'}
+      onResize={() => {
+        editorResize?.current.doResize();
+      }}
+    >
       <DrawerHead>
         {formContent && Object.keys(formContent)[0].length > 0 && (
           <span>
@@ -109,11 +120,9 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
       return JSON.stringify(formContent.formConfiguration.resources, null, 2);
     }
   };
-
   if (error) {
     return <ServerErrors error={error} variant={'large'} />;
   }
-
   return (
     <div {...componentOuiaProps(ouiaId, 'form-details', ouiaSafe)}>
       {!isLoading ? (
@@ -139,6 +148,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                       setFormContent={setFormContent}
                       isSource
                       formType={getType()}
+                      ref={editorResize}
                     />
                   )}
                 </DrawerContentBody>
@@ -161,6 +171,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                       formContent={formContent}
                       setFormContent={setFormContent}
                       isConfig
+                      ref={editorResize}
                     />
                   )}
                 </DrawerContentBody>

@@ -48,7 +48,7 @@ describe('FormDetailsEnvelopeApiImpl tests', () => {
       },
       {
         name: 'form1',
-        type: 'html',
+        type: 'HTML',
         lastModified: new Date('2020-07-11T18:30:00.000Z')
       }
     );

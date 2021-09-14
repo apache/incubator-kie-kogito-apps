@@ -1,0 +1,183 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormView test render config 1`] = `
+<FormView
+  code="{\\"1\\":\\"1\\",\\"2\\":\\"2\\"}"
+  formContent={
+    Object {
+      "formConfiguration": Object {
+        "resources": Object {
+          "scripts": Object {},
+          "styles": Object {},
+        },
+        "schema": "{\\"$schema\\":\\"http://json-schema.org/draft-07/schema#\\",\\"type\\":\\"object\\",\\"properties\\":{\\"candidate\\":{\\"type\\":\\"object\\",\\"properties\\":{\\"email\\":{\\"type\\":\\"string\\"},\\"name\\":{\\"type\\":\\"string\\"},\\"salary\\":{\\"type\\":\\"integer\\"},\\"skills\\":{\\"type\\":\\"string\\"}},\\"input\\":true},\\"approve\\":{\\"type\\":\\"boolean\\",\\"output\\":true}}}",
+      },
+      "name": "from1",
+      "source": Object {
+        "source-content": "<div><span>1</span></div>",
+      },
+    }
+  }
+  isConfig={true}
+  isSource={false}
+  setFormContent={[MockFunction]}
+>
+  <div
+    data-ouia-component-type="form-view"
+    data-ouia-safe={true}
+  >
+    <CodeEditor
+      code="{\\"1\\":\\"1\\",\\"2\\":\\"2\\"}"
+      customControls={
+        <CodeEditorControl
+          aria-label="Refresh code"
+          icon={
+            <SyncAltIcon
+              color="currentColor"
+              noVerticalAlign={false}
+              size="sm"
+            />
+          }
+          isVisible={null}
+          onClick={[Function]}
+          toolTipText="Refresh code"
+        />
+      }
+      height="800px"
+      isCopyEnabled={true}
+      isDarkTheme={false}
+      isLanguageLabelVisible={true}
+      isLineNumbersVisible={true}
+      isMinimapVisible={false}
+      isReadOnly={false}
+      language="json"
+      onChange={[Function]}
+      onEditorDidMount={[Function]}
+    >
+      <MockedComponent />
+    </CodeEditor>
+  </div>
+</FormView>
+`;
+
+exports[`FormView test render source - html 1`] = `
+<FormView
+  code="<div><span>1</span></div>"
+  formContent={
+    Object {
+      "formConfiguration": Object {
+        "resources": Object {
+          "scripts": Object {},
+          "styles": Object {},
+        },
+        "schema": "{\\"$schema\\":\\"http://json-schema.org/draft-07/schema#\\",\\"type\\":\\"object\\",\\"properties\\":{\\"candidate\\":{\\"type\\":\\"object\\",\\"properties\\":{\\"email\\":{\\"type\\":\\"string\\"},\\"name\\":{\\"type\\":\\"string\\"},\\"salary\\":{\\"type\\":\\"integer\\"},\\"skills\\":{\\"type\\":\\"string\\"}},\\"input\\":true},\\"approve\\":{\\"type\\":\\"boolean\\",\\"output\\":true}}}",
+      },
+      "name": "from1",
+      "source": Object {
+        "source-content": "<div><span>1</span></div>",
+      },
+    }
+  }
+  formType="html"
+  isConfig={false}
+  isSource={true}
+  setFormContent={[MockFunction]}
+>
+  <div
+    data-ouia-component-type="form-view"
+    data-ouia-safe={true}
+  >
+    <CodeEditor
+      code="<div><span>1</span></div>"
+      customControls={
+        <CodeEditorControl
+          aria-label="Refresh code"
+          icon={
+            <SyncAltIcon
+              color="currentColor"
+              noVerticalAlign={false}
+              size="sm"
+            />
+          }
+          isVisible={null}
+          onClick={[Function]}
+          toolTipText="Refresh code"
+        />
+      }
+      height="800px"
+      isCopyEnabled={true}
+      isDarkTheme={false}
+      isLanguageLabelVisible={true}
+      isLineNumbersVisible={true}
+      isMinimapVisible={false}
+      isReadOnly={false}
+      language="html"
+      onChange={[Function]}
+      onEditorDidMount={[Function]}
+    >
+      <MockedComponent />
+    </CodeEditor>
+  </div>
+</FormView>
+`;
+
+exports[`FormView test render source - tsx 1`] = `
+<FormView
+  code="<React.FC><div><span>1</span></div></React.FC>"
+  formContent={
+    Object {
+      "formConfiguration": Object {
+        "resources": Object {
+          "scripts": Object {},
+          "styles": Object {},
+        },
+        "schema": "{\\"$schema\\":\\"http://json-schema.org/draft-07/schema#\\",\\"type\\":\\"object\\",\\"properties\\":{\\"candidate\\":{\\"type\\":\\"object\\",\\"properties\\":{\\"email\\":{\\"type\\":\\"string\\"},\\"name\\":{\\"type\\":\\"string\\"},\\"salary\\":{\\"type\\":\\"integer\\"},\\"skills\\":{\\"type\\":\\"string\\"}},\\"input\\":true},\\"approve\\":{\\"type\\":\\"boolean\\",\\"output\\":true}}}",
+      },
+      "name": "from1",
+      "source": Object {
+        "source-content": "<div><span>1</span></div>",
+      },
+    }
+  }
+  formType="tsx"
+  isConfig={false}
+  isSource={true}
+  setFormContent={[MockFunction]}
+>
+  <div
+    data-ouia-component-type="form-view"
+    data-ouia-safe={true}
+  >
+    <CodeEditor
+      code="<React.FC><div><span>1</span></div></React.FC>"
+      customControls={
+        <CodeEditorControl
+          aria-label="Refresh code"
+          icon={
+            <SyncAltIcon
+              color="currentColor"
+              noVerticalAlign={false}
+              size="sm"
+            />
+          }
+          isVisible={null}
+          onClick={[Function]}
+          toolTipText="Refresh code"
+        />
+      }
+      height="800px"
+      isCopyEnabled={true}
+      isDarkTheme={false}
+      isLanguageLabelVisible={true}
+      isLineNumbersVisible={true}
+      isMinimapVisible={false}
+      isReadOnly={false}
+      language="typescript"
+      onChange={[Function]}
+      onEditorDidMount={[Function]}
+    >
+      <MockedComponent />
+    </CodeEditor>
+  </div>
+</FormView>
+`;
