@@ -2,11 +2,11 @@ const restData = require('./rest');
 const graphData = require('./graphql');
 const path = require('path');
 const _ = require('lodash');
+const fs = require('fs');
 const confirmTravelForm = require('./forms/ConfirmTravel');
 const applyForVisaForm = require('./forms/ApplyForVisa');
 const emptyForm = require('./forms/EmptyForm');
 const formData = require('../MockData/forms/formData');
-const formContentData = require('../MockData/forms/FormContent');
 const tasksUnableToTransition = [
   '047ec38d-5d57-4330-8c8d-9bd67b53a529',
   '841b9dba-3d91-4725-9de3-f9f4853b417e'
@@ -302,11 +302,25 @@ module.exports = controller = {
   },
 
   getFormContent: (req, res) => {
+    let sourceString;
     const formName = req.params.formName;
-    const formContent = formContentData.filter((content) => content.Form.name === formName);
-    if (formContent) {
-      res.send(formContent[0]);
+    const formInfo = formData.filter((datum) => datum.name === formName);
+    const configString = fs.readFileSync(path.join(`${__dirname}/forms/examples/${formName}.config`),'utf8');
+    if (formInfo[0].type.toLowerCase() === 'html') {
+      sourceString = fs.readFileSync(path.join(`${__dirname}/forms/examples/${formName}.html`),'utf8');
+    } else if (formInfo[0].type.toLowerCase() === 'tsx') {
+      sourceString = fs.readFileSync(path.join(`${__dirname}/forms/examples/${formName}.tsx`),'utf8');
     }
+    const response ={
+      Form:{
+        name:formName,
+        source:{
+          'source-content':sourceString
+        },
+        formConfiguration:JSON.parse(configString)
+      }
+    }
+    res.send(response);
   }
 };
 

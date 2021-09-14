@@ -28,7 +28,6 @@ export interface FormViewProps {
   formType?: string;
   isSource?: boolean;
   isConfig?: boolean;
-  editorType: string;
   formContent: Form;
   code: string;
   setFormContent: any;
@@ -39,7 +38,6 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
   formType,
   formContent,
   setFormContent,
-  editorType,
   isSource = false,
   isConfig = false,
   ouiaId,
@@ -64,7 +62,7 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
 
   const editorDidMount = (editor, monaco): void => {
     console.log('mount', editor, monaco);
-    if (formType && formType.toLowerCase() === 'tsx') {
+    if (isSource && formType.toLowerCase() === 'tsx') {
       monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
         jsx: 'react'
       });
@@ -74,14 +72,11 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
         noSyntaxValidation: false
       });
     }
-    setTimeout(() => {
-      editor.trigger('anyString', 'editor.action.formatDocument');
-    }, 500);
   };
 
   const handleChange = (value): void => {
     console.log('view', formContent);
-    if (Object.keys(formContent)[0].length > 0 && editorType === 'Source') {
+    if (Object.keys(formContent)[0].length > 0 && isSource) {
       const temp: Form = formContent;
       temp.source['source-content'] = value;
       setContentChange({ ...formContent, ...temp });
@@ -104,6 +99,7 @@ const FormView: React.FC<FormViewProps & OUIAProps> = ({
       isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
     />
   );
+  CodeEditorControl;
 
   return (
     <div {...componentOuiaProps(ouiaId, 'form-view', ouiaSafe)}>

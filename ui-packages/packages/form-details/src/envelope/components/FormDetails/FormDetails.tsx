@@ -106,7 +106,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
   const getConfig = (): string => {
     /* istanbul ignore else */
     if (!_.isEmpty(formContent)) {
-      return JSON.stringify(formContent.formConfiguration.resources);
+      return JSON.stringify(formContent.formConfiguration.resources, null, 2);
     }
   };
 
@@ -135,7 +135,6 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                   {activeTab === 0 && (
                     <FormView
                       code={getSource()}
-                      editorType="Source"
                       formContent={formContent}
                       setFormContent={setFormContent}
                       isSource
@@ -159,7 +158,6 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                   {activeTab === 1 && (
                     <FormView
                       code={getConfig()}
-                      editorType="Connections"
                       formContent={formContent}
                       setFormContent={setFormContent}
                       isConfig

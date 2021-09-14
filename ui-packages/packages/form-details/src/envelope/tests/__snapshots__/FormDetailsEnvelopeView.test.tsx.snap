@@ -15,20 +15,22 @@ exports[`FormDetailsEnvelopeView tests Snapshot 2`] = `
     }
   }
 >
-  <MockedFormDetails
-    driver={
-      FormDetailsEnvelopeViewDriver {
-        "channelApi": Object {
-          "notifications": [MockFunction],
-          "requests": Object {
-            "formDetails__getFormContent": [MockFunction],
+  <FormDetailsContextProvider>
+    <MockedFormDetails
+      driver={
+        FormDetailsEnvelopeViewDriver {
+          "channelApi": Object {
+            "notifications": [MockFunction],
+            "requests": Object {
+              "formDetails__getFormContent": [MockFunction],
+            },
+            "subscribe": [MockFunction],
+            "unsubscribe": [MockFunction],
           },
-          "subscribe": [MockFunction],
-          "unsubscribe": [MockFunction],
-        },
+        }
       }
-    }
-    isEnvelopeConnectedToChannel={true}
-  />
+      isEnvelopeConnectedToChannel={true}
+    />
+  </FormDetailsContextProvider>
 </ForwardRef>
 `;
