@@ -12,11 +12,7 @@
     "build:fast": "lerna run build:fast --stream --",
     "build:prod": "lerna run build:prod --include-dependencies --stream --",
     "test": "lerna run test:coverage --stream --",
-    "cypress:run": "lerna run cypress:run --",
-    "cypress:run-management-console": "cypress run --project ./packages/management-console",
-    "cypress:run-management-console-webapp": "cypress run --project ./packages/management-console-webapp",
-    "cypress:run-task-console-webapp": "cypress run --project ./packages/task-console-webapp",
-    "cypress:run-runtime-tools-dev-ui-webapp": "cypress run --project ./packages/runtime-tools-dev-ui-webapp",
+    "test:it": "lerna run test:it --stream --concurrency=1 --no-bail --",
     "locktt": "locktt",
     "postinstall": "patch-package"
   },
