@@ -21,7 +21,7 @@ import {
   CodeEditorControl,
   Language
 } from '@patternfly/react-code-editor';
-import { SyncAltIcon } from '@patternfly/react-icons';
+import { PlayIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
 import { Form } from '../../../api';
 import { useFormDetailsContext } from '../contexts/FormDetailsContext';
 import { ResizableContent } from '../FormDetails/FormDetails';
@@ -54,6 +54,7 @@ export const FormEditor = React.forwardRef<
     const appContext = useFormDetailsContext();
     const [contentChange, setContentChange] = useState<Form>(null);
     const [monacoEditor, setMonacoEditor] = useState<any>();
+
     useImperativeHandle(
       forwardedRef,
       () => {
@@ -81,6 +82,7 @@ export const FormEditor = React.forwardRef<
     };
 
     const editorDidMount = (editor, monaco): void => {
+      console.log('editor', editor.getModel());
       if (isSource && formType.toLowerCase() === 'tsx') {
         monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
           jsx: 'react'
@@ -100,25 +102,56 @@ export const FormEditor = React.forwardRef<
         temp.source['source-content'] = value;
         setContentChange({ ...formContent, ...temp });
       } else {
-        setContentChange((formContent.formConfiguration['resources'] = value));
+        const temp: Form = formContent;
+        temp.source['resources'] = value;
+        setContentChange({ ...formContent, ...temp });
       }
     };
 
-    const onRefreshCode = (): void => {
+    const onExecuteCode = (): void => {
       appContext.updateContent(contentChange);
       setFormContent(contentChange);
     };
 
+    const onUndoCode = (): void => {
+      if (monacoEditor !== null) {
+        monacoEditor.focus();
+        document.execCommand('undo');
+      }
+    };
+
+    const onRedoCode = (): void => {
+      if (monacoEditor !== null) {
+        monacoEditor.focus();
+        document.execCommand('redo');
+      }
+    };
+
     const customControl = (
-      <CodeEditorControl
-        icon={<SyncAltIcon />}
-        aria-label="Refresh code"
-        toolTipText="Refresh code"
-        onClick={onRefreshCode}
-        isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
-      />
+      <>
+        <CodeEditorControl
+          icon={<PlayIcon className="pf-global--primary-color--100" />}
+          aria-label="Execute code"
+          toolTipText="Execute code"
+          onClick={onExecuteCode}
+          isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
+        />
+        <CodeEditorControl
+          icon={<UndoIcon className="pf-global--primary-color--100" />}
+          aria-label="Undo code"
+          toolTipText="Undo code"
+          onClick={onUndoCode}
+          isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
+        />
+        <CodeEditorControl
+          icon={<RedoIcon className="pf-global--primary-color--100" />}
+          aria-label="Redo code"
+          toolTipText="Redo code"
+          onClick={onRedoCode}
+          isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
+        />
+      </>
     );
-    CodeEditorControl;
 
     return (
       <div {...componentOuiaProps(ouiaId, 'form-view', ouiaSafe)}>
