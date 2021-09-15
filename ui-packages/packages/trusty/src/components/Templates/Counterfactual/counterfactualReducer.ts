@@ -59,7 +59,7 @@ export type cfActions =
       };
     };
 
-export const cfReducer = (state: CFState, action: cfActions) => {
+export const cfReducer = (state: CFState, action: cfActions): CFState => {
   switch (action.type) {
     case 'CF_SET_OUTCOMES': {
       const newState = { ...state, goals: action.payload };
@@ -142,7 +142,10 @@ export const cfReducer = (state: CFState, action: cfActions) => {
   }
 };
 
-export const cfInitState = (parameters): CFState => {
+export const cfInitState = (parameters: {
+  inputs: ItemObject[];
+  outcomes: Outcome[];
+}): CFState => {
   const { inputs, outcomes } = parameters;
   const initialState: CFState = {
     goals: [],
@@ -154,19 +157,21 @@ export const cfInitState = (parameters): CFState => {
     },
     results: []
   };
-  initialState.goals = outcomes.map(outcome => {
-    return {
-      id: outcome.outcomeId,
-      name: outcome.outcomeName,
-      typeRef: outcome.outcomeResult.typeRef,
-      value: outcome.outcomeResult.value,
-      originalValue: outcome.outcomeResult.value,
-      role: isOutcomeSupported(outcome)
-        ? CFGoalRole.ORIGINAL
-        : CFGoalRole.UNSUPPORTED,
-      kind: outcome.outcomeResult.kind
-    };
-  });
+  initialState.goals = outcomes
+    .filter(outcome => outcome.evaluationStatus === 'SUCCEEDED')
+    .map(outcome => {
+      return {
+        id: outcome.outcomeId,
+        name: outcome.outcomeName,
+        typeRef: outcome.outcomeResult.typeRef,
+        value: outcome.outcomeResult.value,
+        originalValue: outcome.outcomeResult.value,
+        role: isOutcomeSupported(outcome)
+          ? CFGoalRole.ORIGINAL
+          : CFGoalRole.UNSUPPORTED,
+        kind: outcome.outcomeResult.kind
+      };
+    });
 
   initialState.searchDomains = convertInputToSearchDomain(inputs);
 
