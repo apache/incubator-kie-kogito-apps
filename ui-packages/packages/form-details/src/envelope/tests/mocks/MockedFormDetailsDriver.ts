@@ -27,10 +27,7 @@ export const formContent: Form = {
       '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"approve":{"type":"boolean","output":true},"candidate":{"type":"object","properties":{"email":{"type":"string"},"name":{"type":"string"},"salary":{"type":"integer"},"skills":{"type":"string"}},"input":true}}}',
     resources: {
       scripts: {},
-      styles: {
-        bootstrap:
-          'https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css'
-      }
+      styles: {}
     }
   }
 };

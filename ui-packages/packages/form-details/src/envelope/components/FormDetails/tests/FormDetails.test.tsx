@@ -19,9 +19,8 @@ import { mount } from 'enzyme';
 import FormDetails from '../FormDetails';
 import { MockedFormDetailsDriver } from '../../../tests/mocks/MockedFormDetailsDriver';
 import { act } from 'react-dom/test-utils';
-
 jest.mock('../../FormEditor/FormEditor');
-
+jest.mock('../../../containers/FormDisplayerContainer/FormDisplayerContainer');
 describe('form details tests', () => {
   const driver = new MockedFormDetailsDriver();
 
@@ -31,7 +30,7 @@ describe('form details tests', () => {
       driver: driver,
       formData: {
         name: 'form1',
-        type: 'html' as any,
+        type: 'HTML' as any,
         lastModified: new Date('2020-07-11T18:30:00.000Z')
       }
     };

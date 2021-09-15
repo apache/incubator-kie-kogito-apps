@@ -1,6 +1,10 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import FormEditor from '../FormEditor';
+import RuntimeToolsFormDetailsContext, {
+  FormDetailsContextImpl
+} from '../../contexts/FormDetailsContext';
+import { act } from 'react-dom/test-utils';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
@@ -31,7 +35,6 @@ describe('FormEditor test', () => {
     const props = {
       code: '<div><span>1</span></div>',
       isSource: true,
-      isConfig: false,
       formType: 'html',
       formContent: formContent,
       setFormContent: jest.fn()
@@ -43,7 +46,6 @@ describe('FormEditor test', () => {
     const props = {
       code: '<React.FC><div><span>1</span></div></React.FC>',
       isSource: true,
-      isConfig: false,
       formType: 'tsx',
       formContent: formContent,
       setFormContent: jest.fn()
@@ -57,12 +59,53 @@ describe('FormEditor test', () => {
         1: '1',
         2: '2'
       }),
-      isSource: false,
       isConfig: true,
       formContent: formContent,
       setFormContent: jest.fn()
     };
     const wrapper = mount(<FormEditor {...props} />);
     expect(wrapper).toMatchSnapshot();
+  });
+
+  it('call refresh', () => {
+    const props = {
+      code: JSON.stringify({
+        1: '1',
+        2: '2'
+      }),
+      isConfig: true,
+      formContent: formContent,
+      setFormContent: jest.fn()
+    };
+    const wrapper = mount(
+      <RuntimeToolsFormDetailsContext.Provider
+        value={new FormDetailsContextImpl()}
+      >
+        <FormEditor {...props} />
+      </RuntimeToolsFormDetailsContext.Provider>
+    );
+    wrapper
+      .find('CodeEditor')
+      .props()
+      ['customControls']['props']['onClick']();
+    expect(props.setFormContent).toHaveBeenCalled();
+  });
+
+  it('call handleChange - source', async () => {
+    const props = {
+      code: '<React.FC><div><span>1</span></div></React.FC>',
+      isSource: true,
+      formType: 'tsx',
+      formContent: formContent,
+      setFormContent: jest.fn()
+    };
+    const wrapperWithSource = mount(<FormEditor {...props} />);
+    await act(async () => {
+      wrapperWithSource
+        .find('CodeEditor')
+        .props()
+        ['onChange']({} as any);
+    });
+    expect(props.formContent).toBeDefined();
   });
 });

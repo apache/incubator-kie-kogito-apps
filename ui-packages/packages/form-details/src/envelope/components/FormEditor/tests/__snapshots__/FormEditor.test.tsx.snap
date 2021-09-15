@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FormView test render config 1`] = `
-<FormView
+exports[`FormEditor test render config 1`] = `
+<ForwardRef
   code="{\\"1\\":\\"1\\",\\"2\\":\\"2\\"}"
   formContent={
     Object {
@@ -19,7 +19,6 @@ exports[`FormView test render config 1`] = `
     }
   }
   isConfig={true}
-  isSource={false}
   setFormContent={[MockFunction]}
 >
   <div
@@ -57,11 +56,11 @@ exports[`FormView test render config 1`] = `
       <MockedComponent />
     </CodeEditor>
   </div>
-</FormView>
+</ForwardRef>
 `;
 
-exports[`FormView test render source - html 1`] = `
-<FormView
+exports[`FormEditor test render source - html 1`] = `
+<ForwardRef
   code="<div><span>1</span></div>"
   formContent={
     Object {
@@ -79,7 +78,6 @@ exports[`FormView test render source - html 1`] = `
     }
   }
   formType="html"
-  isConfig={false}
   isSource={true}
   setFormContent={[MockFunction]}
 >
@@ -118,11 +116,11 @@ exports[`FormView test render source - html 1`] = `
       <MockedComponent />
     </CodeEditor>
   </div>
-</FormView>
+</ForwardRef>
 `;
 
-exports[`FormView test render source - tsx 1`] = `
-<FormView
+exports[`FormEditor test render source - tsx 1`] = `
+<ForwardRef
   code="<React.FC><div><span>1</span></div></React.FC>"
   formContent={
     Object {
@@ -140,7 +138,6 @@ exports[`FormView test render source - tsx 1`] = `
     }
   }
   formType="tsx"
-  isConfig={false}
   isSource={true}
   setFormContent={[MockFunction]}
 >
@@ -179,5 +176,5 @@ exports[`FormView test render source - tsx 1`] = `
       <MockedComponent />
     </CodeEditor>
   </div>
-</FormView>
+</ForwardRef>
 `;

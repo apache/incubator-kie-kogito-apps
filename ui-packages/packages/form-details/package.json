@@ -51,7 +51,8 @@
       "./src/static",
       "dist/",
       "./src/envelope/tests/mocks",
-      "./src/envelope/FormDetailsEnvelope.tsx"
+      "./src/envelope/FormDetailsEnvelope.tsx",
+      "./src/envelope/components/contexts"
     ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
