@@ -11,8 +11,8 @@ import {
 } from '@patternfly/react-core';
 import { v4 as uuid } from 'uuid';
 import { CFGoal, CFGoalRole } from '../../../types';
-import './CounterfactualOutcomeEdit.scss';
 import CounterfactualOutcomeUnsupported from '../../Atoms/CounterfactualOutcomeUnsupported/CounterfactualOutcomeUnsupported';
+import './CounterfactualOutcomeEdit.scss';
 
 type CounterfactualOutcomeEditProps = {
   goal: CFGoal;

@@ -232,7 +232,7 @@ const areInputsSelected = (inputs: CFSearchInput[]) => {
   );
 };
 
-const isOutcomeSupported = outcome => {
+const isOutcomeSupported = (outcome: Outcome) => {
   switch (typeof outcome.outcomeResult.value) {
     case 'boolean':
     case 'number':
