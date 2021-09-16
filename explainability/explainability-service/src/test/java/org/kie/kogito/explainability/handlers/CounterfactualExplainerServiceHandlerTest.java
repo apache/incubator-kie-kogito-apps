@@ -59,6 +59,7 @@ import com.fasterxml.jackson.databind.node.IntNode;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -82,6 +83,8 @@ public class CounterfactualExplainerServiceHandlerTest {
 
     private static final Long MAX_RUNNING_TIME_SECONDS = 60L;
 
+    private static final Long MAX_RUNNING_TIME_MILLISECONDS = MAX_RUNNING_TIME_SECONDS * 1000;
+
     private CounterfactualExplainer explainer;
 
     private CounterfactualExplainerServiceHandler handler;
@@ -91,7 +94,9 @@ public class CounterfactualExplainerServiceHandlerTest {
         PredictionProviderFactory predictionProviderFactory = mock(PredictionProviderFactory.class);
 
         this.explainer = mock(CounterfactualExplainer.class);
-        this.handler = new CounterfactualExplainerServiceHandler(explainer, predictionProviderFactory);
+        this.handler = new CounterfactualExplainerServiceHandler(explainer,
+                predictionProviderFactory,
+                MAX_RUNNING_TIME_MILLISECONDS);
     }
 
     @Test
@@ -119,6 +124,45 @@ public class CounterfactualExplainerServiceHandlerTest {
 
         CounterfactualExplainabilityRequest request = handler.explainabilityRequestFrom(requestDto);
 
+        assertExplainabilityRequestFrom(requestDto, request);
+        assertEquals(requestDto.getMaxRunningTimeSeconds(), request.getMaxRunningTimeSeconds());
+    }
+
+    @Test
+    public void testExplainabilityRequestFromWithTimeoutLargerThanKafka() {
+        CounterfactualExplainabilityRequestDto requestDto = new CounterfactualExplainabilityRequestDto(EXECUTION_ID,
+                COUNTERFACTUAL_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER_DTO,
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                MAX_RUNNING_TIME_MILLISECONDS * 2);
+
+        CounterfactualExplainabilityRequest request = handler.explainabilityRequestFrom(requestDto);
+
+        assertExplainabilityRequestFrom(requestDto, request);
+        assertEquals(MAX_RUNNING_TIME_SECONDS, request.getMaxRunningTimeSeconds());
+    }
+
+    @Test
+    public void testExplainabilityRequestFromWithNullTimeout() {
+        CounterfactualExplainabilityRequestDto requestDto = new CounterfactualExplainabilityRequestDto(EXECUTION_ID,
+                COUNTERFACTUAL_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER_DTO,
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                Collections.emptyMap(),
+                null);
+
+        CounterfactualExplainabilityRequest request = handler.explainabilityRequestFrom(requestDto);
+
+        assertExplainabilityRequestFrom(requestDto, request);
+        assertNull(request.getMaxRunningTimeSeconds());
+    }
+
+    private void assertExplainabilityRequestFrom(CounterfactualExplainabilityRequestDto requestDto, CounterfactualExplainabilityRequest request) {
         assertEquals(requestDto.getExecutionId(), request.getExecutionId());
         assertEquals(requestDto.getCounterfactualId(), request.getCounterfactualId());
         assertEquals(requestDto.getServiceUrl(), request.getServiceUrl());
@@ -127,8 +171,6 @@ public class CounterfactualExplainerServiceHandlerTest {
         assertEquals(requestDto.getOriginalInputs(), request.getOriginalInputs());
         assertEquals(requestDto.getGoals(), request.getGoals());
         assertEquals(requestDto.getSearchDomains(), request.getSearchDomains());
-
-        assertEquals(requestDto.getMaxRunningTimeSeconds(), request.getMaxRunningTimeSeconds());
     }
 
     @Test

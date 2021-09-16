@@ -70,8 +70,11 @@ public class LocalExplainerServiceHandlerRegistryTest {
         LimeExplainer limeExplainer = mock(LimeExplainer.class);
         CounterfactualExplainer counterfactualExplainer = mock(CounterfactualExplainer.class);
         PredictionProviderFactory predictionProviderFactory = mock(PredictionProviderFactory.class);
-        limeExplainerServiceHandler = spy(new LimeExplainerServiceHandler(limeExplainer, predictionProviderFactory));
-        counterfactualExplainerServiceHandler = spy(new CounterfactualExplainerServiceHandler(counterfactualExplainer, predictionProviderFactory));
+        limeExplainerServiceHandler = spy(new LimeExplainerServiceHandler(limeExplainer,
+                predictionProviderFactory));
+        counterfactualExplainerServiceHandler = spy(new CounterfactualExplainerServiceHandler(counterfactualExplainer,
+                predictionProviderFactory,
+                MAX_RUNNING_TIME_SECONDS));
         predictionProvider = mock(PredictionProvider.class);
         callback = mock(Consumer.class);
 
