@@ -14,33 +14,76 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from 'react';
-import _ from 'lodash';
+import React, { useState, useEffect, useCallback } from 'react';
+import isEmpty from 'lodash/isEmpty';
 import uuidv4 from 'uuid';
 import * as Babel from '@babel/standalone';
 import ReactDOM from 'react-dom';
 import * as Patternfly from '@patternfly/react-core';
-import { FormArgs } from '../../../api';
+import { FormResources } from '../../../api';
 import Text = Patternfly.Text;
 import TextContent = Patternfly.TextContent;
 import TextVariants = Patternfly.TextVariants;
 interface ReactFormRendererProps {
-  content: FormArgs;
+  source: string;
+  resources: FormResources;
+  seIsExecuting: (isExecuting: boolean) => void;
 }
 
-const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
+const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({
+  source,
+  resources,
+  seIsExecuting
+}) => {
   const [errorMessage, setErrorMessage] = useState<any>(null);
-  let source;
 
   useEffect(() => {
-    if (content && content.source) {
-      source = content.source['source-content'];
+    if (source) {
       renderform();
     }
-  }, [content]);
+  }, [source, resources]);
+
+  const renderTags = (container): void => {
+    for (const key in resources.scripts) {
+      const script: HTMLScriptElement = document.createElement('script');
+
+      script.src = resources.scripts[key];
+      container.appendChild(script);
+    }
+
+    for (const key in resources.styles) {
+      const link: HTMLLinkElement = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = resources.styles[key];
+      container.appendChild(link);
+    }
+  };
+  const renderResources = useCallback(() => {
+    const container: HTMLElement = document.getElementById('formContainer');
+    const scripts: HTMLCollectionOf<HTMLScriptElement> = container.getElementsByTagName(
+      'script'
+    );
+    const styles: HTMLCollectionOf<HTMLLinkElement> = container.getElementsByTagName(
+      'link'
+    );
+    if (scripts.length > 0 || styles.length > 0) {
+      let scriptIndex: number = scripts.length;
+      let styleIndex: number = styles.length;
+      while (scriptIndex--) {
+        container.removeChild(scripts[scriptIndex]);
+      }
+      while (styleIndex--) {
+        container.removeChild(styles[styleIndex]);
+      }
+      renderTags(container);
+    } else {
+      renderTags(container);
+    }
+  }, [resources]);
 
   const renderform = () => {
     if (source) {
+      seIsExecuting(true);
       window.React = React;
       window.ReactDOM = ReactDOM;
 
@@ -54,6 +97,7 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
       formContainer.id = id;
 
       container.appendChild(formContainer);
+      renderResources();
 
       const reactReg = /import React, {[^}]*}.*(?='react').*/gim;
       const patternflyReg = /import {[^}]*}.*(?='@patternfly\/react-core').*/gim;
@@ -76,8 +120,6 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
       const tempSource = trimmedSource;
       const formName = tempSource.split(':')[0].split('const ')[1];
       try {
-        // const compiledReact = react;
-
         const compiledReact = trimmedSource;
 
         const scriptElement: HTMLScriptElement = document.createElement(
@@ -113,16 +155,18 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({ content }) => {
         scriptElement.text = react;
 
         container.appendChild(scriptElement);
+        seIsExecuting(false);
       } catch (e) {
         console.log('here on error id:', e);
         setErrorMessage(e);
+        seIsExecuting(false);
       }
     }
   };
 
   return (
     <>
-      {_.isEmpty(errorMessage) ? (
+      {isEmpty(errorMessage) ? (
         <div
           style={{
             height: '100%'

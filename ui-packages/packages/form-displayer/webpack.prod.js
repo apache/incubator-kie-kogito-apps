@@ -28,7 +28,7 @@ module.exports = merge(common, {
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'styles/styles.css',
+      filename: 'envelope/components/styles.css',
       chunkFilename: '[name].bundle.css'
     })
   ],

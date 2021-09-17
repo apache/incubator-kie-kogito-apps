@@ -11,7 +11,8 @@ const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 module.exports = {
   entry: {
     standalone: path.resolve(__dirname, 'src', 'standalone', 'standalone.ts'),
-    envelope: path.resolve(__dirname, 'src', 'standalone', 'EnvelopeApp.ts')
+    envelope: path.resolve(__dirname, 'src', 'standalone', 'EnvelopeApp.ts'),
+    'resources/form-displayer': './src/resources/form-displayer.ts'
   },
   plugins: [
     new MonacoWebpackPlugin({
@@ -95,6 +96,12 @@ module.exports = {
             '../../node_modules/@kogito-apps/task-form/dist/static'
           ),
           path.resolve(
+            '../../node_modules/@kogito-apps/form-details/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/form-displayer/dist/static'
+          ),
+          path.resolve(
             '../../node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf'
           )
         ],
@@ -167,6 +174,12 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/process-list/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/form-details/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/form-displayer/dist/static'
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/task-form/dist/static'

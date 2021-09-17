@@ -65,6 +65,6 @@ module.exports = merge(common, {
     ]
   },
   output: {
-    filename: 'src/components/styles.css'
+    filename: 'envelope/components/styles.css'
   }
 });

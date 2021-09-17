@@ -17,7 +17,7 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { EnvelopeBus } from '@kogito-tooling/envelope-bus/dist/api';
-import { Envelope, EnvelopeDivConfig } from '@kogito-tooling/envelope';
+import { Envelope, EnvelopeIFrameConfig } from '@kogito-tooling/envelope';
 import { FormDisplayerChannelApi, FormDisplayerEnvelopeApi } from '../api';
 import { FormDisplayerEnvelopeContext } from './FormDisplayerEnvelopeContext';
 import {
@@ -27,9 +27,9 @@ import {
 import { FormDisplayerEnvelopeApiImpl } from './FormDisplayerEnvelopeApiImpl';
 
 export function init(args: {
-  config: EnvelopeDivConfig;
-  container: HTMLDivElement;
+  container: HTMLElement;
   bus: EnvelopeBus;
+  config: EnvelopeIFrameConfig;
 }) {
   const envelope = new Envelope<
     FormDisplayerEnvelopeApi,
@@ -37,6 +37,7 @@ export function init(args: {
     FormDisplayerEnvelopeViewApi,
     FormDisplayerEnvelopeContext
   >(args.bus, args.config);
+  console.log('container', args.container);
 
   const envelopeViewDelegate = async () => {
     const ref = React.createRef<FormDisplayerEnvelopeViewApi>();
@@ -47,7 +48,7 @@ export function init(args: {
           channelApi={envelope.channelApi}
         />,
         args.container,
-        () => res(() => ref.current)
+        () => res(() => ref.current!)
       );
     });
   };

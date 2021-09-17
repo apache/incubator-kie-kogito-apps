@@ -1832,15 +1832,6 @@
     "@types/yargs" "^15.0.0"
     chalk "^3.0.0"
 
-"@kogito-apps/management-console@file:packages/management-console":
-  version "1.0.0"
-  dependencies:
-    "@kogito-apps/common" "1.0.0"
-    gql-query-builder "3.1.3"
-    moment "2.24.0"
-    react-json-view "1.19.1"
-    react-moment "0.9.7"
-
 "@kogito-tooling/backend@0.10.0":
   version "0.10.0"
   resolved "https://registry.yarnpkg.com/@kogito-tooling/backend/-/backend-0.10.0.tgz#f5e67866e380b9e2de3ad6266b02fb4ecb761a9c"
@@ -2858,7 +2849,7 @@
     react-dropzone "9.0.0"
     tslib "1.13.0"
 
-"@patternfly/react-core@4.135.0", "@patternfly/react-core@4.84.4", "@patternfly/react-core@^4.135.0":
+"@patternfly/react-core@4.135.0", "@patternfly/react-core@^4.135.0":
   version "4.135.0"
   resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.135.0.tgz#b64ad4da10a8814926e28fad727bc7690cd60e66"
   integrity sha512-DZcONUGOR7Znd6BsUJ4L+KrrnIpyjUvh3JNcYiHW3loytxShCGcx+a04QjOOcZm+MtFhkgs/t51yiC5IP12abA==
@@ -2871,10 +2862,33 @@
     tippy.js "5.1.2"
     tslib "1.13.0"
 
-"@patternfly/react-icons@4.11.0", "@patternfly/react-icons@4.7.22", "@patternfly/react-icons@^4.11.0":
+"@patternfly/react-core@4.84.4":
+  version "4.84.4"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-core/-/react-core-4.84.4.tgz#e3061596f0ac02c5cb181f41201293ba073013a1"
+  integrity sha512-GIv6zJl+NGYIrSm2pATQFggRt4ZFYUKVNbLSsna2x8+eYeZscqIUFSPmBM+eNpQkGaoJk254Lu09pgm4hM/b4g==
+  dependencies:
+    "@patternfly/react-icons" "^4.7.22"
+    "@patternfly/react-styles" "^4.7.22"
+    "@patternfly/react-tokens" "^4.9.22"
+    focus-trap "6.2.2"
+    react-dropzone "9.0.0"
+    tippy.js "5.1.2"
+    tslib "1.13.0"
+
+"@patternfly/react-icons@4.11.0", "@patternfly/react-icons@^4.11.0":
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.11.0.tgz#26790eeff22dc3204aa8cd094470f0a2f915634a"
   integrity sha512-WsIX34bO9rhVRmPG0jlV3GoFGfYgPC64TscNV0lxQosiVRnYIA6Z3nBSArtJsxo5Yn6c63glIefC/YTy6D/ZYg==
+
+"@patternfly/react-icons@4.7.22":
+  version "4.7.22"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.7.22.tgz#ee8c4f66020abf200cbdd233fba27d004dea562f"
+  integrity sha512-JDsnebr9CNIyrv9yjaGFQ56OChbV6KcxMYBIpNc8/sZdU4TXHWNC7P7rlUM/BuGpbWvyaOJtscRuf5uteIKX3A==
+
+"@patternfly/react-icons@^4.7.22":
+  version "4.11.14"
+  resolved "https://registry.yarnpkg.com/@patternfly/react-icons/-/react-icons-4.11.14.tgz#ef7a2de3f78d5bd83715afb9651a185a89901c22"
+  integrity sha512-SBwID1p+UaQ9BSmzIRFr+BJEhYgx1rWHlm2HIZzhoz7BG3Q7byaQ8ZNfZLm0D+ZGVJQ+fq0zUHGE1nzxDPFqNQ==
 
 "@patternfly/react-styles@4.11.0", "@patternfly/react-styles@^4.11.0", "@patternfly/react-styles@^4.7.22":
   version "4.11.0"
@@ -5481,7 +5495,7 @@ axe-core@^3.3.2:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-3.5.5.tgz#84315073b53fa3c0c51676c588d59da09a192227"
   integrity sha512-5P0QZ6J5xGikH780pghEdbEKijCTrruK9KxtPZCFWUpef0f6GipO+xEZ5GKCb020mmqgbiNO6TcA55CriL784Q==
 
-axios@0.21.1, axios@^0.21.1:
+axios@^0.21.1:
   version "0.21.1"
   resolved "https://registry.yarnpkg.com/axios/-/axios-0.21.1.tgz#22563481962f4d6bde9a76d516ef0e5d3c09b2b8"
   integrity sha512-dKQiRHxGD9PPRIUNIWvZhPTPpl1rf/OxTYKsqKUDjBwYylTvV7SjSHJb9ratfyzM6wCdLCOYLzs73qpg5c4iGA==
@@ -16255,6 +16269,11 @@ react-popper@^1.3.7:
     prop-types "^15.6.1"
     typed-styles "^0.0.7"
     warning "^4.0.2"
+
+react-pure-loaders@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/react-pure-loaders/-/react-pure-loaders-3.0.1.tgz#e364d5b1847281dac1d0a5769f912a0fdfd68bc0"
+  integrity sha512-FwJy+NNCGS0ojtslaY0ubhzayw1zgYCY3nGKLEAMjNhIH5p/ld+MOe/JIdh50dUaYf3rqH4TNlJLPl/iy9UOLA==
 
 react-redux@^7.0.2:
   version "7.2.1"

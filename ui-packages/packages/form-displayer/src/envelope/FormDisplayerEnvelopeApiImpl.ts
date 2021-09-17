@@ -24,7 +24,7 @@ import {
 } from '../api';
 import { FormDisplayerEnvelopeViewApi } from './FormDisplayerEnvelopeView';
 import { FormDisplayerEnvelopeContext } from './FormDisplayerEnvelopeContext';
-import _ from 'lodash';
+import isEqual from 'lodash/isEqual';
 export class FormDisplayerEnvelopeApiImpl implements FormDisplayerEnvelopeApi {
   private capturedInitRequestYet = false;
   constructor(
@@ -60,7 +60,7 @@ export class FormDisplayerEnvelopeApiImpl implements FormDisplayerEnvelopeApi {
 
     this.ackCapturedInitRequest();
 
-    if (!_.isEqual(tempContent, initArgs.formContent)) {
+    if (!isEqual(tempContent, initArgs.formContent)) {
       tempContent = initArgs.formContent;
       this.args.view().setFormContent(initArgs.formContent, initArgs.formData);
     }

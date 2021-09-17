@@ -16,7 +16,7 @@
 
 import * as React from 'react';
 import { useImperativeHandle, useState } from 'react';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { FormDisplayerChannelApi, FormArgs, FormInfo } from '../api';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
 import FormDisplayer from './components/FormDisplayer/FormDisplayer';
@@ -54,9 +54,11 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
           setEnvelopeConnectedToChannel(true);
         },
         notify: (formContent: FormArgs) => {
-          if (!_.isEmpty(formContent)) {
+          if (!isEmpty(formContent)) {
             console.log('check', formContent);
+            setEnvelopeConnectedToChannel(false);
             setContent(formContent);
+            setEnvelopeConnectedToChannel(true);
           }
           return Promise.resolve();
         }
@@ -64,7 +66,7 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
     },
     []
   );
-
+  console.log('check', content, config);
   return (
     <FormDisplayer
       isEnvelopeConnectedToChannel={isEnvelopeConnectedToChannel}

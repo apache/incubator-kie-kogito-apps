@@ -48,7 +48,8 @@ const FormDisplayerContainer: React.FC<FormDisplayerContainerProps> = ({
 
   return (
     <EmbeddedFormDisplayer
-      targetOrigin={'*'}
+      targetOrigin={window.location.origin}
+      envelopePath={'resources/form-displayer.html'}
       formContent={formContent}
       formData={formData}
       ref={formDisplayerApiRef}

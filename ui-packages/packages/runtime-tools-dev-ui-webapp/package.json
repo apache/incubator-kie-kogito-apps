@@ -37,6 +37,7 @@
     "@kogito-apps/components-common": "^1.0.0",
     "@kogito-apps/consoles-common": "^1.0.0",
     "@kogito-apps/form-details": "^1.0.0",
+    "@kogito-apps/form-displayer": "^1.0.0",
     "@kogito-apps/forms-list": "^1.0.0",
     "@kogito-apps/jobs-management": "^1.0.0",
     "@kogito-apps/management-console-shared": "^1.0.0",
@@ -89,7 +90,7 @@
     ],
     "moduleNameMapper": {
       "\\.(scss|sass|css)$": "identity-obj-proxy",
-      "monaco-editor":"<rootDir>/__mocks__/monacoMock.js"
+      "monaco-editor": "<rootDir>/__mocks__/monacoMock.js"
     }
   },
   "lint-staged": {

@@ -31,7 +31,7 @@ import {
 } from '@patternfly/react-core';
 import FormEditor from '../FormEditor/FormEditor';
 import { ServerErrors, KogitoSpinner } from '@kogito-apps/components-common';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
 import { Form } from '../../../api';
 import FormDisplayerContainer from '../../containers/FormDisplayerContainer/FormDisplayerContainer';
 
@@ -85,7 +85,7 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
         editorResize?.current.doResize();
       }}
     >
-      <DrawerHead>
+      <DrawerHead style={{ height: '100%' }}>
         {formContent && Object.keys(formContent)[0].length > 0 && (
           <span>
             <FormDisplayerContainer
@@ -104,19 +104,19 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
 
   const getSource = (): string => {
     /* istanbul ignore else */
-    if (!_.isEmpty(formContent)) {
+    if (!isEmpty(formContent)) {
       return formContent.source['source-content'];
     }
   };
   const getType = (): string => {
     /* istanbul ignore else */
-    if (!_.isEmpty(formData)) {
+    if (!isEmpty(formData)) {
       return formData.type;
     }
   };
   const getConfig = (): string => {
     /* istanbul ignore else */
-    if (!_.isEmpty(formContent)) {
+    if (!isEmpty(formContent)) {
       return JSON.stringify(formContent.formConfiguration.resources, null, 2);
     }
   };

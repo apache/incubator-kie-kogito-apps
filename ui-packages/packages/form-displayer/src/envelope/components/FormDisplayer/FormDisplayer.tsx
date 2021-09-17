@@ -14,10 +14,13 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormArgs, FormInfo } from '../../../api';
+import { BallBeat } from 'react-pure-loaders';
 import ReactFormRenderer from '../ReactFormRenderer/ReactFormRenderer';
 import HtmlFormRenderer from '../HtmlFormRenderer/HtmlFormRenderer';
+import { Bullseye } from '@patternfly/react-core';
+import '../styles.css';
 
 interface FormDisplayerProps {
   isEnvelopeConnectedToChannel: boolean;
@@ -30,12 +33,34 @@ const FormDisplayer: React.FC<FormDisplayerProps> = ({
   content,
   config
 }) => {
+  const [source, setSource] = useState<string>();
+  const [resources, setResources] = useState<any>();
+  const [isExecuting, seIsExecuting] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isEnvelopeConnectedToChannel) {
+      setSource(content.source['source-content']);
+      setResources(content.formConfiguration['resources']);
+    }
+  }, [isEnvelopeConnectedToChannel, content]);
   return (
     <>
-      {isEnvelopeConnectedToChannel && config && config.type === 'TSX' ? (
-        <ReactFormRenderer content={content} />
+      {isEnvelopeConnectedToChannel && !isExecuting ? (
+        <>
+          {config && config.type === 'TSX' ? (
+            <ReactFormRenderer
+              source={source}
+              resources={resources}
+              seIsExecuting={seIsExecuting}
+            />
+          ) : (
+            <HtmlFormRenderer source={source} resources={resources} />
+          )}
+        </>
       ) : (
-        <HtmlFormRenderer content={content} config={config} />
+        <Bullseye className="kogito-form-displayer__ball-beats">
+          <BallBeat color={'#000000'} loading={!isEnvelopeConnectedToChannel} />
+        </Bullseye>
       )}
     </>
   );

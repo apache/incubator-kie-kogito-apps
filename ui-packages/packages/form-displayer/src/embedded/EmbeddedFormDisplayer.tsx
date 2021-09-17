@@ -25,13 +25,14 @@ import {
 import { ContainerType } from '@kogito-tooling/envelope/dist/api';
 import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
 import { EmbeddedEnvelopeFactory } from '@kogito-tooling/envelope/dist/embedded';
-import { EnvelopeBusMessage } from '@kogito-tooling/envelope-bus/dist/api';
-import { init } from '../envelope';
+// import { EnvelopeBusMessage } from '@kogito-tooling/envelope-bus/dist/api';
+// import { init } from '../envelope';
 
 export type Props = {
   targetOrigin: string;
   formContent: FormArgs;
   formData: FormInfo;
+  envelopePath: string;
 };
 
 export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
@@ -42,24 +43,8 @@ export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
         FormDisplayerChannelApi,
         FormDisplayerEnvelopeApi
       >,
-      container: () => HTMLDivElement
+      container: () => HTMLElement
     ) => {
-      init({
-        config: {
-          containerType: ContainerType.DIV,
-          envelopeId: envelopeServer.id
-        },
-        container: container(),
-        bus: {
-          postMessage<D, Type>(
-            message: EnvelopeBusMessage<D, Type>,
-            targetOrigin?: string,
-            transfer?: any
-          ) {
-            window.postMessage(message, '*', transfer);
-          }
-        }
-      });
       return envelopeServer.envelopeApi.requests.formDisplayer__init(
         {
           origin: envelopeServer.origin,
@@ -91,7 +76,10 @@ export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
         origin: props.targetOrigin,
         refDelegate,
         pollInit,
-        config: { containerType: ContainerType.DIV }
+        config: {
+          containerType: ContainerType.IFRAME,
+          envelopePath: props.envelopePath
+        }
       });
     }, []);
 

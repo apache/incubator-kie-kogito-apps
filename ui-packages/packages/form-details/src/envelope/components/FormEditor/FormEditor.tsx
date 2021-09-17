@@ -25,6 +25,7 @@ import { PlayIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
 import { Form } from '../../../api';
 import { useFormDetailsContext } from '../contexts/FormDetailsContext';
 import { ResizableContent } from '../FormDetails/FormDetails';
+import '../styles.css';
 export interface FormEditorProps {
   formType?: string;
   isSource?: boolean;
@@ -103,7 +104,7 @@ export const FormEditor = React.forwardRef<
         setContentChange({ ...formContent, ...temp });
       } else {
         const temp: Form = formContent;
-        temp.source['resources'] = value;
+        temp.formConfiguration['resources'] = JSON.parse(value);
         setContentChange({ ...formContent, ...temp });
       }
     };
@@ -113,14 +114,14 @@ export const FormEditor = React.forwardRef<
       setFormContent(contentChange);
     };
 
-    const onUndoCode = (): void => {
+    const onUndoChanges = (): void => {
       if (monacoEditor !== null) {
         monacoEditor.focus();
         document.execCommand('undo');
       }
     };
 
-    const onRedoCode = (): void => {
+    const onRedoChanges = (): void => {
       if (monacoEditor !== null) {
         monacoEditor.focus();
         document.execCommand('redo');
@@ -138,16 +139,16 @@ export const FormEditor = React.forwardRef<
         />
         <CodeEditorControl
           icon={<UndoIcon className="pf-global--primary-color--100" />}
-          aria-label="Undo code"
-          toolTipText="Undo code"
-          onClick={onUndoCode}
+          aria-label="Undo changes"
+          toolTipText="Undo changes"
+          onClick={onUndoChanges}
           isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
         />
         <CodeEditorControl
           icon={<RedoIcon className="pf-global--primary-color--100" />}
-          aria-label="Redo code"
-          toolTipText="Redo code"
-          onClick={onRedoCode}
+          aria-label="Redo changes"
+          toolTipText="Redo changes"
+          onClick={onRedoChanges}
           isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
         />
       </>

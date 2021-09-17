@@ -14,43 +14,62 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from 'react';
-import { FormArgs, FormInfo } from '../../../api';
-// import uuidv4 from 'uuid';
+import React, { useEffect, useCallback } from 'react';
+import { FormResources } from '../../../api';
 
 interface HtmlFormRendererProps {
-  content: FormArgs;
-  config: FormInfo;
+  source: any;
+  resources: FormResources;
 }
 
-const HtmlFormRenderer: React.FC<HtmlFormRendererProps> = ({ content }) => {
-  const [source, setSource] = useState<string>();
-  let resources = {} as any;
-
+const HtmlFormRenderer: React.FC<HtmlFormRendererProps> = ({
+  source,
+  resources
+}) => {
   useEffect(() => {
-    if (content && content.source) {
-      setSource(content.source['source-content']);
-      resources = { ...content.formConfiguration.resources };
+    if (source) {
       renderResources();
     }
-  }, [content]);
+  }, [resources]);
 
-  const renderResources = () => {
-    const container: HTMLElement = document.getElementById('script-container');
+  const renderTags = (container): void => {
     for (const key in resources.scripts) {
-      const script = document.createElement('script');
+      const script: HTMLScriptElement = document.createElement('script');
 
       script.src = resources.scripts[key];
       container.appendChild(script);
     }
 
     for (const key in resources.styles) {
-      const link = document.createElement('link');
+      const link: HTMLLinkElement = document.createElement('link');
       link.rel = 'stylesheet';
       link.href = resources.styles[key];
       container.appendChild(link);
     }
   };
+
+  const renderResources = useCallback((): void => {
+    const container: HTMLElement = document.getElementById('script-container');
+    const scripts: HTMLCollectionOf<HTMLScriptElement> = container.getElementsByTagName(
+      'script'
+    );
+    const styles: HTMLCollectionOf<HTMLLinkElement> = container.getElementsByTagName(
+      'link'
+    );
+    if (scripts.length > 0 || styles.length > 0) {
+      let scriptIndex: number = scripts.length;
+      let styleIndex: number = styles.length;
+      while (scriptIndex--) {
+        container.removeChild(scripts[scriptIndex]);
+      }
+      while (styleIndex--) {
+        container.removeChild(styles[styleIndex]);
+      }
+      renderTags(container);
+    } else {
+      renderTags(container);
+    }
+  }, [resources]);
 
   return (
     <div id="script-container">

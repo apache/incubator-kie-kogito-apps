@@ -71,6 +71,12 @@ module.exports = merge(common, {
             '../../node_modules/@kogito-apps/task-form/dist/envelope/styles.css'
           ),
           path.resolve(
+            '../../node_modules/@kogito-apps/form-details/dist/envelope/components/styles.css'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/form-displayer/dist/envelope/components/styles.css'
+          ),
+          path.resolve(
             '../../node_modules/react-calendar/dist/Calendar.css'
           ),
           path.resolve(

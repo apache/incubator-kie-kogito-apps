@@ -32,7 +32,7 @@ export interface FormDisplayerInitArgs {
   formData: FormInfo;
 }
 
-interface FormResources {
+export interface FormResources {
   scripts: {
     [key: string]: string;
   };
@@ -45,10 +45,11 @@ interface FormConfiguration {
   resources: FormResources;
 }
 
+export interface sourceArgs {
+  'source-content': string;
+}
 export interface FormArgs {
-  source: {
-    'source-content': string;
-  };
+  source: sourceArgs;
   name: string;
   formConfiguration: FormConfiguration;
 }
