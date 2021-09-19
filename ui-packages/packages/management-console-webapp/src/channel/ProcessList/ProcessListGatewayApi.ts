@@ -20,12 +20,7 @@ import {
   ProcessInstance
 } from '@kogito-apps/management-console-shared';
 import { ProcessListQueries } from './ProcessListQueries';
-import {
-  handleProcessAbort,
-  handleProcessMultipleAction,
-  handleProcessRetry,
-  handleProcessSkip
-} from '../../apis/apis';
+import { handleProcessRetry } from '../../apis/apis';
 
 export interface ProcessListGatewayApi {
   processListState: ProcessListState;
@@ -106,7 +101,7 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
   handleProcessSkip = async (
     processInstance: ProcessInstance
   ): Promise<void> => {
-    return handleProcessSkip(processInstance);
+    return this.queries.handleProcessSkip(processInstance);
   };
 
   handleProcessRetry = async (
@@ -118,14 +113,17 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
   handleProcessAbort = async (
     processInstance: ProcessInstance
   ): Promise<void> => {
-    return handleProcessAbort(processInstance);
+    return this.queries.handleProcessAbort(processInstance);
   };
 
   handleProcessMultipleAction = async (
     processInstances: ProcessInstance[],
     operationType: OperationType
   ): Promise<BulkProcessInstanceActionResponse> => {
-    return handleProcessMultipleAction(processInstances, operationType);
+    return this.queries.handleProcessMultipleAction(
+      processInstances,
+      operationType
+    );
   };
   query(offset: number, limit: number): Promise<ProcessInstance[]> {
     return new Promise<ProcessInstance[]>((resolve, reject) => {

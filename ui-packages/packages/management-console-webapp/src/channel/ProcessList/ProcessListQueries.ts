@@ -16,9 +16,18 @@
 
 import { ApolloClient } from 'apollo-client';
 import { SortBy, ProcessInstanceFilter } from '@kogito-apps/process-list';
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import {
+  BulkProcessInstanceActionResponse,
+  OperationType,
+  ProcessInstance
+} from '@kogito-apps/management-console-shared';
 import { GraphQL } from '@kogito-apps/consoles-common';
 import { buildProcessListWhereArgument } from '../../utils/QueryUtils';
+import {
+  handleProcessAbort,
+  handleProcessMultipleAction,
+  handleProcessSkip
+} from '../../apis/apis';
 
 export interface ProcessListQueries {
   getProcessInstances(
@@ -30,6 +39,12 @@ export interface ProcessListQueries {
   getChildProcessInstances(
     rootProcessInstanceId: string
   ): Promise<ProcessInstance[]>;
+  handleProcessSkip(processInstance: ProcessInstance): Promise<void>;
+  handleProcessAbort(processInstance: ProcessInstance): Promise<void>;
+  handleProcessMultipleAction(
+    processInstances: ProcessInstance[],
+    operationType: OperationType
+  ): Promise<BulkProcessInstanceActionResponse>;
 }
 
 export class GraphQLProcessListQueries implements ProcessListQueries {
@@ -80,5 +95,24 @@ export class GraphQLProcessListQueries implements ProcessListQueries {
         })
         .catch(reason => reject(reason));
     });
+  }
+
+  async handleProcessSkip(processInstance: ProcessInstance): Promise<void> {
+    return handleProcessSkip(processInstance, this.client);
+  }
+
+  async handleProcessAbort(processInstance: ProcessInstance): Promise<void> {
+    return handleProcessAbort(processInstance, this.client);
+  }
+
+  async handleProcessMultipleAction(
+    processInstances: ProcessInstance[],
+    operationType: OperationType
+  ) {
+    return handleProcessMultipleAction(
+      processInstances,
+      operationType,
+      this.client
+    );
   }
 }

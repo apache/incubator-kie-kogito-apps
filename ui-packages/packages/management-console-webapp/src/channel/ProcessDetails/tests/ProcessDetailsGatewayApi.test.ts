@@ -33,7 +33,6 @@ import {
   handleJobReschedule,
   jobCancel,
   getSvg,
-  handleProcessAbort,
   getTriggerableNodes,
   handleNodeTrigger,
   handleProcessVariableUpdate
@@ -70,10 +69,14 @@ export const JobData: Job = {
 
 const getJobsMock = jest.fn();
 const getProcessDetailsMock = jest.fn();
+const handleProcessSkipMock = jest.fn();
+const handleProcessAbortMock = jest.fn();
 
 const MockProcessDetailsQueries = jest.fn<ProcessDetailsQueries, []>(() => ({
   getProcessDetails: getProcessDetailsMock,
-  getJobs: getJobsMock
+  getJobs: getJobsMock,
+  handleProcessSkip: handleProcessSkipMock,
+  handleProcessAbort: handleProcessAbortMock
 }));
 
 let queries: ProcessDetailsQueries;
@@ -207,7 +210,7 @@ describe('ProcessDetailsGatewayApi tests', () => {
 
   it('handleProcessAbort', async () => {
     await gatewayApi.handleProcessAbort(data);
-    expect(handleProcessAbort).toHaveBeenCalledWith(data);
+    expect(handleProcessAbortMock).toHaveBeenCalledWith(data);
   });
 
   it('get triggerable node', () => {

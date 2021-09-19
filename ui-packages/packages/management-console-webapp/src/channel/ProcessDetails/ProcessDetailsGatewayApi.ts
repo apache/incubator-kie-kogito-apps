@@ -27,9 +27,7 @@ import {
 import {
   getSvg,
   handleJobReschedule,
-  handleProcessAbort,
   handleProcessRetry,
-  handleProcessSkip,
   jobCancel,
   getTriggerableNodes,
   handleNodeTrigger,
@@ -111,7 +109,7 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
   };
 
   handleProcessAbort = (processInstance: ProcessInstance): Promise<void> => {
-    return handleProcessAbort(processInstance);
+    return this.queries.handleProcessAbort(processInstance);
   };
 
   cancelJob = (job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> => {
@@ -208,7 +206,7 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
   }
 
   handleProcessSkip(processInstance: ProcessInstance): Promise<void> {
-    return handleProcessSkip(processInstance);
+    return this.queries.handleProcessSkip(processInstance);
   }
 
   handleNodeInstanceRetrigger(

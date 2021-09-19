@@ -15,6 +15,8 @@ const config = require('./config');
 const data = require('./MockData/graphql');
 const controller = require('./MockData/controllers');
 const typeDefs = require('./MockData/types');
+const restData = require("./MockData/rest");
+const mutationRestData = require("./MockData/mutationRest");
 
 function setPort(port = 4000) {
   app.set('port', parseInt(port, 10));
@@ -88,6 +90,29 @@ function paginatedResult(arr, offset, limit) {
 }
 // Provide resolver functions for your schema fields
 const resolvers = {
+  Mutation: {
+    ProcessInstanceSkip: async (parent, args) => {
+      const { process } = mutationRestData.management;
+      const processId = process.filter(data => {
+        return data.processInstanceId === args['id'];
+      });
+      const error = processId[0].instances.filter(err => {
+        return err.processInstanceId === args['id'];
+      });
+      return error[0].skip;
+    },
+    ProcessInstanceAbort: async (parent, args) => {
+      const { process } = mutationRestData.management;
+      console.log('process args=', args['id']);
+      const processId = process.filter(data => {
+        return data.processInstanceId === args['id'];
+      });
+      const error = processId.filter(err => {
+        return err.processInstanceId === args['id'];
+      });
+      return error[0].skip;
+    },
+  },
   Query: {
     ProcessInstances: async (parent, args) => {
       let result = data.ProcessInstanceData.filter(datum => {
@@ -160,6 +185,7 @@ const resolvers = {
       console.log('result length: ' + result.length);
       return result;
     },
+
     Jobs: async (parent, args) => {
       if (Object.keys(args).length > 0) {
         const result = data.JobsData.filter(jobData => {

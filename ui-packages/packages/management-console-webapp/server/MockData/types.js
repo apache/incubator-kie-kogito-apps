@@ -5,8 +5,14 @@ module.exports = typeDefs = gql`
   schema {
     query: Query
     subscription: Subscription
+    mutation: Mutation
   }
-
+  
+  type Mutation {
+    ProcessInstanceSkip(id: String): String
+    ProcessInstanceAbort(id: String): String
+  }
+  
   type Query {
     ProcessInstances(
       where: ProcessInstanceArgument

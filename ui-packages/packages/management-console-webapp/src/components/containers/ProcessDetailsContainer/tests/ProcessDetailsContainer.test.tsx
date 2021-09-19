@@ -24,7 +24,9 @@ import { ProcessDetailsQueries } from '../../../../channel/ProcessDetails/Proces
 
 const MockQueries = jest.fn<ProcessDetailsQueries, []>(() => ({
   getProcessDetails: jest.fn(),
-  getJobs: jest.fn()
+  getJobs: jest.fn(),
+  handleProcessSkip: jest.fn(),
+  handleProcessAbort: jest.fn()
 }));
 
 jest

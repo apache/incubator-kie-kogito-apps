@@ -392,3 +392,15 @@ const GET_JOBS_WITH_FILTERS = gql`
     }
   }
 `;
+
+const ABORT_PROCESS_INSTANCE = gql`
+  mutation abortProcessInstance($processsId: String) {
+    ProcessInstanceAbort(id: $processsId)
+  }
+`;
+
+const SKIP_PROCESS_INSTANCE = gql`
+  mutation skipProcessInstance($processsId: String) {
+    ProcessInstanceSkip(id: $processsId)
+  }
+`;

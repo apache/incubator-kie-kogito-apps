@@ -17,10 +17,13 @@
 import { ApolloClient } from 'apollo-client';
 import { GraphQL } from '@kogito-apps/consoles-common';
 import { ProcessInstance, Job } from '@kogito-apps/management-console-shared';
+import { handleProcessAbort, handleProcessSkip } from '../../apis/apis';
 
 export interface ProcessDetailsQueries {
   getProcessDetails(id: string): Promise<ProcessInstance>;
   getJobs(id: string): Promise<Job[]>;
+  handleProcessSkip(processInstance: ProcessInstance): Promise<void>;
+  handleProcessAbort(processInstance: ProcessInstance): Promise<void>;
 }
 
 export class GraphQLProcessDetailsQueries implements ProcessDetailsQueries {
@@ -63,5 +66,13 @@ export class GraphQLProcessDetailsQueries implements ProcessDetailsQueries {
     } catch (error) {
       return Promise.reject(error);
     }
+  }
+
+  async handleProcessSkip(processInstance: ProcessInstance): Promise<void> {
+    return handleProcessSkip(processInstance, this.client);
+  }
+
+  async handleProcessAbort(processInstance: ProcessInstance): Promise<void> {
+    return handleProcessAbort(processInstance, this.client);
   }
 }

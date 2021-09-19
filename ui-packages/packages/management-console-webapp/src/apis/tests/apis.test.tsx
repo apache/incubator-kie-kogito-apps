@@ -40,7 +40,16 @@ import {
   NodeInstance
 } from '@kogito-apps/management-console-shared';
 import { processInstance } from '../../channel/ProcessList/tests/ProcessListGatewayApi.test';
+import { act } from 'react-dom/test-utils';
+import reactApollo from 'react-apollo';
+
 jest.mock('axios');
+jest.mock('apollo-client');
+
+jest.mock('react-apollo', () => {
+  const ApolloClient = { query: jest.fn(), mutate: jest.fn() };
+  return { useApolloClient: jest.fn(() => ApolloClient) };
+});
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 const processInstances = [
   {
@@ -416,10 +425,25 @@ describe('test utility of svg panel', () => {
   });
 
   describe('handle skip test', () => {
+    let client;
+    let useApolloClient;
+    const mockUseApolloClient = () => {
+      act(() => {
+        client = useApolloClient();
+      });
+    };
+
+    beforeEach(() => {
+      act(() => {
+        useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+        mockUseApolloClient();
+      });
+    });
+
     it('on successful skip', async () => {
-      mockedAxios.post.mockResolvedValue({});
+      client.mutate.mockResolvedValue({ data: 'success' });
       let result = null;
-      await handleProcessSkip(processInstance)
+      await handleProcessSkip(processInstance, client)
         .then(() => {
           result = 'success';
         })
@@ -429,9 +453,9 @@ describe('test utility of svg panel', () => {
       expect(result).toEqual('success');
     });
     it('on failed skip', async () => {
-      mockedAxios.post.mockRejectedValue({ message: '404 error' });
+      client.mutate.mockRejectedValue({ message: '404 error' });
       let result = null;
-      await handleProcessSkip(processInstance)
+      await handleProcessSkip(processInstance, client)
         .then(() => {
           result = 'success';
         })
@@ -470,10 +494,25 @@ describe('test utility of svg panel', () => {
   });
 
   describe('handle abort test', () => {
+    let client;
+    let useApolloClient;
+    const mockUseApolloClient = () => {
+      act(() => {
+        client = useApolloClient();
+      });
+    };
+
+    beforeEach(() => {
+      act(() => {
+        useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+        mockUseApolloClient();
+      });
+    });
     it('on successful abort', async () => {
-      mockedAxios.delete.mockResolvedValue({});
+      client.mutate.mockResolvedValue({ data: 'success' });
+      client.mutate.moc;
       let result = null;
-      await handleProcessAbort(processInstances[0])
+      await handleProcessAbort(processInstances[0], client)
         .then(() => {
           result = 'success';
         })
@@ -483,9 +522,9 @@ describe('test utility of svg panel', () => {
       expect(result).toEqual('success');
     });
     it('on failed abort', async () => {
-      mockedAxios.delete.mockRejectedValue({ message: '404 error' });
+      client.mutate.mockRejectedValue({ message: '404 error' });
       let result = null;
-      await handleProcessAbort(processInstances[0])
+      await handleProcessAbort(processInstances[0], client)
         .then(() => {
           result = 'success';
         })
@@ -498,19 +537,35 @@ describe('test utility of svg panel', () => {
 });
 
 describe('multiple action in process list', () => {
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
+  };
+
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
+    });
+  });
   it('multiple skip test', async () => {
-    mockedAxios.post.mockResolvedValue({});
+    client.mutate.mockResolvedValue({ data: 'success' });
     const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
       processInstances,
-      OperationType.SKIP
+      OperationType.SKIP,
+      client
     );
     expect(result.successProcessInstances.length).toEqual(1);
   });
   it('multiple skip test', async () => {
-    mockedAxios.post.mockRejectedValue({ message: '404 error' });
+    client.mutate.mockRejectedValue({ message: '404 error' });
     const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
       processInstances,
-      OperationType.SKIP
+      OperationType.SKIP,
+      client
     );
     expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
   });
@@ -519,7 +574,8 @@ describe('multiple action in process list', () => {
     mockedAxios.post.mockResolvedValue({});
     const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
       processInstances,
-      OperationType.RETRY
+      OperationType.RETRY,
+      client
     );
     expect(result.successProcessInstances.length).toEqual(1);
   });
@@ -527,24 +583,27 @@ describe('multiple action in process list', () => {
     mockedAxios.post.mockRejectedValue({ message: '404 error' });
     const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
       processInstances,
-      OperationType.RETRY
+      OperationType.RETRY,
+      client
     );
     expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
   });
 
   it('multiple abort test', async () => {
-    mockedAxios.delete.mockResolvedValue({});
+    client.mutate.mockResolvedValue({ data: 'success' });
     const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
       processInstances,
-      OperationType.ABORT
+      OperationType.ABORT,
+      client
     );
     expect(result.successProcessInstances.length).toEqual(1);
   });
   it('multiple abort test', async () => {
-    mockedAxios.delete.mockRejectedValue({ message: '404 error' });
+    client.mutate.mockRejectedValue({ message: '404 error' });
     const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
       processInstances,
-      OperationType.ABORT
+      OperationType.ABORT,
+      client
     );
     expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
   });

@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 /* eslint-disable */
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
@@ -165,6 +164,69 @@ export namespace GraphQL {
     in?: Maybe<Array<Maybe<MilestoneStatus>>>;
   };
 
+  export type Mutation = {
+    __typename?: 'Mutation';
+    ProcessInstanceAbort?: Maybe<Scalars['String']>;
+    ProcessInstanceRetry?: Maybe<Scalars['String']>;
+    ProcessInstanceSkip?: Maybe<Scalars['String']>;
+    ProcessInstanceUpdateVariables?: Maybe<Scalars['String']>;
+    NodeInstanceTrigger?: Maybe<Scalars['String']>;
+    NodeInstanceRetrigger?: Maybe<Scalars['String']>;
+    NodeInstanceCancel?: Maybe<Scalars['String']>;
+    JobCancel?: Maybe<Scalars['String']>;
+    JobReschedule?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationProcessInstanceAbortArgs = {
+    id?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationProcessInstanceRetryArgs = {
+    id?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationProcessInstanceSkipArgs = {
+    id?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationProcessInstanceUpdateVariablesArgs = {
+    id?: Maybe<Scalars['String']>;
+    variables?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationNodeInstanceTriggerArgs = {
+    id?: Maybe<Scalars['String']>;
+    nodeId?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationNodeInstanceRetriggerArgs = {
+    id?: Maybe<Scalars['String']>;
+    nodeInstanceId?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationNodeInstanceCancelArgs = {
+    id?: Maybe<Scalars['String']>;
+    nodeInstanceId?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationJobCancelArgs = {
+    id?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationJobRescheduleArgs = {
+    id?: Maybe<Scalars['String']>;
+    data?: Maybe<Scalars['String']>;
+  };
+
+  export type Node = {
+    __typename?: 'Node';
+    id: Scalars['String'];
+    nodeDefinitionId: Scalars['String'];
+    name: Scalars['String'];
+    type: Scalars['String'];
+    uniqueId: Scalars['String'];
+  };
+
   export type NodeInstance = {
     __typename?: 'NodeInstance';
     id: Scalars['String'];
@@ -225,12 +287,14 @@ export namespace GraphQL {
     endpoint: Scalars['String'];
     serviceUrl?: Maybe<Scalars['String']>;
     nodes: Array<NodeInstance>;
+    nodeDefinitions?: Maybe<Array<Node>>;
     milestones?: Maybe<Array<Milestone>>;
     variables?: Maybe<Scalars['String']>;
     start: Scalars['DateTime'];
     end?: Maybe<Scalars['DateTime']>;
     parentProcessInstance?: Maybe<ProcessInstance>;
     childProcessInstances?: Maybe<Array<ProcessInstance>>;
+    diagram?: Maybe<Scalars['String']>;
     error?: Maybe<ProcessInstanceError>;
     addons?: Maybe<Array<Scalars['String']>>;
     lastUpdate: Scalars['DateTime'];
@@ -1176,6 +1240,24 @@ export namespace GraphQL {
       >
     >;
   };
+
+  export type AbortProcessInstanceMutationVariables = Exact<{
+    processsId?: Maybe<Scalars['String']>;
+  }>;
+
+  export type AbortProcessInstanceMutation = { __typename?: 'Mutation' } & Pick<
+    Mutation,
+    'ProcessInstanceAbort'
+  >;
+
+  export type SkipProcessInstanceMutationVariables = Exact<{
+    processsId?: Maybe<Scalars['String']>;
+  }>;
+
+  export type SkipProcessInstanceMutation = { __typename?: 'Mutation' } & Pick<
+    Mutation,
+    'ProcessInstanceSkip'
+  >;
 
   export const GetProcessInstancesDocument = gql`
     query getProcessInstances(
@@ -2185,5 +2267,101 @@ export namespace GraphQL {
   export type GetJobsWithFiltersQueryResult = ApolloReactCommon.QueryResult<
     GetJobsWithFiltersQuery,
     GetJobsWithFiltersQueryVariables
+  >;
+  export const AbortProcessInstanceDocument = gql`
+    mutation abortProcessInstance($processsId: String) {
+      ProcessInstanceAbort(id: $processsId)
+    }
+  `;
+  export type AbortProcessInstanceMutationFn = ApolloReactCommon.MutationFunction<
+    AbortProcessInstanceMutation,
+    AbortProcessInstanceMutationVariables
+  >;
+
+  /**
+   * __useAbortProcessInstanceMutation__
+   *
+   * To run a mutation, you first call `useAbortProcessInstanceMutation` within a React component and pass it any options that fit your needs.
+   * When your component renders, `useAbortProcessInstanceMutation` returns a tuple that includes:
+   * - A mutate function that you can call at any time to execute the mutation
+   * - An object with fields that represent the current status of the mutation's execution
+   *
+   * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+   *
+   * @example
+   * const [abortProcessInstanceMutation, { data, loading, error }] = useAbortProcessInstanceMutation({
+   *   variables: {
+   *      processsId: // value for 'processsId'
+   *   },
+   * });
+   */
+  export function useAbortProcessInstanceMutation(
+    baseOptions?: ApolloReactHooks.MutationHookOptions<
+      AbortProcessInstanceMutation,
+      AbortProcessInstanceMutationVariables
+    >
+  ) {
+    return ApolloReactHooks.useMutation<
+      AbortProcessInstanceMutation,
+      AbortProcessInstanceMutationVariables
+    >(AbortProcessInstanceDocument, baseOptions);
+  }
+  export type AbortProcessInstanceMutationHookResult = ReturnType<
+    typeof useAbortProcessInstanceMutation
+  >;
+  export type AbortProcessInstanceMutationResult = ApolloReactCommon.MutationResult<
+    AbortProcessInstanceMutation
+  >;
+  export type AbortProcessInstanceMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    AbortProcessInstanceMutation,
+    AbortProcessInstanceMutationVariables
+  >;
+  export const SkipProcessInstanceDocument = gql`
+    mutation skipProcessInstance($processsId: String) {
+      ProcessInstanceSkip(id: $processsId)
+    }
+  `;
+  export type SkipProcessInstanceMutationFn = ApolloReactCommon.MutationFunction<
+    SkipProcessInstanceMutation,
+    SkipProcessInstanceMutationVariables
+  >;
+
+  /**
+   * __useSkipProcessInstanceMutation__
+   *
+   * To run a mutation, you first call `useSkipProcessInstanceMutation` within a React component and pass it any options that fit your needs.
+   * When your component renders, `useSkipProcessInstanceMutation` returns a tuple that includes:
+   * - A mutate function that you can call at any time to execute the mutation
+   * - An object with fields that represent the current status of the mutation's execution
+   *
+   * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+   *
+   * @example
+   * const [skipProcessInstanceMutation, { data, loading, error }] = useSkipProcessInstanceMutation({
+   *   variables: {
+   *      processsId: // value for 'processsId'
+   *   },
+   * });
+   */
+  export function useSkipProcessInstanceMutation(
+    baseOptions?: ApolloReactHooks.MutationHookOptions<
+      SkipProcessInstanceMutation,
+      SkipProcessInstanceMutationVariables
+    >
+  ) {
+    return ApolloReactHooks.useMutation<
+      SkipProcessInstanceMutation,
+      SkipProcessInstanceMutationVariables
+    >(SkipProcessInstanceDocument, baseOptions);
+  }
+  export type SkipProcessInstanceMutationHookResult = ReturnType<
+    typeof useSkipProcessInstanceMutation
+  >;
+  export type SkipProcessInstanceMutationResult = ApolloReactCommon.MutationResult<
+    SkipProcessInstanceMutation
+  >;
+  export type SkipProcessInstanceMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    SkipProcessInstanceMutation,
+    SkipProcessInstanceMutationVariables
   >;
 }
