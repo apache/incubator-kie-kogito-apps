@@ -9,6 +9,7 @@ schema {
 type Query {
     ProcessInstances(where: ProcessInstanceArgument, orderBy: ProcessInstanceOrderBy, pagination: Pagination): [ProcessInstance]
     UserTaskInstances(where: UserTaskInstanceArgument, orderBy: UserTaskInstanceOrderBy, pagination: Pagination):  [UserTaskInstance]
+    getUserTaskSchema(id: String, taskId: String, user:String, groups:[String]): String
     Jobs(where: JobArgument, orderBy: JobOrderBy, pagination: Pagination):  [Job]
 }
 
@@ -22,6 +23,8 @@ type Mutation {
     NodeInstanceCancel(id:String, nodeInstanceId:String): String
     JobCancel(id: String): String
     JobReschedule(id: String, data: String): String
+    TaskUpdate(id: String,taskId: String, user:String, groups:[String], taskInfo: UserTaskInfoArgument): String
+    TaskPartialUpdate(id: String,taskId: String, user:String, groups:[String], taskInfo: UserTaskInfoArgument): String
 }
 
 type ProcessInstance {
@@ -352,6 +355,17 @@ input UserTaskInstanceMetaArgument {
     completed: DateArgument
     started: DateArgument
     referenceName: StringArgument
+}
+input UserTaskInfoArgument {
+    description: String
+    priority: String
+    actualOwner: String
+    adminGroups: [String!]
+    adminUsers: [String!]
+    excludedUsers: [String!]
+    potentialGroups: [String!]
+    potentialUsers: [String!]
+    inputParams: String
 }
 
 input UserTaskInstanceOrderBy {

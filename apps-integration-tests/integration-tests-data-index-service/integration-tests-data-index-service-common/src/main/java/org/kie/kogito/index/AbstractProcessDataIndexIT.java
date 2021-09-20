@@ -29,6 +29,8 @@ import static io.restassured.RestAssured.given;
 import static java.util.Collections.singletonMap;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.either;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -238,6 +240,78 @@ public abstract class AbstractProcessDataIndexIT {
                             .body("data.ProcessInstances[0].nodeDefinitions", notNullValue())
                             .body("data.ProcessInstances[0].nodeDefinitions.size()", is(4))
                             .body("data.ProcessInstances[0].nodes.size()", is(2)));
+
+            final String taskId = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { id description potentialGroups } }\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200)
+                    .body("data.UserTaskInstances[0].description", nullValue())
+                    .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"))
+                    .extract().path("data.UserTaskInstances[0].id");
+            String expectedSchema =
+                    "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"traveller\":{\"type\":\"object\",\"properties\":{\"address\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"},\"street\":{\"type\":\"string\"},\"zipCode\":{\"type\":\"string\"}}},\"email\":{\"type\":\"string\"},\"firstName\":{\"type\":\"string\"},\"lastName\":{\"type\":\"string\"},\"nationality\":{\"type\":\"string\"},\"processed\":{\"type\":\"boolean\"}},\"input\":true},\"approved\":{\"type\":\"boolean\",\"output\":true}},\"phases\":[\"abort\",\"claim\",\"skip\",\"complete\"]}";
+            String expectedSchemaMongo =
+                    "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"approved\":{\"type\":\"boolean\",\"output\":true},\"traveller\":{\"type\":\"object\",\"properties\":{\"address\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"},\"street\":{\"type\":\"string\"},\"zipCode\":{\"type\":\"string\"}}},\"email\":{\"type\":\"string\"},\"firstName\":{\"type\":\"string\"},\"lastName\":{\"type\":\"string\"},\"nationality\":{\"type\":\"string\"},\"processed\":{\"type\":\"boolean\"}},\"input\":true}},\"phases\":[\"abort\",\"claim\",\"skip\",\"complete\"]}";
+
+            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"{ getUserTaskSchema ( " +
+                            "id: \\\"" + pId2 + "\\\", " +
+                            "taskId: \\\"" + taskId + "\\\", " +
+                            "user: \\\"manager\\\", " +
+                            "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"]" +
+                            ")}\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200)
+                    .body("data.getUserTaskSchema", either(equalTo(expectedSchema)).or(equalTo(expectedSchemaMongo)));
+
+            await()
+                    .atMost(TIMEOUT)
+                    .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                            .body("{ \"query\" : \"mutation{ TaskPartialUpdate(" +
+                                    "id: \\\"" + pId2 + "\\\", " +
+                                    "taskId: \\\"" + taskId + "\\\", " +
+                                    "user: \\\"manager\\\", " +
+                                    "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
+                                    "taskInfo: { description: \\\"NewDescription\\\", priority: \\\"low\\\"} " +
+                                    ")}\"}")
+                            .when().post("/graphql")
+                            .then()
+                            .statusCode(200)
+                            .body("errors", nullValue()));
+
+            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { id description priority potentialGroups} }\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200)
+                    .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
+                    .body("data.UserTaskInstances[0].priority", equalTo("low"))
+                    .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"));
+
+            await()
+                    .atMost(TIMEOUT)
+                    .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                            .body("{ \"query\" : \"mutation{ TaskUpdate(" +
+                                    "id: \\\"" + pId2 + "\\\", " +
+                                    "taskId: \\\"" + taskId + "\\\", " +
+                                    "user: \\\"manager\\\", " +
+                                    "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
+                                    "taskInfo: { description: \\\"NewDescription2\\\"} " +
+                                    ")}\"}")
+                            .when().post("/graphql")
+                            .then()
+                            .statusCode(200)
+                            .body("errors", nullValue()));
+
+            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { id description priority potentialGroups} }\"}")
+                    .when().post("/graphql")
+                    .then()
+                    .statusCode(200)
+                    .body("data.UserTaskInstances[0].description", equalTo("NewDescription2"))
+                    .body("data.UserTaskInstances[0].priority", nullValue());
 
             String vars = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                     .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { variables} }\"}")
