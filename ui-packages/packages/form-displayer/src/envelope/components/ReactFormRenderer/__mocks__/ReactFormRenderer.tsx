@@ -14,30 +14,10 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react';
-import { FormResources } from '../../../api';
-import { renderResources } from '../../../utils';
+import React from 'react';
 
-interface HtmlFormRendererProps {
-  source: any;
-  resources: FormResources;
-}
-
-const HtmlFormRenderer: React.FC<HtmlFormRendererProps> = ({
-  source,
-  resources
-}) => {
-  useEffect(() => {
-    if (source && resources) {
-      renderResources('formContainer', resources);
-    }
-  }, [resources]);
-
-  return (
-    <div id="formContainer">
-      <div dangerouslySetInnerHTML={{ __html: source }} />
-    </div>
-  );
+const ReactFormRenderer = () => {
+  return <></>;
 };
 
-export default HtmlFormRenderer;
+export default ReactFormRenderer;

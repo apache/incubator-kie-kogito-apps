@@ -25,8 +25,6 @@ import {
 import { ContainerType } from '@kogito-tooling/envelope/dist/api';
 import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
 import { EmbeddedEnvelopeFactory } from '@kogito-tooling/envelope/dist/embedded';
-// import { EnvelopeBusMessage } from '@kogito-tooling/envelope-bus/dist/api';
-// import { init } from '../envelope';
 
 export type Props = {
   targetOrigin: string;

@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import isEmpty from 'lodash/isEmpty';
 import uuidv4 from 'uuid';
 import * as Babel from '@babel/standalone';
 import ReactDOM from 'react-dom';
 import * as Patternfly from '@patternfly/react-core';
 import { FormResources } from '../../../api';
+import { renderResources, sourceHandler } from '../../../utils';
 import Text = Patternfly.Text;
 import TextContent = Patternfly.TextContent;
 import TextVariants = Patternfly.TextVariants;
 interface ReactFormRendererProps {
   source: string;
   resources: FormResources;
-  seIsExecuting: (isExecuting: boolean) => void;
+  setIsExecuting: (isExecuting: boolean) => void;
 }
 
 const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({
   source,
   resources,
-  seIsExecuting
+  setIsExecuting
 }) => {
   const [errorMessage, setErrorMessage] = useState<any>(null);
 
@@ -43,84 +44,30 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({
     }
   }, [source, resources]);
 
-  const renderTags = (container): void => {
-    for (const key in resources.scripts) {
-      const script: HTMLScriptElement = document.createElement('script');
-
-      script.src = resources.scripts[key];
-      container.appendChild(script);
-    }
-
-    for (const key in resources.styles) {
-      const link: HTMLLinkElement = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = resources.styles[key];
-      container.appendChild(link);
-    }
-  };
-  const renderResources = useCallback(() => {
-    const container: HTMLElement = document.getElementById('formContainer');
-    const scripts: HTMLCollectionOf<HTMLScriptElement> = container.getElementsByTagName(
-      'script'
-    );
-    const styles: HTMLCollectionOf<HTMLLinkElement> = container.getElementsByTagName(
-      'link'
-    );
-    if (scripts.length > 0 || styles.length > 0) {
-      let scriptIndex: number = scripts.length;
-      let styleIndex: number = styles.length;
-      while (scriptIndex--) {
-        container.removeChild(scripts[scriptIndex]);
-      }
-      while (styleIndex--) {
-        container.removeChild(styles[styleIndex]);
-      }
-      renderTags(container);
-    } else {
-      renderTags(container);
-    }
-  }, [resources]);
-
   const renderform = () => {
     if (source) {
-      seIsExecuting(true);
-      window.React = React;
-      window.ReactDOM = ReactDOM;
-
-      // @ts-ignore
-      window.PatternFlyReact = Patternfly;
-
-      const container: HTMLElement = document.getElementById('formContainer');
-      container.innerHTML = '';
-      const id = uuidv4();
-      const formContainer: HTMLElement = document.createElement('div');
-      formContainer.id = id;
-
-      container.appendChild(formContainer);
-      renderResources();
-
-      const reactReg = /import React, {[^}]*}.*(?='react').*/gim;
-      const patternflyReg = /import {[^}]*}.*(?='@patternfly\/react-core').*/gim;
-      const regexvalueReact = new RegExp(reactReg);
-      const reactImport = regexvalueReact.exec(source);
-      const reg = /\{([^)]+)\}/;
-      const reactElements = reg.exec(reactImport[0])[1];
-      console.log('react', reactElements);
-      const regexvaluePat = new RegExp(patternflyReg);
-      const patternflyImport = regexvaluePat.exec(source);
-      const patternflyElements = reg.exec(patternflyImport[0])[1];
-      console.log('pat', patternflyElements);
-      const trimmedSource = source
-        .split(reactReg)
-        .join('')
-        .trim()
-        .split(patternflyReg)
-        .join('')
-        .trim();
-      const tempSource = trimmedSource;
-      const formName = tempSource.split(':')[0].split('const ')[1];
+      setIsExecuting(true);
       try {
-        const compiledReact = trimmedSource;
+        window.React = React;
+        window.ReactDOM = ReactDOM;
+
+        // @ts-ignore
+        window.PatternFlyReact = Patternfly;
+
+        const container: HTMLElement = document.getElementById('formContainer');
+        container.innerHTML = '';
+        const id = uuidv4();
+        const formContainer: HTMLElement = document.createElement('div');
+        formContainer.id = id;
+
+        container.appendChild(formContainer);
+        renderResources('formContainer', resources);
+        const {
+          reactElements,
+          patternflyElements,
+          formName,
+          trimmedSource
+        } = sourceHandler(source);
 
         const scriptElement: HTMLScriptElement = document.createElement(
           'script'
@@ -134,7 +81,7 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({
         const content = `
         const {${reactElements}} = React;
         const {${patternflyElements}} = PatternFlyReact;
-        ${compiledReact}
+        ${trimmedSource}
         const target = document.getElementById("${id}");
         const element = window.React.createElement(${formName}, {});
         window.ReactDOM.render(element, target);
@@ -155,11 +102,11 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({
         scriptElement.text = react;
 
         container.appendChild(scriptElement);
-        seIsExecuting(false);
+        setIsExecuting(false);
       } catch (e) {
         console.log('here on error id:', e);
         setErrorMessage(e);
-        seIsExecuting(false);
+        setIsExecuting(false);
       }
     }
   };

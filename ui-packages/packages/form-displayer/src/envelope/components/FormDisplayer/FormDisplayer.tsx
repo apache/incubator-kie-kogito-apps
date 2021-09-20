@@ -15,11 +15,12 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { FormArgs, FormInfo } from '../../../api';
+import { Bullseye } from '@patternfly/react-core';
+import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 import { BallBeat } from 'react-pure-loaders';
+import { FormArgs, FormInfo } from '../../../api';
 import ReactFormRenderer from '../ReactFormRenderer/ReactFormRenderer';
 import HtmlFormRenderer from '../HtmlFormRenderer/HtmlFormRenderer';
-import { Bullseye } from '@patternfly/react-core';
 import '../styles.css';
 
 interface FormDisplayerProps {
@@ -28,30 +29,33 @@ interface FormDisplayerProps {
   config: FormInfo;
 }
 
-const FormDisplayer: React.FC<FormDisplayerProps> = ({
+const FormDisplayer: React.FC<FormDisplayerProps & OUIAProps> = ({
   isEnvelopeConnectedToChannel,
   content,
-  config
+  config,
+  ouiaId,
+  ouiaSafe
 }) => {
   const [source, setSource] = useState<string>();
   const [resources, setResources] = useState<any>();
-  const [isExecuting, seIsExecuting] = useState<boolean>(false);
+  const [isExecuting, setIsExecuting] = useState<boolean>(false);
 
   useEffect(() => {
+    /* istanbul ignore else */
     if (isEnvelopeConnectedToChannel) {
       setSource(content.source['source-content']);
       setResources(content.formConfiguration['resources']);
     }
   }, [isEnvelopeConnectedToChannel, content]);
   return (
-    <>
+    <div {...componentOuiaProps(ouiaId, 'form-displayer', ouiaSafe)}>
       {isEnvelopeConnectedToChannel && !isExecuting ? (
         <>
           {config && config.type === 'TSX' ? (
             <ReactFormRenderer
               source={source}
               resources={resources}
-              seIsExecuting={seIsExecuting}
+              setIsExecuting={setIsExecuting}
             />
           ) : (
             <HtmlFormRenderer source={source} resources={resources} />
@@ -62,7 +66,7 @@ const FormDisplayer: React.FC<FormDisplayerProps> = ({
           <BallBeat color={'#000000'} loading={!isEnvelopeConnectedToChannel} />
         </Bullseye>
       )}
-    </>
+    </div>
   );
 };
 

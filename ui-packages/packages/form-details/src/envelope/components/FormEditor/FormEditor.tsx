@@ -31,8 +31,10 @@ export interface FormEditorProps {
   isSource?: boolean;
   isConfig?: boolean;
   formContent: Form;
+  contentChange: Form;
   code: string;
-  setFormContent: any;
+  setFormContent: (formContent: Form) => void;
+  setContentChange: (contentChange: Form) => void;
 }
 
 export const FormEditor = React.forwardRef<
@@ -45,6 +47,8 @@ export const FormEditor = React.forwardRef<
       formType,
       formContent,
       setFormContent,
+      contentChange,
+      setContentChange,
       isSource = false,
       isConfig = false,
       ouiaId,
@@ -53,7 +57,7 @@ export const FormEditor = React.forwardRef<
     forwardedRef
   ) => {
     const appContext = useFormDetailsContext();
-    const [contentChange, setContentChange] = useState<Form>(null);
+
     const [monacoEditor, setMonacoEditor] = useState<any>();
 
     useImperativeHandle(

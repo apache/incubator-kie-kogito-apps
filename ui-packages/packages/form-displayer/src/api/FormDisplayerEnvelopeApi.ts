@@ -54,8 +54,13 @@ export interface FormArgs {
   formConfiguration: FormConfiguration;
 }
 
+export enum FormType {
+  HTML = 'HTML',
+  TSX = 'TSX'
+}
+
 export interface FormInfo {
   name: string;
-  type: 'HTML' | 'TSX';
+  type: FormType;
   lastModified: Date;
 }

@@ -54,9 +54,11 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState<number>(0);
   const [formContent, setFormContent] = useState<Form>(null);
+  const [contentChange, setContentChange] = useState<Form>(null);
   const [error, setError] = useState<any>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const editorResize = useRef<ResizableContent>();
+
   useEffect(() => {
     /* istanbul ignore else */
     if (isEnvelopeConnectedToChannel) {
@@ -146,6 +148,8 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                       code={getSource()}
                       formContent={formContent}
                       setFormContent={setFormContent}
+                      contentChange={contentChange}
+                      setContentChange={setContentChange}
                       isSource
                       formType={getType()}
                       ref={editorResize}
@@ -170,6 +174,8 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
                       code={getConfig()}
                       formContent={formContent}
                       setFormContent={setFormContent}
+                      contentChange={contentChange}
+                      setContentChange={setContentChange}
                       isConfig
                       ref={editorResize}
                     />
