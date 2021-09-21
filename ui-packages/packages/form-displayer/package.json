@@ -51,7 +51,10 @@
     ],
     "coveragePathIgnorePatterns": [
       "./src/static",
-      "dist/"
+      "dist/",
+      "./tests/mocks/",
+      "./src/utils/index.ts",
+      "./src/api/index.ts"
     ],
     "coverageReporters": [
       [

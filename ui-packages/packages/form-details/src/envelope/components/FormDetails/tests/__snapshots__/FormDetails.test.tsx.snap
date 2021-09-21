@@ -30,7 +30,13 @@ exports[`form details tests render form details - config 1`] = `
               minSize="700px"
               onResize={[Function]}
             >
-              <DrawerHead>
+              <DrawerHead
+                style={
+                  Object {
+                    "height": "100%",
+                  }
+                }
+              >
                 <span>
                   <MockedFormDisplayerContainer
                     formContent={
@@ -324,6 +330,7 @@ exports[`form details tests render form details - config 1`] = `
   \\"scripts\\": {},
   \\"styles\\": {}
 }"
+                            contentChange={null}
                             formContent={
                               Object {
                                 "formConfiguration": Object {
@@ -340,6 +347,7 @@ exports[`form details tests render form details - config 1`] = `
                               }
                             }
                             isConfig={true}
+                            setContentChange={[Function]}
                             setFormContent={[Function]}
                           />
                         </DrawerContentBody>
@@ -373,6 +381,7 @@ exports[`form details tests render form details - config 1`] = `
   \\"scripts\\": {},
   \\"styles\\": {}
 }"
+                              contentChange={null}
                               formContent={
                                 Object {
                                   "formConfiguration": Object {
@@ -389,6 +398,7 @@ exports[`form details tests render form details - config 1`] = `
                                 }
                               }
                               isConfig={true}
+                              setContentChange={[Function]}
                               setFormContent={[Function]}
                             />
                           </DrawerContentBody>
@@ -427,6 +437,7 @@ exports[`form details tests render form details - config 1`] = `
   \\"scripts\\": {},
   \\"styles\\": {}
 }"
+                              contentChange={null}
                               formContent={
                                 Object {
                                   "formConfiguration": Object {
@@ -443,6 +454,7 @@ exports[`form details tests render form details - config 1`] = `
                                 }
                               }
                               isConfig={true}
+                              setContentChange={[Function]}
                               setFormContent={[Function]}
                             />
                           </div>
@@ -488,7 +500,13 @@ exports[`form details tests render form details - config 1`] = `
                   <div
                     className="pf-c-drawer__panel-main"
                   >
-                    <DrawerHead>
+                    <DrawerHead
+                      style={
+                        Object {
+                          "height": "100%",
+                        }
+                      }
+                    >
                       <DrawerPanelBody
                         hasNoPadding={false}
                       >
@@ -497,6 +515,11 @@ exports[`form details tests render form details - config 1`] = `
                         >
                           <div
                             className="pf-c-drawer__head"
+                            style={
+                              Object {
+                                "height": "100%",
+                              }
+                            }
                           >
                             <span>
                               <MockedFormDisplayerContainer
@@ -570,7 +593,13 @@ exports[`form details tests render form details - source 1`] = `
               minSize="700px"
               onResize={[Function]}
             >
-              <DrawerHead>
+              <DrawerHead
+                style={
+                  Object {
+                    "height": "100%",
+                  }
+                }
+              >
                 <span>
                   <MockedFormDisplayerContainer
                     formContent={
@@ -782,6 +811,7 @@ exports[`form details tests render form details - source 1`] = `
                         >
                           <MockedFormEditor
                             code="<div><div class=\\"form-check\\"> <input type=\\"checkbox\\" id=\\"uniforms-0001-0001\\" name=\\"approve\\" class=\\"form-check-input\\" /> <label class=\\"form-check-label\\" for=\\"uniforms-0001-0001\\">Approve</label> </div> <fieldset disabled> <legend>Candidate</legend> <div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0004\\">Email</label> <input type=\\"text\\" id=\\"uniforms-0001-0004\\" name=\\"candidate.email\\" class=\\"form-control\\" disabled value=\\"\\" /> </div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0005\\">Name</label> <input type=\\"text\\" id=\\"uniforms-0001-0005\\" name=\\"candidate.name\\" class=\\"form-control\\" disabled value=\\"\\" /> </div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0007\\">Salary</label> <input type=\\"number\\" class=\\"form-control\\" id=\\"uniforms-0001-0007\\" name=\\"candidate.salary\\" disabled step=\\"1\\" value=\\"\\" /> </div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0008\\">Skills</label> <input type=\\"text\\" id=\\"uniforms-0001-0008\\" name=\\"candidate.skills\\" class=\\"form-control\\" disabled value=\\"\\" /> </div> </div> </fieldset> </div>"
+                            contentChange={null}
                             formContent={
                               Object {
                                 "formConfiguration": Object {
@@ -799,6 +829,7 @@ exports[`form details tests render form details - source 1`] = `
                             }
                             formType="HTML"
                             isSource={true}
+                            setContentChange={[Function]}
                             setFormContent={[Function]}
                           />
                         </DrawerContentBody>
@@ -829,6 +860,7 @@ exports[`form details tests render form details - source 1`] = `
                           >
                             <MockedFormEditor
                               code="<div><div class=\\"form-check\\"> <input type=\\"checkbox\\" id=\\"uniforms-0001-0001\\" name=\\"approve\\" class=\\"form-check-input\\" /> <label class=\\"form-check-label\\" for=\\"uniforms-0001-0001\\">Approve</label> </div> <fieldset disabled> <legend>Candidate</legend> <div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0004\\">Email</label> <input type=\\"text\\" id=\\"uniforms-0001-0004\\" name=\\"candidate.email\\" class=\\"form-control\\" disabled value=\\"\\" /> </div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0005\\">Name</label> <input type=\\"text\\" id=\\"uniforms-0001-0005\\" name=\\"candidate.name\\" class=\\"form-control\\" disabled value=\\"\\" /> </div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0007\\">Salary</label> <input type=\\"number\\" class=\\"form-control\\" id=\\"uniforms-0001-0007\\" name=\\"candidate.salary\\" disabled step=\\"1\\" value=\\"\\" /> </div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0008\\">Skills</label> <input type=\\"text\\" id=\\"uniforms-0001-0008\\" name=\\"candidate.skills\\" class=\\"form-control\\" disabled value=\\"\\" /> </div> </div> </fieldset> </div>"
+                              contentChange={null}
                               formContent={
                                 Object {
                                   "formConfiguration": Object {
@@ -846,6 +878,7 @@ exports[`form details tests render form details - source 1`] = `
                               }
                               formType="HTML"
                               isSource={true}
+                              setContentChange={[Function]}
                               setFormContent={[Function]}
                             />
                           </DrawerContentBody>
@@ -881,6 +914,7 @@ exports[`form details tests render form details - source 1`] = `
                           >
                             <MockedFormEditor
                               code="<div><div class=\\"form-check\\"> <input type=\\"checkbox\\" id=\\"uniforms-0001-0001\\" name=\\"approve\\" class=\\"form-check-input\\" /> <label class=\\"form-check-label\\" for=\\"uniforms-0001-0001\\">Approve</label> </div> <fieldset disabled> <legend>Candidate</legend> <div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0004\\">Email</label> <input type=\\"text\\" id=\\"uniforms-0001-0004\\" name=\\"candidate.email\\" class=\\"form-control\\" disabled value=\\"\\" /> </div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0005\\">Name</label> <input type=\\"text\\" id=\\"uniforms-0001-0005\\" name=\\"candidate.name\\" class=\\"form-control\\" disabled value=\\"\\" /> </div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0007\\">Salary</label> <input type=\\"number\\" class=\\"form-control\\" id=\\"uniforms-0001-0007\\" name=\\"candidate.salary\\" disabled step=\\"1\\" value=\\"\\" /> </div> <div class=\\"form-group\\"> <label for=\\"uniforms-0001-0008\\">Skills</label> <input type=\\"text\\" id=\\"uniforms-0001-0008\\" name=\\"candidate.skills\\" class=\\"form-control\\" disabled value=\\"\\" /> </div> </div> </fieldset> </div>"
+                              contentChange={null}
                               formContent={
                                 Object {
                                   "formConfiguration": Object {
@@ -898,6 +932,7 @@ exports[`form details tests render form details - source 1`] = `
                               }
                               formType="HTML"
                               isSource={true}
+                              setContentChange={[Function]}
                               setFormContent={[Function]}
                             />
                           </div>
@@ -1022,7 +1057,13 @@ exports[`form details tests render form details - source 1`] = `
                   <div
                     className="pf-c-drawer__panel-main"
                   >
-                    <DrawerHead>
+                    <DrawerHead
+                      style={
+                        Object {
+                          "height": "100%",
+                        }
+                      }
+                    >
                       <DrawerPanelBody
                         hasNoPadding={false}
                       >
@@ -1031,6 +1072,11 @@ exports[`form details tests render form details - source 1`] = `
                         >
                           <div
                             className="pf-c-drawer__head"
+                            style={
+                              Object {
+                                "height": "100%",
+                              }
+                            }
                           >
                             <span>
                               <MockedFormDisplayerContainer

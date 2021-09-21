@@ -48,14 +48,12 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
     () => {
       return {
         setFormContent: (formContent: FormArgs, formData: FormInfo) => {
-          console.log('content', content, config);
           setContent(formContent);
           setConfig(formData);
           setEnvelopeConnectedToChannel(true);
         },
         notify: (formContent: FormArgs) => {
           if (!isEmpty(formContent)) {
-            console.log('check', formContent);
             setEnvelopeConnectedToChannel(false);
             setContent(formContent);
             setEnvelopeConnectedToChannel(true);
@@ -66,7 +64,7 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
     },
     []
   );
-  console.log('check', content, config);
+
   return (
     <FormDisplayer
       isEnvelopeConnectedToChannel={isEnvelopeConnectedToChannel}

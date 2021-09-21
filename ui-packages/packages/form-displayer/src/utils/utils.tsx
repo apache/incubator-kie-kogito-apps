@@ -60,11 +60,9 @@ export const sourceHandler = source => {
   const reactImport = regexvalueReact.exec(source);
   const reg = /\{([^)]+)\}/;
   const reactElements = reg.exec(reactImport[0])[1];
-  console.log('react', reactElements);
   const regexvaluePat = new RegExp(patternflyReg);
   const patternflyImport = regexvaluePat.exec(source);
   const patternflyElements = reg.exec(patternflyImport[0])[1];
-  console.log('pat', patternflyElements);
   const trimmedSource = source
     .split(reactReg)
     .join('')

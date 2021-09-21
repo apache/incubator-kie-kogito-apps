@@ -54,7 +54,7 @@ export const EmbeddedFormDisplayer = React.forwardRef<FormDisplayerApi, Props>(
         }
       );
     }, []);
-    console.log('content-displayer', props.formContent);
+
     const refDelegate = useCallback(
       (
         envelopeServer: EnvelopeServer<

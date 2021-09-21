@@ -37,7 +37,6 @@ export function init(args: {
     FormDisplayerEnvelopeViewApi,
     FormDisplayerEnvelopeContext
   >(args.bus, args.config);
-  console.log('container', args.container);
 
   const envelopeViewDelegate = async () => {
     const ref = React.createRef<FormDisplayerEnvelopeViewApi>();

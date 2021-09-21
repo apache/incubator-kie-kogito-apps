@@ -18,6 +18,7 @@ import {
   MockedEnvelopeBusController,
   MockedFormDetailsEnvelopeViewApi
 } from './mocks/Mocks';
+import { FormType } from '@kogito-apps/forms-list';
 import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
 import { FormDetailsChannelApi, FormDetailsEnvelopeApi } from '../../api';
 import { FormDetailsEnvelopeApiImpl } from '../FormDetailsEnvelopeApiImpl';
@@ -48,7 +49,7 @@ describe('FormDetailsEnvelopeApiImpl tests', () => {
       },
       {
         name: 'form1',
-        type: 'HTML',
+        type: FormType.HTML,
         lastModified: new Date('2020-07-11T18:30:00.000Z')
       }
     );

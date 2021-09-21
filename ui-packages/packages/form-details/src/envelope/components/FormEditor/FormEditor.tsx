@@ -87,7 +87,6 @@ export const FormEditor = React.forwardRef<
     };
 
     const editorDidMount = (editor, monaco): void => {
-      console.log('editor', editor.getModel());
       if (isSource && formType.toLowerCase() === 'tsx') {
         monaco.languages.typescript.typescriptDefaults.setCompilerOptions({
           jsx: 'react'

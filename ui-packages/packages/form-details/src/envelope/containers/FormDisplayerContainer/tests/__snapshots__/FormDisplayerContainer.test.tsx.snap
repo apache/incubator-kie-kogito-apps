@@ -26,6 +26,7 @@ exports[`FormDisplayerContainer render embeded formdisplayer 1`] = `
   }
 >
   <ForwardRef
+    envelopePath="resources/form-displayer.html"
     formContent={
       Object {
         "formConfiguration": Object {
@@ -48,10 +49,26 @@ exports[`FormDisplayerContainer render embeded formdisplayer 1`] = `
         "type": "HTML",
       }
     }
-    targetOrigin="*"
+    targetOrigin="http://localhost"
   >
     <ForwardRef>
-      <div />
+      <iframe
+        src="resources/form-displayer.html"
+        style={
+          Object {
+            "border": "none",
+            "display": "flex",
+            "flex": 1,
+            "flexDirection": "column",
+            "height": "100%",
+            "margin": 0,
+            "overflow": "hidden",
+            "padding": 0,
+            "width": "100%",
+          }
+        }
+        title="X"
+      />
     </ForwardRef>
   </ForwardRef>
 </FormDisplayerContainer>

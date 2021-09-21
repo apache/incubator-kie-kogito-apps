@@ -19,6 +19,11 @@ import { mount } from 'enzyme';
 import ReactFormRenderer from '../ReactFormRenderer';
 
 describe('ReactFormRenderer component tests', () => {
+  beforeAll(() => {
+    const div = document.createElement('div');
+    div.setAttribute('id', 'formContainer');
+    document.body.appendChild(div);
+  });
   it('Snapshot test with default props', () => {
     const props = {
       source:
@@ -38,7 +43,11 @@ describe('ReactFormRenderer component tests', () => {
       },
       setIsExecuting: jest.fn()
     };
-    const wrapper = mount(<ReactFormRenderer {...props} />);
+    const wrapper = mount(<ReactFormRenderer {...props} />, {
+      attachTo: document.getElementById('formContainer')
+    });
+    wrapper.update();
     expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('div')).toBeTruthy();
   });
 });

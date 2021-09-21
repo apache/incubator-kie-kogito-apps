@@ -51,9 +51,8 @@ describe('EmbeddedFormDisplayer tests', () => {
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.props().targetOrigin).toStrictEqual(props.targetOrigin);
     expect(wrapper.props().formData).toStrictEqual(props.formData);
+    const contentIframe = wrapper.find('iframe');
 
-    const contentDiv = wrapper.find('div');
-
-    expect(contentDiv.exists()).toBeTruthy();
+    expect(contentIframe.exists()).toBeTruthy();
   });
 });

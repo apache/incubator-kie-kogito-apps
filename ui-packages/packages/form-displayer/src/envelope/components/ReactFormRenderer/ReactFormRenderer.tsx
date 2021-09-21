@@ -39,12 +39,14 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({
   const [errorMessage, setErrorMessage] = useState<any>(null);
 
   useEffect(() => {
+    /* istanbul ignore else */
     if (source) {
       renderform();
     }
   }, [source, resources]);
 
   const renderform = () => {
+    /* istanbul ignore else */
     if (source) {
       setIsExecuting(true);
       try {
@@ -86,7 +88,7 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({
         const element = window.React.createElement(${formName}, {});
         window.ReactDOM.render(element, target);
         `;
-        console.log('cone', content);
+
         const react = Babel.transform(content.trim(), {
           presets: [
             'react',
@@ -104,7 +106,6 @@ const ReactFormRenderer: React.FC<ReactFormRendererProps> = ({
         container.appendChild(scriptElement);
         setIsExecuting(false);
       } catch (e) {
-        console.log('here on error id:', e);
         setErrorMessage(e);
         setIsExecuting(false);
       }

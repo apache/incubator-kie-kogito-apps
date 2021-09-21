@@ -30,6 +30,21 @@ const formContent = {
       '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"candidate":{"type":"object","properties":{"email":{"type":"string"},"name":{"type":"string"},"salary":{"type":"integer"},"skills":{"type":"string"}},"input":true},"approve":{"type":"boolean","output":true}}}'
   }
 };
+
+const contentChange = {
+  name: 'from1',
+  source: {
+    'source-content': '<div><span>1</span><span>2</span></div>'
+  },
+  formConfiguration: {
+    resources: {
+      styles: {},
+      scripts: {}
+    },
+    schema:
+      '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"candidate":{"type":"object","properties":{"email":{"type":"string"},"name":{"type":"string"},"salary":{"type":"integer"},"skills":{"type":"string"}},"input":true},"approve":{"type":"boolean","output":true}}}'
+  }
+};
 describe('FormEditor test', () => {
   it('render source - html', () => {
     const props = {
@@ -37,7 +52,9 @@ describe('FormEditor test', () => {
       isSource: true,
       formType: 'html',
       formContent: formContent,
-      setFormContent: jest.fn()
+      setFormContent: jest.fn(),
+      contentChange: contentChange,
+      setContentChange: jest.fn()
     };
     const wrapper = mount(<FormEditor {...props} />);
     expect(wrapper).toMatchSnapshot();
@@ -48,7 +65,9 @@ describe('FormEditor test', () => {
       isSource: true,
       formType: 'tsx',
       formContent: formContent,
-      setFormContent: jest.fn()
+      setFormContent: jest.fn(),
+      contentChange: contentChange,
+      setContentChange: jest.fn()
     };
     const wrapper = mount(<FormEditor {...props} />);
     expect(wrapper).toMatchSnapshot();
@@ -61,7 +80,9 @@ describe('FormEditor test', () => {
       }),
       isConfig: true,
       formContent: formContent,
-      setFormContent: jest.fn()
+      setFormContent: jest.fn(),
+      contentChange: contentChange,
+      setContentChange: jest.fn()
     };
     const wrapper = mount(<FormEditor {...props} />);
     expect(wrapper).toMatchSnapshot();
@@ -75,7 +96,9 @@ describe('FormEditor test', () => {
       }),
       isConfig: true,
       formContent: formContent,
-      setFormContent: jest.fn()
+      setFormContent: jest.fn(),
+      contentChange: contentChange,
+      setContentChange: jest.fn()
     };
     const wrapper = mount(
       <RuntimeToolsFormDetailsContext.Provider
@@ -84,11 +107,7 @@ describe('FormEditor test', () => {
         <FormEditor {...props} />
       </RuntimeToolsFormDetailsContext.Provider>
     );
-    wrapper
-      .find('CodeEditor')
-      .props()
-      ['customControls']['props']['onClick']();
-    expect(props.setFormContent).toHaveBeenCalled();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('call handleChange - source', async () => {
@@ -97,7 +116,9 @@ describe('FormEditor test', () => {
       isSource: true,
       formType: 'tsx',
       formContent: formContent,
-      setFormContent: jest.fn()
+      setFormContent: jest.fn(),
+      contentChange: contentChange,
+      setContentChange: jest.fn()
     };
     const wrapperWithSource = mount(<FormEditor {...props} />);
     await act(async () => {
