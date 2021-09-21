@@ -23,21 +23,16 @@ const CounterfactualCategoricalDomainEdit = (
   const [categories, setCategories] = useState(
     inputDomain && inputDomain.categories ? inputDomain.categories : ['']
   );
-  const handleChange = (
-    value: string,
-    event: React.FormEvent<HTMLInputElement>
-  ) => {
-    const id = event.currentTarget.id.split('enum-value-')[1];
+  const handleChange = (value: string, position: number) => {
     const updatedList = [...categories];
-    updatedList[id] = value;
+    updatedList[position] = value;
     setCategories(updatedList);
   };
 
-  const handleDelete = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    const id = Number(event.currentTarget.id.split('delete-enum-value-')[1]);
-    const updatedList = categories.filter((category, index) => index !== id);
+  const handleDelete = (position: number) => {
+    const updatedList = categories.filter(
+      (category, index) => index !== position
+    );
     setCategories(updatedList);
     onUpdate(updatedList);
   };
@@ -80,7 +75,7 @@ const CounterfactualCategoricalDomainEdit = (
                 id={`enum-value-${index}`}
                 name={`enum-value-${index}`}
                 value={category}
-                onChange={handleChange}
+                onChange={value => handleChange(value, index)}
                 onBlur={handleSave}
                 onKeyPress={handleEnterPress}
                 autoComplete="off"
@@ -92,7 +87,7 @@ const CounterfactualCategoricalDomainEdit = (
                 id={`delete-enum-value-${index}`}
                 variant={ButtonVariant.plain}
                 isInline={true}
-                onClick={handleDelete}
+                onClick={() => handleDelete(index)}
                 isDisabled={categories.length === 1}
               >
                 <TrashIcon />
@@ -102,7 +97,11 @@ const CounterfactualCategoricalDomainEdit = (
         </StackItem>
       ))}
       <StackItem>
-        <Button variant={ButtonVariant.secondary} onClick={addOneCategory}>
+        <Button
+          id="enum-add"
+          variant={ButtonVariant.secondary}
+          onClick={addOneCategory}
+        >
           Add another value
         </Button>
       </StackItem>

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormGroup, Text, TextVariants } from '@patternfly/react-core';
 import { CFGoal, CFGoalRole } from '../../../types';
-import './CounterfactualOutcome.scss';
 import CounterfactualOutcomeUnsupported from '../../Atoms/CounterfactualOutcomeUnsupported/CounterfactualOutcomeUnsupported';
+import './CounterfactualOutcome.scss';
 
 type CounterfactualOutcomeProps = {
   goal: CFGoal;
@@ -11,57 +11,35 @@ type CounterfactualOutcomeProps = {
 const CounterfactualOutcome = (props: CounterfactualOutcomeProps) => {
   const { goal } = props;
 
-  if (goal.role === CFGoalRole.UNSUPPORTED) {
-    return <CounterfactualOutcomeUnsupported goal={goal} />;
-  }
-
-  let value;
-  switch (typeof goal.value) {
-    case 'boolean':
-      value = <CounterfactualOutcomeBoolean goal={goal} />;
-      break;
-    case 'number':
-      value = <CounterfactualOutcomeNumber goal={goal} />;
-      break;
-    case 'string':
-      value = <CounterfactualOutcomeString goal={goal} />;
-      break;
-  }
-
   return (
-    <FormGroup fieldId={goal.id} label={goal.name}>
-      {value}
-    </FormGroup>
+    <>
+      {goal.role === CFGoalRole.UNSUPPORTED ? (
+        <CounterfactualOutcomeUnsupported goal={goal} />
+      ) : (
+        <FormGroup fieldId={goal.id} label={goal.name}>
+          <CounterfactualOutcomeValue goal={goal} />
+        </FormGroup>
+      )}
+    </>
   );
 };
 
 export default CounterfactualOutcome;
 
-const CounterfactualOutcomeBoolean = (props: CounterfactualOutcomeProps) => {
+const CounterfactualOutcomeValue = (props: CounterfactualOutcomeProps) => {
   const { goal } = props;
+
+  const value = useMemo(() => {
+    if (typeof goal.originalValue === 'boolean') {
+      return goal.originalValue ? 'True' : 'False';
+    } else {
+      return goal.originalValue;
+    }
+  }, [goal]);
 
   return (
     <Text component={TextVariants.p} className="counterfactual-outcome__text">
-      {goal.originalValue ? 'True' : 'False'}
-    </Text>
-  );
-};
-
-const CounterfactualOutcomeNumber = (props: CounterfactualOutcomeProps) => {
-  const { goal } = props;
-  return (
-    <Text component={TextVariants.p} className="counterfactual-outcome__text">
-      {goal.originalValue}
-    </Text>
-  );
-};
-
-const CounterfactualOutcomeString = (props: CounterfactualOutcomeProps) => {
-  const { goal } = props;
-
-  return (
-    <Text component={TextVariants.p} className="counterfactual-outcome__text">
-      {goal.originalValue}
+      {value}
     </Text>
   );
 };

@@ -16,14 +16,14 @@ import { InfoCircleIcon } from '@patternfly/react-icons';
 import CounterfactualOutcome from '../../Molecules/CounterfactualOutcome/CounterfactualOutcome';
 import CounterfactualOutcomeEdit from '../../Molecules/CounterfactualOutcomeEdit/CounterfactualOutcomeEdit';
 
-type CounterfactualOutcomeSelection = {
+type CounterfactualOutcomeSelectionProps = {
   isOpen: boolean;
   onClose: () => void;
   goals: CFGoal[];
 };
 
 const CounterfactualOutcomeSelection = (
-  props: CounterfactualOutcomeSelection
+  props: CounterfactualOutcomeSelectionProps
 ) => {
   const { isOpen, onClose, goals } = props;
   const [editingGoals, setEditingGoals] = useState(goals);

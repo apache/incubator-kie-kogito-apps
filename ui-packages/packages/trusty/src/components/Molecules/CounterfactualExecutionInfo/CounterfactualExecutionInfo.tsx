@@ -35,7 +35,7 @@ const CounterfactualExecutionInfo = (
         </span>
       </FlexItem>
       <FlexItem>
-        <span className="cf-execution-info">
+        <span className="cf-execution-info cf-execution-info__results">
           <span className="cf-execution-info__label">Total Results</span>
           <Badge>{resultsCount}</Badge>
         </span>

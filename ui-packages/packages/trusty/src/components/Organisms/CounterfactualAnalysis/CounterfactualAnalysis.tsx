@@ -97,15 +97,18 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
         result => result.stage === 'FINAL'
       );
       if (finalResult !== undefined) {
+        let executionStatus;
+        if (finalResult.status === 'FAILED') {
+          executionStatus = CFExecutionStatus.FAILED;
+        } else if (finalResult.isValid) {
+          executionStatus = CFExecutionStatus.COMPLETED;
+        } else {
+          executionStatus = CFExecutionStatus.NO_RESULTS;
+        }
         dispatch({
           type: 'CF_SET_STATUS',
           payload: {
-            executionStatus:
-              finalResult.status === 'FAILED'
-                ? CFExecutionStatus.FAILED
-                : finalResult.isValid
-                ? CFExecutionStatus.COMPLETED
-                : CFExecutionStatus.NO_RESULTS
+            executionStatus
           }
         });
       }

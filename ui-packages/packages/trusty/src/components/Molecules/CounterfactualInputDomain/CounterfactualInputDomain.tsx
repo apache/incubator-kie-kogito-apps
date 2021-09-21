@@ -18,16 +18,22 @@ const CounterfactualInputDomain = ({
       );
       break;
     case 'CATEGORICAL':
-      domain = (
-        <span>
-          {input.domain.categories.map((category, index, list) => (
-            <span key={index}>
-              {category}
-              {index === list.length - 1 ? '' : ','}{' '}
-            </span>
-          ))}
-        </span>
-      );
+      domain =
+        // special treatment for boolean values that have a 'fake' categorical
+        // domain
+        typeof input.value === 'boolean' ? (
+          <></>
+        ) : (
+          <span>
+            {input.domain.categories.map((category, index, list) => (
+              <span key={index}>
+                {category}
+                {index === list.length - 1 ? '' : ','}{' '}
+              </span>
+            ))}
+          </span>
+        );
+
       break;
     default:
       domain = '';

@@ -192,6 +192,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                   }
                 >
                   <Button
+                    id="counterfactual-new"
                     variant={ButtonVariant.primary}
                     aria-label="New Counterfactual Analysis"
                     onClick={handleNewCF}
@@ -209,7 +210,11 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                     </div>
                   }
                 >
-                  <Button variant="secondary" onClick={handleEditSearchDomain}>
+                  <Button
+                    id="counterfactual-edit"
+                    variant="secondary"
+                    onClick={handleEditSearchDomain}
+                  >
                     Edit Counterfactual
                   </Button>
                 </Tooltip>

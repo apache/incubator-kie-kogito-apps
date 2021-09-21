@@ -158,13 +158,16 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
     }
   };
 
-  const canAddConstraint = (input: CFSearchInput) => {
-    return ['string', 'number'].includes(typeof input.value);
-  };
-
-  const canSelectInput = (input: CFSearchInput) => {
+  const isInputTypeSupported = useCallback((input: CFSearchInput) => {
     return ['string', 'number', 'boolean'].includes(typeof input.value);
-  };
+  }, []);
+
+  const canSelectInput = useCallback(
+    (input: CFSearchInput) => {
+      return isInputSelectionEnabled && isInputTypeSupported(input);
+    },
+    [isInputSelectionEnabled, isInputTypeSupported]
+  );
 
   useEffect(() => {
     if (results.length > 0) {
@@ -191,8 +194,8 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
   }, [displayedResults, onScrollUpdate]);
 
   const handleScrollbarRendering = (cssClass: string) => {
-    return ({ style, ...props }) => {
-      return <div style={{ ...style }} {...props} className={cssClass} />;
+    return ({ style, ...trackProps }) => {
+      return <div style={{ ...style }} {...trackProps} className={cssClass} />;
     };
   };
 
@@ -385,37 +388,20 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
                               rowIndex,
                               onSelect,
                               isSelected: row.fixed === false,
-                              disable: !(
-                                isInputSelectionEnabled && canSelectInput(row)
-                              )
+                              disable: !canSelectInput(row)
                             }}
                           />
                           <Td key={`${rowIndex}_1`} dataLabel={columns[0]}>
                             {row.name}
                           </Td>
                           <Td key={`${rowIndex}_2`} dataLabel={columns[1]}>
-                            {!isInputSelectionEnabled && row.domain && (
-                              <CounterfactualInputDomain input={row} />
-                            )}
-                            {isInputSelectionEnabled && canAddConstraint(row) && (
-                              <Button
-                                variant={'link'}
-                                isInline={true}
-                                onClick={() =>
-                                  onOpenInputDomainEdit(row, rowIndex)
-                                }
-                                icon={!row.domain && <PlusCircleIcon />}
-                                isDisabled={row.fixed}
-                                className={'counterfactual-constraint-edit'}
-                              >
-                                {row.domain ? (
-                                  <CounterfactualInputDomain input={row} />
-                                ) : (
-                                  <>Constraint</>
-                                )}
-                              </Button>
-                            )}
-                            {!canSelectInput(row) && <em>Not yet supported</em>}
+                            <ConstraintCell
+                              row={row}
+                              rowIndex={rowIndex}
+                              isInputSelectionEnabled={isInputSelectionEnabled}
+                              isInputTypeSupported={isInputTypeSupported}
+                              onEditConstraint={onOpenInputDomainEdit}
+                            />
                           </Td>
                           <Td key={`${rowIndex}_3`} dataLabel={columns[2]}>
                             {row.components === null && (
@@ -497,6 +483,54 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
 };
 
 export default CounterfactualTable;
+
+type ConstraintCellProps = {
+  row: CFSearchInput;
+  rowIndex: number;
+  isInputSelectionEnabled: boolean;
+  isInputTypeSupported: (input: CFSearchInput) => boolean;
+  onEditConstraint: (row: CFSearchInput, rowIndex: number) => void;
+};
+
+const ConstraintCell = (props: ConstraintCellProps) => {
+  const {
+    row,
+    rowIndex,
+    isInputSelectionEnabled,
+    isInputTypeSupported,
+    onEditConstraint
+  } = props;
+
+  const isTypeSupported = isInputTypeSupported(row);
+
+  const isConstraintEditEnabled =
+    isInputSelectionEnabled && ['string', 'number'].includes(typeof row.value);
+
+  return (
+    <>
+      {!isInputSelectionEnabled && row.domain && (
+        <CounterfactualInputDomain input={row} />
+      )}
+      {isConstraintEditEnabled && (
+        <Button
+          variant={'link'}
+          isInline={true}
+          onClick={() => onEditConstraint(row, rowIndex)}
+          icon={!row.domain && <PlusCircleIcon />}
+          isDisabled={row.fixed}
+          className={'counterfactual-constraint-edit'}
+        >
+          {row.domain ? (
+            <CounterfactualInputDomain input={row} />
+          ) : (
+            <>Constraint</>
+          )}
+        </Button>
+      )}
+      {!isTypeSupported && <em>Not yet supported</em>}
+    </>
+  );
+};
 
 const convertCFResultsInputs = (results: CFAnalysisResult[]) => {
   const rows = [];

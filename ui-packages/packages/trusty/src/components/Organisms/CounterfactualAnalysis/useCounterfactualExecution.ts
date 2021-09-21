@@ -79,8 +79,7 @@ const useCounterfactualExecution = (executionId: string) => {
         }
       })
       .catch(error => {
-        // @todo decide how to handle eventual errors
-        console.log(error);
+        setCFAnalysis({ status: RemoteDataStatus.FAILURE, error });
       });
     return () => {
       isMounted = false;

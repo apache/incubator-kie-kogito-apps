@@ -36,6 +36,7 @@ const CounterfactualHint = (props: CounterfactualHintProps) => {
                 dropdownItems={[
                   <DropdownItem
                     key="action"
+                    id="hint-close"
                     component={
                       <button onClick={() => setIsDiscarded(true)}>
                         Close

@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import CounterfactualAnalysis from '../CounterfactualAnalysis';
 import {
   CFAnalysisResultsSets,
+  CFExecutionStatus,
   CFGoalRole,
   ItemObject,
   Outcome
@@ -54,7 +55,7 @@ describe('CounterfactualAnalysis', () => {
     ).toBeTruthy();
     expect(wrapper.find('CounterfactualOutcomesSelected').text()).toMatch('');
     expect(wrapper.find('CounterfactualTable Thead Tr')).toHaveLength(1);
-    expect(wrapper.find('CounterfactualTable Tbody Tr')).toHaveLength(1);
+    expect(wrapper.find('CounterfactualTable Tbody Tr')).toHaveLength(2);
     expect(
       wrapper
         .find('CounterfactualTable Tbody Tr Td')
@@ -69,10 +70,53 @@ describe('CounterfactualAnalysis', () => {
     ).toMatch('738');
     expect(
       wrapper
+        .find('CounterfactualTable Tbody Tr')
+        .at(1)
+        .find('Td')
+        .at(1)
+        .text()
+    ).toMatch('Type');
+    expect(
+      wrapper
+        .find('CounterfactualTable Tbody Tr')
+        .at(1)
+        .find('Td')
+        .at(3)
+        .text()
+    ).toMatch('Lease');
+
+    expect(
+      wrapper
         .find('CounterfactualTable Tbody Tr Td')
         .at(4)
         .text()
     ).toMatch('No available results');
+  });
+
+  test('provides an hint on how to setup an analysis', () => {
+    (useCounterfactualExecution as jest.Mock).mockReturnValue({
+      runCFAnalysis,
+      cfResults: undefined
+    });
+    const wrapper = mount(
+      <CounterfactualAnalysis
+        inputs={inputs}
+        outcomes={outcomes}
+        executionId={executionId}
+        containerHeight={900}
+        containerWidth={900}
+      />
+    );
+
+    expect(wrapper.find('CounterfactualHint')).toHaveLength(1);
+    expect(wrapper.find('CounterfactualHint Hint')).toHaveLength(1);
+
+    wrapper
+      .find('CounterfactualHint button#hint-kebab-toggle')
+      .simulate('click');
+    wrapper.find('CounterfactualHint #hint-close button').simulate('click');
+
+    expect(wrapper.find('CounterfactualHint Hint')).toHaveLength(0);
   });
 
   test('handles input selection, constraints change and outcome selection', () => {
@@ -138,6 +182,59 @@ describe('CounterfactualAnalysis', () => {
         .find('Button')
         .text()
     ).toMatch('1-10');
+
+    wrapper
+      .find('CounterfactualTable Tbody Tr')
+      .at(1)
+      .find('Td:first-child SelectColumn')
+      .simulate('change');
+
+    wrapper
+      .find('CounterfactualTable Tbody Tr')
+      .at(1)
+      .find('Td')
+      .at(2)
+      .find('Button')
+      .simulate('click');
+
+    expect(wrapper.find('CounterfactualInputDomainEdit')).toHaveLength(1);
+    expect(wrapper.find('CounterfactualCategoricalDomainEdit')).toHaveLength(1);
+
+    const firstEnum = wrapper.find(
+      'CounterfactualCategoricalDomainEdit input#enum-value-0'
+    );
+    firstEnum.getDOMNode<HTMLInputElement>().value = 'alpha';
+    firstEnum.simulate('change', 'alpha');
+    firstEnum.simulate('blur');
+
+    wrapper
+      .find('CounterfactualCategoricalDomainEdit button#enum-add')
+      .simulate('click');
+
+    const secondEnum = wrapper.find(
+      'CounterfactualCategoricalDomainEdit input#enum-value-1'
+    );
+    secondEnum.getDOMNode<HTMLInputElement>().value = 'beta';
+    secondEnum.simulate('change', 'beta');
+    secondEnum.simulate('blur');
+
+    wrapper
+      .find('CounterfactualInputDomainEdit ActionListItem:first-child Button')
+      .simulate('click');
+
+    expect(wrapper.find('CounterfactualInputDomainEdit')).toHaveLength(0);
+    expect(wrapper.find('CounterfactualCategoricalDomainEdit')).toHaveLength(0);
+
+    expect(
+      wrapper
+        .find('CounterfactualTable Tbody Tr')
+        .at(1)
+        .find('Td')
+        .at(2)
+        .find('Button')
+        .text()
+    ).toMatch('alpha, beta');
+
     expect(wrapper.find('CounterfactualOutcomeSelection')).toHaveLength(0);
     expect(
       wrapper.find('Button.counterfactual-run').props()['isAriaDisabled']
@@ -189,6 +286,18 @@ describe('CounterfactualAnalysis', () => {
           name: 'Credit Score',
           typeRef: 'number',
           value: 738
+        },
+        {
+          components: null,
+          domain: {
+            categories: ['alpha', 'beta'],
+            type: 'CATEGORICAL'
+          },
+          fixed: false,
+          kind: 'UNIT',
+          name: 'Type',
+          typeRef: 'string',
+          value: 'Lease'
         }
       ]
     });
@@ -224,6 +333,118 @@ describe('CounterfactualAnalysis', () => {
         .at(5)
         .text()
     ).toMatch(cfResultsFinal.solutions[0].inputs[0].value.toString());
+
+    expect(
+      wrapper.find('CounterfactualCompletedMessage').props()['status']
+        .executionStatus
+    ).toEqual(CFExecutionStatus.COMPLETED);
+
+    expect(
+      wrapper
+        .find('CounterfactualExecutionInfo .cf-execution-info__results Badge')
+        .text()
+    ).toMatch('1');
+  });
+
+  test('handles an analysis with no results', () => {
+    (useCounterfactualExecution as jest.Mock).mockReturnValue({
+      runCFAnalysis,
+      cfResults: cfNoResults
+    });
+    const wrapper = mount(
+      <CounterfactualAnalysis
+        inputs={inputs}
+        outcomes={outcomes}
+        executionId={executionId}
+        containerHeight={900}
+        containerWidth={900}
+      />
+    );
+
+    expect(wrapper.find('CounterfactualTable Thead Tr Th')).toHaveLength(4);
+
+    expect(
+      wrapper.find('CounterfactualCompletedMessage').props()['status']
+        .executionStatus
+    ).toEqual(CFExecutionStatus.NO_RESULTS);
+  });
+
+  test('handles a failed analysis', () => {
+    (useCounterfactualExecution as jest.Mock).mockReturnValue({
+      runCFAnalysis,
+      cfResults: cfResultsFailed
+    });
+    const wrapper = mount(
+      <CounterfactualAnalysis
+        inputs={inputs}
+        outcomes={outcomes}
+        executionId={executionId}
+        containerHeight={900}
+        containerWidth={900}
+      />
+    );
+
+    expect(wrapper.find('CounterfactualTable Thead Tr Th')).toHaveLength(4);
+
+    expect(
+      wrapper.find('CounterfactualCompletedMessage').props()['status']
+        .executionStatus
+    ).toEqual(CFExecutionStatus.FAILED);
+  });
+
+  test('let the user start another analysis', () => {
+    (useCounterfactualExecution as jest.Mock).mockReturnValue({
+      runCFAnalysis,
+      cfResults: cfResultsFinal
+    });
+    const wrapper = mount(
+      <CounterfactualAnalysis
+        inputs={inputs}
+        outcomes={outcomes}
+        executionId={executionId}
+        containerHeight={900}
+        containerWidth={900}
+      />
+    );
+
+    expect(wrapper.find('Button#counterfactual-new')).toHaveLength(1);
+    wrapper.find('Button#counterfactual-new').simulate('click');
+
+    expect(wrapper.find('CounterfactualToolbar Modal')).toHaveLength(1);
+    expect(
+      wrapper.find('CounterfactualToolbar Modal').props()['title']
+    ).toMatch('Results will be cleared');
+    wrapper
+      .find('CounterfactualToolbar Modal ModalBoxFooter Button')
+      .at(0)
+      .simulate('click');
+
+    expect(wrapper.find('Button.counterfactual-run')).toHaveLength(1);
+    expect(
+      wrapper.find('Button.counterfactual-run').props()['isAriaDisabled']
+    ).toBeTruthy();
+    expect(
+      wrapper
+        .find(
+          'CounterfactualTable Tbody Tr:first-child Td:first-child SelectColumn'
+        )
+        .props()['checked']
+    ).toBeFalsy();
+    expect(
+      wrapper
+        .find('CounterfactualTable Tbody Tr:first-child Td')
+        .at(2)
+        .find('Button')
+        .props()['isDisabled']
+    ).toBeTruthy();
+    expect(
+      wrapper
+        .find('CounterfactualTable Tbody Tr:first-child Td')
+        .at(2)
+        .find('Button')
+        .text()
+    ).toMatch('Constraint');
+    expect(wrapper.find('CounterfactualOutcomesSelected').text()).toMatch('');
   });
 });
 
@@ -234,8 +455,16 @@ const inputs: ItemObject[] = [
     kind: 'UNIT',
     typeRef: 'number',
     value: 738
+  },
+  {
+    components: null,
+    name: 'Type',
+    kind: 'UNIT',
+    typeRef: 'string',
+    value: 'Lease'
   }
 ];
+
 const outcomes: Outcome[] = [
   {
     evaluationStatus: 'SUCCEEDED',
@@ -271,6 +500,13 @@ const cfResultsFinal: CFAnalysisResultsSets = {
           kind: 'UNIT',
           value: 5,
           components: null
+        },
+        {
+          name: 'Lease',
+          typeRef: 'string',
+          kind: 'UNIT',
+          value: 'alpha',
+          components: null
         }
       ],
       isValid: true,
@@ -281,6 +517,26 @@ const cfResultsFinal: CFAnalysisResultsSets = {
       statusDetails: '',
       type: 'counterfactual',
       valid: true
+    }
+  ]
+};
+
+const cfNoResults: CFAnalysisResultsSets = {
+  ...cfResultsFinal,
+  solutions: [
+    {
+      ...cfResultsFinal.solutions[0],
+      isValid: false
+    }
+  ]
+};
+
+const cfResultsFailed: CFAnalysisResultsSets = {
+  ...cfResultsFinal,
+  solutions: [
+    {
+      ...cfResultsFinal.solutions[0],
+      status: 'FAILED'
     }
   ]
 };
