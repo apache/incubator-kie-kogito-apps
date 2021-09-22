@@ -9,7 +9,6 @@ schema {
 type Query {
     ProcessInstances(where: ProcessInstanceArgument, orderBy: ProcessInstanceOrderBy, pagination: Pagination): [ProcessInstance]
     UserTaskInstances(where: UserTaskInstanceArgument, orderBy: UserTaskInstanceOrderBy, pagination: Pagination):  [UserTaskInstance]
-    getUserTaskSchema(id: String, taskId: String, user:String, groups:[String]): String
     Jobs(where: JobArgument, orderBy: JobOrderBy, pagination: Pagination):  [Job]
 }
 
@@ -295,6 +294,7 @@ type UserTaskInstance {
     referenceName: String
     lastUpdate: DateTime!
     endpoint: String
+    schema(user: String, groups:[String]): String
 }
 
 type UserTaskInstanceMeta {

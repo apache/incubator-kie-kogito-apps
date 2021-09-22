@@ -15,9 +15,11 @@
  */
 package org.kie.kogito.index;
 
+import java.io.IOException;
 import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -29,11 +31,11 @@ import static io.restassured.RestAssured.given;
 import static java.util.Collections.singletonMap;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.either;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractProcessDataIndexIT {
 
@@ -63,7 +65,7 @@ public abstract class AbstractProcessDataIndexIT {
     }
 
     @Test
-    public void testProcessInstanceEvents() {
+    public void testProcessInstanceEvents() throws IOException {
         String pId = given()
                 .contentType(ContentType.JSON)
                 .body("{\"traveller\" : {\"firstName\" : \"Darth\",\"lastName\" : \"Vader\",\"email\" : \"darth.vader@deathstar.com\",\"nationality\" : \"Tatooine\"}}")
@@ -251,21 +253,18 @@ public abstract class AbstractProcessDataIndexIT {
                     .extract().path("data.UserTaskInstances[0].id");
             String expectedSchema =
                     "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"traveller\":{\"type\":\"object\",\"properties\":{\"address\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"},\"street\":{\"type\":\"string\"},\"zipCode\":{\"type\":\"string\"}}},\"email\":{\"type\":\"string\"},\"firstName\":{\"type\":\"string\"},\"lastName\":{\"type\":\"string\"},\"nationality\":{\"type\":\"string\"},\"processed\":{\"type\":\"boolean\"}},\"input\":true},\"approved\":{\"type\":\"boolean\",\"output\":true}},\"phases\":[\"abort\",\"claim\",\"skip\",\"complete\"]}";
-            String expectedSchemaMongo =
-                    "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"approved\":{\"type\":\"boolean\",\"output\":true},\"traveller\":{\"type\":\"object\",\"properties\":{\"address\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"},\"street\":{\"type\":\"string\"},\"zipCode\":{\"type\":\"string\"}}},\"email\":{\"type\":\"string\"},\"firstName\":{\"type\":\"string\"},\"lastName\":{\"type\":\"string\"},\"nationality\":{\"type\":\"string\"},\"processed\":{\"type\":\"boolean\"}},\"input\":true}},\"phases\":[\"abort\",\"claim\",\"skip\",\"complete\"]}";
 
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"{ getUserTaskSchema ( " +
-                            "id: \\\"" + pId2 + "\\\", " +
-                            "taskId: \\\"" + taskId + "\\\", " +
-                            "user: \\\"manager\\\", " +
-                            "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"]" +
-                            ")}\"}")
+            String taskSchema = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                    .body("{ \"query\" : \"{ UserTaskInstances (where: {id: {equal:\\\"" + taskId + "\\\" }}){ " +
+                            "schema ( user: \\\"manager\\\", groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"] )" +
+                            "}}\"}")
                     .when().post("/graphql")
                     .then()
                     .statusCode(200)
-                    .body("data.getUserTaskSchema", either(equalTo(expectedSchema)).or(equalTo(expectedSchemaMongo)));
+                    .extract().path("data.UserTaskInstances[0].schema");
 
+            ObjectMapper mapper = new ObjectMapper();
+            assertEquals(mapper.readTree(taskSchema), mapper.readTree(expectedSchema));
             await()
                     .atMost(TIMEOUT)
                     .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)

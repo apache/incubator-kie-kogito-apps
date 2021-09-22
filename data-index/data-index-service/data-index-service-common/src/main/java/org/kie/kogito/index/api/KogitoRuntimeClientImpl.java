@@ -197,12 +197,12 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
     }
 
     private String getUserGroupsURIParameter(String user, List<String> groups) {
-        final String params = "";
+        final StringBuilder builder = new StringBuilder();
         if (user != null && groups != null) {
-            groups.stream().forEach(group -> params.concat("&group=" + group));
-            return "user=" + user + params;
+            builder.append("user=" + user);
+            groups.stream().forEach(group -> builder.append("&group=" + group));
         }
-        return params;
+        return builder.toString();
     }
 
     protected CompletableFuture sendDeleteClientRequest(WebClient webClient, String requestURI, String logMessage) {

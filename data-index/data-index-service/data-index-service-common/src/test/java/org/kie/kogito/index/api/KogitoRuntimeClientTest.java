@@ -364,7 +364,7 @@ public class KogitoRuntimeClientTest {
         UserTaskInstance taskInstance = createUserTaskInstance(PROCESS_INSTANCE_ID, TASK_ID, "InProgress");
 
         client.getUserTaskSchema(SERVICE_URL, taskInstance, "jdoe", Collections.singletonList("managers"));
-        verify(client).sendGetClientRequest(webClientMock, "/travels/" + PROCESS_INSTANCE_ID + "/TaskName/" + TASK_ID + "/schema?user=jdoe",
+        verify(client).sendGetClientRequest(webClientMock, "/travels/" + PROCESS_INSTANCE_ID + "/TaskName/" + TASK_ID + "/schema?user=jdoe&group=managers",
                 "Get User Task schema for task:TaskName with id: " + taskInstance.getId(), null);
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
         verify(httpRequestMock).send(handlerCaptor.capture());
@@ -390,7 +390,7 @@ public class KogitoRuntimeClientTest {
         client.updateUserTask(SERVICE_URL, taskInstance, "jdoe", Collections.singletonList("managers"), taskInfo);
         ArgumentCaptor<JsonObject> jsonCaptor = ArgumentCaptor.forClass(JsonObject.class);
         verify(client).sendPutClientRequest(eq(webClientMock),
-                eq("/management/processes/travels/instances/" + PROCESS_INSTANCE_ID + "/tasks/" + TASK_ID + "?user=jdoe"),
+                eq("/management/processes/travels/instances/" + PROCESS_INSTANCE_ID + "/tasks/" + TASK_ID + "?user=jdoe&group=managers"),
                 eq("Update UserTask: " + taskInstance.getName() + " with id: " + taskInstance.getId()),
                 jsonCaptor.capture());
         assertThat(jsonCaptor.getValue().getString("description")).isEqualTo("NewDescription");
@@ -420,7 +420,7 @@ public class KogitoRuntimeClientTest {
         client.partialUpdateUserTask(SERVICE_URL, taskInstance, "jdoe", Collections.singletonList("managers"), taskInfo);
         ArgumentCaptor<JsonObject> jsonCaptor = ArgumentCaptor.forClass(JsonObject.class);
         verify(client).sendPatchClientRequest(eq(webClientMock),
-                eq("/management/processes/travels/instances/" + PROCESS_INSTANCE_ID + "/tasks/" + TASK_ID + "?user=jdoe"),
+                eq("/management/processes/travels/instances/" + PROCESS_INSTANCE_ID + "/tasks/" + TASK_ID + "?user=jdoe&group=managers"),
                 eq("Partial update UserTask:" + taskInstance.getName() + " with id: " + taskInstance.getId()),
                 jsonCaptor.capture());
         assertThat(jsonCaptor.getValue().getString("description")).isEqualTo("NewDescription");

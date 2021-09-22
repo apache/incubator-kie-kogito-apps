@@ -233,12 +233,9 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
                 null, "InProgress", user);
 
         indexUserTaskCloudEvent(event);
-        checkOkResponse("{ \"query\" : \"{ getUserTaskSchema ( " +
-                "id: \\\"" + processInstanceId + "\\\", " +
-                "taskId: \\\"" + taskId + "\\\"" +
-                "user: \\\"" + user + "\\\", " +
-                "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"]" +
-                ")}\"}");
+        checkOkResponse("{ \"query\" : \"{UserTaskInstances (where: {id: {equal:\\\"" + taskId + "\\\" }}){ " +
+                "schema ( user: \\\"" + user + "\\\", groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"] )" +
+                "}}\"}");
         ArgumentCaptor<UserTaskInstance> userTaskInstanceCaptor = ArgumentCaptor.forClass(UserTaskInstance.class);
 
         verify(dataIndexApiClient).getUserTaskSchema(eq("http://localhost:8080"),

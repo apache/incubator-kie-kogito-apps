@@ -110,7 +110,6 @@ public class GraphQLSchemaManager {
                 .type("Query", builder -> {
                     builder.dataFetcher("ProcessInstances", this::getProcessInstancesValues);
                     builder.dataFetcher("UserTaskInstances", this::getUserTaskInstancesValues);
-                    builder.dataFetcher("getUserTaskSchema", this::getUserTaskSchema);
                     builder.dataFetcher("Jobs", this::getJobsValues);
                     return builder;
                 })
@@ -134,6 +133,10 @@ public class GraphQLSchemaManager {
                     builder.dataFetcher("serviceUrl", this::getProcessInstanceServiceUrl);
                     builder.dataFetcher("diagram", this::getProcessInstanceDiagram);
                     builder.dataFetcher("nodeDefinitions", this::getProcessNodes);
+                    return builder;
+                })
+                .type("UserTaskInstance", builder -> {
+                    builder.dataFetcher("schema", this::getUserTaskSchema);
                     return builder;
                 })
                 .type("ProcessInstanceMeta", builder -> {
@@ -276,8 +279,8 @@ public class GraphQLSchemaManager {
         return execute.size() > 0 ? execute.get(0) : null;
     }
 
-    private CompletableFuture<String> getUserTaskSchema(DataFetchingEnvironment env) {
-        UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
+    private CompletableFuture getUserTaskSchema(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = env.getSource();
         return dataIndexApiExecutor.getUserTaskSchema(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
                 userTaskInstance,
                 env.getArgument("user"),
