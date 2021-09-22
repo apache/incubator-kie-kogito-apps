@@ -21,6 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.index.TestUtils;
+import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -31,6 +32,7 @@ import io.quarkus.security.identity.SecurityIdentity;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.client.HttpRequest;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
@@ -41,11 +43,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.ABORT_PROCESS_INSTANCE_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.CANCEL_JOB_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.CANCEL_NODE_INSTANCE_PATH;
 import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_DIAGRAM_PATH;
 import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_NODE_DEFINITIONS_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.RESCHEDULE_JOB_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.RETRIGGER_NODE_INSTANCE_PATH;
 import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.RETRY_PROCESS_INSTANCE_PATH;
 import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.SKIP_PROCESS_INSTANCE_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.TRIGGER_NODE_INSTANCE_PATH;
+import static org.kie.kogito.index.api.KogitoRuntimeClientImpl.UPDATE_VARIABLES_PROCESS_INSTANCE_PATH;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -61,6 +70,7 @@ public class KogitoRuntimeClientTest {
     private static int ERROR = 5;
     private static String SERVICE_URL = "http://runtimeURL.com";
     private static String PROCESS_INSTANCE_ID = "pId";
+    private static String JOB_ID = "jobId";
 
     private static String AUTHORIZED_TOKEN = "authToken";
 
@@ -145,6 +155,146 @@ public class KogitoRuntimeClientTest {
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
         verify(httpRequestMock).send(handlerCaptor.capture());
         verify(httpRequestMock).putHeader(eq("Authorization"), eq("Bearer " + AUTHORIZED_TOKEN));
+        HttpResponse response = mock(HttpResponse.class);
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsString();
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
+        verify(response).bodyAsString();
+    }
+
+    @Test
+    public void testUpdateProcessInstanceVariables() throws Exception {
+        when(webClientMock.put(any())).thenReturn(httpRequestMock);
+        when(httpRequestMock.putHeader(anyString(), anyString())).thenReturn(httpRequestMock);
+
+        ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ERROR);
+
+        client.updateProcessInstanceVariables(SERVICE_URL, pI, pI.getVariables().toString());
+        verify(client).sendPutClientRequest(webClientMock,
+                format(UPDATE_VARIABLES_PROCESS_INSTANCE_PATH, pI.getProcessId(), pI.getId()),
+                "UPDATE VARIABLES of ProcessInstance with id: " + pI.getId(), pI.getVariables().toString());
+        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
+        JsonObject jsonOject = new JsonObject(pI.getVariables().toString());
+        verify(httpRequestMock).sendJson(eq(jsonOject), handlerCaptor.capture());
+        HttpResponse response = mock(HttpResponse.class);
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsString();
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
+        verify(response).bodyAsString();
+    }
+
+    @Test
+    public void testTriggerNodeInstance() {
+        String nodeDefId = "nodeDefId";
+        when(webClientMock.post(any())).thenReturn(httpRequestMock);
+        when(httpRequestMock.putHeader(anyString(), anyString())).thenReturn(httpRequestMock);
+
+        ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ERROR);
+
+        client.triggerNodeInstance(SERVICE_URL, pI, nodeDefId);
+        verify(client).sendPostClientRequest(webClientMock,
+                format(TRIGGER_NODE_INSTANCE_PATH, pI.getProcessId(), pI.getId(), nodeDefId),
+                "Trigger Node " + nodeDefId + "from ProcessInstance with id: " + pI.getId());
+        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
+        verify(httpRequestMock).send(handlerCaptor.capture());
+        HttpResponse response = mock(HttpResponse.class);
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsString();
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
+        verify(response).bodyAsString();
+    }
+
+    @Test
+    public void testRetriggerNodeInstance() {
+        String nodeInstanceId = "nodeInstanceId";
+        when(webClientMock.post(any())).thenReturn(httpRequestMock);
+        when(httpRequestMock.putHeader(anyString(), anyString())).thenReturn(httpRequestMock);
+
+        ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ERROR);
+
+        client.retriggerNodeInstance(SERVICE_URL, pI, nodeInstanceId);
+        verify(client).sendPostClientRequest(webClientMock,
+                format(RETRIGGER_NODE_INSTANCE_PATH, pI.getProcessId(), pI.getId(), nodeInstanceId),
+                "Retrigger NodeInstance " + nodeInstanceId +
+                        "from ProcessInstance with id: " + pI.getId());
+        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
+        verify(httpRequestMock).send(handlerCaptor.capture());
+        HttpResponse response = mock(HttpResponse.class);
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsString();
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
+        verify(response).bodyAsString();
+    }
+
+    @Test
+    public void testCancelNodeInstance() {
+        String nodeInstanceId = "nodeInstanceId";
+        when(webClientMock.delete(any())).thenReturn(httpRequestMock);
+        when(httpRequestMock.putHeader(anyString(), anyString())).thenReturn(httpRequestMock);
+
+        ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ERROR);
+
+        client.cancelNodeInstance(SERVICE_URL, pI, nodeInstanceId);
+        verify(client).sendDeleteClientRequest(webClientMock,
+                format(CANCEL_NODE_INSTANCE_PATH, pI.getProcessId(), pI.getId(), nodeInstanceId),
+                "Cancel NodeInstance " + nodeInstanceId +
+                        "from ProcessInstance with id: " + pI.getId());
+        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
+        verify(httpRequestMock).send(handlerCaptor.capture());
+        HttpResponse response = mock(HttpResponse.class);
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsString();
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
+        verify(response).bodyAsString();
+    }
+
+    @Test
+    public void testCancelJob() {
+        when(webClientMock.delete(any())).thenReturn(httpRequestMock);
+        when(httpRequestMock.putHeader(anyString(), anyString())).thenReturn(httpRequestMock);
+
+        Job job = createJob(JOB_ID, PROCESS_INSTANCE_ID, "SCHEDULED");
+        client.cancelJob(SERVICE_URL, job);
+
+        verify(client).sendDeleteClientRequest(webClientMock,
+                format(CANCEL_JOB_PATH, job.getId()),
+                "CANCEL Job with id: " + JOB_ID);
+        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
+        verify(httpRequestMock).send(handlerCaptor.capture());
+        HttpResponse response = mock(HttpResponse.class);
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
+        verify(response, never()).bodyAsString();
+
+        handlerCaptor.getValue().handle(createResponseMocks(response, true, 200));
+        verify(response).bodyAsString();
+    }
+
+    @Test
+    public void testRescheduleJob() throws Exception {
+        String newJobData = "{ }";
+        when(webClientMock.put(any())).thenReturn(httpRequestMock);
+        when(httpRequestMock.putHeader(anyString(), anyString())).thenReturn(httpRequestMock);
+
+        Job job = createJob(JOB_ID, PROCESS_INSTANCE_ID, "SCHEDULED");
+
+        client.rescheduleJob(SERVICE_URL, job, newJobData);
+        verify(client).sendPutClientRequest(webClientMock,
+                format(RESCHEDULE_JOB_PATH, JOB_ID),
+                "RESCHEDULED JOB with id: " + job.getId(), newJobData);
+        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
+        JsonObject jsonOject = new JsonObject(newJobData);
+        verify(httpRequestMock).sendJson(eq(jsonOject), handlerCaptor.capture());
         HttpResponse response = mock(HttpResponse.class);
 
         handlerCaptor.getValue().handle(createResponseMocks(response, false, 404));
@@ -259,6 +409,10 @@ public class KogitoRuntimeClientTest {
 
     private ProcessInstance createProcessInstance(String processInstanceId, int status) {
         return TestUtils.getProcessInstance("travels", processInstanceId, status, null, null);
+    }
+
+    private Job createJob(String jobId, String processInstanceId, String status) {
+        return TestUtils.getJob(jobId, "travels", processInstanceId, null, null, status);
     }
 
     protected void setupIdentityMock() {

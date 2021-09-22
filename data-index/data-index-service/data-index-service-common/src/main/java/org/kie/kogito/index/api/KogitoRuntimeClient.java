@@ -19,6 +19,7 @@ package org.kie.kogito.index.api;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessInstance;
 
@@ -30,7 +31,19 @@ public interface KogitoRuntimeClient {
 
     CompletableFuture<String> skipProcessInstance(String serviceURL, ProcessInstance processInstance);
 
+    CompletableFuture<String> updateProcessInstanceVariables(String serviceURL, ProcessInstance processInstance, String variables);
+
     CompletableFuture<String> getProcessInstanceDiagram(String serviceURL, ProcessInstance processInstance);
 
     CompletableFuture<List<Node>> getProcessInstanceNodeDefinitions(String serviceURL, ProcessInstance processInstance);
+
+    CompletableFuture<String> triggerNodeInstance(String serviceURL, ProcessInstance processInstance, String nodeDefinitionId);
+
+    CompletableFuture<String> retriggerNodeInstance(String serviceURL, ProcessInstance processInstance, String nodeInstanceId);
+
+    CompletableFuture<String> cancelNodeInstance(String serviceURL, ProcessInstance processInstance, String nodeInstanceId);
+
+    CompletableFuture<String> cancelJob(String serviceURL, Job job);
+
+    CompletableFuture<String> rescheduleJob(String serviceURL, Job job, String newJobData);
 }
