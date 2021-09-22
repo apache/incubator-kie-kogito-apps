@@ -66,8 +66,7 @@ class PrequalificationDmnLimeExplainerTest {
 
         Random random = new Random();
 
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(0L, random, 1);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
@@ -109,11 +108,11 @@ class PrequalificationDmnLimeExplainerTest {
         List<PredictionInput> samples = DmnTestUtils.randomPrequalificationInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 10)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        int seed = 0;
+        long seed = 0;
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).withSampling(false);
         Random random = new Random();
-        random.setSeed(seed);
-        LimeConfig initialConfig = new LimeConfig().withSamples(10);
+        LimeConfig initialConfig = new LimeConfig().withSamples(10)
+                .withPerturbationContext(new PerturbationContext(seed, random, 1));
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
         assertThat(optimizedConfig).isNotSameAs(initialConfig);
 
@@ -135,11 +134,10 @@ class PrequalificationDmnLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 10)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
 
-        int seed = 0;
+        long seed = 0;
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).forImpactScore().withSampling(false);
         Random random = new Random();
-        random.setSeed(seed);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
@@ -156,12 +154,12 @@ class PrequalificationDmnLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 10)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
 
-        int seed = 0;
+        long seed = 0;
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed)
                 .withWeightedStability(0.4, 0.6).withSampling(false);
         Random random = new Random();
-        random.setSeed(seed);
-        LimeConfig initialConfig = new LimeConfig().withSamples(10);
+        LimeConfig initialConfig = new LimeConfig().withSamples(10)
+                .withPerturbationContext(new PerturbationContext(seed, random, 1));
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
         assertThat(optimizedConfig).isNotSameAs(initialConfig);
 

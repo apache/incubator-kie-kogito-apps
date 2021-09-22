@@ -68,10 +68,9 @@ class PmmlCompoundScorecardLimeExplainerTest {
     @Test
     void testPMMLCompoundScorecard() throws Exception {
         Random random = new Random();
-        random.setSeed(0);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
-                .withPerturbationContext(new PerturbationContext(random, 1));
+                .withPerturbationContext(new PerturbationContext(0L, random, 1));
 
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionInput input = getTestInput();
@@ -111,11 +110,10 @@ class PmmlCompoundScorecardLimeExplainerTest {
         List<PredictionInput> samples = getSamples();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        int seed = 0;
+        long seed = 0;
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed);
         Random random = new Random();
-        random.setSeed(seed);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
@@ -138,11 +136,10 @@ class PmmlCompoundScorecardLimeExplainerTest {
         List<PredictionInput> samples = getSamples();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        int seed = 0;
+        long seed = 0;
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).forImpactScore();
         Random random = new Random();
-        random.setSeed(seed);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
@@ -157,11 +154,10 @@ class PmmlCompoundScorecardLimeExplainerTest {
         List<PredictionInput> samples = getSamples();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        int seed = 0;
+        long seed = 0;
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).withWeightedStability(0.4, 0.6);
         Random random = new Random();
-        random.setSeed(seed);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);

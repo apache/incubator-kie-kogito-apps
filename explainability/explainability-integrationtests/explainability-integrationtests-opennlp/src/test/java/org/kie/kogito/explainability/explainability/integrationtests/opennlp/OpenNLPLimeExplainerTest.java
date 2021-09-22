@@ -68,13 +68,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class OpenNLPLimeExplainerTest {
 
     @ParameterizedTest
-    @ValueSource(ints = { 0 })
-    void testOpenNLPLangDetect(int seed) throws Exception {
+    @ValueSource(longs = { 0 })
+    void testOpenNLPLangDetect(long seed) throws Exception {
         Random random = new Random();
-        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
-                .withPerturbationContext(new PerturbationContext(random, 1));
+                .withPerturbationContext(new PerturbationContext(seed, random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionProvider model = getModel();
 
@@ -165,13 +164,12 @@ class OpenNLPLimeExplainerTest {
         List<PredictionInput> samples = getSamples(getTokenizer());
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        int seed = 0;
+        long seed = 0;
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).withSampling(false);
         Random random = new Random();
-        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
-                .withPerturbationContext(new PerturbationContext(random, 1));
+                .withPerturbationContext(new PerturbationContext(seed, random, 1));
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(limeConfig, predictions, model);
         Assertions.assertThat(optimizedConfig).isNotSameAs(limeConfig);
 
@@ -191,13 +189,12 @@ class OpenNLPLimeExplainerTest {
         List<PredictionInput> samples = getSamples(getTokenizer());
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        int seed = 0;
+        long seed = 0;
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).forImpactScore().withSampling(false);
         Random random = new Random();
-        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
-                .withPerturbationContext(new PerturbationContext(random, 1));
+                .withPerturbationContext(new PerturbationContext(seed, random, 1));
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(limeConfig, predictions, model);
         Assertions.assertThat(optimizedConfig).isNotSameAs(limeConfig);
     }
@@ -209,13 +206,12 @@ class OpenNLPLimeExplainerTest {
         List<PredictionInput> samples = getSamples(getTokenizer());
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        int seed = 0;
+        long seed = 0;
         LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).withSampling(false);
         Random random = new Random();
-        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
-                .withPerturbationContext(new PerturbationContext(random, 1));
+                .withPerturbationContext(new PerturbationContext(seed, random, 1));
         LimeConfig optimizedConfig = limeConfigOptimizer.optimize(limeConfig, predictions, model);
         Assertions.assertThat(optimizedConfig).isNotSameAs(limeConfig);
         LimeExplainer limeExplainer = new LimeExplainer(optimizedConfig);

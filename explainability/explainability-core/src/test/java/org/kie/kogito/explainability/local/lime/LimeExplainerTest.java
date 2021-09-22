@@ -55,12 +55,11 @@ class LimeExplainerTest {
     private static final int DEFAULT_NO_OF_PERTURBATIONS = 1;
 
     @ParameterizedTest
-    @ValueSource(ints = { 0, 1, 2, 3, 4 })
-    void testEmptyPrediction(int seed) throws ExecutionException, InterruptedException, TimeoutException {
+    @ValueSource(longs = { 0, 1, 2, 3, 4 })
+    void testEmptyPrediction(long seed) throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
-        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
-                .withPerturbationContext(new PerturbationContext(random, DEFAULT_NO_OF_PERTURBATIONS))
+                .withPerturbationContext(new PerturbationContext(seed, random, DEFAULT_NO_OF_PERTURBATIONS))
                 .withSamples(10);
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionInput input = new PredictionInput(Collections.emptyList());
@@ -74,12 +73,11 @@ class LimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { 0, 1, 2, 3, 4 })
-    void testNonEmptyInput(int seed) throws ExecutionException, InterruptedException, TimeoutException {
+    @ValueSource(longs = { 0, 1, 2, 3, 4 })
+    void testNonEmptyInput(long seed) throws ExecutionException, InterruptedException, TimeoutException {
         Random random = new Random();
-        random.setSeed(seed);
         LimeConfig limeConfig = new LimeConfig()
-                .withPerturbationContext(new PerturbationContext(random, DEFAULT_NO_OF_PERTURBATIONS))
+                .withPerturbationContext(new PerturbationContext(seed, random, DEFAULT_NO_OF_PERTURBATIONS))
                 .withSamples(10);
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         List<Feature> features = new ArrayList<>();
@@ -98,14 +96,13 @@ class LimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { 0, 1, 2, 3, 4 })
-    void testSparseBalance(int seed) throws InterruptedException, ExecutionException, TimeoutException {
+    @ValueSource(longs = { 0, 1, 2, 3, 4 })
+    void testSparseBalance(long seed) throws InterruptedException, ExecutionException, TimeoutException {
         Random random = new Random();
-        random.setSeed(seed);
         for (int nf = 1; nf < 4; nf++) {
             int noOfSamples = 100;
             LimeConfig limeConfigNoPenalty = new LimeConfig()
-                    .withPerturbationContext(new PerturbationContext(random, DEFAULT_NO_OF_PERTURBATIONS))
+                    .withPerturbationContext(new PerturbationContext(seed, random, DEFAULT_NO_OF_PERTURBATIONS))
                     .withSamples(noOfSamples)
                     .withPenalizeBalanceSparse(false);
             LimeExplainer limeExplainerNoPenalty = new LimeExplainer(limeConfigNoPenalty);
@@ -150,10 +147,9 @@ class LimeExplainerTest {
     @Test
     void testNormalizedWeights() throws InterruptedException, ExecutionException, TimeoutException {
         Random random = new Random();
-        random.setSeed(4);
         LimeConfig limeConfig = new LimeConfig()
                 .withNormalizeWeights(true)
-                .withPerturbationContext(new PerturbationContext(random, 2))
+                .withPerturbationContext(new PerturbationContext(4L, random, 2))
                 .withSamples(10);
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         int nf = 4;
@@ -183,8 +179,7 @@ class LimeExplainerTest {
     @Test
     void testWithDataDistribution() throws InterruptedException, ExecutionException, TimeoutException {
         Random random = new Random();
-        random.setSeed(4);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(4L, random, 1);
         List<FeatureDistribution> featureDistributions = new ArrayList<>();
 
         int nf = 4;
@@ -242,14 +237,13 @@ class LimeExplainerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { 0, 1, 2, 3, 4 })
-    void testDeterministic(int seed) throws ExecutionException, InterruptedException, TimeoutException {
+    @ValueSource(longs = { 0, 1, 2, 3, 4 })
+    void testDeterministic(long seed) throws ExecutionException, InterruptedException, TimeoutException {
         List<Saliency> saliencies = new ArrayList<>();
         for (int j = 0; j < 2; j++) {
             Random random = new Random();
-            random.setSeed(seed);
             LimeConfig limeConfig = new LimeConfig()
-                    .withPerturbationContext(new PerturbationContext(random, DEFAULT_NO_OF_PERTURBATIONS))
+                    .withPerturbationContext(new PerturbationContext(seed, random, DEFAULT_NO_OF_PERTURBATIONS))
                     .withSamples(10);
             LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
             List<Feature> features = new ArrayList<>();

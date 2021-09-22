@@ -47,25 +47,23 @@ class LimeStabilityTest {
     static final double TOP_FEATURE_THRESHOLD = 0.9;
 
     @ParameterizedTest
-    @ValueSource(ints = { 0 })
-    void testStabilityWithNumericData(int seed) throws Exception {
+    @ValueSource(longs = { 0 })
+    void testStabilityWithNumericData(long seed) throws Exception {
         Random random = new Random();
-        random.setSeed(seed);
         PredictionProvider sumSkipModel = TestUtils.getSumSkipModel(0);
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 5; i++) {
             featureList.add(TestUtils.getMockedNumericFeature(i));
         }
-        LimeConfig limeConfig = new LimeConfig().withSamples(10).withPerturbationContext(new PerturbationContext(random, 1));
+        LimeConfig limeConfig = new LimeConfig().withSamples(10).withPerturbationContext(new PerturbationContext(seed, random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         assertStable(limeExplainer, sumSkipModel, featureList);
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { 0 })
-    void testStabilityWithTextData(int seed) throws Exception {
+    @ValueSource(longs = { 0 })
+    void testStabilityWithTextData(long seed) throws Exception {
         Random random = new Random();
-        random.setSeed(seed);
         PredictionProvider sumSkipModel = TestUtils.getDummyTextClassifier();
         List<Feature> featureList = new LinkedList<>();
         for (int i = 0; i < 4; i++) {
@@ -74,17 +72,16 @@ class LimeStabilityTest {
         featureList.add(TestUtils.getMockedTextFeature("money"));
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
-                .withPerturbationContext(new PerturbationContext(random, 1));
+                .withPerturbationContext(new PerturbationContext(seed, random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         assertStable(limeExplainer, sumSkipModel, featureList);
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { 0 })
-    void testAdaptiveVariance(int seed) throws Exception {
+    @ValueSource(longs = { 0 })
+    void testAdaptiveVariance(long seed) throws Exception {
         Random random = new Random();
-        random.setSeed(seed);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
 
         int samples = 1;
         int retries = 4;
@@ -151,12 +148,11 @@ class LimeStabilityTest {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = { 0, 1, 2, 3, 4 })
-    void testStabilityDeterministic(int seed) throws Exception {
+    @ValueSource(longs = { 0, 1, 2, 3, 4 })
+    void testStabilityDeterministic(long seed) throws Exception {
         List<LocalSaliencyStability> stabilities = new ArrayList<>();
         for (int j = 0; j < 2; j++) {
             Random random = new Random();
-            random.setSeed(seed);
             PredictionProvider model = TestUtils.getSumSkipModel(0);
             List<Feature> featureList = new LinkedList<>();
             for (int i = 0; i < 5; i++) {
@@ -168,7 +164,7 @@ class LimeStabilityTest {
 
             Prediction prediction = new SimplePrediction(input, predictionOutputs.get(0));
 
-            LimeConfig limeConfig = new LimeConfig().withSamples(10).withPerturbationContext(new PerturbationContext(random, 1));
+            LimeConfig limeConfig = new LimeConfig().withSamples(10).withPerturbationContext(new PerturbationContext(seed, random, 1));
             LimeExplainer explainer = new LimeExplainer(limeConfig);
             LocalSaliencyStability stability = ExplainabilityMetrics.getLocalSaliencyStability(model, prediction, explainer,
                     2, 10);

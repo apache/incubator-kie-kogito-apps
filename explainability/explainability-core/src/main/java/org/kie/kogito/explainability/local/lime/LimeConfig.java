@@ -222,12 +222,21 @@ public class LimeConfig {
     }
 
     public LimeConfig copy() {
+        PerturbationContext newPC;
+        if (this.perturbationContext.getSeed().isPresent()) {
+            newPC = new PerturbationContext(this.perturbationContext.getSeed().get(),
+                    this.perturbationContext.getRandom(),
+                    this.perturbationContext.getNoOfPerturbations());
+        } else {
+            newPC = new PerturbationContext(this.perturbationContext.getRandom(),
+                    this.perturbationContext.getNoOfPerturbations());
+        }
+
         return new LimeConfig()
                 .withSeparableDatasetRatio(separableDatasetRatio)
                 .withSamples(noOfSamples)
                 .withRetries(noOfRetries)
-                .withPerturbationContext(new PerturbationContext(perturbationContext.getRandom(),
-                        perturbationContext.getNoOfPerturbations()))
+                .withPerturbationContext(newPC)
                 .withAdaptiveVariance(adaptDatasetVariance)
                 .withDataDistribution(dataDistribution)
                 .withPenalizeBalanceSparse(penalizeBalanceSparse)

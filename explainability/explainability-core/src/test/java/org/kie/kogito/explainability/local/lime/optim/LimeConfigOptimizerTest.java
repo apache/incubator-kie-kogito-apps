@@ -149,7 +149,7 @@ class LimeConfigOptimizerTest {
 
     @Test
     void testSameConfig() throws ExecutionException, InterruptedException {
-        int seed = 0;
+        long seed = 0;
         List<LimeConfig> optimizedConfigs = new ArrayList<>();
 
         PredictionProvider model = TestUtils.getSumSkipModel(1);
@@ -160,8 +160,7 @@ class LimeConfigOptimizerTest {
 
         for (int i = 0; i < 2; i++) {
             Random random = new Random();
-            random.setSeed(seed);
-            LimeConfig initialConfig = new LimeConfig().withSamples(10).withPerturbationContext(new PerturbationContext(random, 1));
+            LimeConfig initialConfig = new LimeConfig().withSamples(10).withPerturbationContext(new PerturbationContext(seed, random, 1));
 
             LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed)
                     .withStepCountLimit(10).withTimeLimit(10);
