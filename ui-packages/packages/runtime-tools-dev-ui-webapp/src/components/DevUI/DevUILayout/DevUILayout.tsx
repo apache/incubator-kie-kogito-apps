@@ -29,6 +29,8 @@ import TaskFormContextProvider from '../../../channel/TaskForms/TaskFormContextP
 import FormsListContextProvider from '../../../channel/FormsList/FormsListContextProvider';
 import FormDetailsContextProvider from '../../../channel/FormDetails/FormDetailsContextProvider';
 import DevUIAppContextProvider from '../../contexts/DevUIAppContextProvider';
+import ProcessDefinitionListContextProvider from '../../../channel/ProcessDefinitionList/ProcessDefinitionListContextProvider';
+import ProcessFormContextProvider from '../../../channel/ProcessForm/ProcessFormContextProvider';
 
 interface IOwnProps {
   apolloClient: ApolloClient<any>;
@@ -61,15 +63,19 @@ const DevUILayout: React.FC<IOwnProps> = ({
             <ProcessListContextProvider apolloClient={apolloClient}>
               <ProcessDetailsContextProvider apolloClient={apolloClient}>
                 <JobsManagementContextProvider apolloClient={apolloClient}>
-                  <FormsListContextProvider>
-                    <FormDetailsContextProvider>
-                      <MemoryRouter>
-                        <Switch>
-                          <Route path="/" render={renderPage} />
-                        </Switch>
-                      </MemoryRouter>
-                    </FormDetailsContextProvider>
-                  </FormsListContextProvider>
+                  <ProcessDefinitionListContextProvider>
+                    <FormsListContextProvider>
+                      <FormDetailsContextProvider>
+                        <ProcessFormContextProvider>
+                          <MemoryRouter>
+                            <Switch>
+                              <Route path="/" render={renderPage} />
+                            </Switch>
+                          </MemoryRouter>
+                        </ProcessFormContextProvider>
+                      </FormDetailsContextProvider>
+                    </FormsListContextProvider>
+                  </ProcessDefinitionListContextProvider>
                 </JobsManagementContextProvider>
               </ProcessDetailsContextProvider>
             </ProcessListContextProvider>

@@ -89,6 +89,8 @@ app.get('/forms/list', controller.getForms);
 app.get('/forms/:formName',controller.getFormContent);
 app.post('/forms/:formName',controller.saveFormContent);
 
+app.get('/:processName/schema', controller.getProcessFormSchema);
+
 const taskDetailsError = ['5cead49f-7649-410a-89ff-840cc52adf52'];
 
 const checkStatesFilters = (userTaskInstance, states) => {
@@ -341,6 +343,29 @@ const resolvers = {
 
         result = result.slice(offset, offset + limit);
       }
+      return result;
+    },
+    ProcessDefinitions: async (parent, args) => {
+      console.log(args['where']);
+      let result = data.ProcessDefinitions.filter(datum => {
+        if (args['where'].or) {
+          if (args['where'].or.length === 0) {
+            return true;
+          } else {
+            for (let i = 0; i < args['where'].or.length; i++) {
+              if (
+                datum.processName
+                  .toLowerCase()
+                  .indexOf(
+                    args['where'].or[i].processName.like.toLowerCase()
+                  ) > -1
+              ) {
+                return true;
+              }
+            }
+          }
+        }
+      })
       return result;
     }
   },

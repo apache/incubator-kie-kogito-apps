@@ -9,6 +9,8 @@ const hrInterviewForm = require('./forms/HRInterview');
 const itInterviewForm = require('./forms/ITInterview');
 const emptyForm = require('./forms/EmptyForm');
 const formData = require('../MockData/forms/formData');
+const processFormConfirmTravelSchema = require('./process-forms-schema/ConfirmTravel');
+const processFormApplyForVisaSchema = require('./process-forms-schema/ApplyForVisa');
 
 const tasksUnableToTransition = [
   '047ec38d-5d57-4330-8c8d-9bd67b53a529',
@@ -313,22 +315,22 @@ module.exports = controller = {
     const formName = req.params.formName;
     const formInfo = formData.filter((datum) => datum.name === formName);
 
-    if(formInfo.length === 0) {
+    if (formInfo.length === 0) {
       res.status(500).send('Cannot find form');
       return;
     }
     let sourceString;
 
-    const configString = fs.readFileSync(path.join(`${__dirname}/forms/examples/${formName}.config`),'utf8');
+    const configString = fs.readFileSync(path.join(`${__dirname}/forms/examples/${formName}.config`), 'utf8');
     if (formInfo[0].type.toLowerCase() === 'html') {
-      sourceString = fs.readFileSync(path.join(`${__dirname}/forms/examples/${formName}.html`),'utf8');
+      sourceString = fs.readFileSync(path.join(`${__dirname}/forms/examples/${formName}.html`), 'utf8');
     } else if (formInfo[0].type.toLowerCase() === 'tsx') {
-      sourceString = fs.readFileSync(path.join(`${__dirname}/forms/examples/${formName}.tsx`),'utf8');
+      sourceString = fs.readFileSync(path.join(`${__dirname}/forms/examples/${formName}.tsx`), 'utf8');
     }
-    const response ={
+    const response = {
       formInfo: formInfo[0],
       source: sourceString,
-      configuration:JSON.parse(configString)
+      configuration: JSON.parse(configString)
     }
 
     res.send(response);
@@ -344,6 +346,22 @@ module.exports = controller = {
       res.send('Saved!');
     }
   },
+  getProcessFormSchema: (req, res) => {
+    console.log(`processName: ${req.params.processName}`);
+    const processName = req.params.processName;
+    let schema;
+    switch (processName) {
+      case 'ConfirmTravel': {
+        schema = _.cloneDeep(processFormConfirmTravelSchema);
+        break;
+      }
+      case 'hiring': {
+        schema = _.cloneDeep(processFormApplyForVisaSchema);
+        break;
+      }
+    };
+    res.send(JSON.stringify(schema));
+  }
 };
 
 

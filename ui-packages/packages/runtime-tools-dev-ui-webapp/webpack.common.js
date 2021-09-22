@@ -103,6 +103,9 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/process-form/dist/static'
           )
         ],
         use: {
@@ -184,6 +187,9 @@ module.exports = {
           path.resolve(
             '../../node_modules/@kogito-apps/task-form/dist/static'
           ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/process-form/dist/static'
+          )
         ],
         use: [
           {

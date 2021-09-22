@@ -33,6 +33,9 @@ module.exports = typeDefs = gql`
       orderBy: JobOrderBy
       pagination: Pagination
       ): [Job]
+    ProcessDefinitions(
+      where: ProcessDefinitionArgument
+    ):[ProcessDefinition]
   }
 
   type ProcessInstance {
@@ -626,5 +629,16 @@ enum JobStatus {
   SCHEDULED
   RETRY
   CANCELED
+}
+
+input ProcessDefinitionArgument {
+  or: [ProcessDefinitionArgument!]
+  processName: StringArgument
+  endpoint: StringArgument
+}
+
+type ProcessDefinition {
+  processName:String!
+  endpoint:String!
 }
 `;

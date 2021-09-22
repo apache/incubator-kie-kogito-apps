@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProcessDefinitionListContainer tests Snapshot 1`] = `
+<ProcessDefinitionListContainer>
+  <ForwardRef
+    data-ouia-component-type="process-definition-list-container"
+    data-ouia-safe={true}
+    driver={
+      ProcessDefinitionListGatewayApiImpl {
+        "getProcessDefinitionFilter": [Function],
+        "getProcessDefinitionsQuery": [Function],
+        "listeners": Array [
+          Object {
+            "onOpen": [Function],
+          },
+        ],
+        "openProcessForm": [Function],
+        "processDefinitonFilter": Array [],
+        "setProcessDefinitionFilter": [Function],
+      }
+    }
+    targetOrigin="*"
+  >
+    <ForwardRef>
+      <div />
+    </ForwardRef>
+  </ForwardRef>
+</ProcessDefinitionListContainer>
+`;
