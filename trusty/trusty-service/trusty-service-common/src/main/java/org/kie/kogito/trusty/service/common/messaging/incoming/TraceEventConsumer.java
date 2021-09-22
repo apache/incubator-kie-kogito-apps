@@ -23,8 +23,8 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
-import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
-import org.kie.kogito.tracing.decision.event.trace.TraceEventType;
+import org.kie.kogito.tracing.event.trace.TraceEvent;
+import org.kie.kogito.tracing.event.trace.TraceEventType;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.messaging.BaseEventConsumer;
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
@@ -53,7 +53,8 @@ public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
     }
 
     @Inject
-    public TraceEventConsumer(TrustyService service, ObjectMapper mapper, StorageExceptionsProvider storageExceptionsProvider) {
+    public TraceEventConsumer(TrustyService service, ObjectMapper mapper,
+            StorageExceptionsProvider storageExceptionsProvider) {
         super(service, mapper, storageExceptionsProvider);
     }
 

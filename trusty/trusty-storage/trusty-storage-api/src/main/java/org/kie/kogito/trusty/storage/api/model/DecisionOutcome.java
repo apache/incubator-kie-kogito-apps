@@ -17,7 +17,7 @@ package org.kie.kogito.trusty.storage.api.model;
 
 import java.util.Collection;
 
-import org.kie.kogito.tracing.decision.event.message.MessageLevel;
+import org.kie.kogito.tracing.event.message.MessageLevel;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -54,7 +54,8 @@ public class DecisionOutcome {
     public DecisionOutcome() {
     }
 
-    public DecisionOutcome(String outcomeId, String outcomeName, String evaluationStatus, TypedVariableWithValue outcomeResult, Collection<TypedVariableWithValue> outcomeInputs,
+    public DecisionOutcome(String outcomeId, String outcomeName, String evaluationStatus,
+            TypedVariableWithValue outcomeResult, Collection<TypedVariableWithValue> outcomeInputs,
             Collection<Message> messages) {
         this.outcomeId = outcomeId;
         this.outcomeName = outcomeName;

@@ -27,7 +27,7 @@ import java.util.function.BiConsumer;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.tracing.decision.event.message.MessageLevel;
+import org.kie.kogito.tracing.event.message.MessageLevel;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.responses.DecisionOutcomesResponse;
@@ -68,7 +68,8 @@ class DecisionsApiV1IT {
     private static final String TEST_SOURCE_URL = "http://localhost:8080/" + TEST_MODEL_NAME;
     private static final String TEST_OUTCOME_ID = "FirstOutcome";
     private static final long TEST_EXECUTION_TIMESTAMP = 1591692950000L;
-    private static final OffsetDateTime TEST_EXECUTION_DATE = OffsetDateTime.ofInstant(Instant.ofEpochMilli(TEST_EXECUTION_TIMESTAMP), ZoneId.of("UTC"));
+    private static final OffsetDateTime TEST_EXECUTION_DATE =
+            OffsetDateTime.ofInstant(Instant.ofEpochMilli(TEST_EXECUTION_TIMESTAMP), ZoneId.of("UTC"));
 
     @InjectMock
     TrustyService trustyService;
@@ -210,7 +211,8 @@ class DecisionsApiV1IT {
         assertCollection(expected.getOutcomes(), actual.getOutcomes(), this::assertDecisionOutcomeResponse);
     }
 
-    private void assertDecisionStructuredInputResponse(DecisionStructuredInputsResponse expected, DecisionStructuredInputsResponse actual) {
+    private void assertDecisionStructuredInputResponse(DecisionStructuredInputsResponse expected,
+            DecisionStructuredInputsResponse actual) {
         assertNotNull(actual);
         assertCollection(expected.getInputs(), actual.getInputs(), this::assertTypedVariableResponse);
     }
@@ -273,8 +275,10 @@ class DecisionsApiV1IT {
 
             case FULL:
                 decision.setInputs(List.of(
-                        new DecisionInput("1", "first", TypedVariableWithValue.buildUnit("first", "FirstInput", mapper.readTree("\"Hello\""))),
-                        new DecisionInput("2", "second", TypedVariableWithValue.buildUnit("second", "SecondInput", mapper.readTree("12345")))));
+                        new DecisionInput("1", "first", TypedVariableWithValue.buildUnit("first", "FirstInput",
+                                mapper.readTree("\"Hello\""))),
+                        new DecisionInput("2", "second", TypedVariableWithValue.buildUnit("second", "SecondInput",
+                                mapper.readTree("12345")))));
         }
 
         switch (outcomesStatus) {
@@ -286,12 +290,16 @@ class DecisionsApiV1IT {
                 decision.setOutcomes(List.of(
                         new DecisionOutcome(
                                 TEST_OUTCOME_ID, "ONE", "SUCCEEDED",
-                                TypedVariableWithValue.buildUnit("result", "ResType", mapper.readTree("\"The First Outcome\"")),
+                                TypedVariableWithValue.buildUnit("result", "ResType", mapper.readTree("\"The First " +
+                                        "Outcome\"")),
                                 List.of(),
                                 List.of(new Message(
                                         MessageLevel.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",
                                         new MessageExceptionField("TestException", "Test exception message",
-                                                new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)))))));
+                                                new MessageExceptionField("TestExceptionCause",
+                                                        "Test exception cause " +
+                                                                "message",
+                                                        null)))))));
         }
 
         return decision;
@@ -301,11 +309,13 @@ class DecisionsApiV1IT {
         ObjectMapper mapper = new ObjectMapper();
         return new DecisionOutcome(
                 TEST_OUTCOME_ID, "ONE", "SUCCEEDED",
-                new TypedVariableWithValue(TypedValue.Kind.UNIT, "result", "ResType", mapper.readTree("\"The First Outcome\""), null),
+                new TypedVariableWithValue(TypedValue.Kind.UNIT, "result", "ResType", mapper.readTree("\"The First " +
+                        "Outcome\""), null),
                 Collections.emptyList(),
                 List.of(new Message(MessageLevel.WARNING, "INTERNAL", "TEST", "testSrc", "Test message",
                         new MessageExceptionField("TestException", "Test exception message",
-                                new MessageExceptionField("TestExceptionCause", "Test exception cause message", null)))));
+                                new MessageExceptionField("TestExceptionCause", "Test " +
+                                        "exception cause message", null)))));
     }
 
     private DecisionOutcomesResponse buildDecisionOutcomesResponse(ListStatus outcomesStatus) throws JsonProcessingException {
@@ -315,7 +325,8 @@ class DecisionsApiV1IT {
             case EMPTY:
                 return new DecisionOutcomesResponse(buildExecutionHeaderResponse(), Collections.emptyList());
             case FULL:
-                return new DecisionOutcomesResponse(buildExecutionHeaderResponse(), List.of(buildDecisionOutcomeResponse()));
+                return new DecisionOutcomesResponse(buildExecutionHeaderResponse(),
+                        List.of(buildDecisionOutcomeResponse()));
         }
         throw new IllegalStateException();
     }
@@ -329,8 +340,10 @@ class DecisionsApiV1IT {
             case FULL:
                 ObjectMapper mapper = new ObjectMapper();
                 return new DecisionStructuredInputsResponse(List.of(
-                        new TypedVariableWithValue(TypedValue.Kind.UNIT, "first", "FirstInput", mapper.readTree("\"Hello\""), null),
-                        new TypedVariableWithValue(TypedValue.Kind.UNIT, "second", "SecondInput", mapper.readTree("12345"), null)));
+                        new TypedVariableWithValue(TypedValue.Kind.UNIT, "first", "FirstInput", mapper.readTree(
+                                "\"Hello\""), null),
+                        new TypedVariableWithValue(TypedValue.Kind.UNIT, "second", "SecondInput", mapper.readTree(
+                                "12345"), null)));
         }
         throw new IllegalStateException();
     }
@@ -359,11 +372,13 @@ class DecisionsApiV1IT {
     }
 
     private void mockServiceWithDecision(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {
-        when(trustyService.getDecisionById(eq(TEST_EXECUTION_ID))).thenReturn(buildValidDecision(inputsStatus, outcomesStatus));
+        when(trustyService.getDecisionById(eq(TEST_EXECUTION_ID))).thenReturn(buildValidDecision(inputsStatus,
+                outcomesStatus));
     }
 
     private void mockServiceWithoutDecision() {
-        when(trustyService.getDecisionById(anyString())).thenThrow(new IllegalArgumentException("Execution does not exist."));
+        when(trustyService.getDecisionById(anyString())).thenThrow(new IllegalArgumentException("Execution does not " +
+                "exist."));
     }
 
     private enum ListStatus {

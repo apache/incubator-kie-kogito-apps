@@ -24,7 +24,7 @@ import javax.inject.Inject;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.decision.DecisionModelMetadata;
-import org.kie.kogito.tracing.decision.event.model.ModelEvent;
+import org.kie.kogito.tracing.decision.event.model.DecisionModelEvent;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.messaging.BaseEventConsumer;
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
@@ -38,10 +38,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.cloudevents.CloudEvent;
 
 @ApplicationScoped
-public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
+public class ModelEventConsumer extends BaseEventConsumer<DecisionModelEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ModelEventConsumer.class);
-    private static final TypeReference<ModelEvent> CLOUD_EVENT_TYPE = new TypeReference<>() {
+    private static final TypeReference<DecisionModelEvent> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
 
     private ModelEventConsumer() {
@@ -49,7 +49,8 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     }
 
     @Inject
-    public ModelEventConsumer(TrustyService service, ObjectMapper mapper, StorageExceptionsProvider storageExceptionsProvider) {
+    public ModelEventConsumer(TrustyService service, ObjectMapper mapper,
+            StorageExceptionsProvider storageExceptionsProvider) {
         super(service, mapper, storageExceptionsProvider);
     }
 
@@ -60,12 +61,12 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     }
 
     @Override
-    protected TypeReference<ModelEvent> getEventType() {
+    protected TypeReference<DecisionModelEvent> getEventType() {
         return CLOUD_EVENT_TYPE;
     }
 
     @Override
-    protected void internalHandleCloudEvent(CloudEvent cloudEvent, ModelEvent payload) {
+    protected void internalHandleCloudEvent(CloudEvent cloudEvent, DecisionModelEvent payload) {
         final DecisionModelMetadata decisionModelMetadata = payload.getDecisionModelMetadata();
         if (decisionModelMetadata.getType().equals(DecisionModelMetadata.Type.DMN)) {
             ModelIdentifier identifier = new ModelIdentifier(payload.getGav().getGroupId(),
