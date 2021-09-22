@@ -35,6 +35,7 @@ exports[`Execution table renders a list of executions 1`] = `
           Object {
             "title": <Link
               data-ouia-component-id="show-detail"
+              data-ouia-component-type="link"
               to="/audit/decision/b2b0ed8d-c1e2-46b5-ad4f-3ac54ff4beae"
             >
               <ExecutionId
@@ -64,6 +65,7 @@ exports[`Execution table renders a list of executions 1`] = `
           Object {
             "title": <Link
               data-ouia-component-id="show-detail"
+              data-ouia-component-type="link"
               to="/audit/decision/b2b0ed8d-c1e2-46b5-ad4f-3hd83kidi4u74"
             >
               <ExecutionId

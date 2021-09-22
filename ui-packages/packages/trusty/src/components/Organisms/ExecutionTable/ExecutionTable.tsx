@@ -101,6 +101,7 @@ const prepareExecutionsRows = (rowData: Execution[]) => {
               item.executionId
             }`}
             data-ouia-component-id="show-detail"
+            data-ouia-component-type="link"
           >
             <ExecutionId id={item.executionId} />
           </Link>

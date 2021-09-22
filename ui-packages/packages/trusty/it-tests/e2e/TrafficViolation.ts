@@ -47,9 +47,9 @@ describe('Traffic Violation', () => {
   it('open Audit Details', () => {
     cy.visit('/');
     cy.ouiaId('refresh-button').click();
-    cy.ouiaId(reqId).within(() => {
-      cy.ouiaId('status').should('have.text', 'Completed');
-      cy.ouiaId('show-detail').click();
+    cy.ouiaId(reqId, 'PF4/TableRow').within(() => {
+      cy.ouiaId('status', 'execution-status').should('have.text', 'Completed');
+      cy.ouiaId('show-detail', 'link').click();
     });
     cy.url().should('contains', auditDetailsUrl);
   });
