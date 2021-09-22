@@ -23,7 +23,7 @@ import {
   isItemObjectMultiArray
 } from '../../../types';
 import './Outcomes.scss';
-import { ouiaAttribute, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 
 type OutcomesProps =
   | {
@@ -33,16 +33,18 @@ type OutcomesProps =
     }
   | { outcomes: Outcome[]; listView?: false };
 
-const Outcomes = (props: OutcomesProps) => {
+const Outcomes: React.FC<OutcomesProps & OUIAProps> = (
+  props: OutcomesProps & OUIAProps
+) => {
+  const ouiaType = 'outcomes';
   if (props.listView) {
     return (
-      <section className="outcomes">
+      <section
+        className="outcomes"
+        {...componentOuiaProps(props.ouiaId, ouiaType, props.ouiaSafe)}
+      >
         {props.outcomes.length && (
-          <Gallery
-            className="outcome-cards"
-            hasGutter
-            {...componentOuiaProps('outcome-cards', 'gallery', true)}
-          >
+          <Gallery className="outcome-cards" hasGutter>
             {props.outcomes.map(item =>
               renderCard(item, props.onExplanationClick)
             )}
@@ -53,7 +55,10 @@ const Outcomes = (props: OutcomesProps) => {
   }
 
   return (
-    <section className="outcomes">
+    <section
+      className="outcomes"
+      {...componentOuiaProps(props.ouiaId, ouiaType, props.ouiaSafe)}
+    >
       {props.outcomes.map(item => {
         if (
           item.outcomeResult !== null &&
@@ -61,12 +66,7 @@ const Outcomes = (props: OutcomesProps) => {
           isItemObjectMultiArray(item.outcomeResult.components)
         ) {
           return (
-            <Gallery
-              className="outcome-cards"
-              hasGutter
-              key={uuid()}
-              {...componentOuiaProps('outcome-cards', 'gallery', true)}
-            >
+            <Gallery className="outcome-cards" hasGutter key={uuid()}>
               {item.outcomeResult.components.map(subList => {
                 return (
                   <GalleryItem key={uuid()}>
@@ -138,12 +138,20 @@ type OutcomeCardProps = {
   titleAsLabel?: boolean;
 };
 
-const OutcomeCard = (props: OutcomeCardProps) => {
-  const { children, outcome, onExplanation, titleAsLabel = false } = props;
+const OutcomeCard: React.FC<OutcomeCardProps> = ({
+  children,
+  outcome,
+  onExplanation,
+  titleAsLabel = false
+}) => {
   return (
+    /*
+     * TODO: titleAsLabel is true when "components" is array.
+     * Only way to recognize the right card is array index.
+     */
     <Card
       className="outcome-cards__card outcome-cards__card--list-view"
-      {...ouiaAttribute('data-ouia-component-type', 'outcome-card')}
+      ouiaId={outcome.outcomeName}
       isHoverable
     >
       <CardHeader>
@@ -151,7 +159,7 @@ const OutcomeCard = (props: OutcomeCardProps) => {
           <Label
             className="outcome-cards__card__label"
             color="blue"
-            data-ouia-component-type="outcome-name"
+            {...componentOuiaProps('card-label', 'label', true)}
           >
             {outcome.outcomeName}
           </Label>
@@ -160,7 +168,7 @@ const OutcomeCard = (props: OutcomeCardProps) => {
             className="outcome-cards__card__title"
             headingLevel="h4"
             size="xl"
-            data-ouia-component-type="outcome-name"
+            {...componentOuiaProps('card-title', 'title', true)}
           >
             {outcome.outcomeName}
           </Title>
@@ -182,7 +190,7 @@ const OutcomeCard = (props: OutcomeCardProps) => {
             onClick={() => {
               onExplanation(outcome.outcomeId);
             }}
-            data-ouia-component-type="view-detail"
+            ouiaId="view-detail"
           >
             View Details <LongArrowAltRightIcon />
           </Button>
@@ -247,25 +255,29 @@ const OutcomeProperty = (props: {
     return (
       <div
         className="outcome__property__value--bigger"
-        data-ouia-component-type="simple-property-value"
+        {...componentOuiaProps(property.name, 'simple-property-value', true)}
       >
         <FormattedValue value={property.value} />
       </div>
     );
   } else {
     return (
-      <Split key={uuid()} className="outcome__property">
+      <Split
+        key={uuid()}
+        className="outcome__property"
+        {...componentOuiaProps(property.name, 'outcome-property', true)}
+      >
         <SplitItem
           className="outcome__property__name"
           key="property-name"
-          {...ouiaAttribute('data-ouia-component-type', 'property-name')}
+          {...componentOuiaProps(property.name, 'property-name', true)}
         >
           {hidePropertyName ? 'Result' : property.name}:
         </SplitItem>
         <SplitItem
           className="outcome__property__value"
           key="property-value"
-          {...ouiaAttribute('data-ouia-component-type', 'property-value')}
+          {...componentOuiaProps(property.name, 'property-value', true)}
         >
           <FormattedValue value={property.value} />
         </SplitItem>
@@ -274,14 +286,11 @@ const OutcomeProperty = (props: {
   }
 };
 
-const OutcomeComposed = (
-  props: {
-    outcome: ItemObject;
-    compact: boolean;
-    name: string;
-  },
-  ouiaId
-) => {
+const OutcomeComposed = (props: {
+  outcome: ItemObject;
+  compact: boolean;
+  name: string;
+}) => {
   const { outcome, compact, name } = props;
   const renderItems: JSX.Element[] = [];
 
@@ -290,7 +299,7 @@ const OutcomeComposed = (
       <div
         className="outcome-item"
         key={subItem.name}
-        {...ouiaAttribute('data-ouia-component-type', 'outcome-property')}
+        {...componentOuiaProps(subItem.name, 'outcome-subitem')}
       >
         {renderOutcome(subItem, name, compact)}
       </div>
@@ -301,7 +310,7 @@ const OutcomeComposed = (
       <div className="outcome__title outcome__title--struct" key={uuid()}>
         <span
           className="outcome__property__name"
-          {...ouiaAttribute('data-ouia-component-type', 'outcome-name')}
+          {...componentOuiaProps('subitem-title', 'title')}
         >
           {outcome.name}
         </span>
@@ -323,22 +332,11 @@ const OutcomeSubList = (props: OutcomeSubListProps) => {
     <>
       {subListItem &&
         subListItem.map(item => (
-          <Split key={uuid()} className="outcome__property">
-            <SplitItem
-              className="outcome__property__name"
-              key="property-name"
-              {...ouiaAttribute('data-ouia-component-type', 'property-name')}
-            >
-              {item.name}:
-            </SplitItem>
-            <SplitItem
-              className="outcome__property__value"
-              key="property-value"
-              {...ouiaAttribute('data-ouia-component-type', 'property-value')}
-            >
-              <FormattedValue value={item.value} />
-            </SplitItem>
-          </Split>
+          <OutcomeProperty
+            property={item}
+            hidePropertyName={false}
+            key={item.name}
+          />
         ))}
     </>
   );
@@ -350,13 +348,18 @@ type LightCardProps = {
   isHoverable?: boolean;
 };
 
-const LightCard = (props: LightCardProps) => {
-  const { children, className = '', isHoverable = false } = props;
+const LightCard: React.FC<LightCardProps & OUIAProps> = ({
+  children,
+  className,
+  isHoverable,
+  ouiaId,
+  ouiaSafe
+}) => {
   return (
     <Card
       className={className}
       isHoverable={isHoverable}
-      {...ouiaAttribute('data-ouia-component-type', 'outcome-card')}
+      {...componentOuiaProps(ouiaId, 'outcome-card', ouiaSafe)}
     >
       <CardBody>{children}</CardBody>
     </Card>

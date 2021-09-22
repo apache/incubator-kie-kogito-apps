@@ -50,19 +50,15 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
 >
   <section
     className="outcomes"
+    data-ouia-component-type="outcomes"
+    data-ouia-safe={true}
   >
     <Gallery
       className="outcome-cards"
-      data-ouia-component-id="outcome-cards"
-      data-ouia-component-type="gallery"
-      data-ouia-safe={true}
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
-        data-ouia-component-id="outcome-cards"
-        data-ouia-component-type="gallery"
-        data-ouia-safe={true}
       >
         <GalleryItem
           key="0"
@@ -88,12 +84,12 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
             >
               <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
-                data-ouia-component-type="outcome-card"
                 isHoverable={true}
+                ouiaId="Mortgage Approval"
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id="OUIA-Generated-Card-1"
+                  data-ouia-component-id="Mortgage Approval"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
                   id=""
@@ -104,13 +100,17 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                     >
                       <Title
                         className="outcome-cards__card__title"
-                        data-ouia-component-type="outcome-name"
+                        data-ouia-component-id="card-title"
+                        data-ouia-component-type="title"
+                        data-ouia-safe={true}
                         headingLevel="h4"
                         size="xl"
                       >
                         <h4
                           className="pf-c-title pf-m-xl outcome-cards__card__title"
-                          data-ouia-component-type="outcome-name"
+                          data-ouia-component-id="card-title"
+                          data-ouia-component-type="title"
+                          data-ouia-safe={true}
                         >
                           Mortgage Approval
                         </h4>
@@ -135,7 +135,9 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                       >
                         <div
                           className="outcome__property__value--bigger"
+                          data-ouia-component-id="Mortgage Approval"
                           data-ouia-component-type="simple-property-value"
+                          data-ouia-safe={true}
                         >
                           <FormattedValue
                             value={true}
@@ -156,9 +158,9 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                     >
                       <Button
                         className="outcome-cards__card__explanation-link"
-                        data-ouia-component-type="view-detail"
                         isInline={true}
                         onClick={[Function]}
+                        ouiaId="view-detail"
                         variant="link"
                       >
                         <ButtonBase
@@ -172,7 +174,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                            data-ouia-component-id="OUIA-Generated-Button-link-1"
+                            data-ouia-component-id="view-detail"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}
@@ -239,12 +241,12 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
             >
               <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
-                data-ouia-component-type="outcome-card"
                 isHoverable={true}
+                ouiaId="Risk Score"
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id="OUIA-Generated-Card-2"
+                  data-ouia-component-id="Risk Score"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
                   id=""
@@ -255,13 +257,17 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                     >
                       <Title
                         className="outcome-cards__card__title"
-                        data-ouia-component-type="outcome-name"
+                        data-ouia-component-id="card-title"
+                        data-ouia-component-type="title"
+                        data-ouia-safe={true}
                         headingLevel="h4"
                         size="xl"
                       >
                         <h4
                           className="pf-c-title pf-m-xl outcome-cards__card__title"
-                          data-ouia-component-type="outcome-name"
+                          data-ouia-component-id="card-title"
+                          data-ouia-component-type="title"
+                          data-ouia-safe={true}
                         >
                           Risk Score
                         </h4>
@@ -286,7 +292,9 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                       >
                         <div
                           className="outcome__property__value--bigger"
+                          data-ouia-component-id="Risk Score"
                           data-ouia-component-type="simple-property-value"
+                          data-ouia-safe={true}
                         >
                           <FormattedValue
                             value={21.7031851958099}
@@ -307,9 +315,9 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                     >
                       <Button
                         className="outcome-cards__card__explanation-link"
-                        data-ouia-component-type="view-detail"
                         isInline={true}
                         onClick={[Function]}
+                        ouiaId="view-detail"
                         variant="link"
                       >
                         <ButtonBase
@@ -323,7 +331,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                            data-ouia-component-id="OUIA-Generated-Button-link-2"
+                            data-ouia-component-id="view-detail"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}
@@ -390,12 +398,12 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
             >
               <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
-                data-ouia-component-type="outcome-card"
                 isHoverable={true}
+                ouiaId="Client Score"
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id="OUIA-Generated-Card-3"
+                  data-ouia-component-id="Client Score"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
                   id=""
@@ -406,13 +414,17 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                     >
                       <Title
                         className="outcome-cards__card__title"
-                        data-ouia-component-type="outcome-name"
+                        data-ouia-component-id="card-title"
+                        data-ouia-component-type="title"
+                        data-ouia-safe={true}
                         headingLevel="h4"
                         size="xl"
                       >
                         <h4
                           className="pf-c-title pf-m-xl outcome-cards__card__title"
-                          data-ouia-component-type="outcome-name"
+                          data-ouia-component-id="card-title"
+                          data-ouia-component-type="title"
+                          data-ouia-safe={true}
                         >
                           Client Score
                         </h4>
@@ -437,7 +449,9 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                       >
                         <div
                           className="outcome__property__value--bigger"
+                          data-ouia-component-id="Client Score"
                           data-ouia-component-type="simple-property-value"
+                          data-ouia-safe={true}
                         >
                           <FormattedValue
                             value={null}
@@ -460,9 +474,9 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                     >
                       <Button
                         className="outcome-cards__card__explanation-link"
-                        data-ouia-component-type="view-detail"
                         isInline={true}
                         onClick={[Function]}
+                        ouiaId="view-detail"
                         variant="link"
                       >
                         <ButtonBase
@@ -476,7 +490,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                            data-ouia-component-id="OUIA-Generated-Button-link-3"
+                            data-ouia-component-id="view-detail"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}
@@ -638,19 +652,15 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
 >
   <section
     className="outcomes"
+    data-ouia-component-type="outcomes"
+    data-ouia-safe={true}
   >
     <Gallery
       className="outcome-cards"
-      data-ouia-component-id="outcome-cards"
-      data-ouia-component-type="gallery"
-      data-ouia-safe={true}
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
-        data-ouia-component-id="outcome-cards"
-        data-ouia-component-type="gallery"
-        data-ouia-safe={true}
       >
         <GalleryItem
           key="21"
@@ -766,12 +776,12 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
             >
               <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
-                data-ouia-component-type="outcome-card"
                 isHoverable={true}
+                ouiaId="Recommended Loan Products"
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id="OUIA-Generated-Card-9"
+                  data-ouia-component-id="Recommended Loan Products"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
                   id=""
@@ -783,11 +793,15 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                       <Label
                         className="outcome-cards__card__label"
                         color="blue"
-                        data-ouia-component-type="outcome-name"
+                        data-ouia-component-id="card-label"
+                        data-ouia-component-type="label"
+                        data-ouia-safe={true}
                       >
                         <span
                           className="pf-c-label pf-m-blue outcome-cards__card__label"
-                          data-ouia-component-type="outcome-name"
+                          data-ouia-component-id="card-label"
+                          data-ouia-component-type="label"
+                          data-ouia-safe={true}
                         >
                           <span
                             className="pf-c-label__content"
@@ -850,300 +864,489 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                           ]
                         }
                       >
-                        <Split
-                          className="outcome__property"
-                          key="23"
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Product"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Product",
+                              "typeRef": "string",
+                              "value": "Lender B - ARM5/1-Standard",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Product"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="23"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Product"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Product"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Product
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="Lender B - ARM5/1-Standard"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Product"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Product
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Product"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Product"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="Lender B - ARM5/1-Standard"
                                   >
-                                    Lender B - ARM5/1-Standard
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="24"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      Lender B - ARM5/1-Standard
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Recommendation"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Recommendation",
+                              "typeRef": "string",
+                              "value": "Good",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Recommendation"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="24"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Recommendation"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Recommendation"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Recommendation
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="Good"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Recommendation"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Recommendation
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Recommendation"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Recommendation"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="Good"
                                   >
-                                    Good
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="25"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      Good
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Note Amount"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Note Amount",
+                              "typeRef": "string",
+                              "value": "$273,775.90",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Note Amount"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="25"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Note Amount"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Note Amount"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Note Amount
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="$273,775.90"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Note Amount"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Note Amount
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Note Amount"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Note Amount"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="$273,775.90"
                                   >
-                                    $273,775.90
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="26"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      $273,775.90
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Interest Rate"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Interest Rate",
+                              "typeRef": "string",
+                              "value": "3.8",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Interest Rate"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="26"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Interest Rate"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Interest Rate"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Interest Rate
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="3.8"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Interest Rate"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Interest Rate
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Interest Rate"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Interest Rate"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="3.8"
                                   >
-                                    3.8
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="27"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      3.8
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Monthly Payment"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Monthly Payment",
+                              "typeRef": "string",
+                              "value": "$1,267.90",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Monthly Payment"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="27"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Monthly Payment"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Monthly Payment"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Monthly Payment
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="$1,267.90"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Monthly Payment"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Monthly Payment
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Monthly Payment"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Monthly Payment"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="$1,267.90"
                                   >
-                                    $1,267.90
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="28"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      $1,267.90
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Cash to Close"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Cash to Close",
+                              "typeRef": "string",
+                              "value": "$1,267.90",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Cash to Close"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="28"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Cash to Close"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Cash to Close"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Cash to Close
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="$1,267.90"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Cash to Close"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Cash to Close
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Cash to Close"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Cash to Close"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="$1,267.90"
                                   >
-                                    $1,267.90
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="29"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      $1,267.90
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Required Credit Score"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Required Credit Score",
+                              "typeRef": "number",
+                              "value": 720,
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Required Credit Score"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="29"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Required Credit Score"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Required Credit Score"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Required Credit Score
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value={720}
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Required Credit Score"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Required Credit Score
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Required Credit Score"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Required Credit Score"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value={720}
                                   >
-                                    720
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      720
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
                       </OutcomeSubList>
                     </div>
                   </CardBody>
@@ -1153,9 +1356,9 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                     >
                       <Button
                         className="outcome-cards__card__explanation-link"
-                        data-ouia-component-type="view-detail"
                         isInline={true}
                         onClick={[Function]}
+                        ouiaId="view-detail"
                         variant="link"
                       >
                         <ButtonBase
@@ -1169,7 +1372,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                            data-ouia-component-id="OUIA-Generated-Button-link-9"
+                            data-ouia-component-id="view-detail"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}
@@ -1326,12 +1529,12 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
             >
               <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
-                data-ouia-component-type="outcome-card"
                 isHoverable={true}
+                ouiaId="Recommended Loan Products"
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id="OUIA-Generated-Card-10"
+                  data-ouia-component-id="Recommended Loan Products"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
                   id=""
@@ -1343,11 +1546,15 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                       <Label
                         className="outcome-cards__card__label"
                         color="blue"
-                        data-ouia-component-type="outcome-name"
+                        data-ouia-component-id="card-label"
+                        data-ouia-component-type="label"
+                        data-ouia-safe={true}
                       >
                         <span
                           className="pf-c-label pf-m-blue outcome-cards__card__label"
-                          data-ouia-component-type="outcome-name"
+                          data-ouia-component-id="card-label"
+                          data-ouia-component-type="label"
+                          data-ouia-safe={true}
                         >
                           <span
                             className="pf-c-label__content"
@@ -1410,300 +1617,489 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                           ]
                         }
                       >
-                        <Split
-                          className="outcome__property"
-                          key="30"
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Product"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Product",
+                              "typeRef": "string",
+                              "value": "Lender C - Fixed30-Standard",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Product"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="30"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Product"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Product"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Product
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="Lender C - Fixed30-Standard"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Product"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Product
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Product"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Product"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="Lender C - Fixed30-Standard"
                                   >
-                                    Lender C - Fixed30-Standard
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="31"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      Lender C - Fixed30-Standard
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Recommendation"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Recommendation",
+                              "typeRef": "string",
+                              "value": "Best",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Recommendation"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="31"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Recommendation"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Recommendation"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Recommendation
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="Best"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Recommendation"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Recommendation
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Recommendation"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Recommendation"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="Best"
                                   >
-                                    Best
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="32"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      Best
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Note Amount"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Note Amount",
+                              "typeRef": "string",
+                              "value": "$274,599.40",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Note Amount"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="32"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Note Amount"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Note Amount"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Note Amount
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="$274,599.40"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Note Amount"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Note Amount
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Note Amount"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Note Amount"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="$274,599.40"
                                   >
-                                    $274,599.40
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="33"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      $274,599.40
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Interest Rate"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Interest Rate",
+                              "typeRef": "string",
+                              "value": "3.88",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Interest Rate"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="33"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Interest Rate"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Interest Rate"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Interest Rate
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="3.88"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Interest Rate"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Interest Rate
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Interest Rate"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Interest Rate"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="3.88"
                                   >
-                                    3.88
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="34"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      3.88
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Monthly Payment"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Monthly Payment",
+                              "typeRef": "string",
+                              "value": "$1,291.27",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Monthly Payment"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="34"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Monthly Payment"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Monthly Payment"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Monthly Payment
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="$1,291.27"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Monthly Payment"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Monthly Payment
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Monthly Payment"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Monthly Payment"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="$1,291.27"
                                   >
-                                    $1,291.27
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="35"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      $1,291.27
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Cash to Close"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Cash to Close",
+                              "typeRef": "string",
+                              "value": "$75,491.99",
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Cash to Close"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="35"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Cash to Close"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Cash to Close"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Cash to Close
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value="$75,491.99"
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Cash to Close"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Cash to Close
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Cash to Close"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Cash to Close"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value="$75,491.99"
                                   >
-                                    $75,491.99
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
-                        <Split
-                          className="outcome__property"
-                          key="36"
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      $75,491.99
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
+                        <OutcomeProperty
+                          hidePropertyName={false}
+                          key="Required Credit Score"
+                          property={
+                            Object {
+                              "components": null,
+                              "name": "Required Credit Score",
+                              "typeRef": "number",
+                              "value": 680,
+                            }
+                          }
                         >
-                          <div
-                            className="pf-l-split outcome__property"
+                          <Split
+                            className="outcome__property"
+                            data-ouia-component-id="Required Credit Score"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
+                            key="36"
                           >
-                            <SplitItem
-                              className="outcome__property__name"
-                              data-ouia-component-type="property-name"
-                              key="property-name"
+                            <div
+                              className="pf-l-split outcome__property"
+                              data-ouia-component-id="Required Credit Score"
+                              data-ouia-component-type="outcome-property"
+                              data-ouia-safe={true}
                             >
-                              <div
-                                className="pf-l-split__item outcome__property__name"
+                              <SplitItem
+                                className="outcome__property__name"
+                                data-ouia-component-id="Required Credit Score"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
+                                key="property-name"
                               >
-                                Required Credit Score
-                                :
-                              </div>
-                            </SplitItem>
-                            <SplitItem
-                              className="outcome__property__value"
-                              data-ouia-component-type="property-value"
-                              key="property-value"
-                            >
-                              <div
-                                className="pf-l-split__item outcome__property__value"
-                                data-ouia-component-type="property-value"
-                              >
-                                <FormattedValue
-                                  value={680}
+                                <div
+                                  className="pf-l-split__item outcome__property__name"
+                                  data-ouia-component-id="Required Credit Score"
+                                  data-ouia-component-type="property-name"
+                                  data-ouia-safe={true}
                                 >
-                                  <span
-                                    className="formatted-value"
+                                  Required Credit Score
+                                  :
+                                </div>
+                              </SplitItem>
+                              <SplitItem
+                                className="outcome__property__value"
+                                data-ouia-component-id="Required Credit Score"
+                                data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
+                                key="property-value"
+                              >
+                                <div
+                                  className="pf-l-split__item outcome__property__value"
+                                  data-ouia-component-id="Required Credit Score"
+                                  data-ouia-component-type="property-value"
+                                  data-ouia-safe={true}
+                                >
+                                  <FormattedValue
+                                    value={680}
                                   >
-                                    680
-                                  </span>
-                                </FormattedValue>
-                              </div>
-                            </SplitItem>
-                          </div>
-                        </Split>
+                                    <span
+                                      className="formatted-value"
+                                    >
+                                      680
+                                    </span>
+                                  </FormattedValue>
+                                </div>
+                              </SplitItem>
+                            </div>
+                          </Split>
+                        </OutcomeProperty>
                       </OutcomeSubList>
                     </div>
                   </CardBody>
@@ -1713,9 +2109,9 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                     >
                       <Button
                         className="outcome-cards__card__explanation-link"
-                        data-ouia-component-type="view-detail"
                         isInline={true}
                         onClick={[Function]}
+                        ouiaId="view-detail"
                         variant="link"
                       >
                         <ButtonBase
@@ -1729,7 +2125,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                            data-ouia-component-id="OUIA-Generated-Button-link-10"
+                            data-ouia-component-id="view-detail"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}
@@ -1800,18 +2196,19 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
 >
   <section
     className="outcomes"
+    data-ouia-component-type="outcomes"
+    data-ouia-safe={true}
   >
     <LightCard
       key="54"
     >
       <Card
-        className=""
         data-ouia-component-type="outcome-card"
-        isHoverable={false}
+        data-ouia-safe={true}
       >
         <article
           className="pf-c-card"
-          data-ouia-component-id="OUIA-Generated-Card-13"
+          data-ouia-component-id="OUIA-Generated-Card-1"
           data-ouia-component-type="PF4/Card"
           data-ouia-safe={true}
           id=""
@@ -1834,19 +2231,29 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
               >
                 <Split
                   className="outcome__property"
+                  data-ouia-component-id="Mortgage Approval"
+                  data-ouia-component-type="outcome-property"
+                  data-ouia-safe={true}
                   key="55"
                 >
                   <div
                     className="pf-l-split outcome__property"
+                    data-ouia-component-id="Mortgage Approval"
+                    data-ouia-component-type="outcome-property"
+                    data-ouia-safe={true}
                   >
                     <SplitItem
                       className="outcome__property__name"
+                      data-ouia-component-id="Mortgage Approval"
                       data-ouia-component-type="property-name"
+                      data-ouia-safe={true}
                       key="property-name"
                     >
                       <div
                         className="pf-l-split__item outcome__property__name"
+                        data-ouia-component-id="Mortgage Approval"
                         data-ouia-component-type="property-name"
+                        data-ouia-safe={true}
                       >
                         Mortgage Approval
                         :
@@ -1854,12 +2261,16 @@ exports[`Outcomes renders a single outcome without the list view 1`] = `
                     </SplitItem>
                     <SplitItem
                       className="outcome__property__value"
+                      data-ouia-component-id="Mortgage Approval"
                       data-ouia-component-type="property-value"
+                      data-ouia-safe={true}
                       key="property-value"
                     >
                       <div
                         className="pf-l-split__item outcome__property__value"
+                        data-ouia-component-id="Mortgage Approval"
                         data-ouia-component-type="property-value"
+                        data-ouia-safe={true}
                       >
                         <FormattedValue
                           value={true}
@@ -1903,19 +2314,15 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
 >
   <section
     className="outcomes"
+    data-ouia-component-type="outcomes"
+    data-ouia-safe={true}
   >
     <Gallery
       className="outcome-cards"
-      data-ouia-component-id="outcome-cards"
-      data-ouia-component-type="gallery"
-      data-ouia-safe={true}
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
-        data-ouia-component-id="outcome-cards"
-        data-ouia-component-type="gallery"
-        data-ouia-safe={true}
       >
         <GalleryItem
           key="53"
@@ -1936,12 +2343,12 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
             >
               <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
-                data-ouia-component-type="outcome-card"
                 isHoverable={true}
+                ouiaId="Bank Score"
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id="OUIA-Generated-Card-12"
+                  data-ouia-component-id="Bank Score"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
                   id=""
@@ -1952,13 +2359,17 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                     >
                       <Title
                         className="outcome-cards__card__title"
-                        data-ouia-component-type="outcome-name"
+                        data-ouia-component-id="card-title"
+                        data-ouia-component-type="title"
+                        data-ouia-safe={true}
                         headingLevel="h4"
                         size="xl"
                       >
                         <h4
                           className="pf-c-title pf-m-xl outcome-cards__card__title"
-                          data-ouia-component-type="outcome-name"
+                          data-ouia-component-id="card-title"
+                          data-ouia-component-type="title"
+                          data-ouia-safe={true}
                         >
                           Bank Score
                         </h4>
@@ -2032,9 +2443,9 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                     >
                       <Button
                         className="outcome-cards__card__explanation-link"
-                        data-ouia-component-type="view-detail"
                         isInline={true}
                         onClick={[Function]}
+                        ouiaId="view-detail"
                         variant="link"
                       >
                         <ButtonBase
@@ -2048,7 +2459,7 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                            data-ouia-component-id="OUIA-Generated-Button-link-12"
+                            data-ouia-component-id="view-detail"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}
@@ -2185,19 +2596,15 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
 >
   <section
     className="outcomes"
+    data-ouia-component-type="outcomes"
+    data-ouia-safe={true}
   >
     <Gallery
       className="outcome-cards"
-      data-ouia-component-id="outcome-cards"
-      data-ouia-component-type="gallery"
-      data-ouia-safe={true}
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
-        data-ouia-component-id="outcome-cards"
-        data-ouia-component-type="gallery"
-        data-ouia-safe={true}
       >
         <GalleryItem
           key="37"
@@ -2287,12 +2694,12 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
             >
               <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
-                data-ouia-component-type="outcome-card"
                 isHoverable={true}
+                ouiaId="Client Ratings"
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id="OUIA-Generated-Card-11"
+                  data-ouia-component-id="Client Ratings"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
                   id=""
@@ -2303,13 +2710,17 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                     >
                       <Title
                         className="outcome-cards__card__title"
-                        data-ouia-component-type="outcome-name"
+                        data-ouia-component-id="card-title"
+                        data-ouia-component-type="title"
+                        data-ouia-safe={true}
                         headingLevel="h4"
                         size="xl"
                       >
                         <h4
                           className="pf-c-title pf-m-xl outcome-cards__card__title"
-                          data-ouia-component-type="outcome-name"
+                          data-ouia-component-id="card-title"
+                          data-ouia-component-type="title"
+                          data-ouia-safe={true}
                         >
                           Client Ratings
                         </h4>
@@ -2403,7 +2814,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                         >
                           <span
                             className="outcome__property__name"
-                            data-ouia-component-type="outcome-name"
+                            data-ouia-component-id="subitem-title"
+                            data-ouia-component-type="title"
+                            data-ouia-safe={true}
                           >
                             Client Ratings
                           </span>
@@ -2414,7 +2827,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                         >
                           <div
                             className="outcome-item"
-                            data-ouia-component-type="outcome-property"
+                            data-ouia-component-id="Rating Type A"
+                            data-ouia-component-type="outcome-subitem"
+                            data-ouia-safe={true}
                             key="Rating Type A"
                           >
                             <OutcomeComposed
@@ -2455,7 +2870,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                               >
                                 <span
                                   className="outcome__property__name"
-                                  data-ouia-component-type="outcome-name"
+                                  data-ouia-component-id="subitem-title"
+                                  data-ouia-component-type="title"
+                                  data-ouia-safe={true}
                                 >
                                   Rating Type A
                                 </span>
@@ -2466,7 +2883,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                               >
                                 <div
                                   className="outcome-item"
-                                  data-ouia-component-type="outcome-property"
+                                  data-ouia-component-id="Loan Amount"
+                                  data-ouia-component-type="outcome-subitem"
+                                  data-ouia-safe={true}
                                   key="Loan Amount"
                                 >
                                   <OutcomeProperty
@@ -2483,19 +2902,29 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <Split
                                       className="outcome__property"
+                                      data-ouia-component-id="Loan Amount"
+                                      data-ouia-component-type="outcome-property"
+                                      data-ouia-safe={true}
                                       key="43"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
+                                        data-ouia-component-id="Loan Amount"
+                                        data-ouia-component-type="outcome-property"
+                                        data-ouia-safe={true}
                                       >
                                         <SplitItem
                                           className="outcome__property__name"
+                                          data-ouia-component-id="Loan Amount"
                                           data-ouia-component-type="property-name"
+                                          data-ouia-safe={true}
                                           key="property-name"
                                         >
                                           <div
                                             className="pf-l-split__item outcome__property__name"
+                                            data-ouia-component-id="Loan Amount"
                                             data-ouia-component-type="property-name"
+                                            data-ouia-safe={true}
                                           >
                                             Loan Amount
                                             :
@@ -2503,12 +2932,16 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                         </SplitItem>
                                         <SplitItem
                                           className="outcome__property__value"
+                                          data-ouia-component-id="Loan Amount"
                                           data-ouia-component-type="property-value"
+                                          data-ouia-safe={true}
                                           key="property-value"
                                         >
                                           <div
                                             className="pf-l-split__item outcome__property__value"
+                                            data-ouia-component-id="Loan Amount"
                                             data-ouia-component-type="property-value"
+                                            data-ouia-safe={true}
                                           >
                                             <FormattedValue
                                               value={540000}
@@ -2527,7 +2960,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                 </div>
                                 <div
                                   className="outcome-item"
-                                  data-ouia-component-type="outcome-property"
+                                  data-ouia-component-id="Repayment Rate"
+                                  data-ouia-component-type="outcome-subitem"
+                                  data-ouia-safe={true}
                                   key="Repayment Rate"
                                 >
                                   <OutcomeProperty
@@ -2544,19 +2979,29 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <Split
                                       className="outcome__property"
+                                      data-ouia-component-id="Repayment Rate"
+                                      data-ouia-component-type="outcome-property"
+                                      data-ouia-safe={true}
                                       key="44"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
+                                        data-ouia-component-id="Repayment Rate"
+                                        data-ouia-component-type="outcome-property"
+                                        data-ouia-safe={true}
                                       >
                                         <SplitItem
                                           className="outcome__property__name"
+                                          data-ouia-component-id="Repayment Rate"
                                           data-ouia-component-type="property-name"
+                                          data-ouia-safe={true}
                                           key="property-name"
                                         >
                                           <div
                                             className="pf-l-split__item outcome__property__name"
+                                            data-ouia-component-id="Repayment Rate"
                                             data-ouia-component-type="property-name"
+                                            data-ouia-safe={true}
                                           >
                                             Repayment Rate
                                             :
@@ -2564,12 +3009,16 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                         </SplitItem>
                                         <SplitItem
                                           className="outcome__property__value"
+                                          data-ouia-component-id="Repayment Rate"
                                           data-ouia-component-type="property-value"
+                                          data-ouia-safe={true}
                                           key="property-value"
                                         >
                                           <div
                                             className="pf-l-split__item outcome__property__value"
+                                            data-ouia-component-id="Repayment Rate"
                                             data-ouia-component-type="property-value"
+                                            data-ouia-safe={true}
                                           >
                                             <FormattedValue
                                               value={900}
@@ -2588,7 +3037,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                 </div>
                                 <div
                                   className="outcome-item"
-                                  data-ouia-component-type="outcome-property"
+                                  data-ouia-component-id="Loan Eligibility"
+                                  data-ouia-component-type="outcome-subitem"
+                                  data-ouia-safe={true}
                                   key="Loan Eligibility"
                                 >
                                   <OutcomeProperty
@@ -2605,19 +3056,29 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <Split
                                       className="outcome__property"
+                                      data-ouia-component-id="Loan Eligibility"
+                                      data-ouia-component-type="outcome-property"
+                                      data-ouia-safe={true}
                                       key="45"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
+                                        data-ouia-component-id="Loan Eligibility"
+                                        data-ouia-component-type="outcome-property"
+                                        data-ouia-safe={true}
                                       >
                                         <SplitItem
                                           className="outcome__property__name"
+                                          data-ouia-component-id="Loan Eligibility"
                                           data-ouia-component-type="property-name"
+                                          data-ouia-safe={true}
                                           key="property-name"
                                         >
                                           <div
                                             className="pf-l-split__item outcome__property__name"
+                                            data-ouia-component-id="Loan Eligibility"
                                             data-ouia-component-type="property-name"
+                                            data-ouia-safe={true}
                                           >
                                             Loan Eligibility
                                             :
@@ -2625,12 +3086,16 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                         </SplitItem>
                                         <SplitItem
                                           className="outcome__property__value"
+                                          data-ouia-component-id="Loan Eligibility"
                                           data-ouia-component-type="property-value"
+                                          data-ouia-safe={true}
                                           key="property-value"
                                         >
                                           <div
                                             className="pf-l-split__item outcome__property__value"
+                                            data-ouia-component-id="Loan Eligibility"
                                             data-ouia-component-type="property-value"
+                                            data-ouia-safe={true}
                                           >
                                             <FormattedValue
                                               value={true}
@@ -2652,7 +3117,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                           </div>
                           <div
                             className="outcome-item"
-                            data-ouia-component-type="outcome-property"
+                            data-ouia-component-id="Rating Type B"
+                            data-ouia-component-type="outcome-subitem"
+                            data-ouia-safe={true}
                             key="Rating Type B"
                           >
                             <OutcomeComposed
@@ -2706,7 +3173,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                               >
                                 <span
                                   className="outcome__property__name"
-                                  data-ouia-component-type="outcome-name"
+                                  data-ouia-component-id="subitem-title"
+                                  data-ouia-component-type="title"
+                                  data-ouia-safe={true}
                                 >
                                   Rating Type B
                                 </span>
@@ -2717,7 +3186,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                               >
                                 <div
                                   className="outcome-item"
-                                  data-ouia-component-type="outcome-property"
+                                  data-ouia-component-id="Loan amount"
+                                  data-ouia-component-type="outcome-subitem"
+                                  data-ouia-safe={true}
                                   key="Loan amount"
                                 >
                                   <OutcomeProperty
@@ -2734,19 +3205,29 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <Split
                                       className="outcome__property"
+                                      data-ouia-component-id="Loan amount"
+                                      data-ouia-component-type="outcome-property"
+                                      data-ouia-safe={true}
                                       key="48"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
+                                        data-ouia-component-id="Loan amount"
+                                        data-ouia-component-type="outcome-property"
+                                        data-ouia-safe={true}
                                       >
                                         <SplitItem
                                           className="outcome__property__name"
+                                          data-ouia-component-id="Loan amount"
                                           data-ouia-component-type="property-name"
+                                          data-ouia-safe={true}
                                           key="property-name"
                                         >
                                           <div
                                             className="pf-l-split__item outcome__property__name"
+                                            data-ouia-component-id="Loan amount"
                                             data-ouia-component-type="property-name"
+                                            data-ouia-safe={true}
                                           >
                                             Loan amount
                                             :
@@ -2754,12 +3235,16 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                         </SplitItem>
                                         <SplitItem
                                           className="outcome__property__value"
+                                          data-ouia-component-id="Loan amount"
                                           data-ouia-component-type="property-value"
+                                          data-ouia-safe={true}
                                           key="property-value"
                                         >
                                           <div
                                             className="pf-l-split__item outcome__property__value"
+                                            data-ouia-component-id="Loan amount"
                                             data-ouia-component-type="property-value"
+                                            data-ouia-safe={true}
                                           >
                                             <FormattedValue
                                               value={340000}
@@ -2778,7 +3263,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                 </div>
                                 <div
                                   className="outcome-item"
-                                  data-ouia-component-type="outcome-property"
+                                  data-ouia-component-id="Repayment rate"
+                                  data-ouia-component-type="outcome-subitem"
+                                  data-ouia-safe={true}
                                   key="Repayment rate"
                                 >
                                   <OutcomeProperty
@@ -2795,19 +3282,29 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                   >
                                     <Split
                                       className="outcome__property"
+                                      data-ouia-component-id="Repayment rate"
+                                      data-ouia-component-type="outcome-property"
+                                      data-ouia-safe={true}
                                       key="49"
                                     >
                                       <div
                                         className="pf-l-split outcome__property"
+                                        data-ouia-component-id="Repayment rate"
+                                        data-ouia-component-type="outcome-property"
+                                        data-ouia-safe={true}
                                       >
                                         <SplitItem
                                           className="outcome__property__name"
+                                          data-ouia-component-id="Repayment rate"
                                           data-ouia-component-type="property-name"
+                                          data-ouia-safe={true}
                                           key="property-name"
                                         >
                                           <div
                                             className="pf-l-split__item outcome__property__name"
+                                            data-ouia-component-id="Repayment rate"
                                             data-ouia-component-type="property-name"
+                                            data-ouia-safe={true}
                                           >
                                             Repayment rate
                                             :
@@ -2815,12 +3312,16 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                         </SplitItem>
                                         <SplitItem
                                           className="outcome__property__value"
+                                          data-ouia-component-id="Repayment rate"
                                           data-ouia-component-type="property-value"
+                                          data-ouia-safe={true}
                                           key="property-value"
                                         >
                                           <div
                                             className="pf-l-split__item outcome__property__value"
+                                            data-ouia-component-id="Repayment rate"
                                             data-ouia-component-type="property-value"
+                                            data-ouia-safe={true}
                                           >
                                             <FormattedValue
                                               value={2000}
@@ -2839,7 +3340,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                 </div>
                                 <div
                                   className="outcome-item"
-                                  data-ouia-component-type="outcome-property"
+                                  data-ouia-component-id="Sub-Rating Type C"
+                                  data-ouia-component-type="outcome-subitem"
+                                  data-ouia-safe={true}
                                   key="Sub-Rating Type C"
                                 >
                                   <OutcomeComposed
@@ -2874,7 +3377,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     >
                                       <span
                                         className="outcome__property__name"
-                                        data-ouia-component-type="outcome-name"
+                                        data-ouia-component-id="subitem-title"
+                                        data-ouia-component-type="title"
+                                        data-ouia-safe={true}
                                       >
                                         Sub-Rating Type C
                                       </span>
@@ -2885,7 +3390,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                     >
                                       <div
                                         className="outcome-item"
-                                        data-ouia-component-type="outcome-property"
+                                        data-ouia-component-id="Loan amount"
+                                        data-ouia-component-type="outcome-subitem"
+                                        data-ouia-safe={true}
                                         key="Loan amount"
                                       >
                                         <OutcomeProperty
@@ -2902,19 +3409,29 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                         >
                                           <Split
                                             className="outcome__property"
+                                            data-ouia-component-id="Loan amount"
+                                            data-ouia-component-type="outcome-property"
+                                            data-ouia-safe={true}
                                             key="51"
                                           >
                                             <div
                                               className="pf-l-split outcome__property"
+                                              data-ouia-component-id="Loan amount"
+                                              data-ouia-component-type="outcome-property"
+                                              data-ouia-safe={true}
                                             >
                                               <SplitItem
                                                 className="outcome__property__name"
+                                                data-ouia-component-id="Loan amount"
                                                 data-ouia-component-type="property-name"
+                                                data-ouia-safe={true}
                                                 key="property-name"
                                               >
                                                 <div
                                                   className="pf-l-split__item outcome__property__name"
+                                                  data-ouia-component-id="Loan amount"
                                                   data-ouia-component-type="property-name"
+                                                  data-ouia-safe={true}
                                                 >
                                                   Loan amount
                                                   :
@@ -2922,12 +3439,16 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                               </SplitItem>
                                               <SplitItem
                                                 className="outcome__property__value"
+                                                data-ouia-component-id="Loan amount"
                                                 data-ouia-component-type="property-value"
+                                                data-ouia-safe={true}
                                                 key="property-value"
                                               >
                                                 <div
                                                   className="pf-l-split__item outcome__property__value"
+                                                  data-ouia-component-id="Loan amount"
                                                   data-ouia-component-type="property-value"
+                                                  data-ouia-safe={true}
                                                 >
                                                   <FormattedValue
                                                     value={390000}
@@ -2946,7 +3467,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                       </div>
                                       <div
                                         className="outcome-item"
-                                        data-ouia-component-type="outcome-property"
+                                        data-ouia-component-id="Repayment rate"
+                                        data-ouia-component-type="outcome-subitem"
+                                        data-ouia-safe={true}
                                         key="Repayment rate"
                                       >
                                         <OutcomeProperty
@@ -2963,19 +3486,29 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                         >
                                           <Split
                                             className="outcome__property"
+                                            data-ouia-component-id="Repayment rate"
+                                            data-ouia-component-type="outcome-property"
+                                            data-ouia-safe={true}
                                             key="52"
                                           >
                                             <div
                                               className="pf-l-split outcome__property"
+                                              data-ouia-component-id="Repayment rate"
+                                              data-ouia-component-type="outcome-property"
+                                              data-ouia-safe={true}
                                             >
                                               <SplitItem
                                                 className="outcome__property__name"
+                                                data-ouia-component-id="Repayment rate"
                                                 data-ouia-component-type="property-name"
+                                                data-ouia-safe={true}
                                                 key="property-name"
                                               >
                                                 <div
                                                   className="pf-l-split__item outcome__property__name"
+                                                  data-ouia-component-id="Repayment rate"
                                                   data-ouia-component-type="property-name"
+                                                  data-ouia-safe={true}
                                                 >
                                                   Repayment rate
                                                   :
@@ -2983,12 +3516,16 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                                               </SplitItem>
                                               <SplitItem
                                                 className="outcome__property__value"
+                                                data-ouia-component-id="Repayment rate"
                                                 data-ouia-component-type="property-value"
+                                                data-ouia-safe={true}
                                                 key="property-value"
                                               >
                                                 <div
                                                   className="pf-l-split__item outcome__property__value"
+                                                  data-ouia-component-id="Repayment rate"
                                                   data-ouia-component-type="property-value"
+                                                  data-ouia-safe={true}
                                                 >
                                                   <FormattedValue
                                                     value={5000}
@@ -3021,9 +3558,9 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                     >
                       <Button
                         className="outcome-cards__card__explanation-link"
-                        data-ouia-component-type="view-detail"
                         isInline={true}
                         onClick={[Function]}
+                        ouiaId="view-detail"
                         variant="link"
                       >
                         <ButtonBase
@@ -3037,7 +3574,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                            data-ouia-component-id="OUIA-Generated-Button-link-11"
+                            data-ouia-component-id="view-detail"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}
@@ -3123,19 +3660,15 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
 >
   <section
     className="outcomes"
+    data-ouia-component-type="outcomes"
+    data-ouia-safe={true}
   >
     <Gallery
       className="outcome-cards"
-      data-ouia-component-id="outcome-cards"
-      data-ouia-component-type="gallery"
-      data-ouia-safe={true}
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
-        data-ouia-component-id="outcome-cards"
-        data-ouia-component-type="gallery"
-        data-ouia-safe={true}
       >
         <GalleryItem
           key="6"
@@ -3174,12 +3707,12 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
             >
               <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
-                data-ouia-component-type="outcome-card"
                 isHoverable={true}
+                ouiaId="Last Transaction"
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id="OUIA-Generated-Card-7"
+                  data-ouia-component-id="Last Transaction"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
                   id=""
@@ -3190,13 +3723,17 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                     >
                       <Title
                         className="outcome-cards__card__title"
-                        data-ouia-component-type="outcome-name"
+                        data-ouia-component-id="card-title"
+                        data-ouia-component-type="title"
+                        data-ouia-safe={true}
                         headingLevel="h4"
                         size="xl"
                       >
                         <h4
                           className="pf-c-title pf-m-xl outcome-cards__card__title"
-                          data-ouia-component-type="outcome-name"
+                          data-ouia-component-id="card-title"
+                          data-ouia-component-type="title"
+                          data-ouia-safe={true}
                         >
                           Last Transaction
                         </h4>
@@ -3239,7 +3776,9 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                         >
                           <span
                             className="outcome__property__name"
-                            data-ouia-component-type="outcome-name"
+                            data-ouia-component-id="subitem-title"
+                            data-ouia-component-type="title"
+                            data-ouia-safe={true}
                           >
                             Last Transaction
                           </span>
@@ -3250,7 +3789,9 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                         >
                           <div
                             className="outcome-item"
-                            data-ouia-component-type="outcome-property"
+                            data-ouia-component-id="Auth Code"
+                            data-ouia-component-type="outcome-subitem"
+                            data-ouia-safe={true}
                             key="Auth Code"
                           >
                             <OutcomeProperty
@@ -3267,19 +3808,29 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                             >
                               <Split
                                 className="outcome__property"
+                                data-ouia-component-id="Auth Code"
+                                data-ouia-component-type="outcome-property"
+                                data-ouia-safe={true}
                                 key="9"
                               >
                                 <div
                                   className="pf-l-split outcome__property"
+                                  data-ouia-component-id="Auth Code"
+                                  data-ouia-component-type="outcome-property"
+                                  data-ouia-safe={true}
                                 >
                                   <SplitItem
                                     className="outcome__property__name"
+                                    data-ouia-component-id="Auth Code"
                                     data-ouia-component-type="property-name"
+                                    data-ouia-safe={true}
                                     key="property-name"
                                   >
                                     <div
                                       className="pf-l-split__item outcome__property__name"
+                                      data-ouia-component-id="Auth Code"
                                       data-ouia-component-type="property-name"
+                                      data-ouia-safe={true}
                                     >
                                       Auth Code
                                       :
@@ -3287,12 +3838,16 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                                   </SplitItem>
                                   <SplitItem
                                     className="outcome__property__value"
+                                    data-ouia-component-id="Auth Code"
                                     data-ouia-component-type="property-value"
+                                    data-ouia-safe={true}
                                     key="property-value"
                                   >
                                     <div
                                       className="pf-l-split__item outcome__property__value"
+                                      data-ouia-component-id="Auth Code"
                                       data-ouia-component-type="property-value"
+                                      data-ouia-safe={true}
                                     >
                                       <FormattedValue
                                         value="Authorized"
@@ -3311,7 +3866,9 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                           </div>
                           <div
                             className="outcome-item"
-                            data-ouia-component-type="outcome-property"
+                            data-ouia-component-id="Amount"
+                            data-ouia-component-type="outcome-subitem"
+                            data-ouia-safe={true}
                             key="Amount"
                           >
                             <OutcomeProperty
@@ -3328,19 +3885,29 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                             >
                               <Split
                                 className="outcome__property"
+                                data-ouia-component-id="Amount"
+                                data-ouia-component-type="outcome-property"
+                                data-ouia-safe={true}
                                 key="10"
                               >
                                 <div
                                   className="pf-l-split outcome__property"
+                                  data-ouia-component-id="Amount"
+                                  data-ouia-component-type="outcome-property"
+                                  data-ouia-safe={true}
                                 >
                                   <SplitItem
                                     className="outcome__property__name"
+                                    data-ouia-component-id="Amount"
                                     data-ouia-component-type="property-name"
+                                    data-ouia-safe={true}
                                     key="property-name"
                                   >
                                     <div
                                       className="pf-l-split__item outcome__property__name"
+                                      data-ouia-component-id="Amount"
                                       data-ouia-component-type="property-name"
+                                      data-ouia-safe={true}
                                     >
                                       Amount
                                       :
@@ -3348,12 +3915,16 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                                   </SplitItem>
                                   <SplitItem
                                     className="outcome__property__value"
+                                    data-ouia-component-id="Amount"
                                     data-ouia-component-type="property-value"
+                                    data-ouia-safe={true}
                                     key="property-value"
                                   >
                                     <div
                                       className="pf-l-split__item outcome__property__value"
+                                      data-ouia-component-id="Amount"
                                       data-ouia-component-type="property-value"
+                                      data-ouia-safe={true}
                                     >
                                       <FormattedValue
                                         value={10000}
@@ -3380,9 +3951,9 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                     >
                       <Button
                         className="outcome-cards__card__explanation-link"
-                        data-ouia-component-type="view-detail"
                         isInline={true}
                         onClick={[Function]}
+                        ouiaId="view-detail"
                         variant="link"
                       >
                         <ButtonBase
@@ -3396,7 +3967,7 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                            data-ouia-component-id="OUIA-Generated-Button-link-7"
+                            data-ouia-component-id="view-detail"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}
@@ -3473,19 +4044,15 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
 >
   <section
     className="outcomes"
+    data-ouia-component-type="outcomes"
+    data-ouia-safe={true}
   >
     <Gallery
       className="outcome-cards"
-      data-ouia-component-id="outcome-cards"
-      data-ouia-component-type="gallery"
-      data-ouia-safe={true}
       hasGutter={true}
     >
       <div
         className="pf-l-gallery pf-m-gutter outcome-cards"
-        data-ouia-component-id="outcome-cards"
-        data-ouia-component-type="gallery"
-        data-ouia-safe={true}
       >
         <GalleryItem
           key="11"
@@ -3515,12 +4082,12 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
             >
               <Card
                 className="outcome-cards__card outcome-cards__card--list-view"
-                data-ouia-component-type="outcome-card"
                 isHoverable={true}
+                ouiaId="Merchant Blacklist"
               >
                 <article
                   className="pf-c-card pf-m-hoverable outcome-cards__card outcome-cards__card--list-view"
-                  data-ouia-component-id="OUIA-Generated-Card-8"
+                  data-ouia-component-id="Merchant Blacklist"
                   data-ouia-component-type="PF4/Card"
                   data-ouia-safe={true}
                   id=""
@@ -3531,13 +4098,17 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                     >
                       <Title
                         className="outcome-cards__card__title"
-                        data-ouia-component-type="outcome-name"
+                        data-ouia-component-id="card-title"
+                        data-ouia-component-type="title"
+                        data-ouia-safe={true}
                         headingLevel="h4"
                         size="xl"
                       >
                         <h4
                           className="pf-c-title pf-m-xl outcome-cards__card__title"
-                          data-ouia-component-type="outcome-name"
+                          data-ouia-component-id="card-title"
+                          data-ouia-component-type="title"
+                          data-ouia-safe={true}
                         >
                           Merchant Blacklist
                         </h4>
@@ -3566,19 +4137,29 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                       >
                         <Split
                           className="outcome__property"
+                          data-ouia-component-id="Merchant Blacklist"
+                          data-ouia-component-type="outcome-property"
+                          data-ouia-safe={true}
                           key="12"
                         >
                           <div
                             className="pf-l-split outcome__property"
+                            data-ouia-component-id="Merchant Blacklist"
+                            data-ouia-component-type="outcome-property"
+                            data-ouia-safe={true}
                           >
                             <SplitItem
                               className="outcome__property__name"
+                              data-ouia-component-id="Merchant Blacklist"
                               data-ouia-component-type="property-name"
+                              data-ouia-safe={true}
                               key="property-name"
                             >
                               <div
                                 className="pf-l-split__item outcome__property__name"
+                                data-ouia-component-id="Merchant Blacklist"
                                 data-ouia-component-type="property-name"
+                                data-ouia-safe={true}
                               >
                                 Result
                                 :
@@ -3586,12 +4167,16 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                             </SplitItem>
                             <SplitItem
                               className="outcome__property__value"
+                              data-ouia-component-id="Merchant Blacklist"
                               data-ouia-component-type="property-value"
+                              data-ouia-safe={true}
                               key="property-value"
                             >
                               <div
                                 className="pf-l-split__item outcome__property__value"
+                                data-ouia-component-id="Merchant Blacklist"
                                 data-ouia-component-type="property-value"
+                                data-ouia-safe={true}
                               >
                                 <FormattedValue
                                   value={
@@ -3676,9 +4261,9 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                     >
                       <Button
                         className="outcome-cards__card__explanation-link"
-                        data-ouia-component-type="view-detail"
                         isInline={true}
                         onClick={[Function]}
+                        ouiaId="view-detail"
                         variant="link"
                       >
                         <ButtonBase
@@ -3692,7 +4277,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                             aria-disabled={false}
                             aria-label={null}
                             className="pf-c-button pf-m-link pf-m-inline outcome-cards__card__explanation-link"
-                            data-ouia-component-id="OUIA-Generated-Button-link-8"
+                            data-ouia-component-id="view-detail"
                             data-ouia-component-type="PF4/Button"
                             data-ouia-safe={true}
                             disabled={false}

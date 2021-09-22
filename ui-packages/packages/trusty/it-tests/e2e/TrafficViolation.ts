@@ -100,21 +100,31 @@ describe('Traffic Violation', () => {
     });
 
     it('Outcomes', () => {
-      cy.ouiaId('outcome-cards')
-        .contains("article[data-ouia-component-type='PF4/Card']", 'Fine')
+      cy.ouiaId('outcome-gallery')
+        .ouiaId('Fine')
         .ouiaType('outcome-property')
         .should($items => {
           expect($items).to.have.length(2);
-          expect($items[0]).to.have.text('Points:3');
-          expect($items[1]).to.have.text('Amount:500');
+          cy.wrap($items[0])
+            .ouiaId('property-name')
+            .should('have.text', 'Points:');
+          cy.wrap($items[0])
+            .ouiaId('property-value')
+            .should('have.text', '3');
+          cy.wrap($items[1])
+            .ouiaId('property-name')
+            .should('have.text', 'Amount:');
+          cy.wrap($items[1])
+            .ouiaId('property-value')
+            .should('have.text', '500');
         });
-      cy.ouiaId('outcome-cards')
-        .contains(
-          "article[data-ouia-component-type='PF4/Card']",
-          'Should the driver be suspended?'
-        )
+      cy.ouiaId('outcome-gallery')
+        .ouiaId('Should the driver be suspended?')
         .ouiaType('simple-property-value')
-        .should('to.have.text', 'No');
+        .should($items => {
+          expect($items).to.have.length(1);
+          cy.wrap($items[0]).should('have.text', 'No');
+        });
     });
 
     it('Input Data - Violation', () => {
