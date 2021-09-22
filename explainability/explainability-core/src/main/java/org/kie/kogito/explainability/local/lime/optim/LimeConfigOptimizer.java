@@ -52,12 +52,12 @@ public class LimeConfigOptimizer {
 
     private long timeLimit;
     private int stepCountLimit;
-    private Optional<Long> seed;
     private boolean proximityEntities;
     private boolean samplingEntities;
     private boolean encodingEntities;
     private boolean weightingEntities;
     private EasyScoreCalculator<LimeConfigSolution, SimpleBigDecimalScore> scoreCalculator;
+    private boolean deterministic;
 
     public LimeConfigOptimizer() {
         this.timeLimit = DEFAULT_TIME_LIMIT;
@@ -66,7 +66,7 @@ public class LimeConfigOptimizer {
         this.samplingEntities = DEFAULT_SAMPLING_ENTITIES;
         this.encodingEntities = DEFAULT_ENCODING_ENTITIES;
         this.weightingEntities = DEFAULT_WEIGHTING_ENTITIES;
-        this.seed = Optional.empty();
+        this.deterministic = false;
         this.stepCountLimit = 0;
     }
 
@@ -157,8 +157,9 @@ public class LimeConfigOptimizer {
         solverConfig.setTerminationConfig(terminationConfig);
 
         LocalSearchPhaseConfig localSearchPhaseConfig = new LocalSearchPhaseConfig();
-        if (seed.isPresent()) {
-            solverConfig.setRandomSeed(seed.get());
+        if (deterministic) {
+            Optional<Long> seed = config.getPerturbationContext().getSeed();
+            seed.ifPresent(solverConfig::setRandomSeed);
             solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
         }
         localSearchPhaseConfig.setLocalSearchType(LocalSearchType.LATE_ACCEPTANCE);
@@ -206,8 +207,8 @@ public class LimeConfigOptimizer {
         return this;
     }
 
-    public LimeConfigOptimizer withDeterministicExecution(long seed) {
-        this.seed = Optional.of(seed);
+    public LimeConfigOptimizer withDeterministicExecution(boolean deterministic) {
+        this.deterministic = deterministic;
         return this;
     }
 }

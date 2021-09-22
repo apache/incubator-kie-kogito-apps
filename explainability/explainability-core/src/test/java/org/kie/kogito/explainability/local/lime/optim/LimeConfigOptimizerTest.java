@@ -162,7 +162,7 @@ class LimeConfigOptimizerTest {
             Random random = new Random();
             LimeConfig initialConfig = new LimeConfig().withSamples(10).withPerturbationContext(new PerturbationContext(seed, random, 1));
 
-            LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed)
+            LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(true)
                     .withStepCountLimit(10).withTimeLimit(10);
             LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
             optimizedConfigs.add(optimizedConfig);

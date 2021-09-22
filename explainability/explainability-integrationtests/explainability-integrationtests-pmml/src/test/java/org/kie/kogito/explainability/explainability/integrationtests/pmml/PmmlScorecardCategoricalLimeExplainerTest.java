@@ -112,7 +112,7 @@ class PmmlScorecardCategoricalLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
         long seed = 0;
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed);
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(true);
         Random random = new Random();
         PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
@@ -131,14 +131,14 @@ class PmmlScorecardCategoricalLimeExplainerTest {
     }
 
     @Test
-    void testExplanationImpactScoreWithOptimization() throws ExecutionException, InterruptedException, TimeoutException {
+    void testExplanationImpactScoreWithOptimization() throws ExecutionException, InterruptedException {
         PredictionProvider model = getModel();
 
         List<PredictionInput> samples = getSamples();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
         long seed = 0;
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed).forImpactScore();
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(true).forImpactScore();
         Random random = new Random();
         PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
@@ -156,7 +156,7 @@ class PmmlScorecardCategoricalLimeExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
         long seed = 0;
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(seed)
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(true)
                 .withWeightedStability(0.4, 0.6);
         Random random = new Random();
         PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
