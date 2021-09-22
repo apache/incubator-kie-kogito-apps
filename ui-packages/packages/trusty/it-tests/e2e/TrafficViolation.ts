@@ -100,28 +100,28 @@ describe('Traffic Violation', () => {
     });
 
     it('Outcomes', () => {
-      cy.ouiaId('outcome-gallery')
-        .ouiaId('Fine')
+      cy.ouiaId('outcomes-gallery', 'outcomes')
+        .ouiaId('Fine', 'PF4/Card')
         .ouiaType('outcome-property')
-        .should($items => {
+        .within($items => {
           expect($items).to.have.length(2);
           cy.wrap($items[0])
-            .ouiaId('property-name')
+            .ouiaId('Points', 'property-name')
             .should('have.text', 'Points:');
           cy.wrap($items[0])
-            .ouiaId('property-value')
+            .ouiaId('Points', 'property-value')
             .should('have.text', '3');
           cy.wrap($items[1])
-            .ouiaId('property-name')
+            .ouiaId('Amount', 'property-name')
             .should('have.text', 'Amount:');
           cy.wrap($items[1])
-            .ouiaId('property-value')
+            .ouiaId('Amount', 'property-value')
             .should('have.text', '500');
         });
-      cy.ouiaId('outcome-gallery')
-        .ouiaId('Should the driver be suspended?')
+      cy.ouiaId('outcomes-gallery', 'outcomes')
+        .ouiaId('Should the driver be suspended?', 'PF4/Card')
         .ouiaType('simple-property-value')
-        .should($items => {
+        .within($items => {
           expect($items).to.have.length(1);
           cy.wrap($items[0]).should('have.text', 'No');
         });
