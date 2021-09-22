@@ -590,15 +590,19 @@ public class DataUtils {
 
                     // only use high score points, if possible
                     HighScoreNumericFeatureZones highScoreNumericFeatureZones = numericFeatureZonesMap.get(feature.getName());
+                    double[] filteredData = new double[0];
                     if (highScoreNumericFeatureZones != null) {
-                        data = Arrays.stream(data).filter(highScoreNumericFeatureZones::accept).toArray();
+                        filteredData = Arrays.stream(data).filter(highScoreNumericFeatureZones::accept).toArray();
+                    }
+                    if (filteredData.length == 0) {
+                        filteredData = data;
                     }
 
-                    double mean = DataUtils.getMean(data);
+                    double mean = DataUtils.getMean(filteredData);
                     double stdDev = Math
-                            .pow(DataUtils.getStdDev(data, mean), 2);
-                    double min = sampledValues.stream().mapToDouble(Value::asNumber).min().orElse(Double.MIN_VALUE);
-                    double max = sampledValues.stream().mapToDouble(Value::asNumber).max().orElse(Double.MAX_VALUE);
+                            .pow(DataUtils.getStdDev(filteredData, mean), 2);
+                    double min = Arrays.stream(filteredData).min().orElse(Double.MIN_VALUE);
+                    double max = Arrays.stream(filteredData).max().orElse(Double.MAX_VALUE);
                     means[i] = mean;
                     stdDevs[i] = stdDev;
                     mins[i] = min;
