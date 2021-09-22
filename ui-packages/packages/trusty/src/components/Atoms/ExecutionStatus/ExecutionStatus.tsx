@@ -12,7 +12,6 @@ const ExecutionStatus: React.FC<ExecutionStatusProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
-  //const { result } = props;
   return (
     <span
       className="execution-status"
