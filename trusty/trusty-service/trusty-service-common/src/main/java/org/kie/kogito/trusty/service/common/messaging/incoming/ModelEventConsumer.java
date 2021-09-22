@@ -36,15 +36,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.cloudevents.CloudEvent;
+import io.quarkus.arc.properties.UnlessBuildProperty;
 
 @ApplicationScoped
+@UnlessBuildProperty(name = "kogito.trusty.blocking", stringValue = "true", enableIfMissing = true)
 public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ModelEventConsumer.class);
     private static final TypeReference<ModelEvent> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
 
-    private ModelEventConsumer() {
+    protected ModelEventConsumer() {
         //CDI proxy
     }
 

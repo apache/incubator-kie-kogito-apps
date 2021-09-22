@@ -37,8 +37,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import io.cloudevents.CloudEvent;
+import io.quarkus.arc.properties.UnlessBuildProperty;
 
 @ApplicationScoped
+@UnlessBuildProperty(name = "kogito.trusty.blocking", stringValue = "true", enableIfMissing = true)
 public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(TraceEventConsumer.class);
@@ -48,7 +50,7 @@ public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
     private static final TypeReference<TraceEvent> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
 
-    private TraceEventConsumer() {
+    protected TraceEventConsumer() {
         //CDI proxy
     }
 

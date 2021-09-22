@@ -37,8 +37,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.cloudevents.CloudEvent;
+import io.quarkus.arc.properties.UnlessBuildProperty;
 
 @ApplicationScoped
+@UnlessBuildProperty(name = "kogito.trusty.blocking", stringValue = "true", enableIfMissing = true)
 public class ExplainabilityResultConsumer extends BaseEventConsumer<BaseExplainabilityResultDto> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExplainabilityResultConsumer.class);
@@ -47,7 +49,7 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<BaseExplaina
 
     private ExplainerServiceHandlerRegistry explainerServiceHandlerRegistry;
 
-    private ExplainabilityResultConsumer() {
+    protected ExplainabilityResultConsumer() {
         //CDI proxy
     }
 
