@@ -20,7 +20,7 @@ import {
 } from '@kogito-tooling/envelope-bus/dist/api';
 import { MockedMessageBusClientApi } from './mocks/Mocks';
 import FormsListEnvelopeViewDriver from '../FormsListEnvelopeViewDriver';
-import { FormInfo, FormsListChannelApi } from '../../api';
+import { FormInfo, FormsListChannelApi, FormType } from '../../api';
 
 let channelApi: MessageBusClientApi<FormsListChannelApi>;
 let requests: Pick<
@@ -59,7 +59,7 @@ describe('FormsListEnvelopeViewDriver tests', () => {
     it('open form', () => {
       const formData: FormInfo = {
         name: 'form1',
-        type: 'html',
+        type: FormType.HTML,
         lastModified: new Date(new Date('2020-07-11T18:30:00.000Z'))
       };
       driver.openForm(formData);

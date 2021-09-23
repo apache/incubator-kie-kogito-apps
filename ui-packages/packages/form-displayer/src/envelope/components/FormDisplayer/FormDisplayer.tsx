@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Bullseye } from '@patternfly/react-core';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 import { BallBeat } from 'react-pure-loaders';
@@ -36,29 +36,23 @@ const FormDisplayer: React.FC<FormDisplayerProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
-  const [source, setSource] = useState<string>();
-  const [resources, setResources] = useState<any>();
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
 
-  useEffect(() => {
-    /* istanbul ignore else */
-    if (isEnvelopeConnectedToChannel) {
-      setSource(content.source['source-content']);
-      setResources(content.formConfiguration['resources']);
-    }
-  }, [isEnvelopeConnectedToChannel, content]);
   return (
     <div {...componentOuiaProps(ouiaId, 'form-displayer', ouiaSafe)}>
       {isEnvelopeConnectedToChannel && !isExecuting ? (
         <>
           {config && config.type === 'TSX' ? (
             <ReactFormRenderer
-              source={source}
-              resources={resources}
+              source={content.source['source-content']}
+              resources={content.formConfiguration['resources']}
               setIsExecuting={setIsExecuting}
             />
           ) : (
-            <HtmlFormRenderer source={source} resources={resources} />
+            <HtmlFormRenderer
+              source={content.source['source-content']}
+              resources={content.formConfiguration['resources']}
+            />
           )}
         </>
       ) : (

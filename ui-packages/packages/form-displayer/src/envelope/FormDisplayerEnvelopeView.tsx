@@ -21,8 +21,6 @@ import { FormDisplayerChannelApi, FormArgs, FormInfo } from '../api';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
 import FormDisplayer from './components/FormDisplayer/FormDisplayer';
 
-import '@patternfly/patternfly/patternfly.css';
-
 export interface FormDisplayerEnvelopeViewApi {
   setFormContent: (formContent: FormArgs, formData: FormInfo) => void;
   notify: (userName: FormArgs) => Promise<void>;

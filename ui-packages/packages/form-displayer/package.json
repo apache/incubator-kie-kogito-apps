@@ -30,7 +30,6 @@
   "dependencies": {
     "@kogito-apps/components-common": "^1.0.0",
     "@kogito-apps/ouia-tools": "^1.0.0",
-    "@kogito-apps/task-console-shared": "^1.0.0",
     "react-pure-loaders": "^3.0.1"
   },
   "devDependencies": {

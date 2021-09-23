@@ -7,8 +7,7 @@ const BG_IMAGES_DIRNAME = 'bgimages';
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'src', 'index.tsx'),
-    'envelope/form-displayer': './src/resources/form-displayer.ts',
+    app: path.resolve(__dirname, 'src', 'index.tsx')
   },
   plugins: [
     new HtmlWebpackPlugin({

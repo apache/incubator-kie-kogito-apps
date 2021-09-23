@@ -25,6 +25,7 @@ import { renderResources, sourceHandler } from '../../../utils';
 import Text = Patternfly.Text;
 import TextContent = Patternfly.TextContent;
 import TextVariants = Patternfly.TextVariants;
+import '@patternfly/patternfly/patternfly.css';
 interface ReactFormRendererProps {
   source: string;
   resources: FormResources;
