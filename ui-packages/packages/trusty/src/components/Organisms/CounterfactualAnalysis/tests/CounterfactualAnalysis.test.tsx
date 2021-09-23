@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { mount } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import CounterfactualAnalysis from '../CounterfactualAnalysis';
 import {
   CFAnalysisResultsSets,
@@ -51,7 +52,7 @@ describe('CounterfactualAnalysis', () => {
     );
 
     expect(
-      wrapper.find('Button.counterfactual-run').props()['isAriaDisabled']
+      wrapper.find('Button#counterfactual-run').props()['isAriaDisabled']
     ).toBeTruthy();
     expect(wrapper.find('CounterfactualOutcomesSelected').text()).toMatch('');
     expect(wrapper.find('CounterfactualTable Thead Tr')).toHaveLength(1);
@@ -119,7 +120,7 @@ describe('CounterfactualAnalysis', () => {
     expect(wrapper.find('CounterfactualHint Hint')).toHaveLength(0);
   });
 
-  test('handles input selection, constraints change and outcome selection', () => {
+  test('handles input selection, constraints change and outcome selection', async () => {
     const results = {
       runCFAnalysis,
       cfResults: undefined
@@ -138,7 +139,7 @@ describe('CounterfactualAnalysis', () => {
     );
     expect(wrapper.find('CounterfactualInputDomainEdit')).toHaveLength(0);
     expect(
-      wrapper.find('Button.counterfactual-run').props()['isAriaDisabled']
+      wrapper.find('Button#counterfactual-run').props()['isAriaDisabled']
     ).toBeTruthy();
 
     wrapper
@@ -237,29 +238,96 @@ describe('CounterfactualAnalysis', () => {
 
     expect(wrapper.find('CounterfactualOutcomeSelection')).toHaveLength(0);
     expect(
-      wrapper.find('Button.counterfactual-run').props()['isAriaDisabled']
+      wrapper.find('Button#counterfactual-run').props()['isAriaDisabled']
     ).toBeTruthy();
 
-    wrapper.find('Button.counterfactual-setup-outcomes').simulate('click');
+    wrapper.find('Button#counterfactual-setup-outcomes').simulate('click');
 
     expect(wrapper.find('CounterfactualOutcomeSelection')).toHaveLength(1);
 
+    expect(
+      wrapper
+        .find('CounterfactualOutcomeSelection Button#confirm-outcome-selection')
+        .props()['isAriaDisabled']
+    ).toBeTruthy();
+
+    expect(
+      wrapper.find('CounterfactualOutcomeSelection CounterfactualOutcomeEdit')
+    ).toHaveLength(3);
+
+    expect(
+      wrapper
+        .find('CounterfactualOutcomeSelection CounterfactualOutcomeEdit')
+        .at(2)
+        .find('FormGroup')
+        .props()['label']
+    ).toMatch('Asset Score');
+
+    await act(async () => {
+      wrapper
+        .find('CounterfactualOutcomeSelection CounterfactualOutcomeEdit')
+        .at(2)
+        .find('Checkbox.counterfactual-outcome__floating')
+        .props()
+        ['onChange']({ currentTarget: { checked: true } } as FormEvent<
+          HTMLInputElement
+        >);
+    });
+    wrapper.update();
+
+    expect(
+      wrapper
+        .find('CounterfactualOutcomeSelection Button#confirm-outcome-selection')
+        .props()['isAriaDisabled']
+    ).toBeTruthy();
+
+    expect(
+      wrapper
+        .find('CounterfactualOutcomeSelection CounterfactualOutcomeEdit')
+        .at(0)
+        .find('FormGroup')
+        .props()['label']
+    ).toMatch('Risk Score');
+
     wrapper
-      .find('CounterfactualOutcomeSelection Touchspin Button')
+      .find('CounterfactualOutcomeSelection CounterfactualOutcomeEdit')
+      .at(0)
+      .find('Touchspin Button')
       .at(1)
       .simulate('click');
+
+    expect(
+      wrapper
+        .find('CounterfactualOutcomeSelection Button#confirm-outcome-selection')
+        .props()['isAriaDisabled']
+    ).toBeFalsy();
+
+    expect(
+      wrapper
+        .find('CounterfactualOutcomeSelection CounterfactualOutcomeEdit')
+        .at(1)
+        .find('FormGroup')
+        .props()['label']
+    ).toMatch('canRequestLoan');
+
     wrapper
-      .find('CounterfactualOutcomeSelection ModalBoxFooter Button:first-child')
+      .find('CounterfactualOutcomeSelection CounterfactualOutcomeEdit')
+      .at(1)
+      .find('Switch input')
+      .simulate('change', { target: { checked: true } });
+
+    wrapper
+      .find('CounterfactualOutcomeSelection Button#confirm-outcome-selection')
       .simulate('click');
 
     expect(wrapper.find('CounterfactualOutcomesSelected').text()).toMatch(
-      'Selected Outcomes: Risk Score: 2'
+      'Selected Outcomes: Risk Score: 2, canRequestLoan: true, Asset Score: Any'
     );
     expect(
-      wrapper.find('Button.counterfactual-run').props()['isAriaDisabled']
+      wrapper.find('Button#counterfactual-run').props()['isAriaDisabled']
     ).toBeFalsy();
 
-    wrapper.find('Button.counterfactual-run').simulate('click');
+    wrapper.find('Button#counterfactual-run').simulate('click');
 
     expect(runCFAnalysis).toHaveBeenCalledWith({
       goals: [
@@ -271,6 +339,24 @@ describe('CounterfactualAnalysis', () => {
           originalValue: 1,
           typeRef: 'number',
           value: 2
+        },
+        {
+          id: '_46B5CA54-27CA-4950-B601-63F58BC3BDFE',
+          role: CFGoalRole.FIXED,
+          kind: 'UNIT',
+          name: 'canRequestLoan',
+          originalValue: false,
+          typeRef: 'boolean',
+          value: true
+        },
+        {
+          id: '_047FFF53-0583-4FAD-B08F-8E1C077021D6',
+          role: CFGoalRole.FLOATING,
+          kind: 'UNIT',
+          name: 'Asset Score',
+          originalValue: '33',
+          typeRef: 'number',
+          value: '33'
         }
       ],
       searchDomains: [
@@ -392,7 +478,7 @@ describe('CounterfactualAnalysis', () => {
     ).toEqual(CFExecutionStatus.FAILED);
   });
 
-  test('let the user start another analysis', () => {
+  test('lets the user start another analysis', () => {
     (useCounterfactualExecution as jest.Mock).mockReturnValue({
       runCFAnalysis,
       cfResults: cfResultsFinal
@@ -406,6 +492,7 @@ describe('CounterfactualAnalysis', () => {
         containerWidth={900}
       />
     );
+    expect(wrapper.find('Button#counterfactual-run')).toHaveLength(0);
 
     expect(wrapper.find('Button#counterfactual-new')).toHaveLength(1);
     wrapper.find('Button#counterfactual-new').simulate('click');
@@ -419,9 +506,9 @@ describe('CounterfactualAnalysis', () => {
       .at(0)
       .simulate('click');
 
-    expect(wrapper.find('Button.counterfactual-run')).toHaveLength(1);
+    expect(wrapper.find('Button#counterfactual-run')).toHaveLength(1);
     expect(
-      wrapper.find('Button.counterfactual-run').props()['isAriaDisabled']
+      wrapper.find('Button#counterfactual-run').props()['isAriaDisabled']
     ).toBeTruthy();
     expect(
       wrapper
@@ -445,6 +532,75 @@ describe('CounterfactualAnalysis', () => {
         .text()
     ).toMatch('Constraint');
     expect(wrapper.find('CounterfactualOutcomesSelected').text()).toMatch('');
+  });
+
+  test('lets the user to reset the input/outcome selection', () => {
+    const results = {
+      runCFAnalysis,
+      cfResults: undefined
+    };
+
+    (useCounterfactualExecution as jest.Mock).mockReturnValue(results);
+
+    const wrapper = mount(
+      <CounterfactualAnalysis
+        inputs={inputs}
+        outcomes={outcomes}
+        executionId={executionId}
+        containerHeight={900}
+        containerWidth={900}
+      />
+    );
+
+    wrapper
+      .find('CounterfactualTable Tbody Tr')
+      .at(1)
+      .find('Td:first-child SelectColumn')
+      .simulate('change');
+
+    wrapper
+      .find('CounterfactualTable Tbody Tr')
+      .at(1)
+      .find('Td')
+      .at(2)
+      .find('Button')
+      .simulate('click');
+
+    expect(wrapper.find('CounterfactualInputDomainEdit')).toHaveLength(1);
+    expect(wrapper.find('CounterfactualCategoricalDomainEdit')).toHaveLength(1);
+
+    const firstEnum = wrapper.find(
+      'CounterfactualCategoricalDomainEdit input#enum-value-0'
+    );
+    firstEnum.getDOMNode<HTMLInputElement>().value = 'alpha';
+    firstEnum.simulate('change', 'alpha');
+    firstEnum.simulate('blur');
+
+    wrapper
+      .find('CounterfactualInputDomainEdit ActionListItem:first-child Button')
+      .simulate('click');
+
+    expect(
+      wrapper
+        .find('CounterfactualTable Tbody Tr')
+        .at(1)
+        .find('Td')
+        .at(2)
+        .find('Button')
+        .text()
+    ).toMatch('alpha');
+
+    wrapper.find('Button#counterfactual-reset').simulate('click');
+
+    const constraintButton = wrapper
+      .find('CounterfactualTable Tbody Tr')
+      .at(1)
+      .find('Td')
+      .at(2)
+      .find('Button');
+
+    expect(constraintButton.text()).toMatch('Constraint');
+    expect(constraintButton.props()['isDisabled']).toBeTruthy();
   });
 });
 
@@ -477,6 +633,34 @@ const outcomes: Outcome[] = [
       kind: 'UNIT',
       typeRef: 'number',
       value: 1,
+      components: null
+    }
+  },
+  {
+    evaluationStatus: 'SUCCEEDED',
+    hasErrors: false,
+    messages: [],
+    outcomeId: '_46B5CA54-27CA-4950-B601-63F58BC3BDFE',
+    outcomeName: 'canRequestLoan',
+    outcomeResult: {
+      name: 'canRequestLoan',
+      kind: 'UNIT',
+      typeRef: 'boolean',
+      value: false,
+      components: null
+    }
+  },
+  {
+    evaluationStatus: 'SUCCEEDED',
+    hasErrors: false,
+    messages: [],
+    outcomeId: '_047FFF53-0583-4FAD-B08F-8E1C077021D6',
+    outcomeName: 'Asset Score',
+    outcomeResult: {
+      name: 'Asset Score',
+      kind: 'UNIT',
+      typeRef: 'number',
+      value: '33',
       components: null
     }
   }

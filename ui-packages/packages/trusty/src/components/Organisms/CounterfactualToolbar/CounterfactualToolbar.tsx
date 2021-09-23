@@ -134,7 +134,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                     aria-label="Run Counterfactual Analysis"
                     onClick={handleRun}
                     isAriaDisabled={status.isDisabled}
-                    className="counterfactual-run"
+                    id="counterfactual-run"
                   >
                     Run Counterfactual
                   </Button>
@@ -152,7 +152,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                   <Button
                     variant="secondary"
                     onClick={toggleOutcomeSelection}
-                    className="counterfactual-setup-outcomes"
+                    id="counterfactual-setup-outcomes"
                   >
                     Set Up Outcomes
                   </Button>
@@ -172,6 +172,7 @@ const CounterfactualToolbar = (props: CounterfactualToolbarProps) => {
                     variant="link"
                     isInline={true}
                     onClick={handleCFReset}
+                    id="counterfactual-reset"
                   >
                     Reset
                   </Button>

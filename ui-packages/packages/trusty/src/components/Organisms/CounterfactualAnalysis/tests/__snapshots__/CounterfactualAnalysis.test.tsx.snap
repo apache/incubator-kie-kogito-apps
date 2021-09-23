@@ -39,6 +39,34 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
           "value": 1,
         },
       },
+      Object {
+        "evaluationStatus": "SUCCEEDED",
+        "hasErrors": false,
+        "messages": Array [],
+        "outcomeId": "_46B5CA54-27CA-4950-B601-63F58BC3BDFE",
+        "outcomeName": "canRequestLoan",
+        "outcomeResult": Object {
+          "components": null,
+          "kind": "UNIT",
+          "name": "canRequestLoan",
+          "typeRef": "boolean",
+          "value": false,
+        },
+      },
+      Object {
+        "evaluationStatus": "SUCCEEDED",
+        "hasErrors": false,
+        "messages": Array [],
+        "outcomeId": "_047FFF53-0583-4FAD-B08F-8E1C077021D6",
+        "outcomeName": "Asset Score",
+        "outcomeResult": Object {
+          "components": null,
+          "kind": "UNIT",
+          "name": "Asset Score",
+          "typeRef": "number",
+          "value": "33",
+        },
+      },
     ]
   }
 >
@@ -157,6 +185,24 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                 "role": 1,
                                                 "typeRef": "number",
                                                 "value": 1,
+                                              },
+                                              Object {
+                                                "id": "_46B5CA54-27CA-4950-B601-63F58BC3BDFE",
+                                                "kind": "UNIT",
+                                                "name": "canRequestLoan",
+                                                "originalValue": false,
+                                                "role": 1,
+                                                "typeRef": "boolean",
+                                                "value": false,
+                                              },
+                                              Object {
+                                                "id": "_047FFF53-0583-4FAD-B08F-8E1C077021D6",
+                                                "kind": "UNIT",
+                                                "name": "Asset Score",
+                                                "originalValue": "33",
+                                                "role": 1,
+                                                "typeRef": "number",
+                                                "value": "33",
                                               },
                                             ]
                                           }
@@ -500,6 +546,24 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                         "typeRef": "number",
                                         "value": 1,
                                       },
+                                      Object {
+                                        "id": "_46B5CA54-27CA-4950-B601-63F58BC3BDFE",
+                                        "kind": "UNIT",
+                                        "name": "canRequestLoan",
+                                        "originalValue": false,
+                                        "role": 1,
+                                        "typeRef": "boolean",
+                                        "value": false,
+                                      },
+                                      Object {
+                                        "id": "_047FFF53-0583-4FAD-B08F-8E1C077021D6",
+                                        "kind": "UNIT",
+                                        "name": "Asset Score",
+                                        "originalValue": "33",
+                                        "role": 1,
+                                        "typeRef": "number",
+                                        "value": "33",
+                                      },
                                     ]
                                   }
                                   onRunAnalysis={[Function]}
@@ -672,7 +736,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                       <Button
                                                         aria-describedby="pf-tooltip-1"
                                                         aria-label="Run Counterfactual Analysis"
-                                                        className="counterfactual-run"
+                                                        id="counterfactual-run"
                                                         isAriaDisabled={true}
                                                         onClick={[Function]}
                                                         variant="primary"
@@ -688,7 +752,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                       <Button
                                                         aria-describedby="pf-tooltip-1"
                                                         aria-label="Run Counterfactual Analysis"
-                                                        className="counterfactual-run"
+                                                        id="counterfactual-run"
                                                         isAriaDisabled={true}
                                                         onClick={[Function]}
                                                         variant="primary"
@@ -697,11 +761,12 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                           aria-describedby="pf-tooltip-1"
                                                           aria-disabled={true}
                                                           aria-label="Run Counterfactual Analysis"
-                                                          className="pf-c-button pf-m-primary pf-m-aria-disabled counterfactual-run"
+                                                          className="pf-c-button pf-m-primary pf-m-aria-disabled"
                                                           data-ouia-component-id="OUIA-Generated-Button-primary-1"
                                                           data-ouia-component-type="PF4/Button"
                                                           data-ouia-safe={true}
                                                           disabled={false}
+                                                          id="counterfactual-run"
                                                           onClick={[Function]}
                                                           onKeyPress={[Function]}
                                                           role={null}
@@ -786,7 +851,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                     trigger={
                                                       <Button
                                                         aria-describedby="pf-tooltip-2"
-                                                        className="counterfactual-setup-outcomes"
+                                                        id="counterfactual-setup-outcomes"
                                                         onClick={[Function]}
                                                         variant="secondary"
                                                       >
@@ -800,7 +865,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                     >
                                                       <Button
                                                         aria-describedby="pf-tooltip-2"
-                                                        className="counterfactual-setup-outcomes"
+                                                        id="counterfactual-setup-outcomes"
                                                         onClick={[Function]}
                                                         variant="secondary"
                                                       >
@@ -808,11 +873,12 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                           aria-describedby="pf-tooltip-2"
                                                           aria-disabled={false}
                                                           aria-label={null}
-                                                          className="pf-c-button pf-m-secondary counterfactual-setup-outcomes"
+                                                          className="pf-c-button pf-m-secondary"
                                                           data-ouia-component-id="OUIA-Generated-Button-secondary-1"
                                                           data-ouia-component-type="PF4/Button"
                                                           data-ouia-safe={true}
                                                           disabled={false}
+                                                          id="counterfactual-setup-outcomes"
                                                           onClick={[Function]}
                                                           role={null}
                                                           type="button"
@@ -906,6 +972,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                     trigger={
                                                       <Button
                                                         aria-describedby="pf-tooltip-3"
+                                                        id="counterfactual-reset"
                                                         isInline={true}
                                                         onClick={[Function]}
                                                         variant="link"
@@ -920,6 +987,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                     >
                                                       <Button
                                                         aria-describedby="pf-tooltip-3"
+                                                        id="counterfactual-reset"
                                                         isInline={true}
                                                         onClick={[Function]}
                                                         variant="link"
@@ -933,6 +1001,7 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                                           data-ouia-component-type="PF4/Button"
                                                           data-ouia-safe={true}
                                                           disabled={false}
+                                                          id="counterfactual-reset"
                                                           onClick={[Function]}
                                                           role={null}
                                                           type="button"

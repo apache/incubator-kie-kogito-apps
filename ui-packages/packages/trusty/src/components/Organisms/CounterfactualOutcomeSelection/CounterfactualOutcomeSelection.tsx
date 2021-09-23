@@ -89,6 +89,7 @@ const CounterfactualOutcomeSelection = (
     const actions = isDesiredOutcomeDefined()
       ? [
           <Button
+            id="confirm-outcome-selection"
             key="confirm"
             variant="primary"
             aria-label="Run Counterfactual Analysis"
@@ -111,6 +112,7 @@ const CounterfactualOutcomeSelection = (
             }
           >
             <Button
+              id="confirm-outcome-selection"
               key="confirm"
               variant="primary"
               aria-label="Run Counterfactual Analysis"
