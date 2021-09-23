@@ -1,4 +1,5 @@
 {
+  "@class": "org.kie.kogito.tracing.decision.event.model.DecisionModelEvent",
   "gav": {
     "groupId": "groupId",
     "artifactId": "artifactId",

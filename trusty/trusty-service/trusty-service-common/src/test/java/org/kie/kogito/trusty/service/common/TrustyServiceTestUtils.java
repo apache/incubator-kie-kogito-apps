@@ -144,7 +144,7 @@ public class TrustyServiceTestUtils {
         try {
             return MAPPER.readValue(TrustyServiceTestUtils.class.getResource(name), clazz);
         } catch (IOException e) {
-            throw new RuntimeException("Can't read test resource");
+            throw new RuntimeException("Can't read test resource " + name, e);
         }
     }
 
@@ -152,7 +152,7 @@ public class TrustyServiceTestUtils {
         try {
             return readFromInputStream(TrustyServiceTestUtils.class.getResourceAsStream(name));
         } catch (IOException e) {
-            throw new RuntimeException("Can't read test resource");
+            throw new RuntimeException("Can't read test resource " + name, e);
         }
     }
 
