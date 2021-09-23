@@ -94,6 +94,11 @@ public class PredictionInputsDataDistribution implements DataDistribution {
     }
 
     @Override
+    public int size() {
+        return inputs.size();
+    }
+
+    @Override
     public String toString() {
         return "PredictionInputsDataDistribution{" +
                 "inputs=" + inputs +

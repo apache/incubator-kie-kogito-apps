@@ -97,4 +97,13 @@ public class IndependentFeaturesDataDistribution implements DataDistribution {
     public List<FeatureDistribution> asFeatureDistributions() {
         return featureDistributions;
     }
+
+    @Override
+    public int size() {
+        int size = 0;
+        for (FeatureDistribution fd : featureDistributions) {
+            size += fd.size();
+        }
+        return size;
+    }
 }

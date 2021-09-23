@@ -36,4 +36,11 @@ public interface FeatureDistribution {
 
     List<Value> getAllSamples();
 
+    /**
+     * Get the size of this feature distribution.
+     * 
+     * @return the size of this feature distribution
+     */
+    int size();
+
 }

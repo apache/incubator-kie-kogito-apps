@@ -78,4 +78,9 @@ public class NumericFeatureDistribution implements FeatureDistribution {
         Collections.shuffle(values);
         return Collections.unmodifiableList(values);
     }
+
+    @Override
+    public int size() {
+        return doubles.size();
+    }
 }

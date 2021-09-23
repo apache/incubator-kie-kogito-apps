@@ -49,4 +49,11 @@ public interface DataDistribution {
      * @return a list of feature distributions
      */
     List<FeatureDistribution> asFeatureDistributions();
+
+    /**
+     * Get the size of this data distribution.
+     * 
+     * @return the no. of samples in this data distribution.
+     */
+    int size();
 }
