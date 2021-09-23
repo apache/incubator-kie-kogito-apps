@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.local.lime;
 
 import java.security.SecureRandom;
 import java.util.Collections;
+import java.util.Optional;
 
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.EncodingParams;
@@ -223,14 +224,12 @@ public class LimeConfig {
 
     public LimeConfig copy() {
         PerturbationContext newPC;
-        if (this.perturbationContext.getSeed().isPresent()) {
-            newPC = new PerturbationContext(this.perturbationContext.getSeed().get(),
-                    this.perturbationContext.getRandom(),
-                    this.perturbationContext.getNoOfPerturbations());
-        } else {
-            newPC = new PerturbationContext(this.perturbationContext.getRandom(),
-                    this.perturbationContext.getNoOfPerturbations());
-        }
+        Optional<Long> seed = this.perturbationContext.getSeed();
+        newPC = seed.map(aLong -> new PerturbationContext(aLong,
+                this.perturbationContext.getRandom(),
+                this.perturbationContext.getNoOfPerturbations()))
+                .orElseGet(() -> new PerturbationContext(this.perturbationContext.getRandom(),
+                        this.perturbationContext.getNoOfPerturbations()));
 
         return new LimeConfig()
                 .withSeparableDatasetRatio(separableDatasetRatio)
