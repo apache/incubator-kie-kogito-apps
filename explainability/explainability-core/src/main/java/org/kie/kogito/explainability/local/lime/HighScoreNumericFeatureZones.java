@@ -17,7 +17,7 @@ package org.kie.kogito.explainability.local.lime;
 
 import java.util.stream.DoubleStream;
 
-public class HighScoreNumericFeatureZones {
+public class HighScoreNumericFeatureZones implements Predicate<Double> {
 
     private final double[] highFeatureScorePoint;
     private final double tolerance;
@@ -27,7 +27,8 @@ public class HighScoreNumericFeatureZones {
         this.tolerance = tolerance;
     }
 
-    public boolean accept(double point) {
+    @Override
+    public boolean test(Double point) {
         return DoubleStream.of(highFeatureScorePoint).anyMatch(d -> point > (d - tolerance) && point < (d + tolerance));
     }
 }
