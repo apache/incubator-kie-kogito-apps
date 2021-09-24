@@ -134,7 +134,8 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                 });
     }
 
-    private CompletableFuture<Map<String, Saliency>> explain(PredictionProvider model, PredictionInput originalInput, List<Feature> linearizedTargetInputFeatures, List<Output> actualOutputs, int noOfRetries, int noOfSamples, PerturbationContext perturbationContext) {
+    private CompletableFuture<Map<String, Saliency>> explain(PredictionProvider model, PredictionInput originalInput, List<Feature> linearizedTargetInputFeatures, List<Output> actualOutputs,
+            int noOfRetries, int noOfSamples, PerturbationContext perturbationContext) {
         PerturbationContext newPerturbationContext;
         int newNoOfSamples;
         if (limeConfig.isAdaptDatasetVariance()) {
@@ -145,23 +146,23 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             newNoOfSamples = noOfSamples;
         }
         return explainRetryCycle(model, originalInput, linearizedTargetInputFeatures,
-                                 actualOutputs, noOfRetries - 1, newNoOfSamples,
-                                 newPerturbationContext);
+                actualOutputs, noOfRetries - 1, newNoOfSamples,
+                newPerturbationContext);
     }
 
     private PerturbationContext getNewPerturbationContext(List<Feature> linearizedTargetInputFeatures, int noOfRetries, PerturbationContext perturbationContext) {
         PerturbationContext newPerturbationContext;
         int nextPerturbationSize = Math.max(perturbationContext.getNoOfPerturbations() + 1,
-                                            linearizedTargetInputFeatures.size() / noOfRetries);
+                linearizedTargetInputFeatures.size() / noOfRetries);
         // make sure to stay within the max no. of features boundaries
         nextPerturbationSize = Math.min(linearizedTargetInputFeatures.size() - 1, nextPerturbationSize);
         if (perturbationContext.getSeed().isPresent()) {
             Long seed = perturbationContext.getSeed().get();
             newPerturbationContext = new PerturbationContext(seed, perturbationContext.getRandom(),
-                                                             nextPerturbationSize);
+                    nextPerturbationSize);
         } else {
             newPerturbationContext = new PerturbationContext(perturbationContext.getRandom(),
-                                                             nextPerturbationSize);
+                    nextPerturbationSize);
         }
         return newPerturbationContext;
     }
