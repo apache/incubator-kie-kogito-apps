@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonNode;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.RestAssured;
@@ -36,6 +37,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractProcessDataIndexIT {
 
@@ -251,8 +253,6 @@ public abstract class AbstractProcessDataIndexIT {
                     .body("data.UserTaskInstances[0].description", nullValue())
                     .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"))
                     .extract().path("data.UserTaskInstances[0].id");
-            String expectedSchema =
-                    "{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"type\":\"object\",\"properties\":{\"traveller\":{\"type\":\"object\",\"properties\":{\"address\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\"},\"country\":{\"type\":\"string\"},\"street\":{\"type\":\"string\"},\"zipCode\":{\"type\":\"string\"}}},\"email\":{\"type\":\"string\"},\"firstName\":{\"type\":\"string\"},\"lastName\":{\"type\":\"string\"},\"nationality\":{\"type\":\"string\"},\"processed\":{\"type\":\"boolean\"}},\"input\":true},\"approved\":{\"type\":\"boolean\",\"output\":true}},\"phases\":[\"abort\",\"claim\",\"skip\",\"complete\"]}";
 
             String taskSchema = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                     .body("{ \"query\" : \"{ UserTaskInstances (where: {id: {equal:\\\"" + taskId + "\\\" }}){ " +
@@ -262,9 +262,8 @@ public abstract class AbstractProcessDataIndexIT {
                     .then()
                     .statusCode(200)
                     .extract().path("data.UserTaskInstances[0].schema");
+            checkExpectedTaskSchema(taskSchema);
 
-            ObjectMapper mapper = new ObjectMapper();
-            assertEquals(mapper.readTree(taskSchema), mapper.readTree(expectedSchema));
             await()
                     .atMost(TIMEOUT)
                     .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
@@ -329,12 +328,14 @@ public abstract class AbstractProcessDataIndexIT {
                                 .then()
                                 .statusCode(200)
                                 .body("errors", nullValue()));
-                given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { variables} }\"}")
-                        .when().post("/graphql")
-                        .then()
-                        .statusCode(200)
-                        .body("data.ProcessInstances[0].variables", containsString("Anakin"));
+                await()
+                        .atMost(TIMEOUT)
+                        .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                                .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { variables} }\"}")
+                                .when().post("/graphql")
+                                .then()
+                                .statusCode(200)
+                                .body("data.ProcessInstances[0].variables", containsString("Anakin")));
             }
             given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                     .body("{ \"query\" : \"mutation{ NodeInstanceTrigger(id:\\\"" + pId2 + "\\\", nodeId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
@@ -462,5 +463,46 @@ public abstract class AbstractProcessDataIndexIT {
                 .body("data.ProcessInstances[0].id", is(processInstanceId))
                 .body("data.ProcessInstances[0].processId", is("approvals"))
                 .body("data.ProcessInstances[0].state", is(state));
+    }
+
+    private void checkExpectedTaskSchema(String taskSchema) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode schemaJsonNode = mapper.readTree(taskSchema);
+        assertEquals("\"object\"", schemaJsonNode.at("/type").toString());
+
+        assertEquals(4, schemaJsonNode.at("/phases").size());
+        assertTrue(schemaJsonNode.get("phases").toString().contains("abort"));
+        assertTrue(schemaJsonNode.get("phases").toString().contains("claim"));
+        assertTrue(schemaJsonNode.get("phases").toString().contains("skip"));
+        assertTrue(schemaJsonNode.get("phases").toString().contains("complete"));
+
+        assertEquals(2, schemaJsonNode.at("/properties").size());
+
+        assertEquals("true", schemaJsonNode.at("/properties/approved/output").toString());
+        assertEquals("\"boolean\"", schemaJsonNode.at("/properties/approved/type").toString());
+
+        assertEquals("\"object\"", schemaJsonNode.at("/properties/traveller/type").toString());
+        assertEquals("true", schemaJsonNode.at("/properties/traveller/input").toString());
+        assertEquals(6, schemaJsonNode.at("/properties/traveller/properties").size());
+        assertEquals("\"object\"", schemaJsonNode.at("/properties/traveller/properties/address/type").toString());
+        assertEquals(4, schemaJsonNode.at("/properties/traveller/properties/address/properties").size());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/address/properties/city/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/address/properties/country/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/address/properties/street/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/address/properties/zipCode/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/email/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/firstName/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/lastName/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/nationality/type").toString());
+        assertEquals("\"boolean\"",
+                schemaJsonNode.at("/properties/traveller/properties/processed/type").toString());
     }
 }
