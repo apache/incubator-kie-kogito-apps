@@ -98,8 +98,8 @@ class LimeExplainerTest {
     @ParameterizedTest
     @ValueSource(longs = { 0, 1, 2, 3, 4 })
     void testSparseBalance(long seed) throws InterruptedException, ExecutionException, TimeoutException {
-        Random random = new Random();
         for (int nf = 1; nf < 4; nf++) {
+            Random random = new Random();
             int noOfSamples = 100;
             LimeConfig limeConfigNoPenalty = new LimeConfig()
                     .withPerturbationContext(new PerturbationContext(seed, random, DEFAULT_NO_OF_PERTURBATIONS))
