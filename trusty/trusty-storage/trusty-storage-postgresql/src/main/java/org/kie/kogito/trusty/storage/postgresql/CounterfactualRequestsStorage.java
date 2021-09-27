@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.kie.kogito.trusty.storage.common.TrustyStorageService.COUNTERFACTUAL_REQUESTS_STORAGE;
 
 @ApplicationScoped
-public class CounterfactualRequestsStorage extends AbstractDelegatingStorage<CounterfactualExplainabilityRequest> {
+public class CounterfactualRequestsStorage extends BaseTransactionalStorage<CounterfactualExplainabilityRequest> {
 
     CounterfactualRequestsStorage() {
         //CDI proxy

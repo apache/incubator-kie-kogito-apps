@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.kie.kogito.trusty.storage.common.TrustyStorageService.MODELS_STORAGE;
 
 @ApplicationScoped
-public class DMNModelWithMetadataStorage extends AbstractDelegatingStorage<DMNModelWithMetadata> {
+public class DMNModelWithMetadataStorage extends BaseTransactionalStorage<DMNModelWithMetadata> {
 
     DMNModelWithMetadataStorage() {
         //CDI proxy

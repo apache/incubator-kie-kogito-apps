@@ -17,7 +17,7 @@ package org.kie.kogito.trusty.storage.postgresql;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.hibernate.HibernateException;
+import org.hibernate.exception.JDBCConnectionException;
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 
 @ApplicationScoped
@@ -25,6 +25,6 @@ public class PostgreSQLStorageExceptionsProviderImpl implements StorageException
 
     @Override
     public boolean isConnectionException(Throwable e) {
-        return e instanceof HibernateException;
+        return e instanceof JDBCConnectionException;
     }
 }

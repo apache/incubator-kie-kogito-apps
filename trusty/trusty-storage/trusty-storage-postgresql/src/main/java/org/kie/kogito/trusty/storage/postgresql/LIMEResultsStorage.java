@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.kie.kogito.trusty.storage.common.TrustyStorageService.LIME_RESULTS_STORAGE;
 
 @ApplicationScoped
-public class LIMEResultsStorage extends AbstractDelegatingStorage<LIMEExplainabilityResult> {
+public class LIMEResultsStorage extends BaseTransactionalStorage<LIMEExplainabilityResult> {
 
     LIMEResultsStorage() {
         //CDI proxy

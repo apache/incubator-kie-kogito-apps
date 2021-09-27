@@ -43,6 +43,7 @@ public class PostgresStorage<V> implements Storage<String, V> {
     private Class type;
     private ObjectMapper mapper;
     private String rootType;
+    private Query<V> query;
 
     public PostgresStorage(String cacheName, CacheEntityRepository repository, ObjectMapper mapper, Class type) {
         this(cacheName, repository, mapper, type, type.getCanonicalName());
@@ -54,6 +55,7 @@ public class PostgresStorage<V> implements Storage<String, V> {
         this.type = type;
         this.mapper = mapper;
         this.rootType = rootType;
+        this.query = new PostgresQuery<>(cacheName, repository, mapper, type);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class PostgresStorage<V> implements Storage<String, V> {
 
     @Override
     public Query<V> query() {
-        throw new UnsupportedOperationException("Custom query not available in PostgresSQL");
+        return query;
     }
 
     @Override

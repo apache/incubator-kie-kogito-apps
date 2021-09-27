@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.kie.kogito.trusty.storage.common.TrustyStorageService.DECISIONS_STORAGE;
 
 @ApplicationScoped
-public class DecisionsStorage extends AbstractDelegatingStorage<Decision> {
+public class DecisionsStorage extends BaseTransactionalStorage<Decision> {
 
     DecisionsStorage() {
         //CDI proxy

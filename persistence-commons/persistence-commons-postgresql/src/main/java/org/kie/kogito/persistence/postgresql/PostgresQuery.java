@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.trusty.storage.postgresql;
+package org.kie.kogito.persistence.postgresql;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.AttributeSort;
+import org.kie.kogito.persistence.api.query.FilterCondition;
 import org.kie.kogito.persistence.api.query.Query;
 import org.kie.kogito.persistence.postgresql.model.CacheEntityRepository;
 import org.slf4j.Logger;
@@ -34,12 +36,12 @@ import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType;
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
-public class PostgreSqlQuery<T> implements Query<T> {
+public class PostgresQuery<T> implements Query<T> {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostgreSqlQuery.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostgresQuery.class);
     private static final String AND = " and ";
     private static final String OR = " or ";
-    private static final String ATTRIBUTE_VALUE = "%s = %s";
+    private static final String ATTRIBUTE_VALUE = "o.%s = %s";
 
     private final String name;
     private final CacheEntityRepository repository;
@@ -66,7 +68,7 @@ public class PostgreSqlQuery<T> implements Query<T> {
         }
     }
 
-    public PostgreSqlQuery(String name, CacheEntityRepository repository, ObjectMapper objectMapper, Class<T> type) {
+    public PostgresQuery(String name, CacheEntityRepository repository, ObjectMapper objectMapper, Class<T> type) {
         this.name = name;
         this.repository = repository;
         this.objectMapper = objectMapper;
@@ -106,12 +108,8 @@ public class PostgreSqlQuery<T> implements Query<T> {
         // - "columnX" is the JSON property on which you want to filter (only "top-level" JSON keys are supported)
         StringBuilder subQueryBuilder = new StringBuilder("SELECT ");
         subQueryBuilder.append("name AS name, json_value AS json_value");
-        Map<String, JsonField> fields = new HashMap<>();
-        if (filters != null && !filters.isEmpty()) {
-            filters.stream().filter(filter -> !fields.containsKey(filter.getAttribute()))
-                    .forEach(filter -> fields.put(filter.getAttribute(),
-                            new JsonField(filter.getAttribute(), filter.getValue())));
-        }
+        Map<String, JsonField> fields = addFilters(new HashMap<>(), filters);
+
         if (sortBy != null && !sortBy.isEmpty()) {
             sortBy.stream().filter(sortBy -> !fields.containsKey(sortBy.getAttribute()))
                     .forEach(sortBy -> fields.put(sortBy.getAttribute(),
@@ -137,7 +135,7 @@ public class PostgreSqlQuery<T> implements Query<T> {
         if (filters != null && !filters.isEmpty()) {
             queryString.append(" AND ");
             queryString.append(filters.stream()
-                    .map(filter -> new StringBuilder("o.")
+                    .map(filter -> new StringBuilder()
                             .append(filterStringFunction(filter)))
                     .collect(joining(AND)));
         }
@@ -174,6 +172,57 @@ public class PostgreSqlQuery<T> implements Query<T> {
     }
 
     @SuppressWarnings("unchecked")
+    private Map<String, JsonField> addFilters(final Map<String, JsonField> fields,
+            final List<AttributeFilter<?>> filters) {
+        if (filters.isEmpty()) {
+            return fields;
+        }
+
+        filters.stream()
+                .filter(filter -> Objects.nonNull(filter.getAttribute()))
+                .filter(filter -> !Objects.equals(filter.getCondition(), FilterCondition.NOT))
+                .filter(filter -> !Objects.equals(filter.getCondition(), FilterCondition.AND))
+                .filter(filter -> !Objects.equals(filter.getCondition(), FilterCondition.OR))
+                .filter(filter -> !Objects.equals(filter.getCondition(), FilterCondition.BETWEEN))
+                .filter(filter -> !fields.containsKey(filter.getAttribute()))
+                .forEach(filter -> fields.put(filter.getAttribute(),
+                        new JsonField(filter.getAttribute(), filter.getValue())));
+
+        //Add Children of NOT conditions
+        addFilters(fields,
+                filters.stream()
+                        .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.NOT))
+                        .map(filter -> (AttributeFilter<?>) filter.getValue())
+                        .collect(Collectors.toList()));
+
+        //Add Children of AND conditions
+        addFilters(fields,
+                filters.stream()
+                        .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.AND))
+                        .map(filter -> (List<AttributeFilter<?>>) filter.getValue())
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList()));
+
+        //Add Children of OR conditions
+        addFilters(fields,
+                filters.stream()
+                        .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.OR))
+                        .map(filter -> (List<AttributeFilter<?>>) filter.getValue())
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList()));
+
+        //Add Children of BETWEEN conditions
+        filters.stream()
+                .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.BETWEEN))
+                .filter(filter -> !fields.containsKey(filter.getAttribute()))
+                .forEach(filter -> fields.put(filter.getAttribute(),
+                        new JsonField(filter.getAttribute(),
+                                ((List<Object>) filter.getValue()).get(0))));
+
+        return fields;
+    }
+
+    @SuppressWarnings("unchecked")
     private String filterStringFunction(AttributeFilter<?> filter) {
         switch (filter.getCondition()) {
             case CONTAINS:
@@ -183,26 +232,26 @@ public class PostgreSqlQuery<T> implements Query<T> {
             case CONTAINS_ANY:
                 return (String) ((List) filter.getValue()).stream().map(o -> format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString(o))).collect(joining(OR));
             case LIKE:
-                return format("%s like %s", filter.getAttribute(), getValueForQueryString(filter.getValue())).replaceAll("\\*", "%");
+                return format("o.%s like %s", filter.getAttribute(), getValueForQueryString(filter.getValue())).replaceAll("\\*", "%");
             case EQUAL:
                 return format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString(filter.getValue()));
             case IN:
-                return format("%s in (%s)", filter.getAttribute(), ((List) filter.getValue()).stream().map(PostgreSqlQuery::getValueForQueryString).collect(joining(", ")));
+                return format("o.%s in (%s)", filter.getAttribute(), ((List) filter.getValue()).stream().map(PostgresQuery::getValueForQueryString).collect(joining(", ")));
             case IS_NULL:
-                return format("%s is null", filter.getAttribute());
+                return format("o.%s is null", filter.getAttribute());
             case NOT_NULL:
-                return format("%s is not null", filter.getAttribute());
+                return format("o.%s is not null", filter.getAttribute());
             case BETWEEN:
                 List<Object> value = (List<Object>) filter.getValue();
-                return format("%s between %s and %s", filter.getAttribute(), getValueForQueryString(value.get(0)), getValueForQueryString(value.get(1)));
+                return format("o.%s between %s and %s", filter.getAttribute(), getValueForQueryString(value.get(0)), getValueForQueryString(value.get(1)));
             case GT:
-                return format("%s > %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
+                return format("o.%s > %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
             case GTE:
-                return format("%s >= %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
+                return format("o.%s >= %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
             case LT:
-                return format("%s < %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
+                return format("o.%s < %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
             case LTE:
-                return format("%s <= %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
+                return format("o.%s <= %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
             case OR:
                 return getRecursiveString(filter, OR);
             case AND:

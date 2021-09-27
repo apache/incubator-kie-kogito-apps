@@ -28,18 +28,21 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.smallrye.mutiny.Multi;
 
-public abstract class AbstractDelegatingStorage<T> implements Storage<String, T> {
+public abstract class BaseTransactionalStorage<T> implements Storage<String, T> {
 
     private PostgresStorage<T> delegate;
-    private Query<T> query;
 
-    AbstractDelegatingStorage() {
+    BaseTransactionalStorage() {
         //CDI proxy
     }
 
-    public AbstractDelegatingStorage(String name, CacheEntityRepository repository, ObjectMapper mapper, Class<T> type) {
-        this.delegate = new PostgresStorage<>(name, repository, mapper, type);
-        this.query = new PostgreSqlQuery<>(name, repository, mapper, type);
+    public BaseTransactionalStorage(String name, CacheEntityRepository repository, ObjectMapper mapper, Class<T> type) {
+        this(new PostgresStorage<>(name, repository, mapper, type));
+    }
+
+    //For Unit Tests to check delegation
+    BaseTransactionalStorage(final PostgresStorage<T> delegate) {
+        this.delegate = delegate;
     }
 
     @Override
@@ -60,7 +63,7 @@ public abstract class AbstractDelegatingStorage<T> implements Storage<String, T>
     @Override
     @Transactional
     public Query<T> query() {
-        return query;
+        return delegate.query();
     }
 
     @Override
