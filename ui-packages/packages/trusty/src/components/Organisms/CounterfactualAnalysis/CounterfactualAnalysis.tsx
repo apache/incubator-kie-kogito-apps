@@ -119,10 +119,8 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
   }, [cfResults]);
 
   const maxRunningTimeSeconds = useMemo(() => {
-    if (cfAnalysis) {
-      if (cfAnalysis.status === RemoteDataStatus.SUCCESS) {
-        return cfAnalysis.data.maxRunningTimeSeconds;
-      }
+    if (cfAnalysis?.status === RemoteDataStatus.SUCCESS) {
+      return cfAnalysis.data.maxRunningTimeSeconds;
     }
   }, [cfAnalysis]);
 

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Progress, ProgressSize } from '@patternfly/react-core';
 
 type CounterfactualProgressBarProps = {
@@ -27,7 +27,7 @@ const CounterfactualProgressBar = (props: CounterfactualProgressBarProps) => {
     setTimeLimit(maxRunningTimeSeconds);
   }, [maxRunningTimeSeconds]);
 
-  const label = useCallback(() => {
+  const label = useMemo(() => {
     if (timeLimit) {
       return timeLimit - value !== 0
         ? `${timeLimit - value} seconds remaining`
@@ -42,7 +42,7 @@ const CounterfactualProgressBar = (props: CounterfactualProgressBarProps) => {
       title="Calculating..."
       size={ProgressSize.sm}
       style={{ width: 400 }}
-      label={label()}
+      label={label}
     />
   );
 };
