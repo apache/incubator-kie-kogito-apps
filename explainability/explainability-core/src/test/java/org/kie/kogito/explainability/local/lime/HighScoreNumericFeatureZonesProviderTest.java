@@ -44,7 +44,7 @@ class HighScoreNumericFeatureZonesProviderTest {
         List<FeatureDistribution> featureDistributions = new ArrayList<>();
         DataDistribution dataDistribution = new IndependentFeaturesDataDistribution(featureDistributions);
         Map<String, HighScoreNumericFeatureZones> highScoreFeatureZones =
-                HighScoreNumericFeatureZonesProvider.getHighScoreFeatureZones(dataDistribution, predictionProvider, features);
+                HighScoreNumericFeatureZonesProvider.getHighScoreFeatureZones(dataDistribution, predictionProvider, features, 10);
         assertThat(highScoreFeatureZones).isNotNull();
         assertThat(highScoreFeatureZones.size()).isEqualTo(0);
     }
@@ -67,7 +67,7 @@ class HighScoreNumericFeatureZonesProviderTest {
         }
         DataDistribution dataDistribution = new IndependentFeaturesDataDistribution(featureDistributions);
         Map<String, HighScoreNumericFeatureZones> highScoreFeatureZones =
-                HighScoreNumericFeatureZonesProvider.getHighScoreFeatureZones(dataDistribution, predictionProvider, features);
+                HighScoreNumericFeatureZonesProvider.getHighScoreFeatureZones(dataDistribution, predictionProvider, features, 10);
         assertThat(highScoreFeatureZones).isNotNull();
         assertThat(highScoreFeatureZones.size()).isEqualTo(4);
     }

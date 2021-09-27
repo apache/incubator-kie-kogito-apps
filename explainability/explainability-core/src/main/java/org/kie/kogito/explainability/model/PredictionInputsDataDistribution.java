@@ -94,8 +94,8 @@ public class PredictionInputsDataDistribution implements DataDistribution {
     }
 
     @Override
-    public int size() {
-        return inputs.size();
+    public boolean isEmpty() {
+        return this.inputs.isEmpty();
     }
 
     @Override

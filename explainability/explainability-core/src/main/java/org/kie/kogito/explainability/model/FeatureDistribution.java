@@ -37,10 +37,10 @@ public interface FeatureDistribution {
     List<Value> getAllSamples();
 
     /**
-     * Get the size of this feature distribution.
-     * 
-     * @return the size of this feature distribution
+     * Check whether this feature distribution is empty.
+     *
+     * @return {@code true} if empty, {@code false} otherwise
      */
-    int size();
+    boolean isEmpty();
 
 }

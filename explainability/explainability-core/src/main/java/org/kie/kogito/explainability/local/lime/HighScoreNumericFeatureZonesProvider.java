@@ -29,6 +29,7 @@ import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.utils.DataUtils;
@@ -54,17 +55,17 @@ public class HighScoreNumericFeatureZonesProvider {
      * @param dataDistribution a data distribution
      * @param predictionProvider the model used to score the inputs
      * @param features the list of features to associate high score points with
+     * @param maxNoOfSamples max no. of inputs used for discovering high score zones
      * @return a map feature name -> high score numeric feature zones
      */
     public static Map<String, HighScoreNumericFeatureZones> getHighScoreFeatureZones(DataDistribution dataDistribution,
-            PredictionProvider predictionProvider,
-            List<Feature> features) {
+            PredictionProvider predictionProvider, List<Feature> features, int maxNoOfSamples) {
         Map<String, HighScoreNumericFeatureZones> numericFeatureZonesMap = new HashMap<>();
 
         List<Prediction> scoreSortedPredictions = new ArrayList<>();
         try {
             scoreSortedPredictions.addAll(DataUtils.getScoreSortedPredictions(
-                    predictionProvider, dataDistribution));
+                    predictionProvider, new PredictionInputsDataDistribution(dataDistribution.sample(maxNoOfSamples))));
         } catch (ExecutionException e) {
             LOGGER.error("Could not sort predictions by score {}", e.getMessage());
         } catch (InterruptedException e) {
@@ -97,7 +98,7 @@ public class HighScoreNumericFeatureZonesProvider {
                         // get high score points and tolerance
                         double[] highScoreFeaturePoints = topValues.stream().flatMapToDouble(DoubleStream::of).toArray();
                         double center = DataUtils.getMean(highScoreFeaturePoints);
-                        double tolerance = DataUtils.getStdDev(highScoreFeaturePoints, center);
+                        double tolerance = DataUtils.getStdDev(highScoreFeaturePoints, center) / 2;
                         HighScoreNumericFeatureZones highScoreNumericFeatureZones = new HighScoreNumericFeatureZones(highScoreFeaturePoints, tolerance);
                         numericFeatureZonesMap.put(feature.getName(), highScoreNumericFeatureZones);
                     }

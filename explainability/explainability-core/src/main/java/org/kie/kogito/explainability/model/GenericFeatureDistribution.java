@@ -73,7 +73,7 @@ public class GenericFeatureDistribution implements FeatureDistribution {
     }
 
     @Override
-    public int size() {
-        return values.size();
+    public boolean isEmpty() {
+        return values.isEmpty();
     }
 }

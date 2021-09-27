@@ -99,11 +99,18 @@ public class IndependentFeaturesDataDistribution implements DataDistribution {
     }
 
     @Override
-    public int size() {
-        int size = 0;
-        for (FeatureDistribution fd : featureDistributions) {
-            size += fd.size();
+    public boolean isEmpty() {
+        boolean empty = this.featureDistributions.isEmpty();
+        if (!empty) {
+            for (FeatureDistribution featureDistribution : this.featureDistributions) {
+                if (!featureDistribution.isEmpty()) {
+                    empty = false;
+                    break;
+                } else {
+                    empty = true;
+                }
+            }
         }
-        return size;
+        return empty;
     }
 }

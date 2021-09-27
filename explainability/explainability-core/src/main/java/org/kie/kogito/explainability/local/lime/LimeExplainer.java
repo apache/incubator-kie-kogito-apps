@@ -324,14 +324,20 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         DataDistribution dataDistribution = limeConfig.getDataDistribution();
 
         Map<String, FeatureDistribution> featureDistributionsMap;
-        if (dataDistribution.size() > 0) {
-            Map<String, HighScoreNumericFeatureZones> numericFeatureZonesMap = HighScoreNumericFeatureZonesProvider
-                    .getHighScoreFeatureZones(dataDistribution, predictionProvider, features);
+        if (!dataDistribution.isEmpty()) {
+            Map<String, HighScoreNumericFeatureZones> numericFeatureZonesMap;
+            int max = limeConfig.getBoostrapInputs();
+            if (limeConfig.isHighScoreFeatureZones()) {
+                numericFeatureZonesMap = HighScoreNumericFeatureZonesProvider
+                        .getHighScoreFeatureZones(dataDistribution, predictionProvider, features, max);
+            } else {
+                numericFeatureZonesMap = new HashMap<>();
+            }
 
             // generate feature distributions, if possible
             featureDistributionsMap = DataUtils.boostrapFeatureDistributions(
                     dataDistribution, perturbationContext, 2 * size,
-                    1, size, numericFeatureZonesMap);
+                    1, Math.min(size, max), numericFeatureZonesMap);
         } else {
             featureDistributionsMap = new HashMap<>();
         }

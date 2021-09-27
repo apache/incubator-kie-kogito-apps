@@ -51,9 +51,9 @@ public interface DataDistribution {
     List<FeatureDistribution> asFeatureDistributions();
 
     /**
-     * Get the size of this data distribution.
-     * 
-     * @return the no. of samples in this data distribution.
+     * Check whether this data distribution is empty.
+     *
+     * @return {@code true} if empty, {@code false} otherwise
      */
-    int size();
+    boolean isEmpty();
 }

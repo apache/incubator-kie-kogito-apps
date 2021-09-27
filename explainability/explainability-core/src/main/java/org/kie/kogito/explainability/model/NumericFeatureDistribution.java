@@ -80,7 +80,7 @@ public class NumericFeatureDistribution implements FeatureDistribution {
     }
 
     @Override
-    public int size() {
-        return doubles.size();
+    public boolean isEmpty() {
+        return this.doubles.isEmpty();
     }
 }
