@@ -162,7 +162,7 @@ public class LimeConfigOptimizer {
             seed.ifPresent(solverConfig::setRandomSeed);
             solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
         } else {
-            logger.warn("non reproducible execution, set the seed inside initial LimeConfig's PerturbationContext and enable deterministic execution to fix this");
+            logger.debug("non reproducible execution, set the seed inside initial LimeConfig's PerturbationContext and enable deterministic execution to fix this");
         }
         localSearchPhaseConfig.setLocalSearchType(LocalSearchType.LATE_ACCEPTANCE);
 
