@@ -135,6 +135,7 @@ describe('Traffic Violation', () => {
       ).should($value => {
         expect($value).to.have.text('speed');
       });
+
       cy.get(
         "ul.input-browser__data-list>li:contains('Speed Limit') div.pf-c-data-list__cell:nth-child(2)"
       ).should($value => {
