@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -156,8 +157,9 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                 linearizedTargetInputFeatures.size() / noOfRetries);
         // make sure to stay within the max no. of features boundaries
         nextPerturbationSize = Math.min(linearizedTargetInputFeatures.size() - 1, nextPerturbationSize);
-        if (perturbationContext.getSeed().isPresent()) {
-            Long seed = perturbationContext.getSeed().get();
+        Optional<Long> optionalSeed = perturbationContext.getSeed();
+        if (optionalSeed.isPresent()) {
+            Long seed = optionalSeed.get();
             newPerturbationContext = new PerturbationContext(seed, perturbationContext.getRandom(),
                     nextPerturbationSize);
         } else {

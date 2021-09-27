@@ -41,7 +41,9 @@ public class PerturbationContext {
     public PerturbationContext(Long seed, Random random, int noOfPerturbations) {
         this.seed = Optional.ofNullable(seed);
         this.random = random;
-        random.setSeed(seed);
+        if (seed != null ) {
+            random.setSeed(seed);
+        }
         this.noOfPerturbations = noOfPerturbations;
     }
 
