@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
+import java.util.function.Predicate;
 import java.util.stream.DoubleStream;
 
 public class HighScoreNumericFeatureZones implements Predicate<Double> {

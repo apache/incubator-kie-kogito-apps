@@ -27,18 +27,18 @@ class HighScoreNumericFeatureZonesTest {
         double[] points = new double[] { 1d, 2d };
         HighScoreNumericFeatureZones highScoreNumericFeatureZones = new HighScoreNumericFeatureZones(points, tolerance);
 
-        assertThat(highScoreNumericFeatureZones.accept(Double.NaN)).isFalse();
+        assertThat(highScoreNumericFeatureZones.test(Double.NaN)).isFalse();
 
-        assertThat(highScoreNumericFeatureZones.accept(1.01)).isTrue();
-        assertThat(highScoreNumericFeatureZones.accept(0.91)).isTrue();
-        assertThat(highScoreNumericFeatureZones.accept(1.11)).isFalse();
-        assertThat(highScoreNumericFeatureZones.accept(1.1)).isFalse();
-        assertThat(highScoreNumericFeatureZones.accept(0.9)).isFalse();
+        assertThat(highScoreNumericFeatureZones.test(1.01)).isTrue();
+        assertThat(highScoreNumericFeatureZones.test(0.91)).isTrue();
+        assertThat(highScoreNumericFeatureZones.test(1.11)).isFalse();
+        assertThat(highScoreNumericFeatureZones.test(1.1)).isFalse();
+        assertThat(highScoreNumericFeatureZones.test(0.9)).isFalse();
 
-        assertThat(highScoreNumericFeatureZones.accept(2.01)).isTrue();
-        assertThat(highScoreNumericFeatureZones.accept(1.91)).isTrue();
-        assertThat(highScoreNumericFeatureZones.accept(2.11)).isFalse();
-        assertThat(highScoreNumericFeatureZones.accept(2.1)).isFalse();
-        assertThat(highScoreNumericFeatureZones.accept(1.9)).isFalse();
+        assertThat(highScoreNumericFeatureZones.test(2.01)).isTrue();
+        assertThat(highScoreNumericFeatureZones.test(1.91)).isTrue();
+        assertThat(highScoreNumericFeatureZones.test(2.11)).isFalse();
+        assertThat(highScoreNumericFeatureZones.test(2.1)).isFalse();
+        assertThat(highScoreNumericFeatureZones.test(1.9)).isFalse();
     }
 }

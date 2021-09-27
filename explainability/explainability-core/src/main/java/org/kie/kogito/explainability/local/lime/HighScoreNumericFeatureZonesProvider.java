@@ -78,27 +78,29 @@ public class HighScoreNumericFeatureZonesProvider {
             double max = scoreSortedPredictions.get(0).getOutput().getOutputs().stream().mapToDouble(Output::getScore).sum();
             double min = scoreSortedPredictions.get(scoreSortedPredictions.size() - 1).getOutput().getOutputs().stream()
                     .mapToDouble(Output::getScore).sum();
-            double threshold = (max + min) / 2;
+            if (max != min) {
+                double threshold = (max + min) / 2;
 
-            // filter out predictions whose score is in [min, threshold]
-            scoreSortedPredictions = scoreSortedPredictions.stream().filter(p -> p.getOutput().getOutputs().stream()
-                    .mapToDouble(Output::getScore).sum() > threshold).collect(Collectors.toList());
+                // filter out predictions whose score is in [min, threshold]
+                scoreSortedPredictions = scoreSortedPredictions.stream().filter(p -> p.getOutput().getOutputs().stream()
+                        .mapToDouble(Output::getScore).sum() > threshold).collect(Collectors.toList());
 
-            for (int j = 0; j < features.size(); j++) {
-                Feature feature = features.get(j);
-                if (Type.NUMBER.equals(feature.getType())) {
-                    int finalJ = j;
-                    // get feature values associated with high score inputs
-                    List<Double> topValues = scoreSortedPredictions.stream().map(prediction -> prediction.getInput()
-                            .getFeatures().get(finalJ).getValue().asNumber())
-                            .distinct().collect(Collectors.toList());
+                for (int j = 0; j < features.size(); j++) {
+                    Feature feature = features.get(j);
+                    if (Type.NUMBER.equals(feature.getType())) {
+                        int finalJ = j;
+                        // get feature values associated with high score inputs
+                        List<Double> topValues = scoreSortedPredictions.stream().map(prediction -> prediction.getInput()
+                                .getFeatures().get(finalJ).getValue().asNumber())
+                                .distinct().collect(Collectors.toList());
 
-                    // get high score points and tolerance
-                    double[] highScoreFeaturePoints = topValues.stream().flatMapToDouble(DoubleStream::of).toArray();
-                    double center = DataUtils.getMean(highScoreFeaturePoints);
-                    double tolerance = DataUtils.getStdDev(highScoreFeaturePoints, center);
-                    HighScoreNumericFeatureZones highScoreNumericFeatureZones = new HighScoreNumericFeatureZones(highScoreFeaturePoints, tolerance);
-                    numericFeatureZonesMap.put(feature.getName(), highScoreNumericFeatureZones);
+                        // get high score points and tolerance
+                        double[] highScoreFeaturePoints = topValues.stream().flatMapToDouble(DoubleStream::of).toArray();
+                        double center = DataUtils.getMean(highScoreFeaturePoints);
+                        double tolerance = DataUtils.getStdDev(highScoreFeaturePoints, center);
+                        HighScoreNumericFeatureZones highScoreNumericFeatureZones = new HighScoreNumericFeatureZones(highScoreFeaturePoints, tolerance);
+                        numericFeatureZonesMap.put(feature.getName(), highScoreNumericFeatureZones);
+                    }
                 }
             }
         }

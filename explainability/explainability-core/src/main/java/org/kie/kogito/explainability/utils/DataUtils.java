@@ -588,21 +588,11 @@ public class DataUtils {
                             DataUtils.sampleWithReplacement(values, sampleSize, perturbationContext.getRandom());
                     double[] data = sampledValues.stream().mapToDouble(Value::asNumber).toArray();
 
-                    // only use high score points, if possible
-                    HighScoreNumericFeatureZones highScoreNumericFeatureZones = numericFeatureZonesMap.get(feature.getName());
-                    double[] filteredData = new double[0];
-                    if (highScoreNumericFeatureZones != null) {
-                        filteredData = Arrays.stream(data).filter(highScoreNumericFeatureZones::accept).toArray();
-                    }
-                    if (filteredData.length == 0) {
-                        filteredData = data;
-                    }
-
-                    double mean = DataUtils.getMean(filteredData);
+                    double mean = DataUtils.getMean(data);
                     double stdDev = Math
-                            .pow(DataUtils.getStdDev(filteredData, mean), 2);
-                    double min = Arrays.stream(filteredData).min().orElse(Double.MIN_VALUE);
-                    double max = Arrays.stream(filteredData).max().orElse(Double.MAX_VALUE);
+                            .pow(DataUtils.getStdDev(data, mean), 2);
+                    double min = Arrays.stream(data).min().orElse(Double.MIN_VALUE);
+                    double max = Arrays.stream(data).max().orElse(Double.MAX_VALUE);
                     means[i] = mean;
                     stdDevs[i] = stdDev;
                     mins[i] = min;
@@ -615,7 +605,20 @@ public class DataUtils {
                 double[] doubles = DataUtils.generateData(finalMean, finalStdDev, featureDistributionSize,
                         perturbationContext.getRandom());
                 double[] boundedData = Arrays.stream(doubles).map(d -> Math.min(Math.max(d, finalMin), finalMax)).toArray();
-                NumericFeatureDistribution numericFeatureDistribution = new NumericFeatureDistribution(feature, boundedData);
+                HighScoreNumericFeatureZones highScoreNumericFeatureZones = numericFeatureZonesMap.get(feature.getName());
+                double[] finaldata;
+                if (highScoreNumericFeatureZones != null) {
+                    double[] filteredData = DoubleStream.of(boundedData).filter(highScoreNumericFeatureZones::test).toArray();
+                    // only use the filtered data if it's not discarding more than 50% of the points
+                    if (filteredData.length > featureDistributionSize / 2) {
+                        finaldata = filteredData;
+                    } else {
+                        finaldata = boundedData;
+                    }
+                } else {
+                    finaldata = boundedData;
+                }
+                NumericFeatureDistribution numericFeatureDistribution = new NumericFeatureDistribution(feature, finaldata);
                 featureDistributions.put(feature.getName(), numericFeatureDistribution);
             }
         }
