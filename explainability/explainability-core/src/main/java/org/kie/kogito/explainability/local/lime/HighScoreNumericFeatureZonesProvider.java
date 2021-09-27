@@ -80,7 +80,9 @@ public class HighScoreNumericFeatureZonesProvider {
             double min = scoreSortedPredictions.get(scoreSortedPredictions.size() - 1).getOutput().getOutputs().stream()
                     .mapToDouble(Output::getScore).sum();
             if (max != min) {
-                double threshold = (max + min) / 2;
+                double threshold = scoreSortedPredictions.stream().map(
+                        p -> p.getOutput().getOutputs().stream().map(Output::getScore).mapToDouble(d -> d).sum())
+                        .mapToDouble(d -> d).average().orElse((max + min) / 2);
 
                 // filter out predictions whose score is in [min, threshold]
                 scoreSortedPredictions = scoreSortedPredictions.stream().filter(p -> p.getOutput().getOutputs().stream()
