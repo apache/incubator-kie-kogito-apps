@@ -16,6 +16,7 @@
 
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -37,10 +38,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.cloudevents.CloudEvent;
-import io.quarkus.arc.properties.UnlessBuildProperty;
 
 @ApplicationScoped
-@UnlessBuildProperty(name = "kogito.trusty.blocking", stringValue = "true", enableIfMissing = true)
 public class ExplainabilityResultConsumer extends BaseEventConsumer<BaseExplainabilityResultDto> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ExplainabilityResultConsumer.class);
@@ -67,7 +66,7 @@ public class ExplainabilityResultConsumer extends BaseEventConsumer<BaseExplaina
     @Override
     @Incoming("trusty-explainability-result")
     public CompletionStage<Void> handleMessage(Message<String> message) {
-        return super.handleMessage(message);
+        return CompletableFuture.runAsync(() -> super.handleMessage(message));
     }
 
     @Override

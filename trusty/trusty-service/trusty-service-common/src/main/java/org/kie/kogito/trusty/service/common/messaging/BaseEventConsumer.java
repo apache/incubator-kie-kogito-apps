@@ -55,7 +55,7 @@ public abstract class BaseEventConsumer<E> {
 
     protected CompletionStage<Void> handleMessage(final Message<String> message) {
         try {
-            internalHandleMessage(message);
+            CloudEventUtils.decode(message.getPayload()).ifPresent(this::handleCloudEvent);
         } catch (Exception e) {
             if (storageExceptionsProvider.isConnectionException(e) || failOnAllExceptions) {
                 LOG.error("A critical exception occurred. A nack is sent and the application will react according to the specified failure strategy.", e);
@@ -64,10 +64,6 @@ public abstract class BaseEventConsumer<E> {
             LOG.error("Something unexpected happened during the processing of an Event. The event is discarded.", e);
         }
         return message.ack();
-    }
-
-    protected void internalHandleMessage(final Message<String> message) {
-        CloudEventUtils.decode(message.getPayload()).ifPresent(this::handleCloudEvent);
     }
 
     protected void handleCloudEvent(final CloudEvent cloudEvent) {

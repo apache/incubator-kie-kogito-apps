@@ -16,6 +16,7 @@
 
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -36,10 +37,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.cloudevents.CloudEvent;
-import io.quarkus.arc.properties.UnlessBuildProperty;
 
 @ApplicationScoped
-@UnlessBuildProperty(name = "kogito.trusty.blocking", stringValue = "true", enableIfMissing = true)
 public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
 
     private static final Logger LOG = LoggerFactory.getLogger(ModelEventConsumer.class);
@@ -58,7 +57,7 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     @Override
     @Incoming("kogito-tracing-model")
     public CompletionStage<Void> handleMessage(final Message<String> message) {
-        return super.handleMessage(message);
+        return CompletableFuture.runAsync(() -> super.handleMessage(message));
     }
 
     @Override
