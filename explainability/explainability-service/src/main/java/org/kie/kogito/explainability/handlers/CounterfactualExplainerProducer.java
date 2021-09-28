@@ -24,6 +24,8 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualConfig;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.kie.kogito.explainability.local.counterfactual.SolverConfigBuilder;
+import org.optaplanner.core.config.solver.SolverConfig;
+import org.optaplanner.core.config.solver.termination.TerminationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,11 +50,11 @@ public class CounterfactualExplainerProducer {
     @Produces
     public CounterfactualExplainer produce() {
         LOG.debug("CounterfactualExplainer created");
+        final TerminationConfig terminationConfig = new TerminationConfig().withSecondsSpentLimit(this.maxRunningTimeSeconds);
+        final SolverConfig solverConfig = SolverConfigBuilder.builder().withTerminationConfig(terminationConfig).build();
         final CounterfactualConfig counterfactualConfig = new CounterfactualConfig()
-                .withSolverConfig(
-                        SolverConfigBuilder.builder().withSecondsSpentLimit(this.maxRunningTimeSeconds).build())
+                .withSolverConfig(solverConfig)
                 .withGoalThreshold(this.goalThreshold);
-        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig();
         return new CounterfactualExplainer(counterfactualConfig);
     }
 }

@@ -89,13 +89,8 @@ class CounterfactualExplainerTest {
     final TimeUnit predictionTimeUnit = TimeUnit.MINUTES;
     final Long steps = 30_000L;
     final double DEFAULT_GOAL_THRESHOLD = 0.01;
-    private static final Logger logger = LoggerFactory.getLogger(CounterfactualExplainerTest.class);
 
     private static final Long MAX_RUNNING_TIME_SECONDS = 60L;
-
-    private final long predictionTimeOut = 10L;
-    private final TimeUnit predictionTimeUnit = TimeUnit.MINUTES;
-    private final Long steps = 30_000L;
 
     private Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory;
     private SolverManager<CounterfactualSolution, UUID> solverManager;
