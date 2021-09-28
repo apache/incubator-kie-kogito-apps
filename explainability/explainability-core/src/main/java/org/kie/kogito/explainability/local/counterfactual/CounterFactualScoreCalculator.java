@@ -55,7 +55,8 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         final Type bType = b.getType();
 
         if (aType != bType) {
-            String message = "Features must have the same type, got " + aType.toString() + " and " + bType.toString();
+            String message = String.format("Features must have the same type. Feature '%s', has type '%s' and '%s'",
+                    a.getName(), aType.toString(), bType.toString());
             logger.error(message);
             throw new IllegalArgumentException(message);
         }
@@ -81,7 +82,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         } else if (a.getType() == Type.CATEGORICAL || a.getType() == Type.BOOLEAN) {
             return a.getValue().getUnderlyingObject().equals(b.getValue().getUnderlyingObject()) ? 0.0 : 1.0;
         } else {
-            String message = "Feature type " + aType.toString() + " not supported";
+            String message = String.format("Feature '%s' has unsupported type '%s'", a.getName(), aType.toString());
             logger.error(message);
             throw new IllegalArgumentException(message);
         }

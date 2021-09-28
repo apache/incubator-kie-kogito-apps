@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -40,6 +41,7 @@ import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
+import org.kie.kogito.index.service.DataIndexServiceException;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
 import org.reactivestreams.Publisher;
@@ -60,6 +62,7 @@ import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
 
+import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
@@ -114,6 +117,12 @@ public class GraphQLSchemaManager {
                     builder.dataFetcher("ProcessInstanceAbort", this::abortProcessInstance);
                     builder.dataFetcher("ProcessInstanceRetry", this::retryProcessInstance);
                     builder.dataFetcher("ProcessInstanceSkip", this::skipProcessInstance);
+                    builder.dataFetcher("ProcessInstanceUpdateVariables", this::updateProcessInstanceVariables);
+                    builder.dataFetcher("NodeInstanceTrigger", this::triggerNodeInstance);
+                    builder.dataFetcher("NodeInstanceRetrigger", this::retriggerNodeInstance);
+                    builder.dataFetcher("NodeInstanceCancel", this::cancelNodeInstance);
+                    builder.dataFetcher("JobCancel", this::cancelJob);
+                    builder.dataFetcher("JobReschedule", this::rescheduleJob);
                     return builder;
                 })
                 .type("ProcessInstance", builder -> {
@@ -161,6 +170,42 @@ public class GraphQLSchemaManager {
     public CompletableFuture<String> skipProcessInstance(DataFetchingEnvironment env) {
         ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
         return dataIndexApiExecutor.skipProcessInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance);
+    }
+
+    public CompletableFuture<String> updateProcessInstanceVariables(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.updateProcessInstanceVariables(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance, env.getArgument("variables"));
+    }
+
+    public CompletableFuture<String> triggerNodeInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.triggerNodeInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                processInstance,
+                env.getArgument("nodeId"));
+    }
+
+    public CompletableFuture<String> retriggerNodeInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.retriggerNodeInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                processInstance,
+                env.getArgument("nodeInstanceId"));
+    }
+
+    public CompletableFuture<String> cancelNodeInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.cancelNodeInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                processInstance,
+                env.getArgument("nodeInstanceId"));
+    }
+
+    public CompletableFuture<String> cancelJob(DataFetchingEnvironment env) {
+        Job job = cacheService.getJobsCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.cancelJob(job.getEndpoint(), job);
+    }
+
+    public CompletableFuture<String> rescheduleJob(DataFetchingEnvironment env) {
+        Job job = cacheService.getJobsCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.rescheduleJob(job.getEndpoint(), job, env.getArgument("data"));
     }
 
     public CompletableFuture getProcessInstanceDiagram(DataFetchingEnvironment env) {
@@ -299,17 +344,21 @@ public class GraphQLSchemaManager {
         return env -> cache.get().objectUpdatedListener();
     }
 
+    private Supplier<DataIndexServiceException> cacheNotFoundException(String processId) {
+        return () -> new DataIndexServiceException(format("Cache for process %s not found", processId));
+    };
+
     protected DataFetcher<Publisher<ObjectNode>> getDomainModelUpdatedDataFetcher(String processId) {
-        return env -> cacheService.getDomainModelCache(processId).objectUpdatedListener();
+        return env -> Optional.ofNullable(cacheService.getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)).objectUpdatedListener();
     }
 
     protected DataFetcher<Publisher<ObjectNode>> getDomainModelAddedDataFetcher(String processId) {
-        return env -> cacheService.getDomainModelCache(processId).objectCreatedListener();
+        return env -> Optional.ofNullable(cacheService.getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)).objectCreatedListener();
     }
 
     protected DataFetcher<Collection<ObjectNode>> getDomainModelDataFetcher(String processId) {
         return env -> {
-            List result = executeAdvancedQueryForCache(cacheService.getDomainModelCache(processId), env);
+            List result = executeAdvancedQueryForCache(Optional.ofNullable(cacheService.getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)), env);
             return (Collection<ObjectNode>) result.stream().map(json -> {
                 try {
                     return (ObjectNode) getObjectMapper().readTree(json.toString());

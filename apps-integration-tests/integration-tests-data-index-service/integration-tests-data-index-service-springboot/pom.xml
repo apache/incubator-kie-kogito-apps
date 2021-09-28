@@ -31,7 +31,7 @@
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-springboot-starter</artifactId>
+      <artifactId>kogito-spring-boot-starter</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
@@ -44,7 +44,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-addons-springboot-events-kafka</artifactId>
+      <artifactId>kogito-addons-springboot-events-process-kafka</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
@@ -112,7 +112,7 @@
                 <resource>
                   <directory>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources</directory>
                   <includes>
-                    <include>create.sql</include>
+                    <include>data_index_create.sql</include>
                   </includes>
                 </resource>
               </resources>
@@ -128,7 +128,7 @@
               <directory>${project.basedir}/src/main/resources/</directory>
               <includes>
                 <include>**/*.bpmn</include>
-                <include>create.sql</include>
+                <include>*create.sql</include>
               </includes>
             </fileset>
           </filesets>

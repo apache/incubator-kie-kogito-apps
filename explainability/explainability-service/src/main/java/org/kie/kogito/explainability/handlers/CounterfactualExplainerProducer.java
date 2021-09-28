@@ -52,6 +52,7 @@ public class CounterfactualExplainerProducer {
                 .withSolverConfig(
                         SolverConfigBuilder.builder().withSecondsSpentLimit(this.maxRunningTimeSeconds).build())
                 .withGoalThreshold(this.goalThreshold);
+        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig();
         return new CounterfactualExplainer(counterfactualConfig);
     }
 }
