@@ -100,17 +100,6 @@ public class IndependentFeaturesDataDistribution implements DataDistribution {
 
     @Override
     public boolean isEmpty() {
-        boolean empty = this.featureDistributions.isEmpty();
-        if (!empty) {
-            for (FeatureDistribution featureDistribution : this.featureDistributions) {
-                if (!featureDistribution.isEmpty()) {
-                    empty = false;
-                    break;
-                } else {
-                    empty = true;
-                }
-            }
-        }
-        return empty;
+        return this.featureDistributions.isEmpty() || featureDistributions.stream().allMatch(FeatureDistribution::isEmpty);
     }
 }

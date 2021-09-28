@@ -51,7 +51,9 @@ class HighScoreNumericFeatureZonesProviderTest {
 
     @Test
     void testNonEmptyData() {
-        PerturbationContext perturbationContext = new PerturbationContext(new Random(), 1);
+        Random random = new Random();
+        random.setSeed(0);
+        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
         List<Feature> features = new ArrayList<>();
         PredictionProvider predictionProvider = TestUtils.getSumThresholdModel(0.1, 0.1);
         List<FeatureDistribution> featureDistributions = new ArrayList<>();

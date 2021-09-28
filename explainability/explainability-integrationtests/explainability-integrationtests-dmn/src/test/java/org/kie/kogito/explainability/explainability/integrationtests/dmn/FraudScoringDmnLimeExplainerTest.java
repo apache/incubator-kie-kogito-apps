@@ -165,7 +165,9 @@ class FraudScoringDmnLimeExplainerTest {
         List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
         List<PredictionInput> inputs = samples.subList(0, 10);
 
-        PerturbationContext perturbationContext = new PerturbationContext(0, new Random(), 1);
+        Random random = new Random();
+        random.setSeed(0);
+        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withDataDistribution(new PredictionInputsDataDistribution(inputs))
