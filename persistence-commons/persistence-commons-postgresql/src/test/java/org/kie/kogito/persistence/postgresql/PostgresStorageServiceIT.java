@@ -26,6 +26,7 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
+import org.kie.kogito.persistence.api.query.SortDirection;
 import org.kie.kogito.persistence.postgresql.model.CacheEntity;
 import org.kie.kogito.persistence.postgresql.model.CacheEntityRepository;
 import org.kie.kogito.persistence.postgresql.model.CacheId;
@@ -593,4 +594,45 @@ class PostgresStorageServiceIT {
         assertThat(results.get(0).getField1()).isEqualTo(1);
         assertThat(results.get(0).getField3()).isEqualTo("A");
     }
+
+    @Test
+    @Transactional
+    void testQuery_OrderByString() {
+        String cacheName = "queries";
+
+        Storage<String, StructuredType> cache = storageService.getCache(cacheName, StructuredType.class);
+        cache.put("key1", StructuredType.builder().withField1(1).withField3("A").build());
+        cache.put("key2", StructuredType.builder().withField1(2).withField3("B").build());
+
+        Query<StructuredType> query = cache.query();
+        query.sort(List.of(QueryFilterFactory.orderBy("field3", SortDirection.DESC)));
+
+        List<StructuredType> results = query.execute();
+        assertThat(results).hasSize(2);
+        assertThat(results.get(0).getField1()).isEqualTo(2);
+        assertThat(results.get(0).getField3()).isEqualTo("B");
+        assertThat(results.get(1).getField1()).isEqualTo(1);
+        assertThat(results.get(1).getField3()).isEqualTo("A");
+    }
+
+    @Test
+    @Transactional
+    void testQuery_OrderByNumeric() {
+        String cacheName = "queries";
+
+        Storage<String, StructuredType> cache = storageService.getCache(cacheName, StructuredType.class);
+        cache.put("key1", StructuredType.builder().withField1(1).withField3("A").build());
+        cache.put("key2", StructuredType.builder().withField1(2).withField3("B").build());
+
+        Query<StructuredType> query = cache.query();
+        query.sort(List.of(QueryFilterFactory.orderBy("field1", SortDirection.DESC)));
+
+        List<StructuredType> results = query.execute();
+        assertThat(results).hasSize(2);
+        assertThat(results.get(0).getField1()).isEqualTo(2);
+        assertThat(results.get(0).getField3()).isEqualTo("B");
+        assertThat(results.get(1).getField1()).isEqualTo(1);
+        assertThat(results.get(1).getField3()).isEqualTo("A");
+    }
+
 }

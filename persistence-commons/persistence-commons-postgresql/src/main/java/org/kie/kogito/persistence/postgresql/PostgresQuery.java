@@ -21,9 +21,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.AttributeSort;
 import org.kie.kogito.persistence.api.query.FilterCondition;
@@ -31,6 +28,10 @@ import org.kie.kogito.persistence.api.query.Query;
 import org.kie.kogito.persistence.postgresql.model.CacheEntityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
@@ -106,7 +107,7 @@ public class PostgresQuery<T> implements Query<T> {
         if (sortBy != null && !sortBy.isEmpty()) {
             sortBy.stream().filter(sortBy -> !fields.containsKey(sortBy.getAttribute()))
                     .forEach(sortBy -> fields.put(sortBy.getAttribute(),
-                                                  new JsonField(sortBy.getAttribute())));
+                            new JsonField(sortBy.getAttribute())));
         }
 
         // Build the query to retrieve the filtered data from the temporary table above.
@@ -117,15 +118,18 @@ public class PostgresQuery<T> implements Query<T> {
         if (filters != null && !filters.isEmpty()) {
             queryString.append(" AND ");
             queryString.append(filters.stream()
-                                       .map(filter -> new StringBuilder()
-                                               .append(filterStringFunction(filter)))
-                                       .collect(joining(AND)));
+                    .map(filter -> new StringBuilder()
+                            .append(filterStringFunction(filter)))
+                    .collect(joining(AND)));
         }
 
         // Sorting
         if (sortBy != null && !sortBy.isEmpty()) {
             queryString.append(" ORDER BY ");
-            queryString.append(sortBy.stream().map(f -> "o." + f.getAttribute() + " " + f.getSort().name()).collect(joining(", ")));
+            queryString.append(sortBy.stream().map(f -> {
+                final JsonField field = fields.get(f.getAttribute());
+                return cast(field, format(ATTRIBUTE_ACCESSOR, f.getAttribute())).append(" ").append(f.getSort().name());
+            }).collect(joining(", ")));
         }
 
         LOGGER.debug("Executing PostgreSQL query: {}", queryString);
@@ -155,8 +159,8 @@ public class PostgresQuery<T> implements Query<T> {
 
     @SuppressWarnings("unchecked")
     private Map<String, JsonField> addFilters(final Map<String, JsonField> fields,
-                                              final List<AttributeFilter<?>> filters) {
-        if (filters.isEmpty()) {
+            final List<AttributeFilter<?>> filters) {
+        if (Objects.isNull(filters) || filters.isEmpty()) {
             return fields;
         }
 
@@ -168,38 +172,38 @@ public class PostgresQuery<T> implements Query<T> {
                 .filter(filter -> !Objects.equals(filter.getCondition(), FilterCondition.BETWEEN))
                 .filter(filter -> !fields.containsKey(filter.getAttribute()))
                 .forEach(filter -> fields.put(filter.getAttribute(),
-                                              new JsonField(filter.getAttribute(), filter.getValue())));
+                        new JsonField(filter.getAttribute(), filter.getValue())));
 
         //Add Children of NOT conditions
         addFilters(fields,
-                   filters.stream()
-                           .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.NOT))
-                           .map(filter -> (AttributeFilter<?>) filter.getValue())
-                           .collect(Collectors.toList()));
+                filters.stream()
+                        .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.NOT))
+                        .map(filter -> (AttributeFilter<?>) filter.getValue())
+                        .collect(Collectors.toList()));
 
         //Add Children of AND conditions
         addFilters(fields,
-                   filters.stream()
-                           .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.AND))
-                           .map(filter -> (List<AttributeFilter<?>>) filter.getValue())
-                           .flatMap(List::stream)
-                           .collect(Collectors.toList()));
+                filters.stream()
+                        .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.AND))
+                        .map(filter -> (List<AttributeFilter<?>>) filter.getValue())
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList()));
 
         //Add Children of OR conditions
         addFilters(fields,
-                   filters.stream()
-                           .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.OR))
-                           .map(filter -> (List<AttributeFilter<?>>) filter.getValue())
-                           .flatMap(List::stream)
-                           .collect(Collectors.toList()));
+                filters.stream()
+                        .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.OR))
+                        .map(filter -> (List<AttributeFilter<?>>) filter.getValue())
+                        .flatMap(List::stream)
+                        .collect(Collectors.toList()));
 
         //Add Children of BETWEEN conditions
         filters.stream()
                 .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.BETWEEN))
                 .filter(filter -> !fields.containsKey(filter.getAttribute()))
                 .forEach(filter -> fields.put(filter.getAttribute(),
-                                              new JsonField(filter.getAttribute(),
-                                                            ((List<Object>) filter.getValue()).get(0))));
+                        new JsonField(filter.getAttribute(),
+                                ((List<Object>) filter.getValue()).get(0))));
 
         return fields;
     }
