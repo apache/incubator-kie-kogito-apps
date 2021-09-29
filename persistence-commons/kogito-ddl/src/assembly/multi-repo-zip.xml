@@ -23,6 +23,13 @@
                 <include>*_create.sql</include>
             </includes>
         </fileSet>
+        <fileSet>
+            <directory>${project.root.dir}/persistence-commons/persistence-commons-postgresql/src/main/resources</directory>
+            <outputDirectory>postgresql</outputDirectory>
+            <includes>
+                <include>*_create.sql</include>
+            </includes>
+        </fileSet>
     </fileSets>
     <files>
         <file>
