@@ -16,8 +16,10 @@
 
 package org.kie.kogito.jitexecutor.dmn;
 
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.kie.api.io.Resource;
@@ -28,6 +30,8 @@ import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
 import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.internal.io.ResourceFactory;
+import org.kie.kogito.jitexecutor.dmn.requests.MultipleResourcesPayload;
+import org.kie.kogito.jitexecutor.dmn.requests.ResourceWithURI;
 
 public class DMNEvaluator {
 
@@ -62,5 +66,37 @@ public class DMNEvaluator {
     public DMNResult evaluate(Map<String, Object> context) {
         DMNContext dmnContext = new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
         return dmnRuntime.evaluateAll(dmnModel, dmnContext);
+    }
+
+    public static DMNEvaluator fromMultiple(MultipleResourcesPayload payload) {
+        Map<String, Resource> resources = new HashMap<>();
+        for (ResourceWithURI r : payload.getResources()) {
+            Resource readerResource = ResourceFactory.newReaderResource(new StringReader(r.getContent()), "UTF-8");
+            readerResource.setSourcePath(r.getUri());
+            resources.put(r.getUri(), readerResource);
+        }
+        DMNRuntimeBuilder.RelativeImportResolver rir = (x, y, locationURI) -> {
+            try {
+                return resources.get(locationURI).getReader();
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to operate RelativeImportResolver", e);
+            }
+        };
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults()
+                .setRelativeImportResolver(rir)
+                .buildConfiguration()
+                .fromResources(resources.values())
+                .getOrElseThrow(RuntimeException::new);
+        DMNModel mainModel = null;
+        for (DMNModel m : dmnRuntime.getModels()) {
+            if (m.getResource().getSourcePath().equals(payload.getMainURI())) {
+                mainModel = m;
+                break;
+            }
+        }
+        if (mainModel == null) {
+            throw new IllegalStateException("Was not able to identify main model from MultipleResourcesPayload contents.");
+        }
+        return new DMNEvaluator(mainModel, dmnRuntime);
     }
 }

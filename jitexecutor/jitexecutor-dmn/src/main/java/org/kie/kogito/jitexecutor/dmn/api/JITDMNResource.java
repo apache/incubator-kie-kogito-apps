@@ -44,7 +44,7 @@ public class JITDMNResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response jitdmn(JITDMNPayload payload) {
-        KogitoDMNResult evaluateAll = jitdmnService.evaluateModel(payload.getModel(), payload.getContext());
+        KogitoDMNResult evaluateAll = payload.getModel() != null ? jitdmnService.evaluateModel(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModel(payload, payload.getContext());
         Map<String, Object> restResulk = new HashMap<>();
         for (Entry<String, Object> kv : evaluateAll.getContext().getAll().entrySet()) {
             restResulk.put(kv.getKey(), MarshallingStubUtils.stubDMNResult(kv.getValue(), String::valueOf));
@@ -57,7 +57,7 @@ public class JITDMNResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response jitdmnResult(JITDMNPayload payload) {
-        KogitoDMNResult dmnResult = jitdmnService.evaluateModel(payload.getModel(), payload.getContext());
+        KogitoDMNResult dmnResult = payload.getModel() != null ? jitdmnService.evaluateModel(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModel(payload, payload.getContext());
         return Response.ok(dmnResult).build();
     }
 
