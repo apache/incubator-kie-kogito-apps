@@ -21,6 +21,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.AttributeSort;
 import org.kie.kogito.persistence.api.query.FilterCondition;
@@ -29,19 +32,15 @@ import org.kie.kogito.persistence.postgresql.model.CacheEntityRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType;
-
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
 
 public class PostgresQuery<T> implements Query<T> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostgresQuery.class);
-    private static final String AND = " and ";
-    private static final String OR = " or ";
-    private static final String ATTRIBUTE_VALUE = "o.%s = %s";
+    private static final String AND = " AND ";
+    private static final String OR = " OR ";
+    private static final String ATTRIBUTE_ACCESSOR = "(json_value->>'%s')";
 
     private final String name;
     private final CacheEntityRepository repository;
@@ -52,6 +51,7 @@ public class PostgresQuery<T> implements Query<T> {
     private Integer offset;
     private List<AttributeFilter<?>> filters;
     private List<AttributeSort> sortBy;
+    private Map<String, JsonField> fields;
 
     private static final class JsonField {
 
@@ -101,43 +101,25 @@ public class PostgresQuery<T> implements Query<T> {
 
     @Override
     public List<T> execute() {
-        // Build a temporary table containing the extracted JSON values against which we want to query.
-        // For example: SELECT name, json_value, json_value->'columnX'->>0 as columnX from kogito_data_cache
-        // - "name" identifies the correct segment of the underlying table for the particular object type being stored.
-        // - "json_value" contains the JSON serialised object
-        // - "columnX" is the JSON property on which you want to filter (only "top-level" JSON keys are supported)
-        StringBuilder subQueryBuilder = new StringBuilder("SELECT ");
-        subQueryBuilder.append("name AS name, json_value AS json_value");
-        Map<String, JsonField> fields = addFilters(new HashMap<>(), filters);
-
+        //Get type information from filters/sorting to cast JSON document fields in query
+        fields = addFilters(new HashMap<>(), filters);
         if (sortBy != null && !sortBy.isEmpty()) {
             sortBy.stream().filter(sortBy -> !fields.containsKey(sortBy.getAttribute()))
                     .forEach(sortBy -> fields.put(sortBy.getAttribute(),
-                            new JsonField(sortBy.getAttribute())));
+                                                  new JsonField(sortBy.getAttribute())));
         }
-        if (!fields.isEmpty()) {
-            subQueryBuilder.append(", ");
-            subQueryBuilder.append(fields.values().stream()
-                    .map(field -> cast(field, new StringBuilder("json_value->'")
-                            .append(field.name)
-                            .append("'->>0"))
-                                    .append(" AS ")
-                                    .append(field.name))
-                    .collect(joining(", ")));
-        }
-        subQueryBuilder.append(" FROM kogito_data_cache");
+
         // Build the query to retrieve the filtered data from the temporary table above.
-        StringBuilder queryString = new StringBuilder("SELECT o.* FROM (")
-                .append(subQueryBuilder).append(") o")
-                .append(" WHERE o.name = '")
+        StringBuilder queryString = new StringBuilder("SELECT * FROM kogito_data_cache")
+                .append(" WHERE name = '")
                 .append(name)
                 .append("'");
         if (filters != null && !filters.isEmpty()) {
             queryString.append(" AND ");
             queryString.append(filters.stream()
-                    .map(filter -> new StringBuilder()
-                            .append(filterStringFunction(filter)))
-                    .collect(joining(AND)));
+                                       .map(filter -> new StringBuilder()
+                                               .append(filterStringFunction(filter)))
+                                       .collect(joining(AND)));
         }
 
         // Sorting
@@ -173,7 +155,7 @@ public class PostgresQuery<T> implements Query<T> {
 
     @SuppressWarnings("unchecked")
     private Map<String, JsonField> addFilters(final Map<String, JsonField> fields,
-            final List<AttributeFilter<?>> filters) {
+                                              final List<AttributeFilter<?>> filters) {
         if (filters.isEmpty()) {
             return fields;
         }
@@ -186,72 +168,104 @@ public class PostgresQuery<T> implements Query<T> {
                 .filter(filter -> !Objects.equals(filter.getCondition(), FilterCondition.BETWEEN))
                 .filter(filter -> !fields.containsKey(filter.getAttribute()))
                 .forEach(filter -> fields.put(filter.getAttribute(),
-                        new JsonField(filter.getAttribute(), filter.getValue())));
+                                              new JsonField(filter.getAttribute(), filter.getValue())));
 
         //Add Children of NOT conditions
         addFilters(fields,
-                filters.stream()
-                        .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.NOT))
-                        .map(filter -> (AttributeFilter<?>) filter.getValue())
-                        .collect(Collectors.toList()));
+                   filters.stream()
+                           .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.NOT))
+                           .map(filter -> (AttributeFilter<?>) filter.getValue())
+                           .collect(Collectors.toList()));
 
         //Add Children of AND conditions
         addFilters(fields,
-                filters.stream()
-                        .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.AND))
-                        .map(filter -> (List<AttributeFilter<?>>) filter.getValue())
-                        .flatMap(List::stream)
-                        .collect(Collectors.toList()));
+                   filters.stream()
+                           .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.AND))
+                           .map(filter -> (List<AttributeFilter<?>>) filter.getValue())
+                           .flatMap(List::stream)
+                           .collect(Collectors.toList()));
 
         //Add Children of OR conditions
         addFilters(fields,
-                filters.stream()
-                        .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.OR))
-                        .map(filter -> (List<AttributeFilter<?>>) filter.getValue())
-                        .flatMap(List::stream)
-                        .collect(Collectors.toList()));
+                   filters.stream()
+                           .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.OR))
+                           .map(filter -> (List<AttributeFilter<?>>) filter.getValue())
+                           .flatMap(List::stream)
+                           .collect(Collectors.toList()));
 
         //Add Children of BETWEEN conditions
         filters.stream()
                 .filter(filter -> Objects.equals(filter.getCondition(), FilterCondition.BETWEEN))
                 .filter(filter -> !fields.containsKey(filter.getAttribute()))
                 .forEach(filter -> fields.put(filter.getAttribute(),
-                        new JsonField(filter.getAttribute(),
-                                ((List<Object>) filter.getValue()).get(0))));
+                                              new JsonField(filter.getAttribute(),
+                                                            ((List<Object>) filter.getValue()).get(0))));
 
         return fields;
     }
 
     @SuppressWarnings("unchecked")
     private String filterStringFunction(AttributeFilter<?> filter) {
+        JsonField field = fields.get(filter.getAttribute());
         switch (filter.getCondition()) {
             case CONTAINS:
-                return format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString(filter.getValue()));
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append(format("= %s", getValueForQueryString(filter.getValue())))
+                        .toString();
             case CONTAINS_ALL:
-                return (String) ((List) filter.getValue()).stream().map(o -> format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString(o))).collect(joining(AND));
+                return (String) ((List) filter.getValue())
+                        .stream()
+                        .map(o -> cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                                .append(format("= %s", getValueForQueryString(o))))
+                        .collect(joining(AND));
             case CONTAINS_ANY:
-                return (String) ((List) filter.getValue()).stream().map(o -> format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString(o))).collect(joining(OR));
+                return (String) ((List) filter.getValue())
+                        .stream()
+                        .map(o -> cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                                .append(format("= %s", getValueForQueryString(o))))
+                        .collect(joining(OR));
             case LIKE:
-                return format("o.%s like %s", filter.getAttribute(), getValueForQueryString(filter.getValue())).replaceAll("\\*", "%");
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append(format("LIKE %s", getValueForQueryString(filter.getValue())))
+                        .toString()
+                        .replaceAll("\\*", "%");
             case EQUAL:
-                return format(ATTRIBUTE_VALUE, filter.getAttribute(), getValueForQueryString(filter.getValue()));
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append(format("= %s", getValueForQueryString(filter.getValue())))
+                        .toString();
             case IN:
-                return format("o.%s in (%s)", filter.getAttribute(), ((List) filter.getValue()).stream().map(PostgresQuery::getValueForQueryString).collect(joining(", ")));
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append(format("IN (%s)", ((List) filter.getValue()).stream().map(PostgresQuery::getValueForQueryString).collect(joining(", "))))
+                        .toString();
             case IS_NULL:
-                return format("o.%s is null", filter.getAttribute());
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append("IS NULL")
+                        .toString();
             case NOT_NULL:
-                return format("o.%s is not null", filter.getAttribute());
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append("IS NOT NULL")
+                        .toString();
             case BETWEEN:
                 List<Object> value = (List<Object>) filter.getValue();
-                return format("o.%s between %s and %s", filter.getAttribute(), getValueForQueryString(value.get(0)), getValueForQueryString(value.get(1)));
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append(format("BETWEEN %s AND %s", getValueForQueryString(value.get(0)), getValueForQueryString(value.get(1))))
+                        .toString();
             case GT:
-                return format("o.%s > %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append(format("> %s", getValueForQueryString(filter.getValue())))
+                        .toString();
             case GTE:
-                return format("o.%s >= %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append(format(">= %s", getValueForQueryString(filter.getValue())))
+                        .toString();
             case LT:
-                return format("o.%s < %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append(format("< %s", getValueForQueryString(filter.getValue())))
+                        .toString();
             case LTE:
-                return format("o.%s <= %s", filter.getAttribute(), getValueForQueryString(filter.getValue()));
+                return cast(field, format(ATTRIBUTE_ACCESSOR, filter.getAttribute()))
+                        .append(format("<= %s", getValueForQueryString(filter.getValue())))
+                        .toString();
             case OR:
                 return getRecursiveString(filter, OR);
             case AND:
@@ -263,20 +277,20 @@ public class PostgresQuery<T> implements Query<T> {
         }
     }
 
-    private static String getValueForQueryString(Object value) {
-        return value instanceof String ? "'" + value + "'" : value.toString();
-    }
-
-    // The values extracted from the JSON structure need casting into primitive types
-    private static StringBuilder cast(JsonField field, StringBuilder extractor) {
+    // Text values extracted from the JSON structure may need casting into primitive types
+    private static StringBuilder cast(JsonField field, String accessor) {
         StringBuilder cast = new StringBuilder();
         Object value = field.value;
         if (value instanceof Number) {
-            cast.append("(").append(extractor).append(")\\:\\:numeric");
+            cast.append("(").append(accessor).append(")\\:\\:numeric ");
         } else {
-            cast.append(extractor);
+            cast.append(accessor).append(" ");
         }
         return cast;
+    }
+
+    private static String getValueForQueryString(Object value) {
+        return value instanceof String ? "'" + value + "'" : value.toString();
     }
 
     @SuppressWarnings("unchecked")
