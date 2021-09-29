@@ -34,7 +34,6 @@ public class SolverConfigBuilder {
 
     private static final int DEFAULT_TABU_SIZE = 70;
     private static final int DEFAULT_ACCEPTED_COUNT = 5000;
-    public static final double DEFAULT_GOAL_THRESHOLD = 0.01;
 
     private SolverConfigBuilder() {
     }
