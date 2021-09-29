@@ -15,10 +15,10 @@
  */
 package org.kie.kogito.explainability.local.lime;
 
-import java.util.function.Predicate;
+import java.util.function.DoublePredicate;
 import java.util.stream.DoubleStream;
 
-public class HighScoreNumericFeatureZones implements Predicate<Double> {
+public class HighScoreNumericFeatureZones implements DoublePredicate {
 
     private final double[] highFeatureScorePoint;
     private final double tolerance;
@@ -29,7 +29,7 @@ public class HighScoreNumericFeatureZones implements Predicate<Double> {
     }
 
     @Override
-    public boolean test(Double point) {
+    public boolean test(double point) {
         return DoubleStream.of(highFeatureScorePoint).anyMatch(d -> point > (d - tolerance) && point < (d + tolerance));
     }
 }

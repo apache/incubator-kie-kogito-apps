@@ -46,7 +46,7 @@ class HighScoreNumericFeatureZonesProviderTest {
         Map<String, HighScoreNumericFeatureZones> highScoreFeatureZones =
                 HighScoreNumericFeatureZonesProvider.getHighScoreFeatureZones(dataDistribution, predictionProvider, features, 10);
         assertThat(highScoreFeatureZones).isNotNull();
-        assertThat(highScoreFeatureZones.size()).isEqualTo(0);
+        assertThat(highScoreFeatureZones.size()).isZero();
     }
 
     @Test

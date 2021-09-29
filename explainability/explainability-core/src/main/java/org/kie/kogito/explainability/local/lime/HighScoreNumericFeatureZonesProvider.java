@@ -46,6 +46,9 @@ public class HighScoreNumericFeatureZonesProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HighScoreNumericFeatureZonesProvider.class);
 
+    private HighScoreNumericFeatureZonesProvider() {
+    }
+
     /**
      * Get a map of feature-name -> high score feature zones. Predictions in data distribution are sorted by (descending)
      * score, then the (aggregated) mean score is calculated and all the data points that are associated with a prediction
