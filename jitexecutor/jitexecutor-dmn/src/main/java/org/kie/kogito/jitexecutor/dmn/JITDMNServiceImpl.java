@@ -81,6 +81,16 @@ public class JITDMNServiceImpl implements JITDMNService {
     @Override
     public DMNResultWithExplanation evaluateModelAndExplain(String modelXML, Map<String, Object> context) {
         DMNEvaluator dmnEvaluator = DMNEvaluator.fromXML(modelXML);
+        return evaluateModelAndExplain(dmnEvaluator, context);
+    }
+
+    @Override
+    public DMNResultWithExplanation evaluateModelAndExplain(MultipleResourcesPayload payload, Map<String, Object> context) {
+        DMNEvaluator dmnEvaluator = DMNEvaluator.fromMultiple(payload);
+        return evaluateModelAndExplain(dmnEvaluator, context);
+    }
+
+    public DMNResultWithExplanation evaluateModelAndExplain(DMNEvaluator dmnEvaluator, Map<String, Object> context) {
         LocalDMNPredictionProvider localDMNPredictionProvider = new LocalDMNPredictionProvider(dmnEvaluator);
 
         DMNResult dmnResult = dmnEvaluator.evaluate(context);

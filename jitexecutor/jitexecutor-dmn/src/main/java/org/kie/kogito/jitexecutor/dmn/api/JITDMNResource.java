@@ -66,7 +66,8 @@ public class JITDMNResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response jitEvaluateAndExplain(JITDMNPayload payload) {
-        DMNResultWithExplanation response = jitdmnService.evaluateModelAndExplain(payload.getModel(), payload.getContext());
+        DMNResultWithExplanation response =
+                payload.getModel() != null ? jitdmnService.evaluateModelAndExplain(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModelAndExplain(payload, payload.getContext());
         return Response.ok(response).build();
     }
 }
