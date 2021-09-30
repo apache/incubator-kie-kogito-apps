@@ -18,6 +18,7 @@ package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,8 +64,8 @@ public class DMNEvaluator {
         return dmnModel.getName();
     }
 
-    public DMNRuntime getDmnRuntime() {
-        return dmnRuntime;
+    public Collection<DMNModel> getAllDMNModels() {
+        return dmnRuntime.getModels();
     }
 
     public DMNResult evaluate(Map<String, Object> context) {

@@ -101,7 +101,7 @@ public class SchemaResource {
     public Response schema(MultipleResourcesPayload payload) {
         DMNEvaluator dmnEvaluator = DMNEvaluator.fromMultiple(payload);
         DMNModel dmnModel = dmnEvaluator.getDmnModel();
-        DMNOASResult oasResult = DMNOASGeneratorFactory.generator(dmnEvaluator.getDmnRuntime().getModels()).build();
+        DMNOASResult oasResult = DMNOASGeneratorFactory.generator(dmnEvaluator.getAllDMNModels()).build();
         return fullSchema(dmnModel, oasResult, false);
     }
 
@@ -122,7 +122,7 @@ public class SchemaResource {
     public Response form(MultipleResourcesPayload payload) {
         DMNEvaluator dmnEvaluator = DMNEvaluator.fromMultiple(payload);
         DMNModel dmnModel = dmnEvaluator.getDmnModel();
-        DMNOASResult oasResult = DMNOASGeneratorFactory.generator(dmnEvaluator.getDmnRuntime().getModels()).build();
+        DMNOASResult oasResult = DMNOASGeneratorFactory.generator(dmnEvaluator.getAllDMNModels()).build();
         return formSchema(dmnModel, oasResult);
     }
 
