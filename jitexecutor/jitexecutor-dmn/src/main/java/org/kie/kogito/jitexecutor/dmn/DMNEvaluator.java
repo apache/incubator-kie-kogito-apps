@@ -16,7 +16,6 @@
 
 package org.kie.kogito.jitexecutor.dmn;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.util.Collection;
 import java.util.Collections;

@@ -16,7 +16,6 @@
 
 package org.kie.kogito.jitexecutor.dmn.api;
 
-import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
@@ -37,7 +36,6 @@ import org.kie.dmn.api.core.DMNMessage;
 import org.kie.dmn.core.compiler.profiles.ExtendedDMNProfile;
 import org.kie.dmn.validation.DMNValidator;
 import org.kie.dmn.validation.DMNValidator.Validation;
-import org.kie.dmn.validation.DMNValidator.ValidatorBuilder.ValidatorImportReaderResolver;
 import org.kie.dmn.validation.DMNValidatorFactory;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.kogito.dmn.rest.KogitoDMNMessage;
@@ -72,17 +70,10 @@ public class ValidationResource {
             resources.put(r.getURI(), readerResource);
         }
         ResolveByKey rbk = new ResolveByKey(resources);
-        List<Reader> models = resources.values().stream().map(r -> {
-            try {
-                return r.getReader();
-            } catch (IOException e) {
-                throw new RuntimeException("Unable to open reader for resource.", e);
-            }
-        }).collect(Collectors.toList());
         List<DMNMessage> validate = validator
                 .validateUsing(Validation.VALIDATE_SCHEMA, Validation.VALIDATE_MODEL, Validation.VALIDATE_COMPILATION, Validation.ANALYZE_DECISION_TABLE)
                 .usingImports((x, y, locationURI) -> rbk.readerByKey(locationURI))
-                .theseModels(models.toArray(new Reader[] {}));
+                .theseModels(rbk.allReaders().toArray(new Reader[] {}));
         List<KogitoDMNMessage> result = validate.stream().map(KogitoDMNMessage::of).collect(Collectors.toList());
         return Response.ok(result).build();
     }
