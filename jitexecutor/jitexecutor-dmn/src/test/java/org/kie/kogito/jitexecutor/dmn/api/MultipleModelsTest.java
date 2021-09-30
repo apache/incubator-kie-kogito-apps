@@ -39,6 +39,11 @@ import static org.hamcrest.CoreMatchers.is;
 @QuarkusTest
 public class MultipleModelsTest {
 
+    private static final String URI1 = "/multiple/importing.dmn";
+    private static final String URI2 = "/multiple/stdlib.dmn";
+    private static ResourceWithURI model1;
+    private static ResourceWithURI model2;
+
     private static final String CH11URI1 = "/multiple/Chapter 11 Example.dmn";
     private static final String CH11URI2 = "/multiple/Financial.dmn";
     private static ResourceWithURI ch11model1;
@@ -47,6 +52,8 @@ public class MultipleModelsTest {
     @BeforeAll
     public static void setup() throws IOException {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        model1 = new ResourceWithURI(URI1, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(URI1))));
+        model2 = new ResourceWithURI(URI2, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(URI2))));
         ch11model1 = new ResourceWithURI(CH11URI1, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(CH11URI1))));
         ch11model2 = new ResourceWithURI(CH11URI2, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(CH11URI2))));
     }
@@ -55,16 +62,44 @@ public class MultipleModelsTest {
     public void testForm() {
         given()
                 .contentType(ContentType.JSON)
-                .body(new MultipleResourcesPayload(CH11URI1, List.of(ch11model1, ch11model2)))
+                .body(new MultipleResourcesPayload(URI1, List.of(model1, model2)))
                 .when().post("/jitdmn/schema/form")
                 .then()
                 .statusCode(200)
-                .body(containsString("InputSet"), containsString("x-dmn-type"));
+                .body(containsString("InputSet"), containsString("x-dmn-type"), containsString("tPerson"));
     }
 
     @Test
     public void testjitEndpoint() {
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(CH11URI1, List.of(ch11model1, ch11model2), buildContext());
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(URI1, List.of(model1, model2), buildContext());
+        given()
+                .contentType(ContentType.JSON)
+                .body(jitdmnpayload)
+                .when().post("/jitdmn")
+                .then()
+                .statusCode(200)
+                .body("'my decision'", is("Ciao, John Doe (age:47)."));
+    }
+
+    private Map<String, Object> buildContext() {
+        return Map.of("a person", Map.of("full name", "John Doe", "age", 47));
+    }
+
+    @Test
+    public void testjitdmnResultEndpoint() {
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(URI1, List.of(model1, model2), buildContext());
+        given()
+                .contentType(ContentType.JSON)
+                .body(jitdmnpayload)
+                .when().post("/jitdmn/dmnresult")
+                .then()
+                .statusCode(200)
+                .body("dmnContext.'my decision'", is("Ciao, John Doe (age:47)."));
+    }
+
+    @Test
+    public void testjitEndpointCH11() {
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(CH11URI1, List.of(ch11model1, ch11model2), buildCH11Context());
         given()
                 .contentType(ContentType.JSON)
                 .body(jitdmnpayload)
@@ -75,8 +110,8 @@ public class MultipleModelsTest {
     }
 
     @Test
-    public void testjitdmnResultEndpoint() {
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(CH11URI1, List.of(ch11model1, ch11model2), buildContext());
+    public void testjitdmnResultEndpointCH11() {
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(CH11URI1, List.of(ch11model1, ch11model2), buildCH11Context());
         given()
                 .contentType(ContentType.JSON)
                 .body(jitdmnpayload)
@@ -86,7 +121,7 @@ public class MultipleModelsTest {
                 .body("dmnContext.Strategy", is("THROUGH"));
     }
 
-    private Map<String, Object> buildContext() {
+    private Map<String, Object> buildCH11Context() {
         Map<String, Object> context = new HashMap<>();
         context.put("Applicant data", Map.of("Age", 51,
                 "MartitalStatus", "M", // typo is present in DMNv1.3

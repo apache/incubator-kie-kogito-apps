@@ -16,25 +16,28 @@
 
 package org.kie.kogito.jitexecutor.dmn.requests;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ResourceWithURI {
 
-    private String uri;
+    private String URI;
     private String content;
 
     public ResourceWithURI() {
     }
 
-    public ResourceWithURI(String uri, String content) {
-        this.uri = uri;
+    public ResourceWithURI(String URI, String content) {
+        this.URI = URI;
         this.content = content;
     }
 
-    public String getUri() {
-        return uri;
+    @JsonProperty("URI")
+    public String getURI() {
+        return URI;
     }
 
-    public void setUri(String uri) {
-        this.uri = uri;
+    public void setURI(String uRI) {
+        URI = uRI;
     }
 
     public String getContent() {

@@ -76,8 +76,8 @@ public class DMNEvaluator {
         Map<String, Resource> resources = new HashMap<>();
         for (ResourceWithURI r : payload.getResources()) {
             Resource readerResource = ResourceFactory.newReaderResource(new StringReader(r.getContent()), "UTF-8");
-            readerResource.setSourcePath(r.getUri());
-            resources.put(r.getUri(), readerResource);
+            readerResource.setSourcePath(r.getURI());
+            resources.put(r.getURI(), readerResource);
         }
         DMNRuntimeBuilder.RelativeImportResolver rir = (x, y, locationURI) -> {
             try {
