@@ -33,6 +33,7 @@ import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.kogito.jitexecutor.dmn.requests.MultipleResourcesPayload;
 import org.kie.kogito.jitexecutor.dmn.requests.ResourceWithURI;
+import org.kie.kogito.jitexecutor.dmn.utils.ResolveByKey;
 
 public class DMNEvaluator {
 
@@ -80,15 +81,9 @@ public class DMNEvaluator {
             readerResource.setSourcePath(r.getURI());
             resources.put(r.getURI(), readerResource);
         }
-        DMNRuntimeBuilder.RelativeImportResolver rir = (x, y, locationURI) -> {
-            try {
-                return resources.get(locationURI).getReader();
-            } catch (IOException e) {
-                throw new RuntimeException("Unable to operate RelativeImportResolver", e);
-            }
-        };
+        ResolveByKey rbk = new ResolveByKey(resources);
         DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults()
-                .setRelativeImportResolver(rir)
+                .setRelativeImportResolver((x, y, locationURI) -> rbk.readerByKey(locationURI))
                 .buildConfiguration()
                 .fromResources(resources.values())
                 .getOrElseThrow(RuntimeException::new);
