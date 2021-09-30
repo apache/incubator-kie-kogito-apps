@@ -120,10 +120,6 @@ public class SchemaResource {
     public Response form(MultipleResourcesPayload payload) {
         DMNEvaluator dmnEvaluator = DMNEvaluator.fromMultiple(payload);
         DMNModel dmnModel = dmnEvaluator.getDmnModel();
-        for (DMNModel m : dmnEvaluator.getDmnRuntime().getModels()) {
-            System.out.println(m.getNamespace());
-            System.out.println(m.getName());
-        }
         DMNOASResult oasResult = DMNOASGeneratorFactory.generator(dmnEvaluator.getDmnRuntime().getModels()).build();
         return formSchema(dmnModel, oasResult);
     }

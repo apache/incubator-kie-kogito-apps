@@ -116,7 +116,6 @@ public class MultipleModelsTest {
                 .body(containsString("Variable named 'my decision' is missing its type reference"))
                 .extract()
                 .asString();
-
         LOG.info("Validate response: {}", response);
     }
 
