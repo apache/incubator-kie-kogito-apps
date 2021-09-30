@@ -7,7 +7,7 @@
   </dmn:inputData>
   <dmn:decision id="_3D29B8EF-1D43-4619-9AE3-009D5C63F84F" name="my decision">
     <dmn:extensionElements/>
-    <dmn:variable id="_A4D5D2C9-DB64-4EED-81E7-7A903BE64F37" name="my decision" typeRef="string"/>
+    <dmn:variable id="_A4D5D2C9-DB64-4EED-81E7-7A903BE64F37" name="my decision"/>
     <dmn:informationRequirement id="_3F618709-ADA9-45B4-8687-0EB541346183">
       <dmn:requiredInput href="#_A819FAD7-E389-44F3-A95C-5B4729EAFFB5"/>
     </dmn:informationRequirement>

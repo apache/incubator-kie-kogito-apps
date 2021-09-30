@@ -27,17 +27,20 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
 import org.kie.kogito.jitexecutor.dmn.requests.MultipleResourcesPayload;
 import org.kie.kogito.jitexecutor.dmn.requests.ResourceWithURI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
 public class MultipleModelsTest {
+    private static final Logger LOG = LoggerFactory.getLogger(MultipleModelsTest.class);
 
     private static final String URI1 = "/multiple/importing.dmn";
     private static final String URI2 = "/multiple/stdlib.dmn";
@@ -52,10 +55,10 @@ public class MultipleModelsTest {
     @BeforeAll
     public static void setup() throws IOException {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-        model1 = new ResourceWithURI(URI1, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(URI1))));
-        model2 = new ResourceWithURI(URI2, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(URI2))));
-        ch11model1 = new ResourceWithURI(CH11URI1, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(CH11URI1))));
-        ch11model2 = new ResourceWithURI(CH11URI2, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(CH11URI2))));
+        model1 = new ResourceWithURI(URI1, new String(IoUtils.readBytesFromInputStream(MultipleModelsTest.class.getResourceAsStream(URI1))));
+        model2 = new ResourceWithURI(URI2, new String(IoUtils.readBytesFromInputStream(MultipleModelsTest.class.getResourceAsStream(URI2))));
+        ch11model1 = new ResourceWithURI(CH11URI1, new String(IoUtils.readBytesFromInputStream(MultipleModelsTest.class.getResourceAsStream(CH11URI1))));
+        ch11model2 = new ResourceWithURI(CH11URI2, new String(IoUtils.readBytesFromInputStream(MultipleModelsTest.class.getResourceAsStream(CH11URI2))));
     }
 
     @Test
@@ -95,6 +98,22 @@ public class MultipleModelsTest {
                 .then()
                 .statusCode(200)
                 .body("dmnContext.'my decision'", is("Ciao, John Doe (age:47)."));
+    }
+
+    @Test
+    public void testValidation() throws IOException {
+        String response = given()
+                .contentType(ContentType.JSON)
+                .body(new MultipleResourcesPayload(URI1, List.of(model1, model2)))
+                .when()
+                .post("/jitdmn/validate")
+                .then()
+                .statusCode(200)
+                .body(containsString("Variable named 'my decision' is missing its type reference"))
+                .extract()
+                .asString();
+
+        LOG.info("Validate response: {}", response);
     }
 
     @Test

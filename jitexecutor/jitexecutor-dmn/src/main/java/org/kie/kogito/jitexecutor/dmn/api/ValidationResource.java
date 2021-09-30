@@ -16,9 +16,13 @@
 
 package org.kie.kogito.jitexecutor.dmn.api;
 
+import java.io.IOException;
+import java.io.Reader;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.ws.rs.Consumes;
@@ -28,12 +32,17 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNMessage;
 import org.kie.dmn.core.compiler.profiles.ExtendedDMNProfile;
 import org.kie.dmn.validation.DMNValidator;
 import org.kie.dmn.validation.DMNValidator.Validation;
+import org.kie.dmn.validation.DMNValidator.ValidatorBuilder.ValidatorImportReaderResolver;
 import org.kie.dmn.validation.DMNValidatorFactory;
+import org.kie.internal.io.ResourceFactory;
 import org.kie.kogito.dmn.rest.KogitoDMNMessage;
+import org.kie.kogito.jitexecutor.dmn.requests.MultipleResourcesPayload;
+import org.kie.kogito.jitexecutor.dmn.requests.ResourceWithURI;
 
 @Path("jitdmn/validate")
 public class ValidationResource {
@@ -47,6 +56,38 @@ public class ValidationResource {
     public Response schema(String payload) {
         List<DMNMessage> validate =
                 validator.validate(new StringReader(payload), Validation.VALIDATE_SCHEMA, Validation.VALIDATE_MODEL, Validation.VALIDATE_COMPILATION, Validation.ANALYZE_DECISION_TABLE);
+        List<KogitoDMNMessage> result = validate.stream().map(KogitoDMNMessage::of).collect(Collectors.toList());
+        return Response.ok(result).build();
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response schema(MultipleResourcesPayload payload) {
+        Map<String, Resource> resources = new HashMap<>();
+        for (ResourceWithURI r : payload.getResources()) {
+            Resource readerResource = ResourceFactory.newReaderResource(new StringReader(r.getContent()), "UTF-8");
+            readerResource.setSourcePath(r.getURI());
+            resources.put(r.getURI(), readerResource);
+        }
+        ValidatorImportReaderResolver rir = (x, y, locationURI) -> {
+            try {
+                return resources.get(locationURI).getReader();
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to operate ValidatorImportReaderResolver", e);
+            }
+        };
+        List<Reader> models = resources.values().stream().map(r -> {
+            try {
+                return r.getReader();
+            } catch (IOException e) {
+                throw new RuntimeException("Unable to open reader for resource.", e);
+            }
+        }).collect(Collectors.toList());
+        List<DMNMessage> validate = validator
+                .validateUsing(Validation.VALIDATE_SCHEMA, Validation.VALIDATE_MODEL, Validation.VALIDATE_COMPILATION, Validation.ANALYZE_DECISION_TABLE)
+                .usingImports(rir)
+                .theseModels(models.toArray(new Reader[] {}));
         List<KogitoDMNMessage> result = validate.stream().map(KogitoDMNMessage::of).collect(Collectors.toList());
         return Response.ok(result).build();
     }
