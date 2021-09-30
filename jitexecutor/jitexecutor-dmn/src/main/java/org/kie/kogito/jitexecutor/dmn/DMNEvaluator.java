@@ -63,6 +63,10 @@ public class DMNEvaluator {
         return dmnModel.getName();
     }
 
+    public DMNRuntime getDmnRuntime() {
+        return dmnRuntime;
+    }
+
     public DMNResult evaluate(Map<String, Object> context) {
         DMNContext dmnContext = new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
         return dmnRuntime.evaluateAll(dmnModel, dmnContext);

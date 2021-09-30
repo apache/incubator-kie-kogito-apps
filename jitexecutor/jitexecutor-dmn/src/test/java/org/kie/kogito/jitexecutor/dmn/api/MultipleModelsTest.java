@@ -25,6 +25,7 @@ import org.drools.core.util.IoUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
+import org.kie.kogito.jitexecutor.dmn.requests.MultipleResourcesPayload;
 import org.kie.kogito.jitexecutor.dmn.requests.ResourceWithURI;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -32,27 +33,38 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.*;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
-public class JITDMNResourceMultipleModelsTest {
+public class MultipleModelsTest {
 
-    private static final String URI1 = "/DMNv1_3/Chapter 11 Example.dmn";
-    private static final String URI2 = "/DMNv1_3/Financial.dmn";
-
-    private static ResourceWithURI model1;
-    private static ResourceWithURI model2;
+    private static final String CH11URI1 = "/multiple/Chapter 11 Example.dmn";
+    private static final String CH11URI2 = "/multiple/Financial.dmn";
+    private static ResourceWithURI ch11model1;
+    private static ResourceWithURI ch11model2;
 
     @BeforeAll
     public static void setup() throws IOException {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
-        model1 = new ResourceWithURI(URI1, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(URI1))));
-        model2 = new ResourceWithURI(URI2, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(URI2))));
+        ch11model1 = new ResourceWithURI(CH11URI1, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(CH11URI1))));
+        ch11model2 = new ResourceWithURI(CH11URI2, new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream(CH11URI2))));
+    }
+
+    @Test
+    public void testForm() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(new MultipleResourcesPayload(CH11URI1, List.of(ch11model1, ch11model2)))
+                .when().post("/jitdmn/schema/form")
+                .then()
+                .statusCode(200)
+                .body(containsString("InputSet"), containsString("x-dmn-type"));
     }
 
     @Test
     public void testjitEndpoint() {
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(URI1, List.of(model1, model2), buildContext());
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(CH11URI1, List.of(ch11model1, ch11model2), buildContext());
         given()
                 .contentType(ContentType.JSON)
                 .body(jitdmnpayload)
@@ -64,7 +76,7 @@ public class JITDMNResourceMultipleModelsTest {
 
     @Test
     public void testjitdmnResultEndpoint() {
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(URI1, List.of(model1, model2), buildContext());
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(CH11URI1, List.of(ch11model1, ch11model2), buildContext());
         given()
                 .contentType(ContentType.JSON)
                 .body(jitdmnpayload)

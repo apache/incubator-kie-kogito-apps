@@ -16,9 +16,6 @@
 
 package org.kie.kogito.jitexecutor.dmn.requests;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResourceWithURI {
 
     private String uri;
