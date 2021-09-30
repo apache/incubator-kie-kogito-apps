@@ -84,7 +84,8 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         solverConfig.setRandomSeed((long) 23);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
 
-        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig().withSolverConfig(solverConfig).withGoalThreshold(0.01);
+        final CounterfactualConfig counterfactualConfig =
+                new CounterfactualConfig().withSolverConfig(solverConfig).withGoalThreshold(0.01);
         final CounterfactualExplainer counterfactualExplainer =
                 new CounterfactualExplainer(counterfactualConfig);
 
@@ -146,7 +147,8 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         solverConfig.setRandomSeed((long) 23);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
 
-        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig().withSolverConfig(solverConfig).withGoalThreshold(0.01);
+        final CounterfactualConfig counterfactualConfig =
+                new CounterfactualConfig().withSolverConfig(solverConfig).withGoalThreshold(0.01);
         final CounterfactualExplainer counterfactualExplainer =
                 new CounterfactualExplainer(counterfactualConfig);
 
@@ -185,7 +187,7 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
 
         // since the scoring function is ((0.6 * ((42 - age + 18)/42)) + (0.4 * (monthlySalary/8000)))
         // for a result of 1.0 the relation must be age = (7*monthlySalary)/2000 - 10
-        assertEquals(18, (7*monthlySalary)/2000.0 - 10.0, 0.5);
+        assertEquals(18, (7 * monthlySalary) / 2000.0 - 10.0, 0.5);
     }
 
     @Test
@@ -215,7 +217,8 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         solverConfig.setRandomSeed((long) 23);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
 
-        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig().withSolverConfig(solverConfig).withGoalThreshold(0.01);
+        final CounterfactualConfig counterfactualConfig =
+                new CounterfactualConfig().withSolverConfig(solverConfig).withGoalThreshold(0.01);
         final CounterfactualExplainer counterfactualExplainer =
                 new CounterfactualExplainer(counterfactualConfig);
 
