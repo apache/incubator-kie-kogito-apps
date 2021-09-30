@@ -169,7 +169,7 @@ mvn clean package -DskipTests -Pnative
 
 Each endpoint does support a multiple DMN models variant of the payload; this is helpful for the use-case where the main model to be evaluated has some DMN-import references to other DMNs.
 
-For evaluation and explainability, the payload require specify `mainURI` and `resources` instead of `model`.
+For DMN Evaluation and eXplainability, the payload require specify `mainURI` and `resources` instead of `model`.
 Example:
 ```json
 {

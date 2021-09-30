@@ -17,6 +17,7 @@
 package org.kie.kogito.jitexecutor.dmn.api;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
@@ -53,8 +54,9 @@ public class SchemaResource {
         OASFactoryResolver.instance();
         x = OASFactory.createObject(OpenAPI.class);
         resourceWithURI = OASFactory.createObject(Schema.class).type(SchemaType.OBJECT)
-                .addProperty("uri", OASFactory.createObject(Schema.class).type(SchemaType.STRING))
-                .addProperty("content", OASFactory.createObject(Schema.class).type(SchemaType.STRING));
+                .addProperty("URI", OASFactory.createObject(Schema.class).type(SchemaType.STRING))
+                .addProperty("content", OASFactory.createObject(Schema.class).type(SchemaType.STRING))
+                .required(List.of("URI", "content"));
     }
 
     @POST

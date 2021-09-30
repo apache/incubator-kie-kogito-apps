@@ -77,6 +77,17 @@ public class MultipleModelsTest {
     }
 
     @Test
+    public void testSchema() {
+        given()
+                .contentType(ContentType.JSON)
+                .body(new MultipleResourcesPayload(URI1, List.of(model1, model2)))
+                .when().post("/jitdmn/schema")
+                .then()
+                .statusCode(200)
+                .body(containsString("InputSet"), containsString("x-dmn-type"), containsString("tPerson"), containsString("mainURI"), containsString("URI"));
+    }
+
+    @Test
     public void testjitEndpoint() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(URI1, List.of(model1, model2), buildContext());
         given()
