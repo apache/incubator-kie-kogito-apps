@@ -2,12 +2,13 @@
   <cache-container shutdown-hook="DEFAULT">
     {#let template=config:property('kogito.cache.domain.template')}
       {#if template is null}
-    <local-cache name="{cache_name}">
+      <distributed-cache name="{cache_name}" mode="SYNC">
+      <encoding media-type="application/x-protostream"/>
       {#else}
     <local-cache name="{cache_name}" configuration="{template}">
       {/if}
     {/let}
-      <indexing storage="filesystem" path="data-index-{cache_name}">
+      <indexing enabled="true">
         <indexed-entities>
           <indexed-entity>org.kie.kogito.index.model.KogitoMetadata</indexed-entity>
           <indexed-entity>org.kie.kogito.index.model.ProcessInstanceMeta</indexed-entity>
@@ -16,10 +17,17 @@
           <indexed-entity>{index}</indexed-entity>
           {/for}
         </indexed-entities>
-      </indexing>
-      <persistence>
-        <file-store/>
+      </indexing>    
+      <persistence passivation="false" availability-interval="2000" connection-attempts="5" connection-interval="100">
+        <file-store fetch-state="true" preload="true" purge="false">
+        </file-store>
       </persistence>
-    </local-cache>
+    {#let template=config:property('kogito.cache.domain.template')}
+      {#if template is null}
+      </distributed-cache>
+      {#else}
+      </local-cache>
+      {/if}
+    {/let}
   </cache-container>
 </infinispan>
