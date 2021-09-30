@@ -47,6 +47,9 @@ public class MultipleModelsTest {
     private static ResourceWithURI model1;
     private static ResourceWithURI model2;
 
+    private static final String XAIURI1 = "/test.dmn";
+    private static ResourceWithURI xaimodel1;
+
     private static final String CH11URI1 = "/multiple/Chapter 11 Example.dmn";
     private static final String CH11URI2 = "/multiple/Financial.dmn";
     private static ResourceWithURI ch11model1;
@@ -57,6 +60,7 @@ public class MultipleModelsTest {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
         model1 = new ResourceWithURI(URI1, new String(IoUtils.readBytesFromInputStream(MultipleModelsTest.class.getResourceAsStream(URI1))));
         model2 = new ResourceWithURI(URI2, new String(IoUtils.readBytesFromInputStream(MultipleModelsTest.class.getResourceAsStream(URI2))));
+        xaimodel1 = new ResourceWithURI(XAIURI1, new String(IoUtils.readBytesFromInputStream(MultipleModelsTest.class.getResourceAsStream(XAIURI1))));
         ch11model1 = new ResourceWithURI(CH11URI1, new String(IoUtils.readBytesFromInputStream(MultipleModelsTest.class.getResourceAsStream(CH11URI1))));
         ch11model2 = new ResourceWithURI(CH11URI2, new String(IoUtils.readBytesFromInputStream(MultipleModelsTest.class.getResourceAsStream(CH11URI2))));
     }
@@ -114,6 +118,18 @@ public class MultipleModelsTest {
                 .asString();
 
         LOG.info("Validate response: {}", response);
+    }
+
+    @Test
+    public void testjitExplainabilityEndpoint() {
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(XAIURI1, List.of(xaimodel1, model1, model2), Map.of("FICO Score", 800, "DTI Ratio", .1, "PITI Ratio", .1));
+        given()
+                .contentType(ContentType.JSON)
+                .body(jitdmnpayload)
+                .when().post("/jitdmn/evaluateAndExplain")
+                .then()
+                .statusCode(200)
+                .body(containsString("dmnResult"), containsString("saliencies"), containsString("xls2dmn"), containsString("featureName"));
     }
 
     @Test
