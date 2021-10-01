@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Card,
   Label,
@@ -29,13 +29,46 @@ import { useHistory } from 'react-router-dom';
 import { FormInfo } from '@kogito-apps/forms-list';
 import { PageTitle } from '@kogito-apps/consoles-common';
 import Moment from 'react-moment';
+import FormNotification, {
+  Notification
+} from '../TaskDetailsPage/components/FormNotification/FormNotification';
 
 const FormDetailsPage: React.FC<OUIAProps> = () => {
+  const [notification, setNotification] = useState<Notification>();
+
   useEffect(() => {
     return ouiaPageTypeAndObjectId('form-detail');
   });
   const history = useHistory();
   const formData: FormInfo = history.location.state['formData'];
+
+  const onSuccess = () => {
+    const message = `The form '${formData.name}.${formData.type}' has been successfully saved.`;
+
+    showNotification('success', message);
+  };
+
+  const onError = (details?: string) => {
+    const message = `The form '${formData.name}.${formData.type}' couldn't be saved.`;
+
+    showNotification('error', message, details);
+  };
+
+  const showNotification = (
+    notificationType: 'error' | 'success',
+    submitMessage: string,
+    notificationDetails?: string
+  ) => {
+    setNotification({
+      type: notificationType,
+      message: submitMessage,
+      details: notificationDetails,
+      close: () => {
+        setNotification(null);
+      }
+    });
+  };
+
   return (
     <React.Fragment>
       <PageSection variant="light">
@@ -47,10 +80,19 @@ const FormDetailsPage: React.FC<OUIAProps> = () => {
           <span style={{ fontWeight: 'bold' }}>Last modified:</span>{' '}
           <Moment fromNow>{formData.lastModified}</Moment>
         </Text>
+        {notification && (
+          <div className="kogito-task-console__task-details-page">
+            <FormNotification notification={notification} />
+          </div>
+        )}
       </PageSection>
       <PageSection>
         <Card className="Dev-ui__card-size">
-          <FormDetailsContainer formData={formData} />
+          <FormDetailsContainer
+            formData={formData}
+            onSuccess={onSuccess}
+            onError={onError}
+          />
         </Card>
       </PageSection>
     </React.Fragment>

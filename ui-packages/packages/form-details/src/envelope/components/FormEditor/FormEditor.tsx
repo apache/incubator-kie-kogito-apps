@@ -21,7 +21,12 @@ import {
   CodeEditorControl,
   Language
 } from '@patternfly/react-code-editor';
-import { PlayIcon, RedoIcon, UndoIcon } from '@patternfly/react-icons';
+import {
+  PlayIcon,
+  RedoIcon,
+  SaveIcon,
+  UndoIcon
+} from '@patternfly/react-icons';
 import { Form } from '../../../api';
 import { useFormDetailsContext } from '../contexts/FormDetailsContext';
 import { ResizableContent } from '../FormDetails/FormDetails';
@@ -35,6 +40,7 @@ export interface FormEditorProps {
   code: string;
   setFormContent: (formContent: Form) => void;
   setContentChange: (contentChange: Form) => void;
+  saveFormContent: (formContent: Form) => void;
 }
 
 export const FormEditor = React.forwardRef<
@@ -47,6 +53,7 @@ export const FormEditor = React.forwardRef<
       formType,
       formContent,
       setFormContent,
+      saveFormContent,
       contentChange,
       setContentChange,
       isSource = false,
@@ -103,11 +110,11 @@ export const FormEditor = React.forwardRef<
     const handleChange = (value): void => {
       if (Object.keys(formContent)[0].length > 0 && isSource) {
         const temp: Form = formContent;
-        temp.source['source-content'] = value;
+        temp.source = value;
         setContentChange({ ...formContent, ...temp });
       } else {
         const temp: Form = formContent;
-        temp.formConfiguration['resources'] = JSON.parse(value);
+        temp.configuration['resources'] = JSON.parse(value);
         setContentChange({ ...formContent, ...temp });
       }
     };
@@ -115,6 +122,10 @@ export const FormEditor = React.forwardRef<
     const onExecuteCode = (): void => {
       appContext.updateContent(contentChange);
       setFormContent(contentChange);
+    };
+
+    const onSaveForm = (): void => {
+      saveFormContent(formContent);
     };
 
     const onUndoChanges = (): void => {
@@ -134,9 +145,16 @@ export const FormEditor = React.forwardRef<
     const customControl = (
       <>
         <CodeEditorControl
+          icon={<SaveIcon />}
+          aria-label="Save form"
+          toolTipText="Save form"
+          onClick={() => onSaveForm()}
+          isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
+        />
+        <CodeEditorControl
           icon={<PlayIcon className="pf-global--primary-color--100" />}
-          aria-label="Execute code"
-          toolTipText="Execute code"
+          aria-label="Execute form"
+          toolTipText="Execute form"
           onClick={onExecuteCode}
           isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
         />
