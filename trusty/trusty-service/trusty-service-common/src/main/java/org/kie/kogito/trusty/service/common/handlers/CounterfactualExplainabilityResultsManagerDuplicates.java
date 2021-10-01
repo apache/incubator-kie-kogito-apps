@@ -22,14 +22,13 @@ import java.util.Objects;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 import static org.kie.kogito.persistence.api.query.SortDirection.ASC;
@@ -53,9 +52,9 @@ public class CounterfactualExplainabilityResultsManagerDuplicates implements Exp
     @Override
     public void purge(String counterfactualId, Storage<String, CounterfactualExplainabilityResult> storage) {
         List<CounterfactualExplainabilityResult> results = new ArrayList<>(storage.query()
-                .sort(List.of(orderBy(CounterfactualExplainabilityResult.COUNTERFACTUAL_SEQUENCE_ID_FIELD, ASC)))
-                .filter(List.of(QueryFilterFactory.equalTo(CounterfactualExplainabilityResult.COUNTERFACTUAL_ID_FIELD, counterfactualId)))
-                .execute());
+                                                                                   .sort(List.of(orderBy(CounterfactualExplainabilityResult.COUNTERFACTUAL_SEQUENCE_ID_FIELD, ASC)))
+                                                                                   .filter(List.of(QueryFilterFactory.equalTo(CounterfactualExplainabilityResult.COUNTERFACTUAL_ID_FIELD, counterfactualId)))
+                                                                                   .execute());
 
         if (results.size() < 2) {
             return;
@@ -67,9 +66,7 @@ public class CounterfactualExplainabilityResultsManagerDuplicates implements Exp
         final boolean outputsEqual = equals(latestResult.getOutputs(), penultimateResult.getOutputs());
 
         if (inputsEqual && outputsEqual) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info("The latest two Counterfactual results are equal. Removing duplicate.");
-            }
+            LOG.info("The latest two Counterfactual results are equal. Removing duplicate.");
             //It's plausible, although unlikely, that the FINAL result could have been received before the last INTERMEDIATE.
             if (latestResult.getStage().equals(CounterfactualExplainabilityResult.Stage.FINAL)) {
                 removeSolution(storage, penultimateResult);
@@ -86,12 +83,10 @@ public class CounterfactualExplainabilityResultsManagerDuplicates implements Exp
     }
 
     private void removeSolution(Storage<String, CounterfactualExplainabilityResult> storage,
-            CounterfactualExplainabilityResult result) {
-        if (LOG.isInfoEnabled()) {
-            LOG.info(String.format("Removing duplicate solution %s, sequence %d",
-                    result.getSolutionId(),
-                    result.getSequenceId()));
-        }
+                                CounterfactualExplainabilityResult result) {
+        LOG.info(String.format("Removing duplicate solution %s, sequence %d",
+                               result.getSolutionId(),
+                               result.getSequenceId()));
         storage.remove(result.getSolutionId());
     }
 }
