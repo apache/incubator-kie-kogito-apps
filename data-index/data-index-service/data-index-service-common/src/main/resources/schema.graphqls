@@ -17,13 +17,15 @@ type Mutation {
     ProcessInstanceRetry(id: String): String
     ProcessInstanceSkip(id: String): String
     ProcessInstanceUpdateVariables(id: String, variables: String): String
-    NodeInstanceTrigger(id:String, nodeId:String): String
-    NodeInstanceRetrigger(id:String, nodeInstanceId:String): String
-    NodeInstanceCancel(id:String, nodeInstanceId:String): String
+    NodeInstanceTrigger(id: String, nodeId: String): String
+    NodeInstanceRetrigger(id: String, nodeInstanceId: String): String
+    NodeInstanceCancel(id: String, nodeInstanceId: String): String
     JobCancel(id: String): String
     JobReschedule(id: String, data: String): String
-    TaskUpdate(id: String, taskId: String, user:String, groups:[String], taskInfo: UserTaskInfoArgument): String
-    TaskPartialUpdate(id: String, taskId: String, user:String, groups:[String], taskInfo: UserTaskInfoArgument): String
+    TaskInstanceUpdate(taskId: String, user: String, groups: [String], taskInfo: UserTaskInfoArgument): String
+    TaskInstancePartialUpdate(taskId: String, user: String, groups: [String], taskInfo: UserTaskInfoArgument): String
+    TaskInstanceCommentCreate(taskId: String, user: String, groups: [String], comment: String): String
+    TaskInstanceAttachmentCreate(taskId: String, user: String, groups: [String], name: String, uri: String): String
 }
 
 type ProcessInstance {

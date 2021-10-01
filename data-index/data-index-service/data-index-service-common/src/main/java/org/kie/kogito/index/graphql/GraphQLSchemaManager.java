@@ -123,8 +123,10 @@ public class GraphQLSchemaManager {
                     builder.dataFetcher("NodeInstanceCancel", this::cancelNodeInstance);
                     builder.dataFetcher("JobCancel", this::cancelJob);
                     builder.dataFetcher("JobReschedule", this::rescheduleJob);
-                    builder.dataFetcher("TaskUpdate", this::updateUserTask);
-                    builder.dataFetcher("TaskPartialUpdate", this::partialUpdateUserTask);
+                    builder.dataFetcher("TaskInstanceUpdate", this::updateUserTask);
+                    builder.dataFetcher("TaskInstancePartialUpdate", this::partialUpdateUserTask);
+                    builder.dataFetcher("TaskInstanceCommentCreate", this::createTaskInstanceComment);
+                    builder.dataFetcher("TaskInstanceAttachmentCreate", this::createTaskInstanceAttachment);
                     return builder;
                 })
                 .type("ProcessInstance", builder -> {
@@ -289,7 +291,6 @@ public class GraphQLSchemaManager {
 
     private CompletableFuture<String> updateUserTask(DataFetchingEnvironment env) {
         UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
-        Map taskData = env.getArgument("taskData");
         return dataIndexApiExecutor.updateUserTask(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
                 userTaskInstance,
                 env.getArgument("user"),
@@ -304,6 +305,25 @@ public class GraphQLSchemaManager {
                 env.getArgument("user"),
                 env.getArgument("groups"),
                 env.getArgument("taskInfo"));
+    }
+
+    private CompletableFuture<String> createTaskInstanceComment(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
+        return dataIndexApiExecutor.createTaskComment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("comment"));
+    }
+
+    private CompletableFuture<String> createTaskInstanceAttachment(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
+        return dataIndexApiExecutor.createTaskAttachment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("name"),
+                env.getArgument("uri"));
     }
 
     private Collection<ProcessInstance> getProcessInstancesValues(DataFetchingEnvironment env) {

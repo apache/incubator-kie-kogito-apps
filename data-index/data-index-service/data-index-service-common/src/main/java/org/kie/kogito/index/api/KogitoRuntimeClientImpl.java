@@ -35,9 +35,11 @@ import org.slf4j.LoggerFactory;
 
 import io.quarkus.security.credential.TokenCredential;
 import io.quarkus.security.identity.SecurityIdentity;
+import io.vertx.core.AsyncResult;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.client.HttpRequest;
 import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
@@ -64,6 +66,8 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
     public static final String UPDATE_TASK_PATH = "/management/processes/%s/instances/%s/tasks/%s";
     public static final String PARTIAL_UPDATE_TASK_PATH = "/management/processes/%s/instances/%s/tasks/%s";
 
+    public static final String CREATE_TASK_COMMENT_PATH = "/%s/%s/%s/%s/comments";
+    public static final String CREATE_TASK_ATTACHMENT_PATH = "/%s/%s/%s/%s/attachments";
     private static final Logger LOGGER = LoggerFactory.getLogger(KogitoRuntimeClientImpl.class);
     private Vertx vertx;
     private SecurityIdentity identity;
@@ -196,6 +200,24 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
                 new JsonObject(taskInfo));
     }
 
+    @Override
+    public CompletableFuture<String> createTaskComment(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, String commentInfo) {
+        String requestURI = format(CREATE_TASK_COMMENT_PATH, userTaskInstance.getProcessId(), userTaskInstance.getProcessInstanceId(), userTaskInstance.getName(),
+                userTaskInstance.getId()) + "?" + getUserGroupsURIParameter(user, groups);
+        return sendPostWithBodyClientRequest(getWebClient(serviceURL), requestURI,
+                "Adding comment to  UserTask:" + userTaskInstance.getName() + " with id: " + userTaskInstance.getId(),
+                commentInfo, "text/plain");
+    }
+
+    @Override
+    public CompletableFuture<String> createTaskAttachment(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, String name, String uri) {
+        String requestURI = format(CREATE_TASK_ATTACHMENT_PATH, userTaskInstance.getProcessId(), userTaskInstance.getProcessInstanceId(), userTaskInstance.getName(),
+                userTaskInstance.getId()) + "?" + getUserGroupsURIParameter(user, groups);
+        return sendPostWithBodyClientRequest(getWebClient(serviceURL), requestURI,
+                "Adding attachment to  UserTask:" + userTaskInstance.getName() + " with id: " + userTaskInstance.getId(),
+                "{ \"name\": \"" + name + "\", \"uri\": \"" + uri + "\" }", "application/json");
+    }
+
     private String getUserGroupsURIParameter(String user, List<String> groups) {
         final StringBuilder builder = new StringBuilder();
         if (user != null && groups != null) {
@@ -209,27 +231,36 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
         CompletableFuture future = new CompletableFuture<>();
         webClient.delete(requestURI)
                 .putHeader("Authorization", getAuthHeader())
-                .send(res -> {
-                    if (res.succeeded() && (res.result().statusCode() == 200)) {
-                        future.complete(res.result().bodyAsString());
-                    } else {
-                        future.completeExceptionally(new DataIndexServiceException(getErrorMessage(logMessage, res.result())));
-                    }
-                });
+                .send(res -> asyncHttpResponseTreatment(res, future, logMessage));
         return future;
+    }
+
+    protected CompletableFuture sendPostWithBodyClientRequest(WebClient webClient, String requestURI, String logMessage, String body, String contentType) {
+        CompletableFuture future = new CompletableFuture<>();
+        HttpRequest<Buffer> request = webClient.post(requestURI)
+                .putHeader("Authorization", getAuthHeader())
+                .putHeader("Content-Type", contentType);
+        if ("application/json".equals(contentType)) {
+            request.sendJson(new JsonObject(body), res -> asyncHttpResponseTreatment(res, future, logMessage));
+        } else {
+            request.sendBuffer(Buffer.buffer(body), res -> asyncHttpResponseTreatment(res, future, logMessage));
+        }
+        return future;
+    }
+
+    private void asyncHttpResponseTreatment(AsyncResult<HttpResponse<Buffer>> res, CompletableFuture future, String logMessage) {
+        if (res.succeeded() && ((res.result().statusCode() == 200 || res.result().statusCode() == 201))) {
+            future.complete(res.result().bodyAsString());
+        } else {
+            future.completeExceptionally(new DataIndexServiceException(getErrorMessage(logMessage, res.result())));
+        }
     }
 
     protected CompletableFuture sendPostClientRequest(WebClient webClient, String requestURI, String logMessage) {
         CompletableFuture future = new CompletableFuture<>();
         webClient.post(requestURI)
                 .putHeader("Authorization", getAuthHeader())
-                .send(res -> {
-                    if (res.succeeded() && (res.result().statusCode() == 200)) {
-                        future.complete(res.result().bodyAsString());
-                    } else {
-                        future.completeExceptionally(new DataIndexServiceException(getErrorMessage(logMessage, res.result())));
-                    }
-                });
+                .send(res -> asyncHttpResponseTreatment(res, future, logMessage));
         return future;
     }
 
@@ -241,13 +272,7 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
         CompletableFuture future = new CompletableFuture<>();
         webClient.put(requestURI)
                 .putHeader("Authorization", getAuthHeader())
-                .sendJson(jsonObject, res -> {
-                    if (res.succeeded() && (res.result().statusCode() == 200)) {
-                        future.complete(res.result().bodyAsString());
-                    } else {
-                        future.completeExceptionally(new DataIndexServiceException(getErrorMessage(logMessage, res.result())));
-                    }
-                });
+                .sendJson(jsonObject, res -> asyncHttpResponseTreatment(res, future, logMessage));
         return future;
     }
 
@@ -255,13 +280,7 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
         CompletableFuture future = new CompletableFuture<>();
         webClient.patch(requestURI)
                 .putHeader("Authorization", getAuthHeader())
-                .sendJson(jsonBody, res -> {
-                    if (res.succeeded() && (res.result().statusCode() == 200)) {
-                        future.complete(res.result().bodyAsString());
-                    } else {
-                        future.completeExceptionally(new DataIndexServiceException(getErrorMessage(logMessage, res.result())));
-                    }
-                });
+                .sendJson(jsonBody, res -> asyncHttpResponseTreatment(res, future, logMessage));
         return future;
     }
 
@@ -288,7 +307,8 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
         String errorMessage = "FAILED: " + logMessage;
         if (result != null) {
             errorMessage += " errorCode:" + result.statusCode() +
-                    " errorStatus:" + result.statusMessage();
+                    " errorStatus:" + result.statusMessage() +
+                    " errorMessage:" + (result.body() != null ? result.body().toString() : "-");
         }
         return errorMessage;
     }

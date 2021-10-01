@@ -54,4 +54,8 @@ public interface KogitoRuntimeClient {
     CompletableFuture<String> updateUserTask(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, Map taskInfo);
 
     CompletableFuture<String> partialUpdateUserTask(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, Map taskInfo);
+
+    CompletableFuture<String> createTaskComment(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, String commentInfo);
+
+    CompletableFuture<String> createTaskAttachment(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, String name, String uri);
 }
