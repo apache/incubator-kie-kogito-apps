@@ -160,6 +160,12 @@
                 <version>${version.org.mapstruct}</version>
             </dependency>
             <dependency>
+                <groupId>org.skyscreamer</groupId>
+                <artifactId>jsonassert</artifactId>
+                <version>${version.org.skyscreamer}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
                 <groupId>io.zonky.test</groupId>
                 <artifactId>embedded-postgres</artifactId>
                 <version>${version.io.zonky.test}</version>
