@@ -22,13 +22,14 @@ import java.util.Objects;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 import static org.kie.kogito.persistence.api.query.SortDirection.ASC;
@@ -52,9 +53,9 @@ public class CounterfactualExplainabilityResultsManagerDuplicates implements Exp
     @Override
     public void purge(String counterfactualId, Storage<String, CounterfactualExplainabilityResult> storage) {
         List<CounterfactualExplainabilityResult> results = new ArrayList<>(storage.query()
-                                                                                   .sort(List.of(orderBy(CounterfactualExplainabilityResult.COUNTERFACTUAL_SEQUENCE_ID_FIELD, ASC)))
-                                                                                   .filter(List.of(QueryFilterFactory.equalTo(CounterfactualExplainabilityResult.COUNTERFACTUAL_ID_FIELD, counterfactualId)))
-                                                                                   .execute());
+                .sort(List.of(orderBy(CounterfactualExplainabilityResult.COUNTERFACTUAL_SEQUENCE_ID_FIELD, ASC)))
+                .filter(List.of(QueryFilterFactory.equalTo(CounterfactualExplainabilityResult.COUNTERFACTUAL_ID_FIELD, counterfactualId)))
+                .execute());
 
         if (results.size() < 2) {
             return;
@@ -83,10 +84,10 @@ public class CounterfactualExplainabilityResultsManagerDuplicates implements Exp
     }
 
     private void removeSolution(Storage<String, CounterfactualExplainabilityResult> storage,
-                                CounterfactualExplainabilityResult result) {
+            CounterfactualExplainabilityResult result) {
         LOG.info(String.format("Removing duplicate solution %s, sequence %d",
-                               result.getSolutionId(),
-                               result.getSequenceId()));
+                result.getSolutionId(),
+                result.getSequenceId()));
         storage.remove(result.getSolutionId());
     }
 }
