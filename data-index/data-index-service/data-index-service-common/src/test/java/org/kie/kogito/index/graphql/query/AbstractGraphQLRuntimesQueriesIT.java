@@ -245,60 +245,31 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
     }
 
     @Test
-    void testUpdateTask() {
+    void testUpdateUserTaskInstance() {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
         String taskId = UUID.randomUUID().toString();
         String user = "jdoe";
         List<String> groups = Arrays.asList("managers", "users", "IT");
-        String taskInfo = "{ description: \\\"NewDescription\\\"}";
+        String newDescription = "NewDescription}";
 
         KogitoUserTaskCloudEvent event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null,
                 null, "InProgress", user);
 
         indexUserTaskCloudEvent(event);
-        checkOkResponse("{ \"query\" : \"mutation { TaskInstanceUpdate ( " +
-                "taskId: \\\"" + taskId + "\\\"" +
+        checkOkResponse("{ \"query\" : \"mutation { UserTaskInstanceUpdate ( " +
+                "taskId: \\\"" + taskId + "\\\"," +
                 "user: \\\"" + user + "\\\", " +
                 "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"]," +
-                "taskInfo:  " + taskInfo + "" +
+                "description:  \\\"" + newDescription + "\\\"" +
                 ")}\"}");
         ArgumentCaptor<UserTaskInstance> userTaskInstanceCaptor = ArgumentCaptor.forClass(UserTaskInstance.class);
         ArgumentCaptor<Map> taskInfoCaptor = ArgumentCaptor.forClass(Map.class);
 
-        verify(dataIndexApiClient).updateUserTask(eq("http://localhost:8080"),
+        verify(dataIndexApiClient).updateUserTaskInstance(eq("http://localhost:8080"),
                 userTaskInstanceCaptor.capture(),
                 eq(user), eq(groups), taskInfoCaptor.capture());
-        assertThat(taskInfoCaptor.getValue().get("description")).isEqualTo("NewDescription");
-        assertUserTaskInstance(userTaskInstanceCaptor.getValue(), taskId, processId, processInstanceId, user);
-    }
-
-    @Test
-    void testPartialUpdateTask() {
-        String processId = "travels";
-        String processInstanceId = UUID.randomUUID().toString();
-        String taskId = UUID.randomUUID().toString();
-        String user = "jdoe";
-        List<String> groups = Arrays.asList("managers", "users", "IT");
-        String taskInfo = "{ description: \\\"NewDescription\\\"}";
-
-        KogitoUserTaskCloudEvent event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null,
-                null, "InProgress", user);
-
-        indexUserTaskCloudEvent(event);
-        checkOkResponse("{ \"query\" : \"mutation { TaskInstancePartialUpdate ( " +
-                "taskId: \\\"" + taskId + "\\\"" +
-                "user: \\\"" + user + "\\\", " +
-                "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"]," +
-                "taskInfo:  " + taskInfo +
-                ")}\"}");
-        ArgumentCaptor<UserTaskInstance> userTaskInstanceCaptor = ArgumentCaptor.forClass(UserTaskInstance.class);
-        ArgumentCaptor<Map> taskInfoCaptor = ArgumentCaptor.forClass(Map.class);
-
-        verify(dataIndexApiClient).partialUpdateUserTask(eq("http://localhost:8080"),
-                userTaskInstanceCaptor.capture(),
-                eq(user), eq(groups), taskInfoCaptor.capture());
-        assertThat(taskInfoCaptor.getValue().get("description")).isEqualTo("NewDescription");
+        assertThat(taskInfoCaptor.getValue().get("description")).isEqualTo(newDescription);
         assertUserTaskInstance(userTaskInstanceCaptor.getValue(), taskId, processId, processInstanceId, user);
     }
 
@@ -315,7 +286,7 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
                 null, "InProgress", user);
 
         indexUserTaskCloudEvent(event);
-        checkOkResponse("{ \"query\" : \"mutation{ TaskInstanceCommentCreate(" +
+        checkOkResponse("{ \"query\" : \"mutation{ UserTaskInstanceCommentCreate(" +
                 "taskId: \\\"" + taskId + "\\\", " +
                 "user: \\\"" + user + "\\\", " +
                 "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"]," +
@@ -323,7 +294,7 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
                 ")}\"}");
         ArgumentCaptor<UserTaskInstance> userTaskInstanceCaptor = ArgumentCaptor.forClass(UserTaskInstance.class);
 
-        verify(dataIndexApiClient).createTaskComment(eq("http://localhost:8080"),
+        verify(dataIndexApiClient).createUserTaskInstanceComment(eq("http://localhost:8080"),
                 userTaskInstanceCaptor.capture(),
                 eq(user), eq(groups),
                 eq(comment));
@@ -344,7 +315,7 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
                 null, "InProgress", user);
 
         indexUserTaskCloudEvent(event);
-        checkOkResponse("{ \"query\" : \"mutation{ TaskInstanceAttachmentCreate(" +
+        checkOkResponse("{ \"query\" : \"mutation{ UserTaskInstanceAttachmentCreate(" +
                 "taskId: \\\"" + taskId + "\\\", " +
                 "user: \\\"" + user + "\\\", " +
                 "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"]," +
@@ -353,7 +324,7 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
                 ")}\"}");
         ArgumentCaptor<UserTaskInstance> userTaskInstanceCaptor = ArgumentCaptor.forClass(UserTaskInstance.class);
 
-        verify(dataIndexApiClient).createTaskAttachment(eq("http://localhost:8080"),
+        verify(dataIndexApiClient).createUserTaskInstanceAttachment(eq("http://localhost:8080"),
                 userTaskInstanceCaptor.capture(),
                 eq(user), eq(groups),
                 eq(attachmentName),

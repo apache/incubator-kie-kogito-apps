@@ -123,10 +123,9 @@ public class GraphQLSchemaManager {
                     builder.dataFetcher("NodeInstanceCancel", this::cancelNodeInstance);
                     builder.dataFetcher("JobCancel", this::cancelJob);
                     builder.dataFetcher("JobReschedule", this::rescheduleJob);
-                    builder.dataFetcher("TaskInstanceUpdate", this::updateUserTask);
-                    builder.dataFetcher("TaskInstancePartialUpdate", this::partialUpdateUserTask);
-                    builder.dataFetcher("TaskInstanceCommentCreate", this::createTaskInstanceComment);
-                    builder.dataFetcher("TaskInstanceAttachmentCreate", this::createTaskInstanceAttachment);
+                    builder.dataFetcher("UserTaskInstanceUpdate", this::updateUserTask);
+                    builder.dataFetcher("UserTaskInstanceCommentCreate", this::createTaskInstanceComment);
+                    builder.dataFetcher("UserTaskInstanceAttachmentCreate", this::createTaskInstanceAttachment);
                     return builder;
                 })
                 .type("ProcessInstance", builder -> {
@@ -291,25 +290,16 @@ public class GraphQLSchemaManager {
 
     private CompletableFuture<String> updateUserTask(DataFetchingEnvironment env) {
         UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
-        return dataIndexApiExecutor.updateUserTask(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+        return dataIndexApiExecutor.updateUserTaskInstance(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
                 userTaskInstance,
                 env.getArgument("user"),
                 env.getArgument("groups"),
-                env.getArgument("taskInfo"));
-    }
-
-    private CompletableFuture<String> partialUpdateUserTask(DataFetchingEnvironment env) {
-        UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
-        return dataIndexApiExecutor.partialUpdateUserTask(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
-                userTaskInstance,
-                env.getArgument("user"),
-                env.getArgument("groups"),
-                env.getArgument("taskInfo"));
+                env.getArguments());
     }
 
     private CompletableFuture<String> createTaskInstanceComment(DataFetchingEnvironment env) {
         UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
-        return dataIndexApiExecutor.createTaskComment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+        return dataIndexApiExecutor.createUserTaskInstanceComment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
                 userTaskInstance,
                 env.getArgument("user"),
                 env.getArgument("groups"),
@@ -318,7 +308,7 @@ public class GraphQLSchemaManager {
 
     private CompletableFuture<String> createTaskInstanceAttachment(DataFetchingEnvironment env) {
         UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
-        return dataIndexApiExecutor.createTaskAttachment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+        return dataIndexApiExecutor.createUserTaskInstanceAttachment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
                 userTaskInstance,
                 env.getArgument("user"),
                 env.getArgument("groups"),

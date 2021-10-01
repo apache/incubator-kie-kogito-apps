@@ -267,11 +267,12 @@ public abstract class AbstractProcessDataIndexIT {
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"mutation{ TaskInstancePartialUpdate(" +
+                        .body("{ \"query\" : \"mutation{ UserTaskInstanceUpdate(" +
                                 "taskId: \\\"" + taskId + "\\\", " +
                                 "user: \\\"manager\\\", " +
                                 "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
-                                "taskInfo: { description: \\\"NewDescription\\\", priority: \\\"low\\\"} " +
+                                "description: \\\"NewDescription\\\", " +
+                                "priority: \\\"low\\\" " +
                                 ")}\"}")
                         .when().post("/graphql")
                         .then()
@@ -290,7 +291,7 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers")));
 
         given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                .body("{ \"query\" : \"mutation{ TaskInstanceCommentCreate(" +
+                .body("{ \"query\" : \"mutation{ UserTaskInstanceCommentCreate(" +
                         "taskId: \\\"" + taskId + "\\\", " +
                         "user: \\\"manager\\\", " +
                         "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
@@ -315,7 +316,7 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("[0].content", is("NewTaskComment")));
 
         given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                .body("{ \"query\" : \"mutation{ TaskInstanceAttachmentCreate(" +
+                .body("{ \"query\" : \"mutation{ UserTaskInstanceAttachmentCreate(" +
                         "taskId: \\\"" + taskId + "\\\", " +
                         "user: \\\"manager\\\", " +
                         "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
@@ -340,30 +341,6 @@ public abstract class AbstractProcessDataIndexIT {
                         .statusCode(200)
                         .body("$.size", is(1))
                         .body("[0].name", is("NewTaskAttachmentName")));
-
-        await()
-                .atMost(TIMEOUT)
-                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"mutation{ TaskInstanceUpdate(" +
-                                "taskId: \\\"" + taskId + "\\\", " +
-                                "user: \\\"manager\\\", " +
-                                "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
-                                "taskInfo: { description: \\\"NewDescription2\\\"} " +
-                                ")}\"}")
-                        .when().post("/graphql")
-                        .then()
-                        .statusCode(200)
-                        .body("errors", nullValue()));
-
-        await()
-                .atMost(TIMEOUT)
-                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { id description priority potentialGroups} }\"}")
-                        .when().post("/graphql")
-                        .then()
-                        .statusCode(200)
-                        .body("data.UserTaskInstances[0].description", equalTo("NewDescription2"))
-                        .body("data.UserTaskInstances[0].priority", nullValue()));
 
         String vars = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { variables} }\"}")

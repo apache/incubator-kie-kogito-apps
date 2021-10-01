@@ -24,6 +24,7 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.MediaType;
 
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.Node;
@@ -63,11 +64,10 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
     public static final String RESCHEDULE_JOB_PATH = "/%s";
 
     public static final String GET_TASK_SCHEMA_PATH = "/%s/%s/%s/%s/schema";
-    public static final String UPDATE_TASK_PATH = "/management/processes/%s/instances/%s/tasks/%s";
-    public static final String PARTIAL_UPDATE_TASK_PATH = "/management/processes/%s/instances/%s/tasks/%s";
+    public static final String UPDATE_USER_TASK_INSTANCE_PATH = "/management/processes/%s/instances/%s/tasks/%s";
 
-    public static final String CREATE_TASK_COMMENT_PATH = "/%s/%s/%s/%s/comments";
-    public static final String CREATE_TASK_ATTACHMENT_PATH = "/%s/%s/%s/%s/attachments";
+    public static final String CREATE_USER_TASK_INSTANCE_COMMENT_PATH = "/%s/%s/%s/%s/comments";
+    public static final String CREATE_USER_TASK_INSTANCE_ATTACHMENT_PATH = "/%s/%s/%s/%s/attachments";
     private static final Logger LOGGER = LoggerFactory.getLogger(KogitoRuntimeClientImpl.class);
     private Vertx vertx;
     private SecurityIdentity identity;
@@ -180,29 +180,18 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
     }
 
     @Override
-    public CompletableFuture<String> updateUserTask(String serviceURL, UserTaskInstance userTaskInstance, String user,
+    public CompletableFuture<String> updateUserTaskInstance(String serviceURL, UserTaskInstance userTaskInstance, String user,
             List<String> groups, Map taskInfo) {
-        String requestURI = format(UPDATE_TASK_PATH, userTaskInstance.getProcessId(), userTaskInstance.getProcessInstanceId(),
-                userTaskInstance.getId()) + "?" + getUserGroupsURIParameter(user, groups);
-        return sendPutClientRequest(getWebClient(serviceURL),
-                requestURI,
-                "Update UserTask: " + userTaskInstance.getName() + " with id: " + userTaskInstance.getId(),
-                new JsonObject(taskInfo));
-    }
-
-    @Override
-    public CompletableFuture<String> partialUpdateUserTask(String serviceURL, UserTaskInstance userTaskInstance, String user,
-            List<String> groups, Map taskInfo) {
-        String requestURI = format(PARTIAL_UPDATE_TASK_PATH, userTaskInstance.getProcessId(), userTaskInstance.getProcessInstanceId(),
+        String requestURI = format(UPDATE_USER_TASK_INSTANCE_PATH, userTaskInstance.getProcessId(), userTaskInstance.getProcessInstanceId(),
                 userTaskInstance.getId()) + "?" + getUserGroupsURIParameter(user, groups);
         return sendPatchClientRequest(getWebClient(serviceURL), requestURI,
-                "Partial update UserTask:" + userTaskInstance.getName() + " with id: " + userTaskInstance.getId(),
+                "Update user task instance:" + userTaskInstance.getName() + " with id: " + userTaskInstance.getId(),
                 new JsonObject(taskInfo));
     }
 
     @Override
-    public CompletableFuture<String> createTaskComment(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, String commentInfo) {
-        String requestURI = format(CREATE_TASK_COMMENT_PATH, userTaskInstance.getProcessId(), userTaskInstance.getProcessInstanceId(), userTaskInstance.getName(),
+    public CompletableFuture<String> createUserTaskInstanceComment(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, String commentInfo) {
+        String requestURI = format(CREATE_USER_TASK_INSTANCE_COMMENT_PATH, userTaskInstance.getProcessId(), userTaskInstance.getProcessInstanceId(), userTaskInstance.getName(),
                 userTaskInstance.getId()) + "?" + getUserGroupsURIParameter(user, groups);
         return sendPostWithBodyClientRequest(getWebClient(serviceURL), requestURI,
                 "Adding comment to  UserTask:" + userTaskInstance.getName() + " with id: " + userTaskInstance.getId(),
@@ -210,8 +199,8 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
     }
 
     @Override
-    public CompletableFuture<String> createTaskAttachment(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, String name, String uri) {
-        String requestURI = format(CREATE_TASK_ATTACHMENT_PATH, userTaskInstance.getProcessId(), userTaskInstance.getProcessInstanceId(), userTaskInstance.getName(),
+    public CompletableFuture<String> createUserTaskInstanceAttachment(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, String name, String uri) {
+        String requestURI = format(CREATE_USER_TASK_INSTANCE_ATTACHMENT_PATH, userTaskInstance.getProcessId(), userTaskInstance.getProcessInstanceId(), userTaskInstance.getName(),
                 userTaskInstance.getId()) + "?" + getUserGroupsURIParameter(user, groups);
         return sendPostWithBodyClientRequest(getWebClient(serviceURL), requestURI,
                 "Adding attachment to  UserTask:" + userTaskInstance.getName() + " with id: " + userTaskInstance.getId(),
@@ -240,7 +229,7 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
         HttpRequest<Buffer> request = webClient.post(requestURI)
                 .putHeader("Authorization", getAuthHeader())
                 .putHeader("Content-Type", contentType);
-        if ("application/json".equals(contentType)) {
+        if (MediaType.APPLICATION_JSON.equals(contentType)) {
             request.sendJson(new JsonObject(body), res -> asyncHttpResponseTreatment(res, future, logMessage));
         } else {
             request.sendBuffer(Buffer.buffer(body), res -> asyncHttpResponseTreatment(res, future, logMessage));

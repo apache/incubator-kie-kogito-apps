@@ -320,30 +320,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testUpdateUserTask() {
-        Map taskInfo = new HashMap();
-        taskInfo.put("description", "NewDescription");
-        setupIdentityMock();
-        when(webClientMock.put(any())).thenReturn(httpRequestMock);
-
-        UserTaskInstance taskInstance = createUserTaskInstance(PROCESS_INSTANCE_ID, TASK_ID, "InProgress");
-
-        client.updateUserTask(SERVICE_URL, taskInstance, "jdoe", Collections.singletonList("managers"), taskInfo);
-        ArgumentCaptor<JsonObject> jsonCaptor = ArgumentCaptor.forClass(JsonObject.class);
-        verify(client).sendPutClientRequest(eq(webClientMock),
-                eq("/management/processes/travels/instances/" + PROCESS_INSTANCE_ID + "/tasks/" + TASK_ID + "?user=jdoe&group=managers"),
-                eq("Update UserTask: " + taskInstance.getName() + " with id: " + taskInstance.getId()),
-                jsonCaptor.capture());
-        assertThat(jsonCaptor.getValue().getString("description")).isEqualTo("NewDescription");
-        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
-        JsonObject jsonOject = new JsonObject(taskInfo);
-        verify(httpRequestMock).sendJson(eq(jsonOject), handlerCaptor.capture());
-        verify(httpRequestMock).putHeader(eq("Authorization"), eq("Bearer " + AUTHORIZED_TOKEN));
-        checkResponseHandling(handlerCaptor.getValue());
-    }
-
-    @Test
-    public void testPartialUpdateUserTask() {
+    public void testUpdateUserTaskInstance() {
         setupIdentityMock();
         when(webClientMock.patch(any())).thenReturn(httpRequestMock);
 
@@ -351,11 +328,11 @@ public class KogitoRuntimeClientTest {
         Map taskInfo = new HashMap();
         taskInfo.put("description", "NewDescription");
 
-        client.partialUpdateUserTask(SERVICE_URL, taskInstance, "jdoe", Collections.singletonList("managers"), taskInfo);
+        client.updateUserTaskInstance(SERVICE_URL, taskInstance, "jdoe", Collections.singletonList("managers"), taskInfo);
         ArgumentCaptor<JsonObject> jsonCaptor = ArgumentCaptor.forClass(JsonObject.class);
         verify(client).sendPatchClientRequest(eq(webClientMock),
                 eq("/management/processes/travels/instances/" + PROCESS_INSTANCE_ID + "/tasks/" + TASK_ID + "?user=jdoe&group=managers"),
-                eq("Partial update UserTask:" + taskInstance.getName() + " with id: " + taskInstance.getId()),
+                eq("Update user task instance:" + taskInstance.getName() + " with id: " + taskInstance.getId()),
                 jsonCaptor.capture());
         assertThat(jsonCaptor.getValue().getString("description")).isEqualTo("NewDescription");
         ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
@@ -366,7 +343,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testCreateTaskComment() {
+    public void testCreateUserTaskInstanceComment() {
         String commentInfo = "newComment";
         setupIdentityMock();
         when(webClientMock.post(any())).thenReturn(httpRequestMock);
@@ -374,7 +351,7 @@ public class KogitoRuntimeClientTest {
 
         UserTaskInstance taskInstance = createUserTaskInstance(PROCESS_INSTANCE_ID, TASK_ID, "InProgress");
 
-        client.createTaskComment(SERVICE_URL, taskInstance, "jdoe", Collections.singletonList("managers"), commentInfo);
+        client.createUserTaskInstanceComment(SERVICE_URL, taskInstance, "jdoe", Collections.singletonList("managers"), commentInfo);
         verify(client).sendPostWithBodyClientRequest(eq(webClientMock),
                 eq("/travels/" + PROCESS_INSTANCE_ID + "/" + taskInstance.getName() + "/" + TASK_ID + "/comments?user=jdoe&group=managers"),
                 eq("Adding comment to  UserTask:" + taskInstance.getName() + " with id: " + taskInstance.getId()),
@@ -385,7 +362,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testCreateTaskAttachment() {
+    public void testCreateUserTaskInstanceAttachment() {
         String attachmentUri = "nhttps://drive.google.com/file/d/AttachmentUri";
         String attachmentName = "newAttachmentName";
         setupIdentityMock();
@@ -394,7 +371,7 @@ public class KogitoRuntimeClientTest {
 
         UserTaskInstance taskInstance = createUserTaskInstance(PROCESS_INSTANCE_ID, TASK_ID, "InProgress");
 
-        client.createTaskAttachment(SERVICE_URL, taskInstance, "jdoe", Collections.singletonList("managers"), attachmentName, attachmentUri);
+        client.createUserTaskInstanceAttachment(SERVICE_URL, taskInstance, "jdoe", Collections.singletonList("managers"), attachmentName, attachmentUri);
         verify(client).sendPostWithBodyClientRequest(eq(webClientMock),
                 eq("/travels/" + PROCESS_INSTANCE_ID + "/" + taskInstance.getName() + "/" + TASK_ID + "/attachments?user=jdoe&group=managers"),
                 eq("Adding attachment to  UserTask:" + taskInstance.getName() + " with id: " + taskInstance.getId()),
