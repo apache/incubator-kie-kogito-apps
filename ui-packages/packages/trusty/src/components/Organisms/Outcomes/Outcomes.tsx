@@ -36,13 +36,14 @@ type OutcomesProps =
 const Outcomes: React.FC<OutcomesProps & OUIAProps> = (
   props: OutcomesProps & OUIAProps
 ) => {
-  const ouiaType = 'outcomes';
+  const ouiaProps = componentOuiaProps(
+    props.ouiaId,
+    'outcomes',
+    props.ouiaSafe
+  );
   if (props.listView) {
     return (
-      <section
-        className="outcomes"
-        {...componentOuiaProps(props.ouiaId, ouiaType, props.ouiaSafe)}
-      >
+      <section className="outcomes" {...ouiaProps}>
         {props.outcomes.length && (
           <Gallery className="outcome-cards" hasGutter>
             {props.outcomes.map(item =>
@@ -55,10 +56,7 @@ const Outcomes: React.FC<OutcomesProps & OUIAProps> = (
   }
 
   return (
-    <section
-      className="outcomes"
-      {...componentOuiaProps(props.ouiaId, ouiaType, props.ouiaSafe)}
-    >
+    <section className="outcomes" {...ouiaProps}>
       {props.outcomes.map(item => {
         if (
           item.outcomeResult !== null &&
