@@ -168,6 +168,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                           innerRef={null}
                           isInline={true}
                           onClick={[Function]}
+                          ouiaId="view-detail"
                           variant="link"
                         >
                           <button
@@ -325,6 +326,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                           innerRef={null}
                           isInline={true}
                           onClick={[Function]}
+                          ouiaId="view-detail"
                           variant="link"
                         >
                           <button
@@ -484,6 +486,7 @@ exports[`Outcomes renders a list of simple outcomes as cards 1`] = `
                           innerRef={null}
                           isInline={true}
                           onClick={[Function]}
+                          ouiaId="view-detail"
                           variant="link"
                         >
                           <button
@@ -1366,6 +1369,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                           innerRef={null}
                           isInline={true}
                           onClick={[Function]}
+                          ouiaId="view-detail"
                           variant="link"
                         >
                           <button
@@ -2119,6 +2123,7 @@ exports[`Outcomes renders a recommendation outcome as a list of cards 1`] = `
                           innerRef={null}
                           isInline={true}
                           onClick={[Function]}
+                          ouiaId="view-detail"
                           variant="link"
                         >
                           <button
@@ -2453,6 +2458,7 @@ exports[`Outcomes renders a skipped decision with no outcome 1`] = `
                           innerRef={null}
                           isInline={true}
                           onClick={[Function]}
+                          ouiaId="view-detail"
                           variant="link"
                         >
                           <button
@@ -3568,6 +3574,7 @@ exports[`Outcomes renders an outcome with a composed structure 1`] = `
                           innerRef={null}
                           isInline={true}
                           onClick={[Function]}
+                          ouiaId="view-detail"
                           variant="link"
                         >
                           <button
@@ -3961,6 +3968,7 @@ exports[`Outcomes renders an outcome with a list of properties 1`] = `
                           innerRef={null}
                           isInline={true}
                           onClick={[Function]}
+                          ouiaId="view-detail"
                           variant="link"
                         >
                           <button
@@ -4271,6 +4279,7 @@ exports[`Outcomes renders an outcome with an array of values 1`] = `
                           innerRef={null}
                           isInline={true}
                           onClick={[Function]}
+                          ouiaId="view-detail"
                           variant="link"
                         >
                           <button
