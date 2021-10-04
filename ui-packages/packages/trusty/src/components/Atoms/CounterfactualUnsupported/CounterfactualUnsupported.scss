@@ -1,0 +1,10 @@
+.cf-unsupported {
+
+  & p {
+    padding-bottom: var(--pf-global--spacer--md);
+  }
+
+  & li {
+    text-align: start;
+  }
+}

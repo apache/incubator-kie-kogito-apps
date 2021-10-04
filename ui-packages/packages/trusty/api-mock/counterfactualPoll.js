@@ -81,7 +81,7 @@ function getResult(executionId, baseId, isFinal) {
     executionId,
     solutionId: (baseId + 1).toString(),
     stage: isFinal ? 'FINAL' : 'INTERMEDIATE',
-    inputs: inputData.inputs.map((input, index) => {
+    inputs: inputData[0].inputs.map((input, index) => {
       if (index === 0) {
         return {
           ...input,

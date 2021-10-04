@@ -1,4 +1,6 @@
-const inputData = [
+const executionIds = require('./executionIds');
+
+const simpleInputData = [
   {
     name: 'Credit Score',
     typeRef: 'number',
@@ -9,6 +11,12 @@ const inputData = [
     name: 'Down Payment',
     typeRef: 'number',
     value: 70000,
+    components: null
+  },
+  {
+    name: 'Favorite cheese',
+    typeRef: 'string',
+    value: 'Cheddar',
     components: null
   },
   {
@@ -279,4 +287,63 @@ const inputData = [
   }
 ];
 
-exports.inputs = inputData;
+const structuredInput = [
+  {
+    name: 'Structured input 1',
+    typeRef: 'tStructure',
+    value: null,
+    components: [
+      {
+        name: 'Structure1 field1',
+        typeRef: 'tField1',
+        value: 'value',
+        components: null
+      }
+    ]
+  }
+];
+
+const inputs = [
+  {
+    executionId: executionIds[0],
+    inputs: simpleInputData
+  },
+  {
+    executionId: executionIds[1],
+    inputs: simpleInputData
+  },
+  {
+    executionId: executionIds[2],
+    inputs: structuredInput
+  },
+  {
+    executionId: executionIds[3],
+    inputs: structuredInput
+  },
+  {
+    executionId: executionIds[4],
+    inputs: simpleInputData
+  },
+  {
+    executionId: executionIds[5],
+    inputs: simpleInputData
+  },
+  {
+    executionId: executionIds[6],
+    inputs: simpleInputData
+  },
+  {
+    executionId: executionIds[7],
+    inputs: simpleInputData
+  },
+  {
+    executionId: executionIds[8],
+    inputs: simpleInputData
+  },
+  {
+    executionId: executionIds[9],
+    inputs: simpleInputData
+  }
+];
+
+module.exports = inputs;

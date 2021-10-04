@@ -29,7 +29,50 @@ const twoSimpleOutcomes = [
   }
 ];
 
-const outcome = [
+const structuredOutcomes = [
+  {
+    outcomeId: '_c6e56793-68d0-4683-b34b-5e9d69e7d0d4',
+    outcomeName: 'Structured outcome 1',
+    evaluationStatus: 'SUCCEEDED',
+    outcomeResult: {
+      name: 'Structure1',
+      typeRef: 'tStructure',
+      value: null,
+      components: [
+        {
+          name: 'Structure1 field1',
+          typeRef: 'tField1',
+          value: 'value',
+          components: null
+        }
+      ]
+    },
+    messages: [],
+    hasErrors: false
+  },
+  {
+    outcomeId: '_859bea4f-dfc4-480e-96f2-1a756d54b84b',
+    outcomeName: 'Structured outcome 2',
+    evaluationStatus: 'SUCCEEDED',
+    outcomeResult: {
+      name: 'Structure2',
+      typeRef: 'tStructure',
+      value: null,
+      components: [
+        {
+          name: 'Structure2 field1',
+          typeRef: 'tField1',
+          value: 'value',
+          components: null
+        }
+      ]
+    },
+    messages: [],
+    hasErrors: false
+  }
+];
+
+const outcomes = [
   {
     header: {
       executionDate: '2020-04-16',
@@ -393,6 +436,32 @@ const outcome = [
             }
           ]
         }
+      },
+      {
+        outcomeId: '_12345678-9012-3456-7890-123456789012',
+        outcomeName: 'Cheese manufacturer',
+        evaluationStatus: 'SUCCEEDED',
+        hasErrors: false,
+        messages: [],
+        outcomeResult: {
+          name: 'Cheese manufacturer',
+          type: 'string',
+          value: 'Acme Cheese Specialists',
+          components: null
+        }
+      },
+      {
+        outcomeId: '_11145678-9012-3456-7890-123456789012',
+        outcomeName: 'Nullable Cheese manufacturer',
+        evaluationStatus: 'SUCCEEDED',
+        hasErrors: false,
+        messages: [],
+        outcomeResult: {
+          name: 'Nullable Cheese manufacturer',
+          type: 'string',
+          value: null,
+          components: null
+        }
       }
     ]
   },
@@ -404,94 +473,7 @@ const outcome = [
       executionType: 'DECISION',
       executorName: 'Technical User'
     },
-    outcomes: [
-      {
-        outcomeId: '_c6e56793-68d0-4683-b34b-5e9d69e7d0d4',
-        outcomeName: 'Risk Score',
-        evaluationStatus: 'SUCCEEDED',
-        outcomeResult: {
-          name: 'Risk Score',
-          typeRef: 'number',
-          value: 1,
-          components: null
-        },
-        messages: [],
-        hasErrors: false
-      },
-      {
-        outcomeId: '_859bea4f-dfc4-480e-96f2-1a756d54b84b',
-        outcomeName: 'Total Amount from Last 24 hours Transactions',
-        evaluationStatus: 'SUCCEEDED',
-        outcomeResult: {
-          name: 'Total Amount from Last 24 hours Transactions',
-          typeRef: 'number',
-          value: 0,
-          components: null
-        },
-        messages: [],
-        hasErrors: false
-      },
-      {
-        outcomeId: '_d361c79e-8c06-4504-bdb2-d6b90b915166',
-        outcomeName: 'Last Transaction',
-        evaluationStatus: 'SUCCEEDED',
-        outcomeResult: {
-          name: 'Last Transaction',
-          typeRef: 'tTransaction',
-          value: null,
-          components: [
-            {
-              name: 'Auth Code',
-              typeRef: 'tAuthCode',
-              value: 'Authorized',
-              components: null
-            },
-            {
-              name: 'Amount',
-              typeRef: 'number',
-              value: 10000,
-              components: null
-            },
-            {
-              name: 'Card Type',
-              typeRef: 'tCardType',
-              value: 'Debit',
-              components: null
-            },
-            {
-              name: 'Location',
-              typeRef: 'tLocation',
-              value: 'Local',
-              components: null
-            }
-          ]
-        },
-        messages: [],
-        hasErrors: false
-      },
-      {
-        outcomeId: '_ff34378e-fe90-4c58-9f7f-b9ce5767a415',
-        outcomeName: 'Merchant Blacklist',
-        evaluationStatus: 'SUCCEEDED',
-        outcomeResult: {
-          name: 'Merchant Blacklist',
-          typeRef: 'string',
-          value: [
-            'ILLICITCORP',
-            'SLIMSHADY',
-            'TAINTEDTHINGS',
-            'UNSCRUPULOUS',
-            'UNETHICALBIZ',
-            'WECORRUPT',
-            'WICKEDSTUFF',
-            'VERYBADTHING'
-          ],
-          components: null
-        },
-        messages: [],
-        hasErrors: false
-      }
-    ]
+    outcomes: structuredOutcomes
   },
   {
     header: {
@@ -511,42 +493,7 @@ const outcome = [
       executionType: 'DECISION',
       executorName: 'Technical User'
     },
-    outcomes: [
-      {
-        outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
-        outcomeName: 'Mortgage Approval',
-        evaluationStatus: 'SUCCEEDED',
-        outcomeResult: {
-          name: 'Mortgage Approval',
-          typeRef: 'boolean',
-          value: true,
-          components: null
-        },
-        messages: [],
-        hasErrors: false
-      },
-      {
-        outcomeId: '_9CFF8C35-4EB3-451E-874C-DB27A5A424C0',
-        outcomeName: 'Risk Score',
-        evaluationStatus: 'SUCCEEDED',
-        outcomeResult: {
-          name: 'Risk Score',
-          typeRef: 'number',
-          value: 21.7031851958099,
-          components: null
-        },
-        messages: [],
-        hasErrors: false
-      },
-      {
-        outcomeId: '_1CFF8C35-4EB2-351E-874C-DB27A2A424C0',
-        outcomeName: 'Bank Score',
-        evaluationStatus: 'SKIPPED',
-        outcomeResult: null,
-        messages: [],
-        hasErrors: false
-      }
-    ]
+    outcomes: structuredOutcomes
   },
   {
     header: {
@@ -624,4 +571,4 @@ const outcome = [
   }
 ];
 
-module.exports = outcome;
+module.exports = outcomes;
