@@ -56,7 +56,7 @@ export const customForm: CustomForm = {
   formInfo: {
     type: FormType.HTML,
     name: 'travels_VisaApplication',
-    lastModified: new Date(2021, 9, 12)
+    lastModified: new Date('2021-10-07T04:58:18.311Z')
   },
   source: '<div></div>',
   configuration: {

@@ -69,12 +69,22 @@ const FormDetailsPage: React.FC<OUIAProps> = () => {
     });
   };
 
+  const getFormType = (type: string): string => {
+    if (type.toLowerCase() === 'html') {
+      return 'HTML';
+    } else if (type.toLowerCase() === 'tsx') {
+      return 'REACT';
+    } else {
+      return type;
+    }
+  };
+
   return (
     <React.Fragment>
       <PageSection variant="light">
         <PageTitle
           title={formData.name}
-          extra={<Label variant="outline">{formData.type}</Label>}
+          extra={<Label variant="outline">{getFormType(formData.type)}</Label>}
         />
         <Text component={TextVariants.p} style={{ marginTop: '10px' }}>
           <span style={{ fontWeight: 'bold' }}>Last modified:</span>{' '}

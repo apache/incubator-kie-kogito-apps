@@ -46,7 +46,7 @@ exports[`TaskFormEnvelopeView tests Custom Task Form 1`] = `
           "schema": "",
         },
         "formInfo": Object {
-          "lastModified": 2021-10-11T22:00:00.000Z,
+          "lastModified": 2021-10-07T04:58:18.311Z,
           "name": "travels_VisaApplication",
           "type": "HTML",
         },

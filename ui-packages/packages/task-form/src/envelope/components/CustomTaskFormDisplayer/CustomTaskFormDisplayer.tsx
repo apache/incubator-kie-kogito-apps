@@ -32,7 +32,7 @@ import FormFooter from '../FormFooter/FormFooter';
 import { FormAction } from '../utils';
 import { TaskFormDriver, User } from '../../../api';
 import { FormOpened } from '@kogito-apps/form-displayer/src';
-import { Bullseye, Flex, FlexItem } from '@patternfly/react-core';
+import { Bullseye, Stack, StackItem } from '@patternfly/react-core';
 import { KogitoSpinner } from '@kogito-apps/components-common';
 
 export interface CustomTaskFormDisplayerProps {
@@ -106,8 +106,6 @@ const CustomTaskFormDisplayer: React.FC<CustomTaskFormDisplayerProps &
   useEffect(() => {
     if (formOpened) {
       document.getElementById(`${formUUID}-form`).style.visibility = 'visible';
-      document.getElementById(`${formUUID}-form`).style.height =
-        formOpened.size.height + 'px';
     }
   }, [formOpened]);
 
@@ -138,7 +136,10 @@ const CustomTaskFormDisplayer: React.FC<CustomTaskFormDisplayerProps &
     };
   };
   return (
-    <div {...componentOuiaProps(ouiaId, 'custom-form-displayer', ouiaSafe)}>
+    <div
+      {...componentOuiaProps(ouiaId, 'custom-form-displayer', ouiaSafe)}
+      style={{ height: '100%' }}
+    >
       {!formOpened && (
         <Bullseye
           {...componentOuiaProps(
@@ -150,24 +151,27 @@ const CustomTaskFormDisplayer: React.FC<CustomTaskFormDisplayerProps &
           <KogitoSpinner spinnerText={`Loading task form...`} />
         </Bullseye>
       )}
-      <div id={`${formUUID}-form`} style={{ visibility: 'hidden' }}>
-        <EmbeddedFormDisplayer
-          targetOrigin={window.location.origin}
-          envelopePath={'resources/form-displayer.html'}
-          formContent={customForm}
-          data={formData}
-          context={buildTaskFormContext()}
-          onOpenForm={opened => setFormOpened(opened)}
-          ref={formDisplayerApiRef}
-        />
-      </div>
-      {formOpened && formOpened.state === FormOpenedState.OPENED && (
-        <Flex>
-          <FlexItem>
+      <Stack hasGutter>
+        <StackItem
+          id={`${formUUID}-form`}
+          style={{ visibility: 'hidden', height: 'inherit' }}
+        >
+          <EmbeddedFormDisplayer
+            targetOrigin={window.location.origin}
+            envelopePath={'resources/form-displayer.html'}
+            formContent={customForm}
+            data={formData}
+            context={buildTaskFormContext()}
+            onOpenForm={opened => setFormOpened(opened)}
+            ref={formDisplayerApiRef}
+          />
+        </StackItem>
+        {formOpened && formOpened.state === FormOpenedState.OPENED && (
+          <StackItem>
             <FormFooter actions={formActions} enabled={!submitted} />
-          </FlexItem>
-        </Flex>
-      )}
+          </StackItem>
+        )}
+      </Stack>
     </div>
   );
 };

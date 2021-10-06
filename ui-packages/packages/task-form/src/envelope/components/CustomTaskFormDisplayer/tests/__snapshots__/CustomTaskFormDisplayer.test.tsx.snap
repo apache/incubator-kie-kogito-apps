@@ -169,6 +169,11 @@ exports[`CustomTaskFormDisplayer Test Rendering form 1`] = `
   <div
     data-ouia-component-type="custom-form-displayer"
     data-ouia-safe={true}
+    style={
+      Object {
+        "height": "100%",
+      }
+    }
   >
     <Bullseye
       data-ouia-component-id="task-form-envelope-view-loading-spinner"
@@ -188,212 +193,232 @@ exports[`CustomTaskFormDisplayer Test Rendering form 1`] = `
         </KogitoSpinner>
       </div>
     </Bullseye>
-    <div
-      id="testId-form"
-      style={
-        Object {
-          "visibility": "hidden",
-        }
-      }
+    <Stack
+      hasGutter={true}
     >
-      <ForwardRef
-        context={
-          Object {
-            "phases": Array [
-              "complete",
-              "release",
-            ],
-            "schema": Object {
-              "properties": Object {
-                "traveller": Object {
-                  "input": true,
-                  "output": true,
-                  "properties": Object {
-                    "address": Object {
-                      "properties": Object {
-                        "city": Object {
-                          "type": "string",
-                        },
-                        "country": Object {
-                          "type": "string",
-                        },
-                        "street": Object {
-                          "type": "string",
-                        },
-                        "zipCode": Object {
-                          "type": "string",
-                        },
-                      },
-                      "type": "object",
-                    },
-                    "email": Object {
-                      "format": "email",
-                      "type": "string",
-                    },
-                    "firstName": Object {
-                      "type": "string",
-                    },
-                    "lastName": Object {
-                      "type": "string",
-                    },
-                    "nationality": Object {
-                      "type": "string",
-                    },
-                  },
-                  "required": Array [
-                    "firstName",
-                    "lastName",
-                  ],
-                  "type": "object",
-                },
-                "trip": Object {
-                  "input": true,
-                  "output": false,
-                  "properties": Object {
-                    "begin": Object {
-                      "format": "date-time",
-                      "type": "string",
-                    },
-                    "city": Object {
-                      "type": "string",
-                    },
-                    "country": Object {
-                      "type": "string",
-                    },
-                    "end": Object {
-                      "format": "date-time",
-                      "type": "string",
-                    },
-                    "visaRequired": Object {
-                      "type": "boolean",
-                    },
-                  },
-                  "type": "object",
-                },
-                "visaApplication": Object {
-                  "input": true,
-                  "output": false,
-                  "properties": Object {
-                    "city": Object {
-                      "type": "string",
-                    },
-                    "country": Object {
-                      "type": "string",
-                    },
-                    "duration": Object {
-                      "type": "integer",
-                    },
-                    "firstName": Object {
-                      "type": "string",
-                    },
-                    "lastName": Object {
-                      "type": "string",
-                    },
-                    "nationality": Object {
-                      "type": "string",
-                    },
-                    "passportNumber": Object {
-                      "type": "string",
-                    },
-                  },
-                  "type": "object",
-                },
-              },
-              "type": "object",
-            },
-            "task": Object {
-              "completed": null,
-              "description": null,
-              "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
-              "lastUpdate": 2020-02-19T11:11:56.282Z,
-              "name": "VisaApplication",
-              "priority": "1",
-              "processId": "travels",
-              "processInstanceId": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
-              "referenceName": "Apply for visa",
-              "rootProcessId": null,
-              "rootProcessInstanceId": null,
-              "started": 2020-02-19T11:11:56.282Z,
-              "state": "Ready",
-            },
-            "user": Object {
-              "groups": Array [
-                "admin",
-                "managers",
-              ],
-              "id": "jdoe",
-            },
-          }
-        }
-        data={
-          Object {
-            "NodeName": "Apply for visa",
-            "Priority": "1",
-            "Skippable": "true",
-            "TaskName": "VisaApplication",
-            "traveller": Object {
-              "address": Object {
-                "city": "Zerf",
-                "country": "Poland",
-                "street": "Cabalone",
-                "zipCode": "765756",
-              },
-              "email": "rwhite@gorle.com",
-              "firstName": "Rachel",
-              "lastName": "White",
-              "nationality": "Polish",
-            },
-            "trip": Object {
-              "begin": "2020-02-19T23:00:00.000+01:00",
-              "city": "Boston",
-              "country": "US",
-              "end": "2020-02-26T23:00:00.000+01:00",
-              "visaRequired": true,
-            },
-          }
-        }
-        envelopePath="resources/form-displayer.html"
-        formContent={
-          Object {
-            "configuration": Object {
-              "resources": Object {
-                "scripts": Object {},
-                "styles": Object {},
-              },
-              "schema": "",
-            },
-            "formInfo": Object {
-              "lastModified": 2021-10-11T22:00:00.000Z,
-              "name": "travels_VisaApplication",
-              "type": "HTML",
-            },
-            "source": "<div></div>",
-          }
-        }
-        onOpenForm={[Function]}
-        targetOrigin="http://localhost"
+      <div
+        className="pf-l-stack pf-m-gutter"
       >
-        <ForwardRef>
-          <iframe
-            src="resources/form-displayer.html"
+        <StackItem
+          id="testId-form"
+          style={
+            Object {
+              "height": "inherit",
+              "visibility": "hidden",
+            }
+          }
+        >
+          <div
+            className="pf-l-stack__item"
+            id="testId-form"
             style={
               Object {
-                "border": "none",
-                "display": "flex",
-                "flex": 1,
-                "flexDirection": "column",
-                "height": "100%",
-                "margin": 0,
-                "overflow": "hidden",
-                "padding": 0,
-                "width": "100%",
+                "height": "inherit",
+                "visibility": "hidden",
               }
             }
-            title="X"
-          />
-        </ForwardRef>
-      </ForwardRef>
-    </div>
+          >
+            <ForwardRef
+              context={
+                Object {
+                  "phases": Array [
+                    "complete",
+                    "release",
+                  ],
+                  "schema": Object {
+                    "properties": Object {
+                      "traveller": Object {
+                        "input": true,
+                        "output": true,
+                        "properties": Object {
+                          "address": Object {
+                            "properties": Object {
+                              "city": Object {
+                                "type": "string",
+                              },
+                              "country": Object {
+                                "type": "string",
+                              },
+                              "street": Object {
+                                "type": "string",
+                              },
+                              "zipCode": Object {
+                                "type": "string",
+                              },
+                            },
+                            "type": "object",
+                          },
+                          "email": Object {
+                            "format": "email",
+                            "type": "string",
+                          },
+                          "firstName": Object {
+                            "type": "string",
+                          },
+                          "lastName": Object {
+                            "type": "string",
+                          },
+                          "nationality": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "firstName",
+                          "lastName",
+                        ],
+                        "type": "object",
+                      },
+                      "trip": Object {
+                        "input": true,
+                        "output": false,
+                        "properties": Object {
+                          "begin": Object {
+                            "format": "date-time",
+                            "type": "string",
+                          },
+                          "city": Object {
+                            "type": "string",
+                          },
+                          "country": Object {
+                            "type": "string",
+                          },
+                          "end": Object {
+                            "format": "date-time",
+                            "type": "string",
+                          },
+                          "visaRequired": Object {
+                            "type": "boolean",
+                          },
+                        },
+                        "type": "object",
+                      },
+                      "visaApplication": Object {
+                        "input": true,
+                        "output": false,
+                        "properties": Object {
+                          "city": Object {
+                            "type": "string",
+                          },
+                          "country": Object {
+                            "type": "string",
+                          },
+                          "duration": Object {
+                            "type": "integer",
+                          },
+                          "firstName": Object {
+                            "type": "string",
+                          },
+                          "lastName": Object {
+                            "type": "string",
+                          },
+                          "nationality": Object {
+                            "type": "string",
+                          },
+                          "passportNumber": Object {
+                            "type": "string",
+                          },
+                        },
+                        "type": "object",
+                      },
+                    },
+                    "type": "object",
+                  },
+                  "task": Object {
+                    "completed": null,
+                    "description": null,
+                    "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
+                    "lastUpdate": 2020-02-19T11:11:56.282Z,
+                    "name": "VisaApplication",
+                    "priority": "1",
+                    "processId": "travels",
+                    "processInstanceId": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
+                    "referenceName": "Apply for visa",
+                    "rootProcessId": null,
+                    "rootProcessInstanceId": null,
+                    "started": 2020-02-19T11:11:56.282Z,
+                    "state": "Ready",
+                  },
+                  "user": Object {
+                    "groups": Array [
+                      "admin",
+                      "managers",
+                    ],
+                    "id": "jdoe",
+                  },
+                }
+              }
+              data={
+                Object {
+                  "NodeName": "Apply for visa",
+                  "Priority": "1",
+                  "Skippable": "true",
+                  "TaskName": "VisaApplication",
+                  "traveller": Object {
+                    "address": Object {
+                      "city": "Zerf",
+                      "country": "Poland",
+                      "street": "Cabalone",
+                      "zipCode": "765756",
+                    },
+                    "email": "rwhite@gorle.com",
+                    "firstName": "Rachel",
+                    "lastName": "White",
+                    "nationality": "Polish",
+                  },
+                  "trip": Object {
+                    "begin": "2020-02-19T23:00:00.000+01:00",
+                    "city": "Boston",
+                    "country": "US",
+                    "end": "2020-02-26T23:00:00.000+01:00",
+                    "visaRequired": true,
+                  },
+                }
+              }
+              envelopePath="resources/form-displayer.html"
+              formContent={
+                Object {
+                  "configuration": Object {
+                    "resources": Object {
+                      "scripts": Object {},
+                      "styles": Object {},
+                    },
+                    "schema": "",
+                  },
+                  "formInfo": Object {
+                    "lastModified": 2021-10-11T22:00:00.000Z,
+                    "name": "travels_VisaApplication",
+                    "type": "HTML",
+                  },
+                  "source": "<div></div>",
+                }
+              }
+              onOpenForm={[Function]}
+              targetOrigin="http://localhost"
+            >
+              <ForwardRef>
+                <iframe
+                  src="resources/form-displayer.html"
+                  style={
+                    Object {
+                      "border": "none",
+                      "display": "flex",
+                      "flex": 1,
+                      "flexDirection": "column",
+                      "height": "100%",
+                      "margin": 0,
+                      "overflow": "hidden",
+                      "padding": 0,
+                      "width": "100%",
+                    }
+                  }
+                  title="X"
+                />
+              </ForwardRef>
+            </ForwardRef>
+          </div>
+        </StackItem>
+      </div>
+    </Stack>
   </div>
 </CustomTaskFormDisplayer>
 `;
@@ -567,220 +592,239 @@ exports[`CustomTaskFormDisplayer Test Rendering form 2`] = `
   <div
     data-ouia-component-type="custom-form-displayer"
     data-ouia-safe={true}
-  >
-    <div
-      id="testId-form"
-      style={
-        Object {
-          "visibility": "hidden",
-        }
+    style={
+      Object {
+        "height": "100%",
       }
+    }
+  >
+    <Stack
+      hasGutter={true}
     >
-      <ForwardRef
-        context={
-          Object {
-            "phases": Array [
-              "complete",
-              "release",
-            ],
-            "schema": Object {
-              "properties": Object {
-                "traveller": Object {
-                  "input": true,
-                  "output": true,
-                  "properties": Object {
-                    "address": Object {
-                      "properties": Object {
-                        "city": Object {
-                          "type": "string",
-                        },
-                        "country": Object {
-                          "type": "string",
-                        },
-                        "street": Object {
-                          "type": "string",
-                        },
-                        "zipCode": Object {
-                          "type": "string",
-                        },
-                      },
-                      "type": "object",
-                    },
-                    "email": Object {
-                      "format": "email",
-                      "type": "string",
-                    },
-                    "firstName": Object {
-                      "type": "string",
-                    },
-                    "lastName": Object {
-                      "type": "string",
-                    },
-                    "nationality": Object {
-                      "type": "string",
-                    },
-                  },
-                  "required": Array [
-                    "firstName",
-                    "lastName",
-                  ],
-                  "type": "object",
-                },
-                "trip": Object {
-                  "input": true,
-                  "output": false,
-                  "properties": Object {
-                    "begin": Object {
-                      "format": "date-time",
-                      "type": "string",
-                    },
-                    "city": Object {
-                      "type": "string",
-                    },
-                    "country": Object {
-                      "type": "string",
-                    },
-                    "end": Object {
-                      "format": "date-time",
-                      "type": "string",
-                    },
-                    "visaRequired": Object {
-                      "type": "boolean",
-                    },
-                  },
-                  "type": "object",
-                },
-                "visaApplication": Object {
-                  "input": true,
-                  "output": false,
-                  "properties": Object {
-                    "city": Object {
-                      "type": "string",
-                    },
-                    "country": Object {
-                      "type": "string",
-                    },
-                    "duration": Object {
-                      "type": "integer",
-                    },
-                    "firstName": Object {
-                      "type": "string",
-                    },
-                    "lastName": Object {
-                      "type": "string",
-                    },
-                    "nationality": Object {
-                      "type": "string",
-                    },
-                    "passportNumber": Object {
-                      "type": "string",
-                    },
-                  },
-                  "type": "object",
-                },
-              },
-              "type": "object",
-            },
-            "task": Object {
-              "completed": null,
-              "description": null,
-              "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
-              "lastUpdate": 2020-02-19T11:11:56.282Z,
-              "name": "VisaApplication",
-              "priority": "1",
-              "processId": "travels",
-              "processInstanceId": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
-              "referenceName": "Apply for visa",
-              "rootProcessId": null,
-              "rootProcessInstanceId": null,
-              "started": 2020-02-19T11:11:56.282Z,
-              "state": "Ready",
-            },
-            "user": Object {
-              "groups": Array [
-                "admin",
-                "managers",
-              ],
-              "id": "jdoe",
-            },
-          }
-        }
-        data={
-          Object {
-            "NodeName": "Apply for visa",
-            "Priority": "1",
-            "Skippable": "true",
-            "TaskName": "VisaApplication",
-            "traveller": Object {
-              "address": Object {
-                "city": "Zerf",
-                "country": "Poland",
-                "street": "Cabalone",
-                "zipCode": "765756",
-              },
-              "email": "rwhite@gorle.com",
-              "firstName": "Rachel",
-              "lastName": "White",
-              "nationality": "Polish",
-            },
-            "trip": Object {
-              "begin": "2020-02-19T23:00:00.000+01:00",
-              "city": "Boston",
-              "country": "US",
-              "end": "2020-02-26T23:00:00.000+01:00",
-              "visaRequired": true,
-            },
-          }
-        }
-        envelopePath="resources/form-displayer.html"
-        formContent={
-          Object {
-            "configuration": Object {
-              "resources": Object {
-                "scripts": Object {},
-                "styles": Object {},
-              },
-              "schema": "",
-            },
-            "formInfo": Object {
-              "lastModified": 2021-10-11T22:00:00.000Z,
-              "name": "travels_VisaApplication",
-              "type": "HTML",
-            },
-            "source": "<div></div>",
-          }
-        }
-        onOpenForm={[Function]}
-        targetOrigin="http://localhost"
+      <div
+        className="pf-l-stack pf-m-gutter"
       >
-        <ForwardRef>
-          <iframe
-            src="resources/form-displayer.html"
+        <StackItem
+          id="testId-form"
+          style={
+            Object {
+              "height": "inherit",
+              "visibility": "hidden",
+            }
+          }
+        >
+          <div
+            className="pf-l-stack__item"
+            id="testId-form"
             style={
               Object {
-                "border": "none",
-                "display": "flex",
-                "flex": 1,
-                "flexDirection": "column",
-                "height": "100%",
-                "margin": 0,
-                "overflow": "hidden",
-                "padding": 0,
-                "width": "100%",
+                "height": "inherit",
+                "visibility": "hidden",
               }
             }
-            title="X"
-          />
-        </ForwardRef>
-      </ForwardRef>
-    </div>
-    <Flex>
-      <div
-        className="pf-l-flex"
-      >
-        <FlexItem>
+          >
+            <ForwardRef
+              context={
+                Object {
+                  "phases": Array [
+                    "complete",
+                    "release",
+                  ],
+                  "schema": Object {
+                    "properties": Object {
+                      "traveller": Object {
+                        "input": true,
+                        "output": true,
+                        "properties": Object {
+                          "address": Object {
+                            "properties": Object {
+                              "city": Object {
+                                "type": "string",
+                              },
+                              "country": Object {
+                                "type": "string",
+                              },
+                              "street": Object {
+                                "type": "string",
+                              },
+                              "zipCode": Object {
+                                "type": "string",
+                              },
+                            },
+                            "type": "object",
+                          },
+                          "email": Object {
+                            "format": "email",
+                            "type": "string",
+                          },
+                          "firstName": Object {
+                            "type": "string",
+                          },
+                          "lastName": Object {
+                            "type": "string",
+                          },
+                          "nationality": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "firstName",
+                          "lastName",
+                        ],
+                        "type": "object",
+                      },
+                      "trip": Object {
+                        "input": true,
+                        "output": false,
+                        "properties": Object {
+                          "begin": Object {
+                            "format": "date-time",
+                            "type": "string",
+                          },
+                          "city": Object {
+                            "type": "string",
+                          },
+                          "country": Object {
+                            "type": "string",
+                          },
+                          "end": Object {
+                            "format": "date-time",
+                            "type": "string",
+                          },
+                          "visaRequired": Object {
+                            "type": "boolean",
+                          },
+                        },
+                        "type": "object",
+                      },
+                      "visaApplication": Object {
+                        "input": true,
+                        "output": false,
+                        "properties": Object {
+                          "city": Object {
+                            "type": "string",
+                          },
+                          "country": Object {
+                            "type": "string",
+                          },
+                          "duration": Object {
+                            "type": "integer",
+                          },
+                          "firstName": Object {
+                            "type": "string",
+                          },
+                          "lastName": Object {
+                            "type": "string",
+                          },
+                          "nationality": Object {
+                            "type": "string",
+                          },
+                          "passportNumber": Object {
+                            "type": "string",
+                          },
+                        },
+                        "type": "object",
+                      },
+                    },
+                    "type": "object",
+                  },
+                  "task": Object {
+                    "completed": null,
+                    "description": null,
+                    "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
+                    "lastUpdate": 2020-02-19T11:11:56.282Z,
+                    "name": "VisaApplication",
+                    "priority": "1",
+                    "processId": "travels",
+                    "processInstanceId": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
+                    "referenceName": "Apply for visa",
+                    "rootProcessId": null,
+                    "rootProcessInstanceId": null,
+                    "started": 2020-02-19T11:11:56.282Z,
+                    "state": "Ready",
+                  },
+                  "user": Object {
+                    "groups": Array [
+                      "admin",
+                      "managers",
+                    ],
+                    "id": "jdoe",
+                  },
+                }
+              }
+              data={
+                Object {
+                  "NodeName": "Apply for visa",
+                  "Priority": "1",
+                  "Skippable": "true",
+                  "TaskName": "VisaApplication",
+                  "traveller": Object {
+                    "address": Object {
+                      "city": "Zerf",
+                      "country": "Poland",
+                      "street": "Cabalone",
+                      "zipCode": "765756",
+                    },
+                    "email": "rwhite@gorle.com",
+                    "firstName": "Rachel",
+                    "lastName": "White",
+                    "nationality": "Polish",
+                  },
+                  "trip": Object {
+                    "begin": "2020-02-19T23:00:00.000+01:00",
+                    "city": "Boston",
+                    "country": "US",
+                    "end": "2020-02-26T23:00:00.000+01:00",
+                    "visaRequired": true,
+                  },
+                }
+              }
+              envelopePath="resources/form-displayer.html"
+              formContent={
+                Object {
+                  "configuration": Object {
+                    "resources": Object {
+                      "scripts": Object {},
+                      "styles": Object {},
+                    },
+                    "schema": "",
+                  },
+                  "formInfo": Object {
+                    "lastModified": 2021-10-11T22:00:00.000Z,
+                    "name": "travels_VisaApplication",
+                    "type": "HTML",
+                  },
+                  "source": "<div></div>",
+                }
+              }
+              onOpenForm={[Function]}
+              targetOrigin="http://localhost"
+            >
+              <ForwardRef>
+                <iframe
+                  src="resources/form-displayer.html"
+                  style={
+                    Object {
+                      "border": "none",
+                      "display": "flex",
+                      "flex": 1,
+                      "flexDirection": "column",
+                      "height": "100%",
+                      "margin": 0,
+                      "overflow": "hidden",
+                      "padding": 0,
+                      "width": "100%",
+                    }
+                  }
+                  title="X"
+                />
+              </ForwardRef>
+            </ForwardRef>
+          </div>
+        </StackItem>
+        <StackItem>
           <div
-            className=""
+            className="pf-l-stack__item"
           >
             <MockedFormFooter
               actions={
@@ -798,9 +842,9 @@ exports[`CustomTaskFormDisplayer Test Rendering form 2`] = `
               enabled={true}
             />
           </div>
-        </FlexItem>
+        </StackItem>
       </div>
-    </Flex>
+    </Stack>
   </div>
 </CustomTaskFormDisplayer>
 `;
@@ -974,6 +1018,11 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 1`] = `
   <div
     data-ouia-component-type="custom-form-displayer"
     data-ouia-safe={true}
+    style={
+      Object {
+        "height": "100%",
+      }
+    }
   >
     <Bullseye
       data-ouia-component-id="task-form-envelope-view-loading-spinner"
@@ -993,212 +1042,232 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 1`] = `
         </KogitoSpinner>
       </div>
     </Bullseye>
-    <div
-      id="testId-form"
-      style={
-        Object {
-          "visibility": "hidden",
-        }
-      }
+    <Stack
+      hasGutter={true}
     >
-      <ForwardRef
-        context={
-          Object {
-            "phases": Array [
-              "complete",
-              "release",
-            ],
-            "schema": Object {
-              "properties": Object {
-                "traveller": Object {
-                  "input": true,
-                  "output": true,
-                  "properties": Object {
-                    "address": Object {
-                      "properties": Object {
-                        "city": Object {
-                          "type": "string",
-                        },
-                        "country": Object {
-                          "type": "string",
-                        },
-                        "street": Object {
-                          "type": "string",
-                        },
-                        "zipCode": Object {
-                          "type": "string",
-                        },
-                      },
-                      "type": "object",
-                    },
-                    "email": Object {
-                      "format": "email",
-                      "type": "string",
-                    },
-                    "firstName": Object {
-                      "type": "string",
-                    },
-                    "lastName": Object {
-                      "type": "string",
-                    },
-                    "nationality": Object {
-                      "type": "string",
-                    },
-                  },
-                  "required": Array [
-                    "firstName",
-                    "lastName",
-                  ],
-                  "type": "object",
-                },
-                "trip": Object {
-                  "input": true,
-                  "output": false,
-                  "properties": Object {
-                    "begin": Object {
-                      "format": "date-time",
-                      "type": "string",
-                    },
-                    "city": Object {
-                      "type": "string",
-                    },
-                    "country": Object {
-                      "type": "string",
-                    },
-                    "end": Object {
-                      "format": "date-time",
-                      "type": "string",
-                    },
-                    "visaRequired": Object {
-                      "type": "boolean",
-                    },
-                  },
-                  "type": "object",
-                },
-                "visaApplication": Object {
-                  "input": true,
-                  "output": false,
-                  "properties": Object {
-                    "city": Object {
-                      "type": "string",
-                    },
-                    "country": Object {
-                      "type": "string",
-                    },
-                    "duration": Object {
-                      "type": "integer",
-                    },
-                    "firstName": Object {
-                      "type": "string",
-                    },
-                    "lastName": Object {
-                      "type": "string",
-                    },
-                    "nationality": Object {
-                      "type": "string",
-                    },
-                    "passportNumber": Object {
-                      "type": "string",
-                    },
-                  },
-                  "type": "object",
-                },
-              },
-              "type": "object",
-            },
-            "task": Object {
-              "completed": null,
-              "description": null,
-              "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
-              "lastUpdate": 2020-02-19T11:11:56.282Z,
-              "name": "VisaApplication",
-              "priority": "1",
-              "processId": "travels",
-              "processInstanceId": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
-              "referenceName": "Apply for visa",
-              "rootProcessId": null,
-              "rootProcessInstanceId": null,
-              "started": 2020-02-19T11:11:56.282Z,
-              "state": "Ready",
-            },
-            "user": Object {
-              "groups": Array [
-                "admin",
-                "managers",
-              ],
-              "id": "jdoe",
-            },
-          }
-        }
-        data={
-          Object {
-            "NodeName": "Apply for visa",
-            "Priority": "1",
-            "Skippable": "true",
-            "TaskName": "VisaApplication",
-            "traveller": Object {
-              "address": Object {
-                "city": "Zerf",
-                "country": "Poland",
-                "street": "Cabalone",
-                "zipCode": "765756",
-              },
-              "email": "rwhite@gorle.com",
-              "firstName": "Rachel",
-              "lastName": "White",
-              "nationality": "Polish",
-            },
-            "trip": Object {
-              "begin": "2020-02-19T23:00:00.000+01:00",
-              "city": "Boston",
-              "country": "US",
-              "end": "2020-02-26T23:00:00.000+01:00",
-              "visaRequired": true,
-            },
-          }
-        }
-        envelopePath="resources/form-displayer.html"
-        formContent={
-          Object {
-            "configuration": Object {
-              "resources": Object {
-                "scripts": Object {},
-                "styles": Object {},
-              },
-              "schema": "",
-            },
-            "formInfo": Object {
-              "lastModified": 2021-10-11T22:00:00.000Z,
-              "name": "travels_VisaApplication",
-              "type": "HTML",
-            },
-            "source": "<div></div>",
-          }
-        }
-        onOpenForm={[Function]}
-        targetOrigin="http://localhost"
+      <div
+        className="pf-l-stack pf-m-gutter"
       >
-        <ForwardRef>
-          <iframe
-            src="resources/form-displayer.html"
+        <StackItem
+          id="testId-form"
+          style={
+            Object {
+              "height": "inherit",
+              "visibility": "hidden",
+            }
+          }
+        >
+          <div
+            className="pf-l-stack__item"
+            id="testId-form"
             style={
               Object {
-                "border": "none",
-                "display": "flex",
-                "flex": 1,
-                "flexDirection": "column",
-                "height": "100%",
-                "margin": 0,
-                "overflow": "hidden",
-                "padding": 0,
-                "width": "100%",
+                "height": "inherit",
+                "visibility": "hidden",
               }
             }
-            title="X"
-          />
-        </ForwardRef>
-      </ForwardRef>
-    </div>
+          >
+            <ForwardRef
+              context={
+                Object {
+                  "phases": Array [
+                    "complete",
+                    "release",
+                  ],
+                  "schema": Object {
+                    "properties": Object {
+                      "traveller": Object {
+                        "input": true,
+                        "output": true,
+                        "properties": Object {
+                          "address": Object {
+                            "properties": Object {
+                              "city": Object {
+                                "type": "string",
+                              },
+                              "country": Object {
+                                "type": "string",
+                              },
+                              "street": Object {
+                                "type": "string",
+                              },
+                              "zipCode": Object {
+                                "type": "string",
+                              },
+                            },
+                            "type": "object",
+                          },
+                          "email": Object {
+                            "format": "email",
+                            "type": "string",
+                          },
+                          "firstName": Object {
+                            "type": "string",
+                          },
+                          "lastName": Object {
+                            "type": "string",
+                          },
+                          "nationality": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "firstName",
+                          "lastName",
+                        ],
+                        "type": "object",
+                      },
+                      "trip": Object {
+                        "input": true,
+                        "output": false,
+                        "properties": Object {
+                          "begin": Object {
+                            "format": "date-time",
+                            "type": "string",
+                          },
+                          "city": Object {
+                            "type": "string",
+                          },
+                          "country": Object {
+                            "type": "string",
+                          },
+                          "end": Object {
+                            "format": "date-time",
+                            "type": "string",
+                          },
+                          "visaRequired": Object {
+                            "type": "boolean",
+                          },
+                        },
+                        "type": "object",
+                      },
+                      "visaApplication": Object {
+                        "input": true,
+                        "output": false,
+                        "properties": Object {
+                          "city": Object {
+                            "type": "string",
+                          },
+                          "country": Object {
+                            "type": "string",
+                          },
+                          "duration": Object {
+                            "type": "integer",
+                          },
+                          "firstName": Object {
+                            "type": "string",
+                          },
+                          "lastName": Object {
+                            "type": "string",
+                          },
+                          "nationality": Object {
+                            "type": "string",
+                          },
+                          "passportNumber": Object {
+                            "type": "string",
+                          },
+                        },
+                        "type": "object",
+                      },
+                    },
+                    "type": "object",
+                  },
+                  "task": Object {
+                    "completed": null,
+                    "description": null,
+                    "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
+                    "lastUpdate": 2020-02-19T11:11:56.282Z,
+                    "name": "VisaApplication",
+                    "priority": "1",
+                    "processId": "travels",
+                    "processInstanceId": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
+                    "referenceName": "Apply for visa",
+                    "rootProcessId": null,
+                    "rootProcessInstanceId": null,
+                    "started": 2020-02-19T11:11:56.282Z,
+                    "state": "Ready",
+                  },
+                  "user": Object {
+                    "groups": Array [
+                      "admin",
+                      "managers",
+                    ],
+                    "id": "jdoe",
+                  },
+                }
+              }
+              data={
+                Object {
+                  "NodeName": "Apply for visa",
+                  "Priority": "1",
+                  "Skippable": "true",
+                  "TaskName": "VisaApplication",
+                  "traveller": Object {
+                    "address": Object {
+                      "city": "Zerf",
+                      "country": "Poland",
+                      "street": "Cabalone",
+                      "zipCode": "765756",
+                    },
+                    "email": "rwhite@gorle.com",
+                    "firstName": "Rachel",
+                    "lastName": "White",
+                    "nationality": "Polish",
+                  },
+                  "trip": Object {
+                    "begin": "2020-02-19T23:00:00.000+01:00",
+                    "city": "Boston",
+                    "country": "US",
+                    "end": "2020-02-26T23:00:00.000+01:00",
+                    "visaRequired": true,
+                  },
+                }
+              }
+              envelopePath="resources/form-displayer.html"
+              formContent={
+                Object {
+                  "configuration": Object {
+                    "resources": Object {
+                      "scripts": Object {},
+                      "styles": Object {},
+                    },
+                    "schema": "",
+                  },
+                  "formInfo": Object {
+                    "lastModified": 2021-10-11T22:00:00.000Z,
+                    "name": "travels_VisaApplication",
+                    "type": "HTML",
+                  },
+                  "source": "<div></div>",
+                }
+              }
+              onOpenForm={[Function]}
+              targetOrigin="http://localhost"
+            >
+              <ForwardRef>
+                <iframe
+                  src="resources/form-displayer.html"
+                  style={
+                    Object {
+                      "border": "none",
+                      "display": "flex",
+                      "flex": 1,
+                      "flexDirection": "column",
+                      "height": "100%",
+                      "margin": 0,
+                      "overflow": "hidden",
+                      "padding": 0,
+                      "width": "100%",
+                    }
+                  }
+                  title="X"
+                />
+              </ForwardRef>
+            </ForwardRef>
+          </div>
+        </StackItem>
+      </div>
+    </Stack>
   </div>
 </CustomTaskFormDisplayer>
 `;
@@ -1372,213 +1441,238 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 2`] = `
   <div
     data-ouia-component-type="custom-form-displayer"
     data-ouia-safe={true}
-  >
-    <div
-      id="testId-form"
-      style={
-        Object {
-          "visibility": "hidden",
-        }
+    style={
+      Object {
+        "height": "100%",
       }
+    }
+  >
+    <Stack
+      hasGutter={true}
     >
-      <ForwardRef
-        context={
-          Object {
-            "phases": Array [
-              "complete",
-              "release",
-            ],
-            "schema": Object {
-              "properties": Object {
-                "traveller": Object {
-                  "input": true,
-                  "output": true,
-                  "properties": Object {
-                    "address": Object {
-                      "properties": Object {
-                        "city": Object {
-                          "type": "string",
-                        },
-                        "country": Object {
-                          "type": "string",
-                        },
-                        "street": Object {
-                          "type": "string",
-                        },
-                        "zipCode": Object {
-                          "type": "string",
-                        },
-                      },
-                      "type": "object",
-                    },
-                    "email": Object {
-                      "format": "email",
-                      "type": "string",
-                    },
-                    "firstName": Object {
-                      "type": "string",
-                    },
-                    "lastName": Object {
-                      "type": "string",
-                    },
-                    "nationality": Object {
-                      "type": "string",
-                    },
-                  },
-                  "required": Array [
-                    "firstName",
-                    "lastName",
-                  ],
-                  "type": "object",
-                },
-                "trip": Object {
-                  "input": true,
-                  "output": false,
-                  "properties": Object {
-                    "begin": Object {
-                      "format": "date-time",
-                      "type": "string",
-                    },
-                    "city": Object {
-                      "type": "string",
-                    },
-                    "country": Object {
-                      "type": "string",
-                    },
-                    "end": Object {
-                      "format": "date-time",
-                      "type": "string",
-                    },
-                    "visaRequired": Object {
-                      "type": "boolean",
-                    },
-                  },
-                  "type": "object",
-                },
-                "visaApplication": Object {
-                  "input": true,
-                  "output": false,
-                  "properties": Object {
-                    "city": Object {
-                      "type": "string",
-                    },
-                    "country": Object {
-                      "type": "string",
-                    },
-                    "duration": Object {
-                      "type": "integer",
-                    },
-                    "firstName": Object {
-                      "type": "string",
-                    },
-                    "lastName": Object {
-                      "type": "string",
-                    },
-                    "nationality": Object {
-                      "type": "string",
-                    },
-                    "passportNumber": Object {
-                      "type": "string",
-                    },
-                  },
-                  "type": "object",
-                },
-              },
-              "type": "object",
-            },
-            "task": Object {
-              "completed": null,
-              "description": null,
-              "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
-              "lastUpdate": 2020-02-19T11:11:56.282Z,
-              "name": "VisaApplication",
-              "priority": "1",
-              "processId": "travels",
-              "processInstanceId": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
-              "referenceName": "Apply for visa",
-              "rootProcessId": null,
-              "rootProcessInstanceId": null,
-              "started": 2020-02-19T11:11:56.282Z,
-              "state": "Ready",
-            },
-            "user": Object {
-              "groups": Array [
-                "admin",
-                "managers",
-              ],
-              "id": "jdoe",
-            },
-          }
-        }
-        data={
-          Object {
-            "NodeName": "Apply for visa",
-            "Priority": "1",
-            "Skippable": "true",
-            "TaskName": "VisaApplication",
-            "traveller": Object {
-              "address": Object {
-                "city": "Zerf",
-                "country": "Poland",
-                "street": "Cabalone",
-                "zipCode": "765756",
-              },
-              "email": "rwhite@gorle.com",
-              "firstName": "Rachel",
-              "lastName": "White",
-              "nationality": "Polish",
-            },
-            "trip": Object {
-              "begin": "2020-02-19T23:00:00.000+01:00",
-              "city": "Boston",
-              "country": "US",
-              "end": "2020-02-26T23:00:00.000+01:00",
-              "visaRequired": true,
-            },
-          }
-        }
-        envelopePath="resources/form-displayer.html"
-        formContent={
-          Object {
-            "configuration": Object {
-              "resources": Object {
-                "scripts": Object {},
-                "styles": Object {},
-              },
-              "schema": "",
-            },
-            "formInfo": Object {
-              "lastModified": 2021-10-11T22:00:00.000Z,
-              "name": "travels_VisaApplication",
-              "type": "HTML",
-            },
-            "source": "<div></div>",
-          }
-        }
-        onOpenForm={[Function]}
-        targetOrigin="http://localhost"
+      <div
+        className="pf-l-stack pf-m-gutter"
       >
-        <ForwardRef>
-          <iframe
-            src="resources/form-displayer.html"
+        <StackItem
+          id="testId-form"
+          style={
+            Object {
+              "height": "inherit",
+              "visibility": "hidden",
+            }
+          }
+        >
+          <div
+            className="pf-l-stack__item"
+            id="testId-form"
             style={
               Object {
-                "border": "none",
-                "display": "flex",
-                "flex": 1,
-                "flexDirection": "column",
-                "height": "100%",
-                "margin": 0,
-                "overflow": "hidden",
-                "padding": 0,
-                "width": "100%",
+                "height": "inherit",
+                "visibility": "hidden",
               }
             }
-            title="X"
-          />
-        </ForwardRef>
-      </ForwardRef>
-    </div>
+          >
+            <ForwardRef
+              context={
+                Object {
+                  "phases": Array [
+                    "complete",
+                    "release",
+                  ],
+                  "schema": Object {
+                    "properties": Object {
+                      "traveller": Object {
+                        "input": true,
+                        "output": true,
+                        "properties": Object {
+                          "address": Object {
+                            "properties": Object {
+                              "city": Object {
+                                "type": "string",
+                              },
+                              "country": Object {
+                                "type": "string",
+                              },
+                              "street": Object {
+                                "type": "string",
+                              },
+                              "zipCode": Object {
+                                "type": "string",
+                              },
+                            },
+                            "type": "object",
+                          },
+                          "email": Object {
+                            "format": "email",
+                            "type": "string",
+                          },
+                          "firstName": Object {
+                            "type": "string",
+                          },
+                          "lastName": Object {
+                            "type": "string",
+                          },
+                          "nationality": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "firstName",
+                          "lastName",
+                        ],
+                        "type": "object",
+                      },
+                      "trip": Object {
+                        "input": true,
+                        "output": false,
+                        "properties": Object {
+                          "begin": Object {
+                            "format": "date-time",
+                            "type": "string",
+                          },
+                          "city": Object {
+                            "type": "string",
+                          },
+                          "country": Object {
+                            "type": "string",
+                          },
+                          "end": Object {
+                            "format": "date-time",
+                            "type": "string",
+                          },
+                          "visaRequired": Object {
+                            "type": "boolean",
+                          },
+                        },
+                        "type": "object",
+                      },
+                      "visaApplication": Object {
+                        "input": true,
+                        "output": false,
+                        "properties": Object {
+                          "city": Object {
+                            "type": "string",
+                          },
+                          "country": Object {
+                            "type": "string",
+                          },
+                          "duration": Object {
+                            "type": "integer",
+                          },
+                          "firstName": Object {
+                            "type": "string",
+                          },
+                          "lastName": Object {
+                            "type": "string",
+                          },
+                          "nationality": Object {
+                            "type": "string",
+                          },
+                          "passportNumber": Object {
+                            "type": "string",
+                          },
+                        },
+                        "type": "object",
+                      },
+                    },
+                    "type": "object",
+                  },
+                  "task": Object {
+                    "completed": null,
+                    "description": null,
+                    "id": "45a73767-5da3-49bf-9c40-d533c3e77ef3",
+                    "lastUpdate": 2020-02-19T11:11:56.282Z,
+                    "name": "VisaApplication",
+                    "priority": "1",
+                    "processId": "travels",
+                    "processInstanceId": "9ae7ce3b-d49c-4f35-b843-8ac3d22fa427",
+                    "referenceName": "Apply for visa",
+                    "rootProcessId": null,
+                    "rootProcessInstanceId": null,
+                    "started": 2020-02-19T11:11:56.282Z,
+                    "state": "Ready",
+                  },
+                  "user": Object {
+                    "groups": Array [
+                      "admin",
+                      "managers",
+                    ],
+                    "id": "jdoe",
+                  },
+                }
+              }
+              data={
+                Object {
+                  "NodeName": "Apply for visa",
+                  "Priority": "1",
+                  "Skippable": "true",
+                  "TaskName": "VisaApplication",
+                  "traveller": Object {
+                    "address": Object {
+                      "city": "Zerf",
+                      "country": "Poland",
+                      "street": "Cabalone",
+                      "zipCode": "765756",
+                    },
+                    "email": "rwhite@gorle.com",
+                    "firstName": "Rachel",
+                    "lastName": "White",
+                    "nationality": "Polish",
+                  },
+                  "trip": Object {
+                    "begin": "2020-02-19T23:00:00.000+01:00",
+                    "city": "Boston",
+                    "country": "US",
+                    "end": "2020-02-26T23:00:00.000+01:00",
+                    "visaRequired": true,
+                  },
+                }
+              }
+              envelopePath="resources/form-displayer.html"
+              formContent={
+                Object {
+                  "configuration": Object {
+                    "resources": Object {
+                      "scripts": Object {},
+                      "styles": Object {},
+                    },
+                    "schema": "",
+                  },
+                  "formInfo": Object {
+                    "lastModified": 2021-10-11T22:00:00.000Z,
+                    "name": "travels_VisaApplication",
+                    "type": "HTML",
+                  },
+                  "source": "<div></div>",
+                }
+              }
+              onOpenForm={[Function]}
+              targetOrigin="http://localhost"
+            >
+              <ForwardRef>
+                <iframe
+                  src="resources/form-displayer.html"
+                  style={
+                    Object {
+                      "border": "none",
+                      "display": "flex",
+                      "flex": 1,
+                      "flexDirection": "column",
+                      "height": "100%",
+                      "margin": 0,
+                      "overflow": "hidden",
+                      "padding": 0,
+                      "width": "100%",
+                    }
+                  }
+                  title="X"
+                />
+              </ForwardRef>
+            </ForwardRef>
+          </div>
+        </StackItem>
+      </div>
+    </Stack>
   </div>
 </CustomTaskFormDisplayer>
 `;
