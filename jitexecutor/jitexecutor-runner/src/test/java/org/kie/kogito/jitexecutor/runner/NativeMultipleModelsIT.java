@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
-Cypress.Commands.add('ouiaId', valueStr => {
-  return cy.get(`[data-ouia-component-id='${valueStr}']`);
-});
+package org.kie.kogito.jitexecutor.runner;
+
+import org.kie.kogito.jitexecutor.dmn.api.MultipleModelsTest;
+
+import io.quarkus.test.junit.NativeImageTest;
+
+@NativeImageTest
+public class NativeMultipleModelsIT extends MultipleModelsTest {
+    // Execute the same tests but in native mode.
+}
