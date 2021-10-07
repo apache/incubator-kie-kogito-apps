@@ -759,7 +759,7 @@ class CounterfactualScoreCalculatorTest {
     }
 
     /**
-     * If the goal and the model's output is the same, the distances should all be zero.
+     * Null values for input Boolean features should be accepted as valid
      */
     @Test
     void testNullBooleanInput() throws ExecutionException, InterruptedException {
@@ -816,7 +816,7 @@ class CounterfactualScoreCalculatorTest {
     }
 
     /**
-     * If the goal and the model's output is the same, the distances should all be zero.
+     * Null values for input Integer features should not be accepted as valid
      */
     @Test
     void testNullIntegerInput() throws ExecutionException, InterruptedException {
@@ -850,7 +850,7 @@ class CounterfactualScoreCalculatorTest {
     }
 
     /**
-     * If the goal and the model's output is the same, the distances should all be zero.
+     * Null values for input Double features should not be accepted as valid
      */
     @Test
     void testNullDoubleInput() {
