@@ -79,12 +79,27 @@ public class CounterfactualEntityFactory {
         return entity;
     }
 
+    /**
+     * Validation of features for counterfactual entity construction
+     * @param feature {@link Feature} to be validated
+     */
+    public static void validateFeature(Feature feature) {
+        final Type type = feature.getType();
+        final Object object = feature.getValue().getUnderlyingObject();
+        if (type == Type.NUMBER) {
+            if (object == null) {
+                throw new IllegalArgumentException("Null numeric features are not supported in counterfactuals");
+            }
+        }
+    }
+
     public static List<CounterfactualEntity> createEntities(PredictionInput predictionInput,
             PredictionFeatureDomain featureDomain, List<Boolean> constraints, DataDistribution dataDistribution) {
         final List<FeatureDomain> domains = featureDomain.getFeatureDomains();
         return IntStream.range(0, predictionInput.getFeatures().size())
                 .mapToObj(featureIndex -> {
                     final Feature feature = predictionInput.getFeatures().get(featureIndex);
+                    validateFeature(feature);
                     final Boolean isConstrained = constraints.get(featureIndex);
                     final FeatureDomain domain = domains.get(featureIndex);
                     final FeatureDistribution featureDistribution = Optional

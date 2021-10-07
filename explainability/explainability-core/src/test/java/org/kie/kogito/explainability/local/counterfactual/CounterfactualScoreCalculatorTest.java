@@ -757,4 +757,129 @@ class CounterfactualScoreCalculatorTest {
         assertEquals("Prediction size must be equal to goal size", exception.getMessage());
 
     }
+
+    /**
+     * If the goal and the model's output is the same, the distances should all be zero.
+     */
+    @Test
+    void testNullBooleanInput() throws ExecutionException, InterruptedException {
+        final CounterFactualScoreCalculator scoreCalculator = new CounterFactualScoreCalculator();
+
+        PredictionProvider model = TestUtils.getFeatureSkipModel(0);
+
+        List<Feature> features = new ArrayList<>();
+        List<FeatureDomain> featureDomains = new ArrayList<>();
+        List<Boolean> constraints = new ArrayList<>();
+
+        // f-1
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
+        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
+        constraints.add(false);
+
+        // f-2
+        features.add(FeatureFactory.newBooleanFeature("f-2", null));
+        featureDomains.add(EmptyFeatureDomain.create());
+        constraints.add(false);
+
+        // f-3
+        features.add(FeatureFactory.newBooleanFeature("f-3", true));
+        featureDomains.add(EmptyFeatureDomain.create());
+        constraints.add(false);
+
+        PredictionInput input = new PredictionInput(features);
+        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+
+        List<Output> goal = new ArrayList<>();
+        goal.add(new Output("f-2", Type.BOOLEAN, new Value(null), 0.0));
+        goal.add(new Output("f-3", Type.BOOLEAN, new Value(true), 0.0));
+
+        final CounterfactualSolution solution =
+                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+
+        BendableBigDecimalScore score = scoreCalculator.calculateScore(solution);
+
+        List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input)).get();
+
+        assertTrue(score.isFeasible());
+
+        assertEquals(2, goal.size());
+        assertEquals(1, predictionOutputs.size()); // A single prediction is expected
+        assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
+        assertEquals(0, score.getHardScore(0).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getHardScore(1).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getHardScore(2).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getSoftScore(0).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getSoftScore(1).compareTo(BigDecimal.ZERO));
+        assertEquals(3, score.getHardLevelsSize());
+        assertEquals(2, score.getSoftLevelsSize());
+    }
+
+    /**
+     * If the goal and the model's output is the same, the distances should all be zero.
+     */
+    @Test
+    void testNullIntegerInput() throws ExecutionException, InterruptedException {
+        List<Feature> features = new ArrayList<>();
+        List<FeatureDomain> featureDomains = new ArrayList<>();
+        List<Boolean> constraints = new ArrayList<>();
+
+        // f-1
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
+        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
+        constraints.add(false);
+
+        // f-2
+        features.add(FeatureFactory.newNumericalFeature("f-2", null));
+        featureDomains.add(NumericalFeatureDomain.create(0, 10));
+        constraints.add(false);
+
+        // f-3
+        features.add(FeatureFactory.newBooleanFeature("f-3", true));
+        featureDomains.add(EmptyFeatureDomain.create());
+        constraints.add(false);
+
+        PredictionInput input = new PredictionInput(features);
+        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+        });
+
+        assertEquals("Null numeric features are not supported in counterfactuals", exception.getMessage());
+    }
+
+    /**
+     * If the goal and the model's output is the same, the distances should all be zero.
+     */
+    @Test
+    void testNullDoubleInput() {
+        List<Feature> features = new ArrayList<>();
+        List<FeatureDomain> featureDomains = new ArrayList<>();
+        List<Boolean> constraints = new ArrayList<>();
+
+        // f-1
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
+        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
+        constraints.add(false);
+
+        // f-2
+        features.add(FeatureFactory.newNumericalFeature("f-2", null));
+        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
+        constraints.add(false);
+
+        // f-3
+        features.add(FeatureFactory.newBooleanFeature("f-3", true));
+        featureDomains.add(EmptyFeatureDomain.create());
+        constraints.add(false);
+
+        PredictionInput input = new PredictionInput(features);
+        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+        });
+
+        assertEquals("Null numeric features are not supported in counterfactuals", exception.getMessage());
+    }
 }
