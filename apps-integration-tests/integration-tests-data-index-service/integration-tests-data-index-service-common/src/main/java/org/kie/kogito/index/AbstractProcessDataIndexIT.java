@@ -282,20 +282,24 @@ public abstract class AbstractProcessDataIndexIT {
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { id description priority potentialGroups} }\"}")
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 +
+                                "\\\"}}) { id description priority potentialGroups comments { content } attachments {id name}} }\"}")
                         .when().post("/graphql")
                         .then()
                         .statusCode(200)
                         .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
                         .body("data.UserTaskInstances[0].priority", equalTo("low"))
+                        .body("data.UserTaskInstances[0].comments.size()", is(0))
+                        .body("data.UserTaskInstances[0].attachments.size()", is(0))
                         .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers")));
 
+        String commentContent = "NewTaskComment";
         given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"mutation{ UserTaskInstanceCommentCreate(" +
                         "taskId: \\\"" + taskId + "\\\", " +
                         "user: \\\"manager\\\", " +
                         "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
-                        "comment: \\\"NewTaskComment\\\" " +
+                        "comment: \\\"" + commentContent + "\\\" " +
                         ")}\"}")
                 .when().post("/graphql")
                 .then()
@@ -313,14 +317,14 @@ public abstract class AbstractProcessDataIndexIT {
                         .then()
                         .statusCode(200)
                         .body("$.size", is(1))
-                        .body("[0].content", is("NewTaskComment")));
-
+                        .body("[0].content", is(commentContent)));
+        String attachmentName = "NewTaskAttachmentName";
         given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"mutation{ UserTaskInstanceAttachmentCreate(" +
                         "taskId: \\\"" + taskId + "\\\", " +
                         "user: \\\"manager\\\", " +
                         "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
-                        "name: \\\"NewTaskAttachmentName\\\", " +
+                        "name: \\\"" + attachmentName + "\\\", " +
                         "uri: \\\"https://drive.google.com/file/d/1Z_Lipg2jzY9TNewTaskAttachmentUri\\\", " +
                         ")}\"}")
                 .when().post("/graphql")
@@ -340,7 +344,23 @@ public abstract class AbstractProcessDataIndexIT {
                         .then()
                         .statusCode(200)
                         .body("$.size", is(1))
-                        .body("[0].name", is("NewTaskAttachmentName")));
+                        .body("[0].name", is(attachmentName)));
+
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { " +
+                                "id description priority potentialGroups comments { id  content } attachments { id name}} }\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
+                        .body("data.UserTaskInstances[0].priority", equalTo("low"))
+                        .body("data.UserTaskInstances[0].comments.size()", is(1))
+                        .body("data.UserTaskInstances[0].comments[0].content", equalTo(commentContent))
+                        .body("data.UserTaskInstances[0].attachments.size()", is(1))
+                        .body("data.UserTaskInstances[0].attachments[0].name", equalTo(attachmentName))
+                        .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers")));
 
         String vars = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { variables} }\"}")
