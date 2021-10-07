@@ -37,12 +37,12 @@ const CounterfactualUnsupported = (props: CounterfactualUnsupportedProps) => {
               <List>
                 {!isAtLeastOneInputSupported && (
                   <ListItem data-ouia-component-id={'inputs-message'}>
-                    All of the model inputs are structured data-types.
+                    <p>All of the model inputs are structured data-types.</p>
                   </ListItem>
                 )}
                 {!isAtLeastOneOutcomeSupported && (
                   <ListItem data-ouia-component-id={'outputs-message'}>
-                    All of the model outcomes are structured data-types.
+                    <p>All of the model outcomes are structured data-types.</p>
                   </ListItem>
                 )}
               </List>

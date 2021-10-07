@@ -32,6 +32,7 @@ import './AuditDetail.scss';
 import Counterfactual from '../Counterfactual/Counterfactual';
 import { SVGIconProps } from '@patternfly/react-icons/dist/js/createIcon';
 import { FlaskIcon } from '@patternfly/react-icons';
+import CounterfactualUnsupportedBanner from '../../Atoms/CounterfactualUnsupportedBanner/CounterfactualUnsupportedBanner';
 
 const AuditDetail = () => {
   const { path, url } = useRouteMatch();
@@ -84,32 +85,37 @@ const AuditDetail = () => {
           </div>
         )}
         {thirdLevelNav.length > 0 && (
-          <Nav
-            className="audit-detail__nav"
-            variant="tertiary"
-            ouiaId="nav-audit-detail"
-          >
-            <NavList>
-              {thirdLevelNav.map((item, index) => (
-                <NavItem
-                  key={`sub-nav-${index}`}
-                  isActive={location.pathname === url + item.url}
-                  ouiaId={item.url.substr(1)}
-                >
-                  <Link to={url + item.url}>
-                    <>
-                      {item.icon && (
-                        <div className={'audit-detail__nav__badge'}>
-                          {item.icon}
-                        </div>
-                      )}
-                      {item.desc}
-                    </>
-                  </Link>
-                </NavItem>
-              ))}
-            </NavList>
-          </Nav>
+          <>
+            {process.env.KOGITO_TRUSTY_COUNTERFACTUAL === 'enabled' && (
+              <CounterfactualUnsupportedBanner />
+            )}
+            <Nav
+              className="audit-detail__nav"
+              variant="tertiary"
+              ouiaId="nav-audit-detail"
+            >
+              <NavList>
+                {thirdLevelNav.map((item, index) => (
+                  <NavItem
+                    key={`sub-nav-${index}`}
+                    isActive={location.pathname === url + item.url}
+                    ouiaId={item.url.substr(1)}
+                  >
+                    <Link to={url + item.url}>
+                      <>
+                        {item.icon && (
+                          <div className={'audit-detail__nav__badge'}>
+                            {item.icon}
+                          </div>
+                        )}
+                        {item.desc}
+                      </>
+                    </Link>
+                  </NavItem>
+                ))}
+              </NavList>
+            </Nav>
+          </>
         )}
       </PageSection>
 

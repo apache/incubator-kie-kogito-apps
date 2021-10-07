@@ -26,12 +26,16 @@ exports[`CounterfactualUnsupported status renders inputs and outputs status 1`] 
           <ListItem
             data-ouia-component-id="inputs-message"
           >
-            All of the model inputs are structured data-types.
+            <p>
+              All of the model inputs are structured data-types.
+            </p>
           </ListItem>
           <ListItem
             data-ouia-component-id="outputs-message"
           >
-            All of the model outcomes are structured data-types.
+            <p>
+              All of the model outcomes are structured data-types.
+            </p>
           </ListItem>
         </List>
       </div>
@@ -69,7 +73,9 @@ exports[`CounterfactualUnsupported status renders inputs status 1`] = `
           <ListItem
             data-ouia-component-id="inputs-message"
           >
-            All of the model inputs are structured data-types.
+            <p>
+              All of the model inputs are structured data-types.
+            </p>
           </ListItem>
         </List>
       </div>
@@ -107,7 +113,9 @@ exports[`CounterfactualUnsupported status renders outputs status 1`] = `
           <ListItem
             data-ouia-component-id="outputs-message"
           >
-            All of the model outcomes are structured data-types.
+            <p>
+              All of the model outcomes are structured data-types.
+            </p>
           </ListItem>
         </List>
       </div>
