@@ -7,15 +7,14 @@ import {
   Title
 } from '@patternfly/react-core';
 import { InfoCircleIcon } from '@patternfly/react-icons';
-import './CounterfactualUnsupported.scss';
+import { CFSupportMessage } from '../../../types';
 
 type CounterfactualUnsupportedProps = {
-  isAtLeastOneInputSupported: boolean;
-  isAtLeastOneOutcomeSupported: boolean;
+  messages?: CFSupportMessage[];
 };
 
 const CounterfactualUnsupported = (props: CounterfactualUnsupportedProps) => {
-  const { isAtLeastOneInputSupported, isAtLeastOneOutcomeSupported } = props;
+  const { messages } = props;
 
   return (
     <EmptyState variant={EmptyStateVariant.full}>
@@ -23,21 +22,11 @@ const CounterfactualUnsupported = (props: CounterfactualUnsupportedProps) => {
       <Title headingLevel="h1">Unsupported model</Title>
       <EmptyStateBody>
         <p>The model contains elements that are unsupported.</p>
-        {!isAtLeastOneInputSupported && !isAtLeastOneOutcomeSupported && (
-          <p data-ouia-component-id="message-inputs-outcomes">
-            All of the model inputs and outcomes are structured data-types.
+        {messages.map(message => (
+          <p key={message.id} data-ouia-component-id={`${message.id}`}>
+            {message.message}
           </p>
-        )}
-        {!isAtLeastOneInputSupported && isAtLeastOneOutcomeSupported && (
-          <p data-ouia-component-id="message-inputs">
-            All of the model inputs are structured data-types.
-          </p>
-        )}
-        {isAtLeastOneInputSupported && !isAtLeastOneOutcomeSupported && (
-          <p data-ouia-component-id="message-outcomes">
-            All of the model outcomes are structured data-types.
-          </p>
-        )}
+        ))}
         <p>Consequentially Counterfactuals cannot be generated.</p>
       </EmptyStateBody>
     </EmptyState>

@@ -112,9 +112,9 @@ const AuditDetail = () => {
                       <>
                         {item.desc}
                         {item.icon && (
-                          <div className={'audit-detail__nav__badge'}>
+                          <span className={'audit-detail__nav__badge'}>
                             {item.icon}
-                          </div>
+                          </span>
                         )}
                       </>
                     </Link>

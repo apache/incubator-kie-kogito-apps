@@ -72,6 +72,7 @@ describe('Counterfactual', () => {
           outcomeResult: {
             name: 'Mortgage Approval',
             typeRef: 'boolean',
+            kind: 'UNIT',
             value: true,
             components: []
           },

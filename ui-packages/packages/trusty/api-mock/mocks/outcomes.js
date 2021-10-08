@@ -8,6 +8,7 @@ const twoSimpleOutcomes = [
     outcomeResult: {
       name: 'Mortgage Approval',
       typeRef: 'boolean',
+      kind: 'UNIT',
       value: null,
       components: null
     },
@@ -21,6 +22,7 @@ const twoSimpleOutcomes = [
     outcomeResult: {
       name: 'Risk Score',
       typeRef: 'number',
+      kind: 'UNIT',
       value: 21.7031851958099,
       components: null
     },
@@ -37,11 +39,13 @@ const structuredOutcomes = [
     outcomeResult: {
       name: 'Structure1',
       typeRef: 'tStructure',
+      kind: 'STRUCTURE',
       value: null,
       components: [
         {
           name: 'Structure1 field1',
           typeRef: 'tField1',
+          kind: 'UNIT',
           value: 'value',
           components: null
         }
@@ -57,11 +61,13 @@ const structuredOutcomes = [
     outcomeResult: {
       name: 'Structure2',
       typeRef: 'tStructure',
+      kind: 'STRUCTURE',
       value: null,
       components: [
         {
           name: 'Structure2 field1',
           typeRef: 'tField1',
+          kind: 'UNIT',
           value: 'value',
           components: null
         }
@@ -91,269 +97,312 @@ const outcomes = [
         outcomeResult: {
           name: 'Recommended Loan Products',
           type: 'tProducts',
+          kind: 'STRUCTURE',
           value: null,
           components: [
             [
               {
                 name: 'Product',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: 'Lender B - ARM5/1-Standard',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Recommendation',
-                value: 'Good',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: 'Good',
                 components: null
               },
               {
                 name: 'Note Amount',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '$273,775.90',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Interest Rate',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '3.8',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Monthly Payment',
-                value: '$1,267.90',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: '$1,267.90',
                 components: null
               },
               {
                 name: 'Cash to Close',
-                value: '$1,267.90',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: '$1,267.90',
                 components: null
               },
               {
                 name: 'Required Credit Score',
-                value: 720,
                 typeRef: 'number',
+                kind: 'UNIT',
+                value: 720,
                 components: null
               }
             ],
             [
               {
                 name: 'Product',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: 'Lender C - Fixed30-Standard',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Recommendation',
-                value: 'Best',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: 'Best',
                 components: null
               },
               {
                 name: 'Note Amount',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '$274,599.40',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Interest Rate',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '3.88',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Monthly Payment',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '$1,291.27',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Cash to Close',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '$75,491.99',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Required Credit Score',
-                value: 680,
                 typeRef: 'number',
+                kind: 'UNIT',
+                value: 680,
                 components: null
               }
             ],
             [
               {
                 name: 'Product',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: 'Lender B - ARM5/1-NoPoints',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Recommendation',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: 'Good',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Note Amount',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '$271,776.00',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Interest Rate',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '4.00',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Monthly Payment',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '$1,297.50',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Cash to Close',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '$75,435.52',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Required Credit Score',
-                value: 720,
                 typeRef: 'number',
+                kind: 'UNIT',
+                value: 720,
                 components: null
               }
             ],
             [
               {
                 name: 'Product',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: 'Lender A - Fixed30-NoPoints',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Recommendation',
-                value: 'Best',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: 'Best',
                 components: null
               },
               {
                 name: 'Note Amount',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '$271,925.00',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Interest Rate',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '4.08',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Monthly Payment',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '$1,310.00',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Cash to Close',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: '$75,438.50',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Required Credit Score',
+                typeRef: 'number',
+                kind: 'UNIT',
                 value: 680,
-                typeRef: 'number',
                 components: null
               }
             ],
             [
               {
                 name: 'Product',
+                typeRef: 'string',
+                kind: 'UNIT',
                 value: 'Lender C - Fixed15-Standard',
-                typeRef: 'string',
                 components: null
               },
               {
                 name: 'Recommendation',
-                value: 'Best',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: 'Best',
                 components: null
               },
               {
                 name: 'Note Amount',
-                value: '$274,045.90',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: '$274,045.90',
                 components: null
               },
               {
                 name: 'Interest Rate',
-                value: '3.38',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: '3.38',
                 components: null
               },
               {
                 name: 'Monthly Payment',
-                value: '$1,942.33',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: '$1,942.33',
                 components: null
               },
               {
                 name: 'Cash to Close',
-                value: '$1,942.33',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: '$1,942.33',
                 components: null
               },
               {
                 name: 'Required Credit Score',
-                value: 720,
                 typeRef: 'number',
+                kind: 'UNIT',
+                value: 720,
                 components: null
               }
             ],
             [
               {
                 name: 'Product',
-                value: 'Lender A - Fixed15-NoPoints',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: 'Lender A - Fixed15-NoPoints',
                 components: null
               },
               {
                 name: 'Recommendation',
-                value: 'Best',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: 'Best',
                 components: null
               },
               {
                 name: 'Note Amount',
-                value: '$270,816.00',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: '$270,816.00',
                 components: null
               },
               {
                 name: 'Interest Rate',
-                value: '3.75',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: '3.75',
                 components: null
               },
               {
                 name: 'Monthly Payment',
-                value: '$1,969.43',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: '$1,969.43',
                 components: null
               },
               {
                 name: 'Cash to Close',
-                value: '$75,416.32',
                 typeRef: 'string',
+                kind: 'UNIT',
+                value: '$75,416.32',
                 components: null
               },
               {
                 name: 'Required Credit Score',
-                value: 720,
                 typeRef: 'number',
+                kind: 'UNIT',
+                value: 720,
                 components: null
               }
             ]
@@ -369,65 +418,76 @@ const outcomes = [
         outcomeResult: {
           name: 'Client Ratings',
           type: 'tProducts',
+          kind: 'STRUCTURE',
           value: null,
           components: [
             {
               name: 'Rating Type A',
-              value: null,
               typeRef: 'string',
+              kind: 'UNIT',
+              value: null,
               components: [
                 {
                   name: 'Loan Amount',
-                  value: 540000,
                   typeRef: 'number',
+                  kind: 'UNIT',
+                  value: 540000,
                   components: null
                 },
                 {
                   name: 'Repayment Rate',
-                  value: 900,
                   typeRef: 'number',
+                  kind: 'UNIT',
+                  value: 900,
                   components: null
                 },
                 {
                   name: 'Loan Eligibility',
-                  value: true,
                   typeRef: 'boolean',
+                  kind: 'UNIT',
+                  value: true,
                   components: null
                 }
               ]
             },
             {
               name: 'Rating Type B',
-              value: null,
               typeRef: 'number',
+              kind: 'STRUCTURE',
+              value: null,
               components: [
                 {
                   name: 'Loan amount',
-                  value: 340000,
                   typeRef: 'number',
+                  kind: 'UNIT',
+                  value: 340000,
                   components: null
                 },
                 {
                   name: 'Repayment rate',
-                  value: 2000,
                   typeRef: 'number',
+                  kind: 'UNIT',
+                  value: 2000,
                   components: null
                 },
                 {
                   name: 'Sub-Rating Type C',
-                  value: null,
                   typeRef: 'number',
+                  kind: 'STRUCTURE',
+                  value: null,
                   components: [
                     {
                       name: 'Loan amount',
-                      value: 340000,
                       typeRef: 'number',
+                      kind: 'UNIT',
+                      value: 340000,
                       components: null
                     },
                     {
                       name: 'Repayment rate',
-                      value: 2000,
                       typeRef: 'number',
+                      kind: 'UNIT',
+                      value: 2000,
                       components: null
                     }
                   ]
@@ -445,7 +505,8 @@ const outcomes = [
         messages: [],
         outcomeResult: {
           name: 'Cheese manufacturer',
-          type: 'string',
+          typeRef: 'string',
+          kind: 'UNIT',
           value: 'Acme Cheese Specialists',
           components: null
         }
@@ -458,7 +519,8 @@ const outcomes = [
         messages: [],
         outcomeResult: {
           name: 'Nullable Cheese manufacturer',
-          type: 'string',
+          typeRef: 'string',
+          kind: 'UNIT',
           value: null,
           components: null
         }
@@ -511,6 +573,7 @@ const outcomes = [
         outcomeResult: {
           name: 'Risk Score',
           typeRef: 'number',
+          kind: 'UNIT',
           value: 21.7031851958099,
           components: null
         },

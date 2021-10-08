@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import {
   Divider,
   PageSection,
@@ -8,7 +8,11 @@ import {
 } from '@patternfly/react-core';
 import { useParams } from 'react-router-dom';
 
-import { ExecutionRouteParams, RemoteDataStatus } from '../../../types';
+import {
+  CFSupportMessage,
+  ExecutionRouteParams,
+  RemoteDataStatus
+} from '../../../types';
 import CounterfactualAnalysis from '../../Organisms/CounterfactualAnalysis/CounterfactualAnalysis';
 import useInputData from '../InputData/useInputData';
 import useDecisionOutcomes from '../AuditDetail/useDecisionOutcomes';
@@ -16,10 +20,6 @@ import SkeletonDataList from '../../Molecules/SkeletonDataList/SkeletonDataList'
 import SkeletonFlexStripes from '../../Molecules/SkeletonFlexStripes/SkeletonFlexStripes';
 import useCFSizes from './useCFSizes';
 import './Counterfactual.scss';
-import {
-  isInputTypeSupported,
-  isOutcomeTypeSupported
-} from './counterfactualReducer';
 import CounterfactualUnsupported from '../../Atoms/CounterfactualUnsupported/CounterfactualUnsupported';
 
 const Counterfactual = () => {
@@ -29,29 +29,67 @@ const Counterfactual = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { containerWidth, containerHeight } = useCFSizes(containerRef.current);
 
-  const isAtLeastOneInputSupported = useMemo(() => {
+  const noSupportedInputs = useMemo(() => {
     if (inputData.status !== RemoteDataStatus.SUCCESS) {
       return false;
     }
-    return (
-      inputData.data.find(input => isInputTypeSupported(input)) !== undefined
-    );
+    return inputData.data.find(input => input.kind === 'UNIT') === undefined;
   }, [inputData]);
 
-  const isAtLeastOneOutcomeSupported = useMemo(() => {
+  const noSupportedSearchDomain = useMemo(() => {
+    if (inputData.status !== RemoteDataStatus.SUCCESS) {
+      return false;
+    }
+    const units = inputData.data.filter(input => input.kind === 'UNIT');
+    if (units.length === 0) {
+      return false;
+    }
+    return units.every(input => typeof input.value === 'string');
+  }, [inputData]);
+
+  const noSupportedOutcomes = useMemo(() => {
     if (outcomesData.status !== RemoteDataStatus.SUCCESS) {
       return false;
     }
     return (
-      outcomesData.data.find(outcome => isOutcomeTypeSupported(outcome)) !==
-      undefined
+      outcomesData.data.find(
+        outcome => outcome.outcomeResult.kind === 'UNIT'
+      ) === undefined
     );
   }, [outcomesData]);
 
-  const isSupported = useCallback(
-    () => isAtLeastOneInputSupported && isAtLeastOneOutcomeSupported,
-    [isAtLeastOneInputSupported, isAtLeastOneOutcomeSupported]
+  const isSupported = useMemo(
+    () =>
+      !(noSupportedInputs || noSupportedOutcomes || noSupportedSearchDomain),
+    [noSupportedInputs, noSupportedOutcomes, noSupportedSearchDomain]
   );
+
+  const messages = useMemo(() => {
+    const messages: CFSupportMessage[] = [];
+    if (noSupportedSearchDomain) {
+      messages.push({
+        id: 'message-outcomes',
+        message:
+          'All of the model inputs are strings and cannot have search domains defined.'
+      });
+    } else if (noSupportedInputs && noSupportedOutcomes) {
+      messages.push({
+        id: 'message-inputs-and-outcomes',
+        message: 'All of the model inputs and outcomes are unsupported types.'
+      });
+    } else if (noSupportedInputs) {
+      messages.push({
+        id: 'message-inputs',
+        message: 'All of the model inputs are unsupported types.'
+      });
+    } else if (noSupportedOutcomes) {
+      messages.push({
+        id: 'message-outcomes',
+        message: 'All of the model outcomes are unsupported types.'
+      });
+    }
+    return messages;
+  }, [noSupportedInputs, noSupportedOutcomes, noSupportedSearchDomain]);
 
   return (
     <>
@@ -60,7 +98,7 @@ const Counterfactual = () => {
         <div className="counterfactual__wrapper__container" ref={containerRef}>
           {inputData.status === RemoteDataStatus.SUCCESS &&
           outcomesData.status === RemoteDataStatus.SUCCESS ? (
-            isSupported() ? (
+            isSupported ? (
               <CounterfactualAnalysis
                 inputs={inputData.data}
                 outcomes={outcomesData.data}
@@ -69,10 +107,7 @@ const Counterfactual = () => {
                 containerHeight={containerHeight}
               />
             ) : (
-              <CounterfactualUnsupported
-                isAtLeastOneInputSupported={isAtLeastOneInputSupported}
-                isAtLeastOneOutcomeSupported={isAtLeastOneOutcomeSupported}
-              />
+              <CounterfactualUnsupported messages={messages} />
             )
           ) : (
             <PageSection variant={'light'} isFilled={true}>

@@ -236,13 +236,9 @@ const areGoalsSelected = (goals: CFGoal[]) => {
   );
 };
 
-export const isInputTypeSupported = (searchInput: CFSearchInput) => {
-  //Structures and Collections are not supported
-  if (
-    searchInput.components === null ||
-    (Array.isArray(searchInput.components) &&
-      searchInput.components.length === 0)
-  ) {
+export const isInputTypeSupported = (searchInput: CFSearchInput): boolean => {
+  //Structures, Collections and Strings are not supported
+  if (searchInput.kind === 'UNIT') {
     switch (typeof searchInput.value) {
       case 'boolean':
       case 'number':
@@ -252,13 +248,9 @@ export const isInputTypeSupported = (searchInput: CFSearchInput) => {
   return false;
 };
 
-export const isOutcomeTypeSupported = (outcome: Outcome) => {
+export const isOutcomeTypeSupported = (outcome: Outcome): boolean => {
   //Structures and Collections are not supported
-  if (
-    outcome.outcomeResult.components === null ||
-    (Array.isArray(outcome.outcomeResult.components) &&
-      outcome.outcomeResult.components.length === 0)
-  ) {
+  if (outcome.outcomeResult.kind === 'UNIT') {
     switch (typeof outcome.outcomeResult.value) {
       case 'boolean':
       case 'number':
