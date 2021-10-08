@@ -44,6 +44,7 @@ public class CounterfactualEntityFactory {
     public static CounterfactualEntity from(Feature feature, Boolean isConstrained, FeatureDomain featureDomain,
             FeatureDistribution featureDistribution) {
         CounterfactualEntity entity = null;
+        validateFeature(feature);
         if (feature.getType() == Type.NUMBER) {
             if (feature.getValue().getUnderlyingObject() instanceof Double) {
                 if (isConstrained) {
@@ -100,7 +101,6 @@ public class CounterfactualEntityFactory {
         return IntStream.range(0, predictionInput.getFeatures().size())
                 .mapToObj(featureIndex -> {
                     final Feature feature = predictionInput.getFeatures().get(featureIndex);
-                    validateFeature(feature);
                     final Boolean isConstrained = constraints.get(featureIndex);
                     final FeatureDomain domain = domains.get(featureIndex);
                     final FeatureDistribution featureDistribution = Optional
