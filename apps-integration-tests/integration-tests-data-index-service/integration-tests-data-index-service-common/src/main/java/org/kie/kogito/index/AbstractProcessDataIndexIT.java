@@ -17,6 +17,10 @@ package org.kie.kogito.index;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonNode;
@@ -282,8 +286,8 @@ public abstract class AbstractProcessDataIndexIT {
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 +
-                                "\\\"}}) { id description priority potentialGroups comments { content } attachments {id name}} }\"}")
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { " +
+                                "id description priority potentialGroups comments {id} attachments {id}} }\"}")
                         .when().post("/graphql")
                         .then()
                         .statusCode(200)
@@ -294,7 +298,7 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers")));
 
         String commentContent = "NewTaskComment";
-        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+        String commentCreationResult = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"mutation{ UserTaskInstanceCommentCreate(" +
                         "taskId: \\\"" + taskId + "\\\", " +
                         "user: \\\"manager\\\", " +
@@ -304,7 +308,9 @@ public abstract class AbstractProcessDataIndexIT {
                 .when().post("/graphql")
                 .then()
                 .statusCode(200)
-                .body("errors", nullValue());
+                .body("errors", nullValue())
+                .extract().path("data.UserTaskInstanceCommentCreate");
+
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> given().contentType(ContentType.JSON)
@@ -318,8 +324,9 @@ public abstract class AbstractProcessDataIndexIT {
                         .statusCode(200)
                         .body("$.size", is(1))
                         .body("[0].content", is(commentContent)));
+
         String attachmentName = "NewTaskAttachmentName";
-        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+        String attachmentCreationResult = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"mutation{ UserTaskInstanceAttachmentCreate(" +
                         "taskId: \\\"" + taskId + "\\\", " +
                         "user: \\\"manager\\\", " +
@@ -330,7 +337,8 @@ public abstract class AbstractProcessDataIndexIT {
                 .when().post("/graphql")
                 .then()
                 .statusCode(200)
-                .body("errors", nullValue());
+                .body("errors", nullValue())
+                .extract().path("data.UserTaskInstanceAttachmentCreate");
 
         await()
                 .atMost(TIMEOUT)
@@ -346,21 +354,32 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("$.size", is(1))
                         .body("[0].name", is(attachmentName)));
 
-        await()
-                .atMost(TIMEOUT)
-                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { " +
-                                "id description priority potentialGroups comments { id  content } attachments { id name}} }\"}")
-                        .when().post("/graphql")
-                        .then()
-                        .statusCode(200)
-                        .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
-                        .body("data.UserTaskInstances[0].priority", equalTo("low"))
-                        .body("data.UserTaskInstances[0].comments.size()", is(1))
-                        .body("data.UserTaskInstances[0].comments[0].content", equalTo(commentContent))
-                        .body("data.UserTaskInstances[0].attachments.size()", is(1))
-                        .body("data.UserTaskInstances[0].attachments[0].name", equalTo(attachmentName))
-                        .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers")));
+        Map commentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { " +
+                        "id description priority potentialGroups comments {id content updatedBy updatedAt} } }\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
+                .body("data.UserTaskInstances[0].priority", equalTo("low"))
+                .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"))
+                .body("data.UserTaskInstances[0].comments.size()", is(1))
+                .extract().jsonPath().getMap("data.UserTaskInstances[0].comments[0]");
+        checkExpectedCreatedItemData(commentCreationResult, commentMap);
+
+        Map attachmentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { " +
+                        "id description priority potentialGroups attachments {id name content updatedBy updatedAt} } }\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
+                .body("data.UserTaskInstances[0].priority", equalTo("low"))
+                .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"))
+                .body("data.UserTaskInstances[0].attachments.size()", is(1))
+                .body("data.UserTaskInstances[0].attachments[0].name", equalTo(attachmentName))
+                .extract().jsonPath().getMap("data.UserTaskInstances[0].attachments[0]");
+        checkExpectedCreatedItemData(attachmentCreationResult, attachmentMap);
 
         String vars = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { variables} }\"}")
@@ -466,6 +485,15 @@ public abstract class AbstractProcessDataIndexIT {
                 .body("data.ProcessInstances[0].id", is(processInstanceId))
                 .body("data.ProcessInstances[0].processId", is("approvals"))
                 .body("data.ProcessInstances[0].state", is(state));
+    }
+
+    private void checkExpectedCreatedItemData(String creationData, Map resultMap) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode creationJsonNode = mapper.readTree(creationData);
+        assertEquals("\"" + resultMap.get("updatedBy") + "\"", creationJsonNode.at("/updatedBy").toString());
+        assertEquals(Date.from(ZonedDateTime.parse(resultMap.get("updatedAt").toString(), DateTimeFormatter.ISO_DATE_TIME).toInstant()),
+                Date.from(ZonedDateTime.parse(creationJsonNode.at("/updatedAt").asText(), DateTimeFormatter.ISO_DATE_TIME).toInstant()));
+        assertEquals("\"" + resultMap.get("content") + "\"", creationJsonNode.at("/content").toString());
     }
 
     private void checkExpectedTaskSchema(String taskSchema) throws IOException {

@@ -17,18 +17,12 @@ package org.kie.kogito.index.model;
 
 import java.time.ZonedDateTime;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class Attachment {
 
     private String id;
-    @JsonProperty("name")
     private String name;
-    @JsonProperty("content")
     private String content;
-    @JsonProperty("updatedAt")
     private ZonedDateTime updatedAt;
-    @JsonProperty("updatedBy")
     private String updatedBy;
 
     public String getId() {
