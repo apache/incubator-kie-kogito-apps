@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import {
   Nav,
   NavItem,
@@ -6,7 +6,8 @@ import {
   PageSection,
   PageSectionVariants,
   Stack,
-  StackItem
+  StackItem,
+  Tooltip
 } from '@patternfly/react-core';
 import {
   Link,
@@ -30,8 +31,7 @@ import InputData from '../InputData/InputData';
 import ModelLookup from '../ModelLookup/ModelLookup';
 import './AuditDetail.scss';
 import Counterfactual from '../Counterfactual/Counterfactual';
-import { SVGIconProps } from '@patternfly/react-icons/dist/js/createIcon';
-import { FlaskIcon } from '@patternfly/react-icons';
+import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
 import CounterfactualUnsupportedBanner from '../../Atoms/CounterfactualUnsupportedBanner/CounterfactualUnsupportedBanner';
 
 const AuditDetail = () => {
@@ -42,7 +42,7 @@ const AuditDetail = () => {
   const outcomes = useDecisionOutcomes(executionId);
 
   const [thirdLevelNav, setThirdLevelNav] = useState<
-    { url: string; desc: string; icon?: React.ComponentClass<SVGIconProps> }[]
+    { url: string; desc: string; icon?: ReactNode }[]
   >([]);
 
   useEffect(() => {
@@ -63,7 +63,14 @@ const AuditDetail = () => {
         newNav.push({
           url: '/counterfactual-analysis',
           desc: 'Counterfactual Analysis',
-          icon: <FlaskIcon />
+          icon: (
+            <Tooltip
+              position="top"
+              content={<div>Counterfactuals are an experimental feature.</div>}
+            >
+              <OutlinedQuestionCircleIcon title="An icon with a tooltip" />
+            </Tooltip>
+          )
         });
       }
       setThirdLevelNav(newNav);
@@ -103,12 +110,12 @@ const AuditDetail = () => {
                   >
                     <Link to={url + item.url}>
                       <>
+                        {item.desc}
                         {item.icon && (
                           <div className={'audit-detail__nav__badge'}>
                             {item.icon}
                           </div>
                         )}
-                        {item.desc}
                       </>
                     </Link>
                   </NavItem>

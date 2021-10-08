@@ -1,128 +1,85 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`CounterfactualUnsupported status renders inputs and outputs status 1`] = `
-<Bullseye
-  className="cf-unsupported"
+<EmptyState
+  variant="full"
 >
-  <EmptyState
-    variant="full"
+  <EmptyStateIcon
+    icon={[Function]}
+  />
+  <Title
+    headingLevel="h1"
   >
-    <EmptyStateIcon
-      color="var(--pf-global--info-color--100)"
-      icon={[Function]}
-    />
-    <Title
-      headingLevel="h1"
-      size="4xl"
+    Unsupported model
+  </Title>
+  <EmptyStateBody>
+    <p>
+      The model contains elements that are unsupported.
+    </p>
+    <p
+      data-ouia-component-id="message-inputs-outcomes"
     >
-      Unsupported model
-    </Title>
-    <EmptyStateBody>
-      <p>
-        The model contains elements that are unsupported.
-      </p>
-      <div>
-        <List>
-          <ListItem
-            data-ouia-component-id="inputs-message"
-          >
-            <p>
-              All of the model inputs are structured data-types.
-            </p>
-          </ListItem>
-          <ListItem
-            data-ouia-component-id="outputs-message"
-          >
-            <p>
-              All of the model outcomes are structured data-types.
-            </p>
-          </ListItem>
-        </List>
-      </div>
-      <p>
-        Consequentially Counterfactuals cannot be generated.
-      </p>
-    </EmptyStateBody>
-  </EmptyState>
-</Bullseye>
+      All of the model inputs and outcomes are structured data-types.
+    </p>
+    <p>
+      Consequentially Counterfactuals cannot be generated.
+    </p>
+  </EmptyStateBody>
+</EmptyState>
 `;
 
 exports[`CounterfactualUnsupported status renders inputs status 1`] = `
-<Bullseye
-  className="cf-unsupported"
+<EmptyState
+  variant="full"
 >
-  <EmptyState
-    variant="full"
+  <EmptyStateIcon
+    icon={[Function]}
+  />
+  <Title
+    headingLevel="h1"
   >
-    <EmptyStateIcon
-      color="var(--pf-global--info-color--100)"
-      icon={[Function]}
-    />
-    <Title
-      headingLevel="h1"
-      size="4xl"
+    Unsupported model
+  </Title>
+  <EmptyStateBody>
+    <p>
+      The model contains elements that are unsupported.
+    </p>
+    <p
+      data-ouia-component-id="message-inputs"
     >
-      Unsupported model
-    </Title>
-    <EmptyStateBody>
-      <p>
-        The model contains elements that are unsupported.
-      </p>
-      <div>
-        <List>
-          <ListItem
-            data-ouia-component-id="inputs-message"
-          >
-            <p>
-              All of the model inputs are structured data-types.
-            </p>
-          </ListItem>
-        </List>
-      </div>
-      <p>
-        Consequentially Counterfactuals cannot be generated.
-      </p>
-    </EmptyStateBody>
-  </EmptyState>
-</Bullseye>
+      All of the model inputs are structured data-types.
+    </p>
+    <p>
+      Consequentially Counterfactuals cannot be generated.
+    </p>
+  </EmptyStateBody>
+</EmptyState>
 `;
 
 exports[`CounterfactualUnsupported status renders outputs status 1`] = `
-<Bullseye
-  className="cf-unsupported"
+<EmptyState
+  variant="full"
 >
-  <EmptyState
-    variant="full"
+  <EmptyStateIcon
+    icon={[Function]}
+  />
+  <Title
+    headingLevel="h1"
   >
-    <EmptyStateIcon
-      color="var(--pf-global--info-color--100)"
-      icon={[Function]}
-    />
-    <Title
-      headingLevel="h1"
-      size="4xl"
+    Unsupported model
+  </Title>
+  <EmptyStateBody>
+    <p>
+      The model contains elements that are unsupported.
+    </p>
+    <p
+      data-ouia-component-id="message-outcomes"
     >
-      Unsupported model
-    </Title>
-    <EmptyStateBody>
-      <p>
-        The model contains elements that are unsupported.
-      </p>
-      <div>
-        <List>
-          <ListItem
-            data-ouia-component-id="outputs-message"
-          >
-            <p>
-              All of the model outcomes are structured data-types.
-            </p>
-          </ListItem>
-        </List>
-      </div>
-      <p>
-        Consequentially Counterfactuals cannot be generated.
-      </p>
-    </EmptyStateBody>
-  </EmptyState>
-</Bullseye>
+      All of the model outcomes are structured data-types.
+    </p>
+    <p>
+      Consequentially Counterfactuals cannot be generated.
+    </p>
+  </EmptyStateBody>
+</EmptyState>
 `;

@@ -12,9 +12,9 @@ describe('CounterfactualUnsupported status', () => {
     );
 
     expect(wrapper).toMatchSnapshot();
-    const items = wrapper.find('ListItem');
-    expect(items.length).toBe(1);
-    expect(items.props()['data-ouia-component-id']).toBe('inputs-message');
+    const items = wrapper.find('EmptyStateBody p');
+    expect(items.length).toBe(3);
+    expect(items.get(1).props['data-ouia-component-id']).toBe('message-inputs');
   });
 
   test('renders outputs status', () => {
@@ -26,9 +26,11 @@ describe('CounterfactualUnsupported status', () => {
     );
 
     expect(wrapper).toMatchSnapshot();
-    const items = wrapper.find('ListItem');
-    expect(items.length).toBe(1);
-    expect(items.props()['data-ouia-component-id']).toBe('outputs-message');
+    const items = wrapper.find('EmptyStateBody p');
+    expect(items.length).toBe(3);
+    expect(items.get(1).props['data-ouia-component-id']).toBe(
+      'message-outcomes'
+    );
   });
 
   test('renders inputs and outputs status', () => {
@@ -40,13 +42,10 @@ describe('CounterfactualUnsupported status', () => {
     );
 
     expect(wrapper).toMatchSnapshot();
-    const items = wrapper.find('ListItem');
-    expect(items.length).toBe(2);
-    expect(items.at(0).props()['data-ouia-component-id']).toBe(
-      'inputs-message'
-    );
-    expect(items.at(1).props()['data-ouia-component-id']).toBe(
-      'outputs-message'
+    const items = wrapper.find('EmptyStateBody p');
+    expect(items.length).toBe(3);
+    expect(items.get(1).props['data-ouia-component-id']).toBe(
+      'message-inputs-outcomes'
     );
   });
 });

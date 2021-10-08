@@ -1,33 +1,15 @@
 import React from 'react';
-import {
-  Hint,
-  HintBody,
-  HintTitle,
-  Split,
-  SplitItem
-} from '@patternfly/react-core';
-import { IconSize, InfoCircleIcon } from '@patternfly/react-icons';
 import './CounterfactualUnsupportedBanner.scss';
+import { Alert } from '@patternfly/react-core';
 
 const CounterfactualUnsupportedBanner = () => {
   return (
-    <Hint className="cf-unsupported-banner">
-      <HintTitle>Experimental Feature</HintTitle>
-      <HintBody>
-        <Split hasGutter={true} className="cf-unsupported-banner__text">
-          <SplitItem>
-            <InfoCircleIcon
-              size={IconSize.lg}
-              color={'var(--pf-global--info-color--100)'}
-            />
-          </SplitItem>
-          <SplitItem isFilled={true}>
-            Counterfactuals is an experimental feature and does not currently
-            support all types of model.
-          </SplitItem>
-        </Split>
-      </HintBody>
-    </Hint>
+    <Alert
+      className="cf-unsupported-banner"
+      variant="info"
+      isInline={true}
+      title="Counterfactuals is an experimental feature and does not currently support all types of model."
+    />
   );
 };
 
