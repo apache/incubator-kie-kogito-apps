@@ -81,6 +81,7 @@ public class CounterfactualEntityFactory {
 
     /**
      * Validation of features for counterfactual entity construction
+     * 
      * @param feature {@link Feature} to be validated
      */
     public static void validateFeature(Feature feature) {
