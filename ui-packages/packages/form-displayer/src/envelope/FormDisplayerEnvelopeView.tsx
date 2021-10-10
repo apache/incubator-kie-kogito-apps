@@ -25,7 +25,7 @@ import {
   FormDisplayerInitArgs,
   FormOpened
 } from '../api';
-import { FormLifecycleApi } from './components/FormDisplayer/apis';
+import { EmbeddedFormApi } from './components/FormDisplayer/apis';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
 import FormDisplayer from './components/FormDisplayer/FormDisplayer';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
@@ -52,7 +52,7 @@ export const FormDisplayerEnvelopeView = React.forwardRef<
     setEnvelopeConnectedToChannel
   ] = useState<boolean>(false);
 
-  const formDisplayerApiRef = useRef<FormLifecycleApi>();
+  const formDisplayerApiRef = useRef<EmbeddedFormApi>();
 
   useImperativeHandle(
     forwardedRef,

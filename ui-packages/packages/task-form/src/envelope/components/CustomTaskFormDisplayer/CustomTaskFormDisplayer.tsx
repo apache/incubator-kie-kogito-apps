@@ -16,8 +16,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import uuidv4 from 'uuid';
-import cloneDeep from 'lodash/cloneDeep';
-import unset from 'lodash/unset';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import {
   EmbeddedFormDisplayer,
@@ -34,6 +32,7 @@ import { TaskFormDriver, User } from '../../../api';
 import { FormOpened } from '@kogito-apps/form-displayer/src';
 import { Bullseye, Stack, StackItem } from '@patternfly/react-core';
 import { KogitoSpinner } from '@kogito-apps/components-common';
+import { buildTaskFormContext } from './utils/utils';
 
 export interface CustomTaskFormDisplayerProps {
   userTask: UserTaskInstance;
@@ -109,32 +108,6 @@ const CustomTaskFormDisplayer: React.FC<CustomTaskFormDisplayerProps &
     }
   }, [formOpened]);
 
-  const buildTaskFormContext = (): Record<string, any> => {
-    const ctxSchema = cloneDeep(schema);
-
-    const ctxPhases = ctxSchema.phases;
-
-    unset(ctxSchema, 'phases');
-
-    const ctxTask = cloneDeep(userTask);
-
-    unset(ctxTask, 'actualOwner');
-    unset(ctxTask, 'adminGroups');
-    unset(ctxTask, 'adminUsers');
-    unset(ctxTask, 'excludedUsers');
-    unset(ctxTask, 'potentialGroups');
-    unset(ctxTask, 'potentialUsers');
-    unset(ctxTask, 'inputs');
-    unset(ctxTask, 'outputs');
-    unset(ctxTask, 'endpoint');
-
-    return {
-      user: user,
-      task: ctxTask,
-      schema: ctxSchema,
-      phases: ctxPhases
-    };
-  };
   return (
     <div
       {...componentOuiaProps(ouiaId, 'custom-form-displayer', ouiaSafe)}
@@ -161,7 +134,7 @@ const CustomTaskFormDisplayer: React.FC<CustomTaskFormDisplayerProps &
             envelopePath={'resources/form-displayer.html'}
             formContent={customForm}
             data={formData}
-            context={buildTaskFormContext()}
+            context={buildTaskFormContext(userTask, schema, user)}
             onOpenForm={opened => setFormOpened(opened)}
             ref={formDisplayerApiRef}
           />

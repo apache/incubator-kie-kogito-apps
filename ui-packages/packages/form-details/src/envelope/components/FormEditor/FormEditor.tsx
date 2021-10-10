@@ -187,7 +187,7 @@ export const FormEditor = React.forwardRef<
           customControls={customControl}
           code={code}
           language={getFormLanguage()}
-          height="800px"
+          height="600px"
           onEditorDidMount={editorDidMount}
           onChange={handleChange}
         />

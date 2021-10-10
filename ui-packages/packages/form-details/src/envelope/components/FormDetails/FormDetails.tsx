@@ -95,7 +95,6 @@ const FormDetails: React.FC<FormDetailsProps & OUIAProps> = ({
     <DrawerPanelContent
       isResizable
       defaultSize={'800px'}
-      minSize={'700px'}
       onResize={() => {
         editorResize?.current.doResize();
       }}

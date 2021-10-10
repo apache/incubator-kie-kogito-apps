@@ -24,7 +24,7 @@ import HtmlFormRenderer from '../HtmlFormRenderer/HtmlFormRenderer';
 import '../styles.css';
 import {
   FormConfig,
-  FormLifecycleApi,
+  EmbeddedFormApi,
   InternalFormDisplayerApi,
   InternalFormDisplayerApiImpl
 } from './apis';
@@ -38,7 +38,7 @@ interface FormDisplayerProps {
 }
 
 export const FormDisplayer = React.forwardRef<
-  FormLifecycleApi,
+  EmbeddedFormApi,
   FormDisplayerProps & OUIAProps
 >(
   (
@@ -59,8 +59,8 @@ export const FormDisplayer = React.forwardRef<
     const [formApi, setFormApi] = useState<InternalFormDisplayerApi>(null);
     const [isExecuting, setIsExecuting] = useState<boolean>(false);
 
-    const doOpenForm = (config: FormConfig): FormLifecycleApi => {
-      const api: FormLifecycleApi = {};
+    const doOpenForm = (config: FormConfig): EmbeddedFormApi => {
+      const api: EmbeddedFormApi = {};
       setFormApi(new InternalFormDisplayerApiImpl(api, config.onOpen));
       return api;
     };

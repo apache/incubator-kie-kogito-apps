@@ -107,7 +107,7 @@ exports[`FormEditor test call refresh 1`] = `
           />
         </React.Fragment>
       }
-      height="800px"
+      height="600px"
       isCopyEnabled={true}
       isDarkTheme={false}
       isLanguageLabelVisible={true}
@@ -231,7 +231,7 @@ exports[`FormEditor test render config 1`] = `
           />
         </React.Fragment>
       }
-      height="800px"
+      height="600px"
       isCopyEnabled={true}
       isDarkTheme={false}
       isLanguageLabelVisible={true}
@@ -356,7 +356,7 @@ exports[`FormEditor test render source - html 1`] = `
           />
         </React.Fragment>
       }
-      height="800px"
+      height="600px"
       isCopyEnabled={true}
       isDarkTheme={false}
       isLanguageLabelVisible={true}
@@ -481,7 +481,7 @@ exports[`FormEditor test render source - tsx 1`] = `
           />
         </React.Fragment>
       }
-      height="800px"
+      height="600px"
       isCopyEnabled={true}
       isDarkTheme={false}
       isLanguageLabelVisible={true}

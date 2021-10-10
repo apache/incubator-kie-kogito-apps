@@ -35,7 +35,7 @@ import { FormSubmitContext, FormSubmitResponse } from '../../../../api';
 declare global {
   interface Window {
     Form: {
-      openForm: (config: FormConfig) => FormLifecycleApi;
+      openForm: (config: FormConfig) => EmbeddedFormApi;
     };
   }
 }
@@ -45,22 +45,22 @@ export interface FormConfig {
   [key: string]: any;
 }
 
-export interface FormLifecycleApi {
+export interface EmbeddedFormApi {
   beforeSubmit?: (context: FormSubmitContext) => void;
   afterSubmit?: (response: FormSubmitResponse) => void;
   getFormData?: () => any;
 }
 
-export interface InternalFormDisplayerApi extends FormLifecycleApi {
+export interface InternalFormDisplayerApi extends EmbeddedFormApi {
   onOpen: (args: InitArgs) => void;
 }
 
 export class InternalFormDisplayerApiImpl implements InternalFormDisplayerApi {
-  private readonly wrapped: FormLifecycleApi;
+  private readonly wrapped: EmbeddedFormApi;
   private readonly onOpenCallback: (data: any, ctx: any) => void;
 
   constructor(
-    api: FormLifecycleApi,
+    api: EmbeddedFormApi,
     onOpenCallback: (data: any, ctx: any) => void
   ) {
     this.wrapped = api;

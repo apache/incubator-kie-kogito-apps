@@ -49,7 +49,7 @@ public class FormsService {
         try {
             return Response.ok(storage.getFormInfoList(filter)).build();
         } catch (Exception e) {
-            LOGGER.error("Error while getting forms list: ", e);
+            LOGGER.warn("Error while getting forms list: ", e);
             return Response.status(INTERNAL_SERVER_ERROR.getStatusCode(), "Unexpected error while getting forms list: " + e.getMessage()).build();
         }
     }
@@ -76,7 +76,7 @@ public class FormsService {
         } catch (FileNotFoundException fe) {
             return Response.status(INTERNAL_SERVER_ERROR.getStatusCode(), fe.getMessage()).build();
         } catch (Exception e) {
-            LOGGER.error("Error while getting form content: ", e);
+            LOGGER.warn("Coudln't find form '" + formName + "'");
             return Response.status(INTERNAL_SERVER_ERROR.getStatusCode(), "Unexpected error while getting form content: " + e.getMessage()).build();
         }
     }
