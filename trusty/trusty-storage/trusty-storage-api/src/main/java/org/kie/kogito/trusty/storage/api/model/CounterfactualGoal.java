@@ -21,14 +21,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DecisionInput {
+public class CounterfactualGoal {
 
-    public static final String ID_FIELD = "id";
     public static final String NAME_FIELD = "name";
     public static final String VALUE_FIELD = "value";
-
-    @JsonProperty(ID_FIELD)
-    private String id;
 
     @JsonProperty(NAME_FIELD)
     private String name;
@@ -36,21 +32,12 @@ public class DecisionInput {
     @JsonProperty(VALUE_FIELD)
     private TypedValue value;
 
-    public DecisionInput() {
+    public CounterfactualGoal() {
     }
 
-    public DecisionInput(String id, String name, TypedValue value) {
-        this.id = id;
+    public CounterfactualGoal(String name, TypedValue value) {
         this.name = name;
         this.value = value;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public String getName() {

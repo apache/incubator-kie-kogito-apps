@@ -16,14 +16,15 @@
 package org.kie.kogito.trusty.storage.infinispan;
 
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualInput;
+import org.kie.kogito.trusty.storage.api.model.CounterfactualOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
-import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -32,7 +33,16 @@ public class CounterfactualExplainabilityResultMarshallerTest extends Marshaller
 
     @Test
     public void testWriteAndRead() throws IOException {
-        List<TypedVariableWithValue> data = Collections.singletonList(TypedVariableWithValue.buildUnit("unitIn", "number", JsonNodeFactory.instance.numberNode(10)));
+        List<CounterfactualInput> inputs = List.of(new CounterfactualInput("unitIn",
+                new UnitValue("number",
+                        "number",
+                        JsonNodeFactory.instance.numberNode(10))));
+
+        List<CounterfactualOutcome> outputs = List.of(new CounterfactualOutcome("unitOut",
+                new UnitValue("number",
+                        "number",
+                        JsonNodeFactory.instance.numberNode(55))));
+
         CounterfactualExplainabilityResult explainabilityResult = new CounterfactualExplainabilityResult("executionId",
                 "counterfactualId",
                 "solutionId",
@@ -41,12 +51,14 @@ public class CounterfactualExplainabilityResultMarshallerTest extends Marshaller
                 "statusDetail",
                 true,
                 CounterfactualExplainabilityResult.Stage.FINAL,
-                data,
-                data);
+                inputs,
+                outputs);
         CounterfactualExplainabilityResultMarshaller marshaller = new CounterfactualExplainabilityResultMarshaller(new ObjectMapper());
 
         marshaller.writeTo(writer, explainabilityResult);
         CounterfactualExplainabilityResult retrieved = marshaller.readFrom(reader);
+        List<CounterfactualInput> retrievedInputs = List.of(retrieved.getInputs().toArray(new CounterfactualInput[0]));
+        List<CounterfactualOutcome> retrievedOutputs = List.of(retrieved.getOutputs().toArray(new CounterfactualOutcome[0]));
 
         Assertions.assertEquals(explainabilityResult.getExecutionId(), retrieved.getExecutionId());
         Assertions.assertEquals(explainabilityResult.getCounterfactualId(), retrieved.getCounterfactualId());
@@ -55,7 +67,17 @@ public class CounterfactualExplainabilityResultMarshallerTest extends Marshaller
         Assertions.assertEquals(explainabilityResult.getStatus(), retrieved.getStatus());
         Assertions.assertEquals(explainabilityResult.getStatusDetails(), retrieved.getStatusDetails());
         Assertions.assertEquals(explainabilityResult.getStage(), retrieved.getStage());
-        Assertions.assertEquals(data.get(0).getName(), retrieved.getInputs().stream().findFirst().get().getName());
-        Assertions.assertEquals(data.get(0).getName(), retrieved.getOutputs().stream().findFirst().get().getName());
+
+        Assertions.assertEquals(1, retrievedInputs.size());
+        Assertions.assertEquals(inputs.get(0).getName(), retrievedInputs.get(0).getName());
+        Assertions.assertEquals(inputs.get(0).getValue().getKind(), retrievedInputs.get(0).getValue().getKind());
+        Assertions.assertEquals(inputs.get(0).getValue().getType(), retrievedInputs.get(0).getValue().getType());
+        Assertions.assertEquals(inputs.get(0).getValue().toUnit().getValue(), retrievedInputs.get(0).getValue().toUnit().getValue());
+
+        Assertions.assertEquals(1, retrievedOutputs.size());
+        Assertions.assertEquals(outputs.get(0).getName(), retrievedOutputs.get(0).getName());
+        Assertions.assertEquals(outputs.get(0).getValue().getKind(), retrievedOutputs.get(0).getValue().getKind());
+        Assertions.assertEquals(outputs.get(0).getValue().getType(), retrievedOutputs.get(0).getValue().getType());
+        Assertions.assertEquals(outputs.get(0).getValue().toUnit().getValue(), retrievedOutputs.get(0).getValue().toUnit().getValue());
     }
 }
