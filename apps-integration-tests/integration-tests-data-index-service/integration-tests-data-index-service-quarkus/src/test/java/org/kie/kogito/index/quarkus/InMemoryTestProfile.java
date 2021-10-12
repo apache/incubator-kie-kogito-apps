@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.index.messaging;
+package org.kie.kogito.index.quarkus;
 
-import org.junit.jupiter.api.Disabled;
-import org.kie.kogito.index.test.KafkaMessageTestProfile;
+import java.util.Arrays;
+import java.util.List;
 
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
+import io.quarkus.test.junit.QuarkusTestProfile;
 
-@QuarkusTest
-@TestProfile(KafkaMessageTestProfile.class)
-@Disabled
-class InmemoryPostgreSqlMessagingLoadKafkaIT extends AbstractMessagingLoadKafkaIT {
+public class InMemoryTestProfile implements QuarkusTestProfile {
+
+    @Override
+    public List<TestResourceEntry> testResources() {
+        return Arrays.asList(new TestResourceEntry(KogitoServiceRandomPortQuarkusTestResource.class),
+                new TestResourceEntry(DataIndexInMemoryQuarkusTestResource.class));
+    }
 
 }

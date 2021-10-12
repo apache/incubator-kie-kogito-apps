@@ -13,21 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.kie.kogito.index.inmemory;
 
-package org.kie.kogito.index.test;
+import io.quarkus.test.junit.NativeImageTest;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
-
-import io.quarkus.test.junit.QuarkusTestProfile;
-
-public class KafkaMessageTestProfile implements QuarkusTestProfile {
-
-    @Override
-    public List<TestResourceEntry> testResources() {
-        return Arrays.asList(new TestResourceEntry(KafkaQuarkusTestResource.class));
-    }
+@NativeImageTest
+public class NativeProcessDataIndexInMemoryIT extends ProcessDataIndexInMemoryIT {
 
 }

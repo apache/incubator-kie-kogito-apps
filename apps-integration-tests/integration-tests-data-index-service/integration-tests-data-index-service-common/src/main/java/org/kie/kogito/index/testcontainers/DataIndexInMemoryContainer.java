@@ -13,11 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.index.mongodb;
 
-import io.quarkus.test.junit.NativeImageTest;
+package org.kie.kogito.index.testcontainers;
 
-@NativeImageTest
-public class NativeProcessDataIndexMongoDBIT extends ProcessDataIndexMongoDBIT {
+/**
+ * This container wraps Data Index Service container
+ */
+public class DataIndexInMemoryContainer extends AbstractDataIndexContainer {
+
+    public static final String NAME = "data-index-service-inmemory";
+
+    public DataIndexInMemoryContainer() {
+        super(NAME);
+        withPrivilegedMode(true);
+    }
+
+    @Override
+    public String getResourceName() {
+        return NAME;
+    }
 
 }
