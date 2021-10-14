@@ -15,6 +15,8 @@ const config = require('./config');
 const data = require('./MockData/graphql');
 const controller = require('./MockData/controllers');
 const typeDefs = require('./MockData/types');
+const restData = require("./MockData/rest");
+const mutationRestData = require("./MockData/mutationRest");
 
 function setPort(port = 4000) {
   app.set('port', parseInt(port, 10));
@@ -161,8 +163,51 @@ function paginatedResult(arr, offset, limit) {
   }
   return paginatedArray;
 }
+
+function setProcessInstanceState(processInstanceId, state) {
+  const processInstance = data.ProcessInstanceData.filter(data => data.id === processInstanceId);
+  processInstance[0].state = state;
+}
+
 // Provide resolver functions for your schema fields
 const resolvers = {
+  Mutation: {
+    ProcessInstanceRetry: async (parent, args) => {
+      const successRetryInstances = ['8035b580-6ae4-4aa8-9ec0-e18e19809e0b2', '8035b580-6ae4-4aa8-9ec0-e18e19809e0b3']
+      const { process } = mutationRestData.management;
+      const processInstance = process.filter(data => {
+        return data.processInstanceId === args['id'];
+      });
+      if (successRetryInstances.includes(processInstance[0].id)) {
+        setProcessInstanceState(processInstance[0].processInstanceId, 'ACTIVE');
+        processInstance[0].state = 'ACTIVE';
+      }
+      return processInstance[0].retrigger;
+    },
+    ProcessInstanceSkip: async (parent, args) => {
+      const { process } = mutationRestData.management;
+      const processInstance = process.filter(data => {
+        return data.processInstanceId === args['id'];
+      });
+
+      return processInstance[0].skip;
+    },
+    ProcessInstanceAbort: async (parent, args) => {
+      const failedAbortInstances = ['8035b580-6ae4-4aa8-9ec0-e18e19809e0b2', '8035b580-6ae4-4aa8-9ec0-e18e19809e0b3']
+      const { process } = mutationRestData.management;
+      console.log('ProcessInstanceAbort');
+      const processInstance = process.filter(data => {
+        return data.processInstanceId === args['id'];
+      });
+      if (failedAbortInstances.includes(processInstance[0].id)) {
+        return 'process not found';
+      }else {
+        setProcessInstanceState(processInstance[0].processInstanceId, 'ABORTED');
+        processInstance[0].state = 'ABORTED';
+        return processInstance[0].abort;
+      }
+    },
+  },
   Query: {
     ProcessInstances: async (parent, args) => {
       let result = data.ProcessInstanceData.filter(datum => {

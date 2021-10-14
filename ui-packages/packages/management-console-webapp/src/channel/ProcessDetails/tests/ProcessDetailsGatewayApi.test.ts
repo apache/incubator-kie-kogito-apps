@@ -71,12 +71,14 @@ const getJobsMock = jest.fn();
 const getProcessDetailsMock = jest.fn();
 const handleProcessSkipMock = jest.fn();
 const handleProcessAbortMock = jest.fn();
+const handleProcessRetryMock = jest.fn();
 
 const MockProcessDetailsQueries = jest.fn<ProcessDetailsQueries, []>(() => ({
   getProcessDetails: getProcessDetailsMock,
   getJobs: getJobsMock,
   handleProcessSkip: handleProcessSkipMock,
-  handleProcessAbort: handleProcessAbortMock
+  handleProcessAbort: handleProcessAbortMock,
+  handleProcessRetry: handleProcessRetryMock
 }));
 
 let queries: ProcessDetailsQueries;

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 /* eslint-disable */
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
@@ -35,9 +36,26 @@ export namespace GraphQL {
     DateTime: any;
   };
 
+  export type Attachment = {
+    __typename?: 'Attachment';
+    id: Scalars['String'];
+    name: Scalars['String'];
+    content: Scalars['String'];
+    updatedBy: Scalars['String'];
+    updatedAt: Scalars['DateTime'];
+  };
+
   export type BooleanArgument = {
     isNull?: Maybe<Scalars['Boolean']>;
     equal?: Maybe<Scalars['Boolean']>;
+  };
+
+  export type Comment = {
+    __typename?: 'Comment';
+    id: Scalars['String'];
+    content: Scalars['String'];
+    updatedBy: Scalars['String'];
+    updatedAt: Scalars['DateTime'];
   };
 
   export type DateArgument = {
@@ -175,6 +193,9 @@ export namespace GraphQL {
     NodeInstanceCancel?: Maybe<Scalars['String']>;
     JobCancel?: Maybe<Scalars['String']>;
     JobReschedule?: Maybe<Scalars['String']>;
+    UserTaskInstanceUpdate?: Maybe<Scalars['String']>;
+    UserTaskInstanceCommentCreate?: Maybe<Scalars['String']>;
+    UserTaskInstanceAttachmentCreate?: Maybe<Scalars['String']>;
   };
 
   export type MutationProcessInstanceAbortArgs = {
@@ -216,6 +237,36 @@ export namespace GraphQL {
   export type MutationJobRescheduleArgs = {
     id?: Maybe<Scalars['String']>;
     data?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationUserTaskInstanceUpdateArgs = {
+    taskId?: Maybe<Scalars['String']>;
+    user?: Maybe<Scalars['String']>;
+    groups?: Maybe<Array<Maybe<Scalars['String']>>>;
+    description?: Maybe<Scalars['String']>;
+    priority?: Maybe<Scalars['String']>;
+    actualOwner?: Maybe<Scalars['String']>;
+    adminGroups?: Maybe<Array<Scalars['String']>>;
+    adminUsers?: Maybe<Array<Scalars['String']>>;
+    excludedUsers?: Maybe<Array<Scalars['String']>>;
+    potentialGroups?: Maybe<Array<Scalars['String']>>;
+    potentialUsers?: Maybe<Array<Scalars['String']>>;
+    inputParams?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationUserTaskInstanceCommentCreateArgs = {
+    taskId?: Maybe<Scalars['String']>;
+    user?: Maybe<Scalars['String']>;
+    groups?: Maybe<Array<Maybe<Scalars['String']>>>;
+    comment?: Maybe<Scalars['String']>;
+  };
+
+  export type MutationUserTaskInstanceAttachmentCreateArgs = {
+    taskId?: Maybe<Scalars['String']>;
+    user?: Maybe<Scalars['String']>;
+    groups?: Maybe<Array<Maybe<Scalars['String']>>>;
+    name?: Maybe<Scalars['String']>;
+    uri?: Maybe<Scalars['String']>;
   };
 
   export type Node = {
@@ -472,6 +523,14 @@ export namespace GraphQL {
     referenceName?: Maybe<Scalars['String']>;
     lastUpdate: Scalars['DateTime'];
     endpoint?: Maybe<Scalars['String']>;
+    schema?: Maybe<Scalars['String']>;
+    comments?: Maybe<Array<Comment>>;
+    attachments?: Maybe<Array<Attachment>>;
+  };
+
+  export type UserTaskInstanceSchemaArgs = {
+    user?: Maybe<Scalars['String']>;
+    groups?: Maybe<Array<Maybe<Scalars['String']>>>;
   };
 
   export type UserTaskInstanceArgument = {
@@ -515,6 +574,8 @@ export namespace GraphQL {
     potentialUsers?: Maybe<Array<Scalars['String']>>;
     referenceName?: Maybe<Scalars['String']>;
     lastUpdate: Scalars['DateTime'];
+    comments?: Maybe<Array<Comment>>;
+    attachments?: Maybe<Array<Attachment>>;
   };
 
   export type UserTaskInstanceMetaArgument = {
@@ -1257,6 +1318,15 @@ export namespace GraphQL {
   export type SkipProcessInstanceMutation = { __typename?: 'Mutation' } & Pick<
     Mutation,
     'ProcessInstanceSkip'
+  >;
+
+  export type RetryProcessInstanceMutationVariables = Exact<{
+    processsId?: Maybe<Scalars['String']>;
+  }>;
+
+  export type RetryProcessInstanceMutation = { __typename?: 'Mutation' } & Pick<
+    Mutation,
+    'ProcessInstanceRetry'
   >;
 
   export const GetProcessInstancesDocument = gql`
@@ -2363,5 +2433,53 @@ export namespace GraphQL {
   export type SkipProcessInstanceMutationOptions = ApolloReactCommon.BaseMutationOptions<
     SkipProcessInstanceMutation,
     SkipProcessInstanceMutationVariables
+  >;
+  export const RetryProcessInstanceDocument = gql`
+    mutation retryProcessInstance($processsId: String) {
+      ProcessInstanceRetry(id: $processsId)
+    }
+  `;
+  export type RetryProcessInstanceMutationFn = ApolloReactCommon.MutationFunction<
+    RetryProcessInstanceMutation,
+    RetryProcessInstanceMutationVariables
+  >;
+
+  /**
+   * __useRetryProcessInstanceMutation__
+   *
+   * To run a mutation, you first call `useRetryProcessInstanceMutation` within a React component and pass it any options that fit your needs.
+   * When your component renders, `useRetryProcessInstanceMutation` returns a tuple that includes:
+   * - A mutate function that you can call at any time to execute the mutation
+   * - An object with fields that represent the current status of the mutation's execution
+   *
+   * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+   *
+   * @example
+   * const [retryProcessInstanceMutation, { data, loading, error }] = useRetryProcessInstanceMutation({
+   *   variables: {
+   *      processsId: // value for 'processsId'
+   *   },
+   * });
+   */
+  export function useRetryProcessInstanceMutation(
+    baseOptions?: ApolloReactHooks.MutationHookOptions<
+      RetryProcessInstanceMutation,
+      RetryProcessInstanceMutationVariables
+    >
+  ) {
+    return ApolloReactHooks.useMutation<
+      RetryProcessInstanceMutation,
+      RetryProcessInstanceMutationVariables
+    >(RetryProcessInstanceDocument, baseOptions);
+  }
+  export type RetryProcessInstanceMutationHookResult = ReturnType<
+    typeof useRetryProcessInstanceMutation
+  >;
+  export type RetryProcessInstanceMutationResult = ApolloReactCommon.MutationResult<
+    RetryProcessInstanceMutation
+  >;
+  export type RetryProcessInstanceMutationOptions = ApolloReactCommon.BaseMutationOptions<
+    RetryProcessInstanceMutation,
+    RetryProcessInstanceMutationVariables
   >;
 }

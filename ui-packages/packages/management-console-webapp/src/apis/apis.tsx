@@ -144,17 +144,22 @@ export const handleProcessSkip = async (
 
 // Rest Api to retrigger a process in error state
 export const handleProcessRetry = async (
-  processInstance: ProcessInstance
+  processInstance: ProcessInstance,
+  client: ApolloClient<any>
 ): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/retrigger`
-      )
-      .then(() => {
-        resolve();
+  return new Promise<void>((resolve, reject) => {
+    client
+      .mutate({
+        mutation: GraphQL.RetryProcessInstanceDocument,
+        variables: {
+          processsId: processInstance.id
+        },
+        fetchPolicy: 'no-cache'
       })
-      .catch(error => reject(error));
+      .then(value => {
+        resolve(value.data);
+      })
+      .catch(reason => reject(reason));
   });
 };
 

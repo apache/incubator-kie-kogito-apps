@@ -11,6 +11,7 @@ module.exports = typeDefs = gql`
   type Mutation {
     ProcessInstanceSkip(id: String): String
     ProcessInstanceAbort(id: String): String
+    ProcessInstanceRetry(id: String): String
   }
   
   type Query {

@@ -27,7 +27,6 @@ import {
 import {
   getSvg,
   handleJobReschedule,
-  handleProcessRetry,
   jobCancel,
   getTriggerableNodes,
   handleNodeTrigger,
@@ -195,7 +194,7 @@ export class ProcessDetailsGatewayApiImpl implements ProcessDetailsGatewayApi {
   }
 
   handleProcessRetry(processInstance: ProcessInstance): Promise<void> {
-    return handleProcessRetry(processInstance);
+    return this.queries.handleProcessRetry(processInstance);
   }
 
   handleNodeInstanceCancel(

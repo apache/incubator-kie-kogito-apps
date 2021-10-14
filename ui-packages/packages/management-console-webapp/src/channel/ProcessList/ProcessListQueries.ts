@@ -26,7 +26,8 @@ import { buildProcessListWhereArgument } from '../../utils/QueryUtils';
 import {
   handleProcessAbort,
   handleProcessMultipleAction,
-  handleProcessSkip
+  handleProcessSkip,
+  handleProcessRetry
 } from '../../apis/apis';
 
 export interface ProcessListQueries {
@@ -41,6 +42,8 @@ export interface ProcessListQueries {
   ): Promise<ProcessInstance[]>;
   handleProcessSkip(processInstance: ProcessInstance): Promise<void>;
   handleProcessAbort(processInstance: ProcessInstance): Promise<void>;
+  handleProcessRetry(processInstance: ProcessInstance): Promise<void>;
+
   handleProcessMultipleAction(
     processInstances: ProcessInstance[],
     operationType: OperationType
@@ -103,6 +106,10 @@ export class GraphQLProcessListQueries implements ProcessListQueries {
 
   async handleProcessAbort(processInstance: ProcessInstance): Promise<void> {
     return handleProcessAbort(processInstance, this.client);
+  }
+
+  async handleProcessRetry(processInstance: ProcessInstance): Promise<void> {
+    return handleProcessRetry(processInstance, this.client);
   }
 
   async handleProcessMultipleAction(

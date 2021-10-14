@@ -467,10 +467,25 @@ describe('test utility of svg panel', () => {
   });
 
   describe('handle retry test', () => {
+    let client;
+    let useApolloClient;
+    const mockUseApolloClient = () => {
+      act(() => {
+        client = useApolloClient();
+      });
+    };
+
+    beforeEach(() => {
+      act(() => {
+        useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+        mockUseApolloClient();
+      });
+    });
+
     it('on successful retrigger', async () => {
-      mockedAxios.post.mockResolvedValue({});
+      client.mutate.mockResolvedValue({ data: 'success' });
       let result = null;
-      await handleProcessRetry(processInstances[0])
+      await handleProcessRetry(processInstances[0], client)
         .then(() => {
           result = 'success';
         })
@@ -480,16 +495,16 @@ describe('test utility of svg panel', () => {
       expect(result).toEqual('success');
     });
     it('on failed retrigger', async () => {
-      mockedAxios.post.mockRejectedValue({ message: '404 error' });
+      client.mutate.mockRejectedValue({ message: '404 error' });
       let result = null;
-      await handleProcessRetry(processInstance[0])
+      await handleProcessRetry(processInstance[0], client)
         .then(() => {
           result = 'success';
         })
         .catch(error => {
           result = error.message;
         });
-      expect(result).toEqual("Cannot read property 'serviceUrl' of undefined");
+      expect(result).toEqual("Cannot read property 'id' of undefined");
     });
   });
 
@@ -510,7 +525,6 @@ describe('test utility of svg panel', () => {
     });
     it('on successful abort', async () => {
       client.mutate.mockResolvedValue({ data: 'success' });
-      client.mutate.moc;
       let result = null;
       await handleProcessAbort(processInstances[0], client)
         .then(() => {
@@ -571,7 +585,7 @@ describe('multiple action in process list', () => {
   });
 
   it('multiple retry test', async () => {
-    mockedAxios.post.mockResolvedValue({});
+    client.mutate.mockResolvedValue({ data: 'success' });
     const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
       processInstances,
       OperationType.RETRY,
@@ -580,7 +594,7 @@ describe('multiple action in process list', () => {
     expect(result.successProcessInstances.length).toEqual(1);
   });
   it('multiple retry test', async () => {
-    mockedAxios.post.mockRejectedValue({ message: '404 error' });
+    client.mutate.mockRejectedValue({ message: '404 error' });
     const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
       processInstances,
       OperationType.RETRY,

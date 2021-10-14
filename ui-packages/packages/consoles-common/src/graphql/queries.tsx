@@ -404,3 +404,9 @@ const SKIP_PROCESS_INSTANCE = gql`
     ProcessInstanceSkip(id: $processsId)
   }
 `;
+
+const RETRY_PROCESS_INSTANCE = gql`
+  mutation retryProcessInstance($processsId: String) {
+    ProcessInstanceRetry(id: $processsId)
+  }
+`;

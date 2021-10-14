@@ -26,7 +26,8 @@ const MockQueries = jest.fn<ProcessDetailsQueries, []>(() => ({
   getProcessDetails: jest.fn(),
   getJobs: jest.fn(),
   handleProcessSkip: jest.fn(),
-  handleProcessAbort: jest.fn()
+  handleProcessAbort: jest.fn(),
+  handleProcessRetry: jest.fn()
 }));
 
 jest

@@ -14,7 +14,6 @@ exports[`WebApp - ProcessDetailsContainer tests Snapshot test with default value
         },
         "cancelJob": [Function],
         "getProcessDiagram": [Function],
-        "handleProcessAbort": [Function],
         "handleProcessVariableUpdate": [Function],
         "listeners": Array [
           Object {
@@ -24,6 +23,9 @@ exports[`WebApp - ProcessDetailsContainer tests Snapshot test with default value
         "queries": Object {
           "getJobs": [MockFunction],
           "getProcessDetails": [MockFunction],
+          "handleProcessAbort": [MockFunction],
+          "handleProcessRetry": [MockFunction],
+          "handleProcessSkip": [MockFunction],
         },
         "rescheduleJob": [Function],
       }

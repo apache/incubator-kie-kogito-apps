@@ -88,29 +88,48 @@ function paginatedResult(arr, offset, limit) {
   }
   return paginatedArray;
 }
+
+function setProcessInstanceState(processInstanceId, state) {
+  const processInstance = data.ProcessInstanceData.filter(data => data.id === processInstanceId);
+  processInstance[0].state = state;
+}
+
 // Provide resolver functions for your schema fields
 const resolvers = {
   Mutation: {
+    ProcessInstanceRetry: async (parent, args) => {
+      const successRetryInstances = ['8035b580-6ae4-4aa8-9ec0-e18e19809e0b2', '8035b580-6ae4-4aa8-9ec0-e18e19809e0b3']
+      const { process } = mutationRestData.management;
+      const processInstance = process.filter(data => {
+        return data.processInstanceId === args['id'];
+      });
+      if (successRetryInstances.includes(processInstance[0].id)) {
+        setProcessInstanceState(processInstance[0].processInstanceId, 'ACTIVE');
+        processInstance[0].state = 'ACTIVE';
+      }
+      return processInstance[0].retrigger;
+    },
     ProcessInstanceSkip: async (parent, args) => {
       const { process } = mutationRestData.management;
-      const processId = process.filter(data => {
+      const processInstance = process.filter(data => {
         return data.processInstanceId === args['id'];
       });
-      const error = processId[0].instances.filter(err => {
-        return err.processInstanceId === args['id'];
-      });
-      return error[0].skip;
+
+      return processInstance[0].skip;
     },
     ProcessInstanceAbort: async (parent, args) => {
+      const failedAbortInstances = ['8035b580-6ae4-4aa8-9ec0-e18e19809e0b2', '8035b580-6ae4-4aa8-9ec0-e18e19809e0b3']
       const { process } = mutationRestData.management;
-      console.log('process args=', args['id']);
-      const processId = process.filter(data => {
+      const processInstance = process.filter(data => {
         return data.processInstanceId === args['id'];
       });
-      const error = processId.filter(err => {
-        return err.processInstanceId === args['id'];
-      });
-      return error[0].skip;
+      if (failedAbortInstances.includes(processInstance[0].id)) {
+        return 'process not found';
+      }else {
+        setProcessInstanceState(processInstance[0].processInstanceId, 'ABORTED');
+        processInstance[0].state = 'ABORTED';
+        return processInstance[0].abort;
+      }
     },
   },
   Query: {

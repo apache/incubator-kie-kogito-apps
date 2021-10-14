@@ -29,7 +29,6 @@ import {
   ProcessListGatewayApiImpl
 } from '../ProcessListGatewayApi';
 import { ProcessListQueries } from '../ProcessListQueries';
-import { handleProcessRetry } from '../../../apis/apis';
 
 jest.mock('apollo-client');
 
@@ -84,6 +83,7 @@ const getProcessInstancesMock = jest.fn();
 const getChildProcessInstancesMock = jest.fn();
 const handleProcessSkipMock = jest.fn();
 const handleProcessAbortMock = jest.fn();
+const handleProcessRetryMock = jest.fn();
 const handleProcessMultipleActionMock = jest.fn();
 
 const MockProcessListQueries = jest.fn<ProcessListQueries, []>(() => ({
@@ -91,7 +91,8 @@ const MockProcessListQueries = jest.fn<ProcessListQueries, []>(() => ({
   getChildProcessInstances: getChildProcessInstancesMock,
   handleProcessSkip: handleProcessSkipMock,
   handleProcessAbort: handleProcessAbortMock,
-  handleProcessMultipleAction: handleProcessMultipleActionMock
+  handleProcessMultipleAction: handleProcessMultipleActionMock,
+  handleProcessRetry: handleProcessRetryMock
 }));
 
 let queries: ProcessListQueries;
@@ -141,7 +142,7 @@ describe('ProcessListChannelApiImpl tests', () => {
 
   it('handleProcessRetry', async () => {
     await gatewayApi.handleProcessRetry(processInstance);
-    expect(handleProcessRetry).toHaveBeenCalledWith(processInstance);
+    expect(handleProcessRetryMock).toHaveBeenCalledWith(processInstance);
   });
 
   it('handleProcessAbort', async () => {

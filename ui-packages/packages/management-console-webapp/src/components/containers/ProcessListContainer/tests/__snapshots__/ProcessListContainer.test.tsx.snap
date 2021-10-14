@@ -32,6 +32,7 @@ exports[`ProcessListContainer tests Snapshot 1`] = `
           "getProcessInstances": [MockFunction],
           "handleProcessAbort": [MockFunction],
           "handleProcessMultipleAction": [MockFunction],
+          "handleProcessRetry": [MockFunction],
           "handleProcessSkip": [MockFunction],
         },
       }

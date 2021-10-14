@@ -27,6 +27,7 @@ const MockQueries = jest.fn<ProcessListQueries, []>(() => ({
   getChildProcessInstances: jest.fn(),
   handleProcessSkip: jest.fn(),
   handleProcessAbort: jest.fn(),
+  handleProcessRetry: jest.fn(),
   handleProcessMultipleAction: jest.fn()
 }));
 

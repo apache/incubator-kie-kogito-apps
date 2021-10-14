@@ -20,7 +20,6 @@ import {
   ProcessInstance
 } from '@kogito-apps/management-console-shared';
 import { ProcessListQueries } from './ProcessListQueries';
-import { handleProcessRetry } from '../../apis/apis';
 
 export interface ProcessListGatewayApi {
   processListState: ProcessListState;
@@ -107,7 +106,7 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
   handleProcessRetry = async (
     processInstance: ProcessInstance
   ): Promise<void> => {
-    return handleProcessRetry(processInstance);
+    return this.queries.handleProcessRetry(processInstance);
   };
 
   handleProcessAbort = async (

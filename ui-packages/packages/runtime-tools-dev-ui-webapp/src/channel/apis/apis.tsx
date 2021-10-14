@@ -25,6 +25,7 @@ import {
 import { FormInfo } from '@kogito-apps/forms-list';
 import axios from 'axios';
 import { Form, FormContent } from '@kogito-apps/form-details';
+import { ApolloClient } from 'apollo-client';
 
 //Rest Api to Cancel multiple Jobs
 export const performMultipleCancel = async (
@@ -124,60 +125,79 @@ export const getSvg = async (data: ProcessInstance): Promise<any> => {
 
 // Rest Api to skip a process in error state
 export const handleProcessSkip = async (
-  processInstance: ProcessInstance
+  processInstance: ProcessInstance,
+  client: ApolloClient<any>
 ): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/skip`
-      )
-      .then(() => {
-        resolve();
+  return new Promise<void>((resolve, reject) => {
+    client
+      .mutate({
+        mutation: GraphQL.AbortProcessInstanceDocument,
+        variables: {
+          processsId: processInstance.id
+        },
+        fetchPolicy: 'no-cache'
       })
-      .catch(error => reject(error));
+      .then(value => {
+        resolve(value.data);
+      })
+      .catch(reason => reject(reason));
   });
 };
 
 // Rest Api to retrigger a process in error state
 export const handleProcessRetry = async (
-  processInstance: ProcessInstance
+  processInstance: ProcessInstance,
+  client: ApolloClient<any>
 ): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/retrigger`
-      )
-      .then(() => {
-        resolve();
+  return new Promise<void>((resolve, reject) => {
+    client
+      .mutate({
+        mutation: GraphQL.RetryProcessInstanceDocument,
+        variables: {
+          processsId: processInstance.id
+        },
+        fetchPolicy: 'no-cache'
       })
-      .catch(error => reject(error));
+      .then(value => {
+        resolve(value.data);
+      })
+      .catch(reason => reject(reason));
   });
 };
 
 // Rest Api to abort a process
 export const handleProcessAbort = (
-  processInstance: ProcessInstance
+  processInstance: ProcessInstance,
+  client: ApolloClient<any>
 ): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    axios
-      .delete(
-        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}`
-      )
-      .then(() => {
-        resolve();
+  return new Promise<void>((resolve, reject) => {
+    client
+      .mutate({
+        mutation: GraphQL.AbortProcessInstanceDocument,
+        variables: {
+          processsId: processInstance.id
+        },
+        fetchPolicy: 'no-cache'
       })
-      .catch(error => reject(error));
+      .then(value => {
+        resolve(value.data);
+      })
+      .catch(reason => reject(reason));
   });
 };
 
 // function to handle multiple actions(abort, skip and retry) on processes
 export const handleProcessMultipleAction = async (
   processInstances: ProcessInstance[],
-  operationType: OperationType
+  operationType: OperationType,
+  client: ApolloClient<any>
 ): Promise<BulkProcessInstanceActionResponse> => {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject) => {
-    let operation: (processInstance: ProcessInstance) => Promise<void>;
+    let operation: (
+      processInstance: ProcessInstance,
+      client: ApolloClient<any>
+    ) => Promise<void>;
     const successProcessInstances: ProcessInstance[] = [];
     const failedProcessInstances: ProcessInstance[] = [];
     switch (operationType) {
@@ -192,7 +212,7 @@ export const handleProcessMultipleAction = async (
         break;
     }
     for (const processInstance of processInstances) {
-      await operation(processInstance)
+      await operation(processInstance, client)
         .then(() => {
           successProcessInstances.push(processInstance);
         })
