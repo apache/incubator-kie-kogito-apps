@@ -23,7 +23,6 @@ import java.util.UUID;
 import org.infinispan.protostream.MessageMarshaller;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.Attachment;
-import org.kie.kogito.index.model.Comment;
 import org.mockito.InOrder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -91,8 +90,8 @@ class AttachmentMarshallerTest {
 
     @Test
     void testMarshaller() {
-        CommentMarshaller marshaller = new CommentMarshaller(null);
-        assertThat(marshaller.getJavaClass()).isEqualTo(Comment.class);
-        assertThat(marshaller.getTypeName()).isEqualTo(Comment.class.getName());
+        AttachmentMarshaller marshaller = new AttachmentMarshaller(null);
+        assertThat(marshaller.getJavaClass()).isEqualTo(Attachment.class);
+        assertThat(marshaller.getTypeName()).isEqualTo(Attachment.class.getName());
     }
 }
