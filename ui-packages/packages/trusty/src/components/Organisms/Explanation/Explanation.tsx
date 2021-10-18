@@ -96,7 +96,7 @@ const Explanation = ({ executionId, outcomeId }: ExplanationProps) => {
                           className="explanation__all-features-opener"
                           onClick={handleModalToggle}
                         >
-                          View Complete Chart
+                          View complete chart
                         </Button>
                         <Modal
                           width={'80%'}
