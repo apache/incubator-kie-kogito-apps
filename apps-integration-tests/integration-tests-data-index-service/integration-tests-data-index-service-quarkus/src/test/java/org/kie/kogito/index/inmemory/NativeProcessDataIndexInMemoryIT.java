@@ -15,9 +15,12 @@
  */
 package org.kie.kogito.index.inmemory;
 
+import org.junit.jupiter.api.Disabled;
+
 import io.quarkus.test.junit.NativeImageTest;
 
 @NativeImageTest
+@Disabled
 public class NativeProcessDataIndexInMemoryIT extends ProcessDataIndexInMemoryIT {
 
 }
