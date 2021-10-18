@@ -85,12 +85,14 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 return distance;
             }
 
-        } else if (prediction.getType() == Type.CATEGORICAL || prediction.getType() == Type.BOOLEAN) {
+        } else if (prediction.getType() == Type.CATEGORICAL || prediction.getType() == Type.BOOLEAN
+                || prediction.getType() == Type.TEXT) {
             final Object goalValueObject = goal.getValue().getUnderlyingObject();
             final Object predictionValueObject = prediction.getValue().getUnderlyingObject();
             return Objects.equals(goalValueObject, predictionValueObject) ? 0.0 : 1.0;
         } else {
-            String message = String.format("Feature '%s' has unsupported type '%s'", prediction.getName(), predictionType.toString());
+            String message =
+                    String.format("Feature '%s' has unsupported type '%s'", prediction.getName(), predictionType.toString());
             logger.error(message);
             throw new IllegalArgumentException(message);
         }

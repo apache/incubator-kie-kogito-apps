@@ -38,7 +38,6 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
-import org.kie.kogito.explainability.model.domain.CategoricalFeatureDomain;
 import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
@@ -254,6 +253,10 @@ class CounterfactualScoreCalculatorTest {
         distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
 
         assertEquals(Type.CATEGORICAL, predictionOutput.getType());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void TextDistanceSameValue(int seed) {
         final String value = UUID.randomUUID().toString();
         Feature x = FeatureFactory.newTextFeature("x", value);
