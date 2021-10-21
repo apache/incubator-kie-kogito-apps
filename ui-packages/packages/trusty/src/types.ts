@@ -87,10 +87,10 @@ export type evaluationStatusStrings = keyof typeof evaluationStatus;
 export interface Outcome {
   outcomeId: string;
   outcomeName: string;
+  outcomeResult: ItemObjectValue;
   evaluationStatus: evaluationStatusStrings;
   hasErrors: boolean;
   messages: string[];
-  outcomeResult: ItemObjectValue;
 }
 
 export interface FeatureScores {
