@@ -67,7 +67,6 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         categoricalVariableRegressionRuntime = getPMMLRuntime(ResourceReaderUtils.getResourceAsFile("categoricalvariablesregression/categoricalVariablesRegression.pmml"));
     }
 
-
     @Disabled("See KOGITO-6154")
     @Test
     void testPMMLRegressionCategorical() throws Exception {
