@@ -211,7 +211,10 @@ const CounterfactualAnalysis = (props: CounterfactualAnalysisProps) => {
                       )}
                       <CounterfactualCompletedMessage status={state.status} />
                       {containerWidth <= 880 && (
-                        <EmptyState variant={EmptyStateVariant.xs}>
+                        <EmptyState
+                          variant={EmptyStateVariant.xs}
+                          className={'counterfactual__unsupported-screen-size'}
+                        >
                           <EmptyStateIcon icon={OutlinedMehIcon} />
                           <Title headingLevel="h4" size="md">
                             Screen size not supported
