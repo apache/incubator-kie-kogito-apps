@@ -227,302 +227,33 @@ exports[`CounterfactualAnalysis renders correctly 1`] = `
                                 </Flex>
                               </div>
                             </StackItem>
-                            <CounterfactualHint
-                              isVisible={true}
+                            <StackItem
+                              className="counterfactual__hint"
                             >
-                              <StackItem>
-                                <div
-                                  className="pf-l-stack__item"
-                                >
-                                  <Hint
-                                    actions={
-                                      <Dropdown
-                                        dropdownItems={
-                                          Array [
-                                            <DropdownItem
-                                              component={
-                                                <button
-                                                  onClick={[Function]}
-                                                >
-                                                  Close
-                                                </button>
-                                              }
-                                              id="hint-close"
-                                            />,
-                                            <DropdownItem
-                                              href="https://docs.jboss.org/kogito/release/1.4.0/html_single/#con-audit-console_kogito-dmn-models"
-                                              icon={
-                                                <ExternalLinkAltIcon
-                                                  color="currentColor"
-                                                  noVerticalAlign={false}
-                                                  size="sm"
-                                                />
-                                              }
-                                              target="_blank"
-                                            >
-                                              Learn More
-                                            </DropdownItem>,
-                                          ]
-                                        }
-                                        isOpen={false}
-                                        isPlain={true}
-                                        position="right"
-                                        toggle={
-                                          <KebabToggle
-                                            id="hint-kebab-toggle"
-                                            onToggle={[Function]}
-                                          />
-                                        }
-                                      />
-                                    }
+                              <div
+                                className="pf-l-stack__item counterfactual__hint"
+                              >
+                                <TextContent>
+                                  <div
+                                    className="pf-c-content"
                                   >
-                                    <div
-                                      className="pf-c-hint"
+                                    <Text
+                                      component="p"
                                     >
-                                      <div
-                                        className="pf-c-hint__actions"
+                                      <p
+                                        className=""
+                                        data-ouia-component-id="OUIA-Generated-Text-1"
+                                        data-ouia-component-type="PF4/Text"
+                                        data-ouia-safe={true}
+                                        data-pf-content={true}
                                       >
-                                        <Dropdown
-                                          dropdownItems={
-                                            Array [
-                                              <DropdownItem
-                                                component={
-                                                  <button
-                                                    onClick={[Function]}
-                                                  >
-                                                    Close
-                                                  </button>
-                                                }
-                                                id="hint-close"
-                                              />,
-                                              <DropdownItem
-                                                href="https://docs.jboss.org/kogito/release/1.4.0/html_single/#con-audit-console_kogito-dmn-models"
-                                                icon={
-                                                  <ExternalLinkAltIcon
-                                                    color="currentColor"
-                                                    noVerticalAlign={false}
-                                                    size="sm"
-                                                  />
-                                                }
-                                                target="_blank"
-                                              >
-                                                Learn More
-                                              </DropdownItem>,
-                                            ]
-                                          }
-                                          isOpen={false}
-                                          isPlain={true}
-                                          position="right"
-                                          toggle={
-                                            <KebabToggle
-                                              id="hint-kebab-toggle"
-                                              onToggle={[Function]}
-                                            />
-                                          }
-                                        >
-                                          <DropdownWithContext
-                                            autoFocus={true}
-                                            className=""
-                                            direction="down"
-                                            dropdownItems={
-                                              Array [
-                                                <DropdownItem
-                                                  component={
-                                                    <button
-                                                      onClick={[Function]}
-                                                    >
-                                                      Close
-                                                    </button>
-                                                  }
-                                                  id="hint-close"
-                                                />,
-                                                <DropdownItem
-                                                  href="https://docs.jboss.org/kogito/release/1.4.0/html_single/#con-audit-console_kogito-dmn-models"
-                                                  icon={
-                                                    <ExternalLinkAltIcon
-                                                      color="currentColor"
-                                                      noVerticalAlign={false}
-                                                      size="sm"
-                                                    />
-                                                  }
-                                                  target="_blank"
-                                                >
-                                                  Learn More
-                                                </DropdownItem>,
-                                              ]
-                                            }
-                                            isGrouped={false}
-                                            isOpen={false}
-                                            isPlain={true}
-                                            menuAppendTo="inline"
-                                            onSelect={[Function]}
-                                            position="right"
-                                            toggle={
-                                              <KebabToggle
-                                                id="hint-kebab-toggle"
-                                                onToggle={[Function]}
-                                              />
-                                            }
-                                          >
-                                            <div
-                                              className="pf-c-dropdown pf-m-align-right"
-                                              data-ouia-component-id="OUIA-Generated-Dropdown-1"
-                                              data-ouia-component-type="PF4/Dropdown"
-                                              data-ouia-safe={true}
-                                            >
-                                              <KebabToggle
-                                                aria-haspopup={true}
-                                                getMenuRef={[Function]}
-                                                id="hint-kebab-toggle"
-                                                isOpen={false}
-                                                isPlain={true}
-                                                key=".0"
-                                                onEnter={[Function]}
-                                                onToggle={[Function]}
-                                                parentRef={
-                                                  Object {
-                                                    "current": <div
-                                                      class="pf-c-dropdown pf-m-align-right"
-                                                      data-ouia-component-id="OUIA-Generated-Dropdown-1"
-                                                      data-ouia-component-type="PF4/Dropdown"
-                                                      data-ouia-safe="true"
-                                                    >
-                                                      <button
-                                                        aria-expanded="false"
-                                                        aria-haspopup="true"
-                                                        aria-label="Actions"
-                                                        class="pf-c-dropdown__toggle pf-m-plain"
-                                                        id="hint-kebab-toggle"
-                                                        type="button"
-                                                      >
-                                                        <svg
-                                                          aria-hidden="true"
-                                                          fill="currentColor"
-                                                          height="1em"
-                                                          role="img"
-                                                          style="vertical-align: -0.125em;"
-                                                          viewBox="0 0 192 512"
-                                                          width="1em"
-                                                        >
-                                                          <path
-                                                            d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                          />
-                                                        </svg>
-                                                      </button>
-                                                    </div>,
-                                                  }
-                                                }
-                                              >
-                                                <Toggle
-                                                  aria-haspopup={true}
-                                                  aria-label="Actions"
-                                                  bubbleEvent={false}
-                                                  className=""
-                                                  getMenuRef={[Function]}
-                                                  id="hint-kebab-toggle"
-                                                  isActive={false}
-                                                  isDisabled={false}
-                                                  isOpen={false}
-                                                  isPlain={true}
-                                                  isPrimary={false}
-                                                  isSplitButton={false}
-                                                  onEnter={[Function]}
-                                                  onToggle={[Function]}
-                                                  parentRef={
-                                                    Object {
-                                                      "current": <div
-                                                        class="pf-c-dropdown pf-m-align-right"
-                                                        data-ouia-component-id="OUIA-Generated-Dropdown-1"
-                                                        data-ouia-component-type="PF4/Dropdown"
-                                                        data-ouia-safe="true"
-                                                      >
-                                                        <button
-                                                          aria-expanded="false"
-                                                          aria-haspopup="true"
-                                                          aria-label="Actions"
-                                                          class="pf-c-dropdown__toggle pf-m-plain"
-                                                          id="hint-kebab-toggle"
-                                                          type="button"
-                                                        >
-                                                          <svg
-                                                            aria-hidden="true"
-                                                            fill="currentColor"
-                                                            height="1em"
-                                                            role="img"
-                                                            style="vertical-align: -0.125em;"
-                                                            viewBox="0 0 192 512"
-                                                            width="1em"
-                                                          >
-                                                            <path
-                                                              d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                            />
-                                                          </svg>
-                                                        </button>
-                                                      </div>,
-                                                    }
-                                                  }
-                                                >
-                                                  <button
-                                                    aria-expanded={false}
-                                                    aria-haspopup={true}
-                                                    aria-label="Actions"
-                                                    className="pf-c-dropdown__toggle pf-m-plain"
-                                                    disabled={false}
-                                                    id="hint-kebab-toggle"
-                                                    onClick={[Function]}
-                                                    onKeyDown={[Function]}
-                                                    type="button"
-                                                  >
-                                                    <EllipsisVIcon
-                                                      color="currentColor"
-                                                      noVerticalAlign={false}
-                                                      size="sm"
-                                                    >
-                                                      <svg
-                                                        aria-hidden={true}
-                                                        aria-labelledby={null}
-                                                        fill="currentColor"
-                                                        height="1em"
-                                                        role="img"
-                                                        style={
-                                                          Object {
-                                                            "verticalAlign": "-0.125em",
-                                                          }
-                                                        }
-                                                        viewBox="0 0 192 512"
-                                                        width="1em"
-                                                      >
-                                                        <path
-                                                          d="M96 184c39.8 0 72 32.2 72 72s-32.2 72-72 72-72-32.2-72-72 32.2-72 72-72zM24 80c0 39.8 32.2 72 72 72s72-32.2 72-72S135.8 8 96 8 24 40.2 24 80zm0 352c0 39.8 32.2 72 72 72s72-32.2 72-72-32.2-72-72-72-72 32.2-72 72z"
-                                                        />
-                                                      </svg>
-                                                    </EllipsisVIcon>
-                                                  </button>
-                                                </Toggle>
-                                              </KebabToggle>
-                                            </div>
-                                          </DropdownWithContext>
-                                        </Dropdown>
-                                      </div>
-                                      <HintTitle>
-                                        <div
-                                          className="pf-c-hint__title"
-                                        >
-                                          Create a counterfactual
-                                        </div>
-                                      </HintTitle>
-                                      <HintBody>
-                                        <div
-                                          className="pf-c-hint__body"
-                                        >
-                                          Select a desired counterfactual outcome; one or more data types, and modify the input constraints.
-                                        </div>
-                                      </HintBody>
-                                    </div>
-                                  </Hint>
-                                </div>
-                              </StackItem>
-                            </CounterfactualHint>
+                                        Select a desired counterfactual outcome; one or more data types, and modify the input constraints.
+                                      </p>
+                                    </Text>
+                                  </div>
+                                </TextContent>
+                              </div>
+                            </StackItem>
                             <CounterfactualCompletedMessage
                               status={
                                 Object {

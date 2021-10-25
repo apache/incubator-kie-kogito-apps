@@ -110,15 +110,7 @@ describe('CounterfactualAnalysis', () => {
       />
     );
 
-    expect(wrapper.find('CounterfactualHint')).toHaveLength(1);
-    expect(wrapper.find('CounterfactualHint Hint')).toHaveLength(1);
-
-    wrapper
-      .find('CounterfactualHint button#hint-kebab-toggle')
-      .simulate('click');
-    wrapper.find('CounterfactualHint #hint-close button').simulate('click');
-
-    expect(wrapper.find('CounterfactualHint Hint')).toHaveLength(0);
+    expect(wrapper.find('div.counterfactual__hint')).toHaveLength(1);
   });
 
   test('handles input selection, constraints change and outcome selection', async () => {
