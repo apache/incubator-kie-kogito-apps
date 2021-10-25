@@ -34,7 +34,7 @@ import {
 } from '@kogito-apps/form-displayer';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
-import { FormSubmitResponseType } from '@kogito-apps/form-displayer/src/api';
+import { FormSubmitResponseType } from '@kogito-apps/form-displayer';
 
 jest.mock('uuid', () => {
   return () => 'testId';

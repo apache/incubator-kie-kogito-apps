@@ -28,12 +28,24 @@ import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.io.TempDir;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.FormsStorage;
-import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.*;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.Form;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormConfiguration;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormContent;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormFilter;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormInfo;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormResources;
 
-import static org.junit.jupiter.api.Assertions.*;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.impl.FormsStorageImpl.PROJECT_FORM_STORAGE_PROP;
+
+@QuarkusTest
+@TestProfile(FormsTestProfile.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class FormsStorageImplTest {
 
@@ -45,16 +57,13 @@ public class FormsStorageImplTest {
     private static final String PARTIAL_FORM_NAME = "hiring";
     private static final String FORM_NAME_WITH_OUT_CONFIG = "hiring_HRInterviewWithoutConfig";
 
-    @TempDir
-    static File storage;
-
     private FormsStorage formsStorage;
 
     @BeforeAll
-    public void init() throws IOException {
+    public void init() {
         URL formsFolder = Thread.currentThread().getContextClassLoader().getResource("forms");
 
-        formsStorage = new FormsStorageImpl(formsFolder, storage.toURI().toURL());
+        formsStorage = new FormsStorageImpl(formsFolder);
     }
 
     @Test
@@ -107,15 +116,16 @@ public class FormsStorageImplTest {
 
     @Test
     public void testUpdateValidForms() throws IOException {
+        File storage = new File(System.getProperties().getProperty(PROJECT_FORM_STORAGE_PROP));
 
         File sourceFile = new File(storage.toURI().resolve(FORM_NAME + ".html"));
-        File contentFile = new File(storage.toURI().resolve(FORM_NAME + ".config"));
+        File configFile = new File(storage.toURI().resolve(FORM_NAME + ".config"));
 
         sourceFile.createNewFile();
-        contentFile.createNewFile();
+        configFile.createNewFile();
 
         FileUtils.write(sourceFile, "", StandardCharsets.UTF_8);
-        FileUtils.write(contentFile, "", StandardCharsets.UTF_8);
+        FileUtils.write(configFile, "", StandardCharsets.UTF_8);
 
         Form form = formsStorage.getFormContent(FORM_NAME);
         FormResources resources = new FormResources();
@@ -133,5 +143,8 @@ public class FormsStorageImplTest {
         assertEquals(form.getConfiguration().getSchema(), newForm.getConfiguration().getSchema());
         assertEquals(STYLE1, newForm.getConfiguration().getResources().getStyles().get(STYLE1));
         assertEquals(SCRIPT1, newForm.getConfiguration().getResources().getScripts().get(SCRIPT1));
+
+        FileUtils.deleteQuietly(sourceFile);
+        FileUtils.deleteQuietly(configFile);
     }
 }

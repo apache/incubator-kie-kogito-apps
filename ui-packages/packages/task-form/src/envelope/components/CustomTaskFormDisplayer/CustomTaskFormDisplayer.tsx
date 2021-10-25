@@ -21,7 +21,8 @@ import {
   EmbeddedFormDisplayer,
   FormDisplayerApi,
   FormOpenedState,
-  FormSubmitResponseType
+  FormSubmitResponseType,
+  FormOpened
 } from '@kogito-apps/form-displayer';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { CustomForm, TaskFormSchema } from '../../../types';
@@ -29,7 +30,6 @@ import { generateFormData } from '../utils/TaskFormDataUtils';
 import FormFooter from '../FormFooter/FormFooter';
 import { FormAction } from '../utils';
 import { TaskFormDriver, User } from '../../../api';
-import { FormOpened } from '@kogito-apps/form-displayer/src';
 import { Bullseye, Stack, StackItem } from '@patternfly/react-core';
 import { KogitoSpinner } from '@kogito-apps/components-common';
 import { buildTaskFormContext } from './utils/utils';

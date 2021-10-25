@@ -38,8 +38,14 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.FormsStorage;
-import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.*;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.Form;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormConfiguration;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormContent;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormFilter;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormInfo;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormResources;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,11 +54,13 @@ import io.vertx.core.json.JsonObject;
 @ApplicationScoped
 public class FormsStorageImpl implements FormsStorage {
 
+    public static final String PROJECT_FORM_STORAGE_PROP = "quarkus.kogito-runtime-tools.forms.folder";
+
     private static final String CONFIG_EXT = ".config";
 
     private static final String FORMS_STORAGE_PATH = "/forms";
 
-    private static final String CLASSLOADER_FORMS_STORAGE_PATH = "/target/classes" + FORMS_STORAGE_PATH;
+    private static final String JAR_FORMS_STORAGE_PATH = "/target/classes" + FORMS_STORAGE_PATH;
     private static final String FS_FORMS_STORAGE_PATH = "/src/main/resources" + FORMS_STORAGE_PATH;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FormsStorageImpl.class);
@@ -67,8 +75,8 @@ public class FormsStorageImpl implements FormsStorage {
         start(Thread.currentThread().getContextClassLoader().getResource(FORMS_STORAGE_PATH));
     }
 
-    FormsStorageImpl(final URL classLoaderFormsUrl, final URL formsStorageUrl) {
-        start(classLoaderFormsUrl, formsStorageUrl);
+    FormsStorageImpl(final URL classLoaderFormsUrl) {
+        start(classLoaderFormsUrl);
     }
 
     private void start(final URL classLoaderFormsUrl) {
@@ -91,7 +99,11 @@ public class FormsStorageImpl implements FormsStorage {
             return null;
         }
 
-        File formsStorageFolder = new File(classLoaderFormsUrl.getFile().replace(CLASSLOADER_FORMS_STORAGE_PATH, FS_FORMS_STORAGE_PATH));
+        String storageUrl = ConfigProvider.getConfig()
+                .getOptionalValue(PROJECT_FORM_STORAGE_PROP, String.class)
+                .orElseGet(() -> classLoaderFormsUrl.getFile().replace(JAR_FORMS_STORAGE_PATH, FS_FORMS_STORAGE_PATH));
+
+        File formsStorageFolder = new File(storageUrl);
 
         if (!formsStorageFolder.exists() || !formsStorageFolder.isDirectory()) {
             LOGGER.warn("Cannot initialize form storage folder in path '" + formsStorageFolder.getPath() + "'");
@@ -154,7 +166,7 @@ public class FormsStorageImpl implements FormsStorage {
         if (formFile != null && formFile.exists()) {
             form = new Form(formInfo, IOUtils.toString(new FileInputStream(formFile), StandardCharsets.UTF_8), readFormConfiguration(formConfiguration));
         } else {
-            throw new FileNotFoundException(formInfo.getName() + "'s config file dose not found");
+            throw new FileNotFoundException(formInfo.getName() + "'s config file was not found");
         }
         return form;
     }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useImperativeHandle, useState } from 'react';
+import React, { useCallback, useImperativeHandle, useState } from 'react';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 import {
   CodeEditor,
@@ -31,6 +31,7 @@ import { Form } from '../../../api';
 import { useFormDetailsContext } from '../contexts/FormDetailsContext';
 import { ResizableContent } from '../FormDetails/FormDetails';
 import '../styles.css';
+
 export interface FormEditorProps {
   formType?: string;
   isSource?: boolean;
@@ -142,6 +143,10 @@ export const FormEditor = React.forwardRef<
       }
     };
 
+    const isVisible = useCallback(() => {
+      return contentChange && contentChange.source.length > 0;
+    }, [contentChange]);
+
     const customControl = (
       <>
         <CodeEditorControl
@@ -149,28 +154,28 @@ export const FormEditor = React.forwardRef<
           aria-label="Save form"
           toolTipText="Save form"
           onClick={() => onSaveForm()}
-          isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
+          isVisible={isVisible()}
         />
         <CodeEditorControl
           icon={<PlayIcon className="pf-global--primary-color--100" />}
           aria-label="Execute form"
           toolTipText="Execute form"
           onClick={onExecuteCode}
-          isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
+          isVisible={isVisible()}
         />
         <CodeEditorControl
           icon={<UndoIcon className="pf-global--primary-color--100" />}
           aria-label="Undo changes"
           toolTipText="Undo changes"
           onClick={onUndoChanges}
-          isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
+          isVisible={isVisible()}
         />
         <CodeEditorControl
           icon={<RedoIcon className="pf-global--primary-color--100" />}
           aria-label="Redo changes"
           toolTipText="Redo changes"
           onClick={onRedoChanges}
-          isVisible={contentChange && Object.keys(contentChange)[0].length > 0}
+          isVisible={isVisible()}
         />
       </>
     );
