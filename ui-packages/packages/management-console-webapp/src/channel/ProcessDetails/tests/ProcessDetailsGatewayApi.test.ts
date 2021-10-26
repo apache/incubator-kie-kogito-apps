@@ -29,14 +29,6 @@ import {
   ProcessDetailsGatewayApiImpl
 } from '../ProcessDetailsGatewayApi';
 import { GraphQL } from '@kogito-apps/consoles-common';
-import {
-  handleJobReschedule,
-  jobCancel,
-  getSvg,
-  getTriggerableNodes,
-  handleNodeTrigger,
-  handleProcessVariableUpdate
-} from '../../../apis/apis';
 
 jest.mock('../../../apis/apis', () => ({
   handleJobReschedule: jest.fn(),
@@ -72,13 +64,28 @@ const getProcessDetailsMock = jest.fn();
 const handleProcessSkipMock = jest.fn();
 const handleProcessAbortMock = jest.fn();
 const handleProcessRetryMock = jest.fn();
-
+const getSVGMock = jest.fn();
+const jobCancelMock = jest.fn();
+const rescheduleJobMock = jest.fn();
+const getTriggerableNodesMock = jest.fn();
+const handleNodeTriggerMock = jest.fn();
+const handleProcessVariableUpdateMock = jest.fn();
+const handleNodeInstanceCancelMock = jest.fn();
+const handleNodeInstanceRetriggerMock = jest.fn();
 const MockProcessDetailsQueries = jest.fn<ProcessDetailsQueries, []>(() => ({
   getProcessDetails: getProcessDetailsMock,
   getJobs: getJobsMock,
   handleProcessSkip: handleProcessSkipMock,
   handleProcessAbort: handleProcessAbortMock,
-  handleProcessRetry: handleProcessRetryMock
+  handleProcessRetry: handleProcessRetryMock,
+  getSVG: getSVGMock,
+  jobCancel: jobCancelMock,
+  rescheduleJob: rescheduleJobMock,
+  getTriggerableNodes: getTriggerableNodesMock,
+  handleNodeTrigger: handleNodeTriggerMock,
+  handleProcessVariableUpdate: handleProcessVariableUpdateMock,
+  handleNodeInstanceCancel: handleNodeInstanceCancelMock,
+  handleNodeInstanceRetrigger: handleNodeInstanceRetriggerMock
 }));
 
 let queries: ProcessDetailsQueries;
@@ -170,7 +177,7 @@ describe('ProcessDetailsGatewayApi tests', () => {
   it('getProcessDiagram', () => {
     gatewayApi.getProcessDiagram(data);
 
-    expect(getSvg).toHaveBeenCalledWith(data);
+    expect(getSVGMock).toHaveBeenCalledWith(data);
   });
 
   it('cancelJob', async () => {
@@ -178,9 +185,9 @@ describe('ProcessDetailsGatewayApi tests', () => {
     const modalContent =
       'The job: eff4ee-11qw23-6675-pokau97-qwedjut45a0fj_0 failed to cancel. Error message: Network Error';
     //@ts-ignore
-    jobCancel.mockReturnValueOnce({ modalTitle, modalContent });
+    jobCancelMock.mockReturnValueOnce({ modalTitle, modalContent });
     const result = await gatewayApi.cancelJob(job);
-    expect(jobCancel).toHaveBeenCalledWith(job);
+    expect(jobCancelMock).toHaveBeenCalledWith(job);
     expect(result).toStrictEqual({ modalTitle, modalContent });
   });
 
@@ -188,7 +195,7 @@ describe('ProcessDetailsGatewayApi tests', () => {
     const modalTitle = 'success';
     const modalContent = `Reschedule of job: 'eff4ee-11qw23-6675-pokau97-qwedjut45a0fj_0' is successful`;
     //@ts-ignore
-    handleJobReschedule.mockReturnValueOnce({ modalTitle, modalContent });
+    rescheduleJobMock.mockReturnValueOnce({ modalTitle, modalContent });
     const repeatInterval = 0;
     const repeatLimit = 0;
     const scheduleDate = new Date('2021-08-27T03:35:50.147Z');
@@ -198,7 +205,7 @@ describe('ProcessDetailsGatewayApi tests', () => {
       repeatLimit,
       scheduleDate
     );
-    expect(handleJobReschedule).toHaveBeenCalledWith(
+    expect(rescheduleJobMock).toHaveBeenCalledWith(
       job,
       repeatInterval,
       repeatLimit,
@@ -217,7 +224,7 @@ describe('ProcessDetailsGatewayApi tests', () => {
 
   it('get triggerable node', () => {
     gatewayApi.getTriggerableNodes(data);
-    expect(getTriggerableNodes).toHaveBeenCalledWith(data);
+    expect(getTriggerableNodesMock).toHaveBeenCalledWith(data);
   });
 
   it('handle node trigger test', () => {
@@ -229,12 +236,12 @@ describe('ProcessDetailsGatewayApi tests', () => {
       nodeDefinitionId: '_aabfr245kgtgiy'
     };
     gatewayApi.handleNodeTrigger(data, node);
-    expect(handleNodeTrigger).toHaveBeenCalledWith(data, node);
+    expect(handleNodeTriggerMock).toHaveBeenCalledWith(data, node);
   });
 
   it('handleProcessVariableUpdate', async () => {
     await gatewayApi.handleProcessVariableUpdate(data, {});
-    expect(handleProcessVariableUpdate).toHaveBeenCalledWith(data, {});
+    expect(handleProcessVariableUpdateMock).toHaveBeenCalledWith(data, {});
   });
 
   it('processDetailsQuery- success response', () => {

@@ -22,18 +22,13 @@ import {
   JobCancel
 } from '@kogito-apps/management-console-shared';
 import { JobsManagementQueries } from './JobsManagementQueries';
-import {
-  performMultipleCancel,
-  jobCancel,
-  handleJobReschedule
-} from '../../apis';
 
 export interface JobsManagementGatewayApi {
   jobsManagementState: any;
   initialLoad: (filter: JobStatus[], orderBy: SortBy) => Promise<void>;
   applyFilter: (filter: JobStatus[]) => Promise<void>;
   bulkCancel: (jobsToBeActioned: Job[]) => Promise<BulkCancel>;
-  cancelJob: (job: Pick<Job, 'id' | 'endpoint'>) => Promise<JobCancel>;
+  cancelJob: (job) => Promise<JobCancel>;
   rescheduleJob: (
     job,
     repeatInterval: number | string,
@@ -71,9 +66,8 @@ export class JobsManagementGatewayApiImpl implements JobsManagementGatewayApi {
     return Promise.resolve();
   };
 
-  cancelJob = async (job: Pick<Job, 'id' | 'endpoint'>): Promise<JobCancel> => {
-    const cancelResult: JobCancel = await jobCancel(job);
-    return cancelResult;
+  cancelJob = async (job: Job): Promise<JobCancel> => {
+    return this.queries.cancelJob(job);
   };
 
   rescheduleJob = async (
@@ -82,7 +76,7 @@ export class JobsManagementGatewayApiImpl implements JobsManagementGatewayApi {
     repeatLimit: number | string,
     scheduleDate: Date
   ): Promise<{ modalTitle: string; modalContent: string }> => {
-    const rescheduleResult = await handleJobReschedule(
+    const rescheduleResult = await this.queries.rescheduleJob(
       job,
       repeatInterval,
       repeatLimit,
@@ -94,7 +88,7 @@ export class JobsManagementGatewayApiImpl implements JobsManagementGatewayApi {
   bulkCancel = (
     jobsToBeActioned: (Job & { errorMessage?: string })[]
   ): Promise<BulkCancel> => {
-    return performMultipleCancel(jobsToBeActioned);
+    return this.queries.performMultipleCancel(jobsToBeActioned);
   };
 
   sortBy = (orderBy: SortBy): Promise<void> => {

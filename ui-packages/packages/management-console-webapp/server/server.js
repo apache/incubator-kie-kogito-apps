@@ -15,7 +15,7 @@ const config = require('./config');
 const data = require('./MockData/graphql');
 const controller = require('./MockData/controllers');
 const typeDefs = require('./MockData/types');
-const restData = require("./MockData/rest");
+// const restData = require("./MockData/rest");
 const mutationRestData = require("./MockData/mutationRest");
 
 function setPort(port = 4000) {
@@ -48,31 +48,31 @@ app.post(
   '/management/processes/:processId/instances/:processInstanceId/error',
   controller.showError
 );
-app.post(
-  '/management/processes/:processId/instances/:processInstanceId/skip',
-  controller.callSkip
-);
-app.post(
-  '/management/processes/:processId/instances/:processInstanceId/retrigger',
-  controller.callRetrigger
-);
-app.delete(
-  '/management/processes/:processId/instances/:processInstanceId',
-  controller.callAbort
-);
-app.post('/management/processes/:processId/instances/:processInstanceId/nodeInstances/:nodeInstanceId',
-  controller.callNodeRetrigger
-);
-app.delete('/management/processes/:processId/instances/:processInstanceId/nodeInstances/:nodeInstanceId',
-  controller.callNodeCancel
-);
-app.patch('/jobs/:id', controller.handleJobReschedule);
-app.post('/management/processes/:processId/instances/:processInstanceId/nodes/:nodeId',
-  controller.callNodeTrigger
-);
-app.get('/management/processes/:processId/nodes', controller.getTriggerableNodes)
-app.delete('/jobs/:jobId', controller.callJobCancel);
-app.get('/svg/processes/:processId/instances/:id', controller.dispatchSVG);
+// app.post(
+//   '/management/processes/:processId/instances/:processInstanceId/skip',
+//   controller.callSkip
+// );
+// app.post(
+//   '/management/processes/:processId/instances/:processInstanceId/retrigger',
+//   controller.callRetrigger
+// );
+// app.delete(
+//   '/management/processes/:processId/instances/:processInstanceId',
+//   controller.callAbort
+// );
+// app.post('/management/processes/:processId/instances/:processInstanceId/nodeInstances/:nodeInstanceId',
+//   controller.callNodeRetrigger
+// );
+// app.delete('/management/processes/:processId/instances/:processInstanceId/nodeInstances/:nodeInstanceId',
+//   controller.callNodeCancel
+// );
+// app.patch('/jobs/:id', controller.handleJobReschedule);
+// app.post('/management/processes/:processId/instances/:processInstanceId/nodes/:nodeId',
+//   controller.callNodeTrigger
+// );
+// app.get('/management/processes/:processId/nodes', controller.getTriggerableNodes)
+// app.delete('/jobs/:jobId', controller.callJobCancel);
+// app.get('/svg/processes/:processId/instances/:id', controller.dispatchSVG);
 
 function timeout(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -93,6 +93,52 @@ function setProcessInstanceState(processInstanceId, state) {
   const processInstance = data.ProcessInstanceData.filter(data => data.id === processInstanceId);
   processInstance[0].state = state;
 }
+
+const processSvg = ['8035b580-6ae4-4aa8-9ec0-e18e19809e0b','a1e139d5-4e77-48c9-84ae-34578e904e5a','8035b580-6ae4-4aa8-9ec0-e18e19809e0blmnop', '2d962eef-45b8-48a9-ad4e-9cde0ad6af88', 'c54ca5b0-b975-46e2-a9a0-6a86bf7ac21e']
+const fs = require('fs')
+
+//init svg
+data.ProcessInstanceData.forEach(datum =>{
+  if(processSvg.includes(datum.id)){
+    if (datum.processId === 'travels') {
+      console.log('travels');
+      datum.diagram =  fs.readFileSync(__dirname+'/static/travels.svg', 'utf8') ;
+    } else if (datum.processId === 'flightBooking') {
+      datum.diagram = fs.readFileSync(__dirname+'/static/flightBooking.svg');
+    } else if (datum.processId === 'hotelBooking') {
+      datum.diagram = fs.readFileSync(__dirname+'/static/hotelBooking.svg');
+    }
+  } else {
+    datum.diagram = null;
+  }
+  if (datum.processId !== null || datum.processId !== undefined){
+    datum.nodeDefinitions = [
+      {
+        nodeDefinitionId: "_BDA56801-1155-4AF2-94D4-7DAADED2E3C0",
+        name: "Send visa application",
+        id: 1,
+        type: "ActionNode",
+        uniqueId: "1"
+      },
+      {
+        nodeDefinitionId: "_175DC79D-C2F1-4B28-BE2D-B583DFABF70D",
+        name: "Book",
+        id: 2,
+        type: "Split",
+        uniqueId: "2"
+      },
+      {
+        nodeDefinitionId: "_E611283E-30B0-46B9-8305-768A002C7518",
+        name: "visasrejected",
+        id: 3,
+        type: "EventNode",
+        uniqueId: "3"
+      }
+    ];
+  }else{
+    datum.nodeDefinition = null;
+  }
+});
 
 // Provide resolver functions for your schema fields
 const resolvers = {
@@ -117,6 +163,7 @@ const resolvers = {
 
       return processInstance[0].skip;
     },
+
     ProcessInstanceAbort: async (parent, args) => {
       const failedAbortInstances = ['8035b580-6ae4-4aa8-9ec0-e18e19809e0b2', '8035b580-6ae4-4aa8-9ec0-e18e19809e0b3']
       const { process } = mutationRestData.management;
@@ -131,6 +178,92 @@ const resolvers = {
         return processInstance[0].abort;
       }
     },
+
+    ProcessInstanceUpdateVariables: async (parent, args) =>{
+        const processInstance = data.ProcessInstanceData.filter(datum => {return datum.id === args['id']});
+        processInstance [0].variables = args['processInstanceVariables'];
+        return processInstance [0].variables;
+    },
+
+    NodeInstanceTrigger: async(parent, args) =>{
+      const nodeData = data.ProcessInstanceData.filter(data => {
+        return data.id === args['id'];
+      });
+      const nodeObject = nodeData[0].nodes.filter((node, index) => {
+        if (index !== nodeData[0].nodes.length - 1) {
+          return node.id === args['nodeId'];
+        }
+      });
+      if (nodeObject.length === 0) {
+        throw new Error('node not found');
+      } else {
+        const node = { ...nodeObject[0] };
+        node.enter = new Date().toISOString();
+        node.exit = null;
+        nodeData[0].nodes.unshift(node);
+        return nodeData[0];
+      }
+    },
+
+    NodeInstanceCancel: async(parent, args) =>{
+      const nodeData = data.ProcessInstanceData.filter(data => {
+        return data.id === args['id'];
+      });
+      const nodeObject = nodeData[0].nodes.filter(node => node.id === args['nodeInstanceId']);
+      if (nodeObject[0].name.includes('not found')) {
+        throw new Error('node not found');
+      }
+      else {
+        nodeObject[0].exit = new Date().toISOString();
+        return nodeObject[0];
+      }
+    },
+
+    NodeInstanceRetrigger: async(parent, args) =>{
+      const nodeData = data.ProcessInstanceData.filter(data => {
+        return data.id === args['id'];
+      });
+      const nodeObject = nodeData[0].nodes.filter(node => node.id === args['nodeInstanceId']);
+      if (nodeObject[0].name.includes('not found')) {
+        throw new Error('node not found');
+      }
+      else {
+        nodeObject[0].exit = new Date().toISOString();
+        return nodeObject[0];
+      }
+    },
+
+    JobCancel: async(parent, args) =>{
+      const mockFailedJobs = ['dad3aa88-5c1e-4858-a919-6123c675a0fa_0']
+      const jobData = data.JobsData.filter(job => job.id === args['id']);
+      if (mockFailedJobs.includes(jobData[0].id) || jobData.length === 0) {
+        return 'job not found';
+      } else {
+        jobData[0].status = 'CANCELED';
+        jobData[0].lastUpdate = new Date().toISOString();
+        return jobData[0];
+      }
+    },
+
+    JobReschedule: async(parent, args) =>{
+      const data = data.JobsData.find(data => {
+        return data.id === args['id'];
+      });
+      if (args['id'] !== "eff4ee-11qw23-6675-pokau97-qwedjut45a0fa_0" && args['data'].repeatInterval && args['data'].repeatLimit) {
+        data.expirationTime = args['data'].expirationTime;
+        data.repeatInterval = args['data'].repeatInterval;
+        data.repeatLimit = args['data'].repeatLimit;
+      } else {
+        if (args['id'] !== "eff4ee-11qw23-6675-pokau97-qwedjut45a0fa_0") {
+          data.expirationTime = args['data'].expirationTime;
+        }
+      }
+      if (args['id'] !== "eff4ee-11qw23-6675-pokau97-qwedjut45a0fa_0") {
+        return data;
+      } else {
+        return 'job not rescheduled';
+      }
+    }
   },
   Query: {
     ProcessInstances: async (parent, args) => {
@@ -146,7 +279,7 @@ const resolvers = {
             datum.rootProcessInstanceId ==
             args['where'].rootProcessInstanceId.equal
           );
-        } else if (args['where'].parentProcessInstanceId.equal) {
+        } else if (args['where'].parentProcessInstanceId && args['where'].parentProcessInstanceId.equal) {
           return (
             datum.parentProcessInstanceId ==
             args['where'].parentProcessInstanceId.equal
@@ -208,7 +341,7 @@ const resolvers = {
     Jobs: async (parent, args) => {
       if (Object.keys(args).length > 0) {
         const result = data.JobsData.filter(jobData => {
-          console.log('Job data args->', args['where'].processInstanceId)
+          // console.log('Job data args->', args['where'].processInstanceId)
           if (args['where'].processInstanceId && args['where'].processInstanceId.equal) {
             return jobData.processInstanceId == args['where'].processInstanceId.equal;
           } else if (args['where'].status && args['where'].status.in) {

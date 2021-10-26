@@ -16,8 +16,18 @@
 
 import { ApolloClient } from 'apollo-client';
 import { SortBy } from '@kogito-apps/jobs-management';
-import { Job, JobStatus } from '@kogito-apps/management-console-shared';
+import {
+  BulkCancel,
+  Job,
+  JobCancel,
+  JobStatus
+} from '@kogito-apps/management-console-shared';
 import { GraphQL } from '@kogito-apps/consoles-common';
+import {
+  handleJobReschedule,
+  jobCancel,
+  performMultipleCancel
+} from '../../apis';
 
 export interface JobsManagementQueries {
   getJobs(
@@ -26,6 +36,15 @@ export interface JobsManagementQueries {
     filters: JobStatus[],
     sortBy: SortBy | any
   ): Promise<Job[]>;
+
+  cancelJob: (job) => Promise<JobCancel>;
+  rescheduleJob: (
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ) => Promise<{ modalTitle: string; modalContent: string }>;
+  performMultipleCancel: (jobsToBeActioned: Job[]) => Promise<BulkCancel>;
 }
 
 export class GraphQLJobsManagementQueries implements JobsManagementQueries {
@@ -56,5 +75,28 @@ export class GraphQLJobsManagementQueries implements JobsManagementQueries {
     } catch (error) {
       return Promise.reject(error);
     }
+  }
+
+  cancelJob(job): Promise<JobCancel> {
+    return jobCancel(job, this.client);
+  }
+
+  rescheduleJob(
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ): Promise<{ modalTitle: string; modalContent: string }> {
+    return handleJobReschedule(
+      job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate,
+      this.client
+    );
+  }
+
+  performMultipleCancel(jobsToBeActioned: Job[]): Promise<BulkCancel> {
+    return performMultipleCancel(jobsToBeActioned, this.client);
   }
 }

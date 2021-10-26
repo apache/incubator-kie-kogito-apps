@@ -14,14 +14,9 @@
  * limitations under the License.
  */
 
-import axios from 'axios';
 import { GraphQL } from '@kogito-apps/consoles-common';
 import wait from 'waait';
 import {
-  getSvg,
-  handleProcessAbort,
-  handleProcessRetry,
-  handleProcessSkip,
   handleJobReschedule,
   handleProcessMultipleAction,
   jobCancel,
@@ -30,13 +25,15 @@ import {
   handleNodeTrigger,
   handleProcessVariableUpdate,
   handleNodeInstanceRetrigger,
-  handleNodeInstanceCancel
+  handleNodeInstanceCancel,
+  handleProcessAbort,
+  handleProcessSkip,
+  handleProcessRetry
 } from '../apis';
 import {
   BulkProcessInstanceActionResponse,
   OperationType,
   ProcessInstanceState,
-  MilestoneStatus,
   NodeInstance
 } from '@kogito-apps/management-console-shared';
 import { processInstance } from '../../channel/ProcessList/tests/ProcessListGatewayApi.test';
@@ -50,7 +47,6 @@ jest.mock('react-apollo', () => {
   const ApolloClient = { query: jest.fn(), mutate: jest.fn() };
   return { useApolloClient: jest.fn(() => ApolloClient) };
 });
-const mockedAxios = axios as jest.Mocked<typeof axios>;
 const processInstances = [
   {
     id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
@@ -89,6 +85,20 @@ const processInstances = [
 ];
 
 describe('bulk cancel tests', () => {
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
+  };
+
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
+    });
+  });
   const bulkJobs = [
     {
       id: 'dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
@@ -133,8 +143,8 @@ describe('bulk cancel tests', () => {
       ],
       failedJobs: []
     };
-    mockedAxios.delete.mockResolvedValue({});
-    const result = await performMultipleCancel(bulkJobs);
+    client.mutate.mockResolvedValue({});
+    const result = await performMultipleCancel(bulkJobs, client);
     await wait(0);
     expect(result).toEqual(expectedResults);
   });
@@ -163,14 +173,28 @@ describe('bulk cancel tests', () => {
       ]
     };
 
-    mockedAxios.delete.mockRejectedValue({});
-    const result = await performMultipleCancel(bulkJobs);
+    client.mutate.mockRejectedValue({});
+    const result = await performMultipleCancel(bulkJobs, client);
     await wait(0);
     expect(result).toEqual(expectedResults);
   });
 });
 
 describe('job cancel tests', () => {
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
+  };
+
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
+    });
+  });
   const job = {
     id: 'T3113e-vbg43-2234-lo89-cpmw3214ra0fa_0',
     processId: 'travels',
@@ -194,10 +218,14 @@ describe('job cancel tests', () => {
       modalContent:
         'The job: T3113e-vbg43-2234-lo89-cpmw3214ra0fa_0 is canceled successfully'
     };
-    mockedAxios.delete.mockResolvedValue({});
-    const cancelResult = await jobCancel(job);
-    await wait(0);
-    expect(cancelResult).toEqual(expectedResult);
+    client.mutate.mockResolvedValue({});
+    await jobCancel(job, client)
+      .then(value => {
+        expect(value).toEqual(expectedResult);
+      })
+      .catch(reason => {
+        expect(reason).toEqual(expectedResult);
+      });
   });
 
   it('fails to execute job cancel', async () => {
@@ -206,14 +234,18 @@ describe('job cancel tests', () => {
       modalContent:
         'The job: T3113e-vbg43-2234-lo89-cpmw3214ra0fa_0 failed to cancel. Error message: 404 error'
     };
-    mockedAxios.delete.mockRejectedValue({ message: '404 error' });
-    const cancelResult = await jobCancel(job);
-    await wait(0);
-    expect(cancelResult).toEqual(expectedResult);
+    client.mutate.mockRejectedValue({ message: '404 error' });
+    await jobCancel(job, client)
+      .then(value => {
+        expect(value).toEqual(expectedResult);
+      })
+      .catch(reason => {
+        expect(reason).toEqual(expectedResult);
+      });
   });
 
   it('test reschedule function', async () => {
-    mockedAxios.patch.mockResolvedValue({
+    client.mutate.mockResolvedValue({
       status: 200,
       statusText: 'OK',
       data: {
@@ -257,16 +289,31 @@ describe('job cancel tests', () => {
     const scheduleDate = new Date('2020-08-27T03:35:50.147Z');
     const modalTitle = 'success';
     const modalContent = `Reschedule of job: ${job.id} is successful`;
-    const result = await handleJobReschedule(
+    // const result = await handleJobReschedule(
+    //   job,
+    //   repeatInterval,
+    //   repeatLimit,
+    //   scheduleDate,
+    //     client
+    // );
+    await handleJobReschedule(
       job,
       repeatInterval,
       repeatLimit,
-      scheduleDate
-    );
-    expect(result).toEqual({ modalTitle, modalContent });
+      scheduleDate,
+      client
+    )
+      .then(value => {
+        expect(value).toEqual({ modalTitle, modalContent });
+      })
+      .catch(reason => {
+        expect(reason).toEqual({ modalTitle, modalContent });
+      });
+
+    // expect(result).toEqual({ modalTitle, modalContent });
   });
   it('test error response for reschedule function', async () => {
-    mockedAxios.patch.mockRejectedValue({ message: '403 error' });
+    client.mutate.mockRejectedValue({ message: '403 error' });
     const job = {
       id: '6e74a570-31c8-4020-bd70-19be2cb625f3_0',
       processId: 'travels',
@@ -288,265 +335,144 @@ describe('job cancel tests', () => {
     const scheduleDate = new Date('2020-08-27T03:35:50.147Z');
     const modalTitle = 'failure';
     const modalContent = `Reschedule of job ${job.id} failed. Message: 403 error`;
-    const result = await handleJobReschedule(
+    await handleJobReschedule(
       job,
       repeatInterval,
       repeatLimit,
-      scheduleDate
-    );
-    expect(result).toEqual({ modalTitle, modalContent });
+      scheduleDate,
+      client
+    )
+      .then(value => {
+        expect(value).toEqual({ modalTitle, modalContent });
+      })
+      .catch(reason => {
+        expect(reason).toEqual({ modalTitle, modalContent });
+      });
   });
 });
 
-describe('test utility of svg panel', () => {
-  const data: any = {
-    id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
-    processId: 'hotelBooking',
-    processName: 'HotelBooking',
-    businessKey: 'T1234HotelBooking01',
-    parentProcessInstanceId: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
-    parentProcessInstance: {
-      id: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
-      processName: 'travels',
-      businessKey: 'T1234'
-    },
-    roles: [],
-    variables:
-      '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
-    state: ProcessInstanceState.Completed,
-    start: new Date('2019-10-22T03:40:44.089Z'),
-    lastUpdate: new Date('Thu, 22 Apr 2021 14:53:04 GMT'),
-    end: new Date('2019-10-22T05:40:44.089Z'),
-    addons: [],
-    endpoint: 'http://localhost:4000',
-    serviceUrl: 'http://localhost:4000',
-    error: {
-      nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-34578e904e6b',
-      message: 'some thing went wrong',
-      __typename: 'ProcessInstanceError'
-    },
-    childProcessInstances: [],
-    nodes: [
-      {
-        id: '27107f38-d888-4edf-9a4f-11b9e6d751b6',
-        nodeId: '1',
-        name: 'End Event 1',
-        enter: new Date('2019-10-22T03:37:30.798Z'),
-        exit: new Date('2019-10-22T03:37:30.798Z'),
-        type: 'EndNode',
-        definitionId: 'EndEvent_1',
-        __typename: 'NodeInstance'
-      },
-      {
-        id: '41b3f49e-beb3-4b5f-8130-efd28f82b971',
-        nodeId: '2',
-        name: 'Book hotel',
-        enter: new Date('2019-10-22T03:37:30.795Z'),
-        exit: new Date('2019-10-22T03:37:30.798Z'),
-        type: 'WorkItemNode',
-        definitionId: 'ServiceTask_1',
-        __typename: 'NodeInstance'
-      },
-      {
-        id: '4165a571-2c79-4fd0-921e-c6d5e7851b67',
-        nodeId: '2',
-        name: 'StartProcess',
-        enter: new Date('2019-10-22T03:37:30.793Z'),
-        exit: new Date('2019-10-22T03:37:30.795Z'),
-        type: 'StartNode',
-        definitionId: 'StartEvent_1',
-        __typename: 'NodeInstance'
-      }
-    ],
-    milestones: [
-      {
-        id: '27107f38-d888-4edf-9a4f-11b9e6d75i86',
-        name: 'Manager decision',
-        status: MilestoneStatus.Completed,
-        __typename: 'Milestone'
-      },
-      {
-        id: '27107f38-d888-4edf-9a4f-11b9e6d75m36',
-        name: 'Milestone 1: Order placed',
-        status: MilestoneStatus.Active,
-        __typename: 'Milestone'
-      },
-      {
-        id: '27107f38-d888-4edf-9a4f-11b9e6d75m66',
-        name: 'Milestone 2: Order shipped',
-        status: MilestoneStatus.Available,
-        __typename: 'Milestone'
-      }
-    ]
+describe('handle skip test', () => {
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
   };
 
-  const svgResponse =
-    '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="300" viewBox="0 0 1748 632"></g></g></svg>';
-  it('handle api to get svg', async () => {
-    mockedAxios.get.mockResolvedValue({
-      data: svgResponse,
-      status: 200,
-      statusText: 'OK'
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
     });
-    const svgResults = await getSvg(data);
-    expect(svgResults).toEqual({ svg: svgResponse });
   });
-  it('handle api to get svg', async () => {
-    const errorResponse404 = {
-      response: { status: 404 }
-    };
-    mockedAxios.get.mockRejectedValue(errorResponse404);
-    await getSvg(data);
-  });
-  it('check api response when call to management console fails ', async () => {
-    mockedAxios.get.mockImplementationOnce(() =>
-      Promise.reject({
-        error: mockedAxios.get.mockResolvedValue({
-          data: svgResponse,
-          status: 200,
-          statusText: 'OK'
-        })
+
+  it('on successful skip', async () => {
+    client.mutate.mockResolvedValue({ data: 'success' });
+    let result = null;
+    await handleProcessSkip(processInstance, client)
+      .then(() => {
+        result = 'success';
       })
-    );
-    const svgResults = await getSvg(data);
-    expect(svgResults).toEqual({ svg: svgResponse });
+      .catch(error => {
+        result = error.message;
+      });
+    expect(result).toEqual('success');
   });
-  it('check api response when, call to both management console and runtimes fails ', async () => {
-    mockedAxios.get.mockImplementationOnce(() =>
-      Promise.reject({
-        error: mockedAxios.get.mockRejectedValue({
-          err: {
-            response: { status: 500 }
-          }
-        })
+  it('on failed skip', async () => {
+    client.mutate.mockRejectedValue({ message: '404 error' });
+    let result = null;
+    await handleProcessSkip(processInstance, client)
+      .then(() => {
+        result = 'success';
       })
-    );
-    await getSvg(data);
+      .catch(error => {
+        result = error.message;
+      });
+    expect(result).toEqual('404 error');
   });
+});
 
-  describe('handle skip test', () => {
-    let client;
-    let useApolloClient;
-    const mockUseApolloClient = () => {
-      act(() => {
-        client = useApolloClient();
-      });
-    };
-
-    beforeEach(() => {
-      act(() => {
-        useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
-        mockUseApolloClient();
-      });
+describe('handle retry test', () => {
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
     });
+  };
 
-    it('on successful skip', async () => {
-      client.mutate.mockResolvedValue({ data: 'success' });
-      let result = null;
-      await handleProcessSkip(processInstance, client)
-        .then(() => {
-          result = 'success';
-        })
-        .catch(error => {
-          result = error.message;
-        });
-      expect(result).toEqual('success');
-    });
-    it('on failed skip', async () => {
-      client.mutate.mockRejectedValue({ message: '404 error' });
-      let result = null;
-      await handleProcessSkip(processInstance, client)
-        .then(() => {
-          result = 'success';
-        })
-        .catch(error => {
-          result = error.message;
-        });
-      expect(result).toEqual('404 error');
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
     });
   });
 
-  describe('handle retry test', () => {
-    let client;
-    let useApolloClient;
-    const mockUseApolloClient = () => {
-      act(() => {
-        client = useApolloClient();
+  it('on successful retrigger', async () => {
+    client.mutate.mockResolvedValue({ data: 'success' });
+    let result = null;
+    await handleProcessRetry(processInstances[0], client)
+      .then(() => {
+        result = 'success';
+      })
+      .catch(error => {
+        result = error.message;
       });
-    };
-
-    beforeEach(() => {
-      act(() => {
-        useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
-        mockUseApolloClient();
+    expect(result).toEqual('success');
+  });
+  it('on failed retrigger', async () => {
+    client.mutate.mockRejectedValue({ message: '404 error' });
+    let result = null;
+    await handleProcessRetry(processInstance[0], client)
+      .then(() => {
+        result = 'success';
+      })
+      .catch(error => {
+        result = error.message;
       });
-    });
+    expect(result).toEqual("Cannot read property 'id' of undefined");
+  });
+});
 
-    it('on successful retrigger', async () => {
-      client.mutate.mockResolvedValue({ data: 'success' });
-      let result = null;
-      await handleProcessRetry(processInstances[0], client)
-        .then(() => {
-          result = 'success';
-        })
-        .catch(error => {
-          result = error.message;
-        });
-      expect(result).toEqual('success');
+describe('handle abort test', () => {
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
     });
-    it('on failed retrigger', async () => {
-      client.mutate.mockRejectedValue({ message: '404 error' });
-      let result = null;
-      await handleProcessRetry(processInstance[0], client)
-        .then(() => {
-          result = 'success';
-        })
-        .catch(error => {
-          result = error.message;
-        });
-      expect(result).toEqual("Cannot read property 'id' of undefined");
+  };
+
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
     });
   });
-
-  describe('handle abort test', () => {
-    let client;
-    let useApolloClient;
-    const mockUseApolloClient = () => {
-      act(() => {
-        client = useApolloClient();
+  it('on successful abort', async () => {
+    client.mutate.mockResolvedValue({ data: 'success' });
+    let result = null;
+    await handleProcessAbort(processInstances[0], client)
+      .then(() => {
+        result = 'success';
+      })
+      .catch(error => {
+        result = error.message;
       });
-    };
-
-    beforeEach(() => {
-      act(() => {
-        useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
-        mockUseApolloClient();
+    expect(result).toEqual('success');
+  });
+  it('on failed abort', async () => {
+    client.mutate.mockRejectedValue({ message: '404 error' });
+    let result = null;
+    await handleProcessAbort(processInstances[0], client)
+      .then(() => {
+        result = 'success';
+      })
+      .catch(error => {
+        result = error.message;
       });
-    });
-    it('on successful abort', async () => {
-      client.mutate.mockResolvedValue({ data: 'success' });
-      let result = null;
-      await handleProcessAbort(processInstances[0], client)
-        .then(() => {
-          result = 'success';
-        })
-        .catch(error => {
-          result = error.message;
-        });
-      expect(result).toEqual('success');
-    });
-    it('on failed abort', async () => {
-      client.mutate.mockRejectedValue({ message: '404 error' });
-      let result = null;
-      await handleProcessAbort(processInstances[0], client)
-        .then(() => {
-          result = 'success';
-        })
-        .catch(error => {
-          result = error.message;
-        });
-      expect(result).toEqual('404 error');
-    });
+    expect(result).toEqual('404 error');
   });
 });
 
@@ -624,108 +550,65 @@ describe('multiple action in process list', () => {
 });
 
 describe('test utilities of process variables', () => {
-  const mockData = {
-    flight: {
-      flightNumber: 'MX555',
-      seat: null,
-      gate: null,
-      departure: '2020-09-23T03:30:00.000+05:30',
-      arrival: '2020-09-28T03:30:00.000+05:30'
-    },
-    hotel: {
-      name: 'Perfect hotel',
-      address: {
-        street: 'street',
-        city: 'Sydney',
-        zipCode: '12345',
-        country: 'Australia'
-      },
-      phone: '09876543',
-      bookingNumber: 'XX-012345',
-      room: null
-    },
-    traveller: {
-      firstName: 'Saravana',
-      lastName: 'Srinivasan',
-      email: 'Saravana@gmai.com',
-      nationality: 'US',
-      address: {
-        street: 'street',
-        city: 'city',
-        zipCode: '123156',
-        country: 'US'
-      }
-    },
-    trip: {
-      city: 'Sydney',
-      country: 'Australia',
-      begin: '2020-09-23T03:30:00.000+05:30',
-      end: '2020-09-28T03:30:00.000+05:30',
-      visaRequired: false
+  const updatedProcessInstances = [
+    {
+      id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
+      variables:
+        '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}'
     }
+  ];
+
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
   };
 
-  const updateJson = {
-    flight: {
-      flightNumber: 'MX5555',
-      seat: null,
-      gate: null,
-      departure: '2020-09-23T03:30:00.000+05:30',
-      arrival: '2020-09-28T03:30:00.000+05:30'
-    },
-    hotel: {
-      name: 'Perfect hotel',
-      address: {
-        street: 'street',
-        city: 'Sydney',
-        zipCode: '12345',
-        country: 'Australia'
-      },
-      phone: '09876543',
-      bookingNumber: 'XX-012345',
-      room: null
-    },
-    traveller: {
-      firstName: 'Saravana',
-      lastName: 'Srinivasan',
-      email: 'Saravana@gmai.com',
-      nationality: 'US',
-      address: {
-        street: 'street',
-        city: 'city',
-        zipCode: '123156',
-        country: 'US'
-      }
-    },
-    trip: {
-      city: 'Sydney',
-      country: 'Australia',
-      begin: '2020-09-23T03:30:00.000+05:30',
-      end: '2020-09-28T03:30:00.000+05:30',
-      visaRequired: false
-    }
-  };
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
+    });
+  });
 
   it('test put method that updates process variables-success', async () => {
-    mockedAxios.put.mockResolvedValue({
-      status: 200,
-      statusText: 'OK',
-      data: mockData
+    client.mutate.mockResolvedValue({
+      data: { ProcessInstanceUpdateVariables: processInstances[0].variables }
     });
     let result;
-    await handleProcessVariableUpdate(processInstance, updateJson)
+    await handleProcessVariableUpdate(
+      processInstance,
+      JSON.parse(updatedProcessInstances[0].variables),
+      client
+    )
       .then(data => {
         result = data;
       })
       .catch(error => {
         result = error.message;
       });
-    expect(result).toEqual(mockData);
+    expect(result).toEqual(JSON.parse(processInstances[0].variables));
   });
 });
 
 describe('retrieve list of triggerable nodes test', () => {
-  const mockTriggerableNodes = [
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
+  };
+
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
+    });
+  });
+  const nodeDefinitions = [
     {
       nodeDefinitionId: '_BDA56801-1155-4AF2-94D4-7DAADED2E3C0',
       name: 'Send visa application',
@@ -750,23 +633,29 @@ describe('retrieve list of triggerable nodes test', () => {
   ];
 
   it('successfully retrieves the list of nodes', async () => {
-    mockedAxios.get.mockResolvedValue({
-      data: mockTriggerableNodes
+    client.query.mockResolvedValue({
+      data: {
+        ProcessInstances: [
+          {
+            nodeDefinitions
+          }
+        ]
+      }
     });
     let result = null;
-    await getTriggerableNodes(processInstance)
+    await getTriggerableNodes(processInstance, client)
       .then(nodes => {
         result = nodes;
       })
       .catch(error => {
         result = error;
       });
-    expect(result).toEqual(mockTriggerableNodes);
+    expect(result).toEqual(nodeDefinitions);
   });
   it('fails to retrieve the list of nodes', async () => {
-    mockedAxios.get.mockRejectedValue({ message: '403 error' });
+    client.query.mockRejectedValue({ message: '403 error' });
     let result = null;
-    await getTriggerableNodes(processInstance)
+    await getTriggerableNodes(processInstance, client)
       .then(nodes => {
         result = nodes;
       })
@@ -778,6 +667,20 @@ describe('retrieve list of triggerable nodes test', () => {
 });
 
 describe('handle node trigger click tests', () => {
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
+  };
+
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
+    });
+  });
   const node = {
     nodeDefinitionId: '_BDA56801-1155-4AF2-94D4-7DAADED2E3C0',
     name: 'Send visa application',
@@ -787,8 +690,8 @@ describe('handle node trigger click tests', () => {
   };
   it('executes node trigger successfully', async () => {
     let result = '';
-    mockedAxios.post.mockResolvedValue({});
-    await handleNodeTrigger(processInstance, node)
+    client.mutate.mockResolvedValue({});
+    await handleNodeTrigger(processInstance, node, client)
       .then(() => {
         result = 'success';
       })
@@ -799,9 +702,9 @@ describe('handle node trigger click tests', () => {
   });
 
   it('fails to execute node trigger', async () => {
-    mockedAxios.post.mockRejectedValue({ message: '404 error' });
+    client.mutate.mockRejectedValue({ message: '404 error' });
     let result = '';
-    await handleNodeTrigger(processInstance, node)
+    await handleNodeTrigger(processInstance, node, client)
       .then(() => {
         result = 'success';
       })
@@ -813,6 +716,20 @@ describe('handle node trigger click tests', () => {
 });
 
 describe('handle node instance trigger click tests', () => {
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
+  };
+
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
+    });
+  });
   const node: NodeInstance = {
     definitionId: '_BDA56801-1155-4AF2-94D4-7DAADED2E3C0',
     name: 'Send visa application',
@@ -823,8 +740,8 @@ describe('handle node instance trigger click tests', () => {
   };
   it('executes node instance trigger successfully', async () => {
     let result = '';
-    mockedAxios.post.mockResolvedValue({});
-    await handleNodeInstanceRetrigger(processInstance, node)
+    client.mutate.mockResolvedValue({});
+    await handleNodeInstanceRetrigger(processInstance, node, client)
       .then(() => {
         result = 'success';
       })
@@ -835,9 +752,9 @@ describe('handle node instance trigger click tests', () => {
   });
 
   it('fails to execute instance node trigger', async () => {
-    mockedAxios.post.mockRejectedValue({ message: '404 error' });
+    client.mutate.mockRejectedValue({ message: '404 error' });
     let result = '';
-    await handleNodeInstanceRetrigger(processInstance, node)
+    await handleNodeInstanceRetrigger(processInstance, node, client)
       .then(() => {
         result = 'success';
       })
@@ -849,6 +766,20 @@ describe('handle node instance trigger click tests', () => {
 });
 
 describe('handle node instance cancel', () => {
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
+  };
+
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
+    });
+  });
   const node: NodeInstance = {
     definitionId: '_BDA56801-1155-4AF2-94D4-7DAADED2E3C0',
     name: 'Send visa application',
@@ -859,8 +790,8 @@ describe('handle node instance cancel', () => {
   };
   it('executes handle node instance cancel successfully', async () => {
     let result = '';
-    mockedAxios.delete.mockResolvedValue({});
-    await handleNodeInstanceCancel(processInstance, node)
+    client.mutate.mockResolvedValue({});
+    await handleNodeInstanceCancel(processInstance, node, client)
       .then(() => {
         result = 'success';
       })
@@ -871,9 +802,9 @@ describe('handle node instance cancel', () => {
   });
 
   it('fails to handle node instance cancel', async () => {
-    mockedAxios.delete.mockRejectedValue({ message: '404 error' });
+    client.mutate.mockRejectedValue({ message: '404 error' });
     let result = '';
-    await handleNodeInstanceCancel(processInstance, node)
+    await handleNodeInstanceCancel(processInstance, node, client)
       .then(() => {
         result = 'success';
       })

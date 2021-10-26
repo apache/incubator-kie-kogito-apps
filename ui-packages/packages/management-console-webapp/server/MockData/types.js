@@ -12,6 +12,12 @@ module.exports = typeDefs = gql`
     ProcessInstanceSkip(id: String): String
     ProcessInstanceAbort(id: String): String
     ProcessInstanceRetry(id: String): String
+    ProcessInstanceUpdateVariables(id: String processInstanceVariables: String): String
+    NodeInstanceTrigger(id: String nodeId: String): String
+    NodeInstanceCancel(id: String nodeInstanceId: String): String
+    NodeInstanceRetrigger(id: String nodeInstanceId: String): String
+    JobCancel(id: String): String
+    JobReschedule(id: String data: String): String
   }
   
   type Query {
@@ -64,6 +70,8 @@ module.exports = typeDefs = gql`
     error: ProcessInstanceError
     addons: [String!]
     lastUpdate: DateTime!
+    diagram: String!
+    nodeDefinitions: [NodeDefinition!]
   }
 
   type KogitoMetadata {
@@ -121,6 +129,15 @@ module.exports = typeDefs = gql`
     exit: DateTime
     definitionId: String!
     nodeId: String!
+  }
+
+
+  type NodeDefinition {
+      id: String
+      name: String
+      type: String
+      uniqueId: String
+      nodeDefinitionId: String
   }
 
   type Milestones {

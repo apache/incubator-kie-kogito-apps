@@ -17,6 +17,7 @@
 import { GraphQL } from '@kogito-apps/consoles-common';
 import {
   BulkProcessInstanceActionResponse,
+  JobCancel,
   NodeInstance,
   OperationType,
   ProcessInstance,
@@ -27,38 +28,58 @@ import { ApolloClient } from 'apollo-client';
 
 //Rest Api to Cancel multiple Jobs
 export const performMultipleCancel = async (
-  jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[]
+  jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[],
+  client: ApolloClient<any>
 ) => {
   const successJobs = [];
   const failedJobs = [];
   for (const job of jobsToBeActioned) {
-    try {
-      await axios.delete(`${job.endpoint}/${job.id}`);
-      successJobs.push(job);
-    } catch (error) {
-      job.errorMessage = JSON.stringify(error.message);
-      failedJobs.push(job);
-    }
+    client
+      .mutate({
+        mutation: GraphQL.JobCancelDocument,
+        variables: {
+          jobId: job.id
+        },
+        fetchPolicy: 'no-cache'
+      })
+      .then(value => {
+        successJobs.push(job);
+      })
+      .catch(reason => {
+        job.errorMessage = JSON.stringify(reason.message);
+        failedJobs.push(job);
+      });
   }
   return { successJobs, failedJobs };
 };
 
 //Rest Api to Cancel a Job
 export const jobCancel = async (
-  job: Pick<GraphQL.Job, 'id' | 'endpoint'>
-): Promise<{ modalTitle: string; modalContent: string }> => {
+  job: Pick<GraphQL.Job, 'id' | 'endpoint'>,
+  client: ApolloClient<any>
+): Promise<JobCancel> => {
   let modalTitle: string;
   let modalContent: string;
-  try {
-    await axios.delete(`${job.endpoint}/${job.id}`);
-    modalTitle = 'success';
-    modalContent = `The job: ${job.id} is canceled successfully`;
-    return { modalTitle, modalContent };
-  } catch (error) {
-    modalTitle = 'failure';
-    modalContent = `The job: ${job.id} failed to cancel. Error message: ${error.message}`;
-    return { modalTitle, modalContent };
-  }
+  return new Promise<JobCancel>((resolve, reject) => {
+    client
+      .mutate({
+        mutation: GraphQL.JobCancelDocument,
+        variables: {
+          jobId: job.id
+        },
+        fetchPolicy: 'no-cache'
+      })
+      .then(value => {
+        modalTitle = 'success';
+        modalContent = `The job: ${job.id} is canceled successfully`;
+        resolve({ modalTitle, modalContent });
+      })
+      .catch(reason => {
+        modalTitle = 'failure';
+        modalContent = `The job: ${job.id} failed to cancel. Error message: ${reason.message}`;
+        reject({ modalTitle, modalContent });
+      });
+  });
 };
 
 // Rest Api to Reschedule a Job
@@ -66,7 +87,8 @@ export const handleJobReschedule = async (
   job,
   repeatInterval: number | string,
   repeatLimit: number | string,
-  scheduleDate: Date
+  scheduleDate: Date,
+  client: ApolloClient<any>
 ): Promise<{ modalTitle: string; modalContent: string }> => {
   let modalTitle: string;
   let modalContent: string;
@@ -82,16 +104,46 @@ export const handleJobReschedule = async (
       repeatLimit
     };
   }
-  try {
-    await axios.patch(`${job.endpoint}/${job.id}`, parameter);
-    modalTitle = 'success';
-    modalContent = `Reschedule of job: ${job.id} is successful`;
-    return { modalTitle, modalContent };
-  } catch (error) {
-    modalTitle = 'failure';
-    modalContent = `Reschedule of job ${job.id} failed. Message: ${error.message}`;
-    return { modalTitle, modalContent };
-  }
+
+  return new Promise<JobCancel>((resolve, reject) => {
+    client
+      .mutate({
+        mutation: GraphQL.HandleJobRescheduleDocument,
+        variables: {
+          jobId: job.id,
+          data: JSON.stringify(parameter)
+        },
+        fetchPolicy: 'no-cache'
+      })
+      .then(value => {
+        modalTitle = 'success';
+        modalContent = `Reschedule of job: ${job.id} is successful`;
+        resolve({ modalTitle, modalContent });
+      })
+      .catch(reason => {
+        modalTitle = 'failure';
+        modalContent = `Reschedule of job ${job.id} failed. Message: ${reason.message}`;
+        reject({ modalTitle, modalContent });
+      });
+  });
+  // client
+  //   .mutate({
+  //     mutation: GraphQL.HandleJobRescheduleDocument,
+  //     variables: {
+  //       jobId: job.id,
+  //       data: JSON.stringify(parameter)
+  //     },
+  //     fetchPolicy: 'no-cache'
+  //   })
+  //   .then(value => {
+  //     modalTitle = 'success';
+  //     modalContent = `Reschedule of job: ${job.id} is successful`;
+  //   })
+  //   .catch(reason => {
+  //     modalTitle = 'failure';
+  //     modalContent = `Reschedule of job ${job.id} failed. Message: ${reason}`;
+  //   });
+  // return { modalTitle, modalContent };
 };
 
 // Rest Api to fetch Process Diagram
@@ -224,89 +276,110 @@ export const handleProcessMultipleAction = async (
   });
 };
 export const getTriggerableNodes = async (
-  processInstance: ProcessInstance
+  processInstance: ProcessInstance,
+  client: ApolloClient<any>
 ): Promise<TriggerableNode[]> => {
   return new Promise((resolve, reject) => {
-    axios
-      .get(
-        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/nodes`
-      )
-      .then(result => {
-        resolve(result.data);
+    client
+      .query({
+        query: GraphQL.GetProcessInstanceNodeDefinitionsDocument,
+        variables: {
+          processsId: processInstance.id
+        },
+        fetchPolicy: 'no-cache'
       })
-      .catch(error => {
-        reject(error);
-      });
+      .then(value => {
+        resolve(value.data.ProcessInstances[0].nodeDefinitions);
+      })
+      .catch(reason => reject(reason));
   });
 };
 
 export const handleNodeTrigger = async (
   processInstance: ProcessInstance,
-  node: TriggerableNode
+  node: TriggerableNode,
+  client: ApolloClient<any>
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/nodes/${node.nodeDefinitionId}`
-      )
-      .then(() => {
-        resolve();
+    client
+      .mutate({
+        mutation: GraphQL.HandleNodeTriggerDocument,
+        variables: {
+          processsId: processInstance.id,
+          nodeId: node.nodeDefinitionId
+        },
+        fetchPolicy: 'no-cache'
       })
-      .catch(error => {
-        reject(error);
-      });
+      .then(value => {
+        resolve(value.data);
+      })
+      .catch(reason => reject(reason));
   });
 };
 
 // function containing Api call to update process variables
 export const handleProcessVariableUpdate = (
   processInstance: ProcessInstance,
-  updatedJson: Record<string, unknown>
+  updatedJson: Record<string, unknown>,
+  client: ApolloClient<any>
 ): Promise<Record<string, unknown>> => {
   return new Promise((resolve, reject) => {
-    axios
-      .put(`${processInstance.endpoint}/${processInstance.id}`, updatedJson)
-      .then(response => {
-        resolve(response.data);
+    client
+      .mutate({
+        mutation: GraphQL.HandleProcessVariableUpdateDocument,
+        variables: {
+          processsId: processInstance.id,
+          processInstanceVariables: JSON.stringify(updatedJson)
+        },
+        fetchPolicy: 'no-cache'
       })
-      .catch(error => {
-        reject(error.message);
-      });
+      .then(value => {
+        resolve(JSON.parse(value.data.ProcessInstanceUpdateVariables));
+      })
+      .catch(reason => reject(reason));
   });
 };
 
 export const handleNodeInstanceCancel = async (
   processInstance: ProcessInstance,
-  node: NodeInstance
+  node: NodeInstance,
+  client: ApolloClient<any>
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
-    axios
-      .delete(
-        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/nodeInstances/${node.id}`
-      )
-      .then(() => {
+    client
+      .mutate({
+        mutation: GraphQL.HandleNodeInstanceCancelDocument,
+        variables: {
+          processsId: processInstance.id,
+          nodeInstanceId: node.id
+        },
+        fetchPolicy: 'no-cache'
+      })
+      .then(value => {
         resolve();
       })
-      .catch(error => {
-        reject(error);
-      });
+      .catch(reason => reject(JSON.stringify(reason.message)));
   });
 };
 
 export const handleNodeInstanceRetrigger = (
   processInstance: Pick<ProcessInstance, 'id' | 'serviceUrl' | 'processId'>,
-  node: Pick<NodeInstance, 'id'>
+  node: Pick<NodeInstance, 'id'>,
+  client: ApolloClient<any>
 ): Promise<void> => {
   return new Promise((resolve, reject) => {
-    axios
-      .post(
-        `${processInstance.serviceUrl}/management/processes/${processInstance.processId}/instances/${processInstance.id}/nodeInstances/${node.id}`
-      )
-      .then(() => {
+    client
+      .mutate({
+        mutation: GraphQL.HandleNodeInstanceRetriggerDocument,
+        variables: {
+          processsId: processInstance.id,
+          nodeInstanceId: node.id
+        },
+        fetchPolicy: 'no-cache'
+      })
+      .then(value => {
         resolve();
       })
-      .catch(error => {
-        reject(JSON.stringify(error.message));
-      });
+      .catch(reason => reject(JSON.stringify(reason.message)));
   });
 };

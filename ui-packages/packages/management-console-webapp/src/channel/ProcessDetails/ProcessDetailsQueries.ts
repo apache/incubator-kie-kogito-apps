@@ -16,11 +16,24 @@
 
 import { ApolloClient } from 'apollo-client';
 import { GraphQL } from '@kogito-apps/consoles-common';
-import { ProcessInstance, Job } from '@kogito-apps/management-console-shared';
+import {
+  ProcessInstance,
+  Job,
+  JobCancel,
+  TriggerableNode,
+  NodeInstance
+} from '@kogito-apps/management-console-shared';
 import {
   handleProcessAbort,
   handleProcessSkip,
-  handleProcessRetry
+  handleProcessRetry,
+  jobCancel,
+  handleJobReschedule,
+  getTriggerableNodes,
+  handleNodeTrigger,
+  handleProcessVariableUpdate,
+  handleNodeInstanceCancel,
+  handleNodeInstanceRetrigger
 } from '../../apis/apis';
 
 export interface ProcessDetailsQueries {
@@ -29,6 +42,30 @@ export interface ProcessDetailsQueries {
   handleProcessSkip(processInstance: ProcessInstance): Promise<void>;
   handleProcessAbort(processInstance: ProcessInstance): Promise<void>;
   handleProcessRetry(processInstance: ProcessInstance): Promise<void>;
+  getSVG(processInstance: ProcessInstance): Promise<any>;
+  jobCancel(job: Job): Promise<JobCancel>;
+  rescheduleJob: (
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ) => Promise<{ modalTitle: string; modalContent: string }>;
+  getTriggerableNodes(
+    processInstance: ProcessInstance
+  ): Promise<TriggerableNode[]>;
+  handleNodeTrigger(processInstance: ProcessInstance, node: any): Promise<void>;
+  handleProcessVariableUpdate: (
+    processInstance: ProcessInstance,
+    updateJson: Record<string, unknown>
+  ) => Promise<Record<string, unknown>>;
+  handleNodeInstanceCancel: (
+    processInstance: ProcessInstance,
+    node: NodeInstance
+  ) => Promise<void>;
+  handleNodeInstanceRetrigger(
+    processInstance: ProcessInstance,
+    node: NodeInstance
+  ): Promise<void>;
 }
 
 export class GraphQLProcessDetailsQueries implements ProcessDetailsQueries {
@@ -83,5 +120,81 @@ export class GraphQLProcessDetailsQueries implements ProcessDetailsQueries {
 
   async handleProcessRetry(processInstance: ProcessInstance): Promise<void> {
     return handleProcessRetry(processInstance, this.client);
+  }
+
+  async getSVG(processInstance: ProcessInstance): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.client
+        .query({
+          query: GraphQL.GetProcessInstanceSvgDocument,
+          variables: {
+            processsId: processInstance.id
+          },
+          fetchPolicy: 'network-only'
+        })
+        .then(value => {
+          resolve(value.data.ProcessInstances[0].diagram);
+        })
+        .catch(reason => {
+          reject({ error: reason.message });
+        });
+    });
+  }
+
+  async jobCancel(job: Job): Promise<JobCancel> {
+    return jobCancel(job, this.client);
+  }
+
+  async rescheduleJob(
+    job,
+    repeatInterval: number | string,
+    repeatLimit: number | string,
+    scheduleDate: Date
+  ): Promise<{ modalTitle: string; modalContent: string }> {
+    return handleJobReschedule(
+      job,
+      repeatInterval,
+      repeatLimit,
+      scheduleDate,
+      this.client
+    );
+  }
+
+  async getTriggerableNodes(
+    processInstance: ProcessInstance
+  ): Promise<TriggerableNode[]> {
+    return getTriggerableNodes(processInstance, this.client);
+  }
+
+  async handleNodeTrigger(
+    processInstance: ProcessInstance,
+    node: any
+  ): Promise<void> {
+    return handleNodeTrigger(processInstance, node, this.client);
+  }
+
+  async handleNodeInstanceCancel(
+    processInstance: ProcessInstance,
+    node: NodeInstance
+  ): Promise<void> {
+    return handleNodeInstanceCancel(processInstance, node, this.client);
+  }
+
+  async handleProcessVariableUpdate(
+    processInstance: ProcessInstance,
+    updateJson: Record<string, unknown>
+  ): Promise<Record<string, unknown>> {
+    return handleProcessVariableUpdate(
+      processInstance,
+      updateJson,
+      this.client
+    );
+  }
+
+  async handleNodeInstanceRetrigger(
+    processInstance: ProcessInstance,
+    node: NodeInstance
+  ): Promise<void> {
+    return handleNodeInstanceRetrigger(processInstance, node, this.client);
   }
 }

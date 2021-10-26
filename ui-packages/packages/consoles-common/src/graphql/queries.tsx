@@ -15,6 +15,10 @@
  */
 
 import gql from 'graphql-tag';
+import {
+  handleNodeInstanceCancel,
+  handleNodeTrigger
+} from '@kogito-apps/management-console-webapp/src/apis';
 
 const GET_PROCESS_INSTANCES = gql`
   query getProcessInstances(
@@ -408,5 +412,73 @@ const SKIP_PROCESS_INSTANCE = gql`
 const RETRY_PROCESS_INSTANCE = gql`
   mutation retryProcessInstance($processsId: String) {
     ProcessInstanceRetry(id: $processsId)
+  }
+`;
+const GET_PROCESS_INSTANCE_SVG = gql`
+  query getProcessInstanceSVG($processsId: String) {
+    ProcessInstances(where: { id: { equal: $processsId } }) {
+      diagram
+    }
+  }
+`;
+
+const GET_PROCESS_INSTANCE_NODES = gql`
+  query getProcessInstanceNodeDefinitions($processsId: String) {
+    ProcessInstances(where: { id: { equal: $processsId } }) {
+      nodeDefinitions {
+        id
+        name
+        type
+        uniqueId
+        nodeDefinitionId
+      }
+    }
+  }
+`;
+
+const TRIGGER_PROCESS_NODE_INSTANCE = gql`
+  mutation handleNodeTrigger($processsId: String, $nodeId: String) {
+    NodeInstanceTrigger(id: $processsId, nodeId: $nodeId)
+  }
+`;
+
+const CANCEL_PROCESS_NODE_INSTANCE = gql`
+  mutation handleNodeInstanceCancel(
+    $processsId: String
+    $nodeInstanceId: String
+  ) {
+    NodeInstanceCancel(id: $processsId, nodeInstanceId: $nodeInstanceId)
+  }
+`;
+
+const RETRIGGER_PROCESS_NODE_INSTANCE = gql`
+  mutation handleNodeInstanceRetrigger(
+    $processsId: String
+    $nodeInstanceId: String
+  ) {
+    NodeInstanceRetrigger(id: $processsId, nodeInstanceId: $nodeInstanceId)
+  }
+`;
+
+const UPDATE_PROCESS_VARBALES = gql`
+  mutation handleProcessVariableUpdate(
+    $processsId: String
+    $processInstanceVariables: String
+  ) {
+    ProcessInstanceUpdateVariables(
+      id: $processsId
+      processInstanceVariables: $processInstanceVariables
+    )
+  }
+`;
+const CANCEL_JOB = gql`
+  mutation jobCancel($jobId: String) {
+    JobCancel(id: $jobId)
+  }
+`;
+
+const RESCHEDULE_JOB = gql`
+  mutation handleJobReschedule($jobId: String, $data: String) {
+    JobReschedule(id: $jobId, data: $data)
   }
 `;

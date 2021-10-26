@@ -21,11 +21,6 @@ import {
   JobsManagementGatewayApiImpl
 } from '../JobsManagementGatewayApi';
 import { GraphQL } from '@kogito-apps/consoles-common';
-import {
-  handleJobReschedule,
-  jobCancel,
-  performMultipleCancel
-} from '../../../apis/apis';
 
 jest.mock('../../../apis/apis', () => ({
   handleJobReschedule: jest.fn(),
@@ -53,9 +48,16 @@ export const JobData: Job = {
 };
 
 const getJobsMock = jest.fn();
-
+const cancelJobMock = jest.fn();
+const rescheduleJobMock = jest.fn();
+const handleJobRescheduleMock = jest.fn();
+const performMultipleCancelMock = jest.fn();
 const MockJobsManagementQueries = jest.fn<JobsManagementQueries, []>(() => ({
-  getJobs: getJobsMock
+  getJobs: getJobsMock,
+  cancelJob: cancelJobMock,
+  rescheduleJob: rescheduleJobMock,
+  handleJobReschedule: handleJobRescheduleMock,
+  performMultipleCancel: performMultipleCancelMock
 }));
 
 let queries: JobsManagementQueries;
@@ -111,9 +113,9 @@ describe('JobsManagementChannelApiImpl tests', () => {
     const modalContent =
       'The job: eff4ee-11qw23-6675-pokau97-qwedjut45a0fj_0 failed to cancel. Error message: Network Error';
     //@ts-ignore
-    jobCancel.mockReturnValueOnce({ modalTitle, modalContent });
+    cancelJobMock.mockReturnValueOnce({ modalTitle, modalContent });
     const result = await gatewayApi.cancelJob(job);
-    expect(jobCancel).toHaveBeenCalledWith(job);
+    expect(cancelJobMock).toHaveBeenCalledWith(job);
     expect(result).toStrictEqual({ modalTitle, modalContent });
   });
 
@@ -121,7 +123,7 @@ describe('JobsManagementChannelApiImpl tests', () => {
     const modalTitle = 'success';
     const modalContent = `Reschedule of job: 'eff4ee-11qw23-6675-pokau97-qwedjut45a0fj_0' is successful`;
     //@ts-ignore
-    handleJobReschedule.mockReturnValueOnce({ modalTitle, modalContent });
+    rescheduleJobMock.mockReturnValueOnce({ modalTitle, modalContent });
     const repeatInterval = 0;
     const repeatLimit = 0;
     const scheduleDate = new Date('2021-08-27T03:35:50.147Z');
@@ -131,7 +133,7 @@ describe('JobsManagementChannelApiImpl tests', () => {
       repeatLimit,
       scheduleDate
     );
-    expect(handleJobReschedule).toHaveBeenCalledWith(
+    expect(rescheduleJobMock).toHaveBeenCalledWith(
       job,
       repeatInterval,
       repeatLimit,
@@ -147,9 +149,9 @@ describe('JobsManagementChannelApiImpl tests', () => {
     const successJobs = [];
     const failedJobs = [job];
     //@ts-ignore
-    performMultipleCancel.mockReturnValue({ successJobs, failedJobs });
+    performMultipleCancelMock.mockReturnValue({ successJobs, failedJobs });
     const result = await gatewayApi.bulkCancel([job]);
-    expect(performMultipleCancel).toHaveBeenCalledWith([job]);
+    expect(performMultipleCancelMock).toHaveBeenCalledWith([job]);
     expect(result).toEqual({ successJobs, failedJobs });
   });
 

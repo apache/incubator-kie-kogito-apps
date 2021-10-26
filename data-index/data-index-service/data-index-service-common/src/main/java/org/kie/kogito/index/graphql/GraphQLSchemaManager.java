@@ -185,7 +185,7 @@ public class GraphQLSchemaManager {
 
     public CompletableFuture<String> updateProcessInstanceVariables(DataFetchingEnvironment env) {
         ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
-        return dataIndexApiExecutor.updateProcessInstanceVariables(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance, env.getArgument("variables"));
+        return dataIndexApiExecutor.updateProcessInstanceVariables(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance, env.getArgument("processInstanceVariables"));
     }
 
     public CompletableFuture<String> triggerNodeInstance(DataFetchingEnvironment env) {
