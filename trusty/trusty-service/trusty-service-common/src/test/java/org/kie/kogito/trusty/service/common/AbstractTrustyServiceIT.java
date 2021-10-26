@@ -37,9 +37,6 @@ import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualGoal;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualInput;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualOutcome;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
@@ -48,6 +45,7 @@ import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportanceModel;
 import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 import org.kie.kogito.trusty.storage.api.model.SaliencyModel;
 import org.kie.kogito.trusty.storage.common.TrustyStorageService;
 
@@ -292,8 +290,8 @@ public abstract class AbstractTrustyServiceIT {
                 "number",
                 new CounterfactualDomainRange(new IntNode(1), new IntNode(2)));
 
-        CounterfactualGoal goal1 = buildGoalUnit("outcome1", "number", new IntNode(25));
-        CounterfactualGoal goal2 = buildGoalUnit("outcome2", "string", new TextNode("cheese"));
+        NamedTypedValue goal1 = buildGoalUnit("outcome1", "number", new IntNode(25));
+        NamedTypedValue goal2 = buildGoalUnit("outcome2", "string", new TextNode("cheese"));
 
         CounterfactualExplainabilityRequest request = trustyService.requestCounterfactuals(executionId, List.of(goal1, goal2), Collections.singletonList(searchDomain));
 
@@ -301,7 +299,7 @@ public abstract class AbstractTrustyServiceIT {
         assertEquals(request.getExecutionId(), executionId);
         assertNotNull(request.getCounterfactualId());
         assertEquals(2, request.getGoals().size());
-        List<CounterfactualGoal> requestGoals = new ArrayList<>(request.getGoals());
+        List<NamedTypedValue> requestGoals = new ArrayList<>(request.getGoals());
         assertCounterfactualGoal(goal1, requestGoals.get(0));
         assertCounterfactualGoal(goal2, requestGoals.get(1));
 
@@ -310,12 +308,12 @@ public abstract class AbstractTrustyServiceIT {
         assertEquals(request.getExecutionId(), result.getExecutionId());
         assertEquals(request.getCounterfactualId(), result.getCounterfactualId());
         assertEquals(2, result.getGoals().size());
-        List<CounterfactualGoal> resultGoals = new ArrayList<>(request.getGoals());
+        List<NamedTypedValue> resultGoals = new ArrayList<>(request.getGoals());
         assertCounterfactualGoal(goal1, resultGoals.get(0));
         assertCounterfactualGoal(goal2, resultGoals.get(1));
     }
 
-    private void assertCounterfactualGoal(CounterfactualGoal expectedGoal, CounterfactualGoal actualGoal) {
+    private void assertCounterfactualGoal(NamedTypedValue expectedGoal, NamedTypedValue actualGoal) {
         assertEquals(expectedGoal.getName(), actualGoal.getName());
         assertEquals(expectedGoal.getValue().getType(), actualGoal.getValue().getType());
         assertEquals(expectedGoal.getValue().toUnit().getValue(), actualGoal.getValue().toUnit().getValue());
@@ -474,13 +472,13 @@ public abstract class AbstractTrustyServiceIT {
     public void testStoreExplainabilityResult_Counterfactual() {
         String executionId = "myCFExecution1Store";
 
-        CounterfactualInput input1 = new CounterfactualInput("field1",
+        NamedTypedValue input1 = new NamedTypedValue("field1",
                 new UnitValue("typeRef1", "typeRef1", new IntNode(25)));
-        CounterfactualInput input2 = new CounterfactualInput("field2",
+        NamedTypedValue input2 = new NamedTypedValue("field2",
                 new UnitValue("typeRef2", "typeRef2", new IntNode(99)));
-        CounterfactualOutcome output1 = new CounterfactualOutcome("field3",
+        NamedTypedValue output1 = new NamedTypedValue("field3",
                 new UnitValue("typeRef3", "typeRef3", new IntNode(200)));
-        CounterfactualOutcome output2 = new CounterfactualOutcome("field4",
+        NamedTypedValue output2 = new NamedTypedValue("field4",
                 new UnitValue("typeRef4", "typeRef4", new IntNode(1000)));
 
         trustyService.storeExplainabilityResult(executionId,
@@ -504,13 +502,13 @@ public abstract class AbstractTrustyServiceIT {
         String executionId = "myCFExecution1Store";
         String counterfactualId = "myCFCounterfactualId";
 
-        CounterfactualInput input1 = new CounterfactualInput("field1",
+        NamedTypedValue input1 = new NamedTypedValue("field1",
                 new UnitValue("typeRef1", "typeRef1", new IntNode(25)));
-        CounterfactualInput input2 = new CounterfactualInput("field2",
+        NamedTypedValue input2 = new NamedTypedValue("field2",
                 new UnitValue("typeRef2", "typeRef2", new IntNode(99)));
-        CounterfactualOutcome output1 = new CounterfactualOutcome("field3",
+        NamedTypedValue output1 = new NamedTypedValue("field3",
                 new UnitValue("typeRef3", "typeRef3", new IntNode(200)));
-        CounterfactualOutcome output2 = new CounterfactualOutcome("field4",
+        NamedTypedValue output2 = new NamedTypedValue("field4",
                 new UnitValue("typeRef4", "typeRef4", new IntNode(1000)));
 
         //First solution is the FINAL (for whatever reason, e.g. messaging delays, the INTERMEDIATE is received afterwards)
@@ -556,13 +554,13 @@ public abstract class AbstractTrustyServiceIT {
         String executionId = "myCFExecution1Store";
         String counterfactualId = "myCFCounterfactualId";
 
-        CounterfactualInput input1 = new CounterfactualInput("field1",
+        NamedTypedValue input1 = new NamedTypedValue("field1",
                 new UnitValue("typeRef1", "typeRef1", new IntNode(25)));
-        CounterfactualInput input2 = new CounterfactualInput("field2",
+        NamedTypedValue input2 = new NamedTypedValue("field2",
                 new UnitValue("typeRef2", "typeRef2", new IntNode(99)));
-        CounterfactualOutcome output1 = new CounterfactualOutcome("field3",
+        NamedTypedValue output1 = new NamedTypedValue("field3",
                 new UnitValue("typeRef3", "typeRef3", new IntNode(200)));
-        CounterfactualOutcome output2 = new CounterfactualOutcome("field4",
+        NamedTypedValue output2 = new NamedTypedValue("field4",
                 new UnitValue("typeRef4", "typeRef4", new IntNode(1000)));
 
         //First solution is the INTERMEDIATE then the FINAL

@@ -18,8 +18,8 @@ package org.kie.kogito.trusty.storage.infinispan;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -40,11 +40,7 @@ public class DecisionMarshallerTest extends MarshallerTestTemplate {
         List<DecisionOutcome> outcomes = Collections.singletonList(new DecisionOutcome("id", "out",
                 DMNDecisionResult.DecisionEvaluationStatus.SUCCEEDED.toString(),
                 new UnitValue("nameOut", "number", JsonNodeFactory.instance.numberNode(10)),
-                new HashMap<>() {
-                    {
-                        put("nameOut", new UnitValue("number", "number", JsonNodeFactory.instance.numberNode(10)));
-                    }
-                },
+                Map.of("nameOut", new UnitValue("number", "number", JsonNodeFactory.instance.numberNode(10))),
                 new ArrayList<>()));
         Decision decision = new Decision("executionId", "source", "serviceUrl", 0L, true, "executor", "model", "namespace", inputs, outcomes);
         DecisionMarshaller marshaller = new DecisionMarshaller(new ObjectMapper());

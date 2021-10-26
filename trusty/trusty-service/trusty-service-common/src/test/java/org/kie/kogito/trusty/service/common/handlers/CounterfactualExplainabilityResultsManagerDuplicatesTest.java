@@ -26,9 +26,8 @@ import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualInput;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -156,8 +155,8 @@ public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
     }
 
     private CounterfactualExplainabilityResult makeResult(long sequenceId,
-            Collection<CounterfactualInput> inputs,
-            Collection<CounterfactualOutcome> outputs) {
+            Collection<NamedTypedValue> inputs,
+            Collection<NamedTypedValue> outputs) {
         return makeResult(sequenceId,
                 CounterfactualExplainabilityResult.Stage.INTERMEDIATE,
                 inputs,
@@ -166,8 +165,8 @@ public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
 
     private CounterfactualExplainabilityResult makeResult(long sequenceId,
             CounterfactualExplainabilityResult.Stage stage,
-            Collection<CounterfactualInput> inputs,
-            Collection<CounterfactualOutcome> outputs) {
+            Collection<NamedTypedValue> inputs,
+            Collection<NamedTypedValue> outputs) {
         return new CounterfactualExplainabilityResult(EXECUTION_ID,
                 COUNTERFACTUAL_ID,
                 UUID.randomUUID().toString(),
@@ -180,11 +179,11 @@ public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
                 outputs);
     }
 
-    private CounterfactualInput makeCounterfactualInput(final String name) {
-        return new CounterfactualInput(name, new UnitValue("typeRef", "typeRef", new TextNode("value")));
+    private NamedTypedValue makeCounterfactualInput(final String name) {
+        return new NamedTypedValue(name, new UnitValue("typeRef", "typeRef", new TextNode("value")));
     }
 
-    private CounterfactualOutcome makeCounterfactualOutput(final String name) {
-        return new CounterfactualOutcome(name, new UnitValue("typeRef", "typeRef", new TextNode("value")));
+    private NamedTypedValue makeCounterfactualOutput(final String name) {
+        return new NamedTypedValue(name, new UnitValue("typeRef", "typeRef", new TextNode("value")));
     }
 }

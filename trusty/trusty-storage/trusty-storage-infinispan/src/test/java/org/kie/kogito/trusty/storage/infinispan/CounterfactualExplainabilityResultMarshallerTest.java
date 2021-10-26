@@ -22,9 +22,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualInput;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -33,12 +32,12 @@ public class CounterfactualExplainabilityResultMarshallerTest extends Marshaller
 
     @Test
     public void testWriteAndRead() throws IOException {
-        List<CounterfactualInput> inputs = List.of(new CounterfactualInput("unitIn",
+        List<NamedTypedValue> inputs = List.of(new NamedTypedValue("unitIn",
                 new UnitValue("number",
                         "number",
                         JsonNodeFactory.instance.numberNode(10))));
 
-        List<CounterfactualOutcome> outputs = List.of(new CounterfactualOutcome("unitOut",
+        List<NamedTypedValue> outputs = List.of(new NamedTypedValue("unitOut",
                 new UnitValue("number",
                         "number",
                         JsonNodeFactory.instance.numberNode(55))));
@@ -57,8 +56,8 @@ public class CounterfactualExplainabilityResultMarshallerTest extends Marshaller
 
         marshaller.writeTo(writer, explainabilityResult);
         CounterfactualExplainabilityResult retrieved = marshaller.readFrom(reader);
-        List<CounterfactualInput> retrievedInputs = List.of(retrieved.getInputs().toArray(new CounterfactualInput[0]));
-        List<CounterfactualOutcome> retrievedOutputs = List.of(retrieved.getOutputs().toArray(new CounterfactualOutcome[0]));
+        List<NamedTypedValue> retrievedInputs = List.of(retrieved.getInputs().toArray(new NamedTypedValue[0]));
+        List<NamedTypedValue> retrievedOutputs = List.of(retrieved.getOutputs().toArray(new NamedTypedValue[0]));
 
         Assertions.assertEquals(explainabilityResult.getExecutionId(), retrieved.getExecutionId());
         Assertions.assertEquals(explainabilityResult.getCounterfactualId(), retrieved.getCounterfactualId());

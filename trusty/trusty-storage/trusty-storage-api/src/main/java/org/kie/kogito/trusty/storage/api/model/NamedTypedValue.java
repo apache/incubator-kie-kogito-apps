@@ -21,7 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CounterfactualOutcome {
+public class NamedTypedValue {
 
     public static final String NAME_FIELD = "name";
     public static final String VALUE_FIELD = "value";
@@ -32,11 +32,10 @@ public class CounterfactualOutcome {
     @JsonProperty(VALUE_FIELD)
     private TypedValue value;
 
-    public CounterfactualOutcome() {
+    public NamedTypedValue() {
     }
 
-    public CounterfactualOutcome(String name,
-            TypedValue value) {
+    public NamedTypedValue(String name, TypedValue value) {
         this.name = name;
         this.value = value;
     }

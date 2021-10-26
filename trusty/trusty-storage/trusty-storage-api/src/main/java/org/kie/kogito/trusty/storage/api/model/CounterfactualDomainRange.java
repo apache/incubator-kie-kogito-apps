@@ -17,6 +17,8 @@ package org.kie.kogito.trusty.storage.api.model;
 
 import java.util.Objects;
 
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -27,15 +29,18 @@ public class CounterfactualDomainRange extends CounterfactualDomain {
     public static final String UPPER_BOUND = "upperBound";
 
     @JsonProperty(LOWER_BOUND)
+    @NotNull(message = "lowerBound object must be provided.")
     private JsonNode lowerBound;
 
     @JsonProperty(UPPER_BOUND)
+    @NotNull(message = "upperBound object must be provided.")
     private JsonNode upperBound;
 
     public CounterfactualDomainRange() {
     }
 
-    public CounterfactualDomainRange(JsonNode lowerBound, JsonNode upperBound) {
+    public CounterfactualDomainRange(@NotNull JsonNode lowerBound,
+            @NotNull JsonNode upperBound) {
         this.lowerBound = Objects.requireNonNull(lowerBound);
         this.upperBound = Objects.requireNonNull(upperBound);
     }

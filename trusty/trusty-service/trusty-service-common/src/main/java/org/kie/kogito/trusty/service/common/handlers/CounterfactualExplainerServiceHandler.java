@@ -30,9 +30,8 @@ import org.kie.kogito.persistence.api.query.AttributeFilter;
 import org.kie.kogito.persistence.api.query.QueryFilterFactory;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualInput;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualOutcome;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 import org.kie.kogito.trusty.storage.common.TrustyStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,12 +81,12 @@ public class CounterfactualExplainerServiceHandler extends BaseExplainerServiceH
                 dto.getInputs()
                         .entrySet()
                         .stream()
-                        .map(e -> new CounterfactualInput(e.getKey(), e.getValue()))
+                        .map(e -> new NamedTypedValue(e.getKey(), e.getValue()))
                         .collect(Collectors.toList()),
                 dto.getOutputs()
                         .entrySet()
                         .stream()
-                        .map(e -> new CounterfactualOutcome(e.getKey(), e.getValue()))
+                        .map(e -> new NamedTypedValue(e.getKey(), e.getValue()))
                         .collect(Collectors.toList()));
     }
 

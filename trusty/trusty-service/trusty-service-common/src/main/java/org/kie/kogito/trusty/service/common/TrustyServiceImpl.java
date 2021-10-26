@@ -46,13 +46,13 @@ import org.kie.kogito.trusty.service.common.models.MatchedExecutionHeaders;
 import org.kie.kogito.trusty.storage.api.model.BaseExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualGoal;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.Execution;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 import org.kie.kogito.trusty.storage.common.TrustyStorageService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -198,7 +198,7 @@ public class TrustyServiceImpl implements TrustyService {
 
     @Override
     public CounterfactualExplainabilityRequest requestCounterfactuals(String executionId,
-            List<CounterfactualGoal> goals,
+            List<NamedTypedValue> goals,
             List<CounterfactualSearchDomain> searchDomains) {
         Storage<String, Decision> storage = storageService.getDecisionsStorage();
         if (!storage.containsKey(executionId)) {
@@ -211,7 +211,7 @@ public class TrustyServiceImpl implements TrustyService {
     }
 
     protected CounterfactualExplainabilityRequest storeCounterfactualRequest(String executionId,
-            List<CounterfactualGoal> goals,
+            List<NamedTypedValue> goals,
             List<CounterfactualSearchDomain> searchDomains,
             Long maxRunningTimeSeconds) {
         String counterfactualId = UUID.randomUUID().toString();
@@ -224,7 +224,7 @@ public class TrustyServiceImpl implements TrustyService {
 
     protected void sendCounterfactualRequestEvent(String executionId,
             String counterfactualId,
-            List<CounterfactualGoal> goals,
+            List<NamedTypedValue> goals,
             List<CounterfactualSearchDomain> searchDomains,
             Long maxRunningTimeSeconds) {
         Decision decision = getDecisionById(executionId);

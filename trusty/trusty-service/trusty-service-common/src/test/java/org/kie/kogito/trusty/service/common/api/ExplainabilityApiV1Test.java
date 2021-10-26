@@ -30,9 +30,9 @@ import org.kie.kogito.trusty.service.common.responses.CounterfactualResultsRespo
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualGoal;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 import org.mockito.Mockito;
 
 import com.fasterxml.jackson.databind.node.TextNode;
@@ -148,7 +148,7 @@ public class ExplainabilityApiV1Test {
 
     @Test
     public void testGetCounterfactualResultsWhenExecutionDoesExist() {
-        CounterfactualGoal goal = buildGoalUnit("unit",
+        NamedTypedValue goal = buildGoalUnit("unit",
                 "string",
                 new TextNode("hello"));
         CounterfactualSearchDomain searchDomain =
@@ -181,7 +181,7 @@ public class ExplainabilityApiV1Test {
 
     @Test
     public void testGetCounterfactualResultsWhenExecutionDoesExistAndResultsHaveBeenCreated() {
-        CounterfactualGoal goal = buildGoalUnit("unit",
+        NamedTypedValue goal = buildGoalUnit("unit",
                 "string",
                 new TextNode("hello"));
         CounterfactualSearchDomain searchDomain = buildSearchDomainUnit("unit",
@@ -235,5 +235,4 @@ public class ExplainabilityApiV1Test {
         assertEquals(solution1, resultsResponse.getSolutions().get(0));
         assertEquals(solution2, resultsResponse.getSolutions().get(1));
     }
-
 }

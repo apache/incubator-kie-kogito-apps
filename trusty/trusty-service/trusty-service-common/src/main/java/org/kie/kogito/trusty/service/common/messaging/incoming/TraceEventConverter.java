@@ -65,8 +65,8 @@ public class TraceEventConverter {
                 eventOutput.getName(),
                 eventOutput.getStatus(),
                 eventOutput.getValue(),
-                eventOutput.getInputs() == null ? null : eventOutput.getInputs(),
-                eventOutput.getMessages() == null ? null : eventOutput.getMessages());
+                eventOutput.getInputs(),
+                eventOutput.getMessages());
     }
 
     public static boolean decisionHasSucceeded(List<TraceOutputValue> outputs) {

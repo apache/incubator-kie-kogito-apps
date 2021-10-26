@@ -55,7 +55,6 @@ import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainFixed;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualGoal;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainStructureValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainUnitValue;
@@ -65,6 +64,7 @@ import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 import org.kie.kogito.trusty.storage.common.TrustyStorageService;
 import org.mockito.ArgumentCaptor;
 
@@ -433,11 +433,11 @@ public class TrustyServiceTest {
         // The Goals structures must be comparable to the original decisions outcomes.
         // The Search Domain structures must be identical those of the original decision inputs.
         trustyService.requestCounterfactuals(TEST_EXECUTION_ID,
-                List.of(new CounterfactualGoal("Fine",
+                List.of(new NamedTypedValue("Fine",
                         new StructureValue("tFine",
                                 Map.of("Amount", new UnitValue("number", "number", new IntNode(0)),
                                         "Points", new UnitValue("number", "number", new IntNode(0))))),
-                        new CounterfactualGoal("Should the driver be suspended?",
+                        new NamedTypedValue("Should the driver be suspended?",
                                 new UnitValue("string", "string", new TextNode("No")))),
                 List.of(new CounterfactualSearchDomain("Violation",
                         new CounterfactualSearchDomainStructureValue("tViolation",
@@ -480,11 +480,11 @@ public class TrustyServiceTest {
         // The Goals structures must be comparable to the original decisions outcomes.
         // The Search Domain structures must be identical those of the original decision inputs.
         trustyService.requestCounterfactuals(TEST_EXECUTION_ID,
-                List.of(new CounterfactualGoal("Fine",
+                List.of(new NamedTypedValue("Fine",
                         new StructureValue("tFine",
                                 Map.of("Amount", new UnitValue("number", "number", new IntNode(0)),
                                         "Points", new UnitValue("number", "number", new IntNode(0))))),
-                        new CounterfactualGoal("Should the driver be suspended?",
+                        new NamedTypedValue("Should the driver be suspended?",
                                 new UnitValue("string", "string", new TextNode("No")))),
                 List.of(new CounterfactualSearchDomain("Violation",
                         new CounterfactualSearchDomainStructureValue("tViolation",
@@ -533,7 +533,7 @@ public class TrustyServiceTest {
         when(decisionStorage.get(eq(TEST_EXECUTION_ID))).thenReturn(decision);
 
         trustyService.requestCounterfactuals(TEST_EXECUTION_ID,
-                List.of(new CounterfactualGoal("salary",
+                List.of(new NamedTypedValue("salary",
                         new UnitValue("integer", "integer", new IntNode(2000)))),
                 List.of(new CounterfactualSearchDomain("yearsOfService",
                         new CounterfactualSearchDomainUnitValue("integer", "integer", false,

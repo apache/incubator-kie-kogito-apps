@@ -36,12 +36,12 @@ import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainCategorical;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityRequest;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualGoal;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainValue;
 import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 import org.kie.kogito.trusty.storage.api.model.FeatureImportanceModel;
 import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 import org.kie.kogito.trusty.storage.api.model.SaliencyModel;
 import org.mockito.ArgumentCaptor;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
@@ -177,7 +177,7 @@ class ExplainabilityApiV1IT {
     @Test
     @SuppressWarnings("unchecked")
     void testCounterfactualRequest() {
-        ArgumentCaptor<List<CounterfactualGoal>> goalsCaptor = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<List<NamedTypedValue>> goalsCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List<CounterfactualSearchDomain>> searchDomainsCaptor = ArgumentCaptor.forClass(List.class);
 
         mockServiceWithCounterfactualRequest();
@@ -198,17 +198,17 @@ class ExplainabilityApiV1IT {
         assertEquals(response.getCounterfactualId(), TEST_COUNTERFACTUAL_ID);
 
         verify(executionService).requestCounterfactuals(eq(TEST_EXECUTION_ID), goalsCaptor.capture(), searchDomainsCaptor.capture());
-        List<CounterfactualGoal> goalsParameter = goalsCaptor.getValue();
+        List<NamedTypedValue> goalsParameter = goalsCaptor.getValue();
         assertNotNull(goalsParameter);
         assertEquals(2, goalsParameter.size());
 
-        CounterfactualGoal goal1 = goalsParameter.get(0);
+        NamedTypedValue goal1 = goalsParameter.get(0);
         assertEquals(TypedValue.Kind.UNIT, goal1.getValue().getKind());
         assertEquals("deposit", goal1.getName());
         assertEquals("number", goal1.getValue().getType());
         assertEquals(5000, goal1.getValue().toUnit().getValue().asInt());
 
-        CounterfactualGoal goal2 = goalsParameter.get(1);
+        NamedTypedValue goal2 = goalsParameter.get(1);
         assertEquals(TypedValue.Kind.UNIT, goal2.getValue().getKind());
         assertEquals("approved", goal2.getName());
         assertEquals("boolean", goal2.getValue().getType());
@@ -251,7 +251,7 @@ class ExplainabilityApiV1IT {
     @Test
     @SuppressWarnings("unchecked")
     void testCounterfactualRequestWithStructuredModel() {
-        ArgumentCaptor<List<CounterfactualGoal>> goalsCaptor = ArgumentCaptor.forClass(List.class);
+        ArgumentCaptor<List<NamedTypedValue>> goalsCaptor = ArgumentCaptor.forClass(List.class);
         ArgumentCaptor<List<CounterfactualSearchDomain>> searchDomainsCaptor = ArgumentCaptor.forClass(List.class);
 
         mockServiceWithCounterfactualRequest();
@@ -272,11 +272,11 @@ class ExplainabilityApiV1IT {
         assertEquals(response.getCounterfactualId(), TEST_COUNTERFACTUAL_ID);
 
         verify(executionService).requestCounterfactuals(eq(TEST_EXECUTION_ID), goalsCaptor.capture(), searchDomainsCaptor.capture());
-        List<CounterfactualGoal> goalsParameter = goalsCaptor.getValue();
+        List<NamedTypedValue> goalsParameter = goalsCaptor.getValue();
         assertNotNull(goalsParameter);
         assertEquals(1, goalsParameter.size());
 
-        CounterfactualGoal goal1 = goalsParameter.get(0);
+        NamedTypedValue goal1 = goalsParameter.get(0);
         assertEquals(TypedValue.Kind.STRUCTURE, goal1.getValue().getKind());
         assertEquals("Fine", goal1.getName());
         assertEquals("tFine", goal1.getValue().getType());

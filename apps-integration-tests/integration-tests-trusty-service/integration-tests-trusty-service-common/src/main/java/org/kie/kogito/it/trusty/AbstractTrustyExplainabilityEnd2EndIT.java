@@ -37,7 +37,6 @@ import org.kie.kogito.trusty.service.common.responses.DecisionOutcomesResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionStructuredInputsResponse;
 import org.kie.kogito.trusty.service.common.responses.ExecutionsResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualGoal;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainCollectionValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainStructureValue;
@@ -45,6 +44,7 @@ import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainUnitVal
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainValue;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.KafkaContainer;
@@ -282,9 +282,9 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
         assertNotNull(counterfactualRequestResponse.getCounterfactualId());
     }
 
-    private static CounterfactualGoal toCounterfactualGoal(DecisionOutcome outcome) {
+    private static NamedTypedValue toCounterfactualGoal(DecisionOutcome outcome) {
         TypedValue value = outcome.getOutcomeResult();
-        return new CounterfactualGoal(outcome.getOutcomeName(), value);
+        return new NamedTypedValue(outcome.getOutcomeName(), value);
     }
 
     private static CounterfactualSearchDomain toCounterfactualSearchDomain(DecisionInput input) {

@@ -23,11 +23,11 @@ import java.util.stream.Collectors;
 
 import org.kie.kogito.tracing.typedvalue.BaseTypedValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualGoal;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainValue;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 
 public class CounterfactualParameterValidation {
 
@@ -35,13 +35,22 @@ public class CounterfactualParameterValidation {
         //Prevent instantiation of this utility class
     }
 
-    private interface Check<C, CV, D, DV> {
+    private interface Check<C, D> {
 
         boolean check(Collection<C> structure1,
                 Collection<D> structure2);
     }
 
-    private static abstract class BaseCheck<C, CV, D, DV> implements Check<C, CV, D, DV> {
+    /**
+     * Checks if two structured parameters are consistent.
+     * What constitutes "consistent" is determined by the concrete sub-classes.
+     *
+     * @param <C> Type C of one parameter
+     * @param <CV> Converter to convert Type C to internal representation
+     * @param <D> Type D of another parameter
+     * @param <DV> Converter to convert Type D to internal representation
+     */
+    private static abstract class BaseCheck<C, CV, D, DV> implements Check<C, D> {
 
         @Override
         public boolean check(Collection<C> structure1, Collection<D> structure2) {
@@ -176,7 +185,7 @@ public class CounterfactualParameterValidation {
         }
     }
 
-    private static class SubsetCheck extends BaseCheck<DecisionOutcome, TypedValue, CounterfactualGoal, TypedValue> {
+    private static class SubsetCheck extends BaseCheck<DecisionOutcome, TypedValue, NamedTypedValue, TypedValue> {
 
         @Override
         protected boolean checkMembership(Map<String, StructureHolder<TypedValue>> structure1Map,
@@ -198,7 +207,7 @@ public class CounterfactualParameterValidation {
         }
 
         @Override
-        protected StructureHolder<TypedValue> convertStructure2toHolder(CounterfactualGoal value) {
+        protected StructureHolder<TypedValue> convertStructure2toHolder(NamedTypedValue value) {
             return new StructureHolder<>(value.getValue().getKind(),
                     value.getName(),
                     value.getValue().getType(),
@@ -247,7 +256,7 @@ public class CounterfactualParameterValidation {
      * @param goals Goals for a Counterfactual Explanation
      * @return True if Goals is a subset of Outcomes
      */
-    public static boolean isStructureSubset(Collection<DecisionOutcome> outcomes, Collection<CounterfactualGoal> goals) {
+    public static boolean isStructureSubset(Collection<DecisionOutcome> outcomes, Collection<NamedTypedValue> goals) {
         return SUBSET.check(outcomes, goals);
     }
 

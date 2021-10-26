@@ -4,17 +4,17 @@ const DMN_1 = `
     <dmn:extensionElements/>
     <dmn:inputData id="_70F1A759-16EA-44EE-98C1-E9B3726382FF" name="Name">
       <dmn:extensionElements/>
-      <dmn:variable id="_544B578A-CB1D-4DE2-AB3C-22622689011A" name="Name" type="string"/>
+      <dmn:variable id="_544B578A-CB1D-4DE2-AB3C-22622689011A" name="Name" typeRef="string"/>
     </dmn:inputData>
     <dmn:decision id="_22CF5537-8C35-4EAB-B770-97BB5E58EEA8" name="Fred?">
       <dmn:extensionElements/>
-      <dmn:variable id="_5B829B9A-CA62-4174-B3A3-968EDF4F5C6D" name="Fred?" type="boolean"/>
+      <dmn:variable id="_5B829B9A-CA62-4174-B3A3-968EDF4F5C6D" name="Fred?" typeRef="boolean"/>
       <dmn:informationRequirement id="_96ED21AE-BF0E-44A0-862C-790215C6FA54">
         <dmn:requiredInput href="#_70F1A759-16EA-44EE-98C1-E9B3726382FF"/>
       </dmn:informationRequirement>
       <dmn:decisionTable id="_D6AF6546-5995-4936-932E-93FE014AAA46" hitPolicy="UNIQUE" preferredOrientation="Rule-as-Row">
         <dmn:input id="_38911DC6-5410-49E3-9693-FBDCD73286E4">
-          <dmn:inputExpression id="_C005FDF1-908D-44F7-BF84-DFC26743700B" type="string">
+          <dmn:inputExpression id="_C005FDF1-908D-44F7-BF84-DFC26743700B" typeRef="string">
             <dmn:text>Name</dmn:text>
           </dmn:inputExpression>
         </dmn:input>

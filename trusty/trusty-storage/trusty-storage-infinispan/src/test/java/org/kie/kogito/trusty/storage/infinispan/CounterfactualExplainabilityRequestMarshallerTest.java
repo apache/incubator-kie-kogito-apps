@@ -24,9 +24,9 @@ import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomainRange;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityRequest;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualGoal;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainUnitValue;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -35,7 +35,7 @@ public class CounterfactualExplainabilityRequestMarshallerTest extends Marshalle
 
     @Test
     public void testWriteAndRead() throws IOException {
-        List<CounterfactualGoal> goals = Collections.singletonList(new CounterfactualGoal("unitIn",
+        List<NamedTypedValue> goals = Collections.singletonList(new NamedTypedValue("unitIn",
                 new UnitValue("number",
                         "number",
                         JsonNodeFactory.instance.numberNode(10))));

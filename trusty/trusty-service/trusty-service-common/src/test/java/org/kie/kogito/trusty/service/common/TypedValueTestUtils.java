@@ -24,12 +24,12 @@ import org.kie.kogito.tracing.typedvalue.StructureValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualDomain;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualGoal;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainStructureValue;
 import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomainUnitValue;
 import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
+import org.kie.kogito.trusty.storage.api.model.NamedTypedValue;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -65,13 +65,13 @@ public class TypedValueTestUtils {
                 Collections.emptyList());
     }
 
-    public static CounterfactualGoal buildGoalUnit(String name, String typeRef, JsonNode value) {
-        return new CounterfactualGoal(name,
+    public static NamedTypedValue buildGoalUnit(String name, String typeRef, JsonNode value) {
+        return new NamedTypedValue(name,
                 new UnitValue(typeRef, typeRef, value));
     }
 
-    public static CounterfactualGoal buildGoalStructure(String name, String typeRef, Map<String, TypedValue> value) {
-        return new CounterfactualGoal(name,
+    public static NamedTypedValue buildGoalStructure(String name, String typeRef, Map<String, TypedValue> value) {
+        return new NamedTypedValue(name,
                 new StructureValue(typeRef, value));
     }
 

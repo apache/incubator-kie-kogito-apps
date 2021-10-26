@@ -44,7 +44,7 @@ public class CounterfactualExplainabilityRequest {
 
     @JsonProperty(COUNTERFACTUAL_GOALS_FIELD)
     @NotNull(message = "goals object must be provided.")
-    private Collection<CounterfactualGoal> goals;
+    private Collection<NamedTypedValue> goals;
 
     @JsonProperty(COUNTERFACTUAL_SEARCH_DOMAINS_FIELD)
     @NotNull(message = "searchDomains object must be provided.")
@@ -64,7 +64,7 @@ public class CounterfactualExplainabilityRequest {
 
     public CounterfactualExplainabilityRequest(@NotNull String executionId,
             @NotNull String counterfactualId,
-            @NotNull Collection<CounterfactualGoal> goals,
+            @NotNull Collection<NamedTypedValue> goals,
             @NotNull Collection<CounterfactualSearchDomain> searchDomains,
             Long maxRunningTimeSeconds) {
         this.executionId = Objects.requireNonNull(executionId);
@@ -82,7 +82,7 @@ public class CounterfactualExplainabilityRequest {
         return counterfactualId;
     }
 
-    public Collection<CounterfactualGoal> getGoals() {
+    public Collection<NamedTypedValue> getGoals() {
         return goals;
     }
 
@@ -105,7 +105,7 @@ public class CounterfactualExplainabilityRequest {
         this.counterfactualId = counterfactualId;
     }
 
-    public void setGoals(Collection<CounterfactualGoal> goals) {
+    public void setGoals(Collection<NamedTypedValue> goals) {
         this.goals = goals;
     }
 
