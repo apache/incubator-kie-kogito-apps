@@ -2,6 +2,14 @@ const executionIds = require('./executionIds');
 
 const simpleInputData = [
   {
+    name: 'Prior refusal?',
+    value: {
+      kind: 'UNIT',
+      type: 'boolean',
+      value: false
+    }
+  },
+  {
     name: 'Credit Score',
     value: {
       kind: 'UNIT',

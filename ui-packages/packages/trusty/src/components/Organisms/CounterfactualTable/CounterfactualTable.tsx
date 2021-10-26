@@ -150,7 +150,12 @@ const CounterfactualTable = (props: CounterfactualTableProps) => {
       payload: { searchInputIndex: rowId }
     });
     // boolean search domain hack
-    if (isSelected && typeof rows[rowId].value === 'boolean') {
+    if (
+      isSelected &&
+      rows[rowId].value.kind === 'UNIT' &&
+      typeof (rows[rowId].value as CFSearchInputUnit).originalValue.value ===
+        'boolean'
+    ) {
       dispatch({
         type: 'CF_SET_INPUT_DOMAIN',
         payload: {

@@ -273,7 +273,7 @@ const areInputsSelected = (inputs: CFSearchInput[]) => {
     selectedInputValues.length > 0 &&
     selectedInputValues.every(
       inputValue =>
-        inputValue.domain || typeof inputValue.originalValue === 'boolean'
+        inputValue.domain || typeof inputValue.originalValue.value === 'boolean'
     )
   );
 };
