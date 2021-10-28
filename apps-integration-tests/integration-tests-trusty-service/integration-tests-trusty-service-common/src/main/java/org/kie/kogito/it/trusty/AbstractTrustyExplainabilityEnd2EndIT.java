@@ -16,6 +16,8 @@
 
 package org.kie.kogito.it.trusty;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +41,7 @@ import org.kie.kogito.testcontainers.KogitoServiceContainer;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualRequest;
 import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
+import org.kie.kogito.trusty.service.common.responses.CounterfactualResultsResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionOutcomesResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionStructuredInputsResponse;
 import org.kie.kogito.trusty.service.common.responses.ExecutionsResponse;
@@ -61,6 +64,7 @@ import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -180,8 +184,10 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
 
             assertNotNull(accessToken);
 
+            final List<String> executionIds = new ArrayList<>();
             final int expectedExecutions = KOGITO_SERVICE_PAYLOADS.size();
 
+            // Invoke Decision endpoint to generate LIME explanations
             KOGITO_SERVICE_PAYLOADS.forEach(json -> given()
                     .port(kogitoService.getFirstMappedPort())
                     .contentType("application/json")
@@ -189,6 +195,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                     .when().post("/Traffic Violation")
                     .then().statusCode(200));
 
+            // Check Decisions executed and LIME explanations generated
             await()
                     .atLeast(5, SECONDS)
                     .atMost(30, SECONDS)
@@ -205,6 +212,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
 
                         executionsResponse.getHeaders().forEach(execution -> {
                             String executionId = execution.getExecutionId();
+                            executionIds.add(executionId);
 
                             assertNotNull(executionId);
 
@@ -216,14 +224,24 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                                     .extract().as(SalienciesResponse.class);
 
                             assertEquals("SUCCEEDED", salienciesResponse.getStatus());
+                        });
+                    });
 
-                            doCounterfactuals(trustyService, accessToken, executionId);
+            // Request Counterfactuals for each execution and check responses generated
+            await()
+                    .atLeast(5, SECONDS)
+                    .atMost(30, SECONDS)
+                    .with().pollInterval(5, SECONDS)
+                    .untilAsserted(() -> {
+                        executionIds.forEach(executionId -> {
+                            doCounterfactualRequests(trustyService, accessToken, executionId);
+                            doCounterfactualResponses(trustyService, accessToken, executionId);
                         });
                     });
         }
     }
 
-    private void doCounterfactuals(final InfinispanTrustyServiceContainer trustyService,
+    private void doCounterfactualRequests(final InfinispanTrustyServiceContainer trustyService,
             final String accessToken,
             final String executionId) {
         //Decision's Inputs
@@ -317,5 +335,41 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                         null);
         }
         throw new IllegalArgumentException("An unexpected TypedValue.Kind detected. Unable to process.");
+    }
+
+    @SuppressWarnings("unchecked")
+    private void doCounterfactualResponses(final InfinispanTrustyServiceContainer trustyService,
+            final String accessToken,
+            final String executionId) {
+        // Get all counterfactual requests for an execution
+        List<CounterfactualRequestResponse> counterfactualRequests = Arrays.asList(given()
+                .port(trustyService.getFirstMappedPort())
+                .auth().oauth2(accessToken)
+                .when()
+                .contentType(ContentType.JSON)
+                .get("/executions/decisions/" + executionId + "/explanations/counterfactuals")
+                .then().statusCode(200)
+                .extract().as(CounterfactualRequestResponse[].class));
+
+        // We should only have one per execution
+        assertNotNull(counterfactualRequests);
+        assertEquals(1, counterfactualRequests.size());
+
+        // Verify there are counterfactual results available
+        String counterfactualId = counterfactualRequests.get(0).getCounterfactualId();
+
+        CounterfactualResultsResponse details = given()
+                .port(trustyService.getFirstMappedPort())
+                .auth().oauth2(accessToken)
+                .when()
+                .contentType(ContentType.JSON)
+                .get("/executions/decisions/" + executionId + "/explanations/counterfactuals/" + counterfactualId)
+                .then().statusCode(200)
+                .extract().as(CounterfactualResultsResponse.class);
+
+        assertNotNull(details);
+        assertEquals(executionId, details.getExecutionId());
+        assertEquals(counterfactualId, details.getCounterfactualId());
+        assertFalse(details.getSolutions().isEmpty());
     }
 }
