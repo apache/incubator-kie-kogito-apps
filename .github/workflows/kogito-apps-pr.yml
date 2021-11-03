@@ -41,9 +41,10 @@ jobs:
         shell: bash
         run: |
           echo "Run E2E Integration test suite"
-          cd ui-packages
+          pushd .
+          cd kogito-apps/ui-packages
           yarn run test:e2e
-          cd ..
+          popd
       - name: Surefire Report
         uses: kiegroup/kogito-pipelines/.ci/actions/surefire-report@main
         if: ${{ always() }}
