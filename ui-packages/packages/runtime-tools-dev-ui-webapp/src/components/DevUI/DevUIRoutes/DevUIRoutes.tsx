@@ -23,6 +23,7 @@ import TaskInboxPage from '../../pages/TaskInboxPage/TaskInboxPage';
 import TaskDetailsPage from '../../pages/TaskDetailsPage/TaskDetailsPage';
 import FormsListPage from '../../pages/FormsListPage/FormsListPage';
 import FormDetailPage from '../../pages/FormDetailsPage/FormDetailsPage';
+import { TrustyApp } from '@kogito-apps/trusty';
 
 interface IOwnProps {
   navigate: string;
@@ -43,6 +44,16 @@ const DevUIRoutes: React.FC<IOwnProps> = ({ navigate }) => {
         path="/TaskDetails/:taskId"
         render={routeProps => <TaskDetailsPage {...routeProps} />}
       />
+      <Route path="/Trusty">
+        <TrustyApp
+          counterfactualEnabled={false}
+          explanationEnabled={false}
+          pageWrapper={false}
+          basePath={'/Trusty'}
+          excludeReactRouter={true}
+          useHrefLinks={false}
+        />
+      </Route>
       <Route
         path="/NoData"
         render={_props => (

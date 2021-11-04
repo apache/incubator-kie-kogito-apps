@@ -1,17 +1,21 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "declarationDir": "./dist",
+    "declaration": true,
+    "skipLibCheck": true,
     "allowJs": true
   },
+  "files": [
+    "./src/index.ts"
+  ],
   "include": [
-    "src/**/*.ts",
-    "src/**/*.tsx",
-    "src/**/*.jsx",
-    "src/**/*.js",
     "../../config/declare.d.ts"
   ],
   "exclude": [
-    "node_modules"
-  ],
-  "preserveSymlinks": true
+    "node_modules",
+    "../../node_modules",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx",
+  ]
 }
