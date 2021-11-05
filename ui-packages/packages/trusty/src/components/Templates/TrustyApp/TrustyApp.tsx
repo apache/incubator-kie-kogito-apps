@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   BrowserRouter,
   NavLink,
@@ -27,6 +27,11 @@ import NotFound from '../NotFound/NotFound';
 import ApplicationError from '../ApplicationError/ApplicationError';
 import { TrustyContextValue } from '../../../types';
 import { datePickerSetup } from '../../Molecules/DatePicker/DatePicker';
+// manually importing Red Hat Mono font because not yet provided by PatternFly
+// see: https://github.com/patternfly/patternfly/issues/4021
+// when updating PF to a version that will include it, it will be
+// important to remove this duplication
+import '../../../../static/fonts/RedHatMono/RedHatMono.css';
 import './TrustyApp.scss';
 
 datePickerSetup();
@@ -61,10 +66,45 @@ const TrustyApp: React.FC<TrustyAppProps> = props => {
     excludeReactRouter = false,
     useHrefLinks = true
   } = props;
+
+  return (
+    <TrustyContext.Provider
+      value={{
+        config: {
+          counterfactualEnabled,
+          explanationEnabled,
+          basePath: basePath,
+          useHrefLinks
+        }
+      }}
+    >
+      <>
+        {excludeReactRouter ? (
+          <TrustyAppContainer pageWrapper={pageWrapper} />
+        ) : (
+          <BrowserRouter>
+            <TrustyAppContainer pageWrapper={pageWrapper} />
+          </BrowserRouter>
+        )}
+      </>
+    </TrustyContext.Provider>
+  );
+};
+
+export default TrustyApp;
+
+export const TrustyContext = React.createContext<TrustyContextValue>(null);
+
+type TrustyAppContainerProps = {
+  pageWrapper: boolean;
+};
+
+const TrustyAppContainer = ({ pageWrapper }: TrustyAppContainerProps) => {
   const location = useLocation();
   const [isMobileView, setIsMobileView] = useState(false);
   const [isNavOpenDesktop, setIsNavOpenDesktop] = useState(true);
   const [isNavOpenMobile, setIsNavOpenMobile] = useState(false);
+  const { config } = useContext(TrustyContext);
 
   const onNavToggleDesktop = () => {
     setIsNavOpenDesktop(!isNavOpenDesktop);
@@ -73,7 +113,7 @@ const TrustyApp: React.FC<TrustyAppProps> = props => {
   const onNavToggleMobile = () => {
     setIsNavOpenMobile(!isNavOpenMobile);
   };
-  console.log(`the location is`, location);
+  // console.log(`the location is`, location);
   const handlePageResize = (props: {
     windowSize: number;
     mobileView: boolean;
@@ -112,7 +152,7 @@ const TrustyApp: React.FC<TrustyAppProps> = props => {
       logo={
         <Brand src={kogitoLogo} alt="Kogito TrustyAI" className="trusty-logo" />
       }
-      logoProps={{ href: '#/' }}
+      logoProps={{ href: `${config.basePath}/` }}
       headerTools={
         <PageHeaderTools>
           <Avatar src={imgAvatar} alt="Avatar image" />
@@ -126,13 +166,13 @@ const TrustyApp: React.FC<TrustyAppProps> = props => {
 
   const Routes = (
     <Switch>
-      <Route exact path={`${basePath}/`}>
-        <Redirect to={`${basePath}/audit`} />
+      <Route exact path={`${config.basePath}/`}>
+        <Redirect to={`${config.basePath}/audit`} />
       </Route>
-      <Route exact path={`${basePath}/audit`}>
+      <Route exact path={`${config.basePath}/audit`}>
         <AuditOverview />
       </Route>
-      <Route path={`${basePath}/audit/:executionType/:executionId`}>
+      <Route path={`${config.basePath}/audit/:executionType/:executionId`}>
         <AuditDetail />
       </Route>
       <Route exact path="/error">
@@ -143,27 +183,8 @@ const TrustyApp: React.FC<TrustyAppProps> = props => {
     </Switch>
   );
 
-  const Routing = (
-    <>
-      {excludeReactRouter ? (
-        <>{Routes}</>
-      ) : (
-        <BrowserRouter>{Routes}</BrowserRouter>
-      )}
-    </>
-  );
-
   return (
-    <TrustyContext.Provider
-      value={{
-        config: {
-          counterfactualEnabled,
-          explanationEnabled,
-          basePath: basePath,
-          useHrefLinks
-        }
-      }}
-    >
+    <>
       {pageWrapper ? (
         <Page
           header={Header}
@@ -171,15 +192,11 @@ const TrustyApp: React.FC<TrustyAppProps> = props => {
           breadcrumb={<Breadcrumbs />}
           onPageResize={handlePageResize}
         >
-          {Routing}
+          {Routes}
         </Page>
       ) : (
-        <>{Routing}</>
+        <>{Routes}</>
       )}
-    </TrustyContext.Provider>
+    </>
   );
 };
-
-export default TrustyApp;
-
-export const TrustyContext = React.createContext<TrustyContextValue>(null);
