@@ -33,6 +33,10 @@
     <i class="fab fa-wpforms fa-fw"></i>
     Forms <span id="formsCount" class="badge badge-light"/>
 </a>
+<a href="{urlbase}/audit" class="badge badge-light">
+    <i class="fab fa-wpforms fa-fw"></i>
+    Audit Investigation <span id="auditCount" class="badge badge-light"/>
+</a>
 <script>
     const fillCount = (resourceType) => {
         fetch("http://localhost:8080/dataindex/" + resourceType + "/count")

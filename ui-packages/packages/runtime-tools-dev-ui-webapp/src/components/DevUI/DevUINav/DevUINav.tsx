@@ -65,12 +65,12 @@ const DevUINav: React.FC<IOwnProps> = ({ pathname }) => {
             Forms
           </Link>
         </NavItem>
-        <NavItem key={'trusty-nav'} isActive={pathname.startsWith('/Trusty')}>
+        <NavItem key={'audit-nav'} isActive={pathname.startsWith('/Audit')}>
           <Link
-            to="/Trusty"
-            {...ouiaAttribute('data-ouia-navigation-name', 'trusty-nav')}
+            to="/Audit"
+            {...ouiaAttribute('data-ouia-navigation-name', 'audit-nav')}
           >
-            Trusty
+            Audit investigation
           </Link>
         </NavItem>
       </NavList>

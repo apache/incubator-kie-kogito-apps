@@ -44,12 +44,12 @@ const DevUIRoutes: React.FC<IOwnProps> = ({ navigate }) => {
         path="/TaskDetails/:taskId"
         render={routeProps => <TaskDetailsPage {...routeProps} />}
       />
-      <Route path="/Trusty">
+      <Route path="/Audit">
         <TrustyApp
           counterfactualEnabled={false}
           explanationEnabled={false}
           pageWrapper={false}
-          basePath={'/Trusty'}
+          basePath={'/Audit'}
           excludeReactRouter={true}
           useHrefLinks={false}
         />
