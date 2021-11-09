@@ -116,24 +116,8 @@ public class CounterfactualExplainerServiceHandler
             throw new IllegalArgumentException("Counterfactual explanations only support flat models.");
         }
 
-        // When the Prediction is run its Outcomes are placed in a HashMap. The iteration order of the HashMap's
-        // members is different to the iteration of the List containing the Goals; which contains the original sequencing
-        // of Outcomes from execution of the original Decision through to the UI, Counterfactual request and receipt here.
-        // To ensure the ordering is correct for CounterFactualScoreCalculator.calculateScore(..) and
-        // CounterFactualScoreCalculator.outputDistance(..) we need to perform the same re-ordering
-        // i.e write to HashMap and read back to a List.
-        // See https://issues.redhat.com/browse/FAI-653
-        Map<String, TypedValue> goalsMap = goals != null
-                ? goals.stream()
-                        .collect(HashMap::new, (m, v) -> m.put(v.getName(), v.getValue()), HashMap::putAll)
-                : Collections.emptyMap();
-        List<NamedTypedValue> goalsReordered = goalsMap.entrySet()
-                .stream()
-                .map(e -> new NamedTypedValue(e.getKey(), e.getValue()))
-                .collect(Collectors.toList());
-
         PredictionInput input = new PredictionInput(toFeatureList(originalInputs));
-        PredictionOutput output = new PredictionOutput(toOutputList(goalsReordered));
+        PredictionOutput output = new PredictionOutput(toOutputList(toMapBasedSorting(goals)));
         PredictionFeatureDomain featureDomain = new PredictionFeatureDomain(toFeatureDomainList(searchDomains));
         List<Boolean> featureConstraints = toFeatureConstraintList(searchDomains);
 
@@ -161,6 +145,24 @@ public class CounterfactualExplainerServiceHandler
     private boolean isUnsupportedCounterfactualSearchDomain(Collection<CounterfactualSearchDomain> domains) {
         return domains.stream().map(CounterfactualSearchDomain::getValue).anyMatch(domain -> domain instanceof CounterfactualSearchDomainStructureValue
                 || domain instanceof CounterfactualSearchDomainCollectionValue);
+    }
+
+    private List<NamedTypedValue> toMapBasedSorting(Collection<NamedTypedValue> goals) {
+        // When the Prediction is run its Outcomes are placed in a HashMap. The iteration order of the HashMap's
+        // members is different to the iteration of the List containing the Goals; which contains the original sequencing
+        // of Outcomes from execution of the original Decision through to the UI, Counterfactual request and receipt here.
+        // To ensure the ordering is correct for CounterFactualScoreCalculator.calculateScore(..) and
+        // CounterFactualScoreCalculator.outputDistance(..) we need to perform the same re-ordering
+        // i.e write to HashMap and read back to a List.
+        // See https://issues.redhat.com/browse/FAI-653
+        Map<String, TypedValue> goalsMap = goals != null
+                ? goals.stream()
+                        .collect(HashMap::new, (m, v) -> m.put(v.getName(), v.getValue()), HashMap::putAll)
+                : Collections.emptyMap();
+        return goalsMap.entrySet()
+                .stream()
+                .map(e -> new NamedTypedValue(e.getKey(), e.getValue()))
+                .collect(Collectors.toList());
     }
 
     @Override
