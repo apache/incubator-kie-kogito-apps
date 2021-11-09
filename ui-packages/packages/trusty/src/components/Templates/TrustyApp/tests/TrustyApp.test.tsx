@@ -14,7 +14,11 @@ describe('TrustyApp', () => {
           }
         ]}
       >
-        <TrustyApp explanationEnabled={true} />
+        <TrustyApp
+          explanationEnabled={true}
+          counterfactualEnabled={true}
+          excludeReactRouter={true}
+        />
       </MemoryRouter>
     );
 

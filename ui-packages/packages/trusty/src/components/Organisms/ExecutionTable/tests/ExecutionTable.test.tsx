@@ -2,6 +2,19 @@ import React from 'react';
 import ExecutionTable from '../ExecutionTable';
 import { shallow } from 'enzyme';
 import { Executions, RemoteData, RemoteDataStatus } from '../../../../types';
+import { TrustyContext } from '../../../Templates/TrustyApp/TrustyApp';
+
+const setupWrapper = (executions: RemoteData<Error, Executions>) => {
+  return shallow(
+    <TrustyContext.Provider
+      value={{
+        config: { counterfactualEnabled: true, explanationEnabled: true }
+      }}
+    >
+      <ExecutionTable data={executions} />
+    </TrustyContext.Provider>
+  );
+};
 
 describe('Execution table', () => {
   test('renders loading skeletons when the data is not yet fetching', () => {
@@ -9,7 +22,7 @@ describe('Execution table', () => {
       Error,
       Executions
     >;
-    const wrapper = shallow(<ExecutionTable data={data} />);
+    const wrapper = setupWrapper(data);
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -18,7 +31,7 @@ describe('Execution table', () => {
       Error,
       Executions
     >;
-    const wrapper = shallow(<ExecutionTable data={data} />);
+    const wrapper = setupWrapper(data);
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -27,7 +40,8 @@ describe('Execution table', () => {
       status: RemoteDataStatus.FAILURE,
       error: { name: '', message: '' }
     } as RemoteData<Error, Executions>;
-    const wrapper = shallow(<ExecutionTable data={data} />);
+    const wrapper = setupWrapper(data);
+
     expect(wrapper).toMatchSnapshot();
   });
 
@@ -58,7 +72,7 @@ describe('Execution table', () => {
         ]
       }
     } as RemoteData<Error, Executions>;
-    const wrapper = shallow(<ExecutionTable data={data} />);
+    const wrapper = setupWrapper(data);
 
     expect(wrapper).toMatchSnapshot();
   });
@@ -73,7 +87,7 @@ describe('Execution table', () => {
         headers: []
       }
     } as RemoteData<Error, Executions>;
-    const wrapper = shallow(<ExecutionTable data={data} />);
+    const wrapper = setupWrapper(data);
 
     expect(wrapper).toMatchSnapshot();
   });
