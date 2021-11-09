@@ -97,7 +97,7 @@ public class CounterfactualExplainerServiceHandler
 
     @Override
     public Prediction getPrediction(CounterfactualExplainabilityRequest request) {
-        Collection<NamedTypedValue> goals = request.getGoals();
+        Collection<NamedTypedValue> goals = toMapBasedSorting(request.getGoals());
         Collection<CounterfactualSearchDomain> searchDomains = request.getSearchDomains();
         Collection<NamedTypedValue> originalInputs = request.getOriginalInputs();
         Long maxRunningTimeSeconds = request.getMaxRunningTimeSeconds();
@@ -117,7 +117,7 @@ public class CounterfactualExplainerServiceHandler
         }
 
         PredictionInput input = new PredictionInput(toFeatureList(originalInputs));
-        PredictionOutput output = new PredictionOutput(toOutputList(toMapBasedSorting(goals)));
+        PredictionOutput output = new PredictionOutput(toOutputList(goals));
         PredictionFeatureDomain featureDomain = new PredictionFeatureDomain(toFeatureDomainList(searchDomains));
         List<Boolean> featureConstraints = toFeatureConstraintList(searchDomains);
 
