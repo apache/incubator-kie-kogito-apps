@@ -45,7 +45,13 @@ outcomes.forEach(item => {
     outcomeId: item,
     featureImportance: []
   };
-  for (let i = 0; i <= features.length - 1; i++) {
+  // simulating an outcome with few features scores that doesn't need
+  // the "complete chart" dialog. The targeted outcome is "Risk Score" from
+  // the decision with the so called twoSimpleOutcomes
+  // ("Mortgage approval" and "Risk score")
+  const featuresCount =
+    item === '_9CFF8C35-4EB3-451E-874C-DB27A5A424C0' ? 4 : features.length - 1;
+  for (let i = 0; i <= featuresCount; i++) {
     const feature = {
       featureName: features[i],
       featureId: faker.random.uuid(),
