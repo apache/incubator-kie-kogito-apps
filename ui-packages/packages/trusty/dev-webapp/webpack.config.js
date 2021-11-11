@@ -3,19 +3,7 @@ const webpack = require('webpack');
 
 const path = require('path');
 
-const HOST = process.env.HOST || 'localhost';
-const PORT = process.env.PORT || '9000';
-
 module.exports = {
-  mode: 'development',
-  entry: {
-    app: path.resolve(__dirname, './index.tsx')
-  },
-  output: {
-    path: path.resolve('../dist-dev'),
-    filename: '[name].js',
-    publicPath: '/'
-  },
   plugins: [
     new CopyPlugin({
       patterns: [
@@ -29,18 +17,6 @@ module.exports = {
       KOGITO_TRUSTY_API_HTTP_URL: 'http://localhost:1336'
     })
   ],
-  devtool: 'source-map',
-  devServer: {
-    contentBase: path.join(__dirname),
-    host: HOST,
-    port: PORT,
-    compress: true,
-    inline: true,
-    historyApiFallback: true,
-    hot: true,
-    overlay: true,
-    open: true
-  },
   module: {
     rules: [
       {
@@ -55,14 +31,6 @@ module.exports = {
             }
           }
         ]
-      },
-      {
-        test: /\.css$/,
-        use: ['style-loader', 'css-loader']
-      },
-      {
-        test: /\.s[ac]ss$/i,
-        use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
         test: /\.(svg|ttf|eot|woff|woff2)$/,

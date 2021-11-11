@@ -103,6 +103,7 @@ module.exports = {
     react: 'umd react',
     'react-dom': 'umd react-dom',
     'react-router-dom': 'umd react-router-dom',
-    'react-router': 'umd react-router'
+    'react-router': 'umd react-router',
+    '@patternfly/react-core': 'umd @patternfly/react-core'
   }
 };
