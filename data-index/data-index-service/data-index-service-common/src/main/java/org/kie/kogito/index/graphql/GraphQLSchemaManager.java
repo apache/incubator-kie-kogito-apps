@@ -123,6 +123,13 @@ public class GraphQLSchemaManager {
                     builder.dataFetcher("NodeInstanceCancel", this::cancelNodeInstance);
                     builder.dataFetcher("JobCancel", this::cancelJob);
                     builder.dataFetcher("JobReschedule", this::rescheduleJob);
+                    builder.dataFetcher("UserTaskInstanceUpdate", this::updateUserTaskInstance);
+                    builder.dataFetcher("UserTaskInstanceCommentCreate", this::createTaskInstanceComment);
+                    builder.dataFetcher("UserTaskInstanceAttachmentCreate", this::createTaskInstanceAttachment);
+                    builder.dataFetcher("UserTaskInstanceCommentUpdate", this::updateUserTaskComment);
+                    builder.dataFetcher("UserTaskInstanceCommentDelete", this::deleteUserTaskComment);
+                    builder.dataFetcher("UserTaskInstanceAttachmentUpdate", this::updateUserTaskAttachment);
+                    builder.dataFetcher("UserTaskInstanceAttachmentDelete", this::deleteUserTaskAttachment);
                     return builder;
                 })
                 .type("ProcessInstance", builder -> {
@@ -131,6 +138,10 @@ public class GraphQLSchemaManager {
                     builder.dataFetcher("serviceUrl", this::getProcessInstanceServiceUrl);
                     builder.dataFetcher("diagram", this::getProcessInstanceDiagram);
                     builder.dataFetcher("nodeDefinitions", this::getProcessNodes);
+                    return builder;
+                })
+                .type("UserTaskInstance", builder -> {
+                    builder.dataFetcher("schema", this::getUserTaskInstanceSchema);
                     return builder;
                 })
                 .type("ProcessInstanceMeta", builder -> {
@@ -271,6 +282,89 @@ public class GraphQLSchemaManager {
         query.filter(singletonList(equalTo("id", source.getParentProcessInstanceId())));
         List<ProcessInstance> execute = query.execute();
         return execute.size() > 0 ? execute.get(0) : null;
+    }
+
+    private CompletableFuture getUserTaskInstanceSchema(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = env.getSource();
+        return dataIndexApiExecutor.getUserTaskSchema(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"));
+    }
+
+    private CompletableFuture<String> updateUserTaskInstance(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
+        return dataIndexApiExecutor.updateUserTaskInstance(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArguments());
+    }
+
+    private CompletableFuture<String> createTaskInstanceComment(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
+        return dataIndexApiExecutor.createUserTaskInstanceComment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("comment"));
+    }
+
+    private CompletableFuture<String> createTaskInstanceAttachment(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
+        return dataIndexApiExecutor.createUserTaskInstanceAttachment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("name"),
+                env.getArgument("uri"));
+    }
+
+    private CompletableFuture<String> updateUserTaskComment(DataFetchingEnvironment env) {
+        Query<UserTaskInstance> query = cacheService.getUserTaskInstancesCache().query();
+        query.filter(singletonList(equalTo("comments.id", env.getArgument("commentId"))));
+        UserTaskInstance userTaskInstance = query.execute().get(0);
+        return dataIndexApiExecutor.updateUserTaskInstanceComment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("commentId"),
+                env.getArgument("comment"));
+    }
+
+    private CompletableFuture<String> deleteUserTaskComment(DataFetchingEnvironment env) {
+        Query<UserTaskInstance> query = cacheService.getUserTaskInstancesCache().query();
+        query.filter(singletonList(equalTo("comments.id", env.getArgument("commentId"))));
+        UserTaskInstance userTaskInstance = query.execute().get(0);
+        return dataIndexApiExecutor.deleteUserTaskInstanceComment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("commentId"));
+    }
+
+    private CompletableFuture<String> updateUserTaskAttachment(DataFetchingEnvironment env) {
+        Query<UserTaskInstance> query = cacheService.getUserTaskInstancesCache().query();
+        query.filter(singletonList(equalTo("attachments.id", env.getArgument("attachmentId"))));
+        UserTaskInstance userTaskInstance = query.execute().get(0);
+        return dataIndexApiExecutor.updateUserTaskInstanceAttachment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("attachmentId"),
+                env.getArgument("name"),
+                env.getArgument("uri"));
+    }
+
+    private CompletableFuture<String> deleteUserTaskAttachment(DataFetchingEnvironment env) {
+        Query<UserTaskInstance> query = cacheService.getUserTaskInstancesCache().query();
+        query.filter(singletonList(equalTo("attachments.id", env.getArgument("attachmentId"))));
+        UserTaskInstance userTaskInstance = query.execute().get(0);
+        return dataIndexApiExecutor.deleteUserTaskInstanceAttachment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("attachmentId"));
     }
 
     private Collection<ProcessInstance> getProcessInstancesValues(DataFetchingEnvironment env) {

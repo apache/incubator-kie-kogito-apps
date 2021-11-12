@@ -68,8 +68,7 @@ class FraudScoringDmnLimeExplainerTest {
         Prediction prediction = new SimplePrediction(predictionInput, predictionOutputs.get(0));
 
         Random random = new Random();
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(0L, random, 1);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
@@ -138,10 +137,10 @@ class FraudScoringDmnLimeExplainerTest {
         List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
+        long seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(true);
         Random random = new Random();
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
@@ -159,17 +158,42 @@ class FraudScoringDmnLimeExplainerTest {
     }
 
     @Test
+    void testExplanationWithDataDistribution() throws ExecutionException, InterruptedException, TimeoutException {
+        PredictionProvider model = getModel();
+
+        List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
+        List<PredictionInput> inputs = samples.subList(0, 10);
+
+        Random random = new Random();
+        random.setSeed(0);
+        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        LimeConfig initialConfig = new LimeConfig()
+                .withSamples(10)
+                .withDataDistribution(new PredictionInputsDataDistribution(inputs))
+                .withPerturbationContext(perturbationContext);
+
+        LimeExplainer limeExplainer = new LimeExplainer(initialConfig);
+        PredictionInput testPredictionInput = getTestInput();
+        List<PredictionOutput> testPredictionOutputs = model.predictAsync(List.of(testPredictionInput))
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        Prediction instance = new SimplePrediction(testPredictionInput, testPredictionOutputs.get(0));
+
+        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, instance, limeExplainer, 1,
+                0.5, 0.5));
+    }
+
+    @Test
     void testExplanationImpactScoreWithOptimization() throws ExecutionException, InterruptedException, TimeoutException {
         PredictionProvider model = getModel();
 
         List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 10)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore().withSampling(false);
+        long seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(true).forImpactScore().withSampling(false);
 
         Random random = new Random();
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
@@ -186,10 +210,10 @@ class FraudScoringDmnLimeExplainerTest {
         List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(0.4, 0.6);
+        long seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(true).withWeightedStability(0.4, 0.6);
         Random random = new Random();
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);

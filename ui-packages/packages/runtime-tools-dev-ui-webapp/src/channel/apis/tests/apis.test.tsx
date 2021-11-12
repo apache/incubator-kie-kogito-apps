@@ -18,29 +18,34 @@ import axios from 'axios';
 import { GraphQL } from '@kogito-apps/consoles-common';
 import wait from 'waait';
 import {
+  getFormContent,
+  getForms,
   getSvg,
+  getTriggerableNodes,
+  handleJobReschedule,
+  handleNodeInstanceCancel,
+  handleNodeInstanceRetrigger,
+  handleNodeTrigger,
   handleProcessAbort,
+  handleProcessMultipleAction,
   handleProcessRetry,
   handleProcessSkip,
-  handleJobReschedule,
-  handleProcessMultipleAction,
-  jobCancel,
-  performMultipleCancel,
-  getTriggerableNodes,
-  handleNodeTrigger,
   handleProcessVariableUpdate,
-  handleNodeInstanceRetrigger,
-  handleNodeInstanceCancel,
-  getForms
+  jobCancel,
+  performMultipleCancel
 } from '../apis';
 import {
   BulkProcessInstanceActionResponse,
-  OperationType,
-  ProcessInstanceState,
   MilestoneStatus,
-  NodeInstance
+  NodeInstance,
+  OperationType,
+  ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
 import { processInstance } from '../../ProcessList/tests/ProcessListGatewayApi.test';
+import { Form } from '@kogito-apps/form-details';
+import { FormType } from '@kogito-apps/forms-list';
+
+Date.now = jest.fn(() => 1592000000000); // UTC Fri Jun 12 2020 22:13:20
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 const processInstances = [
@@ -831,6 +836,48 @@ describe('handle node instance cancel', () => {
     mockedAxios.get.mockRejectedValue({ errorMessage: 'failed to load data' });
     try {
       await getForms(['form1']);
+    } catch (error) {
+      expect(error).toEqual({
+        errorMessage: 'failed to load data'
+      });
+    }
+  });
+
+  it('get form content query test - success', async () => {
+    const formName = 'form1';
+    const formContent: Form = {
+      formInfo: {
+        name: 'html_ITInterview',
+        type: FormType.HTML,
+        lastModified: new Date(Date.now())
+      },
+      source: '<div>test source</div>',
+      configuration: {
+        resources: {
+          styles: {
+            'bootstrap.min.css':
+              'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'
+          },
+          scripts: {
+            1: '1'
+          }
+        },
+        schema:
+          '{"$schema":"http://json-schema.org/draft-07/schema#","type":"object","properties":{"candidate":{"type":"object","properties":{"email":{"type":"string"},"name":{"type":"string"},"salary":{"type":"integer"},"skills":{"type":"string"}},"input":true},"approve":{"type":"boolean","output":true}}}'
+      }
+    };
+    mockedAxios.get.mockResolvedValue({
+      data: formContent
+    });
+    const result = await getFormContent(formName);
+    expect(result).toEqual(formContent);
+  });
+
+  it('get form content query test - failure', async () => {
+    const formName = 'form1';
+    mockedAxios.get.mockRejectedValue({ errorMessage: 'failed to load data' });
+    try {
+      await getFormContent(formName);
     } catch (error) {
       expect(error).toEqual({
         errorMessage: 'failed to load data'

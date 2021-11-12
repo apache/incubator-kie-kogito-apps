@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-import { FormDetailsDriver, FormDetailsChannelApi } from '../api';
+import {
+  FormDetailsDriver,
+  FormDetailsChannelApi,
+  Form,
+  FormContent
+} from '../api';
 
 /**
  * Implementation of the TaskInboxChannelApi delegating to a TaskInboxDriver
@@ -22,4 +27,15 @@ import { FormDetailsDriver, FormDetailsChannelApi } from '../api';
 export class FormDetailsChannelApiImpl implements FormDetailsChannelApi {
   // @ts-ignore
   constructor(private readonly driver: FormDetailsDriver) {}
+
+  formDetails__getFormContent(formName: string): Promise<Form> {
+    return this.driver.getFormContent(formName);
+  }
+
+  formDetails__saveFormContent(
+    formName: string,
+    formContent: FormContent
+  ): Promise<void> {
+    return this.driver.saveFormContent(formName, formContent);
+  }
 }

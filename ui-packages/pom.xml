@@ -38,6 +38,7 @@
       packages/task-inbox/coverage/lcov.info,
       packages/trusty/coverage/lcov.info,
       packages/forms-list/coverage/lcov.info,
+      packages/form-displayer/coverage/lcov.info,
       packages/form-details/coverage/lcov.info,
     </sonar.javascript.lcov.reportPaths>
   </properties>
@@ -91,6 +92,9 @@
             </fileset>
             <fileset>
               <directory>packages/forms-list/node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>packages/form-displayer/node_modules</directory>
             </fileset>
             <fileset>
               <directory>packages/form-details/node_modules</directory>
@@ -175,7 +179,6 @@
             </goals>
             <configuration>
               <skip>${skip.ui.build}</skip>
-              <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
               <arguments>run build:prod</arguments>
               <environmentVariables>
                 <KOGITO_APP_VERSION>${project.version}</KOGITO_APP_VERSION>
@@ -190,8 +193,18 @@
             <phase>test</phase>
             <configuration>
               <skip>${skip.ui.build}</skip>
-              <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
               <arguments>run test</arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>yarn-integration-test</id>
+            <goals>
+              <goal>yarn</goal>
+            </goals>
+            <phase>integration-test</phase>
+            <configuration>
+              <skip>${skip.ui.build}</skip>
+              <arguments>run test:it</arguments>
             </configuration>
           </execution>
         </executions>

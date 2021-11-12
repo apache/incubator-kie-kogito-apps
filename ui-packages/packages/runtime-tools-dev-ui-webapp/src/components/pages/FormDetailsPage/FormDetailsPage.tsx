@@ -14,24 +14,95 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react';
-import { Card, PageSection } from '@patternfly/react-core';
+import React, { useEffect, useState } from 'react';
+import {
+  Card,
+  Label,
+  PageSection,
+  Text,
+  TextVariants
+} from '@patternfly/react-core';
 import { OUIAProps, ouiaPageTypeAndObjectId } from '@kogito-apps/ouia-tools';
-import { PageSectionHeader } from '@kogito-apps/consoles-common';
-import FormDetailsContainer from '../../containers/FromDetailsContainer/FormDetailsContainer';
+import FormDetailsContainer from '../../containers/FormDetailsContainer/FormDetailsContainer';
 import '../../styles.css';
+import { useHistory } from 'react-router-dom';
+import { FormInfo } from '@kogito-apps/forms-list';
+import { PageTitle } from '@kogito-apps/consoles-common';
+import Moment from 'react-moment';
+import FormNotification, {
+  Notification
+} from '../TaskDetailsPage/components/FormNotification/FormNotification';
 
 const FormDetailsPage: React.FC<OUIAProps> = () => {
+  const [notification, setNotification] = useState<Notification>();
+
   useEffect(() => {
     return ouiaPageTypeAndObjectId('form-detail');
   });
+  const history = useHistory();
+  const formData: FormInfo = history.location.state['formData'];
+
+  const onSuccess = () => {
+    const message = `The form '${formData.name}.${formData.type}' has been successfully saved.`;
+
+    showNotification('success', message);
+  };
+
+  const onError = (details?: string) => {
+    const message = `The form '${formData.name}.${formData.type}' couldn't be saved.`;
+
+    showNotification('error', message, details);
+  };
+
+  const showNotification = (
+    notificationType: 'error' | 'success',
+    submitMessage: string,
+    notificationDetails?: string
+  ) => {
+    setNotification({
+      type: notificationType,
+      message: submitMessage,
+      details: notificationDetails,
+      close: () => {
+        setNotification(null);
+      }
+    });
+  };
+
+  const getFormType = (type: string): string => {
+    if (type.toLowerCase() === 'html') {
+      return 'HTML';
+    } else if (type.toLowerCase() === 'tsx') {
+      return 'REACT';
+    } else {
+      return type;
+    }
+  };
 
   return (
     <React.Fragment>
-      <PageSectionHeader titleText="Form Detail" />
+      <PageSection variant="light">
+        <PageTitle
+          title={formData.name}
+          extra={<Label variant="outline">{getFormType(formData.type)}</Label>}
+        />
+        <Text component={TextVariants.p} style={{ marginTop: '10px' }}>
+          <span style={{ fontWeight: 'bold' }}>Last modified:</span>{' '}
+          <Moment fromNow>{formData.lastModified}</Moment>
+        </Text>
+        {notification && (
+          <div className="kogito-task-console__task-details-page">
+            <FormNotification notification={notification} />
+          </div>
+        )}
+      </PageSection>
       <PageSection>
         <Card className="Dev-ui__card-size">
-          <FormDetailsContainer />
+          <FormDetailsContainer
+            formData={formData}
+            onSuccess={onSuccess}
+            onError={onError}
+          />
         </Card>
       </PageSection>
     </React.Fragment>

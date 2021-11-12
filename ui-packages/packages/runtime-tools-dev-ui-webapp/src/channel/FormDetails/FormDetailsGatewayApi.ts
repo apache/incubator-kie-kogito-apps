@@ -13,45 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-export interface OnOpenFormDetailsListener {
-  onOpen(name: string): void;
-}
 
-export interface FormDetailsUnSubscribeHandler {
-  unSubscribe: () => void;
-}
+import { Form, FormContent } from '@kogito-apps/form-details';
+
+import { getFormContent, saveFormContent } from '../apis';
 
 export interface FormDetailsGatewayApi {
-  openFormDetails(name: string): Promise<void>;
-  onOpenFormDetailsListener: (
-    listener: OnOpenFormDetailsListener
-  ) => FormDetailsUnSubscribeHandler;
+  getFormContent: (formName: string) => Promise<Form>;
+  saveFormContent: (formName: string, content: FormContent) => Promise<void>;
 }
 
 export class FormDetailsGatewayApiImpl implements FormDetailsGatewayApi {
-  //@ts-ignore
-  private readonly queries: FormDetailsQueries;
-  private readonly listeners: OnOpenFormDetailsListener[] = [];
-
-  openFormDetails(name: string): Promise<void> {
-    this.listeners.forEach(listener => listener.onOpen(name));
-    return Promise.resolve();
+  getFormContent(formName: string): Promise<Form> {
+    return getFormContent(formName);
   }
 
-  onOpenFormDetailsListener(
-    listener: OnOpenFormDetailsListener
-  ): FormDetailsUnSubscribeHandler {
-    this.listeners.push(listener);
-
-    const unSubscribe = () => {
-      const index = this.listeners.indexOf(listener);
-      if (index > -1) {
-        this.listeners.splice(index, 1);
-      }
-    };
-
-    return {
-      unSubscribe
-    };
+  saveFormContent(formName: string, content: FormContent): Promise<void> {
+    return saveFormContent(formName, content);
   }
 }

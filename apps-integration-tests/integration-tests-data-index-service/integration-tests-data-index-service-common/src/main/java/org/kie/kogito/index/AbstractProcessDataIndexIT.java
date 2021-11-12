@@ -15,9 +15,16 @@
  */
 package org.kie.kogito.index;
 
+import java.io.IOException;
 import java.time.Duration;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonNode;
+import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
@@ -29,9 +36,12 @@ import static io.restassured.RestAssured.given;
 import static java.util.Collections.singletonMap;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public abstract class AbstractProcessDataIndexIT {
 
@@ -49,10 +59,6 @@ public abstract class AbstractProcessDataIndexIT {
         return true;
     }
 
-    public boolean checkRuntimeConnectionsResponses() {
-        return true;
-    }
-
     public RequestSpecification dataIndexSpec() {
         if (spec == null) {
             spec = new RequestSpecBuilder().setBaseUri(getDataIndexURL()).build();
@@ -61,7 +67,7 @@ public abstract class AbstractProcessDataIndexIT {
     }
 
     @Test
-    public void testProcessInstanceEvents() {
+    public void testProcessInstanceEvents() throws IOException {
         String pId = given()
                 .contentType(ContentType.JSON)
                 .body("{\"traveller\" : {\"firstName\" : \"Darth\",\"lastName\" : \"Vader\",\"email\" : \"darth.vader@deathstar.com\",\"nationality\" : \"Tatooine\"}}")
@@ -222,149 +228,336 @@ public abstract class AbstractProcessDataIndexIT {
                             .body("data.Approvals[0].metadata.userTasks", is(notNullValue()))
                             .body("data.Approvals[0].metadata.userTasks.size()", is(2)));
         }
+        testProcessGatewayAPI();
+    }
 
+    public void testProcessGatewayAPI() throws IOException {
         String pId2 = createTestProcessInstance();
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> getProcessInstanceById(pId2, "ACTIVE"));
-        if (checkRuntimeConnectionsResponses()) {
-            await()
-                    .atMost(TIMEOUT)
-                    .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                            .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { nodeDefinitions {id} nodes {id}} }\"}")
-                            .when().post("/graphql")
-                            .then()
-                            .statusCode(200)
-                            .body("data.ProcessInstances[0].nodeDefinitions", notNullValue())
-                            .body("data.ProcessInstances[0].nodeDefinitions.size()", is(4))
-                            .body("data.ProcessInstances[0].nodes.size()", is(2)));
 
-            String vars = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { variables} }\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200).extract().path("data.ProcessInstances[0].variables");
-            if (vars != null) {
-                await()
-                        .atMost(TIMEOUT)
-                        .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                                .body("{ \"query\" : \"mutation{ ProcessInstanceUpdateVariables(id:\\\"" + pId2 + "\\\", variables:\\\"" +
-                                        vars.replace("Darth", "Anakin")
-                                                .replace("\"", "\\\\\\\"")
-                                        + "\\\")}\"}")
-                                .when().post("/graphql")
-                                .then()
-                                .statusCode(200)
-                                .body("errors", nullValue()));
-                given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { variables} }\"}")
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { nodeDefinitions {id} nodes {id}} }\"}")
                         .when().post("/graphql")
                         .then()
                         .statusCode(200)
-                        .body("data.ProcessInstances[0].variables", containsString("Anakin"));
-            }
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ NodeInstanceTrigger(id:\\\"" + pId2 + "\\\", nodeId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200)
-                    .body("errors", nullValue());
+                        .body("data.ProcessInstances[0].nodeDefinitions", notNullValue())
+                        .body("data.ProcessInstances[0].nodeDefinitions.size()", is(4))
+                        .body("data.ProcessInstances[0].nodes.size()", is(2)));
 
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ NodeInstanceRetrigger(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200)
-                    .body("errors[0].message", containsString("FAILED: Retrigger NodeInstance"));
+        final String taskId = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { id description potentialGroups } }\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.UserTaskInstances[0].description", nullValue())
+                .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"))
+                .extract().path("data.UserTaskInstances[0].id");
 
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ NodeInstanceCancel(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200)
-                    .body("errors[0].message", notNullValue());
+        String taskSchema = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ UserTaskInstances (where: {id: {equal:\\\"" + taskId + "\\\" }}){ " +
+                        "schema ( user: \\\"manager\\\", groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"] )" +
+                        "}}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors", nullValue())
+                .extract().path("data.UserTaskInstances[0].schema");
+        checkExpectedTaskSchema(taskSchema);
 
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"mutation{ UserTaskInstanceUpdate(" +
+                                "taskId: \\\"" + taskId + "\\\", " +
+                                "user: \\\"manager\\\", " +
+                                "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
+                                "description: \\\"NewDescription\\\", " +
+                                "priority: \\\"low\\\" " +
+                                ")}\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("errors", nullValue()));
+
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + pId2 + "\\\"}}) { " +
+                                "id description priority potentialGroups comments {id} attachments {id}} }\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
+                        .body("data.UserTaskInstances[0].priority", equalTo("low"))
+                        .body("data.UserTaskInstances[0].comments.size()", is(0))
+                        .body("data.UserTaskInstances[0].attachments.size()", is(0))
+                        .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers")));
+
+        testProcessGatewayAPIComments(taskId, pId2);
+        testProcessGatewayAPIAttachments(taskId, pId2);
+
+        String vars = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { variables} }\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200).extract().path("data.ProcessInstances[0].variables");
+
+        if (vars != null) {
             await()
-                    .atMost(TIMEOUT).untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                            .body("{ \"query\" : \"mutation {ProcessInstanceAbort( id: \\\"" + pId2 + "\\\")}\"}")
+                    .atMost(TIMEOUT)
+                    .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                            .body("{ \"query\" : \"mutation{ ProcessInstanceUpdateVariables(id:\\\"" + pId2 + "\\\", variables:\\\"" +
+                                    vars.replace("Darth", "Anakin")
+                                            .replace("\"", "\\\\\\\"")
+                                    + "\\\")}\"}")
                             .when().post("/graphql")
                             .then()
                             .statusCode(200)
                             .body("errors", nullValue()));
             await()
                     .atMost(TIMEOUT)
-                    .untilAsserted(() -> getProcessInstanceById(pId2, "ABORTED"));
-
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ ProcessInstanceRetry( id: \\\"" + pId2 + "\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200)
-                    .body("data.ProcessInstanceRetry", nullValue());
-
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ ProcessInstanceSkip( id: \\\"" + pId2 + "\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200)
-                    .body("errors[0].message", containsString("FAILED: SKIP"));
-
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ UndefinedMutation( id: \\\"" + pId2 + "\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200)
-                    .body("errors[0].message", containsString("Field 'UndefinedMutation' in type 'Mutation' is undefined"));
-        } else {
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ ProcessInstanceUpdateVariables(id:\\\"" + pId2 + "\\\", variables:\\\"{}\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200);
-
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ NodeInstanceTrigger(id:\\\"" + pId2 + "\\\", nodeId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200);
-
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ NodeInstanceRetrigger(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200);
-
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ NodeInstanceCancel(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200);
-
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation {ProcessInstanceAbort( id: \\\"" + pId2 + "\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200);
-
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ ProcessInstanceRetry( id: \\\"" + pId2 + "\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200);
-
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ ProcessInstanceSkip( id: \\\"" + pId2 + "\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200);
-
-            given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                    .body("{ \"query\" : \"mutation{ UndefinedMutation( id: \\\"" + pId2 + "\\\")}\"}")
-                    .when().post("/graphql")
-                    .then()
-                    .statusCode(200)
-                    .body("errors[0].message", containsString("Field 'UndefinedMutation' in type 'Mutation' is undefined"));
+                    .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                            .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { variables} }\"}")
+                            .when().post("/graphql")
+                            .then()
+                            .statusCode(200)
+                            .body("data.ProcessInstances[0].variables", containsString("Anakin")));
         }
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ NodeInstanceTrigger(id:\\\"" + pId2 + "\\\", nodeId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors", nullValue());
+
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ NodeInstanceRetrigger(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors[0].message", containsString("FAILED: Retrigger NodeInstance"));
+
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ NodeInstanceCancel(id:\\\"" + pId2 + "\\\", nodeInstanceId:\\\"_8B62D3CA-5D03-4B2B-832B-126469288BB4\\\")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors[0].message", notNullValue());
+
+        await()
+                .atMost(TIMEOUT).untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"mutation {ProcessInstanceAbort( id: \\\"" + pId2 + "\\\")}\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("errors", nullValue()));
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> getProcessInstanceById(pId2, "ABORTED"));
+
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ ProcessInstanceRetry( id: \\\"" + pId2 + "\\\")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.ProcessInstanceRetry", nullValue());
+
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ ProcessInstanceSkip( id: \\\"" + pId2 + "\\\")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors[0].message", containsString("FAILED: SKIP"));
+
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ UndefinedMutation( id: \\\"" + pId2 + "\\\")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors[0].message", containsString("Field 'UndefinedMutation' in type 'Mutation' is undefined"));
+
+    }
+
+    public void testProcessGatewayAPIComments(String taskId, String processInstanceId) throws IOException {
+        String commentContent = "NewTaskComment";
+        String commentCreationResult = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ UserTaskInstanceCommentCreate(" +
+                        "taskId: \\\"" + taskId + "\\\", " +
+                        "user: \\\"manager\\\", " +
+                        "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
+                        "comment: \\\"" + commentContent + "\\\" " +
+                        ")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors", nullValue())
+                .extract().path("data.UserTaskInstanceCommentCreate");
+
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().contentType(ContentType.JSON)
+                        .when()
+                        .queryParam("user", "manager")
+                        .queryParam("group", "managers")
+                        .pathParam("id", processInstanceId)
+                        .pathParam("taskId", taskId)
+                        .get("/approvals/{id}/firstLineApproval/{taskId}/comments")
+                        .then()
+                        .statusCode(200)
+                        .body("$.size", is(1))
+                        .body("[0].content", is(commentContent)));
+
+        Map commentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                        "id description priority potentialGroups comments {id content updatedBy updatedAt} } }\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
+                .body("data.UserTaskInstances[0].priority", equalTo("low"))
+                .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"))
+                .body("data.UserTaskInstances[0].comments.size()", is(1))
+                .extract().jsonPath().getMap("data.UserTaskInstances[0].comments[0]");
+        checkExpectedCreatedItemData(commentCreationResult, commentMap);
+        String newCommentContent = "newCommentContent";
+        String commentUpdateResult = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation { UserTaskInstanceCommentUpdate ( " +
+                        "user: \\\"manager\\\", " +
+                        "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
+                        "commentId:  \\\"" + commentMap.get("id") + "\\\"" +
+                        "comment:  \\\"" + newCommentContent + "\\\"" +
+                        ")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors", nullValue())
+                .extract().path("data.UserTaskInstanceCommentUpdate");
+
+        Map comment2Map = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                        "comments {id content updatedBy updatedAt} } }\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.UserTaskInstances[0].comments.size()", is(1))
+                .extract().jsonPath().getMap("data.UserTaskInstances[0].comments[0]");
+
+        checkExpectedCreatedItemData(commentUpdateResult, comment2Map);
+
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation { UserTaskInstanceCommentDelete ( " +
+                        "user: \\\"manager\\\", " +
+                        "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
+                        "commentId:  \\\"" + commentMap.get("id") + "\\\"" +
+                        ")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors", nullValue());
+
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                        "comments {id} } }\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.UserTaskInstances[0].comments.size()", is(0));
+    }
+
+    public void testProcessGatewayAPIAttachments(String taskId, String processInstanceId) throws IOException {
+        String attachmentName = "NewTaskAttachmentName";
+        String attachmentCreationResult = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation{ UserTaskInstanceAttachmentCreate(" +
+                        "taskId: \\\"" + taskId + "\\\", " +
+                        "user: \\\"manager\\\", " +
+                        "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
+                        "name: \\\"" + attachmentName + "\\\", " +
+                        "uri: \\\"https://drive.google.com/file/d/1Z_Lipg2jzY9TNewTaskAttachmentUri\\\", " +
+                        ")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors", nullValue())
+                .extract().path("data.UserTaskInstanceAttachmentCreate");
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().contentType(ContentType.JSON)
+                        .when()
+                        .queryParam("user", "manager")
+                        .queryParam("group", "managers")
+                        .pathParam("id", processInstanceId)
+                        .pathParam("taskId", taskId)
+                        .get("/approvals/{id}/firstLineApproval/{taskId}/attachments")
+                        .then()
+                        .statusCode(200)
+                        .body("$.size", is(1))
+                        .body("[0].name", is(attachmentName)));
+
+        Map attachmentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                        "id description priority potentialGroups attachments {id name content updatedBy updatedAt} } }\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
+                .body("data.UserTaskInstances[0].priority", equalTo("low"))
+                .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"))
+                .body("data.UserTaskInstances[0].attachments.size()", is(1))
+                .body("data.UserTaskInstances[0].attachments[0].name", equalTo(attachmentName))
+                .extract().jsonPath().getMap("data.UserTaskInstances[0].attachments[0]");
+
+        checkExpectedCreatedItemData(attachmentCreationResult, attachmentMap);
+
+        String updatedAttachmentName = "newAttachmentContent";
+        String updatedAttachmentUri = "https://drive.google.com/file/d/1Z_Lipg2jzY9TUpdatedTaskAttachmentUri";
+        String attachmentUpdateResult = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation { UserTaskInstanceAttachmentUpdate ( " +
+                        "user: \\\"manager\\\", " +
+                        "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
+                        "attachmentId:  \\\"" + attachmentMap.get("id") + "\\\"" +
+                        "name:  \\\"" + updatedAttachmentName + "\\\"" +
+                        "uri:  \\\"" + updatedAttachmentUri + "\\\"" +
+                        ")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors", nullValue())
+                .extract().path("data.UserTaskInstanceAttachmentUpdate");
+
+        Map attachmentMap2 = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                        "attachments {id name content updatedBy updatedAt} } }\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.UserTaskInstances[0].attachments.size()", is(1))
+                .body("data.UserTaskInstances[0].attachments[0].name", equalTo(updatedAttachmentName))
+                .extract().jsonPath().getMap("data.UserTaskInstances[0].attachments[0]");
+
+        checkExpectedCreatedItemData(attachmentUpdateResult, attachmentMap2);
+
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"mutation { UserTaskInstanceAttachmentDelete ( " +
+                        "user: \\\"manager\\\", " +
+                        "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
+                        "attachmentId:  \\\"" + attachmentMap.get("id") + "\\\"" +
+                        ")}\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("errors", nullValue());
+
+        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                        "attachments {id} } }\"}")
+                .when().post("/graphql")
+                .then()
+                .statusCode(200)
+                .body("data.UserTaskInstances[0].attachments.size()", is(0));
     }
 
     protected String createTestProcessInstance() {
@@ -389,5 +582,55 @@ public abstract class AbstractProcessDataIndexIT {
                 .body("data.ProcessInstances[0].id", is(processInstanceId))
                 .body("data.ProcessInstances[0].processId", is("approvals"))
                 .body("data.ProcessInstances[0].state", is(state));
+    }
+
+    private void checkExpectedCreatedItemData(String creationData, Map resultMap) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode creationJsonNode = mapper.readTree(creationData);
+        assertEquals("\"" + resultMap.get("updatedBy") + "\"", creationJsonNode.at("/updatedBy").toString());
+        assertEquals(Date.from(ZonedDateTime.parse(resultMap.get("updatedAt").toString(), DateTimeFormatter.ISO_DATE_TIME).toInstant()),
+                Date.from(ZonedDateTime.parse(creationJsonNode.at("/updatedAt").asText(), DateTimeFormatter.ISO_DATE_TIME).toInstant()));
+        assertEquals("\"" + resultMap.get("content") + "\"", creationJsonNode.at("/content").toString());
+    }
+
+    private void checkExpectedTaskSchema(String taskSchema) throws IOException {
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode schemaJsonNode = mapper.readTree(taskSchema);
+        assertEquals("\"object\"", schemaJsonNode.at("/type").toString());
+
+        assertEquals(4, schemaJsonNode.at("/phases").size());
+        assertTrue(schemaJsonNode.get("phases").toString().contains("abort"));
+        assertTrue(schemaJsonNode.get("phases").toString().contains("claim"));
+        assertTrue(schemaJsonNode.get("phases").toString().contains("skip"));
+        assertTrue(schemaJsonNode.get("phases").toString().contains("complete"));
+
+        assertEquals(2, schemaJsonNode.at("/properties").size());
+
+        assertEquals("true", schemaJsonNode.at("/properties/approved/output").toString());
+        assertEquals("\"boolean\"", schemaJsonNode.at("/properties/approved/type").toString());
+
+        assertEquals("\"object\"", schemaJsonNode.at("/properties/traveller/type").toString());
+        assertEquals("true", schemaJsonNode.at("/properties/traveller/input").toString());
+        assertEquals(6, schemaJsonNode.at("/properties/traveller/properties").size());
+        assertEquals("\"object\"", schemaJsonNode.at("/properties/traveller/properties/address/type").toString());
+        assertEquals(4, schemaJsonNode.at("/properties/traveller/properties/address/properties").size());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/address/properties/city/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/address/properties/country/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/address/properties/street/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/address/properties/zipCode/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/email/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/firstName/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/lastName/type").toString());
+        assertEquals("\"string\"",
+                schemaJsonNode.at("/properties/traveller/properties/nationality/type").toString());
+        assertEquals("\"boolean\"",
+                schemaJsonNode.at("/properties/traveller/properties/processed/type").toString());
     }
 }

@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.local.counterfactual;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -46,29 +47,55 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
     private static final Logger logger =
             LoggerFactory.getLogger(CounterFactualScoreCalculator.class);
 
-    public static Double outputDistance(Output a, Output b) throws IllegalArgumentException {
-        double distance = 0.0;
+    public static Double outputDistance(Output prediction, Output goal) throws IllegalArgumentException {
+        return outputDistance(prediction, goal, 0.0);
+    }
 
-        final Type aType = a.getType();
-        final Type bType = b.getType();
+    public static Double outputDistance(Output prediction, Output goal, double threshold) throws IllegalArgumentException {
+        final Type predictionType = prediction.getType();
+        final Type goalType = goal.getType();
 
-        if (aType != bType) {
+        if (predictionType != goalType) {
             String message = String.format("Features must have the same type. Feature '%s', has type '%s' and '%s'",
-                    a.getName(), aType.toString(), bType.toString());
+                    prediction.getName(), predictionType.toString(), goalType.toString());
             logger.error(message);
             throw new IllegalArgumentException(message);
         }
 
-        if (a.getType() == Type.NUMBER) {
-            distance = a.getValue().asNumber() - b.getValue().asNumber();
-        } else if (a.getType() == Type.CATEGORICAL || a.getType() == Type.BOOLEAN) {
-            distance = a.getValue().getUnderlyingObject().equals(b.getValue().getUnderlyingObject()) ? 0.0 : 1.0;
+        if (prediction.getType() == Type.NUMBER) {
+            final double predictionValue = prediction.getValue().asNumber();
+            final double goalValue = goal.getValue().asNumber();
+            final double difference = Math.abs(predictionValue - goalValue);
+            // If any of the values is zero use the difference instead of change
+            // If neither of the values is zero use the change rate
+            double distance;
+            if (Double.isNaN(predictionValue) || Double.isNaN(goalValue)) {
+                String message = String.format("Unsupported NaN or NULL for numeric feature '%s'", prediction.getName());
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+            }
+            if (predictionValue == 0 || goalValue == 0) {
+                distance = difference;
+            } else {
+                distance = difference / Math.max(predictionValue, goalValue);
+            }
+            if (distance < threshold) {
+                return 0d;
+            } else {
+                return distance;
+            }
+
+        } else if (prediction.getType() == Type.CATEGORICAL || prediction.getType() == Type.BOOLEAN
+                || prediction.getType() == Type.TEXT) {
+            final Object goalValueObject = goal.getValue().getUnderlyingObject();
+            final Object predictionValueObject = prediction.getValue().getUnderlyingObject();
+            return Objects.equals(goalValueObject, predictionValueObject) ? 0.0 : 1.0;
         } else {
-            String message = String.format("Feature '%s' has unsupported type '%s'", a.getName(), aType.toString());
+            String message =
+                    String.format("Feature '%s' has unsupported type '%s'", prediction.getName(), predictionType.toString());
             logger.error(message);
             throw new IllegalArgumentException(message);
         }
-        return distance;
     }
 
     /**
@@ -142,8 +169,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 for (int i = 0; i < numberOutputs; i++) {
                     final Output output = outputs.get(i);
                     final Output goalOutput = goal.get(i);
-                    final double d = CounterFactualScoreCalculator.outputDistance(output, goalOutput);
+                    final double d =
+                            CounterFactualScoreCalculator.outputDistance(output, goalOutput, solution.getGoalThreshold());
                     outputDistance += d * d;
+
                     if (output.getScore() < goalOutput.getScore()) {
                         tertiaryHardScore -= 1;
                     }

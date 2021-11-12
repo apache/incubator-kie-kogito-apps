@@ -26,6 +26,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.api.pmml.PMML4Result;
 import org.kie.kogito.explainability.Config;
@@ -58,25 +59,25 @@ import static org.kie.pmml.evaluator.assembler.factories.PMMLRuntimeFactoryInter
 class PmmlRegressionCategoricalLimeExplainerTest {
 
     private static PMMLRuntime categoricalVariableRegressionRuntime;
-    private static final String[] CATEGORY_ONE = new String[] { "red", "blue", "green", "yellow", "grey", "pink", "white", "black" };
-    private static final String[] CATEGORY_TWO = new String[] { "classA", "classB", "classC", "NA" };
+    private static final String[] CATEGORY_ONE = new String[] { "red", "blue", "green", "yellow", "orange" };
+    private static final String[] CATEGORY_TWO = new String[] { "classA", "classB", "classC" };
 
     @BeforeAll
     static void setUpBefore() throws URISyntaxException {
         categoricalVariableRegressionRuntime = getPMMLRuntime(ResourceReaderUtils.getResourceAsFile("categoricalvariablesregression/categoricalVariablesRegression.pmml"));
     }
 
+    @Disabled("See KOGITO-6154")
     @Test
     void testPMMLRegressionCategorical() throws Exception {
 
         PredictionInput input = getTestInput();
 
         Random random = new Random();
-        random.setSeed(0);
         LimeConfig limeConfig = new LimeConfig()
                 .withSamples(10)
                 .withAdaptiveVariance(true)
-                .withPerturbationContext(new PerturbationContext(random, 1));
+                .withPerturbationContext(new PerturbationContext(0L, random, 1));
         LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
         PredictionProvider model = getModel();
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
@@ -106,6 +107,7 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         AssertionsForClassTypes.assertThat(f1).isBetween(0d, 1d);
     }
 
+    @Disabled("See KOGITO-6154")
     @Test
     void testExplanationStabilityWithOptimization() throws ExecutionException, InterruptedException, TimeoutException {
         PredictionProvider model = getModel();
@@ -113,10 +115,10 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         List<PredictionInput> samples = getSamples();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
+        long seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(true);
         Random random = new Random();
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
@@ -133,6 +135,7 @@ class PmmlRegressionCategoricalLimeExplainerTest {
                 0.6, 0.6));
     }
 
+    @Disabled("See KOGITO-6154")
     @Test
     void testExplanationImpactScoreWithOptimization() throws ExecutionException, InterruptedException, TimeoutException {
         PredictionProvider model = getModel();
@@ -140,10 +143,10 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         List<PredictionInput> samples = getSamples();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore();
+        long seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(true).forImpactScore();
         Random random = new Random();
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);
@@ -151,6 +154,7 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         assertThat(optimizedConfig).isNotSameAs(initialConfig);
     }
 
+    @Disabled("See KOGITO-6154")
     @Test
     void testExplanationWeightedStabilityWithOptimization() throws ExecutionException, InterruptedException, TimeoutException {
         PredictionProvider model = getModel();
@@ -158,10 +162,11 @@ class PmmlRegressionCategoricalLimeExplainerTest {
         List<PredictionInput> samples = getSamples();
         List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
         List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(0.4, 0.6);
+        long seed = 0;
+        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withDeterministicExecution(true).withWeightedStability(0.4, 0.6);
         Random random = new Random();
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
+        random.setSeed(seed);
+        PerturbationContext perturbationContext = new PerturbationContext(seed, random, 1);
         LimeConfig initialConfig = new LimeConfig()
                 .withSamples(10)
                 .withPerturbationContext(perturbationContext);

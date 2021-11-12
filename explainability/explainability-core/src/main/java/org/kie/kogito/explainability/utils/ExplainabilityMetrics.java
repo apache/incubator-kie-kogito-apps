@@ -155,6 +155,7 @@ public class ExplainabilityMetrics {
      * @param prediction the prediction on which explanation stability will be evaluated
      * @param saliencyLocalExplainer a local saliency explainer
      * @param topK no. of top k positive/negative features for which stability report will be generated
+     * @param runs no. of times the saliency for each prediction needs to be generated
      * @return a report about stability of all the decisions/predictions (and for each {@code k < topK})
      */
     public static LocalSaliencyStability getLocalSaliencyStability(PredictionProvider model, Prediction prediction,
@@ -166,10 +167,9 @@ public class ExplainabilityMetrics {
         LocalSaliencyStability saliencyStability = new LocalSaliencyStability(saliencies.keySet());
         // for each decision, calculate the stability rate for the top k important feature set, for each k < topK
         for (Map.Entry<String, List<Saliency>> entry : saliencies.entrySet()) {
+            String decision = entry.getKey();
+            List<Saliency> perDecisionSaliencies = entry.getValue();
             for (int k = 1; k <= topK; k++) {
-                String decision = entry.getKey();
-                List<Saliency> perDecisionSaliencies = entry.getValue();
-
                 int finalK = k;
                 // get the top k positive features list from each saliency and count the frequency of each such list across all saliencies
                 Map<List<String>, Long> topKPositive = getTopKFeaturesFrequency(perDecisionSaliencies, s -> s.getPositiveFeatures(finalK));
@@ -268,7 +268,7 @@ public class ExplainabilityMetrics {
             throws InterruptedException, ExecutionException, TimeoutException {
 
         // get all samples from the data distribution
-        List<Prediction> sorted = getScoreSortedPredictions(outputName, predictionProvider, dataDistribution);
+        List<Prediction> sorted = DataUtils.getScoreSortedPredictions(outputName, predictionProvider, dataDistribution);
 
         // get the top and bottom 'chunkSize' predictions
         List<Prediction> topChunk = new ArrayList<>(sorted.subList(0, chunkSize));
@@ -328,28 +328,6 @@ public class ExplainabilityMetrics {
         return replaceAllFeatures(importantFeatures, input);
     }
 
-    private static List<Prediction> getScoreSortedPredictions(String outputName, PredictionProvider predictionProvider,
-            DataDistribution dataDistribution)
-            throws InterruptedException, ExecutionException, TimeoutException {
-        List<PredictionInput> inputs = dataDistribution.getAllSamples();
-        List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(inputs)
-                .get(Config.DEFAULT_ASYNC_TIMEOUT, Config.DEFAULT_ASYNC_TIMEUNIT);
-        List<Prediction> predictions = DataUtils.getPredictions(inputs, predictionOutputs);
-
-        // sort the predictions by Output#getScore, in descending order
-        return predictions.stream().sorted((p1, p2) -> {
-            Optional<Output> optionalOutput1 = p1.getOutput().getByName(outputName);
-            Optional<Output> optionalOutput2 = p2.getOutput().getByName(outputName);
-            if (optionalOutput1.isPresent() && optionalOutput2.isPresent()) {
-                Output o1 = optionalOutput1.get();
-                Output o2 = optionalOutput2.get();
-                return Double.compare(o2.getScore(), o1.getScore());
-            } else {
-                return 0;
-            }
-        }).collect(Collectors.toList());
-    }
-
     /**
      * Evaluate the precision of a local saliency explainer on a given model.
      * Get the predictions having outputs with the lowest score for the given decision and pair them with predictions
@@ -372,7 +350,7 @@ public class ExplainabilityMetrics {
             LocalExplainer<Map<String, Saliency>> localExplainer,
             DataDistribution dataDistribution, int k, int chunkSize)
             throws InterruptedException, ExecutionException, TimeoutException {
-        List<Prediction> sorted = getScoreSortedPredictions(outputName, predictionProvider, dataDistribution);
+        List<Prediction> sorted = DataUtils.getScoreSortedPredictions(outputName, predictionProvider, dataDistribution);
 
         // get the top and bottom 'chunkSize' predictions
         List<Prediction> topChunk = new ArrayList<>(sorted.subList(0, chunkSize));

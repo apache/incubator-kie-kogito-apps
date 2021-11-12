@@ -7,7 +7,8 @@
     <local-cache name="{cache_name}" configuration="{template}">
       {/if}
     {/let}
-      <indexing storage="local-heap">
+      <encoding media-type="application/x-protostream"/>
+      <indexing storage="filesystem" path="data-index-{cache_name}">
         <indexed-entities>
           <indexed-entity>org.kie.kogito.index.model.KogitoMetadata</indexed-entity>
           <indexed-entity>org.kie.kogito.index.model.ProcessInstanceMeta</indexed-entity>

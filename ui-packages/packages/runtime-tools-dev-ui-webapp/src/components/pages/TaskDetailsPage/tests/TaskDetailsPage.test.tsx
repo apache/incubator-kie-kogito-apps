@@ -28,11 +28,7 @@ import TaskDetailsPage from '../TaskDetailsPage';
 import TaskFormContainer from '../../../containers/TaskFormContainer/TaskFormContainer';
 import FormNotification from '../components/FormNotification/FormNotification';
 
-import {
-  Button,
-  DrawerCloseButton,
-  DrawerPanelContent
-} from '@patternfly/react-core';
+import { Button, DrawerPanelContent } from '@patternfly/react-core';
 
 const userTask: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
@@ -355,20 +351,5 @@ describe('TaskDetailsPage tests', () => {
     expect(
       detailsPanel.find('EmbeddedTaskDetails').props().userTask
     ).toStrictEqual(userTask);
-
-    // close details drawer
-    await act(async () => {
-      detailsPanel
-        .find(DrawerCloseButton)
-        .find('button')
-        .simulate('click');
-    });
-    wrapper = wrapper.update();
-    expect(
-      wrapper
-        .find(DrawerPanelContent)
-        .find('EmbeddedTaskDetails')
-        .exists()
-    ).toBeFalsy();
   });
 });

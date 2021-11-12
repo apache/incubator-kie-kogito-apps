@@ -16,13 +16,9 @@ import { v4 as uuid } from 'uuid';
 import EvaluationStatus from '../../Atoms/EvaluationStatus/EvaluationStatus';
 import FormattedValue from '../../Atoms/FormattedValue/FormattedValue';
 import { LongArrowAltRightIcon } from '@patternfly/react-icons';
-import {
-  Outcome,
-  ItemObject,
-  isItemObjectArray,
-  isItemObjectMultiArray
-} from '../../../types';
+import { ItemObjectStructure, ItemObjectValue, Outcome } from '../../../types';
 import './Outcomes.scss';
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 
 type OutcomesProps =
   | {
@@ -32,10 +28,17 @@ type OutcomesProps =
     }
   | { outcomes: Outcome[]; listView?: false };
 
-const Outcomes = (props: OutcomesProps) => {
+const Outcomes: React.FC<OutcomesProps & OUIAProps> = (
+  props: OutcomesProps & OUIAProps
+) => {
+  const ouiaProps = componentOuiaProps(
+    props.ouiaId,
+    'outcomes',
+    props.ouiaSafe
+  );
   if (props.listView) {
     return (
-      <section className="outcomes">
+      <section className="outcomes" {...ouiaProps}>
         {props.outcomes.length && (
           <Gallery className="outcome-cards" hasGutter>
             {props.outcomes.map(item =>
@@ -48,20 +51,23 @@ const Outcomes = (props: OutcomesProps) => {
   }
 
   return (
-    <section className="outcomes">
+    <section className="outcomes" {...ouiaProps}>
       {props.outcomes.map(item => {
         if (
           item.outcomeResult !== null &&
-          item.outcomeResult.components !== null &&
-          isItemObjectMultiArray(item.outcomeResult.components)
+          item.outcomeResult.kind === 'COLLECTION'
         ) {
           return (
             <Gallery className="outcome-cards" hasGutter key={uuid()}>
-              {item.outcomeResult.components.map(subList => {
+              {item.outcomeResult.value.map(value => {
                 return (
                   <GalleryItem key={uuid()}>
                     <LightCard className="outcome-cards__card" isHoverable>
-                      <OutcomeSubList subListItem={subList} />
+                      <OutcomeSubList
+                        key={item.outcomeName}
+                        name={item.outcomeName}
+                        value={value}
+                      />
                     </LightCard>
                   </GalleryItem>
                 );
@@ -71,7 +77,7 @@ const Outcomes = (props: OutcomesProps) => {
         }
         return (
           <LightCard key={uuid()}>
-            {renderOutcome(item.outcomeResult, item.outcomeName, false, false)}
+            {renderOutcome(item.outcomeName, item.outcomeResult, false, false)}
           </LightCard>
         );
       })}
@@ -96,26 +102,31 @@ const renderCard = (
   }
   if (
     outcome.outcomeResult !== null &&
-    outcome.outcomeResult.components !== null &&
-    isItemObjectMultiArray(outcome.outcomeResult.components)
+    outcome.outcomeResult.kind === 'COLLECTION'
   ) {
-    return outcome.outcomeResult.components.map(item => (
-      <GalleryItem key={uuid()}>
-        <OutcomeCard
-          outcome={outcome}
-          onExplanation={onExplanation}
-          titleAsLabel
-        >
-          <OutcomeSubList subListItem={item} />
-        </OutcomeCard>
-      </GalleryItem>
-    ));
+    return outcome.outcomeResult.value.map(value => {
+      return (
+        <GalleryItem key={uuid()}>
+          <OutcomeCard
+            outcome={outcome}
+            onExplanation={onExplanation}
+            titleAsLabel
+          >
+            <OutcomeSubList
+              key={outcome.outcomeName}
+              name={outcome.outcomeName}
+              value={value}
+            />
+          </OutcomeCard>
+        </GalleryItem>
+      );
+    });
   }
 
   return (
     <GalleryItem key={uuid()}>
       <OutcomeCard outcome={outcome} onExplanation={onExplanation}>
-        {renderOutcome(outcome.outcomeResult, outcome.outcomeName, true, true)}
+        {renderOutcome(outcome.outcomeName, outcome.outcomeResult, true, true)}
       </OutcomeCard>
     </GalleryItem>
   );
@@ -128,16 +139,29 @@ type OutcomeCardProps = {
   titleAsLabel?: boolean;
 };
 
-const OutcomeCard = (props: OutcomeCardProps) => {
-  const { children, outcome, onExplanation, titleAsLabel = false } = props;
+const OutcomeCard: React.FC<OutcomeCardProps> = ({
+  children,
+  outcome,
+  onExplanation,
+  titleAsLabel = false
+}) => {
   return (
+    /*
+     * TODO: titleAsLabel is true when "components" is array.
+     * Only way to recognize the right card is array index.
+     */
     <Card
       className="outcome-cards__card outcome-cards__card--list-view"
+      ouiaId={outcome.outcomeName}
       isHoverable
     >
       <CardHeader>
         {titleAsLabel ? (
-          <Label className="outcome-cards__card__label" color="blue">
+          <Label
+            className="outcome-cards__card__label"
+            color="blue"
+            {...componentOuiaProps('card-label', 'label', true)}
+          >
             {outcome.outcomeName}
           </Label>
         ) : (
@@ -145,6 +169,7 @@ const OutcomeCard = (props: OutcomeCardProps) => {
             className="outcome-cards__card__title"
             headingLevel="h4"
             size="xl"
+            {...componentOuiaProps('card-title', 'title', true)}
           >
             {outcome.outcomeName}
           </Title>
@@ -166,8 +191,9 @@ const OutcomeCard = (props: OutcomeCardProps) => {
             onClick={() => {
               onExplanation(outcome.outcomeId);
             }}
+            ouiaId="view-detail"
           >
-            View Details <LongArrowAltRightIcon />
+            View details <LongArrowAltRightIcon />
           </Button>
         )}
       </CardFooter>
@@ -176,70 +202,88 @@ const OutcomeCard = (props: OutcomeCardProps) => {
 };
 
 const renderOutcome = (
-  outcomeData: ItemObject,
   name: string,
+  value: ItemObjectValue,
   compact = true,
   hidePropertyName = false
 ) => {
-  const renderItems: JSX.Element[] = [];
+  const renderedItems: JSX.Element[] = [];
 
-  if (outcomeData.components === null) {
+  if (value.kind === 'UNIT') {
     return (
       <OutcomeProperty
-        property={outcomeData}
-        key={outcomeData.name}
+        key={name}
+        name={name}
+        value={value}
         hidePropertyName={hidePropertyName}
       />
     );
   }
-  if (outcomeData.components.length) {
-    if (isItemObjectArray(outcomeData.components)) {
-      renderItems.push(
+
+  if (value.kind === 'STRUCTURE' || value.kind === 'COLLECTION') {
+    if (value.kind === 'STRUCTURE') {
+      renderedItems.push(
         <OutcomeComposed
-          outcome={outcomeData}
-          key={outcomeData.name}
-          compact={compact}
+          key={name}
           name={name}
+          value={value}
+          compact={compact}
         />
       );
-    } else if (isItemObjectMultiArray(outcomeData.components)) {
-      outcomeData.components.forEach(item => {
-        renderItems.push(<OutcomeSubList subListItem={item} />);
+    } else if (value.kind === 'COLLECTION') {
+      value.value.forEach(item => {
+        renderedItems.push(<OutcomeSubList name={name} value={item} />);
       });
     }
   }
 
   return (
     <React.Fragment key={uuid()}>
-      {renderItems.map((item: JSX.Element) => item)}
+      {renderedItems.map((item: JSX.Element) => item)}
     </React.Fragment>
   );
 };
 
 const OutcomeProperty = (props: {
-  property: ItemObject;
+  name: string;
+  value: ItemObjectValue;
   hidePropertyName: boolean;
 }) => {
-  const { property, hidePropertyName } = props;
+  const { name, value, hidePropertyName } = props;
   const basicTypes = ['string', 'number', 'boolean'];
   const bigOutcome =
     hidePropertyName &&
-    (basicTypes.includes(typeof property.value) || property.value === null);
+    (basicTypes.includes(typeof value.value) || value.value === null);
 
   if (bigOutcome) {
     return (
-      <div className="outcome__property__value--bigger">
-        <FormattedValue value={property.value} />
+      <div
+        className="outcome__property__value--bigger"
+        {...componentOuiaProps(name, 'simple-property-value', true)}
+      >
+        <FormattedValue value={value.value} />
       </div>
     );
   } else {
     return (
-      <Split key={uuid()} className="outcome__property">
-        <SplitItem className="outcome__property__name" key="property-name">
-          {hidePropertyName ? 'Result' : property.name}:
+      <Split
+        key={uuid()}
+        className="outcome__property"
+        {...componentOuiaProps(name, 'outcome-property', true)}
+      >
+        <SplitItem
+          className="outcome__property__name"
+          key="property-name"
+          {...componentOuiaProps(name, 'property-name', true)}
+        >
+          {hidePropertyName ? 'Result' : name}:
         </SplitItem>
-        <SplitItem className="outcome__property__value" key="property-value">
-          <FormattedValue value={property.value} />
+        <SplitItem
+          className="outcome__property__value"
+          key="property-value"
+          {...componentOuiaProps(name, 'property-value', true)}
+        >
+          <FormattedValue value={value.value} />
         </SplitItem>
       </Split>
     );
@@ -247,26 +291,36 @@ const OutcomeProperty = (props: {
 };
 
 const OutcomeComposed = (props: {
-  outcome: ItemObject;
-  compact: boolean;
   name: string;
+  value: ItemObjectStructure;
+  compact: boolean;
 }) => {
-  const { outcome, compact, name } = props;
+  const { name, value, compact } = props;
   const renderItems: JSX.Element[] = [];
 
-  for (const subItem of outcome.components as ItemObject[]) {
+  Object.entries(value.value).forEach(([key, value]) => {
     renderItems.push(
-      <div className="outcome-item" key={subItem.name}>
-        {renderOutcome(subItem, name, compact)}
+      <div
+        className="outcome-item"
+        key={key}
+        {...componentOuiaProps(name, 'outcome-subitem')}
+      >
+        {renderOutcome(key, value, compact)}
       </div>
     );
-  }
+  });
+
   return (
     <>
       <div className="outcome__title outcome__title--struct" key={uuid()}>
-        <span className="outcome__property__name">{outcome.name}</span>
+        <span
+          className="outcome__property__name"
+          {...componentOuiaProps('subitem-title', 'title')}
+        >
+          {name}
+        </span>
       </div>
-      <div className="outcome outcome--struct" key={outcome.name}>
+      <div className="outcome outcome--struct" key={name}>
         {renderItems.map(item => item)}
       </div>
     </>
@@ -274,26 +328,30 @@ const OutcomeComposed = (props: {
 };
 
 type OutcomeSubListProps = {
-  subListItem: ItemObject[];
+  name: string;
+  value: ItemObjectValue;
 };
 const OutcomeSubList = (props: OutcomeSubListProps) => {
-  const { subListItem } = props;
+  const { name, value } = props;
 
   return (
     <>
-      {subListItem &&
-        subListItem.map(item => (
-          <Split key={uuid()} className="outcome__property">
-            <SplitItem className="outcome__property__name" key="property-name">
-              {item.name}:
-            </SplitItem>
-            <SplitItem
-              className="outcome__property__value"
-              key="property-value"
-            >
-              <FormattedValue value={item.value} />
-            </SplitItem>
-          </Split>
+      {value.kind === 'UNIT' && (
+        <OutcomeProperty
+          key={name}
+          name={name}
+          value={value}
+          hidePropertyName={false}
+        />
+      )}
+      {value.kind === 'STRUCTURE' &&
+        Object.entries(value.value).map(([key, value]) => (
+          <OutcomeProperty
+            key={key}
+            name={key}
+            value={value}
+            hidePropertyName={false}
+          />
         ))}
     </>
   );
@@ -305,10 +363,19 @@ type LightCardProps = {
   isHoverable?: boolean;
 };
 
-const LightCard = (props: LightCardProps) => {
-  const { children, className = '', isHoverable = false } = props;
+const LightCard: React.FC<LightCardProps & OUIAProps> = ({
+  children,
+  className,
+  isHoverable,
+  ouiaId,
+  ouiaSafe
+}) => {
   return (
-    <Card className={className} isHoverable={isHoverable}>
+    <Card
+      className={className}
+      isHoverable={isHoverable}
+      {...componentOuiaProps(ouiaId, 'outcome-card', ouiaSafe)}
+    >
       <CardBody>{children}</CardBody>
     </Card>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useContext, useEffect, useState } from 'react';
 import {
   Nav,
   NavItem,
@@ -6,7 +6,8 @@ import {
   PageSection,
   PageSectionVariants,
   Stack,
-  StackItem
+  StackItem,
+  Tooltip
 } from '@patternfly/react-core';
 import {
   Link,
@@ -25,10 +26,15 @@ import SkeletonStripe from '../../Atoms/SkeletonStripe/SkeletonStripe';
 import SkeletonCards from '../../Molecules/SkeletonCards/SkeletonCards';
 import ExecutionDetail from '../ExecutionDetail/ExecutionDetail';
 import useDecisionOutcomes from './useDecisionOutcomes';
-import Explanation from '../Explanation/Explanation';
+import OutcomeDetails from '../OutcomeDetails/OutcomeDetails';
 import InputData from '../InputData/InputData';
 import ModelLookup from '../ModelLookup/ModelLookup';
+import Counterfactual from '../Counterfactual/Counterfactual';
+import { OutlinedQuestionCircleIcon } from '@patternfly/react-icons';
+import CounterfactualUnsupportedBanner from '../../Atoms/CounterfactualUnsupportedBanner/CounterfactualUnsupportedBanner';
+import NotFound from '../NotFound/NotFound';
 import './AuditDetail.scss';
+import { TrustyContext } from '../TrustyApp/TrustyApp';
 
 const AuditDetail = () => {
   const { path, url } = useRouteMatch();
@@ -36,9 +42,10 @@ const AuditDetail = () => {
   const { executionId } = useParams<ExecutionRouteParams>();
   const execution = useExecutionInfo(executionId);
   const outcomes = useDecisionOutcomes(executionId);
+  const { config } = useContext(TrustyContext);
 
   const [thirdLevelNav, setThirdLevelNav] = useState<
-    { url: string; desc: string }[]
+    { url: string; desc: string; icon?: ReactNode }[]
   >([]);
 
   useEffect(() => {
@@ -51,10 +58,29 @@ const AuditDetail = () => {
         });
       } else {
         newNav.push({ url: '/outcomes', desc: 'Outcomes' });
-        newNav.push({ url: '/outcomes-details', desc: 'Outcomes Details' });
+        newNav.push({ url: '/outcomes-details', desc: 'Outcomes details' });
       }
-      newNav.push({ url: '/input-data', desc: 'Input Data' });
-      newNav.push({ url: '/model-lookup', desc: 'Model Lookup' });
+      newNav.push({ url: '/input-data', desc: 'Input data' });
+      newNav.push({ url: '/model-lookup', desc: 'Model lookup' });
+      if (config.counterfactualEnabled) {
+        newNav.push({
+          url: '/counterfactual-analysis',
+          desc: 'Counterfactual analysis',
+          icon: (
+            <Tooltip
+              position="top"
+              content={
+                <div>
+                  Counterfactuals is an experimental feature and doesn&apos;t
+                  currently support all types of models.
+                </div>
+              }
+            >
+              <OutlinedQuestionCircleIcon title="Experimental feature" />
+            </Tooltip>
+          )
+        });
+      }
       setThirdLevelNav(newNav);
     }
   }, [outcomes]);
@@ -74,30 +100,49 @@ const AuditDetail = () => {
           </div>
         )}
         {thirdLevelNav.length > 0 && (
-          <Nav className="audit-detail__nav" variant="tertiary">
-            <NavList>
-              {thirdLevelNav.map((item, index) => (
-                <NavItem
-                  key={`sub-nav-${index}`}
-                  isActive={location.pathname === url + item.url}
-                >
-                  <Link to={url + item.url}>{item.desc}</Link>
-                </NavItem>
-              ))}
-            </NavList>
-          </Nav>
+          <>
+            {config.counterfactualEnabled && (
+              <CounterfactualUnsupportedBanner />
+            )}
+            <Nav
+              className="audit-detail__nav"
+              variant="tertiary"
+              ouiaId="nav-audit-detail"
+            >
+              <NavList>
+                {thirdLevelNav.map((item, index) => (
+                  <NavItem
+                    key={`sub-nav-${index}`}
+                    isActive={location.pathname === url + item.url}
+                    ouiaId={item.url.substr(1)}
+                  >
+                    <Link to={url + item.url}>
+                      <>
+                        {item.desc}
+                        {item.icon && (
+                          <span className={'audit-detail__nav__badge'}>
+                            {item.icon}
+                          </span>
+                        )}
+                      </>
+                    </Link>
+                  </NavItem>
+                ))}
+              </NavList>
+            </Nav>
+          </>
         )}
       </PageSection>
 
       <Switch>
         <Route path={`${path}/single-outcome`}>
-          <Explanation outcomes={outcomes} />
+          <OutcomeDetails outcomes={outcomes} />
         </Route>
         <Route path={`${path}/outcomes`}>
           <ExecutionDetail outcomes={outcomes} />
         </Route>
         <Route path={`${path}/outcomes-details`}>
-          <Explanation outcomes={outcomes} />
+          <OutcomeDetails outcomes={outcomes} />
         </Route>
         <Route path={`${path}/input-data`}>
           <InputData />
@@ -105,22 +150,30 @@ const AuditDetail = () => {
         <Route path={`${path}/model-lookup`}>
           <ModelLookup />
         </Route>
+        {config.counterfactualEnabled && (
+          <Route path={`${path}/counterfactual-analysis`}>
+            <Counterfactual />
+          </Route>
+        )}
         <Route exact path={`${path}/`}>
-          {outcomes.status === RemoteDataStatus.SUCCESS &&
-            outcomes.data.length === 1 && (
-              <Redirect
-                exact
-                from={path}
-                to={`${location.pathname}/single-outcome?outcomeId=${outcomes.data[0].outcomeId}`}
-              />
-            )}
-          {outcomes.status === RemoteDataStatus.SUCCESS &&
-            outcomes.data.length > 1 && (
-              <Redirect
-                exact
-                from={path}
-                to={`${location.pathname}/outcomes`}
-              />
+          {execution.status === RemoteDataStatus.SUCCESS &&
+            outcomes.status === RemoteDataStatus.SUCCESS && (
+              <>
+                {outcomes.data.length === 1 && (
+                  <Redirect
+                    exact
+                    from={path}
+                    to={`${location.pathname}/single-outcome?outcomeId=${outcomes.data[0].outcomeId}`}
+                  />
+                )}
+                {outcomes.data.length > 1 && (
+                  <Redirect
+                    exact
+                    from={path}
+                    to={`${location.pathname}/outcomes`}
+                  />
+                )}
+              </>
             )}
           {outcomes.status === RemoteDataStatus.LOADING && (
             <PageSection>
@@ -138,6 +191,8 @@ const AuditDetail = () => {
             </PageSection>
           )}
         </Route>
+        <Route path="/not-found" component={NotFound} />
+        <Redirect to="/not-found" />
       </Switch>
     </>
   );

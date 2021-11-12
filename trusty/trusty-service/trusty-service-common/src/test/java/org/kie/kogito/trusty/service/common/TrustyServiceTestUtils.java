@@ -29,7 +29,7 @@ import org.kie.kogito.cloudevents.CloudEventUtils;
 import org.kie.kogito.tracing.event.model.ModelEvent;
 import org.kie.kogito.tracing.event.trace.TraceEvent;
 import org.kie.kogito.tracing.event.trace.TraceHeader;
-import org.kie.kogito.trusty.service.common.messaging.incoming.ModelIdentifier;
+import org.kie.kogito.trusty.service.common.messaging.incoming.ModelMetadata;
 import org.kie.kogito.trusty.storage.api.model.Decision;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -125,8 +125,8 @@ public class TrustyServiceTestUtils {
         return readResourceAsString("/requests/counterfactualWithStructuredModelRequest.json");
     }
 
-    public static ModelIdentifier getModelIdentifier() {
-        return new ModelIdentifier("groupId", "artifactId", "version", "name", "namespace");
+    public static ModelMetadata getModelIdentifier() {
+        return new ModelMetadata("groupId", "artifactId", "version", "name", "namespace");
     }
 
     private static void setExecutionId(TraceEvent traceEvent, String executionId) {
