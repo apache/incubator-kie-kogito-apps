@@ -22,14 +22,17 @@ const goals: CFGoal[] = [
 ];
 
 const onClose = jest.fn();
-const verifyConfirmButtonState = (wrapper: ReactWrapper, state: boolean) => {
+const verifyConfirmButtonIsDisabled = (
+  wrapper: ReactWrapper,
+  disabled: boolean
+) => {
   expect(
     wrapper
       .find(
         'CounterfactualOutcomeSelection ButtonBase #confirm-outcome-selection'
       )
       .props()['aria-disabled']
-  ).toEqual(state);
+  ).toEqual(disabled);
 };
 
 describe('CounterfactualOutcomeSelection', () => {
@@ -55,7 +58,7 @@ describe('CounterfactualOutcomeSelection', () => {
     );
 
     //Confirmation button is disabled when all Goals equal their original values
-    verifyConfirmButtonState(wrapper, true);
+    verifyConfirmButtonIsDisabled(wrapper, true);
 
     wrapper
       .find('CounterfactualOutcomeSelection ButtonBase [aria-label="minus"]')
@@ -64,7 +67,7 @@ describe('CounterfactualOutcomeSelection', () => {
     wrapper.update();
 
     //Confirmation button is enabled when a goals is unequal to its original value
-    verifyConfirmButtonState(wrapper, false);
+    verifyConfirmButtonIsDisabled(wrapper, false);
   });
 
   test('Restore goal value to equal original value', () => {
@@ -77,7 +80,7 @@ describe('CounterfactualOutcomeSelection', () => {
     );
 
     //Confirmation button is disabled when all Goals equal their original values
-    verifyConfirmButtonState(wrapper, true);
+    verifyConfirmButtonIsDisabled(wrapper, true);
 
     wrapper
       .find('CounterfactualOutcomeSelection ButtonBase [aria-label="minus"]')
@@ -86,7 +89,7 @@ describe('CounterfactualOutcomeSelection', () => {
     wrapper.update();
 
     //Confirmation button is enabled when a goals is unequal to its original value
-    verifyConfirmButtonState(wrapper, false);
+    verifyConfirmButtonIsDisabled(wrapper, false);
 
     wrapper
       .find('CounterfactualOutcomeSelection ButtonBase [aria-label="plus"]')
@@ -95,6 +98,6 @@ describe('CounterfactualOutcomeSelection', () => {
     wrapper.update();
 
     //Confirmation button is disabled when a goals value returns to its original value
-    verifyConfirmButtonState(wrapper, true);
+    verifyConfirmButtonIsDisabled(wrapper, true);
   });
 });
