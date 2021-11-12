@@ -101,15 +101,6 @@ const prepareExecutionsRows = (rowData: Execution[], url: string) => {
     cells: [
       {
         title: (
-          // <Link
-          //   to={`${url}/${item.executionType.toLocaleLowerCase()}/${
-          //     item.executionId
-          //   }`}
-          //   data-ouia-component-id="show-detail"
-          //   data-ouia-component-type="link"
-          // >
-          //   <ExecutionId id={item.executionId} />
-          // </Link>
           <TrustyLink
             url={`${url}/${item.executionType.toLocaleLowerCase()}/${
               item.executionId

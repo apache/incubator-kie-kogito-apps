@@ -37,7 +37,7 @@
     "lint": "eslint './src/**/*.ts{,x}'",
     "mock-server": "json-server api-mock/db.js --routes api-mock/routes.json --port 1336 --delay 1000 --id executionId --middlewares api-mock/filterSingular.js  api-mock/counterfactualPoll.js",
     "build:services": "./it-tests/docker-compose/build.sh",
-    "start:it": "concurrently 'yarn serve -p 9000 -c ../it-tests/serve.json ./dist/' 'yarn run mock-server'",
+    "start:it": "concurrently 'yarn serve -p 9000 -c ../it-tests/serve.json ./dist-standalone/' 'yarn run mock-server'",
     "start:e2e": "./it-tests/docker-compose/start_docker.sh",
     "cypress:open:it": "yarn run cypress open --project it-tests --config-file cypress.it.json",
     "cypress:run:it": "yarn run cypress run --project it-tests --config-file cypress.it.json",

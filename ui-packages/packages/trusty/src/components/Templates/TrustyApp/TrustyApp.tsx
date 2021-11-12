@@ -113,7 +113,6 @@ const TrustyAppContainer = ({ pageWrapper }: TrustyAppContainerProps) => {
   const onNavToggleMobile = () => {
     setIsNavOpenMobile(!isNavOpenMobile);
   };
-  // console.log(`the location is`, location);
   const handlePageResize = (props: {
     windowSize: number;
     mobileView: boolean;
@@ -152,7 +151,7 @@ const TrustyAppContainer = ({ pageWrapper }: TrustyAppContainerProps) => {
       logo={
         <Brand src={kogitoLogo} alt="Kogito TrustyAI" className="trusty-logo" />
       }
-      logoProps={{ href: `${config.basePath}/` }}
+      logoProps={{ href: `${config.basePath}/`, className: 'trusty-home-link' }}
       headerTools={
         <PageHeaderTools>
           <Avatar src={imgAvatar} alt="Avatar image" />
