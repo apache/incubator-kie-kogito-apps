@@ -8,7 +8,12 @@ const setupWrapper = (executions: RemoteData<Error, Executions>) => {
   return shallow(
     <TrustyContext.Provider
       value={{
-        config: { counterfactualEnabled: true, explanationEnabled: true }
+        config: {
+          counterfactualEnabled: true,
+          explanationEnabled: true,
+          basePath: '/',
+          useHrefLinks: true
+        }
       }}
     >
       <ExecutionTable data={executions} />

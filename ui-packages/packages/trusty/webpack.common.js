@@ -7,9 +7,6 @@ module.exports = {
   entry: {
     app: path.resolve(__dirname, 'src', 'index.ts')
   },
-  devServer: {
-    contentBase: path.join(__dirname, 'static')
-  },
   plugins: [
     new webpack.EnvironmentPlugin({
       KOGITO_APP_VERSION: 'DEV',

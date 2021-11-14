@@ -74,7 +74,12 @@ describe('Audit overview', () => {
     const wrapper = mount(
       <TrustyContext.Provider
         value={{
-          config: { counterfactualEnabled: true, explanationEnabled: true }
+          config: {
+            counterfactualEnabled: true,
+            explanationEnabled: true,
+            basePath: '',
+            useHrefLinks: true
+          }
         }}
       >
         <MemoryRouter>
