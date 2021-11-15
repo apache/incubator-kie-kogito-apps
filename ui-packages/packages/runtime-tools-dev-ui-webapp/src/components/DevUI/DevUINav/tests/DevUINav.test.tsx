@@ -70,4 +70,21 @@ describe('DevUINav tests', () => {
     expect(DevUINavWrapper.exists()).toBeTruthy();
     expect(DevUINavWrapper.props().isActive).toBeTruthy();
   });
+
+  it('Snapshot testing audit investigation link props', () => {
+    const wrapper = mount(
+      <MemoryRouter>
+        <DevUINav pathname={'/Audit'} />
+      </MemoryRouter>
+    );
+
+    expect(wrapper.find('DevUINav')).toMatchSnapshot();
+
+    const DevUINavWrapper = wrapper.findWhere(
+      nested => nested.key() === 'audit-nav'
+    );
+
+    expect(DevUINavWrapper.exists()).toBeTruthy();
+    expect(DevUINavWrapper.props().isActive).toBeTruthy();
+  });
 });
