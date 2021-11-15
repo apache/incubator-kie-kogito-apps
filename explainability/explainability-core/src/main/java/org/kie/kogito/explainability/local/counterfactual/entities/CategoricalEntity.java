@@ -27,17 +27,14 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
  * Mapping between a categorical feature an OptaPlanner {@link PlanningEntity}
  */
 @PlanningEntity
-public class CategoricalEntity extends AbstractEntity<String> {
-
-    private Set<String> allowedCategories;
+public class CategoricalEntity extends AbstractCategoricalEntity<String> {
 
     public CategoricalEntity() {
         super();
     }
 
     private CategoricalEntity(String originalValue, String featureName, Set<String> allowedCategories, boolean constrained) {
-        super(originalValue, featureName, constrained);
-        this.allowedCategories = allowedCategories;
+        super(originalValue, featureName, allowedCategories, constrained);
     }
 
     /**
@@ -46,8 +43,8 @@ public class CategoricalEntity extends AbstractEntity<String> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param categories Set of allowed category values
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param categories      Set of allowed category values
+     * @param constrained     Whether this entity's value should be fixed or not
      */
     public static CategoricalEntity from(Feature originalFeature, Set<String> categories, boolean constrained) {
         return new CategoricalEntity(originalFeature.getValue().asString(), originalFeature.getName(), categories, constrained);
@@ -59,7 +56,7 @@ public class CategoricalEntity extends AbstractEntity<String> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param categories Set of allowed category values
+     * @param categories      Set of allowed category values
      */
     public static CategoricalEntity from(Feature originalFeature, Set<String> categories) {
         return CategoricalEntity.from(originalFeature, categories, false);
@@ -68,22 +65,6 @@ public class CategoricalEntity extends AbstractEntity<String> {
     @ValueRangeProvider(id = "categoricalRange")
     public Set<String> getValueRange() {
         return allowedCategories;
-    }
-
-    /**
-     * Calculates the distance between the current planning value and the reference value
-     * for this feature.
-     *
-     * @return Numerical distance
-     */
-    @Override
-    public double distance() {
-        return proposedValue.equals(originalValue) ? 0.0 : 1.0;
-    }
-
-    @Override
-    public double similarity() {
-        return 1.0 - distance();
     }
 
     /**
@@ -104,4 +85,5 @@ public class CategoricalEntity extends AbstractEntity<String> {
     public void setProposedValue(String proposedValue) {
         this.proposedValue = proposedValue;
     }
+
 }
