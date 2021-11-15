@@ -45,15 +45,6 @@
     "allPublicFields" : true
   },
   {
-    "name": "org.kie.kogito.explainability.api.CounterfactualDomainFixed",
-    "allDeclaredConstructors" : true,
-    "allPublicConstructors" : true,
-    "allDeclaredMethods" : true,
-    "allPublicMethods" : true,
-    "allDeclaredFields" : true,
-    "allPublicFields" : true
-  },
-  {
     "name": "org.kie.kogito.explainability.api.CounterfactualExplainabilityRequest",
     "allDeclaredConstructors" : true,
     "allPublicConstructors" : true,
