@@ -16,7 +16,6 @@
 package org.kie.kogito.explainability.local.counterfactual.entities.fixed;
 
 import java.util.List;
-import java.util.Map;
 
 import org.kie.kogito.explainability.local.counterfactual.entities.AbstractEntity;
 import org.kie.kogito.explainability.model.Feature;
