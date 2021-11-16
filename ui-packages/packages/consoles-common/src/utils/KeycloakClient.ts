@@ -81,7 +81,8 @@ export const initializeKeycloak = (onloadSuccess: () => void) => {
   keycloak = getKeycloakClient();
   keycloak
     .init({
-      onLoad: 'login-required'
+      onLoad: 'login-required',
+      checkLoginIframe: false
     })
     .then(authenticated => {
       /* istanbul ignore else */
