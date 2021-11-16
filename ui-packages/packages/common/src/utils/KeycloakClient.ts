@@ -1,12 +1,16 @@
 import axios from 'axios';
-import { User, UserContext } from '../..';
 import { TestUserContextImpl } from '../environment/auth/TestUserContext';
 import { KeycloakUserContext } from '../environment/auth/KeycloakUserContext';
 import { isTestUserSystemEnabled } from './Utils';
-import { ANONYMOUS_USER } from '../environment/auth/Auth';
+import { ANONYMOUS_USER, User, UserContext } from '../environment/auth/Auth';
+
+declare global {
+  interface Window {
+    KOGITO_AUTH_ENABLED: boolean;
+  }
+}
 
 export const isAuthEnabled = (): boolean => {
-  // @ts-ignore
   return window.KOGITO_AUTH_ENABLED;
 };
 

@@ -55,7 +55,7 @@ export const getLoadedSecurityContext = (): UserContext => {
 };
 
 export const checkAuthServerHealth = () => {
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     fetch(window['KOGITO_CONSOLES_KEYCLOAK_HEALTH_CHECK_URL'])
       .then(response => {
         /* istanbul ignore else */

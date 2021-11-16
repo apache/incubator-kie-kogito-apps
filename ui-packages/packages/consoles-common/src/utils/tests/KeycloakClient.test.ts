@@ -137,7 +137,6 @@ describe('Tests for keycloak client functions', () => {
         //logs out the user
       }
     });
-    // @ts-ignore
     const mockInitializeKeycloak = jest.spyOn(
       KeycloakClient,
       'initializeKeycloak'
@@ -159,7 +158,6 @@ describe('Tests for keycloak client functions', () => {
       }
     });
     checkAuthServerHealthMock.mockRejectedValue({});
-    // @ts-ignore
     const mockInitializeKeycloak = jest.spyOn(
       KeycloakClient,
       'initializeKeycloak'
@@ -179,7 +177,7 @@ describe('Tests for keycloak client functions', () => {
         // logs out the user
       }
     });
-    checkAuthServerHealthMock.mockResolvedValue({});
+    checkAuthServerHealthMock.mockResolvedValue(Promise.resolve());
     const success = jest.fn();
     const failure = jest.fn();
     KeycloakClient.loadSecurityContext(success, failure);
@@ -265,9 +263,8 @@ describe('Tests for keycloak client functions', () => {
       renderFailureMock
     );
     expect(
-      // @ts-ignore
       // tslint:disable-next-line:no-floating-promises
-      axios.interceptors.response.handlers[0].rejected({
+        (axios.interceptors.response as any).handlers[0].rejected({
         response: {
           error: {
             status: 401,
@@ -284,8 +281,7 @@ describe('Tests for keycloak client functions', () => {
       }
     });
     expect(
-      // @ts-ignore
-      await axios.interceptors.request.handlers[0].fulfilled({
+      await (axios.interceptors.response as any).handlers[0].fulfilled({
         headers: { Authorization: 'Bearer testToken' }
       })
     ).toMatchObject({

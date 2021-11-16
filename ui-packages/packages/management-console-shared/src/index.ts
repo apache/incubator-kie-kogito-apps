@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-export { default as JobsCancelModal } from './src/components/JobsCancelModal/JobsCancelModal';
-export { default as JobsDetailsModal } from './src/components/JobsDetailsModal/JobsDetailsModal';
-export { default as JobsRescheduleModal } from './src/components/JobsRescheduleModal/JobsRescheduleModal';
-export { default as ProcessInfoModal } from './src/components/ProcessInfoModal/ProcessInfoModal';
-export * from './src/components/BulkList/BulkList';
+export { default as JobsCancelModal } from './components/JobsCancelModal/JobsCancelModal';
+export { default as JobsDetailsModal } from './components/JobsDetailsModal/JobsDetailsModal';
+export { default as JobsRescheduleModal } from './components/JobsRescheduleModal/JobsRescheduleModal';
+export { default as ProcessInfoModal } from './components/ProcessInfoModal/ProcessInfoModal';
+export * from './components/BulkList/BulkList';
 
-export * from './src/utils/Utils';
+export * from './utils/Utils';
 
-export * from './src/types';
+export * from './types';
