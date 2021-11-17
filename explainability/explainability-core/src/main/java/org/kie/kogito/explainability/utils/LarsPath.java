@@ -81,7 +81,7 @@ public class LarsPath {
      */
     private static RealMatrix computeGram(LarsPathDataCarrier lpdc, boolean simulateNActiveIncrement) {
         int adj = simulateNActiveIncrement ? 0 : 1;
-        RealMatrix xtSubset = lpdc.getXT().getSubMatrix(0, lpdc.getnActive()-adj, 0, lpdc.getnSamples() - 1);
+        RealMatrix xtSubset = lpdc.getXT().getSubMatrix(0, lpdc.getnActive() - adj, 0, lpdc.getnSamples() - 1);
         return MatrixUtilsExtensions.matrixDot(xtSubset, xtSubset.transpose());
     }
 
@@ -119,7 +119,7 @@ public class LarsPath {
             double diag = lowerDefactored.getEntry(lowerDefactored.getRowDimension() - 1,
                     lowerDefactored.getColumnDimension() - 1);
             checkRegressorDegeneracy(diag, lpdc);
-            if (lpdc.isDegenerateRegressor()){
+            if (lpdc.isDegenerateRegressor()) {
                 return;
             }
             lpdc.getActive().add(lpdc.getIndices()[nActive]);
@@ -240,7 +240,7 @@ public class LarsPath {
             RealVector cov = lpdc.getCov();
             double tiny = lpdc.getTiny();
             double g1 = MatrixUtilsExtensions.minPos(
-                    cov.map(x -> c-x).ebeDivide(corrEqDir.map(x-> normalizationFactor - x + tiny)));
+                    cov.map(x -> c - x).ebeDivide(corrEqDir.map(x -> normalizationFactor - x + tiny)));
             double g2 = MatrixUtilsExtensions.minPos(
                     cov.mapAdd(c).ebeDivide(corrEqDir.mapAdd(normalizationFactor + tiny)));
             gamma = Math.min(Math.min(g1, g2), c / normalizationFactor);
@@ -424,7 +424,7 @@ public class LarsPath {
 
             // get the decomposition of the X transpose subset
             getCholeskyDecomposition(lpdc);
-            if (lpdc.isDegenerateRegressor()){
+            if (lpdc.isDegenerateRegressor()) {
                 continue;
             }
 

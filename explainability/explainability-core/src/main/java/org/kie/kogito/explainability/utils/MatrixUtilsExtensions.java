@@ -18,10 +18,6 @@ package org.kie.kogito.explainability.utils;
 
 import java.security.SecureRandom;
 import java.util.*;
-import java.util.function.Function;
-import java.util.function.IntPredicate;
-import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
 import org.apache.commons.math3.linear.*;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -645,9 +641,9 @@ public class MatrixUtilsExtensions {
 
     public static double minPos(RealVector v) {
         double minPos = Double.MAX_VALUE;
-        for (int i=0; i<v.getDimension(); i++){
+        for (int i = 0; i < v.getDimension(); i++) {
             double vI = v.getEntry(i);
-            if (vI > 0 && vI < minPos){
+            if (vI > 0 && vI < minPos) {
                 minPos = vI;
             }
         }
