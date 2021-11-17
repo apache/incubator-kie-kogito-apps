@@ -26,7 +26,7 @@ import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.decision.DecisionModelMetadata;
-import org.kie.kogito.tracing.decision.event.model.DecisionModelEvent;
+import org.kie.kogito.tracing.event.model.ModelEvent;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.messaging.BaseEventConsumer;
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;

@@ -362,10 +362,10 @@ class DecisionsApiV1IT {
                 return new DecisionStructuredInputsResponse(List.of(
                         new DecisionInput("first", "first",
                                 new UnitValue("string", "string", mapper.readTree(
-                                "\"Hello\""))),
+                                        "\"Hello\""))),
                         new DecisionInput("second", "second",
                                 new UnitValue("number", "number", mapper.readTree(
-                                "12345")))));
+                                        "12345")))));
         }
         throw new IllegalStateException();
     }

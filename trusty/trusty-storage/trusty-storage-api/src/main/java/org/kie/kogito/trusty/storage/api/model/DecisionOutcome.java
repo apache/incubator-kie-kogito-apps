@@ -18,7 +18,7 @@ package org.kie.kogito.trusty.storage.api.model;
 import java.util.Collection;
 import java.util.Map;
 
-import org.kie.kogito.tracing.decision.event.message.Message;
+import org.kie.kogito.tracing.event.message.Message;
 import org.kie.kogito.tracing.event.message.MessageLevel;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 
