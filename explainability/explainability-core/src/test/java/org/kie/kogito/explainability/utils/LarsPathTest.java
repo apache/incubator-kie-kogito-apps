@@ -15,11 +15,13 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
@@ -89,5 +91,70 @@ class LarsPathTest {
                 lpr.getAlphas().getSubVector(0, maxIter).toArray(),
                 1e-6);
     }
+
+    // Test the min_alpha_break condition ==============================================================================
+    RealMatrix XMinAlpha = MatrixUtils.createRealMatrix(new double[][] {{1., 2., 3., 4., 5.},
+            {2., 4., 6., 8., 10.},
+            {3., 6., 8., 12., 15.},
+            {-1., -2., -3., -4., -5.},
+    });
+    RealVector yMinAlpha = MatrixUtils.createRealVector(new double[] {55., 110., 162., -55.});
+    List<Integer> correctActivesMinAlpha = List.of(4, 2);
+    RealVector correctAlphasMinAlpha = MatrixUtils.createRealVector(new double[] {1.02000000e+03, 6.81818182e-01, 4.16888746e-13});
+    @Test
+    void testLarsMinAlpha() {
+        LarsPathResults lpr = LarsPath.fit(XMinAlpha, yMinAlpha, 500, false);
+        assertEquals(correctActivesMinAlpha, lpr.getActive());
+        assertArrayEquals(correctAlphasMinAlpha.toArray(), lpr.getAlphas().toArray(), 1e-6);
+    }
+
+    // Test Degenerate Regressor conditions ============================================================================
+    // both of these tests invoke the degenerate regressor condition in Python, but this implementation does not
+    // seem to run into them, with no apparent consequence
+
+
+    // this test will be a little clunky until the WLR library is moved to Apache Commons MatrixUtils (FAI-671)
+    RealMatrix XDGR = MatrixUtils.createRealMatrix(new double[][] {{0., 1., 2., 3., 4.},
+            {5., 6., 7., 8., 9.},
+            {10., 11., 12., 13., 14.},
+            {15., 16., 17., 18., 19.},
+            {20., 21., 22., 23., 24.},
+            {25., 26., 27., 28., 29.},
+            {30., 31., 32., 33., 34.},
+            {35., 36., 37., 38., 39.},
+            {40., 41., 42., 43., 44.},
+            {45., 46., 47., 48., 49.},
+    });
+    RealVector yDGR = MatrixUtils.createRealVector(new double[] {0., 50., 100., 150., 200., 250., 300., 350., 400., 450.});
+    double[] dummyWeights = Arrays.stream(yDGR.toArray()).map(x-> 1.).toArray();
+    @Test
+    void testLarsDGR() {
+        LarsPathResults lpr = LarsPath.fit(XDGR, yDGR, 500, false);
+        RealMatrix coefRowVect = MatrixUtils.createRealMatrix(lpr.getCoefs().getRowDimension(), 1);
+        coefRowVect.setColumnVector(0, lpr.getCoefs().getColumnVector(lpr.getCoefs().getColumnDimension()-1) );
+        double mse = WeightedLinearRegression.getMSE(XDGR.getData(), yDGR.toArray(), dummyWeights, coefRowVect.getData());
+        assertTrue(mse < 1e-16);
+    }
+
+
+    // Test VariableDrop condition ==============================================================================
+    RealMatrix XVarDrop = MatrixUtils.createRealMatrix(new double[][] {{0.18321534, -0.35029812, 0.07666221, -0.0143539, 0.07493564, 0.0264753, },
+            {-0.02852663, 0.35584493, 0.49064148, -0.25236788, 0.61892759, -0.31065164},
+            {0.21982559, 0.49110281, -0.5332698, -0.68922198, -0.52132598, 0.56451554},
+            {0.61981706, 0.26882512, 0.50779668, 0.36052515, 0.13083871, 0.41441906},
+            {-0.63640374, -0.65128988, -0.45031639, 0.57505155, 0.22006143, -0.63980788},
+            {-0.35792762, -0.11418486, -0.09151419, 0.02036707, -0.52343739, -0.05495039},
+    });
+    RealVector yVarDrop = MatrixUtils.createRealVector(new double[] {0.00357273, 0.008411, 0.33522509, 0.07329731, -0.24901509, -0.17149104});
+    List<Integer> correctActivesVarDrop = List.of(1, 3, 0, 2, 4);
+    RealVector correctAlphasVarDrop = MatrixUtils.createRealVector(new double[] {0.0643070982530952, 0.0545709061429076, 0.051526183371599, 0.0273483558266873, 0.0086875666842567, 0.0056182106014212, 0.0037483228269213, 0., });
+    @Test
+    void testLarsVarDrop() {
+        LarsPathResults lpr = LarsPath.fit(XVarDrop, yVarDrop, 500, true);
+        assertEquals(correctActivesVarDrop, lpr.getActive());
+        assertArrayEquals(correctAlphasVarDrop.toArray(), lpr.getAlphas().toArray(), 1e-6);
+    }
+
+
 
 }

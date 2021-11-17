@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.apache.commons.math3.linear.*;
+import org.apache.commons.math3.util.Precision;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +39,7 @@ public class LarsPath {
      */
     private static void updateCovarianceTrackers(LarsPathDataCarrier lpdc) {
         if (lpdc.getCov().getDimension() > 0) {
-            lpdc.setcIdx(lpdc.getCov().map(Math::abs).getMaxIndex());
+            lpdc.setcIdx(lpdc.getCov().map(Math::abs).map(x -> Precision.round(x, 16)).getMaxIndex());
             lpdc.setC_(lpdc.getCov().getEntry(lpdc.getcIdx()));
         } else {
             lpdc.setC_(0);
@@ -50,13 +51,13 @@ public class LarsPath {
 
     /**
      * See if we've developed a degenerate regressor, and drop it if so
+     * This is really, really rare, I can't manage to trigger it at all
      *
      * @param diag: The bottom-right value of the L matrix of the Cholesky decomposition
      * @param lpdc: The Lars path data carrier
      */
     private static void checkRegressorDegeneracy(double diag, LarsPathDataCarrier lpdc) {
-        // this is apparently super rare
-        if (diag < lpdc.getEqualityTolerance()) {
+        if (diag < 1e-7) {
             String logMessage = String.format(
                     "Regressors in active set degenerate." +
                             "Dropping a regressor, after %d iterations," +
@@ -66,6 +67,9 @@ public class LarsPath {
             lpdc.setCov(lpdc.getCovNotShortened());
             lpdc.getCov().setEntry(0, 0);
             MatrixUtilsExtensions.swap(lpdc.getCov(), lpdc.getcIdx(), 0);
+            lpdc.setDegenerateRegressor(true);
+        } else {
+            lpdc.setDegenerateRegressor(false);
         }
     }
 
@@ -75,8 +79,9 @@ public class LarsPath {
      * @param lpdc: The Lars path data carrier
      * @return the gram matrix
      */
-    private static RealMatrix computeGram(LarsPathDataCarrier lpdc) {
-        RealMatrix xtSubset = lpdc.getXT().getSubMatrix(0, lpdc.getnActive(), 0, lpdc.getnSamples() - 1);
+    private static RealMatrix computeGram(LarsPathDataCarrier lpdc, boolean simulateNActiveIncrement) {
+        int adj = simulateNActiveIncrement ? 0 : 1;
+        RealMatrix xtSubset = lpdc.getXT().getSubMatrix(0, lpdc.getnActive()-adj, 0, lpdc.getnSamples() - 1);
         return MatrixUtilsExtensions.matrixDot(xtSubset, xtSubset.transpose());
     }
 
@@ -99,12 +104,14 @@ public class LarsPath {
             MatrixUtilsExtensions.swap(lpdc.getCov(), cIdx, 0);
             MatrixUtilsExtensions.swap(lpdc.getIndices(), n, nActive);
             MatrixUtilsExtensions.swap(lpdc.getXT(), n, nActive);
+            lpdc.setX(lpdc.getXT().transpose());
 
             lpdc.setCovNotShortened(lpdc.getCov().copy());
             lpdc.setCov(lpdc.getCov().getSubVector(1, lpdc.getCov().getDimension() - 1));
 
             // grab the decomposition
-            decomp = new CholeskyDecomposition(computeGram(lpdc));
+            decomp = new CholeskyDecomposition(computeGram(lpdc, true));
+            lpdc.setDecomp(decomp);
 
             // if the bottom right element of the lower triangular decomposition of $defactored is 0, we have
             // a degeneracy issue we need to address.
@@ -112,16 +119,16 @@ public class LarsPath {
             double diag = lowerDefactored.getEntry(lowerDefactored.getRowDimension() - 1,
                     lowerDefactored.getColumnDimension() - 1);
             checkRegressorDegeneracy(diag, lpdc);
+            if (lpdc.isDegenerateRegressor()){
+                return;
+            }
             lpdc.getActive().add(lpdc.getIndices()[nActive]);
-
             lpdc.setnActive(nActive + 1);
-        } else {
-            // grab the decomposition
-            decomp = new CholeskyDecomposition(computeGram(lpdc));
-        }
 
-        // track both xtSubset and the decomposition object
-        lpdc.setDecomp(decomp);
+        } else {
+            decomp = new CholeskyDecomposition(computeGram(lpdc, false), 1e-16, -1e-12);
+            lpdc.setDecomp(decomp);
+        }
     }
 
     /**
@@ -229,12 +236,11 @@ public class LarsPath {
 
         if (nActive < nFeatures) {
             corrEqDir = lpdc.getXT().getSubMatrix(nActive, nFeatures - 1, 0, nSamples - 1).operate(eqDir);
-            corrEqDir.mapToSelf(x -> Math.round(x * 1e16d) / 1e16d);
+            corrEqDir.mapToSelf(x -> Precision.round(x, 16));
             RealVector cov = lpdc.getCov();
             double tiny = lpdc.getTiny();
-
             double g1 = MatrixUtilsExtensions.minPos(
-                    cov.mapMultiply(-1).mapAdd(c).ebeDivide(corrEqDir.mapMultiply(-1).mapAdd(normalizationFactor + tiny)));
+                    cov.map(x -> c-x).ebeDivide(corrEqDir.map(x-> normalizationFactor - x + tiny)));
             double g2 = MatrixUtilsExtensions.minPos(
                     cov.mapAdd(c).ebeDivide(corrEqDir.mapAdd(normalizationFactor + tiny)));
             gamma = Math.min(Math.min(g1, g2), c / normalizationFactor);
@@ -270,22 +276,22 @@ public class LarsPath {
      * @param lpdc: The Lars path data carrier
      */
     private static void getActiveIndices(LarsPathDataCarrier lpdc) {
+        lpdc.setDrop(false);
         double zPos = lpdc.getzPos();
         RealVector z = lpdc.getZ();
-
         if (zPos < lpdc.getGamma()) {
             lpdc.setIdx(
-                    IntStream.range(z.getDimension(), 0)
-                            .filter(i -> z.getEntry(i) == zPos)
+                    IntStream.range(0, z.getDimension())
+                            .filter(i -> Math.abs(z.getEntry(i) - zPos) < lpdc.getEqualityTolerance())
                             .boxed()
                             .collect(Collectors.toSet()));
             for (int i : lpdc.getIdx()) {
                 lpdc.getSignActive().setEntry(i, -lpdc.getSignActive().getEntry(i));
             }
-            lpdc.setGamma(zPos);
+            if (lpdc.isLasso()) {
+                lpdc.setGamma(zPos);
+            }
             lpdc.setDrop(true);
-        } else {
-            lpdc.setIdx(new HashSet<>());
         }
     }
 
@@ -339,19 +345,26 @@ public class LarsPath {
     private static void dropFeature(LarsPathDataCarrier lpdc) {
         lpdc.setnActive(lpdc.getnActive() - 1);
         int nActive = lpdc.getnActive();
+
+        lpdc.setActive(
+                IntStream.range(0, lpdc.getActive().size())
+                        .filter(i -> !lpdc.getIdx().contains(i))
+                        .map(i -> lpdc.getActive().get(i))
+                        .boxed()
+                        .collect(Collectors.toList()));
         RealMatrix coefs = lpdc.getCoefs();
-        RealMatrix X = lpdc.getX();
         RealVector y = lpdc.getY();
 
         for (int ii : lpdc.getIdx()) {
             for (int i = ii; i < nActive; i++) {
                 MatrixUtilsExtensions.swap(lpdc.getXT(), i, i + 1);
+                lpdc.setX(lpdc.getXT().transpose());
                 MatrixUtilsExtensions.swap(lpdc.getIndices(), i, i + 1);
             }
             RealVector activeCoef = MatrixUtils.createRealVector(
                     lpdc.getActive().stream()
                             .mapToDouble(a -> coefs.getEntry(lpdc.getnIter(), a)).toArray());
-            RealVector residual = y.subtract(X.getSubMatrix(0, X.getRowDimension() - 1, 0, nActive - 1).operate(activeCoef));
+            RealVector residual = y.subtract(lpdc.getX().getSubMatrix(0, lpdc.getX().getRowDimension() - 1, 0, nActive - 1).operate(activeCoef));
             lpdc.setCov(MatrixUtils.createRealVector(new double[] { lpdc.getXT().getRowVector(nActive).dotProduct(residual) })
                     .append(lpdc.getCov()));
         }
@@ -360,14 +373,13 @@ public class LarsPath {
                 MatrixUtils.createRealVector(
                         IntStream.range(0, lpdc.getSignActive().getDimension())
                                 .filter(i -> !lpdc.getIdx().contains(i))
-                                .asDoubleStream()
+                                .mapToDouble(i -> lpdc.getSignActive().getEntry(i))
                                 .toArray()));
-        lpdc.setSignActive(
-                MatrixUtils.createRealVector(new double[] { 0. }).append(lpdc.getSignActive()));
+        lpdc.setSignActive(lpdc.getSignActive().append(0.));
     }
 
     /**
-     * If we've early-stopped, our result objects might be too large. In this case, truncate them to the appropriate size
+     * If we've early-stopped, our result objects might be too large/small. In this case, truncate them to the appropriate size
      * Then create the results container
      *
      * @param lpdc: The Lars path data carrier
@@ -377,11 +389,14 @@ public class LarsPath {
         int nIter = lpdc.getnIter();
         RealVector rawAlphas = lpdc.getAlphas();
         RealMatrix rawCoefs = lpdc.getCoefs();
-        lpdc.setAlphas(
-                rawAlphas.getSubVector(0, Math.min(nIter + 1, rawAlphas.getDimension())));
-        lpdc.setCoefs(
-                rawCoefs.getSubMatrix(0,
-                        Math.min(nIter, rawCoefs.getRowDimension() - 1), 0, lpdc.getnFeatures() - 1));
+
+        if (nIter + 1 < rawAlphas.getDimension()) {
+            lpdc.setAlphas(
+                    rawAlphas.getSubVector(0, Math.min(nIter + 1, rawAlphas.getDimension())));
+            lpdc.setCoefs(
+                    rawCoefs.getSubMatrix(0,
+                            Math.min(nIter, rawCoefs.getRowDimension() - 1), 0, lpdc.getnFeatures() - 1));
+        }
         return new LarsPathResults(lpdc.getCoefs().transpose(), lpdc.getAlphas(), lpdc.getActive(), nIter);
     }
 
@@ -409,6 +424,9 @@ public class LarsPath {
 
             // get the decomposition of the X transpose subset
             getCholeskyDecomposition(lpdc);
+            if (lpdc.isDegenerateRegressor()){
+                continue;
+            }
 
             if (lpdc.isLasso() && earlyStoppingBreakCondition(lpdc))
                 break;

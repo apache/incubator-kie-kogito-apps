@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.IntStream;
@@ -42,7 +43,7 @@ public class LarsPathDataCarrier {
 
     // doubles
     private final double equalityTolerance = Math.ulp((float) 1.0);
-    private final double tiny = 1.1754944e-32;
+    private final double tiny = 1e-12;
     private double c;
     private double c_;
     private double normalizationFactor;
@@ -52,9 +53,10 @@ public class LarsPathDataCarrier {
     //booleans
     private boolean drop;
     private final boolean lasso;
+    private boolean degenerateRegressor;
 
     // real vectors
-    private RealVector y;
+    private final RealVector y;
     private RealVector signActive;
     private RealVector alphas;
     private RealVector cov;
@@ -95,6 +97,7 @@ public class LarsPathDataCarrier {
         this.nIter = 0;
         this.nActive = 0;
         this.drop = false;
+        this.idx = new HashSet<>();
 
         // initialize return objects
         this.coefs = MatrixUtils.createRealMatrix(maxFeatures + 1, nFeatures);
@@ -218,16 +221,20 @@ public class LarsPathDataCarrier {
         this.drop = drop;
     }
 
+    public boolean isDegenerateRegressor() {
+        return degenerateRegressor;
+    }
+
+    public void setDegenerateRegressor(boolean degenerateRegressor) {
+        this.degenerateRegressor = degenerateRegressor;
+    }
+
     public boolean isLasso() {
         return lasso;
     }
 
     public RealVector getY() {
         return y;
-    }
-
-    public void setY(RealVector y) {
-        this.y = y;
     }
 
     public RealVector getSignActive() {

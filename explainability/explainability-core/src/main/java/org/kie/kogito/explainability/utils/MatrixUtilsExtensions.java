@@ -18,10 +18,12 @@ package org.kie.kogito.explainability.utils;
 
 import java.security.SecureRandom;
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
+import java.util.stream.IntStream;
 
-import org.apache.commons.math3.linear.MatrixUtils;
-import org.apache.commons.math3.linear.RealMatrix;
-import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.linear.*;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 
@@ -642,8 +644,14 @@ public class MatrixUtilsExtensions {
      */
 
     public static double minPos(RealVector v) {
-        OptionalDouble minPos = Arrays.stream(v.toArray()).filter(x -> x > 0).min();
-        return minPos.isPresent() ? minPos.getAsDouble() : Double.MAX_VALUE;
+        double minPos = Double.MAX_VALUE;
+        for (int i=0; i<v.getDimension(); i++){
+            double vI = v.getEntry(i);
+            if (vI > 0 && vI < minPos){
+                minPos = vI;
+            }
+        }
+        return minPos;
     }
 
     /**
@@ -653,10 +661,8 @@ public class MatrixUtilsExtensions {
      * @return var(v)
      *
      */
-
     public static double variance(RealVector v) {
         double mean = Arrays.stream(v.toArray()).sum() / v.getDimension();
         return Arrays.stream(v.map(a -> Math.pow(a - mean, 2)).toArray()).sum() / v.getDimension();
     }
-
 }
