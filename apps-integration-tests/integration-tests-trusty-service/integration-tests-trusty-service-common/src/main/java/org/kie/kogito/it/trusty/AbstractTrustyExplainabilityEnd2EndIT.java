@@ -21,6 +21,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
@@ -61,10 +63,10 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -228,20 +230,22 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                     });
 
             // Request Counterfactuals for each execution and check responses generated
-            await()
-                    .atLeast(5, SECONDS)
-                    .atMost(30, SECONDS)
-                    .with().pollInterval(5, SECONDS)
-                    .untilAsserted(() -> {
-                        executionIds.forEach(executionId -> {
-                            doCounterfactualRequests(trustyService, accessToken, executionId);
-                            doCounterfactualResponses(trustyService, accessToken, executionId);
-                        });
-                    });
+            executionIds.forEach(executionId -> {
+                await()
+                        .atLeast(500, MILLISECONDS)
+                        .atMost(1, SECONDS)
+                        .with().pollInterval(500, MILLISECONDS)
+                        .until(doCounterfactualRequests(trustyService, accessToken, executionId));
+                await()
+                        .atLeast(500, MILLISECONDS)
+                        .atMost(1, SECONDS)
+                        .with().pollInterval(500, MILLISECONDS)
+                        .until(doCounterfactualResponses(trustyService, accessToken, executionId));
+            });
         }
     }
 
-    private void doCounterfactualRequests(final InfinispanTrustyServiceContainer trustyService,
+    private Callable<Boolean> doCounterfactualRequests(final InfinispanTrustyServiceContainer trustyService,
             final String accessToken,
             final String executionId) {
         //Decision's Inputs
@@ -282,22 +286,25 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
         });
         LOGGER.info(sb.toString());
 
-        // The Goals and Search Domain structures must match those of the original decision
-        // See https://issues.redhat.com/browse/FAI-486
-        CounterfactualRequestResponse counterfactualRequestResponse = given()
-                .port(trustyService.getFirstMappedPort())
-                .auth().oauth2(accessToken)
-                .when()
-                .contentType(ContentType.JSON)
-                .body(new CounterfactualRequest(
-                        outcomes.getOutcomes().stream().map(AbstractTrustyExplainabilityEnd2EndIT::toCounterfactualGoal).collect(Collectors.toList()),
-                        inputs.getInputs().stream().map(AbstractTrustyExplainabilityEnd2EndIT::toCounterfactualSearchDomain).collect(Collectors.toList())))
-                .post("/executions/decisions/" + executionId + "/explanations/counterfactuals")
-                .then().statusCode(200)
-                .extract().as(CounterfactualRequestResponse.class);
+        return () -> {
+            // The Goals and Search Domain structures must match those of the original decision
+            // See https://issues.redhat.com/browse/FAI-486
+            CounterfactualRequestResponse counterfactualRequestResponse = given()
+                    .port(trustyService.getFirstMappedPort())
+                    .auth().oauth2(accessToken)
+                    .when()
+                    .contentType(ContentType.JSON)
+                    .body(new CounterfactualRequest(
+                            outcomes.getOutcomes().stream().map(AbstractTrustyExplainabilityEnd2EndIT::toCounterfactualGoal).collect(Collectors.toList()),
+                            inputs.getInputs().stream().map(AbstractTrustyExplainabilityEnd2EndIT::toCounterfactualSearchDomain).collect(Collectors.toList())))
+                    .post("/executions/decisions/" + executionId + "/explanations/counterfactuals")
+                    .then().statusCode(200)
+                    .extract().as(CounterfactualRequestResponse.class);
 
-        assertEquals(executionId, counterfactualRequestResponse.getExecutionId());
-        assertNotNull(counterfactualRequestResponse.getCounterfactualId());
+            return Objects.nonNull(counterfactualRequestResponse)
+                    && Objects.equals(executionId, counterfactualRequestResponse.getExecutionId())
+                    && Objects.nonNull(counterfactualRequestResponse.getCounterfactualId());
+        };
     }
 
     private static NamedTypedValue toCounterfactualGoal(DecisionOutcome outcome) {
@@ -337,39 +344,40 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
         throw new IllegalArgumentException("An unexpected TypedValue.Kind detected. Unable to process.");
     }
 
-    @SuppressWarnings("unchecked")
-    private void doCounterfactualResponses(final InfinispanTrustyServiceContainer trustyService,
+    private Callable<Boolean> doCounterfactualResponses(final InfinispanTrustyServiceContainer trustyService,
             final String accessToken,
             final String executionId) {
-        // Get all counterfactual requests for an execution
-        List<CounterfactualRequestResponse> counterfactualRequests = Arrays.asList(given()
-                .port(trustyService.getFirstMappedPort())
-                .auth().oauth2(accessToken)
-                .when()
-                .contentType(ContentType.JSON)
-                .get("/executions/decisions/" + executionId + "/explanations/counterfactuals")
-                .then().statusCode(200)
-                .extract().as(CounterfactualRequestResponse[].class));
+        return () -> {
+            // Get all counterfactual requests for an execution
+            List<CounterfactualRequestResponse> counterfactualRequests = Arrays.asList(given()
+                    .port(trustyService.getFirstMappedPort())
+                    .auth().oauth2(accessToken)
+                    .when()
+                    .contentType(ContentType.JSON)
+                    .get("/executions/decisions/" + executionId + "/explanations/counterfactuals")
+                    .then().statusCode(200)
+                    .extract().as(CounterfactualRequestResponse[].class));
 
-        // We should only have one per execution
-        assertNotNull(counterfactualRequests);
-        assertEquals(1, counterfactualRequests.size());
+            // We should only have one per execution
+            assertNotNull(counterfactualRequests);
+            assertEquals(1, counterfactualRequests.size());
 
-        // Verify there are counterfactual results available
-        String counterfactualId = counterfactualRequests.get(0).getCounterfactualId();
+            // Verify there are counterfactual results available
+            String counterfactualId = counterfactualRequests.get(0).getCounterfactualId();
 
-        CounterfactualResultsResponse details = given()
-                .port(trustyService.getFirstMappedPort())
-                .auth().oauth2(accessToken)
-                .when()
-                .contentType(ContentType.JSON)
-                .get("/executions/decisions/" + executionId + "/explanations/counterfactuals/" + counterfactualId)
-                .then().statusCode(200)
-                .extract().as(CounterfactualResultsResponse.class);
+            CounterfactualResultsResponse details = given()
+                    .port(trustyService.getFirstMappedPort())
+                    .auth().oauth2(accessToken)
+                    .when()
+                    .contentType(ContentType.JSON)
+                    .get("/executions/decisions/" + executionId + "/explanations/counterfactuals/" + counterfactualId)
+                    .then().statusCode(200)
+                    .extract().as(CounterfactualResultsResponse.class);
 
-        assertNotNull(details);
-        assertEquals(executionId, details.getExecutionId());
-        assertEquals(counterfactualId, details.getCounterfactualId());
-        assertFalse(details.getSolutions().isEmpty());
+            return Objects.nonNull(details)
+                    && Objects.equals(executionId, details.getExecutionId())
+                    && Objects.equals(counterfactualId, details.getCounterfactualId())
+                    && !details.getSolutions().isEmpty();
+        };
     }
 }
