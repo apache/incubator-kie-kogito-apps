@@ -35,17 +35,17 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Path("/dataindex")
 public class DataIndexService {
 
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
     public static final String ALL_TASKS_IDS_QUERY = "{ \"operationName\": \"getAllTasksIds\", \"query\": \"query getAllTasksIds{  UserTaskInstances{ id } }\" }";
     public static final String ALL_PROCESS_INSTANCES_IDS_QUERY = "{ \"operationName\": \"getAllProcessesIds\", \"query\": \"query getAllProcessesIds{  ProcessInstances{ id } }\" }";
     public static final String ALL_JOBS_IDS_QUERY = "{ \"operationName\": \"getAllJobsIds\", \"query\": \"query getAllJobsIds{  Jobs{ id } }\" }";
 
+    private final ObjectMapper mapper;
     private final DataIndexClient dataIndexClient;
     private final FormsStorage formsStorage;
 
     @Inject
-    public DataIndexService(@RestClient DataIndexClient dataIndexClient, FormsStorage formsStorage) {
+    public DataIndexService(ObjectMapper mapper, @RestClient DataIndexClient dataIndexClient, FormsStorage formsStorage) {
+        this.mapper = mapper;
         this.dataIndexClient = dataIndexClient;
         this.formsStorage = formsStorage;
     }
@@ -91,7 +91,7 @@ public class DataIndexService {
 
     private <T> T doQuery(final String query, Class<T> type) throws JsonProcessingException {
         final String response = dataIndexClient.query(query);
-        return MAPPER.readValue(response, type);
+        return mapper.readValue(response, type);
     }
 
     @GET
