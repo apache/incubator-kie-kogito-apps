@@ -95,7 +95,6 @@ export interface Outcome {
 
 export interface FeatureScores {
   featureName: string;
-  featureId: string;
   featureScore: number;
 }
 
@@ -169,10 +168,12 @@ export interface CFSearchInputCollection {
   value: Array<CFSearchInputValue> | null;
 }
 
+export type CFSearchInputValueMap = { [key: string]: CFSearchInputValue };
+
 export interface CFSearchInputStructure {
   kind: 'STRUCTURE';
   type: string;
-  value: Map<string, CFSearchInputValue> | null;
+  value: CFSearchInputValueMap | null;
 }
 
 export enum CFGoalRole {
