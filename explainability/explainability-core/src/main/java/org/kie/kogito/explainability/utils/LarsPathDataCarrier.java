@@ -42,8 +42,8 @@ public class LarsPathDataCarrier {
     private List<Integer> active;
 
     // doubles
-    private final double equalityTolerance = Math.ulp((float) 1.0);
-    private final double tiny = 1e-12;
+    private static final double EQUALITY_TOLERANCE = Math.ulp((float) 1.0);
+    private static final double TINY = 1e-12;
     private double c;
     private double c_;
     private double normalizationFactor;
@@ -166,11 +166,11 @@ public class LarsPathDataCarrier {
     }
 
     public double getEqualityTolerance() {
-        return equalityTolerance;
+        return EQUALITY_TOLERANCE;
     }
 
     public double getTiny() {
-        return tiny;
+        return TINY;
     }
 
     public double getC() {

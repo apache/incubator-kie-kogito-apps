@@ -29,6 +29,8 @@ public class MatrixUtilsExtensions {
         COLUMN
     }
 
+    private static final String shapeString = "Matrix %s shape: %d x %d";
+
     private MatrixUtilsExtensions() {
         throw new IllegalStateException("Utility class");
     }
@@ -184,8 +186,8 @@ public class MatrixUtilsExtensions {
 
         if (!Arrays.equals(aShape, bShape)) {
             throw new IllegalArgumentException("Shape of matrix A must shape of matrix B" +
-                    String.format("Matrix A shape:  %d x %d, ", aShape[0], aShape[1]) +
-                    String.format("Matrix B shape:  %d x %d,", bShape[0], bShape[1]));
+                    String.format(shapeString, "A", aShape[0], aShape[1]) +
+                    String.format(shapeString, "B", bShape[0], bShape[1]));
         }
 
         double[][] sum = new double[aShape[0]][aShape[1]];
@@ -252,8 +254,8 @@ public class MatrixUtilsExtensions {
 
         if (aShape[1] != bShape[0]) {
             throw new IllegalArgumentException("# columns of matrix A must match # rows of matrix B" +
-                    String.format("Matrix A shape:  %d x %d, ", aShape[0], aShape[1]) +
-                    String.format("Matrix B shape:  %d x %d,", bShape[0], bShape[1]));
+                    String.format(shapeString, "A", aShape[0], aShape[1]) +
+                    String.format(shapeString, "B", bShape[0], bShape[1]));
         }
 
         double[][] product = new double[aShape[0]][bShape[1]];
@@ -280,7 +282,7 @@ public class MatrixUtilsExtensions {
 
         if (aShape[1] != bShape) {
             throw new IllegalArgumentException("# columns of matrix A must match length of vector B" +
-                    String.format("Matrix A shape:  %d x %d, ", aShape[0], aShape[1]) +
+                    String.format(shapeString, "A", aShape[0], aShape[1]) +
                     String.format("Vector B shape:  %d,", bShape));
         }
 
@@ -616,8 +618,8 @@ public class MatrixUtilsExtensions {
 
         if (aCols != bRows) {
             throw new IllegalArgumentException("Columns of matrix A must match rows of matrix B" +
-                    String.format("Matrix A shape:  %d x %d, ", aRows, aCols) +
-                    String.format("Matrix B shape:  %d x %d,", bRows, bCols));
+                    String.format(shapeString, "A", aRows, aCols) +
+                    String.format(shapeString, "B", bRows, bCols));
         }
 
         RealMatrix out = MatrixUtils.createRealMatrix(aRows, bCols);

@@ -33,7 +33,6 @@ public class LassoLarsIC {
 
     public static LassoLarsICResults fit(RealMatrix X, RealVector y, Criterion c, int maxIterations) {
         int nSamples = X.getRowDimension();
-        int nFeatures = X.getColumnDimension();
         double epsilon32 = Math.ulp((float) 1.0);
         double epsilon64 = Math.ulp(1.0);
 
