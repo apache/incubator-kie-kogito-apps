@@ -48,10 +48,12 @@ const DevUIRoutes: React.FC<IOwnProps> = ({ navigate }) => {
         <TrustyApp
           counterfactualEnabled={false}
           explanationEnabled={false}
-          pageWrapper={false}
-          basePath={'/Audit'}
-          excludeReactRouter={true}
-          useHrefLinks={false}
+          containerConfiguration={{
+            pageWrapper: false,
+            basePath: '/Audit',
+            excludeReactRouter: true,
+            useHrefLinks: false
+          }}
         />
       </Route>
       <Route

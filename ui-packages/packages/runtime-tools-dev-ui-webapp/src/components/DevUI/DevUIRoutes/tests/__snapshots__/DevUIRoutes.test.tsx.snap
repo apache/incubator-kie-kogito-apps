@@ -438,12 +438,16 @@ exports[`DevUIRoutes tests audit investigation page test 1`] = `
           path="/Audit"
         >
           <TrustyApp
-            basePath="/Audit"
+            containerConfiguration={
+              Object {
+                "basePath": "/Audit",
+                "excludeReactRouter": true,
+                "pageWrapper": false,
+                "useHrefLinks": false,
+              }
+            }
             counterfactualEnabled={false}
-            excludeReactRouter={true}
             explanationEnabled={false}
-            pageWrapper={false}
-            useHrefLinks={false}
           >
             <MockedComponent />
           </TrustyApp>

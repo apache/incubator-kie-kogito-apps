@@ -41,6 +41,11 @@ type TrustyAppProps = {
   counterfactualEnabled: boolean;
   /** Enable explainability information inside decisions */
   explanationEnabled: boolean;
+  /** Configuration options to embed Trusty inside a parent application  */
+  containerConfiguration?: ContainerConfigurationProps;
+};
+
+type ContainerConfigurationProps = {
   /** Include the page layout wrapper with sidebar navigation and breadcrumbs */
   pageWrapper?: boolean;
   /** Use an optional base path for internal routes */
@@ -61,10 +66,12 @@ const TrustyApp: React.FC<TrustyAppProps> = props => {
   const {
     counterfactualEnabled,
     explanationEnabled,
-    pageWrapper = true,
-    basePath = '',
-    excludeReactRouter = false,
-    useHrefLinks = true
+    containerConfiguration: {
+      pageWrapper = true,
+      basePath = '',
+      excludeReactRouter = false,
+      useHrefLinks = true
+    } = {}
   } = props;
 
   return (

@@ -22,8 +22,10 @@ describe('TrustyApp', () => {
         <TrustyApp
           explanationEnabled={true}
           counterfactualEnabled={true}
-          excludeReactRouter={true}
-          pageWrapper={false}
+          containerConfiguration={{
+            excludeReactRouter: true,
+            pageWrapper: false
+          }}
         />
       </MemoryRouter>
     );
@@ -44,8 +46,10 @@ describe('TrustyApp', () => {
         <TrustyApp
           explanationEnabled={true}
           counterfactualEnabled={true}
-          excludeReactRouter={true}
-          pageWrapper={true}
+          containerConfiguration={{
+            excludeReactRouter: true,
+            pageWrapper: true
+          }}
         />
       </MemoryRouter>
     );
@@ -66,9 +70,11 @@ describe('TrustyApp', () => {
         <TrustyApp
           explanationEnabled={true}
           counterfactualEnabled={true}
-          excludeReactRouter={true}
-          pageWrapper={true}
-          basePath="/trusty-base-path"
+          containerConfiguration={{
+            excludeReactRouter: true,
+            pageWrapper: true,
+            basePath: '/trusty-base-path'
+          }}
         />
       </MemoryRouter>
     );
@@ -94,8 +100,10 @@ describe('TrustyApp', () => {
         <TrustyApp
           explanationEnabled={true}
           counterfactualEnabled={true}
-          excludeReactRouter={true}
-          pageWrapper={true}
+          containerConfiguration={{
+            excludeReactRouter: true,
+            pageWrapper: true
+          }}
         />
       </MemoryRouter>
     );
@@ -121,7 +129,9 @@ describe('TrustyApp', () => {
         <TrustyApp
           explanationEnabled={true}
           counterfactualEnabled={true}
-          excludeReactRouter={true}
+          containerConfiguration={{
+            excludeReactRouter: true
+          }}
         />
       </MemoryRouter>
     );
@@ -138,7 +148,9 @@ describe('TrustyApp', () => {
       <TrustyApp
         explanationEnabled={true}
         counterfactualEnabled={true}
-        excludeReactRouter={false}
+        containerConfiguration={{
+          excludeReactRouter: false
+        }}
       />
     );
 
@@ -158,7 +170,9 @@ describe('TrustyApp', () => {
         <TrustyApp
           explanationEnabled={true}
           counterfactualEnabled={true}
-          excludeReactRouter={true}
+          containerConfiguration={{
+            excludeReactRouter: true
+          }}
         />
       </MemoryRouter>
     );
