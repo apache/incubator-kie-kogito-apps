@@ -54,7 +54,7 @@ public abstract class AbstractCategoricalEntity<T> extends AbstractEntity<T> {
 
     public abstract void setProposedValue(T proposedValue);
 
-    public abstract String getProposedValue();
+    public abstract T getProposedValue();
 
     public abstract Set<T> getValueRange();
 }
