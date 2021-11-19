@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
+import graphql.scalars.ExtendedScalars;
 import org.kie.kogito.index.model.KogitoMetadata;
 import org.kie.kogito.persistence.api.proto.AttributeDescriptor;
 import org.kie.kogito.persistence.api.proto.DomainDescriptor;
@@ -81,7 +82,7 @@ public class GraphQLObjectTypeMapper implements Function<DomainDescriptor, Graph
                         type = Scalars.GraphQLInt;
                         break;
                     case "java.lang.Long":
-                        type = Scalars.GraphQLLong;
+                        type = ExtendedScalars.GraphQLLong;
                         break;
                     case "java.lang.String":
                     case "java.util.Date":
