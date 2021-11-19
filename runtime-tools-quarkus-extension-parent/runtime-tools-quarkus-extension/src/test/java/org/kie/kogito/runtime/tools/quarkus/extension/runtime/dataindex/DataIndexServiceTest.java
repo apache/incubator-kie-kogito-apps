@@ -16,18 +16,24 @@
 
 package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex;
 
+import javax.ws.rs.core.Response;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.FormsStorage;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
-import static io.restassured.RestAssured.given;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
-@QuarkusTest
+@ExtendWith(MockitoExtension.class)
 public class DataIndexServiceTest {
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     public static final String ERROR_RESPONSE = "something wrong happened!";
     public static final String PROCESS_INSTANCE_RESPONSE =
@@ -40,126 +46,111 @@ public class DataIndexServiceTest {
             "{\"data\":{\"Jobs\":[{\"id\":\"a859c055-3301-487a-a252-95bc35849d5c\"},{\"id\":\"cfe73332-6942-44f0-b00b-7f63349c7465\"},{\"id\":\"3ebb40a3-9ed6-4be9-bae7-5cb036870327\"},{\"id\":\"04e200d7-c191-4b29-9f6f-09c556ff5a97\"},{\"id\":\"4ab9ddff-6edb-44fa-9ed4-2b4fc797c23d\"}]}}";
     public static final String EMPTY_JOBS_RESPONSE = "{\"data\":{\"Jobs\":[]}}";
 
-    @InjectMock
+    @Mock
     private static DataIndexClient dataIndexClient;
 
-    @InjectMock
+    @Mock
     private FormsStorage formsStorage;
+
+    private DataIndexService dataIndexService;
+
+    @BeforeEach
+    public void init() {
+        dataIndexService = new DataIndexService(MAPPER, dataIndexClient, formsStorage);
+    }
 
     @Test
     public void testProcessInstancesCount() {
         when(dataIndexClient.query(DataIndexService.ALL_PROCESS_INSTANCES_IDS_QUERY)).thenReturn(PROCESS_INSTANCE_RESPONSE);
 
-        given()
-                .when().get("/dataindex/processInstances/count")
-                .then()
-                .statusCode(200)
-                .body(equalTo("5"));
+        Response response = dataIndexService.processInstancesCount();
+        assertEquals(200, response.getStatus());
+        assertEquals(5, response.getEntity());
     }
 
     @Test
     public void testEmptyProcessInstancesCount() {
         when(dataIndexClient.query(DataIndexService.ALL_PROCESS_INSTANCES_IDS_QUERY)).thenReturn(EMPTY_PROCESS_INSTANCE_RESPONSE);
 
-        given()
-                .when().get("/dataindex/processInstances/count")
-                .then()
-                .statusCode(200)
-                .body(equalTo("0"));
+        Response response = dataIndexService.processInstancesCount();
+        assertEquals(200, response.getStatus());
+        assertEquals(0, response.getEntity());
     }
 
     @Test
     public void testProcessInstancestCountError() {
         when(dataIndexClient.query(DataIndexService.ALL_PROCESS_INSTANCES_IDS_QUERY)).thenReturn(ERROR_RESPONSE);
 
-        given()
-                .when().get("/dataindex/processInstances/count")
-                .then()
-                .statusCode(500);
+        Response response = dataIndexService.processInstancesCount();
+        assertEquals(500, response.getStatus());
     }
 
     @Test
     public void testJobsCount() {
         when(dataIndexClient.query(DataIndexService.ALL_JOBS_IDS_QUERY)).thenReturn(JOBS_RESPONSE);
 
-        given()
-                .when().get("/dataindex/jobs/count")
-                .then()
-                .statusCode(200)
-                .body(equalTo("5"));
+        Response response = dataIndexService.jobsCount();
+        assertEquals(200, response.getStatus());
+        assertEquals(5, response.getEntity());
     }
 
     @Test
     public void testEmptyJobsCount() {
         when(dataIndexClient.query(DataIndexService.ALL_JOBS_IDS_QUERY)).thenReturn(EMPTY_JOBS_RESPONSE);
 
-        given()
-                .when().get("/dataindex/jobs/count")
-                .then()
-                .statusCode(200)
-                .body(equalTo("0"));
+        Response response = dataIndexService.jobsCount();
+        assertEquals(200, response.getStatus());
+        assertEquals(0, response.getEntity());
     }
 
     @Test
     public void testJobsCountError() {
         when(dataIndexClient.query(DataIndexService.ALL_JOBS_IDS_QUERY)).thenReturn(ERROR_RESPONSE);
 
-        given()
-                .when().get("/dataindex/jobs/count")
-                .then()
-                .statusCode(500);
+        Response response = dataIndexService.jobsCount();
+        assertEquals(500, response.getStatus());
     }
 
     @Test
     public void testTasksCount() {
         when(dataIndexClient.query(DataIndexService.ALL_TASKS_IDS_QUERY)).thenReturn(USER_TASK_RESPONSE);
 
-        given()
-                .when().get("/dataindex/tasks/count")
-                .then()
-                .statusCode(200)
-                .body(equalTo("5"));
+        Response response = dataIndexService.tasksCount();
+        assertEquals(200, response.getStatus());
+        assertEquals(5, response.getEntity());
     }
 
     @Test
     public void testEmptyTasksCount() {
         when(dataIndexClient.query(DataIndexService.ALL_TASKS_IDS_QUERY)).thenReturn(EMPTY_USER_TASK_RESPONSE);
 
-        given()
-                .when().get("/dataindex/tasks/count")
-                .then()
-                .statusCode(200)
-                .body(equalTo("0"));
+        Response response = dataIndexService.tasksCount();
+        assertEquals(200, response.getStatus());
+        assertEquals(0, response.getEntity());
     }
 
     @Test
     public void testTasksCountError() {
         when(dataIndexClient.query(DataIndexService.ALL_TASKS_IDS_QUERY)).thenReturn(ERROR_RESPONSE);
 
-        given()
-                .when().get("/dataindex/tasks/count")
-                .then()
-                .statusCode(500);
+        Response response = dataIndexService.jobsCount();
+        assertEquals(500, response.getStatus());
     }
 
     @Test
     public void testFormsCount() {
         when(formsStorage.getFormsCount()).thenReturn(5);
 
-        given()
-                .when().get("/dataindex/forms/count")
-                .then()
-                .statusCode(200)
-                .body(equalTo("5"));
+        Response response = dataIndexService.formsCount();
+        assertEquals(200, response.getStatus());
+        assertEquals(5, response.getEntity());
     }
 
     @Test
     public void testFormsCountError() {
         when(formsStorage.getFormsCount()).thenThrow(new RuntimeException("something went wrong!"));
 
-        given()
-                .when().get("/dataindex/forms/count")
-                .then()
-                .statusCode(500);
+        Response response = dataIndexService.formsCount();
+        assertEquals(500, response.getStatus());
     }
 }
