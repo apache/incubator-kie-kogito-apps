@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import graphql.scalars.ExtendedScalars;
 import org.kie.kogito.index.model.KogitoMetadata;
 import org.kie.kogito.persistence.api.proto.AttributeDescriptor;
 import org.kie.kogito.persistence.api.proto.DomainDescriptor;
@@ -27,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import graphql.Scalars;
+import graphql.scalars.ExtendedScalars;
 import graphql.schema.GraphQLObjectType;
 import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLSchema;
