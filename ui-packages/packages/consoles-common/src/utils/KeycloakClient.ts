@@ -77,9 +77,9 @@ export const getKeycloakClient = (): Keycloak.KeycloakInstance => {
   });
 };
 
-export const initializeKeycloak = (onloadSuccess: () => void) => {
+export const initializeKeycloak = (onloadSuccess: () => void): Promise<void> => {
   keycloak = getKeycloakClient();
-  keycloak
+  return keycloak
     .init({
       onLoad: 'login-required'
     })
@@ -101,22 +101,23 @@ export const initializeKeycloak = (onloadSuccess: () => void) => {
 export const loadSecurityContext = (
   onloadSuccess: () => void,
   onLoadFailure: () => void
-) => {
+): Promise<void> => {
   if (isAuthEnabled()) {
     if (isKeycloakHealthCheckDisabled()) {
-      initializeKeycloak(onloadSuccess);
+      return initializeKeycloak(onloadSuccess);
     } else {
-      checkAuthServerHealth()
+      return checkAuthServerHealth()
         .then(() => {
-          initializeKeycloak(onloadSuccess);
+          return initializeKeycloak(onloadSuccess);
         })
-        .catch(() => {
+        .catch(error => {
           onLoadFailure();
         });
     }
   } else {
     currentSecurityContext = getNonAuthUserContext();
     onloadSuccess();
+    return Promise.resolve();
   }
 };
 
@@ -168,11 +169,11 @@ export const setBearerToken = (
   });
 };
 
-export const appRenderWithAxiosInterceptorConfig = (
+export const appRenderWithAxiosInterceptorConfig = async (
   appRender: (ctx: UserContext) => void,
   onLoadFailure: () => void
-): void => {
-  loadSecurityContext(() => {
+): Promise<void> => {
+  await loadSecurityContext(() => {
     appRender(getLoadedSecurityContext());
   }, onLoadFailure);
   if (isAuthEnabled()) {

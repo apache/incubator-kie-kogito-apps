@@ -76,7 +76,7 @@ export const appRenderWithAxiosInterceptorConfig = (
     axios.interceptors.response.use(
       response => response,
       error => {
-        if (error.response.status === 401) {
+        if (error.response && error.config && error.response.status === 401) {
           loadSecurityContext(() => {
             /* tslint:disable:no-string-literal */
             axios.defaults.headers.common['Authorization'] =
