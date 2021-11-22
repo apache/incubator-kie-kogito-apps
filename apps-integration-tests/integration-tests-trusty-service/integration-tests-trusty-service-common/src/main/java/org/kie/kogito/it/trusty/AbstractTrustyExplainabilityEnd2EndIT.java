@@ -200,7 +200,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
             // Check Decisions executed and LIME explanations generated
             await()
                     .atLeast(5, SECONDS)
-                    .atMost(30, SECONDS)
+                    .atMost(60, SECONDS)
                     .with().pollInterval(5, SECONDS)
                     .untilAsserted(() -> {
                         ExecutionsResponse executionsResponse = given()
