@@ -43,7 +43,10 @@ jobs:
         run: |
           echo "Run E2E Integration test suite"
           pushd .
-          cd kogito-apps/ui-packages
+          cd kogito_apps/ui-packages/packages/trusty/it-tests/docker-compose
+          ls -l
+          cd ../../../../../kogito-apps
+          ls -l
           yarn run test:e2e
           popd
       - name: Surefire Report
