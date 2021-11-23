@@ -19,7 +19,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import graphql.scalars.ExtendedScalars;
 import org.kie.kogito.index.model.KogitoMetadata;
 import org.kie.kogito.persistence.api.proto.AttributeDescriptor;
 import org.kie.kogito.persistence.api.proto.DomainDescriptor;
