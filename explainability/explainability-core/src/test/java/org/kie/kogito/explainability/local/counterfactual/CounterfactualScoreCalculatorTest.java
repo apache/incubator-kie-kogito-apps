@@ -275,7 +275,7 @@ class CounterfactualScoreCalculatorTest {
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void IntegerDistanceDifferentValue(int seed) {
         final Random random = new Random(seed);
-        int value = random.nextInt();
+        int value = random.nextInt(1000);
         Feature x = FeatureFactory.newNumericalFeature("x", value);
         Feature y = FeatureFactory.newNumericalFeature("y", value + 100);
 
@@ -606,34 +606,25 @@ class CounterfactualScoreCalculatorTest {
         PredictionProvider model = TestUtils.getFeatureSkipModel(0);
 
         List<Feature> features = new ArrayList<>();
-        List<FeatureDomain> featureDomains = new ArrayList<>();
-        List<Boolean> constraints = new ArrayList<>();
 
         // f-1
-        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
-        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0, NumericalFeatureDomain.create(0.0, 10.0)));
 
         // f-2
-        features.add(FeatureFactory.newNumericalFeature("f-2", 2.0));
-        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-2", 2.0, NumericalFeatureDomain.create(0.0, 10.0)));
 
         // f-3
-        features.add(FeatureFactory.newBooleanFeature("f-3", true));
-        featureDomains.add(EmptyFeatureDomain.create());
-        constraints.add(false);
+        features.add(FeatureFactory.newBooleanFeature("f-3", true, EmptyFeatureDomain.create()));
 
         PredictionInput input = new PredictionInput(features);
-        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
-        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input);
 
         List<Output> goal = new ArrayList<>();
         goal.add(new Output("f-2", Type.NUMBER, new Value(2.0), 0.0));
         goal.add(new Output("f-3", Type.BOOLEAN, new Value(true), 0.0));
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         BendableBigDecimalScore score = scoreCalculator.calculateScore(solution);
 
@@ -664,27 +655,18 @@ class CounterfactualScoreCalculatorTest {
         PredictionProvider model = TestUtils.getFeatureSkipModel(0);
 
         List<Feature> features = new ArrayList<>();
-        List<FeatureDomain> featureDomains = new ArrayList<>();
-        List<Boolean> constraints = new ArrayList<>();
 
         // f-1
-        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
-        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0, NumericalFeatureDomain.create(0.0, 10.0)));
 
         // f-2
-        features.add(FeatureFactory.newNumericalFeature("f-2", 2.0));
-        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-2", 2.0, NumericalFeatureDomain.create(0.0, 10.0)));
 
         // f-3
-        features.add(FeatureFactory.newBooleanFeature("f-3", true));
-        featureDomains.add(EmptyFeatureDomain.create());
-        constraints.add(false);
+        features.add(FeatureFactory.newBooleanFeature("f-3", true, EmptyFeatureDomain.create()));
 
         PredictionInput input = new PredictionInput(features);
-        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
-        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input);
 
         List<Output> goal = new ArrayList<>();
         goal.add(new Output("f-2", Type.NUMBER, new Value(2.0), 0.0));
@@ -696,7 +678,7 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreCalculator.calculateScore(solution);
@@ -717,27 +699,17 @@ class CounterfactualScoreCalculatorTest {
         PredictionProvider model = TestUtils.getFeatureSkipModel(0);
 
         List<Feature> features = new ArrayList<>();
-        List<FeatureDomain> featureDomains = new ArrayList<>();
-        List<Boolean> constraints = new ArrayList<>();
 
         // f-1
-        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
-        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0, NumericalFeatureDomain.create(0.0, 10.0)));
 
         // f-2
-        features.add(FeatureFactory.newNumericalFeature("f-2", 2.0));
-        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-2", 2.0, NumericalFeatureDomain.create(0.0, 10.0)));
 
         // f-3
-        features.add(FeatureFactory.newBooleanFeature("f-3", true));
-        featureDomains.add(EmptyFeatureDomain.create());
-        constraints.add(false);
+        features.add(FeatureFactory.newBooleanFeature("f-3", true, EmptyFeatureDomain.create()));
 
         PredictionInput input = new PredictionInput(features);
-        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
-        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
 
         List<Output> goal = new ArrayList<>();
         goal.add(new Output("f-1", Type.NUMBER, new Value(1.0), 0.0));
@@ -750,8 +722,10 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(1, predictionOutputs.size()); // A single prediction is expected
         assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
 
+        final List<CounterfactualEntity> entities = CounterfactualEntityFactory.from(features);
+
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreCalculator.calculateScore(solution);
@@ -771,34 +745,25 @@ class CounterfactualScoreCalculatorTest {
         PredictionProvider model = TestUtils.getFeatureSkipModel(0);
 
         List<Feature> features = new ArrayList<>();
-        List<FeatureDomain> featureDomains = new ArrayList<>();
-        List<Boolean> constraints = new ArrayList<>();
 
         // f-1
-        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
-        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0, NumericalFeatureDomain.create(0.0, 10.0)));
 
         // f-2
-        features.add(FeatureFactory.newBooleanFeature("f-2", null));
-        featureDomains.add(EmptyFeatureDomain.create());
-        constraints.add(false);
+        features.add(FeatureFactory.newBooleanFeature("f-2", null, EmptyFeatureDomain.create()));
 
         // f-3
-        features.add(FeatureFactory.newBooleanFeature("f-3", true));
-        featureDomains.add(EmptyFeatureDomain.create());
-        constraints.add(false);
+        features.add(FeatureFactory.newBooleanFeature("f-3", true, EmptyFeatureDomain.create()));
 
         PredictionInput input = new PredictionInput(features);
-        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
-        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input);
 
         List<Output> goal = new ArrayList<>();
         goal.add(new Output("f-2", Type.BOOLEAN, new Value(null), 0.0));
         goal.add(new Output("f-3", Type.BOOLEAN, new Value(true), 0.0));
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         BendableBigDecimalScore score = scoreCalculator.calculateScore(solution);
 
@@ -822,31 +787,22 @@ class CounterfactualScoreCalculatorTest {
      * Null values for input Integer features should not be accepted as valid
      */
     @Test
-    void testNullIntegerInput() throws ExecutionException, InterruptedException {
+    void testNullIntegerInput() {
         List<Feature> features = new ArrayList<>();
-        List<FeatureDomain> featureDomains = new ArrayList<>();
-        List<Boolean> constraints = new ArrayList<>();
 
         // f-1
-        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
-        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0, NumericalFeatureDomain.create(0.0, 10.0)));
 
         // f-2
-        features.add(FeatureFactory.newNumericalFeature("f-2", null));
-        featureDomains.add(NumericalFeatureDomain.create(0, 10));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-2", null, NumericalFeatureDomain.create(0, 10)));
 
         // f-3
-        features.add(FeatureFactory.newBooleanFeature("f-3", true));
-        featureDomains.add(EmptyFeatureDomain.create());
-        constraints.add(false);
+        features.add(FeatureFactory.newBooleanFeature("f-3", true, EmptyFeatureDomain.create()));
 
         PredictionInput input = new PredictionInput(features);
-        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+            CounterfactualEntityFactory.createEntities(input);
         });
 
         assertEquals("Null numeric features are not supported in counterfactuals", exception.getMessage());
@@ -858,31 +814,68 @@ class CounterfactualScoreCalculatorTest {
     @Test
     void testNullDoubleInput() {
         List<Feature> features = new ArrayList<>();
-        List<FeatureDomain> featureDomains = new ArrayList<>();
-        List<Boolean> constraints = new ArrayList<>();
 
         // f-1
-        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
-        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0, NumericalFeatureDomain.create(0.0, 10.0)));
 
         // f-2
-        features.add(FeatureFactory.newNumericalFeature("f-2", null));
-        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("f-2", null, NumericalFeatureDomain.create(0.0, 10.0)));
 
         // f-3
-        features.add(FeatureFactory.newBooleanFeature("f-3", true));
-        featureDomains.add(EmptyFeatureDomain.create());
-        constraints.add(false);
+        features.add(FeatureFactory.newBooleanFeature("f-3", true, EmptyFeatureDomain.create()));
 
         PredictionInput input = new PredictionInput(features);
-        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+            CounterfactualEntityFactory.createEntities(input);
         });
 
         assertEquals("Null numeric features are not supported in counterfactuals", exception.getMessage());
+    }
+
+    @Test
+    void testVaryingOutputScore() {
+        final CounterFactualScoreCalculator scoreCalculator = new CounterFactualScoreCalculator();
+        final double threshold = 100.0;
+        PredictionProvider model = TestUtils.getVaryingTypeModel(0, threshold);
+
+        List<Feature> features = new ArrayList<>();
+
+        // f-1
+        double value = threshold - 10.0;
+        features.add(FeatureFactory.newNumericalFeature("f-1", value, NumericalFeatureDomain.create(0.0, 1000.0)));
+        PredictionInput input = new PredictionInput(features);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input);
+
+        List<Output> goal = new ArrayList<>();
+        goal.add(new Output("result", Type.NUMBER, new Value(value), 0.0));
+
+        CounterfactualSolution solution =
+                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+
+        BendableBigDecimalScore score = scoreCalculator.calculateScore(solution);
+        System.out.println(score);
+
+        assertTrue(score.isFeasible());
+
+        assertEquals(0, score.getHardScore(0).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getHardScore(1).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getHardScore(2).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getSoftScore(0).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getSoftScore(1).compareTo(BigDecimal.ZERO));
+
+        features = new ArrayList<>();
+        value = threshold + 10.0;
+        features.add(FeatureFactory.newNumericalFeature("f-1", value, NumericalFeatureDomain.create(0.0, 1000.0)));
+
+        goal = new ArrayList<>();
+        goal.add(new Output("result", Type.NUMBER, new Value(value), 0.0));
+
+        solution =
+                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+
+        score = scoreCalculator.calculateScore(solution);
+        System.out.println(score);
+        assertEquals(-1, score.getHardScore(0).doubleValue());
     }
 }

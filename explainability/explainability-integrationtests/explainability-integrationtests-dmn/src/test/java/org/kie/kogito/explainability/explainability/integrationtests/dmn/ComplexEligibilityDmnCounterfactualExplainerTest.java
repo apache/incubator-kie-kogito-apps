@@ -39,7 +39,6 @@ import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
-import org.kie.kogito.explainability.model.PredictionFeatureDomain;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
@@ -65,17 +64,9 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         final List<Output> goal = generateGoal(true, true, 0.6);
 
         List<Feature> features = new LinkedList<>();
-        List<FeatureDomain> featureBoundaries = new LinkedList<>();
-        List<Boolean> constraints = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("age", 40));
-        constraints.add(true);
-        featureBoundaries.add(EmptyFeatureDomain.create());
         features.add(FeatureFactory.newBooleanFeature("hasReferral", true));
-        constraints.add(true);
-        featureBoundaries.add(EmptyFeatureDomain.create());
-        features.add(FeatureFactory.newNumericalFeature("monthlySalary", 500));
-        featureBoundaries.add(NumericalFeatureDomain.create(10, 10_000));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("monthlySalary", 500, NumericalFeatureDomain.create(10, 10_000)));
 
         final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(10_000L);
         // for the purpose of this test, only a few steps are necessary
@@ -94,8 +85,6 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction = new CounterfactualPrediction(input,
                 output,
-                new PredictionFeatureDomain(featureBoundaries),
-                constraints,
                 null,
                 UUID.randomUUID(), 60L);
         final CounterfactualResult counterfactualResult =
@@ -114,7 +103,7 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
 
         List<CounterfactualEntity> entities = counterfactualResult.getEntities();
         assertEquals("age", entities.get(0).asFeature().getName());
-        assertEquals(entities.get(0).asFeature().getValue().asNumber(), 40);
+        assertEquals(40, entities.get(0).asFeature().getValue().asNumber());
         assertEquals("hasReferral", entities.get(1).asFeature().getName());
         assertTrue((Boolean) entities.get(1).asFeature().getValue().getUnderlyingObject());
         assertEquals("monthlySalary", entities.get(2).asFeature().getName());
@@ -128,17 +117,9 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         final List<Output> goal = generateGoal(true, true, 1.0);
 
         List<Feature> features = new LinkedList<>();
-        List<FeatureDomain> featureBoundaries = new LinkedList<>();
-        List<Boolean> constraints = new LinkedList<>();
-        features.add(FeatureFactory.newNumericalFeature("age", 40));
-        constraints.add(false);
-        featureBoundaries.add(NumericalFeatureDomain.create(18, 60));
+        features.add(FeatureFactory.newNumericalFeature("age", 40, NumericalFeatureDomain.create(18, 60)));
         features.add(FeatureFactory.newBooleanFeature("hasReferral", true));
-        constraints.add(true);
-        featureBoundaries.add(EmptyFeatureDomain.create());
-        features.add(FeatureFactory.newNumericalFeature("monthlySalary", 500));
-        featureBoundaries.add(NumericalFeatureDomain.create(10, 100_000));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("monthlySalary", 500, NumericalFeatureDomain.create(10, 100_000)));
 
         final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(10_000L);
         // for the purpose of this test, only a few steps are necessary
@@ -157,8 +138,6 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction = new CounterfactualPrediction(input,
                 output,
-                new PredictionFeatureDomain(featureBoundaries),
-                constraints,
                 null,
                 UUID.randomUUID(), 60L);
         final CounterfactualResult counterfactualResult =
@@ -197,18 +176,10 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         final List<Output> goal = generateGoal(true, true, 0.6);
 
         List<Feature> features = new LinkedList<>();
-        List<FeatureDomain> featureBoundaries = new LinkedList<>();
-        List<Boolean> constraints = new LinkedList<>();
         // DMN model does not allow loans for age >= 60, so no CF will be possible
         features.add(FeatureFactory.newNumericalFeature("age", 61));
-        constraints.add(true);
-        featureBoundaries.add(EmptyFeatureDomain.create());
         features.add(FeatureFactory.newBooleanFeature("hasReferral", true));
-        constraints.add(true);
-        featureBoundaries.add(EmptyFeatureDomain.create());
-        features.add(FeatureFactory.newNumericalFeature("monthlySalary", 500));
-        featureBoundaries.add(NumericalFeatureDomain.create(10, 10_000));
-        constraints.add(false);
+        features.add(FeatureFactory.newNumericalFeature("monthlySalary", 500, NumericalFeatureDomain.create(10, 10_000)));
 
         final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(10_000L);
         // for the purpose of this test, only a few steps are necessary
@@ -227,8 +198,6 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction = new CounterfactualPrediction(input,
                 output,
-                new PredictionFeatureDomain(featureBoundaries),
-                constraints,
                 null,
                 UUID.randomUUID(), 60L);
         final CounterfactualResult counterfactualResult =

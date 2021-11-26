@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
+import org.kie.kogito.explainability.utils.CompositeFeatureUtils;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -55,7 +56,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         final Type predictionType = prediction.getType();
         final Type goalType = goal.getType();
 
-        if (predictionType != goalType) {
+        if (predictionType != goalType && Objects.nonNull(prediction.getValue())) {
             String message = String.format("Features must have the same type. Feature '%s', has type '%s' and '%s'",
                     prediction.getName(), predictionType.toString(), goalType.toString());
             logger.error(message);
@@ -122,7 +123,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         final int numberOfEntities = solution.getEntities().size();
         for (CounterfactualEntity entity : solution.getEntities()) {
             final double entitySimilarity = entity.similarity();
-            inputSimilarities += entitySimilarity / (double) numberOfEntities;
+            inputSimilarities += entitySimilarity / numberOfEntities;
             final Feature f = entity.asFeature();
             builder.append(String.format("%s=%s (d:%f)", f.getName(), f.getValue().getUnderlyingObject(), entitySimilarity));
 
@@ -141,7 +142,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
 
         List<Feature> flattenedFeatures = solution.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
 
-        List<Feature> input = NestedFeatureHandler.getDelinearizedFeatures(flattenedFeatures, solution.getOriginalFeatures());
+        List<Feature> input = CompositeFeatureUtils.unflattenFeatures(flattenedFeatures, solution.getOriginalFeatures());
 
         List<PredictionInput> inputs = List.of(new PredictionInput(input));
 
@@ -195,6 +196,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         logger.debug("Feature distance: {}", -Math.abs(primarySoftScore));
         return BendableBigDecimalScore.of(
                 new BigDecimal[] {
+
                         BigDecimal.valueOf(primaryHardScore),
                         BigDecimal.valueOf(secondaryHardScore),
                         BigDecimal.valueOf(tertiaryHardScore)

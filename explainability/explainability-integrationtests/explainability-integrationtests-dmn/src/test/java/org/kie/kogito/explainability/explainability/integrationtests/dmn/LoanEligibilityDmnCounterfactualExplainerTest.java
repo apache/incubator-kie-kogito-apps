@@ -21,10 +21,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.kie.dmn.api.core.DMNRuntime;
@@ -32,38 +32,33 @@ import org.kie.kogito.decision.DecisionModel;
 import org.kie.kogito.dmn.DMNKogito;
 import org.kie.kogito.dmn.DmnDecisionModel;
 import org.kie.kogito.explainability.Config;
-import org.kie.kogito.explainability.local.counterfactual.CounterfactualConfigurationFactory;
+import org.kie.kogito.explainability.local.counterfactual.CounterfactualConfig;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualResult;
+import org.kie.kogito.explainability.local.counterfactual.SolverConfigBuilder;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
-import org.kie.kogito.explainability.local.lime.LimeConfig;
-import org.kie.kogito.explainability.local.lime.LimeExplainer;
-import org.kie.kogito.explainability.local.lime.optim.LimeConfigOptimizer;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
-import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
-import org.kie.kogito.explainability.utils.DataUtils;
-import org.kie.kogito.explainability.utils.ValidationUtils;
+import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
+import org.kie.kogito.explainability.utils.CompositeFeatureUtils;
 import org.optaplanner.core.config.solver.EnvironmentMode;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class LoanEligibilityDmnCounterfactualExplainerTest {
 
-    private static final long steps = 10_000;
+    private static final long steps = 100_000;
     private static final long randomSeed = 23;
 
     @Test
@@ -71,21 +66,19 @@ class LoanEligibilityDmnCounterfactualExplainerTest {
         PredictionProvider model = getModel();
 
         final List<Output> goal = List.of(
-                new Output("Is Enought?", Type.TEXT, new Value(null), 0.0d),
-                new Output("Judgement", Type.TEXT, new Value(null), 0.0d),
-                new Output("Eligibility", Type.TEXT, new Value("Yes"), 0.0d),
-                new Output("Decide", Type.TEXT, new Value(null), 0.0d));
+                new Output("Is Enought?", Type.NUMBER, new Value(100), 0.0d),
+                new Output("Judgement", Type.TEXT, new Value("No"), 0.0d),
+                new Output("Eligibility", Type.TEXT, new Value("No"), 0.0d),
+                new Output("Decide", Type.BOOLEAN, new Value(true), 0.0d));
 
         final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(steps);
-        final SolverConfig solverConfig = CounterfactualConfigurationFactory
+        final SolverConfig solverConfig = SolverConfigBuilder
                 .builder().withTerminationConfig(terminationConfig).build();
         solverConfig.setRandomSeed(randomSeed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
-        final CounterfactualExplainer explainer = CounterfactualExplainer
-                .builder()
-                .withSolverConfig(solverConfig)
-                //                .withGoalThreshold(goalThresold)
-                .build();
+        CounterfactualConfig config = new CounterfactualConfig();
+        config.withSolverConfig(solverConfig);
+        final CounterfactualExplainer explainer = new CounterfactualExplainer(config);
 
         PredictionInput input = getTestInput();
         PredictionOutput output = new PredictionOutput(goal);
@@ -93,122 +86,38 @@ class LoanEligibilityDmnCounterfactualExplainerTest {
         // test model
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+
         for (PredictionOutput o : predictionOutputs) {
             for (Output op : o.getOutputs()) {
                 System.out.println(op);
             }
         }
 
-        // get counterfactual
         Prediction prediction =
-                new CounterfactualPrediction(input, output, UUID.randomUUID());
-        CounterfactualResult counterfactualResult = explainer.explainAsync(prediction, model)
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+                new CounterfactualPrediction(input, output, null, UUID.randomUUID(), null);
+        CounterfactualResult counterfactualResult = explainer.explainAsync(prediction, model).get();
 
         for (CounterfactualEntity e : counterfactualResult.getEntities()) {
             System.out.println(e);
         }
 
-        // old code
-        //        //        Prediction prediction = new SimplePrediction(input, predictionOutputs.get(0));
-        //        Random random = new Random();
-        //        random.setSeed(0);
-        //
-        //        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
-        //        LimeConfig limeConfig = new LimeConfig()
-        //                .withPerturbationContext(perturbationContext);
-        //        LimeExplainer limeExplainer = new LimeExplainer(limeConfig);
-        //        Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
-        //                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        //        for (Saliency saliency : saliencyMap.values()) {
-        //            assertNotNull(saliency);
-        //        }
-        //        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, prediction, limeExplainer, 1,
-        //                0.4, 0.4));
-        //
-        //        String decision = "Eligibility";
-        //        List<PredictionInput> inputs = new ArrayList<>();
-        //        for (int n = 0; n < 10; n++) {
-        //            inputs.add(new PredictionInput(DataUtils.perturbFeatures(input.getFeatures(), perturbationContext)));
-        //        }
-        //        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
-        //        int k = 2;
-        //        int chunkSize = 2;
-        //        double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
-        //        AssertionsForClassTypes.assertThat(f1).isBetween(0.5d, 1d);
+        List<Feature> cfFeatures = counterfactualResult.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
+        List<Feature> unflattened = CompositeFeatureUtils.unflattenFeatures(cfFeatures, input.getFeatures());
+
+        List<PredictionOutput> outputs = model.predictAsync(List.of(new PredictionInput(unflattened))).get();
+
+        for (PredictionOutput o : outputs) {
+            for (Output op : o.getOutputs()) {
+                System.out.println(op);
+            }
+        }
+
+        assertTrue(counterfactualResult.isValid());
+        final Output decideOutput = outputs.get(0).getOutputs().get(3);
+        assertEquals("Decide", decideOutput.getName());
+        assertTrue((Boolean) decideOutput.getValue().getUnderlyingObject());
     }
 
-    @Test
-    void testExplanationStabilityWithOptimization() throws ExecutionException, InterruptedException, TimeoutException {
-        PredictionProvider model = getModel();
-
-        List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
-        List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
-        List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer();
-        Random random = new Random();
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
-        LimeConfig initialConfig = new LimeConfig()
-                .withPerturbationContext(perturbationContext);
-        LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
-        assertThat(optimizedConfig).isNotSameAs(initialConfig);
-
-        LimeExplainer limeExplainer = new LimeExplainer(optimizedConfig);
-        PredictionInput testPredictionInput = getTestInput();
-        List<PredictionOutput> testPredictionOutputs = model.predictAsync(List.of(testPredictionInput))
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        Prediction instance = new SimplePrediction(testPredictionInput, testPredictionOutputs.get(0));
-
-        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, instance, limeExplainer, 1,
-                0.5, 0.5));
-    }
-
-    @Test
-    void testExplanationImpactScoreWithOptimization() throws ExecutionException, InterruptedException, TimeoutException {
-        PredictionProvider model = getModel();
-
-        List<PredictionInput> samples = DmnTestUtils.randomLoanEligibilityInputs();
-        List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 10)).get();
-        List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().forImpactScore().withSampling(false);
-        Random random = new Random();
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
-        LimeConfig initialConfig = new LimeConfig()
-                .withSamples(10)
-                .withPerturbationContext(perturbationContext);
-        LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
-
-        assertThat(optimizedConfig).isNotSameAs(initialConfig);
-    }
-
-    @Test
-    void testExplanationWeightedStabilityWithOptimization() throws ExecutionException, InterruptedException, TimeoutException {
-        PredictionProvider model = getModel();
-
-        List<PredictionInput> samples = DmnTestUtils.randomFraudScoringInputs();
-        List<PredictionOutput> predictionOutputs = model.predictAsync(samples.subList(0, 5)).get();
-        List<Prediction> predictions = DataUtils.getPredictions(samples, predictionOutputs);
-        LimeConfigOptimizer limeConfigOptimizer = new LimeConfigOptimizer().withWeightedStability(0.4, 0.6);
-        Random random = new Random();
-        random.setSeed(0);
-        PerturbationContext perturbationContext = new PerturbationContext(random, 1);
-        LimeConfig initialConfig = new LimeConfig()
-                .withPerturbationContext(perturbationContext);
-        LimeConfig optimizedConfig = limeConfigOptimizer.optimize(initialConfig, predictions, model);
-
-        assertThat(optimizedConfig).isNotSameAs(initialConfig);
-
-        LimeExplainer limeExplainer = new LimeExplainer(optimizedConfig);
-        PredictionInput testPredictionInput = getTestInput();
-        List<PredictionOutput> testPredictionOutputs = model.predictAsync(List.of(testPredictionInput))
-                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        Prediction instance = new SimplePrediction(testPredictionInput, testPredictionOutputs.get(0));
-
-        assertDoesNotThrow(() -> ValidationUtils.validateLocalSaliencyStability(model, instance, limeExplainer, 1,
-                0.4, 0.6));
-    }
 
     private PredictionProvider getModel() {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(
@@ -224,14 +133,16 @@ class LoanEligibilityDmnCounterfactualExplainerTest {
     private PredictionInput getTestInput() {
         final Map<String, Object> client = new HashMap<>();
         client.put("Age", 43);
-        client.put("Salary", 1950);
-        client.put("Existing payments", 100);
+        client.put("Salary", FeatureFactory.newNumericalFeature("Salary", 100, NumericalFeatureDomain.create(0.0, 1000.0)));
+        client.put("Existing payments", FeatureFactory.newNumericalFeature("Existing payments", 100, NumericalFeatureDomain.create(0, 1000)));
         final Map<String, Object> loan = new HashMap<>();
-        loan.put("Duration", 15);
+        loan.put("Duration", FeatureFactory.newNumericalFeature("Duration", 15, NumericalFeatureDomain.create(0, 1000)));
         loan.put("Installment", 100);
         final Map<String, Object> contextVariables = new HashMap<>();
         contextVariables.put("Client", client);
         contextVariables.put("Loan", loan);
+        contextVariables.put("God", FeatureFactory.newCategoricalFeature("God", "No"));
+        contextVariables.put("Bribe", FeatureFactory.newNumericalFeature("Bribe", 0.0, NumericalFeatureDomain.create(0.0, 1000.0)));
 
         List<Feature> features = new ArrayList<>();
         features.add(FeatureFactory.newCompositeFeature("context", contextVariables));

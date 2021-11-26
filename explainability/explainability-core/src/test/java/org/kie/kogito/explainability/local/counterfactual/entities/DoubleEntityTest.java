@@ -35,7 +35,7 @@ class DoubleEntityTest {
     @Test
     void distanceUnscaled() {
         final FeatureDomain featureDomain = NumericalFeatureDomain.create(0.0, 40.0);
-        final Feature doubleFeature = FeatureFactory.newNumericalFeature("feature-double", 20.0, false, featureDomain);
+        final Feature doubleFeature = FeatureFactory.newNumericalFeature("feature-double", 20.0, featureDomain);
         DoubleEntity entity = (DoubleEntity) CounterfactualEntityFactory.from(doubleFeature);
         entity.proposedValue = 30.0;
         assertEquals(10.0, entity.distance());
@@ -48,7 +48,7 @@ class DoubleEntityTest {
         random.setSeed(seed);
 
         final Feature doubleFeature =
-                FeatureFactory.newNumericalFeature("feature-double", 20.0, false, NumericalFeatureDomain.create(0.0, 40.0));
+                FeatureFactory.newNumericalFeature("feature-double", 20.0, NumericalFeatureDomain.create(0.0, 40.0));
         final FeatureDistribution featureDistribution =
                 new NumericFeatureDistribution(doubleFeature, random.doubles(5000, 10.0, 40.0).toArray());
         DoubleEntity entity = (DoubleEntity) CounterfactualEntityFactory.from(doubleFeature, featureDistribution);

@@ -57,24 +57,24 @@ public class FeatureFactory {
         return new Feature(name, Type.CATEGORICAL, new Value(category));
     }
 
-    public static Feature newCategoricalFeature(String name, String category, boolean constrained, FeatureDomain domain) {
-        return new Feature(name, Type.CATEGORICAL, new Value(category), constrained, domain);
+    public static Feature newCategoricalFeature(String name, String category, FeatureDomain domain) {
+        return new Feature(name, Type.CATEGORICAL, new Value(category), false, domain);
     }
 
     public static Feature newNumericalFeature(String name, Number number) {
         return new Feature(name, Type.NUMBER, new Value(number));
     }
 
-    public static Feature newNumericalFeature(String name, Number number, boolean constrained, FeatureDomain domain) {
-        return new Feature(name, Type.NUMBER, new Value(number), constrained, domain);
+    public static Feature newNumericalFeature(String name, Number number, FeatureDomain domain) {
+        return new Feature(name, Type.NUMBER, new Value(number), false, domain);
     }
 
     public static Feature newBooleanFeature(String name, Boolean truthValue) {
         return new Feature(name, Type.BOOLEAN, new Value(truthValue));
     }
 
-    public static Feature newBooleanFeature(String name, Boolean truthValue, boolean constrained, FeatureDomain domain) {
-        return new Feature(name, Type.BOOLEAN, new Value(truthValue), constrained, domain);
+    public static Feature newBooleanFeature(String name, Boolean truthValue, FeatureDomain domain) {
+        return new Feature(name, Type.BOOLEAN, new Value(truthValue), false, domain);
     }
 
     public static Feature newCurrencyFeature(String name, Currency currency) {

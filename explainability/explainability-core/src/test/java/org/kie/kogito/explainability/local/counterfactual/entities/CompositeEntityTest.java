@@ -31,6 +31,7 @@ import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.NumericFeatureDistribution;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
+import org.kie.kogito.explainability.utils.CompositeFeatureUtils;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -62,9 +63,9 @@ class CompositeEntityTest {
         final Feature compositeFeature = generateCompositeFeature();
         features.add(compositeFeature);
 
-        final List<Feature> flattened = NestedFeatureHandler.flattenFeatures(features);
+        final List<Feature> flattened = CompositeFeatureUtils.flattenFeatures(features);
 
-        final List<Feature> delinearised = NestedFeatureHandler.getDelinearizedFeatures(flattened, features);
+        final List<Feature> delinearised = CompositeFeatureUtils.unflattenFeatures(flattened, features);
 
         assertEquals(features, delinearised);
     }
@@ -72,7 +73,7 @@ class CompositeEntityTest {
     @Test
     void distanceUnscaled() {
         final FeatureDomain featureDomain = NumericalFeatureDomain.create(0.0, 40.0);
-        final Feature doubleFeature = FeatureFactory.newNumericalFeature("feature-double", 20.0, false, featureDomain);
+        final Feature doubleFeature = FeatureFactory.newNumericalFeature("feature-double", 20.0, featureDomain);
         DoubleEntity entity = (DoubleEntity) CounterfactualEntityFactory.from(doubleFeature);
         entity.proposedValue = 30.0;
         assertEquals(10.0, entity.distance());
@@ -85,7 +86,7 @@ class CompositeEntityTest {
         random.setSeed(seed);
 
         final Feature doubleFeature =
-                FeatureFactory.newNumericalFeature("feature-double", 20.0, false, NumericalFeatureDomain.create(0.0, 40.0));
+                FeatureFactory.newNumericalFeature("feature-double", 20.0, NumericalFeatureDomain.create(0.0, 40.0));
         final FeatureDistribution featureDistribution =
                 new NumericFeatureDistribution(doubleFeature, random.doubles(5000, 10.0, 40.0).toArray());
         DoubleEntity entity = (DoubleEntity) CounterfactualEntityFactory.from(doubleFeature, featureDistribution);

@@ -44,7 +44,7 @@ class CounterfactualEntityFactoryTest {
     void testIntegerFactory() {
         final int value = 5;
         final FeatureDomain domain = NumericalFeatureDomain.create(0.0, 10.0);
-        final Feature feature = FeatureFactory.newNumericalFeature("int-feature", value, false, domain);
+        final Feature feature = FeatureFactory.newNumericalFeature("int-feature", value, domain);
         final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof IntegerEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().asNumber());
@@ -63,7 +63,7 @@ class CounterfactualEntityFactoryTest {
     void testDoubleFactory() {
         final double value = 5.5;
         final FeatureDomain domain = NumericalFeatureDomain.create(0.0, 10.0);
-        final Feature feature = FeatureFactory.newNumericalFeature("double-feature", value, false, domain);
+        final Feature feature = FeatureFactory.newNumericalFeature("double-feature", value, domain);
         final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof DoubleEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().asNumber());
@@ -81,7 +81,7 @@ class CounterfactualEntityFactoryTest {
     @Test
     void testBooleanFactory() {
         final boolean value = false;
-        final Feature feature = FeatureFactory.newBooleanFeature("bool-feature", value, false, EmptyFeatureDomain.create());
+        final Feature feature = FeatureFactory.newBooleanFeature("bool-feature", value, EmptyFeatureDomain.create());
         final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof BooleanEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
@@ -100,7 +100,7 @@ class CounterfactualEntityFactoryTest {
     @Test
     void testCategoricalFactoryObject() {
         final String value = "foo";
-        final Feature feature = FeatureFactory.newCategoricalFeature("categorical-feature", value, false,
+        final Feature feature = FeatureFactory.newCategoricalFeature("categorical-feature", value,
                 CategoricalFeatureDomain.create("foo", "bar"));
         final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof CategoricalEntity);
@@ -121,7 +121,7 @@ class CounterfactualEntityFactoryTest {
     void testCategoricalFactorySet() {
         final String value = "foo";
         final FeatureDomain domain = CategoricalFeatureDomain.create(Set.of("foo", "bar"));
-        final Feature feature = FeatureFactory.newCategoricalFeature("categorical-feature", value, false, domain);
+        final Feature feature = FeatureFactory.newCategoricalFeature("categorical-feature", value, domain);
         final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof CategoricalEntity);
         assertEquals(domain.getCategories(), ((CategoricalEntity) counterfactualEntity).getValueRange());
@@ -132,7 +132,7 @@ class CounterfactualEntityFactoryTest {
     void testCategoricalFactoryList() {
         final String value = "foo";
         final FeatureDomain domain = CategoricalFeatureDomain.create(List.of("foo", "bar"));
-        final Feature feature = FeatureFactory.newCategoricalFeature("categorical-feature", value, false, domain);
+        final Feature feature = FeatureFactory.newCategoricalFeature("categorical-feature", value, domain);
         final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof CategoricalEntity);
         assertEquals(domain.getCategories(), ((CategoricalEntity) counterfactualEntity).getValueRange());
@@ -143,9 +143,9 @@ class CounterfactualEntityFactoryTest {
     void testCreateFixedEntities() {
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newNumericalFeature("f-num1", 100.1));
-        features.add(FeatureFactory.newNumericalFeature("f-num2", 100.2, false, NumericalFeatureDomain.create(0.0, 1000.0)));
+        features.add(FeatureFactory.newNumericalFeature("f-num2", 100.2, NumericalFeatureDomain.create(0.0, 1000.0)));
         features.add(FeatureFactory.newNumericalFeature("f-num3", 100.3));
-        features.add(FeatureFactory.newNumericalFeature("f-num4", 100.4, false, NumericalFeatureDomain.create(0.0, 1000.0)));
+        features.add(FeatureFactory.newNumericalFeature("f-num4", 100.4, NumericalFeatureDomain.create(0.0, 1000.0)));
 
         PredictionInput input = new PredictionInput(features);
 
@@ -173,11 +173,10 @@ class CounterfactualEntityFactoryTest {
 
     @Test
     void testValidateNullNumericalFeature() {
-        final Feature feature = FeatureFactory.newNumericalFeature("double-feature", null);
-        final FeatureDomain domain = EmptyFeatureDomain.create();
+        final Feature feature = FeatureFactory.newNumericalFeature("double-feature", null, EmptyFeatureDomain.create());
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.from(feature, true, domain);
+            CounterfactualEntityFactory.from(feature);
         });
 
         assertEquals("Null numeric features are not supported in counterfactuals", exception.getMessage());

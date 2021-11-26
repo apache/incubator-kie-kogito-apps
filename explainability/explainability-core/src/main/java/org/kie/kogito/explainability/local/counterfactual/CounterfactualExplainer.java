@@ -30,10 +30,11 @@ import java.util.stream.Collectors;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
+import org.kie.kogito.explainability.utils.CompositeFeatureUtils;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
+import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
-import org.kie.kogito.explainability.model.PredictionFeatureDomain;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
@@ -95,7 +96,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             if (counterfactualSolution.getScore().isFeasible()) {
                 final List<CounterfactualEntity> entities = counterfactualSolution.getEntities();
                 final List<Feature> features = entities.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
-                final List<Feature> unflattenedFeatures = NestedFeatureHandler.getDelinearizedFeatures(features, counterfactualSolution.getOriginalFeatures());
+                final List<Feature> unflattenedFeatures = CompositeFeatureUtils.unflattenFeatures(features, counterfactualSolution.getOriginalFeatures());
                 CounterfactualResult result = new CounterfactualResult(entities, unflattenedFeatures,
                         counterfactualSolution.getPredictionOutputs(),
                         counterfactualSolution.getScore().isFeasible(),
@@ -135,7 +136,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
         final List<Feature> originalFeatures = prediction.getInput().getFeatures();
 
         Function<UUID, CounterfactualSolution> initial =
-                uuid -> new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), executionId,
+                uuid -> new CounterfactualSolution(entities, originalFeatures, model, goal, UUID.randomUUID(), executionId,
                         this.counterfactualConfig.getGoalThreshold());
 
         final CompletableFuture<CounterfactualSolution> cfSolution = CompletableFuture.supplyAsync(() -> {

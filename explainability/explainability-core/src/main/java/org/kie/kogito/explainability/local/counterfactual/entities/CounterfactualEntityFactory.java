@@ -27,6 +27,7 @@ import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.utils.DataUtils;
+import org.kie.kogito.explainability.utils.CompositeFeatureUtils;
 
 public class CounterfactualEntityFactory {
 
@@ -90,18 +91,14 @@ public class CounterfactualEntityFactory {
     public static void validateFeature(Feature feature) {
         final Type type = feature.getType();
         final Object object = feature.getValue().getUnderlyingObject();
-        if (type == Type.NUMBER) {
-            if (object == null) {
+        if (type == Type.NUMBER && object == null) {
                 throw new IllegalArgumentException("Null numeric features are not supported in counterfactuals");
-            }
         }
     }
 
     public static List<CounterfactualEntity> createEntities(PredictionInput predictionInput) {
-        final List<Feature> linearizedFeatures = NestedFeatureHandler.flattenFeatures(predictionInput.getFeatures());
+        final List<Feature> linearizedFeatures = CompositeFeatureUtils.flattenFeatures(predictionInput.getFeatures());
         return linearizedFeatures.stream().map(
-                (Feature feature) -> {
-                    return CounterfactualEntityFactory.from(feature, feature.getDistribution());
-                }).collect(Collectors.toList());
+                (Feature feature) -> CounterfactualEntityFactory.from(feature, feature.getDistribution())).collect(Collectors.toList());
     }
 }

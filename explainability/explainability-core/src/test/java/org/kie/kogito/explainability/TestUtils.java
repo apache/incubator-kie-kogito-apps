@@ -25,6 +25,7 @@ import java.util.Random;
 import org.apache.commons.lang3.tuple.Pair;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -252,6 +253,30 @@ public class TestUtils {
 
                 PredictionOutput predictionOutput = new PredictionOutput(
                         List.of(new Output("result", Type.NUMBER, new Value(result), 1d)));
+                predictionOutputs.add(predictionOutput);
+            }
+            return predictionOutputs;
+        });
+    }
+
+    /**
+     * Creates a model which returns a different type accoding to the a numerical threshold.
+     * This is relevant for DMN modes where an outcome might return different types (as interpreted by the explainers)
+     * e.g. {@link Type} of numeric or text.
+     */
+    public static PredictionProvider getVaryingTypeModel(int featureIndex, double threshold) {
+        return inputs -> supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                List<Feature> features = predictionInput.getFeatures();
+                Feature feature = features.get(featureIndex);
+                Output output;
+                if (feature.getValue().asNumber() < threshold) {
+                    output = new Output("result", Type.NUMBER, new Value(feature.getValue().asNumber()), 1.0);
+                } else {
+                    output = new Output("result", Type.TEXT, new Value(null), 1.0);
+                }
+                PredictionOutput predictionOutput = new PredictionOutput(List.of(output));
                 predictionOutputs.add(predictionOutput);
             }
             return predictionOutputs;
