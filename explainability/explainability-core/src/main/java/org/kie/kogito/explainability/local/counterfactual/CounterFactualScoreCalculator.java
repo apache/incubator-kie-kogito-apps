@@ -16,10 +16,8 @@
 package org.kie.kogito.explainability.local.counterfactual;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -27,8 +25,11 @@ import java.util.stream.Collectors;
 
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
-import org.kie.kogito.explainability.local.counterfactual.entities.NestedFeatureHandler;
-import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.Type;
 import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
 import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
 import org.slf4j.Logger;
@@ -46,35 +47,37 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
     private static final Logger logger =
             LoggerFactory.getLogger(CounterFactualScoreCalculator.class);
 
-    public static Double outputDistance(Output a, Output b) throws IllegalArgumentException {
-        return outputDistance(a, b, 0.0);
+    public static Double outputDistance(Output prediction, Output goal) throws IllegalArgumentException {
+        return outputDistance(prediction, goal, 0.0);
     }
 
-    public static Double outputDistance(Output a, Output b, double threshold) throws IllegalArgumentException {
-        final Type aType = a.getType();
-        final Type bType = b.getType();
+    public static Double outputDistance(Output prediction, Output goal, double threshold) throws IllegalArgumentException {
+        final Type predictionType = prediction.getType();
+        final Type goalType = goal.getType();
 
-        if (aType != bType) {
-            String message = "Features must have the same type, got " + aType.toString() + " and " + bType.toString();
+        if (predictionType != goalType) {
+            String message = String.format("Features must have the same type. Feature '%s', has type '%s' and '%s'",
+                    prediction.getName(), predictionType.toString(), goalType.toString());
             logger.error(message);
             throw new IllegalArgumentException(message);
         }
 
-        if (a.getValue() == null || b.getValue() == null) {
-            return 1.0;
-        }
-
-        if (a.getType() == Type.NUMBER) {
-            final double aValue = a.getValue().asNumber();
-            final double bValue = b.getValue().asNumber();
-            final double difference = Math.abs(aValue - bValue);
+        if (prediction.getType() == Type.NUMBER) {
+            final double predictionValue = prediction.getValue().asNumber();
+            final double goalValue = goal.getValue().asNumber();
+            final double difference = Math.abs(predictionValue - goalValue);
             // If any of the values is zero use the difference instead of change
             // If neither of the values is zero use the change rate
             double distance;
-            if (aValue == 0 || bValue == 0) {
+            if (Double.isNaN(predictionValue) || Double.isNaN(goalValue)) {
+                String message = String.format("Unsupported NaN or NULL for numeric feature '%s'", prediction.getName());
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+            }
+            if (predictionValue == 0 || goalValue == 0) {
                 distance = difference;
             } else {
-                distance = difference / Math.max(aValue, bValue);
+                distance = difference / Math.max(predictionValue, goalValue);
             }
             if (distance < threshold) {
                 return 0d;
@@ -82,12 +85,14 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 return distance;
             }
 
-        } else if (a.getType() == Type.CATEGORICAL || a.getType() == Type.BOOLEAN || a.getType() == Type.TEXT) {
-            //            System.out.println(a.getValue());
-            //            System.out.println(b.getValue());
-            return a.getValue().equals(b.getValue()) ? 0.0 : 1.0;
+        } else if (prediction.getType() == Type.CATEGORICAL || prediction.getType() == Type.BOOLEAN
+                || prediction.getType() == Type.TEXT) {
+            final Object goalValueObject = goal.getValue().getUnderlyingObject();
+            final Object predictionValueObject = prediction.getValue().getUnderlyingObject();
+            return Objects.equals(goalValueObject, predictionValueObject) ? 0.0 : 1.0;
         } else {
-            String message = "Feature type " + aType.toString() + " not supported";
+            String message =
+                    String.format("Feature '%s' has unsupported type '%s'", prediction.getName(), predictionType.toString());
             logger.error(message);
             throw new IllegalArgumentException(message);
         }
@@ -195,22 +200,5 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                         BigDecimal.valueOf(tertiaryHardScore)
                 },
                 new BigDecimal[] { BigDecimal.valueOf(-Math.abs(primarySoftScore)), BigDecimal.valueOf(secondarySoftscore) });
-    }
-
-    private PredictionInput getTestInput() {
-        final Map<String, Object> client = new HashMap<>();
-        client.put("Age", 43);
-        client.put("Salary", 1950);
-        client.put("Existing payments", 100);
-        final Map<String, Object> loan = new HashMap<>();
-        loan.put("Duration", 15);
-        loan.put("Installment", 100);
-        final Map<String, Object> contextVariables = new HashMap<>();
-        contextVariables.put("Client", client);
-        contextVariables.put("Loan", loan);
-
-        List<Feature> features = new ArrayList<>();
-        features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
-        return new PredictionInput(features);
     }
 }

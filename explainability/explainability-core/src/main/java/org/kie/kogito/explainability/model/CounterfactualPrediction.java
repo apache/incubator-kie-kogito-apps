@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.model;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -22,15 +23,38 @@ import java.util.UUID;
  */
 public class CounterfactualPrediction extends BasePrediction {
 
-    public CounterfactualPrediction(PredictionInput input,
-            PredictionOutput output) {
-        super(input, output);
-    }
+    private final PredictionFeatureDomain domain;
+    private final List<Boolean> constraints;
+    private final DataDistribution dataDistribution;
+    private final Long maxRunningTimeSeconds;
 
     public CounterfactualPrediction(PredictionInput input,
             PredictionOutput output,
-            UUID executionId) {
+            PredictionFeatureDomain domain,
+            List<Boolean> constraints,
+            DataDistribution dataDistribution,
+            UUID executionId,
+            Long maxRunningTimeSeconds) {
         super(input, output, executionId);
+        this.domain = domain;
+        this.constraints = constraints;
+        this.dataDistribution = dataDistribution;
+        this.maxRunningTimeSeconds = maxRunningTimeSeconds;
     }
 
+    public PredictionFeatureDomain getDomain() {
+        return domain;
+    }
+
+    public List<Boolean> getConstraints() {
+        return constraints;
+    }
+
+    public DataDistribution getDataDistribution() {
+        return dataDistribution;
+    }
+
+    public Long getMaxRunningTimeSeconds() {
+        return maxRunningTimeSeconds;
+    }
 }

@@ -16,6 +16,9 @@
 
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
+import java.time.Duration;
+
+import org.awaitility.Awaitility;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +27,8 @@ import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+
+import io.smallrye.context.SmallRyeManagedExecutor;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -42,7 +47,10 @@ class ModelEventConsumerTest {
     void setup() {
         trustyService = mock(TrustyService.class);
         storageExceptionsProvider = mock(StorageExceptionsProvider.class);
-        consumer = new ModelEventConsumer(trustyService, TrustyServiceTestUtils.MAPPER, storageExceptionsProvider);
+        consumer = new ModelEventConsumer(trustyService,
+                TrustyServiceTestUtils.MAPPER,
+                storageExceptionsProvider,
+                SmallRyeManagedExecutor.builder().build());
     }
 
     @Test
@@ -86,7 +94,14 @@ class ModelEventConsumerTest {
     private void testNumberOfInvocations(final Message<String> message,
             final int wantedNumberOfServiceInvocations) {
         consumer.handleMessage(message);
-        verify(trustyService, times(wantedNumberOfServiceInvocations)).storeModel(any(), any());
-        verify(message, times(1)).ack();
+
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(1))
+                .untilAsserted(
+                        () -> {
+                            verify(trustyService, times(wantedNumberOfServiceInvocations)).storeModel(any(), any());
+                            verify(message, times(1)).ack();
+                        });
     }
 }

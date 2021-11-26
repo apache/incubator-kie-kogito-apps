@@ -1,7 +1,7 @@
 import React from 'react';
 import useBreadcrumbs from 'use-react-router-breadcrumbs';
 import { Breadcrumb, BreadcrumbItem } from '@patternfly/react-core';
-import { RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import ExecutionId from '../../Atoms/ExecutionId/ExecutionId';
 
 const Breadcrumbs = () => {
@@ -15,12 +15,14 @@ const Breadcrumbs = () => {
             return (
               <BreadcrumbItem
                 className="breadcrumb-item"
-                to={match.url}
                 key={match.url}
                 isActive={location.pathname === match.url}
-              >
-                {breadcrumb}
-              </BreadcrumbItem>
+                render={({ className }) => (
+                  <Link to={match.url} className={className}>
+                    {breadcrumb}
+                  </Link>
+                )}
+              />
             );
           })}
         </Breadcrumb>
@@ -46,19 +48,32 @@ const AuditDetailBreadcrumb = (props: AuditDetailBreadcrumbProps) => {
 };
 
 const routes = [
-  { path: '/audit', breadcrumb: 'Audit Investigation' },
+  { path: '/audit', breadcrumb: 'Audit investigation' },
   {
     path: '/audit/:executionType/:id/outcomes-details',
-    breadcrumb: 'Outcomes Details'
+    breadcrumb: 'Outcomes details'
   },
   // the following route is needed to display a dedicated breadcrumb path for executions with only 1 outcome
-  { path: '/audit/:executionType/:id/single-outcome', breadcrumb: 'Outcome' },
+  {
+    path: '/audit/:executionType/:id/single-outcome',
+    breadcrumb: 'Outcome'
+  },
   {
     path: '/audit/:executionType/:id/model-lookup',
-    breadcrumb: 'Model Lookup'
+    breadcrumb: 'Model lookup'
   },
-  { path: '/audit/:executionType/:id/input-data', breadcrumb: 'Input Data' },
-  { path: '/audit/:executionType/:id', breadcrumb: AuditDetailBreadcrumb }
+  {
+    path: '/audit/:executionType/:id/input-data',
+    breadcrumb: 'Input data'
+  },
+  {
+    path: '/audit/:executionType/:id/counterfactual-analysis',
+    breadcrumb: 'Counterfactual analysis'
+  },
+  {
+    path: '/audit/:executionType/:id',
+    breadcrumb: AuditDetailBreadcrumb
+  }
 ];
 
 const excludePaths = ['/', '/audit/:executionType'];

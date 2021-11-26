@@ -16,11 +16,13 @@
 
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.decision.DecisionModelMetadata;
@@ -44,19 +46,25 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     private static final TypeReference<ModelEvent> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
 
-    private ModelEventConsumer() {
+    protected ModelEventConsumer() {
         //CDI proxy
     }
 
     @Inject
-    public ModelEventConsumer(TrustyService service, ObjectMapper mapper, StorageExceptionsProvider storageExceptionsProvider) {
-        super(service, mapper, storageExceptionsProvider);
+    public ModelEventConsumer(TrustyService service,
+            ObjectMapper mapper,
+            StorageExceptionsProvider storageExceptionsProvider,
+            ManagedExecutor executor) {
+        super(service,
+                mapper,
+                storageExceptionsProvider,
+                executor);
     }
 
     @Override
     @Incoming("kogito-tracing-model")
     public CompletionStage<Void> handleMessage(final Message<String> message) {
-        return super.handleMessage(message);
+        return CompletableFuture.runAsync(() -> super.handleMessage(message), executor);
     }
 
     @Override
@@ -68,7 +76,7 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     protected void internalHandleCloudEvent(CloudEvent cloudEvent, ModelEvent payload) {
         final DecisionModelMetadata decisionModelMetadata = payload.getDecisionModelMetadata();
         if (decisionModelMetadata.getType().equals(DecisionModelMetadata.Type.DMN)) {
-            ModelIdentifier identifier = new ModelIdentifier(payload.getGav().getGroupId(),
+            ModelMetadata identifier = new ModelMetadata(payload.getGav().getGroupId(),
                     payload.getGav().getArtifactId(),
                     payload.getGav().getVersion(),
                     payload.getName(),

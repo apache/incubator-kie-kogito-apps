@@ -20,7 +20,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.kafka.KafkaClient;
+import org.kie.kogito.test.quarkus.kafka.KafkaTestClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
@@ -45,11 +45,11 @@ public class ModelEventConsumerIT {
     @InjectMock
     TrustyService trustyService;
 
-    KafkaClient kafkaClient;
+    KafkaTestClient kafkaClient;
 
     @BeforeEach
     public void setup() {
-        kafkaClient = new KafkaClient(kafkaBootstrapServers);
+        kafkaClient = new KafkaTestClient(kafkaBootstrapServers);
     }
 
     @AfterEach
@@ -63,7 +63,7 @@ public class ModelEventConsumerIT {
     public void eventLoopIsNotStoppedWithException() {
         doThrow(new RuntimeException("Something really bad"))
                 .when(trustyService)
-                .storeModel(any(ModelIdentifier.class), any(DMNModelWithMetadata.class));
+                .storeModel(any(ModelMetadata.class), any(DMNModelWithMetadata.class));
 
         kafkaClient.produce(TrustyServiceTestUtils.buildCloudEventJsonString(TrustyServiceTestUtils.buildCorrectModelEvent()),
                 KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
@@ -71,6 +71,6 @@ public class ModelEventConsumerIT {
                 KafkaConstants.KOGITO_TRACING_MODEL_TOPIC);
 
         verify(trustyService, timeout(3000).times(2))
-                .storeModel(any(ModelIdentifier.class), any(DMNModelWithMetadata.class));
+                .storeModel(any(ModelMetadata.class), any(DMNModelWithMetadata.class));
     }
 }

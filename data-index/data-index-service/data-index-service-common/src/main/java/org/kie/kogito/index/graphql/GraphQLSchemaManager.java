@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
@@ -30,13 +32,16 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.kie.kogito.index.DataIndexStorageService;
+import org.kie.kogito.index.api.KogitoRuntimeClient;
 import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
 import org.kie.kogito.index.json.DataIndexParsingException;
 import org.kie.kogito.index.model.Job;
+import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
+import org.kie.kogito.index.service.DataIndexServiceException;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
 import org.reactivestreams.Publisher;
@@ -57,6 +62,7 @@ import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
 
+import static java.lang.String.format;
 import static java.util.Collections.singletonList;
 import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
@@ -78,6 +84,9 @@ public class GraphQLSchemaManager {
 
     @Inject
     GraphQLScalarType qlDateTimeScalarType;
+
+    @Inject
+    KogitoRuntimeClient dataIndexApiExecutor;
 
     private GraphQLSchema schema;
 
@@ -104,10 +113,35 @@ public class GraphQLSchemaManager {
                     builder.dataFetcher("Jobs", this::getJobsValues);
                     return builder;
                 })
+                .type("Mutation", builder -> {
+                    builder.dataFetcher("ProcessInstanceAbort", this::abortProcessInstance);
+                    builder.dataFetcher("ProcessInstanceRetry", this::retryProcessInstance);
+                    builder.dataFetcher("ProcessInstanceSkip", this::skipProcessInstance);
+                    builder.dataFetcher("ProcessInstanceUpdateVariables", this::updateProcessInstanceVariables);
+                    builder.dataFetcher("NodeInstanceTrigger", this::triggerNodeInstance);
+                    builder.dataFetcher("NodeInstanceRetrigger", this::retriggerNodeInstance);
+                    builder.dataFetcher("NodeInstanceCancel", this::cancelNodeInstance);
+                    builder.dataFetcher("JobCancel", this::cancelJob);
+                    builder.dataFetcher("JobReschedule", this::rescheduleJob);
+                    builder.dataFetcher("UserTaskInstanceUpdate", this::updateUserTaskInstance);
+                    builder.dataFetcher("UserTaskInstanceCommentCreate", this::createTaskInstanceComment);
+                    builder.dataFetcher("UserTaskInstanceAttachmentCreate", this::createTaskInstanceAttachment);
+                    builder.dataFetcher("UserTaskInstanceCommentUpdate", this::updateUserTaskComment);
+                    builder.dataFetcher("UserTaskInstanceCommentDelete", this::deleteUserTaskComment);
+                    builder.dataFetcher("UserTaskInstanceAttachmentUpdate", this::updateUserTaskAttachment);
+                    builder.dataFetcher("UserTaskInstanceAttachmentDelete", this::deleteUserTaskAttachment);
+                    return builder;
+                })
                 .type("ProcessInstance", builder -> {
                     builder.dataFetcher("parentProcessInstance", this::getParentProcessInstanceValue);
                     builder.dataFetcher("childProcessInstances", this::getChildProcessInstancesValues);
                     builder.dataFetcher("serviceUrl", this::getProcessInstanceServiceUrl);
+                    builder.dataFetcher("diagram", this::getProcessInstanceDiagram);
+                    builder.dataFetcher("nodeDefinitions", this::getProcessNodes);
+                    return builder;
+                })
+                .type("UserTaskInstance", builder -> {
+                    builder.dataFetcher("schema", this::getUserTaskInstanceSchema);
                     return builder;
                 })
                 .type("ProcessInstanceMeta", builder -> {
@@ -132,6 +166,67 @@ public class GraphQLSchemaManager {
 
         SchemaGenerator schemaGenerator = new SchemaGenerator();
         return schemaGenerator.makeExecutableSchema(typeDefinitionRegistry, runtimeWiring);
+    }
+
+    public CompletableFuture<String> abortProcessInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.abortProcessInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance);
+    }
+
+    public CompletableFuture<String> retryProcessInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.retryProcessInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance);
+    }
+
+    public CompletableFuture<String> skipProcessInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.skipProcessInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance);
+    }
+
+    public CompletableFuture<String> updateProcessInstanceVariables(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.updateProcessInstanceVariables(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance, env.getArgument("variables"));
+    }
+
+    public CompletableFuture<String> triggerNodeInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.triggerNodeInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                processInstance,
+                env.getArgument("nodeId"));
+    }
+
+    public CompletableFuture<String> retriggerNodeInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.retriggerNodeInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                processInstance,
+                env.getArgument("nodeInstanceId"));
+    }
+
+    public CompletableFuture<String> cancelNodeInstance(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = cacheService.getProcessInstancesCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.cancelNodeInstance(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                processInstance,
+                env.getArgument("nodeInstanceId"));
+    }
+
+    public CompletableFuture<String> cancelJob(DataFetchingEnvironment env) {
+        Job job = cacheService.getJobsCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.cancelJob(job.getEndpoint(), job);
+    }
+
+    public CompletableFuture<String> rescheduleJob(DataFetchingEnvironment env) {
+        Job job = cacheService.getJobsCache().get(env.getArgument("id"));
+        return dataIndexApiExecutor.rescheduleJob(job.getEndpoint(), job, env.getArgument("data"));
+    }
+
+    public CompletableFuture getProcessInstanceDiagram(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = env.getSource();
+        return dataIndexApiExecutor.getProcessInstanceDiagram(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance);
+    }
+
+    public CompletableFuture<List<Node>> getProcessNodes(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = env.getSource();
+        return dataIndexApiExecutor.getProcessInstanceNodeDefinitions(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance);
     }
 
     protected String getProcessInstanceServiceUrl(DataFetchingEnvironment env) {
@@ -187,6 +282,89 @@ public class GraphQLSchemaManager {
         query.filter(singletonList(equalTo("id", source.getParentProcessInstanceId())));
         List<ProcessInstance> execute = query.execute();
         return execute.size() > 0 ? execute.get(0) : null;
+    }
+
+    private CompletableFuture getUserTaskInstanceSchema(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = env.getSource();
+        return dataIndexApiExecutor.getUserTaskSchema(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"));
+    }
+
+    private CompletableFuture<String> updateUserTaskInstance(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
+        return dataIndexApiExecutor.updateUserTaskInstance(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArguments());
+    }
+
+    private CompletableFuture<String> createTaskInstanceComment(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
+        return dataIndexApiExecutor.createUserTaskInstanceComment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("comment"));
+    }
+
+    private CompletableFuture<String> createTaskInstanceAttachment(DataFetchingEnvironment env) {
+        UserTaskInstance userTaskInstance = cacheService.getUserTaskInstancesCache().get(env.getArgument("taskId"));
+        return dataIndexApiExecutor.createUserTaskInstanceAttachment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("name"),
+                env.getArgument("uri"));
+    }
+
+    private CompletableFuture<String> updateUserTaskComment(DataFetchingEnvironment env) {
+        Query<UserTaskInstance> query = cacheService.getUserTaskInstancesCache().query();
+        query.filter(singletonList(equalTo("comments.id", env.getArgument("commentId"))));
+        UserTaskInstance userTaskInstance = query.execute().get(0);
+        return dataIndexApiExecutor.updateUserTaskInstanceComment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("commentId"),
+                env.getArgument("comment"));
+    }
+
+    private CompletableFuture<String> deleteUserTaskComment(DataFetchingEnvironment env) {
+        Query<UserTaskInstance> query = cacheService.getUserTaskInstancesCache().query();
+        query.filter(singletonList(equalTo("comments.id", env.getArgument("commentId"))));
+        UserTaskInstance userTaskInstance = query.execute().get(0);
+        return dataIndexApiExecutor.deleteUserTaskInstanceComment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("commentId"));
+    }
+
+    private CompletableFuture<String> updateUserTaskAttachment(DataFetchingEnvironment env) {
+        Query<UserTaskInstance> query = cacheService.getUserTaskInstancesCache().query();
+        query.filter(singletonList(equalTo("attachments.id", env.getArgument("attachmentId"))));
+        UserTaskInstance userTaskInstance = query.execute().get(0);
+        return dataIndexApiExecutor.updateUserTaskInstanceAttachment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("attachmentId"),
+                env.getArgument("name"),
+                env.getArgument("uri"));
+    }
+
+    private CompletableFuture<String> deleteUserTaskAttachment(DataFetchingEnvironment env) {
+        Query<UserTaskInstance> query = cacheService.getUserTaskInstancesCache().query();
+        query.filter(singletonList(equalTo("attachments.id", env.getArgument("attachmentId"))));
+        UserTaskInstance userTaskInstance = query.execute().get(0);
+        return dataIndexApiExecutor.deleteUserTaskInstanceAttachment(getServiceUrl(userTaskInstance.getEndpoint(), userTaskInstance.getProcessId()),
+                userTaskInstance,
+                env.getArgument("user"),
+                env.getArgument("groups"),
+                env.getArgument("attachmentId"));
     }
 
     private Collection<ProcessInstance> getProcessInstancesValues(DataFetchingEnvironment env) {
@@ -260,17 +438,21 @@ public class GraphQLSchemaManager {
         return env -> cache.get().objectUpdatedListener();
     }
 
+    private Supplier<DataIndexServiceException> cacheNotFoundException(String processId) {
+        return () -> new DataIndexServiceException(format("Cache for process %s not found", processId));
+    };
+
     protected DataFetcher<Publisher<ObjectNode>> getDomainModelUpdatedDataFetcher(String processId) {
-        return env -> cacheService.getDomainModelCache(processId).objectUpdatedListener();
+        return env -> Optional.ofNullable(cacheService.getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)).objectUpdatedListener();
     }
 
     protected DataFetcher<Publisher<ObjectNode>> getDomainModelAddedDataFetcher(String processId) {
-        return env -> cacheService.getDomainModelCache(processId).objectCreatedListener();
+        return env -> Optional.ofNullable(cacheService.getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)).objectCreatedListener();
     }
 
     protected DataFetcher<Collection<ObjectNode>> getDomainModelDataFetcher(String processId) {
         return env -> {
-            List result = executeAdvancedQueryForCache(cacheService.getDomainModelCache(processId), env);
+            List result = executeAdvancedQueryForCache(Optional.ofNullable(cacheService.getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)), env);
             return (Collection<ObjectNode>) result.stream().map(json -> {
                 try {
                     return (ObjectNode) getObjectMapper().readTree(json.toString());
@@ -287,5 +469,9 @@ public class GraphQLSchemaManager {
 
     public void transform(Consumer<GraphQLSchema.Builder> builder) {
         schema = schema.transform(builder);
+    }
+
+    public void setDataIndexApiExecutor(KogitoRuntimeClient dataIndexApiExecutor) {
+        this.dataIndexApiExecutor = dataIndexApiExecutor;
     }
 }

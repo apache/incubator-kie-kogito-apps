@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.trusty.storage.api.model;
 
+import org.kie.kogito.tracing.typedvalue.TypedValue;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -32,12 +34,12 @@ public class DecisionInput {
     private String name;
 
     @JsonProperty(VALUE_FIELD)
-    private TypedVariableWithValue value;
+    private TypedValue value;
 
     public DecisionInput() {
     }
 
-    public DecisionInput(String id, String name, TypedVariableWithValue value) {
+    public DecisionInput(String id, String name, TypedValue value) {
         this.id = id;
         this.name = name;
         this.value = value;
@@ -59,11 +61,11 @@ public class DecisionInput {
         this.name = name;
     }
 
-    public TypedVariableWithValue getValue() {
+    public TypedValue getValue() {
         return value;
     }
 
-    public void setValue(TypedVariableWithValue value) {
+    public void setValue(TypedValue value) {
         this.value = value;
     }
 }

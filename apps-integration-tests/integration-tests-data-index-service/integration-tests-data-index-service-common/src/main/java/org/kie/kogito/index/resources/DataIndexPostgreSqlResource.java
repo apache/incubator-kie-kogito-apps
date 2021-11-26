@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.kie.kogito.index.testcontainers.DataIndexPostgreSqlContainer;
-import org.kie.kogito.resources.TestResource;
-import org.kie.kogito.testcontainers.KogitoKafkaContainer;
+import org.kie.kogito.index.testcontainers.KogitoKafkaContainerWithoutBridge;
+import org.kie.kogito.test.resources.TestResource;
 import org.kie.kogito.testcontainers.KogitoPostgreSqlContainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +32,7 @@ public class DataIndexPostgreSqlResource implements TestResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DataIndexPostgreSqlResource.class);
 
-    KogitoKafkaContainer kafka = new KogitoKafkaContainer();
+    KogitoKafkaContainerWithoutBridge kafka = new KogitoKafkaContainerWithoutBridge();
     KogitoPostgreSqlContainer postgresql = new KogitoPostgreSqlContainer();
     DataIndexPostgreSqlContainer dataIndex = new DataIndexPostgreSqlContainer();
     Map<String, String> properties = new HashMap<>();
@@ -47,7 +47,7 @@ public class DataIndexPostgreSqlResource implements TestResource {
         LOGGER.debug("Starting PostgreSQL Quarkus test resource");
         properties.clear();
         Network network = Network.newNetwork();
-        postgresql.withInitScript("create.sql");
+        postgresql.withInitScript("data_index_create.sql");
         postgresql.withNetwork(network);
         postgresql.withNetworkAliases("postgresql");
         postgresql.waitingFor(Wait.forListeningPort());
@@ -59,6 +59,7 @@ public class DataIndexPostgreSqlResource implements TestResource {
         String kafkaURL = kafka.getBootstrapServers();
         properties.put("kafka.bootstrap.servers", kafkaURL);
         properties.put("spring.kafka.bootstrap-servers", kafkaURL);
+
         dataIndex.addProtoFileFolder();
         dataIndex.withNetwork(network);
         dataIndex

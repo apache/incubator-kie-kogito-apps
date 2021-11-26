@@ -37,22 +37,26 @@ import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.jboss.resteasy.annotations.jaxrs.PathParam;
+import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequest;
+import org.kie.kogito.explainability.api.CounterfactualExplainabilityResult;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomain;
+import org.kie.kogito.explainability.api.LIMEExplainabilityResult;
+import org.kie.kogito.explainability.api.NamedTypedValue;
 import org.kie.kogito.trusty.service.common.TrustyService;
+import org.kie.kogito.trusty.service.common.handlers.LIMESaliencyConverter;
 import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
 import org.kie.kogito.trusty.service.common.responses.CounterfactualResultsResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionStructuredInputsResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityRequest;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
-import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 
 @Path("executions/decisions")
 public class ExplainabilityApiV1 {
 
     @Inject
     TrustyService trustyService;
+
+    @Inject
+    LIMESaliencyConverter saliencyConverter;
 
     @GET
     @Path("/{executionId}/explanations/saliencies")
@@ -72,7 +76,8 @@ public class ExplainabilityApiV1 {
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
         return retrieveLIMEExplainabilityResult(executionId)
-                .map(obj -> Response.ok(new SalienciesResponse(obj)).build())
+                .map(result -> saliencyConverter.fromResult(executionId, result))
+                .map(result -> Response.ok(result).build())
                 .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()).build());
     }
 
@@ -109,17 +114,19 @@ public class ExplainabilityApiV1 {
                     required = true,
                     schema = @Schema(
                             implementation = org.kie.kogito.trusty.service.common.requests.CounterfactualRequest.class)) org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request) {
-        List<TypedVariableWithValue> goals = request.getGoals();
+        List<NamedTypedValue> goals = request.getGoals();
         List<CounterfactualSearchDomain> searchDomains = request.getSearchDomains();
         return requestCounterfactualsForExecution(executionId, goals, searchDomains)
-                .map(obj -> new CounterfactualRequestResponse(obj.getExecutionId(), obj.getCounterfactualId()))
+                .map(obj -> new CounterfactualRequestResponse(obj.getExecutionId(),
+                        obj.getCounterfactualId(),
+                        obj.getMaxRunningTimeSeconds()))
                 .map(Response::ok)
                 .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()))
                 .build();
     }
 
     private Optional<CounterfactualExplainabilityRequest> requestCounterfactualsForExecution(String executionId,
-            List<TypedVariableWithValue> goals,
+            List<NamedTypedValue> goals,
             List<CounterfactualSearchDomain> searchDomains) {
         try {
             return Optional.ofNullable(trustyService.requestCounterfactuals(executionId, goals, searchDomains));
@@ -146,7 +153,9 @@ public class ExplainabilityApiV1 {
                     required = true,
                     schema = @Schema(implementation = String.class)) @PathParam("executionId") String executionId) {
         return getCounterfactualRequestsForExecution(executionId)
-                .map(obj -> obj.stream().map(cf -> new CounterfactualRequestResponse(cf.getExecutionId(), cf.getCounterfactualId())).collect(Collectors.toList()))
+                .map(obj -> obj.stream().map(cf -> new CounterfactualRequestResponse(cf.getExecutionId(),
+                        cf.getCounterfactualId(),
+                        cf.getMaxRunningTimeSeconds())).collect(Collectors.toList()))
                 .map(Response::ok)
                 .orElseGet(() -> Response.status(Response.Status.BAD_REQUEST.getStatusCode()))
                 .build();
@@ -186,9 +195,13 @@ public class ExplainabilityApiV1 {
                 .map(request -> {
                     List<CounterfactualExplainabilityResult> results = trustyService.getCounterfactualResults(executionId, counterfactualId);
                     return new CounterfactualResultsResponse(executionId,
+                            request.getServiceUrl(),
+                            request.getModelIdentifier(),
                             counterfactualId,
+                            request.getOriginalInputs(),
                             request.getGoals(),
                             request.getSearchDomains(),
+                            request.getMaxRunningTimeSeconds(),
                             results);
                 })
                 .map(Response::ok)
@@ -203,5 +216,4 @@ public class ExplainabilityApiV1 {
             return Optional.empty();
         }
     }
-
 }

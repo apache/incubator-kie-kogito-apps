@@ -1,5 +1,6 @@
 node_modules/
 dist/
+dist-it/
 node/
 coverage/
 target/
@@ -15,7 +16,7 @@ package-lock.json
 /.*
 !.github
 !.gitignore
-!.jenkins
+!.ci
 !.mvn
 /nbproject
 /*.ipr

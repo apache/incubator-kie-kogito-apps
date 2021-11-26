@@ -39,7 +39,7 @@ describe('Breadcrumbs', () => {
         .find('li.breadcrumb-item')
         .at(0)
         .text()
-    ).toMatch('Audit Investigation');
+    ).toMatch('Audit investigation');
     expect(
       breadcrumbs
         .find('li.breadcrumb-item')
@@ -54,8 +54,21 @@ describe('Breadcrumbs', () => {
     ).toMatch('Outcomes');
     expect(
       breadcrumbs
-        .find('li.breadcrumb-item')
-        .find('.pf-c-breadcrumb__link.pf-m-current')
-    ).toHaveLength(1);
+        .find('BreadcrumbItem')
+        .at(0)
+        .prop('isActive') as boolean
+    ).toBeFalsy();
+    expect(
+      breadcrumbs
+        .find('BreadcrumbItem')
+        .at(1)
+        .prop('isActive') as boolean
+    ).toBeFalsy();
+    expect(
+      breadcrumbs
+        .find('BreadcrumbItem')
+        .at(2)
+        .prop('isActive') as boolean
+    ).toBeTruthy();
   });
 });

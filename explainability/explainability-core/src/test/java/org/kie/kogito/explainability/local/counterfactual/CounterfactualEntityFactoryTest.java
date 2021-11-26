@@ -33,7 +33,10 @@ import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CounterfactualEntityFactoryTest {
 
@@ -166,5 +169,17 @@ class CounterfactualEntityFactoryTest {
         assertFalse(entities.get(1).isConstrained());
         assertTrue(entities.get(2).isConstrained());
         assertFalse(entities.get(3).isConstrained());
+    }
+
+    @Test
+    void testValidateNullNumericalFeature() {
+        final Feature feature = FeatureFactory.newNumericalFeature("double-feature", null);
+        final FeatureDomain domain = EmptyFeatureDomain.create();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            CounterfactualEntityFactory.from(feature, true, domain);
+        });
+
+        assertEquals("Null numeric features are not supported in counterfactuals", exception.getMessage());
     }
 }

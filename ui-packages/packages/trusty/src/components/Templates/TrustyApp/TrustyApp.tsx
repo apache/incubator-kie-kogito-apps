@@ -22,9 +22,18 @@ import kogitoLogo from '../../../../static/images/kogitoLogo.svg';
 import AuditDetail from '../AuditDetail/AuditDetail';
 import imgAvatar from '../../../../static/images/user.svg';
 import Breadcrumbs from '../../Organisms/Breadcrumbs/Breadcrumbs';
+import NotFound from '../NotFound/NotFound';
+import ApplicationError from '../ApplicationError/ApplicationError';
+import { TrustyContextValue } from '../../../types';
 import './TrustyApp.scss';
 
-const TrustyApp = () => {
+type TrustyAppProps = {
+  counterfactualEnabled: boolean;
+  explanationEnabled: boolean;
+};
+
+const TrustyApp = (props: TrustyAppProps) => {
+  const { counterfactualEnabled, explanationEnabled } = props;
   const location = useLocation();
   const [isMobileView, setIsMobileView] = useState(false);
   const [isNavOpenDesktop, setIsNavOpenDesktop] = useState(true);
@@ -57,7 +66,7 @@ const TrustyApp = () => {
           isActive={location.pathname.startsWith('/audit')}
           ouiaId="audit-item"
         >
-          <NavLink to="/audit">Audit Investigation</NavLink>
+          <NavLink to="/audit">Audit investigation</NavLink>
         </NavItem>
       </NavList>
     </Nav>
@@ -89,25 +98,36 @@ const TrustyApp = () => {
   );
 
   return (
-    <Page
-      header={Header}
-      sidebar={Sidebar}
-      breadcrumb={<Breadcrumbs />}
-      onPageResize={handlePageResize}
+    <TrustyContext.Provider
+      value={{ config: { counterfactualEnabled, explanationEnabled } }}
     >
-      <Switch>
-        <Route exact path="/">
-          <Redirect to="/audit" />
-        </Route>
-        <Route exact path="/audit">
-          <AuditOverview />
-        </Route>
-        <Route path="/audit/:executionType/:executionId">
-          <AuditDetail />
-        </Route>
-      </Switch>
-    </Page>
+      <Page
+        header={Header}
+        sidebar={Sidebar}
+        breadcrumb={<Breadcrumbs />}
+        onPageResize={handlePageResize}
+      >
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/audit" />
+          </Route>
+          <Route exact path="/audit">
+            <AuditOverview />
+          </Route>
+          <Route path="/audit/:executionType/:executionId">
+            <AuditDetail />
+          </Route>
+          <Route exact path="/error">
+            <ApplicationError />
+          </Route>
+          <Route path="/not-found" component={NotFound} />
+          <Redirect to="/not-found" />
+        </Switch>
+      </Page>
+    </TrustyContext.Provider>
   );
 };
 
 export default TrustyApp;
+
+export const TrustyContext = React.createContext<TrustyContextValue>(null);

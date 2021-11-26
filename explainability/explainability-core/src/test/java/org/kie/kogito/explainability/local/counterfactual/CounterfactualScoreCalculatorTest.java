@@ -29,13 +29,24 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
-import org.kie.kogito.explainability.model.*;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PredictionFeatureDomain;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
+import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
 import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class CounterfactualScoreCalculatorTest {
 
@@ -137,6 +148,47 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(0.0, distance);
     }
 
+    @Test
+    void BooleanDistanceNull() {
+        // Null as a goal
+        Feature predictionFeature = FeatureFactory.newBooleanFeature("x", true);
+        Feature goalFeature = FeatureFactory.newBooleanFeature("y", null);
+
+        Output predictionOutput = outputFromFeature(predictionFeature);
+        Output goalOutput = outputFromFeature(goalFeature);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.BOOLEAN, goalOutput.getType());
+        assertEquals(1.0, distance);
+
+        // Null as a prediction
+
+        predictionFeature = FeatureFactory.newBooleanFeature("x", null);
+        goalFeature = FeatureFactory.newBooleanFeature("y", false);
+
+        predictionOutput = outputFromFeature(predictionFeature);
+        goalOutput = outputFromFeature(goalFeature);
+
+        distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.BOOLEAN, predictionOutput.getType());
+        assertEquals(1.0, distance);
+
+        // Null as both prediction and goal
+
+        predictionFeature = FeatureFactory.newBooleanFeature("x", null);
+        goalFeature = FeatureFactory.newBooleanFeature("y", null);
+
+        predictionOutput = outputFromFeature(predictionFeature);
+        goalOutput = outputFromFeature(goalFeature);
+
+        distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.BOOLEAN, predictionOutput.getType());
+        assertEquals(0.0, distance);
+    }
+
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void CategoricalDistanceSameValue(int seed) {
@@ -161,9 +213,69 @@ class CounterfactualScoreCalculatorTest {
 
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void CategoricalDistanceNull(int seed) {
+        final Random random = new Random(seed);
+        final String value = UUID.randomUUID().toString();
+
+        // Null as a goal
+        Feature predictionFeature = FeatureFactory.newCategoricalFeature("x", value);
+        Feature goalFeature = FeatureFactory.newCategoricalFeature("y", null);
+
+        Output predictionOutput = outputFromFeature(predictionFeature);
+        Output goalOutput = outputFromFeature(goalFeature);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.CATEGORICAL, goalOutput.getType());
+        assertEquals(1.0, distance);
+
+        // Null as a prediction
+
+        predictionFeature = FeatureFactory.newCategoricalFeature("x", null);
+        goalFeature = FeatureFactory.newCategoricalFeature("y", value);
+
+        predictionOutput = outputFromFeature(predictionFeature);
+        goalOutput = outputFromFeature(goalFeature);
+
+        distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.CATEGORICAL, predictionOutput.getType());
+        assertEquals(1.0, distance);
+
+        // Null as both prediction and goal
+
+        predictionFeature = FeatureFactory.newCategoricalFeature("x", null);
+        goalFeature = FeatureFactory.newCategoricalFeature("y", null);
+
+        predictionOutput = outputFromFeature(predictionFeature);
+        goalOutput = outputFromFeature(goalFeature);
+
+        distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.CATEGORICAL, predictionOutput.getType());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void TextDistanceSameValue(int seed) {
+        final String value = UUID.randomUUID().toString();
+        Feature x = FeatureFactory.newTextFeature("x", value);
+        Feature y = FeatureFactory.newTextFeature("y", value);
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        final double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertEquals(Type.TEXT, ox.getType());
+        assertEquals(0.0, distance);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void IntegerDistanceDifferentValue(int seed) {
         final Random random = new Random(seed);
-        int value = random.nextInt(1000);
+        int value = random.nextInt();
         Feature x = FeatureFactory.newNumericalFeature("x", value);
         Feature y = FeatureFactory.newNumericalFeature("y", value + 100);
 
@@ -205,6 +317,55 @@ class CounterfactualScoreCalculatorTest {
         distance = CounterFactualScoreCalculator.outputDistance(ox, oy, 0.05);
 
         assertTrue(distance * distance > 0);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void IntegerDistanceNull(int seed) {
+        final Random random = new Random(seed);
+        final int value = random.nextInt(1000);
+
+        // Null as a goal
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            Feature predictionFeature = FeatureFactory.newNumericalFeature("x", value);
+            Feature goalFeature = FeatureFactory.newNumericalFeature("x", null);
+
+            Output predictionOutput = outputFromFeature(predictionFeature);
+            Output goalOutput = outputFromFeature(goalFeature);
+            CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+        });
+
+        assertEquals("Unsupported NaN or NULL for numeric feature 'x'",
+                exception.getMessage());
+
+        // Null as a prediction
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            Feature predictionFeature = FeatureFactory.newNumericalFeature("x", null);
+            Feature goalFeature = FeatureFactory.newNumericalFeature("x", value);
+
+            Output predictionOutput = outputFromFeature(predictionFeature);
+            Output goalOutput = outputFromFeature(goalFeature);
+
+            CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+        });
+
+        assertEquals("Unsupported NaN or NULL for numeric feature 'x'",
+                exception.getMessage());
+
+        // Null as both prediction and goal
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            Feature predictionFeature = FeatureFactory.newNumericalFeature("x", null);
+            Feature goalFeature = FeatureFactory.newNumericalFeature("x", null);
+
+            Output predictionOutput = outputFromFeature(predictionFeature);
+            Output goalOutput = outputFromFeature(goalFeature);
+
+            CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+        });
+
+        assertEquals("Unsupported NaN or NULL for numeric feature 'x'",
+                exception.getMessage());
+
     }
 
     @ParameterizedTest
@@ -281,6 +442,55 @@ class CounterfactualScoreCalculatorTest {
 
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void DoubleDistanceNull(int seed) {
+        final Random random = new Random(seed);
+        final double value = random.nextDouble() * 1000;
+
+        // Null as a goal
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            Feature predictionFeature = FeatureFactory.newNumericalFeature("x", value);
+            Feature goalFeature = FeatureFactory.newNumericalFeature("x", null);
+
+            Output predictionOutput = outputFromFeature(predictionFeature);
+            Output goalOutput = outputFromFeature(goalFeature);
+            CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+        });
+
+        assertEquals("Unsupported NaN or NULL for numeric feature 'x'",
+                exception.getMessage());
+
+        // Null as a prediction
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            Feature predictionFeature = FeatureFactory.newNumericalFeature("x", null);
+            Feature goalFeature = FeatureFactory.newNumericalFeature("x", value);
+
+            Output predictionOutput = outputFromFeature(predictionFeature);
+            Output goalOutput = outputFromFeature(goalFeature);
+
+            CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+        });
+
+        assertEquals("Unsupported NaN or NULL for numeric feature 'x'",
+                exception.getMessage());
+
+        // Null as both prediction and goal
+        exception = assertThrows(IllegalArgumentException.class, () -> {
+            Feature predictionFeature = FeatureFactory.newNumericalFeature("x", null);
+            Feature goalFeature = FeatureFactory.newNumericalFeature("x", null);
+
+            Output predictionOutput = outputFromFeature(predictionFeature);
+            Output goalOutput = outputFromFeature(goalFeature);
+
+            CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+        });
+
+        assertEquals("Unsupported NaN or NULL for numeric feature 'x'",
+                exception.getMessage());
+
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void BooleanDistanceDifferentValue(int seed) {
         final Random random = new Random(seed);
         boolean value = random.nextBoolean();
@@ -338,6 +548,23 @@ class CounterfactualScoreCalculatorTest {
 
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void TextDistanceDifferentValue(int seed) {
+        final Random random = new Random(seed);
+        Feature x = FeatureFactory.newTextFeature("x", UUID.randomUUID().toString());
+        Feature y = FeatureFactory.newTextFeature("y", UUID.randomUUID().toString());
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertEquals(Type.TEXT, ox.getType());
+        assertEquals(Type.TEXT, oy.getType());
+        assertEquals(1.0, distance);
+    }
+
     @Test
     void differentFeatureTypes() {
         Feature x = FeatureFactory.newCategoricalFeature("x", UUID.randomUUID().toString());
@@ -350,7 +577,8 @@ class CounterfactualScoreCalculatorTest {
             CounterFactualScoreCalculator.outputDistance(ox, oy);
         });
 
-        assertEquals("Features must have the same type, got categorical and number", exception.getMessage());
+        assertEquals("Features must have the same type. Feature 'x', has type 'categorical' and 'number'",
+                exception.getMessage());
     }
 
     @Test
@@ -365,7 +593,7 @@ class CounterfactualScoreCalculatorTest {
             CounterFactualScoreCalculator.outputDistance(ox, oy);
         });
 
-        assertEquals("Feature type time not supported", exception.getMessage());
+        assertEquals("Feature 'x' has unsupported type 'time'", exception.getMessage());
     }
 
     /**
@@ -398,14 +626,14 @@ class CounterfactualScoreCalculatorTest {
 
         PredictionInput input = new PredictionInput(features);
         PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
-        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
 
         List<Output> goal = new ArrayList<>();
         goal.add(new Output("f-2", Type.NUMBER, new Value(2.0), 0.0));
         goal.add(new Output("f-3", Type.BOOLEAN, new Value(true), 0.0));
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         BendableBigDecimalScore score = scoreCalculator.calculateScore(solution);
 
@@ -456,7 +684,7 @@ class CounterfactualScoreCalculatorTest {
 
         PredictionInput input = new PredictionInput(features);
         PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
-        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
 
         List<Output> goal = new ArrayList<>();
         goal.add(new Output("f-2", Type.NUMBER, new Value(2.0), 0.0));
@@ -468,7 +696,7 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreCalculator.calculateScore(solution);
@@ -509,7 +737,7 @@ class CounterfactualScoreCalculatorTest {
 
         PredictionInput input = new PredictionInput(features);
         PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
-        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
 
         List<Output> goal = new ArrayList<>();
         goal.add(new Output("f-1", Type.NUMBER, new Value(1.0), 0.0));
@@ -523,7 +751,7 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
 
         final CounterfactualSolution solution =
-                new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
 
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
             scoreCalculator.calculateScore(solution);
@@ -531,5 +759,130 @@ class CounterfactualScoreCalculatorTest {
 
         assertEquals("Prediction size must be equal to goal size", exception.getMessage());
 
+    }
+
+    /**
+     * Null values for input Boolean features should be accepted as valid
+     */
+    @Test
+    void testNullBooleanInput() throws ExecutionException, InterruptedException {
+        final CounterFactualScoreCalculator scoreCalculator = new CounterFactualScoreCalculator();
+
+        PredictionProvider model = TestUtils.getFeatureSkipModel(0);
+
+        List<Feature> features = new ArrayList<>();
+        List<FeatureDomain> featureDomains = new ArrayList<>();
+        List<Boolean> constraints = new ArrayList<>();
+
+        // f-1
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
+        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
+        constraints.add(false);
+
+        // f-2
+        features.add(FeatureFactory.newBooleanFeature("f-2", null));
+        featureDomains.add(EmptyFeatureDomain.create());
+        constraints.add(false);
+
+        // f-3
+        features.add(FeatureFactory.newBooleanFeature("f-3", true));
+        featureDomains.add(EmptyFeatureDomain.create());
+        constraints.add(false);
+
+        PredictionInput input = new PredictionInput(features);
+        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+
+        List<Output> goal = new ArrayList<>();
+        goal.add(new Output("f-2", Type.BOOLEAN, new Value(null), 0.0));
+        goal.add(new Output("f-3", Type.BOOLEAN, new Value(true), 0.0));
+
+        final CounterfactualSolution solution =
+                new CounterfactualSolution(entities, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
+
+        BendableBigDecimalScore score = scoreCalculator.calculateScore(solution);
+
+        List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input)).get();
+
+        assertTrue(score.isFeasible());
+
+        assertEquals(2, goal.size());
+        assertEquals(1, predictionOutputs.size()); // A single prediction is expected
+        assertEquals(2, predictionOutputs.get(0).getOutputs().size()); // Single prediction with two features
+        assertEquals(0, score.getHardScore(0).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getHardScore(1).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getHardScore(2).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getSoftScore(0).compareTo(BigDecimal.ZERO));
+        assertEquals(0, score.getSoftScore(1).compareTo(BigDecimal.ZERO));
+        assertEquals(3, score.getHardLevelsSize());
+        assertEquals(2, score.getSoftLevelsSize());
+    }
+
+    /**
+     * Null values for input Integer features should not be accepted as valid
+     */
+    @Test
+    void testNullIntegerInput() throws ExecutionException, InterruptedException {
+        List<Feature> features = new ArrayList<>();
+        List<FeatureDomain> featureDomains = new ArrayList<>();
+        List<Boolean> constraints = new ArrayList<>();
+
+        // f-1
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
+        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
+        constraints.add(false);
+
+        // f-2
+        features.add(FeatureFactory.newNumericalFeature("f-2", null));
+        featureDomains.add(NumericalFeatureDomain.create(0, 10));
+        constraints.add(false);
+
+        // f-3
+        features.add(FeatureFactory.newBooleanFeature("f-3", true));
+        featureDomains.add(EmptyFeatureDomain.create());
+        constraints.add(false);
+
+        PredictionInput input = new PredictionInput(features);
+        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+        });
+
+        assertEquals("Null numeric features are not supported in counterfactuals", exception.getMessage());
+    }
+
+    /**
+     * Null values for input Double features should not be accepted as valid
+     */
+    @Test
+    void testNullDoubleInput() {
+        List<Feature> features = new ArrayList<>();
+        List<FeatureDomain> featureDomains = new ArrayList<>();
+        List<Boolean> constraints = new ArrayList<>();
+
+        // f-1
+        features.add(FeatureFactory.newNumericalFeature("f-1", 1.0));
+        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
+        constraints.add(false);
+
+        // f-2
+        features.add(FeatureFactory.newNumericalFeature("f-2", null));
+        featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
+        constraints.add(false);
+
+        // f-3
+        features.add(FeatureFactory.newBooleanFeature("f-3", true));
+        featureDomains.add(EmptyFeatureDomain.create());
+        constraints.add(false);
+
+        PredictionInput input = new PredictionInput(features);
+        PredictionFeatureDomain domains = new PredictionFeatureDomain(featureDomains);
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            CounterfactualEntityFactory.createEntities(input, domains, constraints, null);
+        });
+
+        assertEquals("Null numeric features are not supported in counterfactuals", exception.getMessage());
     }
 }

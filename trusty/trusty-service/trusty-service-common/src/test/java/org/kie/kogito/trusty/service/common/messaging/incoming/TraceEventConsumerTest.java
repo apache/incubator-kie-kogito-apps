@@ -17,7 +17,9 @@
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
 import java.lang.reflect.Field;
+import java.time.Duration;
 
+import org.awaitility.Awaitility;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -26,6 +28,8 @@ import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 import org.kie.kogito.trusty.storage.api.model.Decision;
+
+import io.smallrye.context.SmallRyeManagedExecutor;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -44,7 +48,10 @@ class TraceEventConsumerTest {
     void setup() {
         trustyService = mock(TrustyService.class);
         storageExceptionsProvider = mock(StorageExceptionsProvider.class);
-        consumer = new TraceEventConsumer(trustyService, TrustyServiceTestUtils.MAPPER, storageExceptionsProvider);
+        consumer = new TraceEventConsumer(trustyService,
+                TrustyServiceTestUtils.MAPPER,
+                storageExceptionsProvider,
+                SmallRyeManagedExecutor.builder().build());
     }
 
     @Test
@@ -80,7 +87,12 @@ class TraceEventConsumerTest {
 
         doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(any(String.class), any(Decision.class));
         consumer.handleMessage(message);
-        verify(message, times(1)).ack();
+
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(1))
+                .untilAsserted(
+                        () -> verify(message, times(1)).ack());
     }
 
     @Test
@@ -94,7 +106,12 @@ class TraceEventConsumerTest {
 
         doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(any(String.class), any(Decision.class));
         consumer.handleMessage(message);
-        verify(message, times(1)).nack(any());
+
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(1))
+                .untilAsserted(
+                        () -> verify(message, times(1)).nack(any()));
     }
 
     @Test
@@ -111,7 +128,14 @@ class TraceEventConsumerTest {
 
     private void testNumberOfInvocations(Message<String> message, int wantedNumberOfServiceInvocations) {
         consumer.handleMessage(message);
-        verify(trustyService, times(wantedNumberOfServiceInvocations)).processDecision(any(), any());
-        verify(message, times(1)).ack();
+
+        Awaitility.await()
+                .atMost(Duration.ofSeconds(30))
+                .pollInterval(Duration.ofSeconds(1))
+                .untilAsserted(
+                        () -> {
+                            verify(trustyService, times(wantedNumberOfServiceInvocations)).processDecision(any(), any());
+                            verify(message, times(1)).ack();
+                        });
     }
 }

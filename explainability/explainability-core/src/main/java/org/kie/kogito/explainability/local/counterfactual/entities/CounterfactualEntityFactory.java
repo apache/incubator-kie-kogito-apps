@@ -45,6 +45,7 @@ public class CounterfactualEntityFactory {
     public static CounterfactualEntity from(Feature feature,
             FeatureDistribution featureDistribution) {
         CounterfactualEntity entity = null;
+        validateFeature(feature);
         if (feature.getType() == Type.NUMBER) {
             if (feature.getValue().getUnderlyingObject() instanceof Double) {
                 if (feature.isConstrained()) {
@@ -79,6 +80,21 @@ public class CounterfactualEntityFactory {
             throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
         }
         return entity;
+    }
+
+    /**
+     * Validation of features for counterfactual entity construction
+     *
+     * @param feature {@link Feature} to be validated
+     */
+    public static void validateFeature(Feature feature) {
+        final Type type = feature.getType();
+        final Object object = feature.getValue().getUnderlyingObject();
+        if (type == Type.NUMBER) {
+            if (object == null) {
+                throw new IllegalArgumentException("Null numeric features are not supported in counterfactuals");
+            }
+        }
     }
 
     public static List<CounterfactualEntity> createEntities(PredictionInput predictionInput) {

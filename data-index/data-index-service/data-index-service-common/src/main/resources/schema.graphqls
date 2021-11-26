@@ -3,12 +3,34 @@ scalar DateTime
 schema {
     query: Query
     subscription: Subscription
+    mutation: Mutation
 }
 
 type Query {
     ProcessInstances(where: ProcessInstanceArgument, orderBy: ProcessInstanceOrderBy, pagination: Pagination): [ProcessInstance]
     UserTaskInstances(where: UserTaskInstanceArgument, orderBy: UserTaskInstanceOrderBy, pagination: Pagination):  [UserTaskInstance]
     Jobs(where: JobArgument, orderBy: JobOrderBy, pagination: Pagination):  [Job]
+}
+
+type Mutation {
+    ProcessInstanceAbort(id: String): String
+    ProcessInstanceRetry(id: String): String
+    ProcessInstanceSkip(id: String): String
+    ProcessInstanceUpdateVariables(id: String, variables: String): String
+    NodeInstanceTrigger(id: String, nodeId: String): String
+    NodeInstanceRetrigger(id: String, nodeInstanceId: String): String
+    NodeInstanceCancel(id: String, nodeInstanceId: String): String
+    JobCancel(id: String): String
+    JobReschedule(id: String, data: String): String
+    UserTaskInstanceUpdate(taskId: String, user: String, groups: [String],  description: String, priority: String,
+        actualOwner: String, adminGroups: [String!], adminUsers: [String!], excludedUsers: [String!],
+        potentialGroups: [String!], potentialUsers: [String!], inputParams: String): String
+    UserTaskInstanceCommentCreate(taskId: String, user: String, groups: [String], comment: String): String
+    UserTaskInstanceAttachmentCreate(taskId: String, user: String, groups: [String], name: String, uri: String): String
+    UserTaskInstanceCommentUpdate(user:String, groups:[String],commentId: String, comment: String): String
+    UserTaskInstanceCommentDelete(user:String, groups:[String],commentId: String): String
+    UserTaskInstanceAttachmentUpdate(user:String, groups:[String],attachmentId: String,  name: String, uri: String): String
+    UserTaskInstanceAttachmentDelete(user:String, groups:[String], attachmentId: String): String
 }
 
 type ProcessInstance {
@@ -23,12 +45,14 @@ type ProcessInstance {
     endpoint: String!
     serviceUrl: String
     nodes: [NodeInstance!]!
+    nodeDefinitions: [Node!]
     milestones: [Milestone!]
     variables: String
     start: DateTime!
     end: DateTime
     parentProcessInstance: ProcessInstance
     childProcessInstances: [ProcessInstance!]
+    diagram: String
     error: ProcessInstanceError
     addons: [String!]
     lastUpdate: DateTime!
@@ -90,6 +114,14 @@ type NodeInstance {
     exit: DateTime
     definitionId: String!
     nodeId: String!
+}
+
+type Node {
+    id: String!
+    nodeDefinitionId: String!
+    name: String!
+    type: String!
+    uniqueId: String!
 }
 
 enum MilestoneStatus {
@@ -246,6 +278,21 @@ input ProcessInstanceStateArgument {
     in: [ProcessInstanceState]
 }
 
+type Comment {
+    id: String!
+    content: String!
+    updatedBy: String!
+    updatedAt: DateTime!
+}
+
+type Attachment {
+    id: String!
+    name: String!
+    content: String!
+    updatedBy: String!
+    updatedAt: DateTime!
+}
+
 type UserTaskInstance {
     id: String!
     description: String
@@ -269,6 +316,9 @@ type UserTaskInstance {
     referenceName: String
     lastUpdate: DateTime!
     endpoint: String
+    schema(user: String, groups:[String]): String
+    comments: [Comment!]
+    attachments: [Attachment!]
 }
 
 type UserTaskInstanceMeta {
@@ -288,6 +338,8 @@ type UserTaskInstanceMeta {
     potentialUsers: [String!]
     referenceName: String
     lastUpdate: DateTime!
+    comments: [Comment!]
+    attachments: [Attachment!]
 }
 
 input UserTaskInstanceArgument {
@@ -311,6 +363,8 @@ input UserTaskInstanceArgument {
     started: DateArgument
     referenceName: StringArgument
     lastUpdate: DateArgument
+    comments: CommentArgument
+    attachments: AttachmentArgument
 }
 
 input UserTaskInstanceMetaArgument {
@@ -329,6 +383,15 @@ input UserTaskInstanceMetaArgument {
     completed: DateArgument
     started: DateArgument
     referenceName: StringArgument
+}
+input CommentArgument {
+    id: IdArgument
+    name: StringArgument
+}
+
+input AttachmentArgument {
+    id: IdArgument
+    name: StringArgument
 }
 
 input UserTaskInstanceOrderBy {

@@ -20,15 +20,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.explainability.api.CounterfactualExplainabilityResultDto;
+import org.kie.kogito.explainability.api.CounterfactualExplainabilityResult;
 import org.kie.kogito.persistence.api.query.Query;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualExplainabilityResult;
-import org.kie.kogito.trusty.storage.api.model.ExplainabilityStatus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -37,33 +33,30 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 public class CounterfactualExplainerServiceHandlerTest
-        extends BaseExplainerServiceHandlerTest<CounterfactualExplainerServiceHandler, CounterfactualExplainabilityResult, CounterfactualExplainabilityResultDto> {
+        extends BaseExplainerServiceHandlerTest<CounterfactualExplainerServiceHandler, CounterfactualExplainabilityResult> {
 
     private static final String COUNTERFACTUAL_ID = "counterfactualId";
 
     private static final String SOLUTION_ID = "solutionId";
 
-    private static final Long SEQUENCE_ID = 1L;
-
-    private CounterfactualSlidingWindowExplainabilityResultsManager counterfactualExplainabilityResultsManager;
+    private CounterfactualExplainabilityResultsManagerSlidingWindow explainabilityResultsManagerSlidingWindow;
+    private CounterfactualExplainabilityResultsManagerDuplicates explainabilityResultsManagerDuplicates;
 
     @SuppressWarnings("rawtypes")
     private final Query query = mock(Query.class);
 
     @Override
     protected CounterfactualExplainerServiceHandler getHandler() {
-        counterfactualExplainabilityResultsManager = mock(CounterfactualSlidingWindowExplainabilityResultsManager.class);
-        return new CounterfactualExplainerServiceHandler(storageService, counterfactualExplainabilityResultsManager);
+        explainabilityResultsManagerSlidingWindow = mock(CounterfactualExplainabilityResultsManagerSlidingWindow.class);
+        explainabilityResultsManagerDuplicates = mock(CounterfactualExplainabilityResultsManagerDuplicates.class);
+        return new CounterfactualExplainerServiceHandler(storageService,
+                explainabilityResultsManagerSlidingWindow,
+                explainabilityResultsManagerDuplicates);
     }
 
     @Override
     protected Class<CounterfactualExplainabilityResult> getResult() {
         return CounterfactualExplainabilityResult.class;
-    }
-
-    @Override
-    protected Class<CounterfactualExplainabilityResultDto> getResultDto() {
-        return CounterfactualExplainabilityResultDto.class;
     }
 
     @Override
@@ -139,71 +132,6 @@ public class CounterfactualExplainerServiceHandlerTest
         handler.storeExplainabilityResult(EXECUTION_ID, result);
 
         verify(storage).put(eq(SOLUTION_ID), eq(result));
-        verify(counterfactualExplainabilityResultsManager).purge(eq(COUNTERFACTUAL_ID), eq(storage));
-    }
-
-    @Test
-    @Override
-    public void testExplainabilityResultFrom_Success() {
-        CounterfactualExplainabilityResultDto dto = CounterfactualExplainabilityResultDto.buildSucceeded(EXECUTION_ID,
-                COUNTERFACTUAL_ID,
-                SOLUTION_ID,
-                SEQUENCE_ID,
-                true,
-                CounterfactualExplainabilityResultDto.Stage.FINAL,
-                Collections.emptyMap(),
-                Collections.emptyMap());
-
-        CounterfactualExplainabilityResult result = handler.explainabilityResultFrom(dto, decision);
-
-        assertNotNull(result);
-        assertEquals(EXECUTION_ID, result.getExecutionId());
-        assertEquals(COUNTERFACTUAL_ID, result.getCounterfactualId());
-        assertEquals(SOLUTION_ID, result.getSolutionId());
-        assertEquals(SEQUENCE_ID, result.getSequenceId());
-        assertEquals(ExplainabilityStatus.SUCCEEDED, result.getStatus());
-        assertTrue(result.isValid());
-        assertEquals(CounterfactualExplainabilityResult.Stage.FINAL, result.getStage());
-        assertTrue(result.getInputs().isEmpty());
-        assertTrue(result.getOutputs().isEmpty());
-    }
-
-    @Test
-    public void testExplainabilityResultFrom_SuccessIntermediate() {
-        CounterfactualExplainabilityResultDto dto = CounterfactualExplainabilityResultDto.buildSucceeded(EXECUTION_ID,
-                COUNTERFACTUAL_ID,
-                SOLUTION_ID,
-                SEQUENCE_ID,
-                true,
-                CounterfactualExplainabilityResultDto.Stage.INTERMEDIATE,
-                Collections.emptyMap(),
-                Collections.emptyMap());
-
-        CounterfactualExplainabilityResult result = handler.explainabilityResultFrom(dto, decision);
-
-        assertNotNull(result);
-        assertEquals(EXECUTION_ID, result.getExecutionId());
-        assertEquals(COUNTERFACTUAL_ID, result.getCounterfactualId());
-        assertEquals(SOLUTION_ID, result.getSolutionId());
-        assertEquals(SEQUENCE_ID, result.getSequenceId());
-        assertEquals(ExplainabilityStatus.SUCCEEDED, result.getStatus());
-        assertTrue(result.isValid());
-        assertEquals(CounterfactualExplainabilityResult.Stage.INTERMEDIATE, result.getStage());
-        assertTrue(result.getInputs().isEmpty());
-        assertTrue(result.getOutputs().isEmpty());
-    }
-
-    @Test
-    @Override
-    public void testExplainabilityResultFrom_Failure() {
-        CounterfactualExplainabilityResultDto dto = CounterfactualExplainabilityResultDto.buildFailed(EXECUTION_ID, COUNTERFACTUAL_ID, FAILURE_MESSAGE);
-
-        CounterfactualExplainabilityResult result = handler.explainabilityResultFrom(dto, decision);
-
-        assertNotNull(result);
-        assertEquals(EXECUTION_ID, result.getExecutionId());
-        assertEquals(COUNTERFACTUAL_ID, result.getCounterfactualId());
-        assertEquals(ExplainabilityStatus.FAILED, result.getStatus());
-        assertEquals(FAILURE_MESSAGE, result.getStatusDetails());
+        verify(explainabilityResultsManagerSlidingWindow).purge(eq(COUNTERFACTUAL_ID), eq(storage));
     }
 }

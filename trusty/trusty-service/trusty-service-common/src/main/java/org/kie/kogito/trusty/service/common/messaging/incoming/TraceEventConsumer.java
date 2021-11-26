@@ -16,11 +16,13 @@
 
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.context.ManagedExecutor;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.tracing.decision.event.trace.TraceEvent;
@@ -48,19 +50,25 @@ public class TraceEventConsumer extends BaseEventConsumer<TraceEvent> {
     private static final TypeReference<TraceEvent> CLOUD_EVENT_TYPE = new TypeReference<>() {
     };
 
-    private TraceEventConsumer() {
+    protected TraceEventConsumer() {
         //CDI proxy
     }
 
     @Inject
-    public TraceEventConsumer(TrustyService service, ObjectMapper mapper, StorageExceptionsProvider storageExceptionsProvider) {
-        super(service, mapper, storageExceptionsProvider);
+    public TraceEventConsumer(TrustyService service,
+            ObjectMapper mapper,
+            StorageExceptionsProvider storageExceptionsProvider,
+            ManagedExecutor executor) {
+        super(service,
+                mapper,
+                storageExceptionsProvider,
+                executor);
     }
 
     @Override
     @Incoming("kogito-tracing-decision")
     public CompletionStage<Void> handleMessage(Message<String> message) {
-        return super.handleMessage(message);
+        return CompletableFuture.runAsync(() -> super.handleMessage(message), executor);
     }
 
     @Override

@@ -22,7 +22,9 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
@@ -89,7 +91,7 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIndexingServiceIT.class);
 
-    Duration timeout = Duration.ofSeconds(5);
+    Duration timeout = Duration.ofSeconds(30);
 
     @Inject
     public DataIndexStorageService cacheService;
@@ -188,6 +190,101 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
     }
 
     @Test
+    void testProcessInstancePagination() {
+        String processId = "travels";
+        List<String> pIds = new ArrayList<>();
+
+        IntStream.range(0, 200).forEach(i -> {
+            String pId = UUID.randomUUID().toString();
+            KogitoProcessCloudEvent startEvent = getProcessCloudEvent(processId, pId, ACTIVE, null, null, null);
+            indexProcessCloudEvent(startEvent);
+            pIds.add(pId);
+        });
+
+        await()
+                .atMost(timeout)
+                .untilAsserted(() -> given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances { id } }\" }")
+                        .when().post("/graphql")
+                        .then().log().ifValidationFails().statusCode(200)
+                        .body("data.ProcessInstances.size()", is(pIds.size())));
+
+        await()
+                .atMost(timeout)
+                .untilAsserted(() -> given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances(orderBy : {start: ASC}, pagination: {offset: 100, limit: 100}) { id } }\" }")
+                        .when().post("/graphql")
+                        .then().log().ifValidationFails().statusCode(200)
+                        .body("data.ProcessInstances.size()", is(100))
+                        .body("data.ProcessInstances[0].id", is(pIds.get(100)))
+                        .body("data.ProcessInstances[99].id", is(pIds.get(199))));
+
+        await()
+                .atMost(timeout)
+                .untilAsserted(() -> given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances(orderBy : {start: ASC}, pagination: {offset: 0, limit: 100}) { id } }\" }")
+                        .when().post("/graphql")
+                        .then().log().ifValidationFails().statusCode(200)
+                        .body("data.ProcessInstances.size()", is(100))
+                        .body("data.ProcessInstances[0].id", is(pIds.get(0)))
+                        .body("data.ProcessInstances[99].id", is(pIds.get(99))));
+    }
+
+    @Test
+    void testUserTaskInstancePagination() {
+        String processId = "deals";
+        List<String> taskIds = new ArrayList<>();
+
+        IntStream.range(0, 200).forEach(i -> {
+            String taskId = UUID.randomUUID().toString();
+            KogitoUserTaskCloudEvent event = getUserTaskCloudEvent(taskId, processId, UUID.randomUUID().toString(), null, null, "InProgress");
+            indexUserTaskCloudEvent(event);
+            taskIds.add(taskId);
+        });
+
+        await()
+                .atMost(timeout)
+                .untilAsserted(() -> given().contentType(ContentType.JSON).body("{ \"query\" : \"{UserTaskInstances { id } }\" }")
+                        .when().post("/graphql")
+                        .then().log().ifValidationFails().statusCode(200)
+                        .body("data.UserTaskInstances.size()", is(taskIds.size())));
+
+        await()
+                .atMost(timeout)
+                .untilAsserted(() -> given().contentType(ContentType.JSON).body("{ \"query\" : \"{UserTaskInstances(orderBy : {started: ASC}, pagination: {offset: 0, limit: 100}) { id } }\" }")
+                        .when().post("/graphql")
+                        .then().log().ifValidationFails().statusCode(200)
+                        .body("data.UserTaskInstances.size()", is(100))
+                        .body("data.UserTaskInstances[0].id", is(taskIds.get(0)))
+                        .body("data.UserTaskInstances[99].id", is(taskIds.get(99))));
+
+        await()
+                .atMost(timeout)
+                .untilAsserted(() -> given().contentType(ContentType.JSON).body("{ \"query\" : \"{UserTaskInstances(orderBy : {started: ASC}, pagination: {offset: 100, limit: 100}) { id } }\" }")
+                        .when().post("/graphql")
+                        .then().log().ifValidationFails().statusCode(200)
+                        .body("data.UserTaskInstances.size()", is(100))
+                        .body("data.UserTaskInstances[0].id", is(taskIds.get(100)))
+                        .body("data.UserTaskInstances[99].id", is(taskIds.get(199))));
+
+        await()
+                .atMost(timeout)
+                .untilAsserted(() -> given().contentType(ContentType.JSON).body("{ \"query\" : \"{UserTaskInstances(orderBy : {started: ASC}, pagination: {offset: 0, limit: 200}) { id } }\" }")
+                        .when().post("/graphql")
+                        .then().log().ifValidationFails().statusCode(200)
+                        .body("data.UserTaskInstances.size()", is(taskIds.size()))
+                        .body("data.UserTaskInstances[0].id", is(taskIds.get(0)))
+                        .body("data.UserTaskInstances[199].id", is(taskIds.get(199))));
+
+        await()
+                .atMost(timeout)
+                .untilAsserted(() -> given().contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{UserTaskInstances(where: {state: {in: [\\\"InProgress\\\"]}}, orderBy : {started: ASC}, pagination: {offset: 0, limit: 200}) { id } }\" }")
+                        .when().post("/graphql")
+                        .then().log().ifValidationFails().statusCode(200)
+                        .body("data.UserTaskInstances.size()", is(taskIds.size()))
+                        .body("data.UserTaskInstances[0].id", is(taskIds.get(0)))
+                        .body("data.UserTaskInstances[199].id", is(taskIds.get(199))));
+    }
+
+    @Test
     void testProcessInstanceIndex() throws Exception {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
@@ -213,9 +310,11 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
         endEvent.getData().setEnd(ZonedDateTime.now());
         endEvent.getData().setVariables((ObjectNode) getObjectMapper().readTree(
                 "{ \"traveller\":{\"firstName\":\"Maciej\"},\"hotel\":{\"name\":\"Ibis\"},\"flight\":{\"arrival\":\"2019-08-20T22:12:57.340Z\",\"departure\":\"2019-08-20T07:12:57.340Z\",\"flightNumber\":\"QF444\"} }"));
+        endEvent.getData().getMilestones().get(0).setStatus(MilestoneStatus.COMPLETED.name());
         indexProcessCloudEvent(endEvent);
 
         validateProcessInstance(getProcessInstanceByIdAndState(processInstanceId, COMPLETED), endEvent);
+        validateProcessInstance(getProcessInstanceByIdAndMilestoneStatus(processInstanceId, MilestoneStatus.COMPLETED.name()), endEvent);
 
         KogitoProcessCloudEvent event = getProcessCloudEvent(subProcessId, subProcessInstanceId, ACTIVE, processInstanceId,
                 processId, processInstanceId);

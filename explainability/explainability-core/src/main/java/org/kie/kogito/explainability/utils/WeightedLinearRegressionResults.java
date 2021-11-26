@@ -16,11 +16,17 @@
 
 package org.kie.kogito.explainability.utils;
 
+import java.util.Arrays;
+
+import org.apache.commons.math3.distribution.TDistribution;
+
 public class WeightedLinearRegressionResults {
     private final double[] coefficients;
     private final double intercept;
-    private final double gof;
+    private final int dof;
     private final double mse;
+    private final double[] stdErrors;
+    private final double[] pvalues;
 
     /**
      * Store the results of a weighted linear regression into a container class
@@ -29,25 +35,30 @@ public class WeightedLinearRegressionResults {
      * @param intercept Whether or not the weighted linear regression computed an intercept. If true, then the
      *        last value of the coefficients array is taken as the intercept. If false, the intercept is
      *        set to 0.
-     * @param gof: The goodness of fit of the weighted linear regression
-     * @param gof: The mean square error of the weighted linear regression
+     * @param dof: The degress of freedom of the weighted linear regression
+     * @param mse: The mean square error of the weighted linear regression
+     * @param stdErrors: The standard errors of each coefficient of the weighted linear regression
+     * @param pvalues: The pvalues of each coefficient of the weighted linear regression
      *
      */
-    public WeightedLinearRegressionResults(double[][] coefficients, boolean intercept, double gof, double mse) {
+    public WeightedLinearRegressionResults(double[][] coefficients, boolean intercept, int dof, double mse,
+            double[] stdErrors, double[] pvalues) {
         //if intercept is true
         if (intercept) {
-            double[] rawCoeffs = MatrixUtils.getCol(coefficients, 0);
+            double[] rawCoeffs = MatrixUtilsExtensions.getCol(coefficients, 0);
             this.coefficients = java.util.Arrays
                     .stream(rawCoeffs, 0, rawCoeffs.length - 1)
                     .toArray();
             this.intercept = rawCoeffs[rawCoeffs.length - 1];
         } else {
-            this.coefficients = MatrixUtils.getCol(coefficients, 0);
+            this.coefficients = MatrixUtilsExtensions.getCol(coefficients, 0);
             this.intercept = 0.0;
         }
 
-        this.gof = gof;
+        this.dof = dof;
         this.mse = mse;
+        this.stdErrors = stdErrors;
+        this.pvalues = pvalues;
 
     }
 
@@ -89,17 +100,26 @@ public class WeightedLinearRegressionResults {
     }
 
     /**
-     * @return The goodness-of-fit (coefficient of determination) of the weighted linear regression.
-     *         See https://en.wikipedia.org/wiki/Multiple_correlation for more info
-     */
-    public double getGof() {
-        return this.gof;
-    }
-
-    /**
      * @return mse: The mean square error of the weighted linear regression.
      */
     public double getMSE() {
         return this.mse;
+    }
+
+    /**
+     * @return stdError: The standard error of each coefficient of the weighted linear regression.
+     */
+    public double[] getStdErrors() {
+        return this.stdErrors;
+    }
+
+    public double[] getPValues() {
+        return this.pvalues;
+    }
+
+    public double[] getConf(double alpha) {
+        TDistribution tdist = new TDistribution(this.dof);
+        double q = tdist.inverseCumulativeProbability(1 - alpha / 2);
+        return Arrays.stream(this.stdErrors).map(x -> q * x).toArray();
     }
 }

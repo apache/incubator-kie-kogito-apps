@@ -21,7 +21,8 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.explainability.local.counterfactual.CounterfactualConfigurationFactory;
+import org.eclipse.microprofile.context.ManagedExecutor;
+import org.kie.kogito.explainability.local.counterfactual.CounterfactualConfig;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,26 +32,24 @@ public class CounterfactualExplainerProducer {
 
     private static final Logger LOG = LoggerFactory.getLogger(CounterfactualExplainerProducer.class);
 
-    private final Long maxRunningTimeSeconds;
     private final Double goalThreshold;
+    private final ManagedExecutor executor;
 
     @Inject
     public CounterfactualExplainerProducer(
-            @ConfigProperty(name = "trusty.explainability.counterfactuals.maxRunningTimeSeconds",
-                    defaultValue = "60") Integer maxRunningTimeSeconds,
             @ConfigProperty(name = "trusty.explainability.counterfactuals.goalThreshold",
-                    defaultValue = "0.01") Double goalThreshold) {
-        this.maxRunningTimeSeconds = Long.valueOf(maxRunningTimeSeconds);
+                    defaultValue = "0.01") Double goalThreshold,
+            ManagedExecutor executor) {
         this.goalThreshold = goalThreshold;
+        this.executor = executor;
     }
 
     @Produces
     public CounterfactualExplainer produce() {
         LOG.debug("CounterfactualExplainer created");
-        return CounterfactualExplainer.builder()
-                .withSolverConfig(
-                        CounterfactualConfigurationFactory.builder().withSecondsSpentLimit(this.maxRunningTimeSeconds).build())
+        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig()
                 .withGoalThreshold(this.goalThreshold)
-                .build();
+                .withExecutor(executor);
+        return new CounterfactualExplainer(counterfactualConfig);
     }
 }

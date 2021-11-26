@@ -15,7 +15,7 @@
     "test:report": "yarn test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "yarn test --coverage",
+    "test:coverage": "rimraf coverage && yarn test --coverage",
     "lint": "eslint './src/**/*.ts{,x}'",
     "dev": "concurrently 'yarn run   start  --define process.env.TEST_USER_SYSTEM_ENABLED=true' 'yarn run dev:server'",
     "dev-remote-dataindex": "yarn start --define process.env.KOGITO_DATAINDEX_HTTP_URL='\"http://localhost:8180/graphql\"' --define process.env.TEST_USER_SYSTEM_ENABLED=true",
@@ -32,6 +32,7 @@
     "@kogito-apps/components-common": "^1.0.0",
     "@kogito-apps/consoles-common": "^1.0.0",
     "@kogito-apps/task-details": "1.0.0",
+    "@kogito-apps/form-displayer": "^1.0.0",
     "@kogito-apps/task-form": "^1.0.0",
     "@kogito-apps/task-inbox": "^1.0.0"
   },
@@ -49,6 +50,7 @@
       "tsx",
       "js"
     ],
+    "coverageReporters": [["lcov", { "projectRoot": "../../" }]],
     "globals": {
       "ts-jest": {
         "isolatedModules": true

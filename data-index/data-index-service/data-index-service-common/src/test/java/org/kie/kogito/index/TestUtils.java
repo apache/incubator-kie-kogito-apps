@@ -34,6 +34,8 @@ import org.eclipse.microprofile.config.ConfigProvider;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.event.KogitoProcessCloudEvent;
 import org.kie.kogito.index.event.KogitoUserTaskCloudEvent;
+import org.kie.kogito.index.model.Attachment;
+import org.kie.kogito.index.model.Comment;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.MilestoneStatus;
@@ -50,6 +52,8 @@ import static java.util.Collections.singleton;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 
 public final class TestUtils {
+
+    private static final String MILESTONE_ID = UUID.randomUUID().toString();
 
     private TestUtils() {
     }
@@ -152,7 +156,7 @@ public final class TestUtils {
     private static List<Milestone> getMilestones() {
         return newArrayList(
                 Milestone.builder()
-                        .id(UUID.randomUUID().toString())
+                        .id(MILESTONE_ID)
                         .name("SimpleMilestone")
                         .status(MilestoneStatus.AVAILABLE.name())
                         .build());
@@ -203,7 +207,7 @@ public final class TestUtils {
                 .build();
     }
 
-    private static Job getJob(String jobId, String processId, String processInstanceId, String rootProcessId, String rootProcessInstanceId, String status) {
+    public static Job getJob(String jobId, String processId, String processInstanceId, String rootProcessId, String rootProcessInstanceId, String status) {
         Job job = new Job();
         job.setId(jobId);
         job.setProcessId(processId);
@@ -224,7 +228,7 @@ public final class TestUtils {
         return job;
     }
 
-    private static UserTaskInstance getUserTaskInstance(String taskId, String processId, String processInstanceId, String rootProcessInstanceId, String rootProcessId, String state,
+    public static UserTaskInstance getUserTaskInstance(String taskId, String processId, String processInstanceId, String rootProcessInstanceId, String rootProcessId, String state,
             String actualOwner) {
         UserTaskInstance task = new UserTaskInstance();
         task.setId(taskId);
@@ -244,6 +248,8 @@ public final class TestUtils {
         task.setExcludedUsers(singleton("excluded"));
         task.setPotentialUsers(singleton("potentialUser"));
         task.setPotentialGroups(singleton("potentialGroup"));
+        task.setComments(List.of(Comment.builder().id("commentId" + taskId).content("Comment 1").updatedBy("kogito").build()));
+        task.setAttachments(List.of(Attachment.builder().id("attachmentId" + taskId).content("http://linltodoc.com/1").name("doc1").updatedBy("kogito").build()));
         return task;
     }
 }
