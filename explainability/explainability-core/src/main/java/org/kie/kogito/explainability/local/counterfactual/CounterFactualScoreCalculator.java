@@ -83,8 +83,8 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             }
 
         } else if (a.getType() == Type.CATEGORICAL || a.getType() == Type.BOOLEAN || a.getType() == Type.TEXT) {
-//            System.out.println(a.getValue());
-//            System.out.println(b.getValue());
+            //            System.out.println(a.getValue());
+            //            System.out.println(b.getValue());
             return a.getValue().equals(b.getValue()) ? 0.0 : 1.0;
         } else {
             String message = "Feature type " + aType.toString() + " not supported";
@@ -155,6 +155,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             for (PredictionOutput predictionOutput : predictions) {
 
                 final List<Output> outputs = predictionOutput.getOutputs();
+
+                if (goal.size() != outputs.size()) {
+                    throw new IllegalArgumentException("Prediction size must be equal to goal size");
+                }
 
                 final int numberOutputs = outputs.size();
                 for (int i = 0; i < numberOutputs; i++) {

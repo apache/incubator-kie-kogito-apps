@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -103,7 +104,8 @@ class LoanEligibilityDmnCounterfactualExplainerTest {
                 new CounterfactualPrediction(input, output, UUID.randomUUID());
         CounterfactualResult counterfactualResult = explainer.explainAsync(prediction, model)
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
-        for (CounterfactualEntity e : counterfactualResult.getFeatures()) {
+
+        for (CounterfactualEntity e : counterfactualResult.getEntities()) {
             System.out.println(e);
         }
 
@@ -209,7 +211,8 @@ class LoanEligibilityDmnCounterfactualExplainerTest {
     }
 
     private PredictionProvider getModel() {
-        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/LoanEligibility.dmn")));
+        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(
+                Objects.requireNonNull(getClass().getResourceAsStream("/dmn/LoanEligibility.dmn"))));
         assertEquals(1, dmnRuntime.getModels().size());
 
         final String FRAUD_NS = "https://github.com/kiegroup/kogito-examples/dmn-quarkus-listener-example";

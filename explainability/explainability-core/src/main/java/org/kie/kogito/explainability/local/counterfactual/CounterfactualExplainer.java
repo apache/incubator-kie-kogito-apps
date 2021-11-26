@@ -182,11 +182,11 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 cfSolution.thenCompose(s -> model.predictAsync(buildInput(s.getEntities())));
         return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
             CounterfactualSolution solution = cfSolution.join();
-//            final List<Feature> features = solution.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
-//            final List<Feature> unflattenedFeatures = NestedFeatureHandler.getDelinearizedFeatures(features, solution.getOriginalFeatures());
+            //            final List<Feature> features = solution.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
+            //            final List<Feature> unflattenedFeatures = NestedFeatureHandler.getDelinearizedFeatures(features, solution.getOriginalFeatures());
             return new CounterfactualResult(solution.getEntities(),
                     solution.getOriginalFeatures(),
-//                    unflattenedFeatures,
+                    //                    unflattenedFeatures,
                     cfOutputs.join(),
                     solution.getScore().isFeasible(),
                     UUID.randomUUID(),

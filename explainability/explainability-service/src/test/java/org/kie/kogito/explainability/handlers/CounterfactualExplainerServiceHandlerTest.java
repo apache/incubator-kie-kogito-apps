@@ -37,7 +37,8 @@ import org.kie.kogito.explainability.api.ExplainabilityStatus;
 import org.kie.kogito.explainability.api.ModelIdentifierDto;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualResult;
-import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
@@ -326,7 +327,10 @@ public class CounterfactualExplainerServiceHandlerTest {
                 Collections.emptyMap(),
                 Collections.emptyMap());
 
-        CounterfactualResult counterfactuals = new CounterfactualResult(List.of(DoubleEntity.from(new Feature("input1", Type.NUMBER, new Value(123.0d)), 0, 1000)),
+        List<Feature> features = List.of(new Feature("input1", Type.NUMBER, new Value(123.0d)));
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.from(features);
+
+        CounterfactualResult counterfactuals = new CounterfactualResult(entities, features,
                 List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 1.0)))),
                 true,
                 UUID.fromString(SOLUTION_ID),
@@ -429,7 +433,10 @@ public class CounterfactualExplainerServiceHandlerTest {
                 Collections.emptyMap(),
                 Collections.emptyMap());
 
-        CounterfactualResult counterfactuals = new CounterfactualResult(List.of(DoubleEntity.from(new Feature("input1", Type.NUMBER, new Value(123.0d)), 0, 1000)),
+        List<Feature> features = List.of(new Feature("input1", Type.NUMBER, new Value(123.0d)));
+        List<CounterfactualEntity> entities = CounterfactualEntityFactory.from(features);
+
+        CounterfactualResult counterfactuals = new CounterfactualResult(entities, features,
                 List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 1.0)))),
                 true,
                 UUID.fromString(SOLUTION_ID),
