@@ -45,6 +45,8 @@ import org.slf4j.LoggerFactory;
  */
 public class CounterFactualScoreCalculator implements EasyScoreCalculator<CounterfactualSolution, BendableBigDecimalScore> {
 
+    private final static double DEFAULT_DISTANCE = 1.0;
+
     private static final Logger logger =
             LoggerFactory.getLogger(CounterFactualScoreCalculator.class);
 
@@ -56,11 +58,18 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         final Type predictionType = prediction.getType();
         final Type goalType = goal.getType();
 
-        if (predictionType != goalType && Objects.nonNull(prediction.getValue())) {
-            String message = String.format("Features must have the same type. Feature '%s', has type '%s' and '%s'",
-                    prediction.getName(), predictionType.toString(), goalType.toString());
-            logger.error(message);
-            throw new IllegalArgumentException(message);
+        // If the prediction types differ and the prediction is not null, this is not allowed.
+        // An allowance is made if the types differ but the prediction is null, since for DMN models
+        // there could be a type difference (e.g. a numerical feature is predicted as a textual "null")
+        if (predictionType != goalType) {
+            if (Objects.nonNull(prediction.getValue().getUnderlyingObject())) {
+                String message = String.format("Features must have the same type. Feature '%s', has type '%s' and '%s'",
+                        prediction.getName(), predictionType.toString(), goalType.toString());
+                logger.error(message);
+                throw new IllegalArgumentException(message);
+            } else {
+                return DEFAULT_DISTANCE;
+            }
         }
 
         if (prediction.getType() == Type.NUMBER) {
@@ -90,7 +99,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 || prediction.getType() == Type.TEXT) {
             final Object goalValueObject = goal.getValue().getUnderlyingObject();
             final Object predictionValueObject = prediction.getValue().getUnderlyingObject();
-            return Objects.equals(goalValueObject, predictionValueObject) ? 0.0 : 1.0;
+            return Objects.equals(goalValueObject, predictionValueObject) ? 0.0 : DEFAULT_DISTANCE;
         } else {
             String message =
                     String.format("Feature '%s' has unsupported type '%s'", prediction.getName(), predictionType.toString());

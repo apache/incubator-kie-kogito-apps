@@ -834,7 +834,7 @@ class CounterfactualScoreCalculatorTest {
     }
 
     @Test
-    void testVaryingOutputScore() {
+    void testVaryingOutputScore() throws ExecutionException, InterruptedException {
         final CounterFactualScoreCalculator scoreCalculator = new CounterFactualScoreCalculator();
         final double threshold = 100.0;
         PredictionProvider model = TestUtils.getVaryingTypeModel(0, threshold);
@@ -867,9 +867,11 @@ class CounterfactualScoreCalculatorTest {
         features = new ArrayList<>();
         value = threshold + 10.0;
         features.add(FeatureFactory.newNumericalFeature("f-1", value, NumericalFeatureDomain.create(0.0, 1000.0)));
+        input = new PredictionInput(features);
+        entities = CounterfactualEntityFactory.createEntities(input);
 
         goal = new ArrayList<>();
-        goal.add(new Output("result", Type.NUMBER, new Value(value), 0.0));
+        goal.add(new Output("result", Type.NUMBER, new Value(threshold - 10.0), 0.0));
 
         solution =
                 new CounterfactualSolution(entities, features, model, goal, UUID.randomUUID(), UUID.randomUUID(), 0.0);
