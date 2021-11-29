@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import get from 'lodash/get';
 import has from 'lodash/has';
 import isEmpty from 'lodash/isEmpty';
@@ -24,14 +24,16 @@ import { KogitoSpinner } from '@kogito-apps/components-common';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { TaskFormDriver } from '../../../api';
-import { TaskFormSchema } from '../../../types';
 import EmptyTaskForm from '../EmptyTaskForm/EmptyTaskForm';
 import TaskFormRenderer from '../TaskFormRenderer/TaskFormRenderer';
-import { readSchemaAssignments } from '../utils/TaskFormDataUtils';
+import {
+  parseTaskSchema,
+  TaskDataAssignments
+} from '../utils/TaskFormDataUtils';
 
 export interface TaskFormProps {
   userTask: UserTaskInstance;
-  schema: TaskFormSchema;
+  schema: Record<string, any>;
   driver: TaskFormDriver;
 }
 
@@ -50,6 +52,16 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
 }) => {
   const [formData, setFormData] = useState<any>(null);
   const [formState, setFormState] = useState<State>(State.READY);
+  const [taskFormSchema, setTaskFormSchema] = useState<Record<string, any>>();
+  const [taskFormAssignments, setTaskFormAssignments] = useState<
+    TaskDataAssignments
+  >();
+
+  useEffect(() => {
+    const parsedSchema = parseTaskSchema(schema);
+    setTaskFormSchema(parsedSchema.schema);
+    setTaskFormAssignments(parsedSchema.assignments);
+  }, []);
 
   if (formState === State.SUBMITTING) {
     return (
@@ -82,8 +94,6 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
 
         const payload = {};
 
-        const taskFormAssignments = readSchemaAssignments(schema);
-
         taskFormAssignments.outputs.forEach(output => {
           if (has(data, output)) {
             set(payload, output, get(data, output));
@@ -103,7 +113,21 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
       }
     };
 
-    if (isEmpty(schema.properties)) {
+    if (!taskFormSchema) {
+      return (
+        <Bullseye
+          {...componentOuiaProps(
+            (ouiaId ? ouiaId : 'task-form-') + '-loading-spinner',
+            'task-form',
+            true
+          )}
+        >
+          <KogitoSpinner spinnerText={`Loading task form...`} />
+        </Bullseye>
+      );
+    }
+
+    if (isEmpty(taskFormSchema.properties)) {
       return (
         <EmptyTaskForm
           {...componentOuiaProps(
@@ -113,7 +137,7 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
           )}
           userTask={userTask}
           enabled={formState == State.READY}
-          formSchema={schema}
+          formSchema={taskFormSchema}
           submit={phase => doSubmit(phase, {})}
         />
       );
@@ -127,7 +151,7 @@ const TaskForm: React.FC<TaskFormProps & OUIAProps> = ({
           ouiaSafe
         )}
         userTask={userTask}
-        formSchema={schema}
+        formSchema={taskFormSchema}
         formData={formData}
         enabled={formState == State.READY}
         submit={doSubmit}

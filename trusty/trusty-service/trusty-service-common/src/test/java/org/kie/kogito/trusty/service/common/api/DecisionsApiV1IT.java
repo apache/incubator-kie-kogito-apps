@@ -23,10 +23,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.function.BiConsumer;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.api.NamedTypedValue;
 import org.kie.kogito.tracing.decision.event.message.Message;
 import org.kie.kogito.tracing.decision.event.message.MessageCategory;
 import org.kie.kogito.tracing.decision.event.message.MessageExceptionField;
@@ -202,7 +202,7 @@ class DecisionsApiV1IT {
         assertEquals(expected.getOutcomeName(), actual.getOutcomeName());
         assertEquals(expected.getEvaluationStatus(), actual.getEvaluationStatus());
         assertTypedValueResponse(expected, actual);
-        assertCollection(expected.getOutcomeInputs().entrySet(), actual.getOutcomeInputs().entrySet(), this::assertTypedValueResponse);
+        assertCollection(expected.getOutcomeInputs(), actual.getOutcomeInputs(), this::assertTypedValueResponse);
         assertCollection(expected.getMessages(), actual.getMessages(), this::assertMessageResponse);
     }
 
@@ -268,9 +268,9 @@ class DecisionsApiV1IT {
         assertEquals(expected.getOutcomeResult().toUnit().getValue(), actual.getOutcomeResult().toUnit().getValue());
     }
 
-    private void assertTypedValueResponse(Map.Entry<String, TypedValue> expected, Map.Entry<String, TypedValue> actual) {
+    private void assertTypedValueResponse(NamedTypedValue expected, NamedTypedValue actual) {
         assertNotNull(actual);
-        assertEquals(expected.getKey(), actual.getKey());
+        assertEquals(expected.getName(), actual.getName());
         assertEquals(TypedValue.Kind.UNIT, actual.getValue().getKind());
         assertEquals(expected.getValue().getKind(), actual.getValue().getKind());
         assertEquals(expected.getValue().getType(), actual.getValue().getType());
@@ -312,7 +312,7 @@ class DecisionsApiV1IT {
                                 TEST_OUTCOME_ID, "ONE", "SUCCEEDED",
                                 new UnitValue("string", "string", mapper.readTree("\"The First " +
                                         "Outcome\"")),
-                                Collections.emptyMap(),
+                                Collections.emptyList(),
                                 List.of(new Message(
                                         MessageLevel.WARNING, MessageCategory.INTERNAL, "TEST", "testSrc", "Test message", null,
                                         new MessageExceptionField("TestException", "Test exception message",
@@ -331,7 +331,7 @@ class DecisionsApiV1IT {
                 TEST_OUTCOME_ID, "ONE", "SUCCEEDED",
                 new UnitValue("string", "string", mapper.readTree("\"The First " +
                         "Outcome\"")),
-                Collections.emptyMap(),
+                Collections.emptyList(),
                 List.of(new Message(MessageLevel.WARNING, MessageCategory.INTERNAL, "TEST", "testSrc", "Test message", null,
                         new MessageExceptionField("TestException", "Test exception message",
                                 new MessageExceptionField("TestExceptionCause", "Test " +

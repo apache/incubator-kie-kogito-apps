@@ -19,6 +19,7 @@ package org.kie.kogito.trusty.service.common.messaging.incoming;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.kie.kogito.explainability.api.NamedTypedValue;
 import org.kie.kogito.tracing.event.message.MessageLevel;
 import org.kie.kogito.tracing.event.trace.TraceEvent;
 import org.kie.kogito.tracing.event.trace.TraceInputValue;
@@ -61,12 +62,18 @@ public class TraceEventConverter {
     }
 
     public static DecisionOutcome toOutcome(TraceOutputValue eventOutput) {
+        List<NamedTypedValue> flattenedInputs = eventOutput.getInputs()
+                .entrySet()
+                .stream()
+                .map(i -> new NamedTypedValue(i.getKey(), i.getValue()))
+                .collect(Collectors.toList());
+
         return new DecisionOutcome(
                 eventOutput.getId(),
                 eventOutput.getName(),
                 eventOutput.getStatus(),
                 eventOutput.getValue(),
-                eventOutput.getInputs(),
+                flattenedInputs,
                 eventOutput.getMessages());
     }
 

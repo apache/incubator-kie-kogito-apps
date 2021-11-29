@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
+import { SCHEMA_VERSION } from '../../../../../types';
+
 export const ApplyForVisaForm = {
+  $schema: SCHEMA_VERSION.DRAFT_2019_09,
   type: 'object',
   properties: {
     trip: {
@@ -38,8 +41,7 @@ export const ApplyForVisaForm = {
           type: 'boolean'
         }
       },
-      input: true,
-      output: false
+      input: true
     },
     traveller: {
       type: 'object',
@@ -87,8 +89,7 @@ export const ApplyForVisaForm = {
         passportNumber: { type: 'string' },
         nationality: { type: 'string' }
       },
-      input: true,
-      output: false
+      input: true
     }
   },
   phases: ['complete', 'release']

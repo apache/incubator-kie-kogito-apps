@@ -28,6 +28,7 @@ import {
   MockedTaskFormDriver,
   testUserTask
 } from '../../../../embedded/tests/mocks/Mocks';
+import { parseTaskSchema } from '../../utils/TaskFormDataUtils';
 
 jest.mock('../../TaskFormRenderer/TaskFormRenderer');
 jest.mock('../../EmptyTaskForm/EmptyTaskForm');
@@ -123,7 +124,9 @@ describe('TaskForm Test', () => {
 
     expect(taskFormRenderer.props().enabled).toBeTruthy();
     expect(taskFormRenderer.props().userTask).toStrictEqual(props.userTask);
-    expect(taskFormRenderer.props().formSchema).toStrictEqual(props.schema);
+    expect(taskFormRenderer.props().formSchema).toStrictEqual(
+      parseTaskSchema(props.schema).schema
+    );
     expect(taskFormRenderer.props().formData).toBeNull();
 
     const formData = JSON.parse(props.userTask.inputs);
@@ -144,5 +147,20 @@ describe('TaskForm Test', () => {
     expect(taskFormRenderer.exists()).toBeTruthy();
     expect(taskFormRenderer.props().enabled).toBeFalsy();
     expect(taskFormRenderer.props().formData).toStrictEqual(formData);
+
+    const formSchema = taskFormRenderer.props().formSchema;
+
+    expect(_.get(formSchema, 'properties.trip.input')).toBeUndefined();
+    expect(_.get(formSchema, 'properties.traveller.input')).toBeUndefined();
+    expect(_.get(formSchema, 'properties.traveller.output')).toBeUndefined();
+    expect(
+      _.get(formSchema, 'properties.visaApplication.input')
+    ).toBeUndefined();
+
+    expect(_.get(formSchema, 'properties.trip.uniforms.disabled')).toBeTruthy();
+    expect(_.get(formSchema, 'properties.traveller.uniforms')).toBeUndefined();
+    expect(
+      _.get(formSchema, 'properties.visaApplication.uniforms.disabled')
+    ).toBeTruthy();
   });
 });

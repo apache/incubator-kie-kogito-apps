@@ -28,6 +28,7 @@ exports[`CustomTaskFormDisplayer Test Rendering form 1`] = `
   }
   schema={
     Object {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
       "phases": Array [
         "complete",
         "release",
@@ -76,7 +77,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form 1`] = `
         },
         "trip": Object {
           "input": true,
-          "output": false,
           "properties": Object {
             "begin": Object {
               "format": "date-time",
@@ -100,7 +100,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form 1`] = `
         },
         "visaApplication": Object {
           "input": true,
-          "output": false,
           "properties": Object {
             "city": Object {
               "type": "string",
@@ -226,6 +225,7 @@ exports[`CustomTaskFormDisplayer Test Rendering form 1`] = `
                     "release",
                   ],
                   "schema": Object {
+                    "$schema": "https://json-schema.org/draft/2019-09/schema",
                     "properties": Object {
                       "traveller": Object {
                         "input": true,
@@ -270,7 +270,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form 1`] = `
                       },
                       "trip": Object {
                         "input": true,
-                        "output": false,
                         "properties": Object {
                           "begin": Object {
                             "format": "date-time",
@@ -294,7 +293,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form 1`] = `
                       },
                       "visaApplication": Object {
                         "input": true,
-                        "output": false,
                         "properties": Object {
                           "city": Object {
                             "type": "string",
@@ -451,6 +449,7 @@ exports[`CustomTaskFormDisplayer Test Rendering form 2`] = `
   }
   schema={
     Object {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
       "phases": Array [
         "complete",
         "release",
@@ -499,7 +498,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form 2`] = `
         },
         "trip": Object {
           "input": true,
-          "output": false,
           "properties": Object {
             "begin": Object {
               "format": "date-time",
@@ -523,7 +521,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form 2`] = `
         },
         "visaApplication": Object {
           "input": true,
-          "output": false,
           "properties": Object {
             "city": Object {
               "type": "string",
@@ -631,6 +628,7 @@ exports[`CustomTaskFormDisplayer Test Rendering form 2`] = `
                     "release",
                   ],
                   "schema": Object {
+                    "$schema": "https://json-schema.org/draft/2019-09/schema",
                     "properties": Object {
                       "traveller": Object {
                         "input": true,
@@ -675,7 +673,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form 2`] = `
                       },
                       "trip": Object {
                         "input": true,
-                        "output": false,
                         "properties": Object {
                           "begin": Object {
                             "format": "date-time",
@@ -699,7 +696,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form 2`] = `
                       },
                       "visaApplication": Object {
                         "input": true,
-                        "output": false,
                         "properties": Object {
                           "city": Object {
                             "type": "string",
@@ -877,6 +873,7 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 1`] = `
   }
   schema={
     Object {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
       "phases": Array [
         "complete",
         "release",
@@ -925,7 +922,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 1`] = `
         },
         "trip": Object {
           "input": true,
-          "output": false,
           "properties": Object {
             "begin": Object {
               "format": "date-time",
@@ -949,7 +945,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 1`] = `
         },
         "visaApplication": Object {
           "input": true,
-          "output": false,
           "properties": Object {
             "city": Object {
               "type": "string",
@@ -1075,6 +1070,7 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 1`] = `
                     "release",
                   ],
                   "schema": Object {
+                    "$schema": "https://json-schema.org/draft/2019-09/schema",
                     "properties": Object {
                       "traveller": Object {
                         "input": true,
@@ -1119,7 +1115,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 1`] = `
                       },
                       "trip": Object {
                         "input": true,
-                        "output": false,
                         "properties": Object {
                           "begin": Object {
                             "format": "date-time",
@@ -1143,7 +1138,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 1`] = `
                       },
                       "visaApplication": Object {
                         "input": true,
-                        "output": false,
                         "properties": Object {
                           "city": Object {
                             "type": "string",
@@ -1300,6 +1294,7 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 2`] = `
   }
   schema={
     Object {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
       "phases": Array [
         "complete",
         "release",
@@ -1348,7 +1343,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 2`] = `
         },
         "trip": Object {
           "input": true,
-          "output": false,
           "properties": Object {
             "begin": Object {
               "format": "date-time",
@@ -1372,7 +1366,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 2`] = `
         },
         "visaApplication": Object {
           "input": true,
-          "output": false,
           "properties": Object {
             "city": Object {
               "type": "string",
@@ -1480,6 +1473,7 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 2`] = `
                     "release",
                   ],
                   "schema": Object {
+                    "$schema": "https://json-schema.org/draft/2019-09/schema",
                     "properties": Object {
                       "traveller": Object {
                         "input": true,
@@ -1524,7 +1518,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 2`] = `
                       },
                       "trip": Object {
                         "input": true,
-                        "output": false,
                         "properties": Object {
                           "begin": Object {
                             "format": "date-time",
@@ -1548,7 +1541,6 @@ exports[`CustomTaskFormDisplayer Test Rendering form with error 2`] = `
                       },
                       "visaApplication": Object {
                         "input": true,
-                        "output": false,
                         "properties": Object {
                           "city": Object {
                             "type": "string",

@@ -18,22 +18,25 @@ package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.tasks;
 
 import java.util.List;
 
-public class UserTaskInstances {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    private List<Task> userTaskInstancesList;
+public class TaskResponseData {
 
-    public UserTaskInstances() {
+    @JsonProperty("UserTaskInstances")
+    private List<Task> tasks;
+
+    public TaskResponseData() {
     }
 
-    public UserTaskInstances(final List<Task> userTaskInstancesList) {
-        this.userTaskInstancesList = userTaskInstancesList;
+    public TaskResponseData(final List<Task> tasks) {
+        this.tasks = tasks;
     }
 
-    public List<Task> getUserTaskInstances() {
-        return userTaskInstancesList;
+    public List<Task> getTasks() {
+        return tasks;
     }
 
-    public void setUserTaskInstances(final List<Task> userTaskInstancesList) {
-        this.userTaskInstancesList = userTaskInstancesList;
+    public void setTasks(final List<Task> userTaskInstancesList) {
+        this.tasks = userTaskInstancesList;
     }
 }
