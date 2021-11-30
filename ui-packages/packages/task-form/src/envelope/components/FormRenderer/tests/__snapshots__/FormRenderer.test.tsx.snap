@@ -178,6 +178,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
       JSONSchemaBridge {
         "_compiledSchema": Object {
           "": Object {
+            "$schema": "https://json-schema.org/draft/2019-09/schema",
             "phases": Array [
               "complete",
               "release",
@@ -588,6 +589,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
       JSONSchemaBridge {
         "_compiledSchema": Object {
           "": Object {
+            "$schema": "https://json-schema.org/draft/2019-09/schema",
             "phases": Array [
               "complete",
               "release",
