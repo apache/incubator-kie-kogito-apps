@@ -67,7 +67,6 @@ class LoanEligibilityDmnCounterfactualExplainerTest {
 
         final List<Output> goal = List.of(
                 new Output("Is Enought?", Type.NUMBER, new Value(100), 0.0d),
-                new Output("Judgement", Type.TEXT, new Value("No"), 0.0d),
                 new Output("Eligibility", Type.TEXT, new Value("No"), 0.0d),
                 new Output("Decide", Type.BOOLEAN, new Value(true), 0.0d));
 
@@ -87,33 +86,17 @@ class LoanEligibilityDmnCounterfactualExplainerTest {
         List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
 
-        for (PredictionOutput o : predictionOutputs) {
-            for (Output op : o.getOutputs()) {
-                System.out.println(op);
-            }
-        }
-
         Prediction prediction =
                 new CounterfactualPrediction(input, output, null, UUID.randomUUID(), null);
         CounterfactualResult counterfactualResult = explainer.explainAsync(prediction, model).get();
-
-        for (CounterfactualEntity e : counterfactualResult.getEntities()) {
-            System.out.println(e);
-        }
 
         List<Feature> cfFeatures = counterfactualResult.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
         List<Feature> unflattened = CompositeFeatureUtils.unflattenFeatures(cfFeatures, input.getFeatures());
 
         List<PredictionOutput> outputs = model.predictAsync(List.of(new PredictionInput(unflattened))).get();
 
-        for (PredictionOutput o : outputs) {
-            for (Output op : o.getOutputs()) {
-                System.out.println(op);
-            }
-        }
-
         assertTrue(counterfactualResult.isValid());
-        final Output decideOutput = outputs.get(0).getOutputs().get(3);
+        final Output decideOutput = outputs.get(0).getOutputs().get(2);
         assertEquals("Decide", decideOutput.getName());
         assertTrue((Boolean) decideOutput.getValue().getUnderlyingObject());
     }
@@ -126,16 +109,22 @@ class LoanEligibilityDmnCounterfactualExplainerTest {
         final String FRAUD_NS = "https://github.com/kiegroup/kogito-examples/dmn-quarkus-listener-example";
         final String FRAUD_NAME = "LoanEligibility";
         DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, FRAUD_NS, FRAUD_NAME);
-        return new DecisionModelWrapper(decisionModel);
+        return new DecisionModelWrapper(decisionModel, List.of("Judgement"));
     }
 
     private PredictionInput getTestInput() {
         final Map<String, Object> client = new HashMap<>();
         client.put("Age", 43);
-        client.put("Salary", FeatureFactory.newNumericalFeature("Salary", 100, NumericalFeatureDomain.create(0.0, 1000.0)));
-        client.put("Existing payments", FeatureFactory.newNumericalFeature("Existing payments", 100, NumericalFeatureDomain.create(0, 1000)));
+        client.put("Salary",
+                FeatureFactory.newNumericalFeature("Salary", 100,
+                        NumericalFeatureDomain.create(0.0, 1000.0)));
+        client.put("Existing payments",
+                FeatureFactory.newNumericalFeature("Existing payments", 100,
+                        NumericalFeatureDomain.create(0, 1000)));
         final Map<String, Object> loan = new HashMap<>();
-        loan.put("Duration", FeatureFactory.newNumericalFeature("Duration", 15, NumericalFeatureDomain.create(0, 1000)));
+        loan.put("Duration",
+                FeatureFactory.newNumericalFeature("Duration", 15,
+                        NumericalFeatureDomain.create(0, 1000)));
         loan.put("Installment", 100);
         final Map<String, Object> contextVariables = new HashMap<>();
         contextVariables.put("Client", client);

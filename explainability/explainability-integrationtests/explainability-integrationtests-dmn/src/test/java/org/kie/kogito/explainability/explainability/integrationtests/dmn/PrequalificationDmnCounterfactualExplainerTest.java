@@ -87,7 +87,6 @@ class PrequalificationDmnCounterfactualExplainerTest {
         assertEquals("Qualified?", predictionOutput.getName());
         assertFalse((Boolean) predictionOutput.getValue().getUnderlyingObject());
 
-
         Prediction prediction =
                 new CounterfactualPrediction(input, output, null, UUID.randomUUID(), null);
         CounterfactualResult counterfactualResult = explainer.explainAsync(prediction, model).get();
@@ -109,7 +108,7 @@ class PrequalificationDmnCounterfactualExplainerTest {
         borrower.put("Monthly Other Debt", 5000);
         borrower.put("Monthly Income", 10_000);
         final Map<String, Object> contextVariables = new HashMap<>();
-        contextVariables.put("Appraised Value",  500000);
+        contextVariables.put("Appraised Value", 500000);
         contextVariables.put("Loan Amount", 500_000);
         contextVariables.put("Credit Score", 700);
         contextVariables.put("Best Rate", 1);
@@ -127,7 +126,7 @@ class PrequalificationDmnCounterfactualExplainerTest {
         borrower.put("Monthly Income", FeatureFactory.newNumericalFeature("Monthly Income", 10_000,
                 NumericalFeatureDomain.create(1000, 500_000)));
         final Map<String, Object> contextVariables = new HashMap<>();
-        contextVariables.put("Appraised Value",  500000);
+        contextVariables.put("Appraised Value", 500000);
         contextVariables.put("Loan Amount",
                 FeatureFactory.newNumericalFeature("Loan Amount", 500_000,
                         NumericalFeatureDomain.create(10.0, 500_000.0)));

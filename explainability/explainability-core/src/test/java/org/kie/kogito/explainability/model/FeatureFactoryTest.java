@@ -139,7 +139,7 @@ class FeatureFactoryTest {
         Map<String, Object> map = new HashMap<>();
         List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newObjectFeature("f1", new Object()));
-        features.add(FeatureFactory.newCategoricalFeature("f2", "hola"));
+        features.add(FeatureFactory.newTextFeature("f2", "hola"));
         features.add(FeatureFactory.newFulltextFeature("f3", "foo bar"));
         features.add(FeatureFactory.newNumericalFeature("f4", 131));
         features.add(FeatureFactory.newBooleanFeature("f5", false));
