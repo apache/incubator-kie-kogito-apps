@@ -29,6 +29,7 @@ import io.quarkus.deployment.annotations.Record;
 import io.quarkus.deployment.builditem.LaunchModeBuildItem;
 import io.quarkus.deployment.builditem.LiveReloadBuildItem;
 import io.quarkus.deployment.builditem.ShutdownContextBuildItem;
+import io.quarkus.deployment.builditem.SystemPropertyBuildItem;
 import io.quarkus.deployment.pkg.builditem.CurateOutcomeBuildItem;
 import io.quarkus.deployment.util.WebJarUtil;
 import io.quarkus.devconsole.spi.DevConsoleRouteBuildItem;
@@ -39,12 +40,21 @@ import io.quarkus.vertx.http.runtime.devmode.DevConsoleRecorder;
 
 public class DevConsoleProcessor {
 
-    private static String STATIC_RESOURCES_PATH = "dev-static/";
+    private static final String DATA_INDEX_CLIENT_KEY = "quarkus.rest-client.\"org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.DataIndexClient\".url";
+    private static final String STATIC_RESOURCES_PATH = "dev-static/";
 
     @BuildStep(onlyIf = IsDevelopment.class)
     public DevConsoleRuntimeTemplateInfoBuildItem collectUsersInfo() {
         return new DevConsoleRuntimeTemplateInfoBuildItem("userInfo",
                 new UserInfoSupplier());
+    }
+
+    @BuildStep(onlyIf = IsDevelopment.class)
+    public void setUpDataIndexServiceURL(
+            final DevConsoleBuildTimeConfig config,
+            final BuildProducer<SystemPropertyBuildItem> systemProperties) throws IOException {
+
+        systemProperties.produce(new SystemPropertyBuildItem(DATA_INDEX_CLIENT_KEY, config.dataIndexUrl));
     }
 
     @BuildStep(onlyIf = IsDevelopment.class)
