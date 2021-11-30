@@ -16,11 +16,10 @@
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -54,97 +53,99 @@ import org.optaplanner.core.config.solver.SolverConfig;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class LoanEligibilityDmnCounterfactualExplainerTest {
+class PrequalificationDmnCounterfactualExplainerTest {
 
     private static final long steps = 100_000;
     private static final long randomSeed = 23;
 
     @Test
-    void testLoanEligibilityDMNExplanation() throws ExecutionException, InterruptedException, TimeoutException {
+    void testValidCounterfactual() throws ExecutionException, InterruptedException, TimeoutException {
         PredictionProvider model = getModel();
 
         final List<Output> goal = List.of(
-                new Output("Is Enought?", Type.NUMBER, new Value(100), 0.0d),
-                new Output("Judgement", Type.TEXT, new Value("No"), 0.0d),
-                new Output("Eligibility", Type.TEXT, new Value("No"), 0.0d),
-                new Output("Decide", Type.BOOLEAN, new Value(true), 0.0d));
+                new Output("Qualified?", Type.BOOLEAN, new Value(true), 0.0d));
 
         final TerminationConfig terminationConfig = new TerminationConfig().withScoreCalculationCountLimit(steps);
         final SolverConfig solverConfig = SolverConfigBuilder
                 .builder().withTerminationConfig(terminationConfig).build();
         solverConfig.setRandomSeed(randomSeed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
-        CounterfactualConfig config = new CounterfactualConfig();
+        CounterfactualConfig config = new CounterfactualConfig().withGoalThreshold(0.1);
         config.withSolverConfig(solverConfig);
         final CounterfactualExplainer explainer = new CounterfactualExplainer(config);
 
-        PredictionInput input = getTestInput();
+        PredictionInput input = getTestInputVariable();
         PredictionOutput output = new PredictionOutput(goal);
 
         // test model
-        List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(input))
+        List<PredictionOutput> predictionOutputs = model.predictAsync(List.of(getTestInputFixed()))
                 .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        final Output predictionOutput = predictionOutputs.get(0).getOutputs().get(0);
+        assertEquals("Qualified?", predictionOutput.getName());
+        assertFalse((Boolean) predictionOutput.getValue().getUnderlyingObject());
 
-        for (PredictionOutput o : predictionOutputs) {
-            for (Output op : o.getOutputs()) {
-                System.out.println(op);
-            }
-        }
 
         Prediction prediction =
                 new CounterfactualPrediction(input, output, null, UUID.randomUUID(), null);
         CounterfactualResult counterfactualResult = explainer.explainAsync(prediction, model).get();
 
-        for (CounterfactualEntity e : counterfactualResult.getEntities()) {
-            System.out.println(e);
-        }
-
-        List<Feature> cfFeatures = counterfactualResult.getEntities().stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList());
+        List<Feature> cfFeatures = counterfactualResult.getEntities().stream().map(CounterfactualEntity::asFeature).collect(
+                Collectors.toList());
         List<Feature> unflattened = CompositeFeatureUtils.unflattenFeatures(cfFeatures, input.getFeatures());
 
         List<PredictionOutput> outputs = model.predictAsync(List.of(new PredictionInput(unflattened))).get();
 
-        for (PredictionOutput o : outputs) {
-            for (Output op : o.getOutputs()) {
-                System.out.println(op);
-            }
-        }
-
         assertTrue(counterfactualResult.isValid());
-        final Output decideOutput = outputs.get(0).getOutputs().get(3);
-        assertEquals("Decide", decideOutput.getName());
+        final Output decideOutput = outputs.get(0).getOutputs().get(0);
+        assertEquals("Qualified?", decideOutput.getName());
         assertTrue((Boolean) decideOutput.getValue().getUnderlyingObject());
     }
 
-    private PredictionProvider getModel() {
-        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(
-                Objects.requireNonNull(getClass().getResourceAsStream("/dmn/LoanEligibility.dmn"))));
-        assertEquals(1, dmnRuntime.getModels().size());
-
-        final String FRAUD_NS = "https://github.com/kiegroup/kogito-examples/dmn-quarkus-listener-example";
-        final String FRAUD_NAME = "LoanEligibility";
-        DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, FRAUD_NS, FRAUD_NAME);
-        return new DecisionModelWrapper(decisionModel);
-    }
-
-    private PredictionInput getTestInput() {
-        final Map<String, Object> client = new HashMap<>();
-        client.put("Age", 43);
-        client.put("Salary", FeatureFactory.newNumericalFeature("Salary", 100, NumericalFeatureDomain.create(0.0, 1000.0)));
-        client.put("Existing payments", FeatureFactory.newNumericalFeature("Existing payments", 100, NumericalFeatureDomain.create(0, 1000)));
-        final Map<String, Object> loan = new HashMap<>();
-        loan.put("Duration", FeatureFactory.newNumericalFeature("Duration", 15, NumericalFeatureDomain.create(0, 1000)));
-        loan.put("Installment", 100);
+    private PredictionInput getTestInputFixed() {
+        final Map<String, Object> borrower = new HashMap<>();
+        borrower.put("Monthly Other Debt", 5000);
+        borrower.put("Monthly Income", 10_000);
         final Map<String, Object> contextVariables = new HashMap<>();
-        contextVariables.put("Client", client);
-        contextVariables.put("Loan", loan);
-        contextVariables.put("God", FeatureFactory.newCategoricalFeature("God", "No"));
-        contextVariables.put("Bribe", FeatureFactory.newNumericalFeature("Bribe", 0.0, NumericalFeatureDomain.create(0.0, 1000.0)));
-
-        List<Feature> features = new ArrayList<>();
+        contextVariables.put("Appraised Value",  500000);
+        contextVariables.put("Loan Amount", 500_000);
+        contextVariables.put("Credit Score", 700);
+        contextVariables.put("Best Rate", 1);
+        contextVariables.put("Borrower", borrower);
+        List<Feature> features = new LinkedList<>();
         features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
         return new PredictionInput(features);
+    }
+
+    private PredictionInput getTestInputVariable() {
+        final Map<String, Object> borrower = new HashMap<>();
+        borrower.put("Monthly Other Debt",
+                FeatureFactory.newNumericalFeature("Monthly Other Debt", 10_000,
+                        NumericalFeatureDomain.create(0.0, 10_000.0)));
+        borrower.put("Monthly Income", FeatureFactory.newNumericalFeature("Monthly Income", 10_000,
+                NumericalFeatureDomain.create(1000, 500_000)));
+        final Map<String, Object> contextVariables = new HashMap<>();
+        contextVariables.put("Appraised Value",  500000);
+        contextVariables.put("Loan Amount",
+                FeatureFactory.newNumericalFeature("Loan Amount", 500_000,
+                        NumericalFeatureDomain.create(10.0, 500_000.0)));
+        contextVariables.put("Credit Score", 700);
+        contextVariables.put("Best Rate", 1);
+        contextVariables.put("Borrower", borrower);
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newCompositeFeature("context", contextVariables));
+        return new PredictionInput(features);
+    }
+
+    private PredictionProvider getModel() {
+        DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/Prequalification-1.dmn")));
+        assertEquals(1, dmnRuntime.getModels().size());
+
+        final String NS = "http://www.trisotech.com/definitions/_f31e1f8e-d4ce-4a3a-ac3b-747efa6b3401";
+        final String NAME = "Prequalification";
+        DecisionModel decisionModel = new DmnDecisionModel(dmnRuntime, NS, NAME);
+        return new DecisionModelWrapper(decisionModel, List.of("LTV", "LLPA", "DTI", "Loan Payment"));
     }
 }

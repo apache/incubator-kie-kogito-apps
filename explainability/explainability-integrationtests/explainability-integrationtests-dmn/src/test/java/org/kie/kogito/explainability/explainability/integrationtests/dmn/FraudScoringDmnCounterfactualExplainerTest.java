@@ -16,7 +16,6 @@
 package org.kie.kogito.explainability.explainability.integrationtests.dmn;
 
 import java.io.InputStreamReader;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,7 +27,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import org.assertj.core.api.AssertionsForClassTypes;
 import org.junit.jupiter.api.Test;
 import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.kogito.decision.DecisionModel;
@@ -39,39 +37,27 @@ import org.kie.kogito.explainability.local.counterfactual.CounterfactualConfig;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualResult;
 import org.kie.kogito.explainability.local.counterfactual.SolverConfigBuilder;
-import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
-import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.local.lime.optim.LimeConfigOptimizer;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
-import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
-import org.kie.kogito.explainability.model.Saliency;
-import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
 import org.kie.kogito.explainability.utils.DataUtils;
-import org.kie.kogito.explainability.utils.ExplainabilityMetrics;
-import org.kie.kogito.explainability.utils.ValidationUtils;
 import org.optaplanner.core.config.solver.EnvironmentMode;
 import org.optaplanner.core.config.solver.SolverConfig;
 import org.optaplanner.core.config.solver.termination.TerminationConfig;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class FraudScoringDmnCounterfactualExplainerTest {
 
@@ -121,7 +107,7 @@ class FraudScoringDmnCounterfactualExplainerTest {
                 counterfactualExplainer.explainAsync(prediction, model)
                         .get(60L, TimeUnit.SECONDS);
 
-//        List<Output> cfOutputs = counterfactualResult.getOutput().get(0).getOutputs();
+        //        List<Output> cfOutputs = counterfactualResult.getOutput().get(0).getOutputs();
         System.out.println(counterfactualResult.getEntities());
         System.out.println(counterfactualResult.isValid());
         for (PredictionOutput po : counterfactualResult.getOutput()) {
@@ -130,7 +116,6 @@ class FraudScoringDmnCounterfactualExplainerTest {
             }
         }
     }
-
 
     private PredictionProvider getModel() {
         DMNRuntime dmnRuntime = DMNKogito.createGenericDMNRuntime(new InputStreamReader(getClass().getResourceAsStream("/dmn/fraud.dmn")));
@@ -147,17 +132,13 @@ class FraudScoringDmnCounterfactualExplainerTest {
         t1.put("Card Type", FeatureFactory.newCategoricalFeature("Card Type", "Prepaid"));
         t1.put("Location", FeatureFactory.newCategoricalFeature("Location", "Global"));
         t1.put("Amount", FeatureFactory.newNumericalFeature("Amount", amount1, NumericalFeatureDomain.create(0.0, 10000.0)));
-        t1.put("Auth Code", approved1 ?
-                FeatureFactory.newCategoricalFeature("Auth Code", "Approved") :
-                FeatureFactory.newCategoricalFeature("Auth Code", "Denied"));
+        t1.put("Auth Code", approved1 ? FeatureFactory.newCategoricalFeature("Auth Code", "Approved") : FeatureFactory.newCategoricalFeature("Auth Code", "Denied"));
         transactions.add(t1);
         Map<String, Object> t2 = new HashMap<>();
         t2.put("Card Type", FeatureFactory.newCategoricalFeature("Card Type", "Debit"));
         t2.put("Location", FeatureFactory.newCategoricalFeature("Location", "Local"));
         t2.put("Amount", FeatureFactory.newNumericalFeature("Amount", amount2, NumericalFeatureDomain.create(0.0, 10000.0)));
-        t2.put("Auth Code", approved2 ?
-                FeatureFactory.newCategoricalFeature("Auth Code", "Approved") :
-                FeatureFactory.newCategoricalFeature("Auth Code", "Denied"));
+        t2.put("Auth Code", approved2 ? FeatureFactory.newCategoricalFeature("Auth Code", "Approved") : FeatureFactory.newCategoricalFeature("Auth Code", "Denied"));
         transactions.add(t2);
         Map<String, Object> map = new HashMap<>();
         map.put("Transactions", transactions);
@@ -171,10 +152,8 @@ class FraudScoringDmnCounterfactualExplainerTest {
     private List<Output> generateGoal(double score, String amount) {
         return List.of(
                 new Output("Risk Score", Type.NUMBER, new Value(score), 0.0),
-                new Output("Total Amount from Last 24 hours Transactions", Type.TEXT, new Value(amount), 0.0)
-        );
+                new Output("Total Amount from Last 24 hours Transactions", Type.TEXT, new Value(amount), 0.0));
     }
-
 
     @Test
     void testExplanationImpactScoreWithOptimization() throws ExecutionException, InterruptedException, TimeoutException {
