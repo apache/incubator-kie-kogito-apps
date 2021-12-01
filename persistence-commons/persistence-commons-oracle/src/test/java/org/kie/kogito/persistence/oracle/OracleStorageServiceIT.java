@@ -414,6 +414,7 @@ class OracleStorageServiceIT {
 
         Query<StructuredType> query = cache.query();
         query.filter(List.of(QueryFilterFactory.in("field3", List.of("AAA", "BAA"))));
+        query.sort(List.of(QueryFilterFactory.orderBy("field3", SortDirection.ASC)));
 
         List<StructuredType> results = query.execute();
         assertThat(results).hasSize(2);
