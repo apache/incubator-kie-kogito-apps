@@ -22,7 +22,7 @@ import org.junit.jupiter.params.provider.EnumSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class FeatureTest {
+class FeatureTest {
 
     private final PerturbationContext context = new PerturbationContext(new Random(), 1);
 
