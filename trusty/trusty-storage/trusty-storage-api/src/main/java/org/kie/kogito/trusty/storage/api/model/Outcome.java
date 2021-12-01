@@ -25,8 +25,11 @@ import org.kie.kogito.tracing.typedvalue.TypedValue;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * Base abstract class for <b>Outcome</b>
+ */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class DecisionOutcome {
+public abstract class Outcome {
 
     public static final String EVALUATION_STATUS_FIELD = "evaluationStatus";
     public static final String MESSAGES_FIELD = "messages";
@@ -54,10 +57,10 @@ public class DecisionOutcome {
     @JsonProperty(MESSAGES_FIELD)
     private Collection<Message> messages;
 
-    public DecisionOutcome() {
+    public Outcome() {
     }
 
-    public DecisionOutcome(String outcomeId, String outcomeName, String evaluationStatus,
+    public Outcome(String outcomeId, String outcomeName, String evaluationStatus,
             TypedValue outcomeResult,
             Collection<NamedTypedValue> outcomeInputs,
             Collection<Message> messages) {

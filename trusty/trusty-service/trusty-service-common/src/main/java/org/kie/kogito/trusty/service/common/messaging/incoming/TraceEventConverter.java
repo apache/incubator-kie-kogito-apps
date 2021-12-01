@@ -24,9 +24,9 @@ import org.kie.kogito.tracing.event.message.MessageLevel;
 import org.kie.kogito.tracing.event.trace.TraceEvent;
 import org.kie.kogito.tracing.event.trace.TraceInputValue;
 import org.kie.kogito.tracing.event.trace.TraceOutputValue;
-import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.DecisionInput;
-import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
+import org.kie.kogito.trusty.storage.api.model.decision.Decision;
+import org.kie.kogito.trusty.storage.api.model.decision.DecisionInput;
+import org.kie.kogito.trusty.storage.api.model.decision.DecisionOutcome;
 
 public class TraceEventConverter {
 

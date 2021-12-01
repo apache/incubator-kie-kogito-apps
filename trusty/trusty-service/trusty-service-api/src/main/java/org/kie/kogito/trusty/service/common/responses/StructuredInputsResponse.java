@@ -18,31 +18,28 @@ package org.kie.kogito.trusty.service.common.responses;
 
 import java.util.Collection;
 
-import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
+import org.kie.kogito.trusty.storage.api.model.Input;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DecisionOutcomesResponse {
+/**
+ * Base abstract class for <b>StructuredInputsResponse</b>
+ * 
+ * @param <T>
+ */
+public abstract class StructuredInputsResponse<T extends Input> {
 
-    @JsonProperty("header")
-    private ExecutionHeaderResponse header;
+    @JsonProperty("inputs")
+    private Collection<T> inputs;
 
-    @JsonProperty("outcomes")
-    private Collection<DecisionOutcome> outcomes;
-
-    private DecisionOutcomesResponse() {
+    private StructuredInputsResponse() {
     }
 
-    public DecisionOutcomesResponse(ExecutionHeaderResponse header, Collection<DecisionOutcome> outcomes) {
-        this.header = header;
-        this.outcomes = outcomes;
+    public StructuredInputsResponse(Collection<T> inputs) {
+        this.inputs = inputs;
     }
 
-    public ExecutionHeaderResponse getHeader() {
-        return header;
-    }
-
-    public Collection<DecisionOutcome> getOutcomes() {
-        return outcomes;
+    public Collection<T> getInputs() {
+        return inputs;
     }
 }

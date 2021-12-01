@@ -31,7 +31,7 @@ import org.kie.kogito.tracing.event.message.MessageLevel;
 import org.kie.kogito.tracing.event.trace.TraceEvent;
 import org.kie.kogito.tracing.event.trace.TraceOutputValue;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
-import org.kie.kogito.trusty.storage.api.model.Decision;
+import org.kie.kogito.trusty.storage.api.model.decision.Decision;
 import org.skyscreamer.jsonassert.JSONAssert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;

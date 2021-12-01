@@ -14,27 +14,19 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.trusty.service.common.responses;
+package org.kie.kogito.trusty.service.common.responses.process;
 
 import java.util.Collection;
 
-import org.kie.kogito.trusty.storage.api.model.DecisionInput;
+import org.kie.kogito.trusty.service.common.responses.StructuredInputsResponse;
+import org.kie.kogito.trusty.storage.api.model.process.ProcessInput;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+/**
+ * The <b>Process</b> implementation of <code>StructuredInputsResponse</code>.
+ */
+public class ProcessStructuredInputsResponse extends StructuredInputsResponse<ProcessInput> {
 
-public class DecisionStructuredInputsResponse {
-
-    @JsonProperty("inputs")
-    private Collection<DecisionInput> inputs;
-
-    private DecisionStructuredInputsResponse() {
-    }
-
-    public DecisionStructuredInputsResponse(Collection<DecisionInput> inputs) {
-        this.inputs = inputs;
-    }
-
-    public Collection<DecisionInput> getInputs() {
-        return inputs;
+    public ProcessStructuredInputsResponse(Collection<ProcessInput> inputs) {
+        super(inputs);
     }
 }

@@ -14,24 +14,30 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.trusty.storage.api.model;
+package org.kie.kogito.trusty.storage.api.model.decision;
 
 import java.util.Collection;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.kie.kogito.trusty.storage.api.model.Execution;
+import org.kie.kogito.trusty.storage.api.model.ExecutionType;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * A decision.
+ * A <b>Decision</b> <code>Execution</code>
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Decision extends Execution {
 
     public static final String INPUTS_FIELD = "inputs";
     public static final String OUTCOMES_FIELD = "outcomes";
+
+    @JsonProperty(EXECUTED_MODEL_NAMESPACE_FIELD)
+    private String executedModelNamespace;
 
     @JsonProperty(INPUTS_FIELD)
     private Collection<DecisionInput> inputs;
@@ -54,9 +60,28 @@ public class Decision extends Execution {
             List<DecisionInput> inputs,
             List<DecisionOutcome> outcomes) {
         super(executionId, sourceUrl, serviceUrl, executionTimestamp, hasSucceeded, executorName,
-                executedModelName, executedModelNamespace, ExecutionType.DECISION);
+                executedModelName, ExecutionType.DECISION);
+        this.executedModelNamespace = executedModelNamespace;
         this.inputs = inputs;
         this.outcomes = outcomes;
+    }
+
+    /**
+     * Gets the namespace of the executed model.
+     *
+     * @return The namespace of the executed model.
+     */
+    public String getExecutedModelNamespace() {
+        return executedModelNamespace;
+    }
+
+    /**
+     * Sets the executed model namespace.
+     *
+     * @param executedModelNamespace The executed model namespace.
+     */
+    public void setExecutedModelNamespace(String executedModelNamespace) {
+        this.executedModelNamespace = executedModelNamespace;
     }
 
     public Collection<DecisionInput> getInputs() {

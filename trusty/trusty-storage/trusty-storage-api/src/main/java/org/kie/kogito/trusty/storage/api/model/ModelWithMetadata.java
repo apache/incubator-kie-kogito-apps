@@ -1,0 +1,59 @@
+/*
+ * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *       http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.kie.kogito.trusty.storage.api.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public abstract class ModelWithMetadata<T extends ModelMetadata> {
+
+    public static final String MODEL_METADATA = "modelMetaData";
+
+    @JsonProperty(MODEL_METADATA)
+    protected T modelMetaData;
+
+    public ModelWithMetadata() {
+    }
+
+    public ModelWithMetadata(T modelMetaData) {
+        this.modelMetaData = modelMetaData;
+    }
+
+    public T getModelMetaData() {
+        return modelMetaData;
+    }
+
+    public void setModelMetaData(T modelMetaData) {
+        this.modelMetaData = modelMetaData;
+    }
+
+    public String getGroupId() {
+        return modelMetaData.getGroupId();
+    }
+
+    public String getArtifactId() {
+        return modelMetaData.getArtifactId();
+    }
+
+    public String getModelVersion() {
+        return modelMetaData.getModelVersion();
+    }
+
+    public String getIdentifier() {
+        return modelMetaData.getIdentifier();
+    }
+}

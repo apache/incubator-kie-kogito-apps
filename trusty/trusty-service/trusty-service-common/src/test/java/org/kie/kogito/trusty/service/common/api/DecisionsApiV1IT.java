@@ -27,20 +27,19 @@ import java.util.function.BiConsumer;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.NamedTypedValue;
-import org.kie.kogito.tracing.decision.event.message.Message;
-import org.kie.kogito.tracing.decision.event.message.MessageCategory;
-import org.kie.kogito.tracing.decision.event.message.MessageExceptionField;
+import org.kie.kogito.tracing.event.message.Message;
+import org.kie.kogito.tracing.event.message.MessageCategory;
+import org.kie.kogito.tracing.event.message.MessageExceptionField;
 import org.kie.kogito.tracing.event.message.MessageLevel;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.service.common.TrustyService;
-import org.kie.kogito.trusty.service.common.responses.DecisionOutcomesResponse;
-import org.kie.kogito.trusty.service.common.responses.DecisionStructuredInputsResponse;
-import org.kie.kogito.trusty.service.common.responses.ExecutionHeaderResponse;
-import org.kie.kogito.trusty.service.common.responses.ExecutionType;
-import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.DecisionInput;
-import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
+import org.kie.kogito.trusty.service.common.responses.decision.DecisionHeaderResponse;
+import org.kie.kogito.trusty.service.common.responses.decision.DecisionOutcomesResponse;
+import org.kie.kogito.trusty.service.common.responses.decision.DecisionStructuredInputsResponse;
+import org.kie.kogito.trusty.storage.api.model.decision.Decision;
+import org.kie.kogito.trusty.storage.api.model.decision.DecisionInput;
+import org.kie.kogito.trusty.storage.api.model.decision.DecisionOutcome;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -143,7 +142,7 @@ class DecisionsApiV1IT {
 
     private void assertGetExecutionByIdCorrectResponse(ListStatus inputsStatus, ListStatus outcomesStatus) throws Exception {
         mockServiceWithDecision(inputsStatus, outcomesStatus);
-        ExecutionHeaderResponse response = get().as(ExecutionHeaderResponse.class);
+        DecisionHeaderResponse response = get().as(DecisionHeaderResponse.class);
         assertExecutionHeaderResponse(buildExecutionHeaderResponse(), response);
     }
 
@@ -218,7 +217,7 @@ class DecisionsApiV1IT {
         assertCollection(expected.getInputs(), actual.getInputs(), this::assertTypedValueResponse);
     }
 
-    private void assertExecutionHeaderResponse(ExecutionHeaderResponse expected, ExecutionHeaderResponse actual) {
+    private void assertExecutionHeaderResponse(DecisionHeaderResponse expected, DecisionHeaderResponse actual) {
         assertNotNull(actual);
         assertSame(expected.getExecutionType(), actual.getExecutionType());
         assertEquals(expected.getExecutionId(), actual.getExecutionId());
@@ -313,11 +312,13 @@ class DecisionsApiV1IT {
                                 new UnitValue("string", "string", mapper.readTree("\"The First " +
                                         "Outcome\"")),
                                 Collections.emptyList(),
-                                List.of(new Message(
-                                        MessageLevel.WARNING, MessageCategory.INTERNAL, "TEST", "testSrc", "Test message", null,
-                                        new MessageExceptionField("TestException", "Test exception message",
-                                                new MessageExceptionField("TestExceptionCause",
-                                                        "Test exception cause " +
+                                List.of(getMessage(MessageLevel.WARNING,
+                                        MessageCategory.INTERNAL, "TEST", "testSrc", "Test message", null,
+                                        getMessageExceptionField("TestException", "Test exception message",
+                                                getMessageExceptionField(
+                                                        "TestExceptionCause",
+                                                        "Test exception " +
+                                                                "cause " +
                                                                 "message",
                                                         null)))))));
         }
@@ -332,10 +333,26 @@ class DecisionsApiV1IT {
                 new UnitValue("string", "string", mapper.readTree("\"The First " +
                         "Outcome\"")),
                 Collections.emptyList(),
-                List.of(new Message(MessageLevel.WARNING, MessageCategory.INTERNAL, "TEST", "testSrc", "Test message", null,
-                        new MessageExceptionField("TestException", "Test exception message",
-                                new MessageExceptionField("TestExceptionCause", "Test " +
+                List.of(getMessage(MessageLevel.WARNING,
+                        MessageCategory.INTERNAL,
+                        "TEST",
+                        "testSrc",
+                        "Test message",
+                        null,
+                        getMessageExceptionField("TestException", "Test exception message",
+                                getMessageExceptionField("TestExceptionCause", "Test " +
                                         "exception cause message", null)))));
+    }
+
+    private Message getMessage(MessageLevel messageLevel, MessageCategory messageCategory, String type,
+            String sourceId, String text, String exceptionString, MessageExceptionField exception) {
+        return new Message(messageLevel, messageCategory, type, sourceId, text, exception) {
+        };
+    }
+
+    private MessageExceptionField getMessageExceptionField(String className, String message,
+            MessageExceptionField cause) {
+        return new MessageExceptionField(className, message, cause);
     }
 
     private DecisionOutcomesResponse buildDecisionOutcomesResponse(ListStatus outcomesStatus) throws JsonProcessingException {
@@ -370,15 +387,14 @@ class DecisionsApiV1IT {
         throw new IllegalStateException();
     }
 
-    private ExecutionHeaderResponse buildExecutionHeaderResponse() {
-        return new ExecutionHeaderResponse(
+    private DecisionHeaderResponse buildExecutionHeaderResponse() {
+        return new DecisionHeaderResponse(
                 TEST_EXECUTION_ID,
                 TEST_EXECUTION_DATE,
                 true,
                 null,
                 TEST_MODEL_NAME,
-                TEST_MODEL_NAMESPACE,
-                ExecutionType.DECISION);
+                TEST_MODEL_NAMESPACE);
     }
 
     private Response get() {

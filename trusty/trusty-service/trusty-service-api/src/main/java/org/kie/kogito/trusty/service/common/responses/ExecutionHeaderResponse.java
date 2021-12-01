@@ -22,9 +22,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * An execution header.
+ * Base abstract class for <b>ExecutionHeaderResponse</b>
  */
-public class ExecutionHeaderResponse {
+public abstract class ExecutionHeaderResponse {
 
     @JsonProperty("executionId")
     private String executionId;
@@ -42,9 +42,6 @@ public class ExecutionHeaderResponse {
     @JsonProperty("executedModelName")
     private String executedModelName;
 
-    @JsonProperty("executedModelNamespace")
-    private String executedModelNamespace;
-
     @JsonProperty("executionType")
     private ExecutionType executionType;
 
@@ -56,14 +53,12 @@ public class ExecutionHeaderResponse {
             Boolean hasSucceeded,
             String executorName,
             String executedModelName,
-            String executedModelNamespace,
             ExecutionType executionType) {
         this.executionId = executionId;
         this.executionDate = executionDate;
         this.hasSucceeded = hasSucceeded;
         this.executorName = executorName;
         this.executedModelName = executedModelName;
-        this.executedModelNamespace = executedModelNamespace;
         this.executionType = executionType;
     }
 
@@ -110,15 +105,6 @@ public class ExecutionHeaderResponse {
      */
     public String getExecutedModelName() {
         return executedModelName;
-    }
-
-    /**
-     * Gets the namespace of the executed model.
-     *
-     * @return The namespace of the executed model.
-     */
-    public String getExecutedModelNamespace() {
-        return executedModelNamespace;
     }
 
     /**
