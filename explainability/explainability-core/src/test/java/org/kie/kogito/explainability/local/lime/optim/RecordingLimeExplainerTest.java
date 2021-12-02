@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.local.lime.optim;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -60,7 +59,7 @@ class RecordingLimeExplainerTest {
     }
 
     @Test
-    void testParallel() throws InterruptedException, ExecutionException, TimeoutException, IOException {
+    void testParallel() throws InterruptedException, ExecutionException, TimeoutException {
         int capacity = 10;
         RecordingLimeExplainer recordingLimeExplainer = new RecordingLimeExplainer(capacity);
         PredictionProvider model = mock(PredictionProvider.class);
