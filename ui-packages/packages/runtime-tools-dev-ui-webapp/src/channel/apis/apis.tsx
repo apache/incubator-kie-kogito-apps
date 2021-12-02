@@ -336,9 +336,12 @@ export const saveFormContent = (
   });
 };
 
-export const getProcessDefinitionList = (): Promise<ProcessDefinition[]> => {
+export const getProcessDefinitionList = (
+  devUIUrl: string,
+  openApiPath: string
+): Promise<ProcessDefinition[]> => {
   return new Promise((resolve, reject) => {
-    SwaggerParser.parse(`${window.origin}/docs/openapi.json`)
+    SwaggerParser.parse(`${devUIUrl}${openApiPath}`)
       .then(response => {
         const processDefinitionObjs = [];
         const paths = response.paths;

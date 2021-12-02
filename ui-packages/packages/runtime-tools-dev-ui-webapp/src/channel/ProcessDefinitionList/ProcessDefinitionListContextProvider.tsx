@@ -15,6 +15,10 @@
  */
 
 import React from 'react';
+import {
+  DevUIAppContext,
+  useDevUIAppContext
+} from '../../components/contexts/DevUIAppContext';
 import ProcessDefinitionListContext from './ProcessDefinitionListContext';
 import { ProcessDefinitionListGatewayApiImpl } from './ProcessDefinitionListGatewayApi';
 
@@ -25,9 +29,15 @@ interface ProcessDefinitionListContextProviderProps {
 const ProcessDefinitionListContextProvider: React.FC<ProcessDefinitionListContextProviderProps> = ({
   children
 }) => {
+  const runTimeToolsApi: DevUIAppContext = useDevUIAppContext();
   return (
     <ProcessDefinitionListContext.Provider
-      value={new ProcessDefinitionListGatewayApiImpl()}
+      value={
+        new ProcessDefinitionListGatewayApiImpl(
+          runTimeToolsApi.getDevUIUrl(),
+          runTimeToolsApi.getOpenApiPath()
+        )
+      }
     >
       {children}
     </ProcessDefinitionListContext.Provider>

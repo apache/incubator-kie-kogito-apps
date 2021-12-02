@@ -36,11 +36,15 @@ interface IOwnProps {
   apolloClient: ApolloClient<any>;
   users: User[];
   children: React.ReactElement;
+  devUIUrl: string;
+  openApiPath: string;
 }
 
 const DevUILayout: React.FC<IOwnProps> = ({
   apolloClient,
   users,
+  devUIUrl,
+  openApiPath,
   children
 }) => {
   const renderPage = routeProps => {
@@ -57,7 +61,11 @@ const DevUILayout: React.FC<IOwnProps> = ({
 
   return (
     <ApolloProvider client={apolloClient}>
-      <DevUIAppContextProvider users={users}>
+      <DevUIAppContextProvider
+        users={users}
+        devUIUrl={devUIUrl}
+        openApiPath={openApiPath}
+      >
         <TaskConsoleContextsProvider apolloClient={apolloClient}>
           <TaskFormContextProvider>
             <ProcessListContextProvider apolloClient={apolloClient}>

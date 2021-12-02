@@ -36,6 +36,8 @@
         users: {info:userInfo.arrayRepresentation.raw},
         dataIndexUrl: "{config:property('kogito.data-index.url')}/graphql",
         page: "ProcessInstances"
+        devUIUrl: "http://localhost:{config:property('quarkus.http.port') or '8080'}",
+        openApiPath: "{config:property('quarkus.smallrye-openapi.path') or '/docs/openapi.json'}"
     })
 </script>
 {/body}

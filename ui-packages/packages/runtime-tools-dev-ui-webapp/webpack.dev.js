@@ -24,7 +24,7 @@ module.exports = merge(common, {
     open: true,
     proxy: [
       {
-        context:['/svg','/forms'],
+        context:['/svg','/forms','/docs/openapi.json'],
         target: 'http://localhost:4000',
           secure: false,
           changeOrigin: true
