@@ -17,11 +17,9 @@ package org.kie.kogito.trusty.storage.api.model.decision;
 
 import org.kie.kogito.trusty.storage.api.model.ModelMetadata;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class DMNModelMetadata extends ModelMetadata {
+public final class DMNModelMetadata extends ModelMetadata {
 
     public static final String DMN_VERSION_FIELD = "dmnVersion";
     public static final String NAME_FIELD = "name";

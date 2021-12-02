@@ -24,7 +24,7 @@ import org.kie.kogito.trusty.storage.api.model.decision.DecisionOutcome;
 /**
  * The <b>Decision</b> implementation of <code>OutcomesResponse</code>.
  */
-public class DecisionOutcomesResponse extends OutcomesResponse<DecisionHeaderResponse, DecisionOutcome> {
+public final class DecisionOutcomesResponse extends OutcomesResponse<DecisionHeaderResponse, DecisionOutcome> {
 
     public DecisionOutcomesResponse(DecisionHeaderResponse header, Collection<DecisionOutcome> outcomes) {
         super(header, outcomes);

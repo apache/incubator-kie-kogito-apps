@@ -18,15 +18,24 @@ package org.kie.kogito.trusty.service.common.responses;
 
 import java.util.Collection;
 
+import org.kie.kogito.trusty.service.common.responses.decision.DecisionStructuredInputsResponse;
+import org.kie.kogito.trusty.service.common.responses.process.ProcessStructuredInputsResponse;
 import org.kie.kogito.trusty.storage.api.model.Input;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
  * Base abstract class for <b>StructuredInputsResponse</b>
  * 
  * @param <T>
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = DecisionStructuredInputsResponse.class, name = "decision"),
+        @JsonSubTypes.Type(value = ProcessStructuredInputsResponse.class, name = "process"),
+})
 public abstract class StructuredInputsResponse<T extends Input> {
 
     @JsonProperty("inputs")

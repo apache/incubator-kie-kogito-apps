@@ -24,14 +24,12 @@ import javax.validation.constraints.NotNull;
 import org.kie.kogito.trusty.storage.api.model.Execution;
 import org.kie.kogito.trusty.storage.api.model.ExecutionType;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A <b>Decision</b> <code>Execution</code>
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class Decision extends Execution {
+public final class Decision extends Execution {
 
     public static final String INPUTS_FIELD = "inputs";
     public static final String OUTCOMES_FIELD = "outcomes";

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * The <b>Process</b> implementation of <code>ExecutionHeaderResponse</code>.
  */
-public class ProcessHeaderResponse extends ExecutionHeaderResponse {
+public final class ProcessHeaderResponse extends ExecutionHeaderResponse {
 
     @JsonProperty("executedModelNamespace")
     private String executedModelNamespace;

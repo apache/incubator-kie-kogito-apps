@@ -18,10 +18,14 @@ package org.kie.kogito.trusty.service.common.responses;
 
 import java.util.Collection;
 
+import org.kie.kogito.trusty.service.common.responses.decision.DecisionOutcomesResponse;
+import org.kie.kogito.trusty.service.common.responses.process.ProcessOutcomesResponse;
 import org.kie.kogito.trusty.storage.api.model.Outcome;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
  * Base abstract class for <b>OutcomesResponse</b>
@@ -29,6 +33,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * @param <T>
  * @param <E>
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = DecisionOutcomesResponse.class, name = "decision"),
+        @JsonSubTypes.Type(value = ProcessOutcomesResponse.class, name = "process")
+})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class OutcomesResponse<T extends ExecutionHeaderResponse, E extends Outcome> {
 

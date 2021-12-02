@@ -20,12 +20,22 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
+import org.kie.kogito.trusty.storage.api.model.decision.Decision;
+import org.kie.kogito.trusty.storage.api.model.process.Process;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
  * Base abstract class for <b>Execution</b>
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Decision.class, name = "decision"),
+        @JsonSubTypes.Type(value = Process.class, name = "process")
+})
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Execution {
 

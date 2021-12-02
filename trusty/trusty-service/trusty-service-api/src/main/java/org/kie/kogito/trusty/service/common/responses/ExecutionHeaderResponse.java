@@ -18,12 +18,24 @@ package org.kie.kogito.trusty.service.common.responses;
 
 import java.time.OffsetDateTime;
 
+import org.kie.kogito.trusty.service.common.responses.decision.DecisionHeaderResponse;
+import org.kie.kogito.trusty.service.common.responses.process.ProcessHeaderResponse;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
  * Base abstract class for <b>ExecutionHeaderResponse</b>
  */
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type", visible = true)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = DecisionHeaderResponse.class, name = "decision"),
+        @JsonSubTypes.Type(value = ProcessHeaderResponse.class, name = "process")
+})
+@JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class ExecutionHeaderResponse {
 
     @JsonProperty("executionId")
