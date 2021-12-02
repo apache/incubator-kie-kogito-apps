@@ -16,14 +16,17 @@
 package org.kie.kogito.explainability.model;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.kie.kogito.explainability.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
 
 class PredictionInputTest {
 
@@ -51,5 +54,14 @@ class PredictionInputTest {
         PredictionInput input1 = new PredictionInput(features);
         PredictionInput input2 = new PredictionInput(features);
         assertThat(input1).isEqualTo(input2);
+    }
+
+    @Test
+    void testInequality() {
+        PredictionInput input1 = new PredictionInput(Collections.emptyList());
+        Feature feature = mock(Feature.class);
+        PredictionInput input2 = new PredictionInput(List.of(feature));
+        assertThat(input1).isNotEqualTo(input2);
+        assertThat(input1).isNotEqualTo(null);
     }
 }

@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.explainability.model;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,10 +25,16 @@ import static org.mockito.Mockito.mock;
 class BasePredictionTest {
 
     @Test
-    void testEquality() {
+    void testInequality() {
         PredictionInput input1 = mock(PredictionInput.class);
         PredictionOutput output1 = mock(PredictionOutput.class);
         BasePrediction basePrediction1 = new BasePrediction(input1, output1) {
+            @Override
+            public PredictionInput getInput() {
+                return super.getInput();
+            }
+        };
+        BasePrediction basePrediction1Copy = new BasePrediction(input1, output1) {
             @Override
             public PredictionInput getInput() {
                 return super.getInput();
@@ -41,5 +49,20 @@ class BasePredictionTest {
             }
         };
         assertThat(basePrediction1).isNotEqualTo(basePrediction2);
+        assertThat(basePrediction1).isNotEqualTo(basePrediction1Copy);
+        assertThat(basePrediction1).isNotEqualTo(null);
+        BasePrediction simplePrediction1 = new SimplePrediction(input1, output1);
+        BasePrediction simplePrediction2 = new SimplePrediction(input1, output1);
+        assertThat(simplePrediction1).isNotEqualTo(simplePrediction2);
+    }
+
+    @Test
+    void testEquality() {
+        PredictionInput input1 = mock(PredictionInput.class);
+        PredictionOutput output1 = mock(PredictionOutput.class);
+        UUID uuid = UUID.randomUUID();
+        BasePrediction basePrediction1 = new SimplePrediction(input1, output1, uuid);
+        BasePrediction basePrediction2 = new SimplePrediction(input1, output1, uuid);
+        assertThat(basePrediction1).isEqualTo(basePrediction2);
     }
 }
