@@ -12,7 +12,7 @@ module.exports = merge(common, {
   },
   output: {
     path: path.resolve('../dist-dev'),
-    filename: '[name].js',
+    filename: '[name].bundle.js',
     publicPath: '/'
   },
   devtool: 'source-map',

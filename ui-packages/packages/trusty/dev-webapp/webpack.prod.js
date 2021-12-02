@@ -13,7 +13,7 @@ module.exports = merge(common, {
   },
   output: {
     path: path.join(__dirname, '..', 'dist-standalone'),
-    filename: '[name].js',
+    filename: '[name].bundle.js',
     publicPath: '/'
   },
   optimization: {
