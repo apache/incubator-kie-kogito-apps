@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.function.BiConsumer;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.explainability.api.NamedTypedValue;
 import org.kie.kogito.tracing.event.message.Message;
 import org.kie.kogito.tracing.event.message.MessageCategory;
@@ -313,7 +314,7 @@ class DecisionsApiV1IT {
                                         "Outcome\"")),
                                 Collections.emptyList(),
                                 List.of(getMessage(MessageLevel.WARNING,
-                                        MessageCategory.INTERNAL, "TEST", "testSrc", "Test message", null,
+                                        MessageCategory.INTERNAL, "TEST", "testSrc", "Test message",
                                         getMessageExceptionField("TestException", "Test exception message",
                                                 getMessageExceptionField(
                                                         "TestExceptionCause",
@@ -338,15 +339,16 @@ class DecisionsApiV1IT {
                         "TEST",
                         "testSrc",
                         "Test message",
-                        null,
                         getMessageExceptionField("TestException", "Test exception message",
                                 getMessageExceptionField("TestExceptionCause", "Test " +
                                         "exception cause message", null)))));
     }
 
     private Message getMessage(MessageLevel messageLevel, MessageCategory messageCategory, String type,
-            String sourceId, String text, String exceptionString, MessageExceptionField exception) {
-        return new Message(messageLevel, messageCategory, type, sourceId, text, exception) {
+            String sourceId, String text, MessageExceptionField exception) {
+        return new Message(messageLevel,
+                messageCategory, type, sourceId, text, exception,
+                ModelDomain.DECISION) {
         };
     }
 

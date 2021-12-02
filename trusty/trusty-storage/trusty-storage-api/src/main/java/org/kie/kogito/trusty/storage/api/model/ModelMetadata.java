@@ -19,6 +19,7 @@ package org.kie.kogito.trusty.storage.api.model;
 import java.util.Objects;
 
 import org.kie.kogito.KogitoGAV;
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.storage.api.model.decision.DMNModelMetadata;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -28,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type", visible = true)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = DMNModelMetadata.class, name = "decision")
+        @JsonSubTypes.Type(value = DMNModelMetadata.class, name = "DECISION")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class ModelMetadata {
@@ -47,17 +48,21 @@ public abstract class ModelMetadata {
     @JsonProperty(MODEL_VERSION_FIELD)
     private String modelVersion;
 
+    @JsonProperty("@type")
+    private ModelDomain modelDomain;
+
     public ModelMetadata() {
     }
 
-    public ModelMetadata(String groupId, String artifactId, String modelVersion) {
+    public ModelMetadata(String groupId, String artifactId, String modelVersion, ModelDomain modelDomain) {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.modelVersion = modelVersion;
+        this.modelDomain = modelDomain;
     }
 
-    public ModelMetadata(KogitoGAV gav) {
-        this(gav.getGroupId(), gav.getArtifactId(), gav.getVersion());
+    public ModelMetadata(KogitoGAV gav, ModelDomain modelDomain) {
+        this(gav.getGroupId(), gav.getArtifactId(), gav.getVersion(), modelDomain);
     }
 
     public String getGroupId() {

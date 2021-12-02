@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.trusty.storage.api.model.decision;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.storage.api.model.ModelWithMetadata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -35,7 +36,7 @@ public final class DMNModelWithMetadata extends ModelWithMetadata<DMNModelMetada
     }
 
     public DMNModelWithMetadata(DMNModelMetadata dmnModelMetadata, String model) {
-        super(dmnModelMetadata);
+        super(dmnModelMetadata, ModelDomain.DECISION);
         this.model = model;
     }
 

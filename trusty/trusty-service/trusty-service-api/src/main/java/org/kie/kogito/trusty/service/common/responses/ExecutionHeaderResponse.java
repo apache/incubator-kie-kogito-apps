@@ -18,6 +18,7 @@ package org.kie.kogito.trusty.service.common.responses;
 
 import java.time.OffsetDateTime;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.service.common.responses.decision.DecisionHeaderResponse;
 import org.kie.kogito.trusty.service.common.responses.process.ProcessHeaderResponse;
 
@@ -32,8 +33,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type", visible = true)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = DecisionHeaderResponse.class, name = "decision"),
-        @JsonSubTypes.Type(value = ProcessHeaderResponse.class, name = "process")
+        @JsonSubTypes.Type(value = DecisionHeaderResponse.class, name = "DECISION"),
+        @JsonSubTypes.Type(value = ProcessHeaderResponse.class, name = "PROCESS")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class ExecutionHeaderResponse {
@@ -55,7 +56,10 @@ public abstract class ExecutionHeaderResponse {
     private String executedModelName;
 
     @JsonProperty("executionType")
-    private ExecutionType executionType;
+    private ModelDomain executionType;
+
+    @JsonProperty("@type")
+    private ModelDomain modelDomain;
 
     private ExecutionHeaderResponse() {
     }
@@ -65,13 +69,14 @@ public abstract class ExecutionHeaderResponse {
             Boolean hasSucceeded,
             String executorName,
             String executedModelName,
-            ExecutionType executionType) {
+            ModelDomain modelDomain) {
         this.executionId = executionId;
         this.executionDate = executionDate;
         this.hasSucceeded = hasSucceeded;
         this.executorName = executorName;
         this.executedModelName = executedModelName;
-        this.executionType = executionType;
+        this.executionType = modelDomain;
+        this.modelDomain = modelDomain;
     }
 
     /**
@@ -124,7 +129,7 @@ public abstract class ExecutionHeaderResponse {
      *
      * @return The execution type.
      */
-    public ExecutionType getExecutionType() {
+    public ModelDomain getExecutionType() {
         return executionType;
     }
 }

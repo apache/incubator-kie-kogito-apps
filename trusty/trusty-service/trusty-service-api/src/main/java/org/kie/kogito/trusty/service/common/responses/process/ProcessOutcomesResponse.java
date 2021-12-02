@@ -18,6 +18,7 @@ package org.kie.kogito.trusty.service.common.responses.process;
 
 import java.util.Collection;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.service.common.responses.OutcomesResponse;
 import org.kie.kogito.trusty.storage.api.model.process.ProcessOutcome;
 
@@ -27,6 +28,6 @@ import org.kie.kogito.trusty.storage.api.model.process.ProcessOutcome;
 public final class ProcessOutcomesResponse extends OutcomesResponse<ProcessHeaderResponse, ProcessOutcome> {
 
     public ProcessOutcomesResponse(ProcessHeaderResponse header, Collection<ProcessOutcome> outcomes) {
-        super(header, outcomes);
+        super(header, outcomes, ModelDomain.PROCESS);
     }
 }

@@ -18,6 +18,7 @@ package org.kie.kogito.trusty.service.common.responses;
 
 import java.util.Collection;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.service.common.responses.decision.DecisionOutcomesResponse;
 import org.kie.kogito.trusty.service.common.responses.process.ProcessOutcomesResponse;
 import org.kie.kogito.trusty.storage.api.model.Outcome;
@@ -35,8 +36,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type", visible = true)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = DecisionOutcomesResponse.class, name = "decision"),
-        @JsonSubTypes.Type(value = ProcessOutcomesResponse.class, name = "process")
+        @JsonSubTypes.Type(value = DecisionOutcomesResponse.class, name = "DECISION"),
+        @JsonSubTypes.Type(value = ProcessOutcomesResponse.class, name = "PROCESS")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class OutcomesResponse<T extends ExecutionHeaderResponse, E extends Outcome> {
@@ -47,12 +48,16 @@ public abstract class OutcomesResponse<T extends ExecutionHeaderResponse, E exte
     @JsonProperty("outcomes")
     private Collection<E> outcomes;
 
+    @JsonProperty("@type")
+    private ModelDomain modelDomain;
+
     private OutcomesResponse() {
     }
 
-    public OutcomesResponse(T header, Collection<E> outcomes) {
+    public OutcomesResponse(T header, Collection<E> outcomes, ModelDomain modelDomain) {
         this.header = header;
         this.outcomes = outcomes;
+        this.modelDomain = modelDomain;
     }
 
     public T getHeader() {

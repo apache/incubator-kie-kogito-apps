@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.trusty.storage.api.model;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.storage.api.model.decision.DMNModelWithMetadata;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -24,7 +25,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type", visible = true)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = DMNModelWithMetadata.class, name = "decision"),
+        @JsonSubTypes.Type(value = DMNModelWithMetadata.class, name = "DECISION")
 })
 @JsonIgnoreProperties(ignoreUnknown = true)
 public abstract class ModelWithMetadata<T extends ModelMetadata> {
@@ -34,11 +35,15 @@ public abstract class ModelWithMetadata<T extends ModelMetadata> {
     @JsonProperty(MODEL_METADATA)
     protected T modelMetaData;
 
+    @JsonProperty("@type")
+    private ModelDomain modelDomain;
+
     public ModelWithMetadata() {
     }
 
-    public ModelWithMetadata(T modelMetaData) {
+    public ModelWithMetadata(T modelMetaData, ModelDomain modelDomain) {
         this.modelMetaData = modelMetaData;
+        this.modelDomain = modelDomain;
     }
 
     public T getModelMetaData() {

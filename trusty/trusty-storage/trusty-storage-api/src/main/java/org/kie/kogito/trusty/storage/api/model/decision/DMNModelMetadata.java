@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.trusty.storage.api.model.decision;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.storage.api.model.ModelMetadata;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -41,7 +42,7 @@ public final class DMNModelMetadata extends ModelMetadata {
 
     public DMNModelMetadata(String groupId, String artifactId, String modelVersion, String dmnVersion,
             String name, String namespace) {
-        super(groupId, artifactId, modelVersion);
+        super(groupId, artifactId, modelVersion, ModelDomain.DECISION);
         this.dmnVersion = dmnVersion;
         this.name = name;
         this.namespace = namespace;

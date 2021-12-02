@@ -18,6 +18,7 @@ package org.kie.kogito.trusty.service.common.responses;
 
 import java.util.Collection;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.service.common.responses.decision.DecisionStructuredInputsResponse;
 import org.kie.kogito.trusty.service.common.responses.process.ProcessStructuredInputsResponse;
 import org.kie.kogito.trusty.storage.api.model.Input;
@@ -33,19 +34,23 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "@type", visible = true)
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = DecisionStructuredInputsResponse.class, name = "decision"),
-        @JsonSubTypes.Type(value = ProcessStructuredInputsResponse.class, name = "process"),
+        @JsonSubTypes.Type(value = DecisionStructuredInputsResponse.class, name = "DECISION"),
+        @JsonSubTypes.Type(value = ProcessStructuredInputsResponse.class, name = "PROCESS"),
 })
 public abstract class StructuredInputsResponse<T extends Input> {
 
     @JsonProperty("inputs")
     private Collection<T> inputs;
 
+    @JsonProperty("@type")
+    private ModelDomain modelDomain;
+
     private StructuredInputsResponse() {
     }
 
-    public StructuredInputsResponse(Collection<T> inputs) {
+    public StructuredInputsResponse(Collection<T> inputs, ModelDomain modelDomain) {
         this.inputs = inputs;
+        this.modelDomain = modelDomain;
     }
 
     public Collection<T> getInputs() {

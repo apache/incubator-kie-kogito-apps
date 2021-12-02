@@ -18,8 +18,8 @@ package org.kie.kogito.trusty.service.common.responses.process;
 
 import java.time.OffsetDateTime;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.service.common.responses.ExecutionHeaderResponse;
-import org.kie.kogito.trusty.service.common.responses.ExecutionType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -42,7 +42,7 @@ public final class ProcessHeaderResponse extends ExecutionHeaderResponse {
                 hasSucceeded,
                 executorName,
                 executedModelName,
-                ExecutionType.PROCESS);
+                ModelDomain.PROCESS);
         this.executedModelNamespace = executedModelNamespace;
     }
 

@@ -76,12 +76,12 @@ public class ModelEventConsumer extends BaseEventConsumer<ModelEvent> {
     @Override
     protected void internalHandleCloudEvent(CloudEvent cloudEvent, ModelEvent payload) {
         final org.kie.kogito.event.ModelMetadata modelMetadata = payload.getModelMetadata();
-        switch (modelMetadata.getType()) {
-            case DMN:
+        switch (modelMetadata.getModelDomain()) {
+            case DECISION:
                 internalHandleDecisionModelEvent((DecisionModelEvent) payload);
                 break;
             default:
-                LOG.error("Unsupported ModelMetadata type {}", modelMetadata.getType());
+                LOG.error("Unsupported ModelMetadata type {}", modelMetadata.getModelDomain());
         }
     }
 

@@ -18,6 +18,7 @@ package org.kie.kogito.trusty.service.common.responses.decision;
 
 import java.util.Collection;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.service.common.responses.OutcomesResponse;
 import org.kie.kogito.trusty.storage.api.model.decision.DecisionOutcome;
 
@@ -27,6 +28,6 @@ import org.kie.kogito.trusty.storage.api.model.decision.DecisionOutcome;
 public final class DecisionOutcomesResponse extends OutcomesResponse<DecisionHeaderResponse, DecisionOutcome> {
 
     public DecisionOutcomesResponse(DecisionHeaderResponse header, Collection<DecisionOutcome> outcomes) {
-        super(header, outcomes);
+        super(header, outcomes, ModelDomain.DECISION);
     }
 }

@@ -21,8 +21,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.storage.api.model.Execution;
-import org.kie.kogito.trusty.storage.api.model.ExecutionType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -44,7 +44,7 @@ public final class Process extends Execution {
     private Collection<ProcessOutcome> outcomes;
 
     public Process() {
-        super(ExecutionType.DECISION);
+        super(ModelDomain.PROCESS);
     }
 
     public Process(@NotNull String executionId,
@@ -58,7 +58,7 @@ public final class Process extends Execution {
             List<ProcessInput> inputs,
             List<ProcessOutcome> outcomes) {
         super(executionId, sourceUrl, serviceUrl, executionTimestamp, hasSucceeded, executorName,
-                executedModelName, ExecutionType.PROCESS);
+                executedModelName, ModelDomain.PROCESS);
         this.executedModelNamespace = executedModelNamespace;
         this.inputs = inputs;
         this.outcomes = outcomes;

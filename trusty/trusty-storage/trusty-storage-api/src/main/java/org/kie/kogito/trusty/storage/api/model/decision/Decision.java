@@ -21,8 +21,8 @@ import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.storage.api.model.Execution;
-import org.kie.kogito.trusty.storage.api.model.ExecutionType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -44,7 +44,7 @@ public final class Decision extends Execution {
     private Collection<DecisionOutcome> outcomes;
 
     public Decision() {
-        super(ExecutionType.DECISION);
+        super(ModelDomain.DECISION);
     }
 
     public Decision(@NotNull String executionId,
@@ -58,7 +58,7 @@ public final class Decision extends Execution {
             List<DecisionInput> inputs,
             List<DecisionOutcome> outcomes) {
         super(executionId, sourceUrl, serviceUrl, executionTimestamp, hasSucceeded, executorName,
-                executedModelName, ExecutionType.DECISION);
+                executedModelName, ModelDomain.DECISION);
         this.executedModelNamespace = executedModelNamespace;
         this.inputs = inputs;
         this.outcomes = outcomes;

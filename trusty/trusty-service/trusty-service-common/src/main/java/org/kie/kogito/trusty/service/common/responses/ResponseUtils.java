@@ -61,13 +61,4 @@ public class ResponseUtils {
                 execution.getExecutedModelNamespace());
     }
 
-    private static ExecutionType executionTypeFrom(org.kie.kogito.trusty.storage.api.model.ExecutionType executionType) {
-        switch (executionType) {
-            case DECISION:
-                return ExecutionType.DECISION;
-            case PROCESS:
-                return ExecutionType.PROCESS;
-        }
-        throw new IllegalStateException();
-    }
 }

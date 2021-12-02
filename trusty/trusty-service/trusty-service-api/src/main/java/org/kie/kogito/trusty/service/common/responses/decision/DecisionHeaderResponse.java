@@ -18,8 +18,8 @@ package org.kie.kogito.trusty.service.common.responses.decision;
 
 import java.time.OffsetDateTime;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.service.common.responses.ExecutionHeaderResponse;
-import org.kie.kogito.trusty.service.common.responses.ExecutionType;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -42,7 +42,7 @@ public final class DecisionHeaderResponse extends ExecutionHeaderResponse {
                 hasSucceeded,
                 executorName,
                 executedModelName,
-                ExecutionType.DECISION);
+                ModelDomain.DECISION);
         this.executedModelNamespace = executedModelNamespace;
     }
 

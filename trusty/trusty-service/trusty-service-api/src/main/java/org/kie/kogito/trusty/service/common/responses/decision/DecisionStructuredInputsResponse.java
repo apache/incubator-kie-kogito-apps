@@ -18,6 +18,7 @@ package org.kie.kogito.trusty.service.common.responses.decision;
 
 import java.util.Collection;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.service.common.responses.StructuredInputsResponse;
 import org.kie.kogito.trusty.storage.api.model.decision.DecisionInput;
 
@@ -27,6 +28,6 @@ import org.kie.kogito.trusty.storage.api.model.decision.DecisionInput;
 public class DecisionStructuredInputsResponse extends StructuredInputsResponse<DecisionInput> {
 
     public DecisionStructuredInputsResponse(Collection<DecisionInput> inputs) {
-        super(inputs);
+        super(inputs, ModelDomain.DECISION);
     }
 }

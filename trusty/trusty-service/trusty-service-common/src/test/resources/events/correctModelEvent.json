@@ -1,5 +1,5 @@
 {
-  "@class": "org.kie.kogito.tracing.decision.event.model.DecisionModelEvent",
+  "@type": "DECISION",
   "gav": {
     "groupId": "groupId",
     "artifactId": "artifactId",
@@ -8,7 +8,7 @@
   "name": "name",
   "namespace": "namespace",
   "modelMetadata": {
-    "type": "DMN",
+    "@type": "DECISION",
     "specVersion": "http://www.omg.org/spec/DMN/20151101/dmn.xsd"
   },
   "definition": "definition"

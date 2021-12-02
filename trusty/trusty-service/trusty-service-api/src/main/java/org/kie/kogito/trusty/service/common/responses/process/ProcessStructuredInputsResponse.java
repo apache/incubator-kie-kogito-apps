@@ -18,6 +18,7 @@ package org.kie.kogito.trusty.service.common.responses.process;
 
 import java.util.Collection;
 
+import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.service.common.responses.StructuredInputsResponse;
 import org.kie.kogito.trusty.storage.api.model.process.ProcessInput;
 
@@ -27,6 +28,6 @@ import org.kie.kogito.trusty.storage.api.model.process.ProcessInput;
 public class ProcessStructuredInputsResponse extends StructuredInputsResponse<ProcessInput> {
 
     public ProcessStructuredInputsResponse(Collection<ProcessInput> inputs) {
-        super(inputs);
+        super(inputs, ModelDomain.PROCESS);
     }
 }
