@@ -906,7 +906,10 @@ describe('handle node instance cancel', () => {
         }
       })
     );
-    const result = await getProcessDefinitionList();
+    const result = await getProcessDefinitionList(
+      'http://localhost:8080',
+      '/docs/openapi.json'
+    );
     expect(result).toStrictEqual([
       { processName: 'hiring', endpoint: 'http://localhost:8080/hiring' }
     ]);

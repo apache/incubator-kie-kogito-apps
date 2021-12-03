@@ -7,6 +7,9 @@ exports[`ProcessDefinitionListContainer tests Snapshot 1`] = `
     data-ouia-safe={true}
     driver={
       ProcessDefinitionListGatewayApiImpl {
+        "devUIUrl": Object {
+          "getProcessDefinitions": [MockFunction],
+        },
         "getProcessDefinitionFilter": [Function],
         "getProcessDefinitionsQuery": [Function],
         "listeners": Array [
@@ -14,6 +17,7 @@ exports[`ProcessDefinitionListContainer tests Snapshot 1`] = `
             "onOpen": [Function],
           },
         ],
+        "openApiPath": undefined,
         "openProcessForm": [Function],
         "processDefinitonFilter": Array [],
         "setProcessDefinitionFilter": [Function],

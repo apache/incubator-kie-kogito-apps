@@ -31,7 +31,10 @@ let gatewayApi: ProcessDefinitionListGatewayApi;
 describe('ProcessDefinitionListListGatewayApi tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    gatewayApi = new ProcessDefinitionListGatewayApiImpl();
+    gatewayApi = new ProcessDefinitionListGatewayApiImpl(
+      'http://localhost:8080',
+      '/docs/openapi.json'
+    );
   });
 
   it('get process definition query', async () => {
