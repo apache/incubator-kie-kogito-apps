@@ -61,7 +61,6 @@ class PredictionInputTest {
         PredictionInput input1 = new PredictionInput(Collections.emptyList());
         Feature feature = mock(Feature.class);
         PredictionInput input2 = new PredictionInput(List.of(feature));
-        assertThat(input1).isNotEqualTo(input2);
-        assertThat(input1).isNotEqualTo(null);
+        assertThat(input1).isNotEqualTo(input2).isNotEqualTo(null);
     }
 }

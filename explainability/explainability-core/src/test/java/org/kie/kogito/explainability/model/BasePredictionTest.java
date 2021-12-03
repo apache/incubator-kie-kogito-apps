@@ -49,8 +49,7 @@ class BasePredictionTest {
             }
         };
         assertThat(basePrediction1).isNotEqualTo(basePrediction2);
-        assertThat(basePrediction1).isNotEqualTo(basePrediction1Copy);
-        assertThat(basePrediction1).isNotEqualTo(null);
+        assertThat(basePrediction1).isNotEqualTo(basePrediction1Copy).isNotEqualTo(null);
         BasePrediction simplePrediction1 = new SimplePrediction(input1, output1);
         BasePrediction simplePrediction2 = new SimplePrediction(input1, output1);
         assertThat(simplePrediction1).isNotEqualTo(simplePrediction2);
