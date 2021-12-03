@@ -39,7 +39,7 @@ class PredictionInputTest {
         Feature mockedFeature = TestUtils.getMockedFeature(type, v);
         PredictionInput input1 = new PredictionInput(List.of(mockedFeature));
         PredictionInput input2 = new PredictionInput(List.of(mockedFeature));
-        assertThat(input1).isEqualTo(input2);
+        assertThat(input1).isEqualTo(input2).isEqualTo(input1);
     }
 
     @ParameterizedTest
@@ -53,7 +53,7 @@ class PredictionInputTest {
         }
         PredictionInput input1 = new PredictionInput(features);
         PredictionInput input2 = new PredictionInput(features);
-        assertThat(input1).isEqualTo(input2);
+        assertThat(input1).isEqualTo(input2).isEqualTo(input1);
     }
 
     @Test

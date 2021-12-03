@@ -62,6 +62,6 @@ class BasePredictionTest {
         UUID uuid = UUID.randomUUID();
         BasePrediction basePrediction1 = new SimplePrediction(input1, output1, uuid);
         BasePrediction basePrediction2 = new SimplePrediction(input1, output1, uuid);
-        assertThat(basePrediction1).isEqualTo(basePrediction2);
+        assertThat(basePrediction1).isEqualTo(basePrediction2).isEqualTo(basePrediction1);
     }
 }
