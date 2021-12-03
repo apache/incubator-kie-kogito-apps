@@ -47,12 +47,7 @@ public class RecordingLimeExplainer extends LimeExplainer {
 
     public RecordingLimeExplainer(LimeConfig limeConfig, int capacity) {
         super(limeConfig);
-        recordedPredictions = new ConcurrentLinkedDeque<Prediction>() {
-            @Override
-            public boolean offer(Prediction o) {
-                return !contains(o) && (super.offer(o) && (size() <= capacity || super.pop() != null));
-            }
-        };
+        recordedPredictions = new FixedSizeConcurrentLinkedDeque<>(capacity);
     }
 
     @Override
@@ -64,5 +59,19 @@ public class RecordingLimeExplainer extends LimeExplainer {
     public List<Prediction> getRecordedPredictions() {
         Prediction[] a = recordedPredictions.toArray(new Prediction[0]);
         return Collections.unmodifiableList(Arrays.asList(a));
+    }
+
+    static class FixedSizeConcurrentLinkedDeque<T> extends ConcurrentLinkedDeque<T> {
+
+        private final int capacity;
+
+        FixedSizeConcurrentLinkedDeque(int capacity) {
+            this.capacity = capacity;
+        }
+
+        @Override
+        public boolean offer(T o) {
+            return !contains(o) && (super.offer(o) && (size() <= capacity || super.pop() != null));
+        }
     }
 }

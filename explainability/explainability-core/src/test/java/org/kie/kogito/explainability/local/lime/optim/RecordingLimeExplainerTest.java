@@ -86,4 +86,14 @@ class RecordingLimeExplainerTest {
         }
         assertThat(recordingLimeExplainer.getRecordedPredictions().size()).isEqualTo(capacity);
     }
+
+    @Test
+    void testQueue() {
+        RecordingLimeExplainer.FixedSizeConcurrentLinkedDeque<String> queue = new RecordingLimeExplainer.FixedSizeConcurrentLinkedDeque<>(5);
+        String[] strings = "a b c d e f g".split(" ");
+        for (String s : strings) {
+            assertThat(queue.offer(s)).isTrue();
+        }
+        assertThat(queue).containsExactly("c d e f g".split(" "));
+    }
 }
