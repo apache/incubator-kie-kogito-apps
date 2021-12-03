@@ -140,26 +140,14 @@
             </configuration>
           </execution>
           <execution>
-            <id>npm install lock-treatment-tool</id>
-            <goals>
+              <id>lock-treatment-tool execution</id>
+              <phase>initialize</phase>
+              <goals>
               <goal>npm</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.ui.deps}</skip>
-              <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-              <arguments>install lock-treatment-tool --global-style --no-package-lock --no-save</arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>lock-treatment-tool execution</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.ui.deps}</skip>
-              <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-              <arguments>run locktt -- --skipIntegrity</arguments>
-            </configuration>
+              </goals>
+              <configuration>
+              <arguments>exec @kie/lock-treatment-tool -- --skipIntegrity</arguments>
+              </configuration>
           </execution>
           <execution>
             <id>yarn install</id>
