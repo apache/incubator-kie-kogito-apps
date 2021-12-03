@@ -90,9 +90,9 @@ class RecordingLimeExplainerTest {
     @Test
     void testQueue() {
         RecordingLimeExplainer.FixedSizeConcurrentLinkedDeque<String> queue = new RecordingLimeExplainer.FixedSizeConcurrentLinkedDeque<>(5);
-        String[] strings = "a b c d e f g".split(" ");
+        String[] strings = "a b c d e f g f".split(" ");
         for (String s : strings) {
-            assertThat(queue.offer(s)).isTrue();
+            queue.offer(s);
         }
         assertThat(queue).containsExactly("c d e f g".split(" "));
     }

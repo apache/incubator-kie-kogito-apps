@@ -28,6 +28,8 @@ import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A {@link LimeExplainer} wrapper that, while producing a {@link Saliency} explanation, records a fixed amount
@@ -38,6 +40,8 @@ import org.kie.kogito.explainability.model.Saliency;
  * be evicted.
  */
 public class RecordingLimeExplainer extends LimeExplainer {
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(RecordingLimeExplainer.class);
 
     private final Queue<Prediction> recordedPredictions;
 
@@ -52,7 +56,9 @@ public class RecordingLimeExplainer extends LimeExplainer {
 
     @Override
     public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction, PredictionProvider model) {
-        recordedPredictions.offer(prediction);
+        if (!recordedPredictions.offer(prediction) && LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Prediction {} not recorded", prediction);
+        }
         return super.explainAsync(prediction, model);
     }
 
