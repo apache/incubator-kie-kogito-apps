@@ -56,7 +56,7 @@ public class RecordingLimeExplainer extends LimeExplainer {
 
     @Override
     public CompletableFuture<Map<String, Saliency>> explainAsync(Prediction prediction, PredictionProvider model) {
-        if (!recordedPredictions.offer(prediction) && LOGGER.isDebugEnabled()) {
+        if (!recordedPredictions.offer(prediction)) {
             LOGGER.debug("Prediction {} not recorded", prediction);
         }
         return super.explainAsync(prediction, model);
