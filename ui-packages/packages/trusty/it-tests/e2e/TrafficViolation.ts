@@ -16,7 +16,7 @@
 let reqId;
 let auditDetailsUrl;
 
-describe('Traffic Violation', () => {
+describe.skip('Traffic Violation', () => {
   before(() => {
     cy.request({
       method: 'POST',
@@ -95,7 +95,7 @@ describe('Traffic Violation', () => {
               expect($items.eq(2)).have.text('Input data');
               expect($items.eq(3)).have.text('Model lookup');
               /*
-               * TODO: FAI-665 
+               * TODO: FAI-665
                */
               expect($items.eq(4)).to.contain('Counterfactual analysis');
             });

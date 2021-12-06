@@ -1,0 +1,148 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>apps-integration-tests</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>integration-tests-trusty-audit</artifactId>
+    <name>Kogito Apps :: Integration Tests :: Trusty Audit UI</name>
+    <packaging>pom</packaging>
+
+    <properties>
+        <container.image.kogito-service>to-be-changed-in-submodules</container.image.kogito-service>
+    </properties>
+
+    <dependencies>
+        <!-- ensure dependent modules were built, but not added in the classpath -->
+        <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>explainability-service-messaging</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>integration-tests-trusty-service-quarkus</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>trusty-service-infinispan</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>trusty-ui</artifactId>
+            <version>${project.version}</version>
+            <type>pom</type>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+          <!-- frontend related plugins-->
+          <!--
+            Installs node and yarn in the webapp's node and node_modules folders.
+            Run 'mvn package':
+              * the first time you have checked out the source.
+              * whenever the dependencies have been changed in package.json (delete the webapp's node_modules folder first!)
+            If you want to skip installation of the packages, turn the profile off by setting property `-Dskip.ui.deps`.
+          -->
+          <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <configuration>
+              <workingDirectory>../../ui-packages</workingDirectory>
+            </configuration>
+            <executions>
+              <!--
+                It works only if docker contains images from previous build.
+                This was just verification that this way is imposible.
+                In case that docker images are empty than the build fails. 
+                For example: org.kie.kogito/integration-tests-trusty-service-quarkus:2.0.0-SNAPSHOT is missing
+
+                TODO: parametrize base url to localhost:1337
+                -->
+              <execution>
+                <id>yarn e2e test</id>
+                <goals>
+                  <goal>yarn</goal>
+                </goals>
+                <phase>integration-test</phase>
+                <configuration>
+                  <skip>${skip.ui.build}</skip>
+                  <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
+                  <arguments>run test:e2e</arguments>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>docker-maven-plugin</artifactId>
+                <configuration>
+                    <images>
+                        <image>
+                            <alias>webapp</alias>
+                            <name>fabric8/compose-demo:latest</name>
+
+                            <external>
+                                <type>compose</type>
+                                <basedir>src/test/docker-compose</basedir>
+                                <composeFile>docker-compose.yml</composeFile>
+                            </external>
+                        </image>
+                    </images>
+                </configuration>
+                <executions>
+                    <execution>
+                       <id>start</id>
+                       <phase>pre-integration-test</phase>
+                       <goals>
+                         <goal>start</goal>
+                       </goals>
+                    </execution>
+                    <execution>
+                       <id>stop</id>
+                       <phase>post-integration-test</phase>
+                       <goals>
+                         <goal>stop</goal>
+                      </goals>
+                    </execution>
+                  </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
