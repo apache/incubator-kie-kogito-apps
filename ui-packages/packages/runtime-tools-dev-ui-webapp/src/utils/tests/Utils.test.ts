@@ -108,7 +108,8 @@ describe('Utils tests', () => {
       }
     ];
     const processDefinitionList = createProcessDefinitionList(
-      processDefinitionObjs
+      processDefinitionObjs,
+      'http://localhost:8080'
     );
     expect(processDefinitionList).toStrictEqual([
       { processName: 'hiring', endpoint: 'http://localhost:8080/hiring' }

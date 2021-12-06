@@ -103,12 +103,13 @@ export const getActiveTaskStates = (): string[] => {
 };
 
 export const createProcessDefinitionList = (
-  processDefinitionObjs
+  processDefinitionObjs,
+  url: string
 ): ProcessDefinition[] => {
   const processDefinitionList = [];
   processDefinitionObjs.forEach(processDefObj => {
     const processName = Object.keys(processDefObj)[0].split('/')[1];
-    const endpoint = `http://localhost:8080/${processName}`;
+    const endpoint = `${url}/${processName}`;
     processDefinitionList.push({
       processName,
       endpoint

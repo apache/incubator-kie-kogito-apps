@@ -361,7 +361,7 @@ export const getProcessDefinitionList = (
               processDefinitionObjs.push({ [url]: paths[url] });
             }
           });
-        resolve(createProcessDefinitionList(processDefinitionObjs));
+        resolve(createProcessDefinitionList(processDefinitionObjs, devUIUrl));
       })
       .catch(err => reject(err));
   });

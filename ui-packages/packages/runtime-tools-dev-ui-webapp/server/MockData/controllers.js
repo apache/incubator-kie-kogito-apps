@@ -9,9 +9,8 @@ const hrInterviewForm = require('./forms/HRInterview');
 const itInterviewForm = require('./forms/ITInterview');
 const emptyForm = require('./forms/EmptyForm');
 const formData = require('../MockData/forms/formData');
-const processFormConfirmTravelSchema = require('./process-forms-schema/ConfirmTravel');
-const processFormApplyForVisaSchema = require('./process-forms-schema/ApplyForVisa');
-
+const hiringSchema = require('./process-forms-schema/hiring');
+const uuidv4  = require('uuid');
 const tasksUnableToTransition = [
   '047ec38d-5d57-4330-8c8d-9bd67b53a529',
   '841b9dba-3d91-4725-9de3-f9f4853b417e',
@@ -127,7 +126,7 @@ module.exports = controller = {
       res.status(404).send('node not found')
     }
     else {
-      nodeObject[0].exit = new Date().toISOString();
+      nodeObject[0].exit = new Date().toIProcessInstanceDataSOString();
       res.status(200).send(data[0]);
     }
   },
@@ -351,16 +350,57 @@ module.exports = controller = {
     const processName = req.params.processName;
     let schema;
     switch (processName) {
-      case 'ConfirmTravel': {
-        schema = _.cloneDeep(processFormConfirmTravelSchema);
-        break;
-      }
       case 'hiring': {
-        schema = _.cloneDeep(processFormApplyForVisaSchema);
+        schema = _.cloneDeep(hiringSchema);
         break;
       }
     };
     res.send(JSON.stringify(schema));
+  },
+  startProcessInstance: (req, res) => {
+    console.log(req.query)
+    const busiessKey = req.query.businessKey?req.query.businessKey:null;
+    console.log(busiessKey)
+    const processId = uuidv4();
+    const processInstance ={
+      id: processId,
+      processId: 'hiring',
+      businessKey: busiessKey,
+      parentProcessInstanceId: null,
+      parentProcessInstance: null,
+      processName: 'Hiring',
+      rootProcessInstanceId: null,
+      roles: [],
+      state: 'ACTIVE',
+      start: '2019-10-22T03:40:44.089Z',
+      end: '2019-10-22T05:40:44.089Z',
+      serviceUrl: null,
+      endpoint: 'http://localhost:4000',
+      error: {
+        nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-34578e904e6b',
+        message: 'some thing went wrong'
+      },
+      addons: [],
+      variables:
+        '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
+      nodes: [
+        {
+          nodeId: '1',
+          name: 'End Event 1',
+          definitionId: 'EndEvent_1',
+          id: '27107f38-d888-4edf-9a4f-11b9e6d751b6',
+          enter: '2019-10-22T03:37:30.798Z',
+          exit: '2019-10-22T03:37:30.798Z',
+          type: 'EndNode'
+        }
+      ],
+      milestones: [],
+      childProcessInstances: []
+    };
+    graphData['ProcessInstanceData'].push(processInstance);
+     res.send({
+      id:processId
+    })
   }
 };
 
