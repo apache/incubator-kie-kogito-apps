@@ -102,21 +102,6 @@
           </filesets>
         </configuration>
       </plugin>
-      <plugin>
-        <artifactId>maven-antrun-plugin</artifactId>
-        <version>3.0.0</version>
-        <executions>
-          <execution>
-            <phase>test</phase>
-            <configuration>
-              <target><echo file="packages/trusty/it-tests/docker-compose/.env">VERSION=${project.version}</echo> </target>
-            </configuration>
-            <goals>
-              <goal>run</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <!-- frontend related plugins-->
       <!--
         Installs node and yarn in the webapp's node and node_modules folders.
@@ -222,25 +207,6 @@
               <arguments>run test:it</arguments>
             </configuration>
           </execution>
-          <!--
-            It works only if docker contains images from previous build.
-            This was just verification that this way is imposible.
-            In case that docker images are empty than the build fails. 
-            For example: org.kie.kogito/integration-tests-trusty-service-quarkus:2.0.0-SNAPSHOT is missing
-            
-          <execution>
-            <id>yarn e2e test</id>
-            <goals>
-              <goal>yarn</goal>
-            </goals>
-            <phase>test</phase>
-            <configuration>
-              <skip>${skip.ui.build}</skip>
-              <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-              <arguments>run test:e2e</arguments>
-            </configuration>
-          </execution>
-          -->
         </executions>
       </plugin>
     </plugins>

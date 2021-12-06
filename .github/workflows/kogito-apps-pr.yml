@@ -34,21 +34,6 @@ jobs:
         with:
           annotations-prefix: ${{ runner.os }}-${{ matrix.java-version }}/${{ matrix.maven-version }}
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-      #I assume that yarn was installed by the maven build in UI packages module
-      # TODO: find a way how perform `docker-compose down`
-      - name: E2E tests ${{ matrix.java-version }}
-        id: e2e
-        if: ${{ always() }}
-        shell: bash
-        run: |
-          echo "Run E2E Integration test suite"
-          pushd .
-          cd kogito_apps/ui-packages/packages/trusty/it-tests/docker-compose
-          ls -l
-          cd ../../../../../kogito-apps
-          ls -l
-          yarn run test:e2e
-          popd
       - name: Surefire Report
         uses: kiegroup/kogito-pipelines/.ci/actions/surefire-report@main
         if: ${{ always() }}
