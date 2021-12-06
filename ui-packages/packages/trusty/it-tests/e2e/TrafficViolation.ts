@@ -16,7 +16,7 @@
 let reqId;
 let auditDetailsUrl;
 
-describe.skip('Traffic Violation', () => {
+describe('Traffic Violation', () => {
   before(() => {
     cy.request({
       method: 'POST',
