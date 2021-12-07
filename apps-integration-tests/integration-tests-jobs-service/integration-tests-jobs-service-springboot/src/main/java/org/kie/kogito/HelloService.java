@@ -13,21 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.kie.kogito;
 
-package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.jobs;
+import org.springframework.stereotype.Service;
 
-import javax.json.JsonObject;
-import javax.json.bind.adapter.JsonbAdapter;
+@Service
+public class HelloService extends AbstractHelloService {
 
-public class JobsInstancesAdapter implements JsonbAdapter<Jobs, JsonObject> {
-
-    @Override
-    public JsonObject adaptToJson(final Jobs jobs) {
-        return null; // not used
-    }
-
-    @Override
-    public Jobs adaptFromJson(final JsonObject jsonObject) {
-        return new Jobs(jsonObject.getJsonArray("Jobs").getValuesAs(Job.class));
+    public HelloService() {
     }
 }

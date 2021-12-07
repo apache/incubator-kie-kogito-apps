@@ -13,21 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.kie.kogito;
 
-package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.processes;
+public abstract class AbstractHelloService {
 
-import javax.json.JsonObject;
-import javax.json.bind.adapter.JsonbAdapter;
-
-public class ProcessInstancesAdapter implements JsonbAdapter<ProcessInstances, JsonObject> {
-
-    @Override
-    public JsonObject adaptToJson(final ProcessInstances processInstances) {
-        return null; // not used
+    public String hello(String input) {
+        return "Hello " + input;
     }
 
-    @Override
-    public ProcessInstances adaptFromJson(final JsonObject jsonObject) {
-        return new ProcessInstances(jsonObject.getJsonArray("ProcessInstances").getValuesAs(ProcessInstance.class));
+    public String bye(String input) {
+        return "Bye " + input;
     }
 }

@@ -13,27 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.kie.kogito;
 
-package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.jobs;
+import javax.enterprise.context.ApplicationScoped;
 
-import java.util.List;
-
-public class Jobs {
-
-    private List<Job> jobsList;
-
-    public Jobs() {
-    }
-
-    public Jobs(final List<Job> jobsList) {
-        this.jobsList = jobsList;
-    }
-
-    public List<Job> getJobs() {
-        return jobsList;
-    }
-
-    public void setJobs(final List<Job> jobsList) {
-        this.jobsList = jobsList;
-    }
+@ApplicationScoped
+public class HelloService extends AbstractHelloService {
 }
