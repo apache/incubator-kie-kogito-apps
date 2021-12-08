@@ -228,10 +228,6 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                                     .then().statusCode(200)
                                     .extract().as(SalienciesResponse.class);
 
-                            System.out.printf("LIME response: status=%s, details=%s%n",
-                                    salienciesResponse.getStatus(),
-                                    salienciesResponse.getStatusDetails());
-
                             assertEquals("SUCCEEDED", salienciesResponse.getStatus());
                         });
                     });
