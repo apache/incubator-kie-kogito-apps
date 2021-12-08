@@ -112,16 +112,206 @@
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
                 <configuration>
+                    <autoCreateCustomNetworks>true</autoCreateCustomNetworks>
                     <images>
                         <image>
-                            <alias>webapp</alias>
-                            <name>fabric8/compose-demo:latest</name>
+                            <alias>zookeeper</alias>
+                            <name>wurstmeister/zookeeper:3.4.6</name>
+                            
+                            <run>
+                              <ports>
+                                <port>2181:2181</port>
+                              </ports>
+                              <env>
+                                <LOG_DIR>/tmp/logs</LOG_DIR>
+                              </env>
+                              <network>
+                                <mode>custom</mode>
+                                <name>trusty-nw</name>
+                                <alias>zookeper</alias>
+                              </network>
+                              <!--<wait>
+                                <http>
+                                  <url>http://localhost:2181/</url>
+                                </http>
+                                <time>60000</time>
+                              </wait>-->
+                            </run>
+                        </image>
+                        <image>
+                            <alias>kafka</alias>
+                            <name>wurstmeister/kafka:2.12-2.2.1</name>
 
-                            <external>
-                                <type>compose</type>
-                                <basedir>src/test/docker-compose</basedir>
-                                <composeFile>docker-compose.yml</composeFile>
-                            </external>
+                            <run>
+                              <dependsOn>
+                                <container>zookeeper</container>
+                              </dependsOn>
+                              <ports>
+                                <port>9092:9092</port>
+                                <!-- expose: - "9093" !-->
+                                <port>9093:9093</port>
+                              </ports>
+                              <env>
+                                <LOG_DIR>/tmp/logs</LOG_DIR>
+                                <KAFKA_ADVERTISED_LISTENERS>INSIDE://kafka:9093,OUTSIDE://localhost:9092</KAFKA_ADVERTISED_LISTENERS> 
+                                <KAFKA_LISTENER_SECURITY_PROTOCOL_MAP>INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT</KAFKA_LISTENER_SECURITY_PROTOCOL_MAP> 
+                                <KAFKA_LISTENERS>INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092</KAFKA_LISTENERS>
+                                <KAFKA_ZOOKEEPER_CONNECT>zookeeper:2181</KAFKA_ZOOKEEPER_CONNECT>
+                                <KAFKA_INTER_BROKER_LISTENER_NAME>INSIDE</KAFKA_INTER_BROKER_LISTENER_NAME>
+                              </env>
+                              <network>
+                                <mode>custom</mode>
+                                <name>trusty-nw</name>
+                                <alias>kafka</alias>
+                              </network>
+                              <!--<wait>
+                                <http>
+                                  <url>http://localhost:9092/</url>
+                                </http>
+                                <time>3000</time>
+                              </wait>-->
+                            </run>
+                        </image>
+                        <image>
+                            <alias>kafkadrop</alias>
+                            <name>obsidiandynamics/kafdrop</name>
+
+                            <run>
+                              <dependsOn>
+                                <container>kafka</container>
+                              </dependsOn>
+                              <ports>
+                                <port>9000:9000</port>
+                              </ports>
+                              <env>
+                                <KAFKA_BROKERCONNECT>kafka:9093</KAFKA_BROKERCONNECT>
+                                <JVM_OPTS>-Xms32M -Xmx64M</JVM_OPTS> 
+                                <SERVER_SERVLET_CONTEXTPATH>/</SERVER_SERVLET_CONTEXTPATH> 
+                              </env>
+                              <network>
+                                <mode>custom</mode>
+                                <name>trusty-nw</name>
+                                <alias>kafkadrop</alias>
+                              </network>
+                            </run>
+                        </image>
+                        <image>
+                            <alias>infinispan</alias>
+                            <name>infinispan/server:13.0.2.Final</name>
+
+                            <run>
+                              <!--container_name: infinispan-->
+                              <ports>
+                                <port>11222:11222</port>
+                              </ports>
+                              <cmd>-c infinispan-demo.xml</cmd>
+                              <network>
+                                <mode>custom</mode>
+                                <name>trusty-nw</name>
+                                <alias>infinispan</alias>
+                              </network>
+                              <volumes>
+                                <bind>
+                                  <volume>./infinispan/infinispan.xml:/opt/infinispan/server/conf/infinispan-demo.xml:z</volume>
+                                </bind>
+                              </volumes>
+                            </run>
+                        </image>
+                        <image>
+                            <alias>kogito-app</alias>
+                            <name>org.kie.kogito/integration-tests-trusty-service-quarkus:${project.version}</name>
+
+                            <run>
+                              <dependsOn>
+                                <container>kafka</container>
+                              </dependsOn>
+                              <ports>
+                                <port>8080:8080</port>
+                              </ports>
+                              <env>
+                                <KAFKA_BOOTSTRAP_SERVERS>kafka:9093</KAFKA_BOOTSTRAP_SERVERS>
+                                <KOGITO_SERVICE_URL>http://kogito-app:8080</KOGITO_SERVICE_URL> 
+                              </env>
+                              <network>
+                                <mode>custom</mode>
+                                <name>trusty-nw</name>
+                                <alias>kogito-app</alias>
+                              </network>
+                              <!--<wait>
+                                <http>
+                                  <url>http://localhost:8080/</url>
+                                </http>
+                                <time>180000</time>
+                              </wait>-->
+                            </run>
+                        </image>
+                        <image>
+                            <alias>explainability</alias>
+                            <name>org.kie.kogito/explainability-service-messaging:${project.version}</name>
+
+                            <run>
+                              <dependsOn>
+                                <container>kafka</container>
+                                <container>kogito-app</container>
+                              </dependsOn>
+                              <ports>
+                                <port>1336:8080</port>
+                              </ports>
+                              <env>
+                                <KAFKA_BOOTSTRAP_SERVERS>kafka:9093</KAFKA_BOOTSTRAP_SERVERS>
+                              </env>
+                              <network>
+                                <mode>custom</mode>
+                                <name>trusty-nw</name>
+                                <alias>explainability</alias>
+                              </network>
+                            </run>
+                        </image>
+                        <image>
+                            <alias>trusty</alias>
+                            <name>org.kie.kogito/trusty-service-infinispan:${project.version}</name>
+
+                            <run>
+                              <dependsOn>
+                                <container>kafka</container>
+                                <container>infinispan</container>
+                              </dependsOn>
+                              <ports>
+                                <port>1337:8080</port>
+                              </ports>
+                              <env>
+                                <KAFKA_BOOTSTRAP_SERVERS>kafka:9093</KAFKA_BOOTSTRAP_SERVERS>
+                                <QUARKUS_INFINISPAN_CLIENT_SERVER_LIST>infinispan:11222</QUARKUS_INFINISPAN_CLIENT_SERVER_LIST> 
+                                <QUARKUS_INFINISPAN_CLIENT_USE_AUTH>"false"</QUARKUS_INFINISPAN_CLIENT_USE_AUTH>
+                                <TRUSTY_EXPLAINABILITY_ENABLED>"true"</TRUSTY_EXPLAINABILITY_ENABLED>
+                              </env>
+                              <network>
+                                <mode>custom</mode>
+                                <name>trusty-nw</name>
+                                <alias>trusty</alias>
+                              </network>
+                            </run>
+                        </image>
+                        <image>
+                            <alias>trusty-ui</alias>
+                            <name>org.kie.kogito/trusty-ui:${project.version}</name>
+
+                            <run>
+                              <dependsOn>
+                                <container>kafka</container>
+                              </dependsOn>
+                              <ports>
+                                <port>1338:8080</port>
+                              </ports>
+                              <env>
+                                <KOGITO_TRUSTY_HTTP_URL>http://localhost:1337</KOGITO_TRUSTY_HTTP_URL>
+                              </env>
+                              <network>
+                                <mode>custom</mode>
+                                <name>trusty-nw</name>
+                                <alias>trusty-ui</alias>
+                              </network>
+                            </run>
                         </image>
                     </images>
                 </configuration>
