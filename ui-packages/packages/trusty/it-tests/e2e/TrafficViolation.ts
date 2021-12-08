@@ -18,6 +18,8 @@ let auditDetailsUrl;
 
 describe('Traffic Violation', () => {
   before(() => {
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(30000);
     cy.request({
       method: 'POST',
       url: 'http://localhost:8080/Traffic Violation',
