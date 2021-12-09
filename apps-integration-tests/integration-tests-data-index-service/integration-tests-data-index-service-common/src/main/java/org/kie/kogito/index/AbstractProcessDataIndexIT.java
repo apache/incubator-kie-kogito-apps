@@ -311,7 +311,7 @@ public abstract class AbstractProcessDataIndexIT {
             await()
                     .atMost(TIMEOUT)
                     .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                            .body("{ \"query\" : \"mutation{ ProcessInstanceUpdateVariables(id:\\\"" + pId2 + "\\\", variables:\\\"" +
+                            .body("{ \"query\" : \"mutation{ ProcessInstanceUpdateVariables(id:\\\"" + pId2 + "\\\", newVariablesValue:\\\"" +
                                     vars.replace("Darth", "Anakin")
                                             .replace("\"", "\\\\\\\"")
                                     + "\\\")}\"}")

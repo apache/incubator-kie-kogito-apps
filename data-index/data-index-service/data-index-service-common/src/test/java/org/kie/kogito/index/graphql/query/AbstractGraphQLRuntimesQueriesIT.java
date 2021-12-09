@@ -118,7 +118,7 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
         KogitoProcessCloudEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
         indexProcessCloudEvent(startEvent);
 
-        checkOkResponse("{ \"query\" : \"mutation{ ProcessInstanceUpdateVariables ( id: \\\"" + processInstanceId + "\\\", variables: \\\"" + variablesUpdated + "\\\")}\"}");
+        checkOkResponse("{ \"query\" : \"mutation{ ProcessInstanceUpdateVariables ( id: \\\"" + processInstanceId + "\\\", newVariablesValue: \\\"" + variablesUpdated + "\\\")}\"}");
 
         verify(dataIndexApiClient).updateProcessInstanceVariables(eq("http://localhost:8080"),
                 eq(getProcessInstance(processId, processInstanceId, 1, null, null)), eq(variablesUpdated));
