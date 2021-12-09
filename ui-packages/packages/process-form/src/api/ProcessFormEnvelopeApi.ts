@@ -17,7 +17,7 @@
 export interface ProcessFormEnvelopeApi {
   processForm__init(
     association: Association,
-    processDefinition: any
+    processDefinition: ProcessDefinition
   ): Promise<void>;
 }
 

@@ -38,7 +38,7 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
 }) => {
   const [processFormSchema, setProcessFormSchema] = useState<any>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<string>(null);
 
   const formAction = [
     {
@@ -54,7 +54,7 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
     init();
   }, [isEnvelopeConnectedToChannel]);
 
-  const init = async () => {
+  const init = async (): Promise<void> => {
     try {
       const schema = await driver.getProcessFormSchema(processDefinition);
       setProcessFormSchema(schema);
@@ -64,12 +64,12 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
     }
   };
 
-  const onSubmit = async (value: any, formApiRef: any) => {
+  const onSubmit = async (value: any, formApiRef: any): Promise<void> => {
     try {
       await driver.startProcess(value);
       formApiRef.reset();
     } catch (e) {
-      //do nothing
+      setError(e);
     }
   };
   if (isLoading) {

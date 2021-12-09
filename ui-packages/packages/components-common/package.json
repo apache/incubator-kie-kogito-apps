@@ -37,8 +37,12 @@
   "devDependencies": {
     "@kogito-apps/ouia-tools": "^1.0.0",
     "react-docgen-typescript-loader": "3.7.2",
-    "@types/json-schema": "^7.0.7",
-    "babel-loader": "8.1.0"
+    "babel-loader": "8.1.0",
+    "@types/json-schema": "7.0.7",
+    "ajv": "6.12.2",
+    "uniforms": "3.0.0",
+    "uniforms-bridge-json-schema": "3.0.0",
+    "uniforms-patternfly": "4.1.2"
   },
   "jest": {
     "setupFiles": [

@@ -213,7 +213,7 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
                   <span
                     className="pf-c-tabs__item-text"
                   >
-                    ProcessDefinitions
+                    Process Definitions
                   </span>
                 </TabTitleText>
               </button>
@@ -352,7 +352,7 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
             id="process-definitions-tab"
             title={
               <TabTitleText>
-                ProcessDefinitions
+                Process Definitions
               </TabTitleText>
             }
           >
@@ -379,7 +379,7 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
               id="process-definitions-tab"
               title={
                 <TabTitleText>
-                  ProcessDefinitions
+                  Process Definitions
                 </TabTitleText>
               }
             >

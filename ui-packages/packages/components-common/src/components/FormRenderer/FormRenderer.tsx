@@ -20,7 +20,7 @@ import { AutoFields, AutoForm, ErrorsField } from 'uniforms-patternfly/dist/es6'
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { FormAction, lookupValidator, ModelConversionTool } from '../utils';
 import FormFooter from '../FormFooter/FormFooter';
-
+import '../styles.css';
 interface IOwnProps {
   formSchema: any;
   model?: any;
@@ -56,12 +56,7 @@ const FormRenderer: React.FC<IOwnProps & OUIAProps> = ({
   return (
     <React.Fragment>
       {' '}
-      <div
-        style={{
-          height: '74vh',
-          overflowY: 'scroll'
-        }}
-      >
+      <div className="kogito-components-common__form-renderer">
         <AutoForm
           ref={ref => setFormApiRef(ref)}
           placeholder

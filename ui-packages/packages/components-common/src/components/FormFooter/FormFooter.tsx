@@ -19,6 +19,7 @@ import _ from 'lodash';
 import { ActionList, ActionListItem } from '@patternfly/react-core';
 import { convertActionsToButton, FormAction } from '../utils';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import '../styles.css';
 
 interface IOwnProps {
   actions?: FormAction[];
@@ -48,9 +49,7 @@ const FormFooter: React.FC<IOwnProps & OUIAProps> = ({
   return (
     <ActionList
       {...componentOuiaProps(ouiaId, 'form-footer', ouiaSafe)}
-      style={{
-        paddingTop: '20px'
-      }}
+      className="kogito-components-common__form-footer"
     >
       {actionItems}
     </ActionList>

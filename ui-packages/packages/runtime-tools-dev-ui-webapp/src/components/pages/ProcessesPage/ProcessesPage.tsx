@@ -95,7 +95,7 @@ const ProcessesPage: React.FC<RouteComponentProps<
           <Tab
             id="process-definitions-tab"
             eventKey={1}
-            title={<TabTitleText>ProcessDefinitions</TabTitleText>}
+            title={<TabTitleText>Process Definitions</TabTitleText>}
           >
             <PageSection
               {...componentOuiaProps(

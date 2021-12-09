@@ -41,7 +41,7 @@ const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [filterProcessNames, setFilterProcessNames] = useState<string[]>([]);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<string>(null);
 
   useEffect(() => {
     if (!isEnvelopeConnectedToChannel) {
@@ -62,19 +62,19 @@ const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
       setError(errorContent);
     }
   };
-  const [columns] = useState<DataTableColumn[]>([
+  const columns: DataTableColumn[] = [
     getColumn('processName', 'Process Name'),
     getColumn('endpoint', 'Endpoint'),
     getActionColumn(processDefinition => {
       driver.openProcessForm(processDefinition);
     })
-  ]);
+  ];
 
   const applyFilter = async (): Promise<void> => {
     await driver.setProcessDefinitionFilter(filterProcessNames);
   };
 
-  const filterProcessDefinition = () => {
+  const filterProcessDefinition = (): ProcessDefinition[] => {
     if (filterProcessNames.length === 0) {
       return processDefinitionList;
     }

@@ -140,12 +140,7 @@ exports[`FormRenderer test Render form with actions 1`] = `
 >
    
   <div
-    style={
-      Object {
-        "height": "74vh",
-        "overflowY": "scroll",
-      }
-    }
+    className="kogito-components-common__form-renderer"
   >
     <AutoForm
       data-ouia-component-type="form-renderer"
@@ -438,12 +433,7 @@ exports[`FormRenderer test Render form without actions 1`] = `
 >
    
   <div
-    style={
-      Object {
-        "height": "74vh",
-        "overflowY": "scroll",
-      }
-    }
+    className="kogito-components-common__form-renderer"
   >
     <AutoForm
       data-ouia-component-type="form-renderer"
