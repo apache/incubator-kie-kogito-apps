@@ -140,14 +140,15 @@
             </configuration>
           </execution>
           <execution>
-              <id>lock-treatment-tool execution</id>
-              <phase>initialize</phase>
-              <goals>
+            <id>lock-treatment-tool execution</id>
+            <phase>initialize</phase>
+            <goals>
               <goal>npm</goal>
-              </goals>
-              <configuration>
+            </goals>
+            <configuration>
+              <skip>${skip.ui.deps}</skip>
               <arguments>exec @kie/lock-treatment-tool -- --skipIntegrity</arguments>
-              </configuration>
+            </configuration>
           </execution>
           <execution>
             <id>yarn install</id>
