@@ -119,6 +119,7 @@
         <executions>
           <execution>
             <id>install-node-and-npm</id>
+            <phase>initialize</phase>
             <goals>
               <goal>install-node-and-npm</goal>
             </goals>
@@ -130,6 +131,7 @@
           </execution>
           <execution>
             <id>install-node-and-yarn</id>
+            <phase>initialize</phase>
             <goals>
               <goal>install-node-and-yarn</goal>
             </goals>
@@ -152,6 +154,7 @@
           </execution>
           <execution>
             <id>yarn install</id>
+            <phase>initialize</phase>
             <goals>
               <goal>yarn</goal>
             </goals>
@@ -163,6 +166,7 @@
           </execution>
           <execution>
             <id>yarn build</id>
+            <phase>build</phase>
             <goals>
               <goal>yarn</goal>
             </goals>
@@ -176,10 +180,10 @@
           </execution>
           <execution>
             <id>yarn test</id>
+            <phase>test</phase>
             <goals>
               <goal>yarn</goal>
             </goals>
-            <phase>test</phase>
             <configuration>
               <skip>${skip.ui.build}</skip>
               <arguments>run test</arguments>
@@ -187,10 +191,10 @@
           </execution>
           <execution>
             <id>yarn-integration-test</id>
+            <phase>integration-test</phase>
             <goals>
               <goal>yarn</goal>
             </goals>
-            <phase>integration-test</phase>
             <configuration>
               <skip>${skip.ui.build}</skip>
               <arguments>run test:it</arguments>
