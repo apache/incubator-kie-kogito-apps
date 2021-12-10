@@ -23,6 +23,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.TrustyService;
@@ -33,10 +36,6 @@ import org.kie.kogito.trusty.storage.api.model.decision.DMNModelMetadata;
 import org.kie.kogito.trusty.storage.api.model.decision.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.decision.Decision;
 import org.mockito.Mockito;
-
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
-import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -164,7 +163,7 @@ class ExecutionsApiV1IT {
         when(decision.getExecutedModelName()).thenReturn("name");
         when(decision.getExecutedModelNamespace()).thenReturn("namespace");
         when(executionService.getDecisionById(anyString())).thenReturn(decision);
-        when(executionService.getModelById(any(DMNModelMetadata.class), DMNModelWithMetadata.class)).thenReturn(dmnModelWithMetadata);
+        when(executionService.getModelById(any(DMNModelMetadata.class), eq(DMNModelWithMetadata.class))).thenReturn(dmnModelWithMetadata);
 
         DMNModelWithMetadata response = given().contentType(ContentType.TEXT).when().get("/executions/123/model").as(DMNModelWithMetadata.class);
         assertEquals(dmnModelWithMetadata.getModel(), response.getModel());
@@ -183,7 +182,7 @@ class ExecutionsApiV1IT {
 
     @Test
     void givenARequestWithoutExistingModelWhenModelEndpointIsCalledThenBadRequestIsReturned() {
-        when(executionService.getModelById(any(DMNModelMetadata.class), DMNModelWithMetadata.class)).thenThrow(new IllegalArgumentException("Model does not exist."));
+        when(executionService.getModelById(any(DMNModelMetadata.class), eq(DMNModelWithMetadata.class))).thenThrow(new IllegalArgumentException("Model does not exist."));
 
         given().contentType(ContentType.TEXT).when().get("/executions/123/model").then().statusCode(400);
     }
