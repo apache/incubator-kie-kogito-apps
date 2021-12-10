@@ -157,4 +157,10 @@ class LarsPathTest {
         assertArrayEquals(correctAlphasVarDrop.toArray(), lpr.getAlphas().toArray(), 1e-6);
     }
 
+    // mismatched vector sizes
+    @Test
+    void testLarsMismatchedInputs() {
+        assertThrows(IllegalArgumentException.class, () -> LarsPath.fit(XVarDrop, yDGR, 500, true));
+    }
+
 }

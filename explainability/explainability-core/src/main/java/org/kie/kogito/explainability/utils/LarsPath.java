@@ -412,6 +412,13 @@ public class LarsPath {
      * @return the LarsPathResults container
      */
     public static LarsPathResults fit(RealMatrix X, RealVector y, int maxIterations, boolean lasso) {
+        if (X.getRowDimension() != y.getDimension()) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "Number of rows of X (%d) must match number of entries in y (%d)!",
+                            X.getRowDimension(), y.getDimension()));
+        }
+
         // initialize the data carrier that will contain all intermediate results from the algorithm
         LarsPathDataCarrier lpdc = new LarsPathDataCarrier(X, y, maxIterations, lasso);
 
