@@ -14,8 +14,8 @@
     "build:prod": "lerna run build:prod --include-dependencies --stream --",
     "test": "lerna run test:coverage --stream --",
     "test:it": "lerna run test:it --stream --concurrency=1 --no-bail --",
-    "test:e2e": "lerna run test:e2e --stream --concurrency=1 --no-bail --",
-    "locktt": "locktt"
+    "locktt": "locktt",
+    "test:e2e:trusty": "lerna run test:e2e:trusty --stream --concurrency=1 --no-bail --"
   },
   "husky": {
     "hooks": {

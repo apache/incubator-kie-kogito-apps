@@ -37,22 +37,7 @@ Note: set [Manage Docker as a non-root user](https://docs.docker.com/engine/inst
 
 #### Perform e2e test suite
 
-To install dependencies
-```
-yarn install
-```
-
-To build KIE Docker images
-```
-yarn run build:services
-```
-NOTE: The "build:services" script generates the ".env" file in the "docker-compose" folder. This file contents the "VERSION" property which is same as ${project.version} in the pom file. This parameter is used by [docker-compose.yml file](docker-compose/docker-compose.yml).  
-
-To run Cypress test suite with real data
-NOTE: Be sure that the .env file exists and contents the right version of docker images.
-```
-yarn run test:e2e
-```
+Follow instruction in [Kogito Apps :: Integration Tests :: Trusty Audit UI](../../../../apps-integration-tests/integration-tests-trusty-audit)
 
 #### Manual steps
 First, you should be sure that there are no conficts in docker images:
