@@ -27,6 +27,10 @@ import org.kie.kogito.trusty.storage.api.model.process.ProcessInput;
  */
 public class ProcessStructuredInputsResponse extends StructuredInputsResponse<ProcessInput> {
 
+    protected ProcessStructuredInputsResponse() {
+        // serialization
+    }
+
     public ProcessStructuredInputsResponse(Collection<ProcessInput> inputs) {
         super(inputs, ModelDomain.PROCESS);
     }

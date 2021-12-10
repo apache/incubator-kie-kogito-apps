@@ -51,7 +51,7 @@ public abstract class OutcomesResponse<T extends ExecutionHeaderResponse, E exte
     @JsonProperty("@type")
     private ModelDomain modelDomain;
 
-    private OutcomesResponse() {
+    protected OutcomesResponse() {
     }
 
     public OutcomesResponse(T header, Collection<E> outcomes, ModelDomain modelDomain) {

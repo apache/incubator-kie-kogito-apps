@@ -27,6 +27,10 @@ import org.kie.kogito.trusty.storage.api.model.decision.DecisionOutcome;
  */
 public final class DecisionOutcomesResponse extends OutcomesResponse<DecisionHeaderResponse, DecisionOutcome> {
 
+    protected DecisionOutcomesResponse() {
+        // serialization
+    }
+
     public DecisionOutcomesResponse(DecisionHeaderResponse header, Collection<DecisionOutcome> outcomes) {
         super(header, outcomes, ModelDomain.DECISION);
     }

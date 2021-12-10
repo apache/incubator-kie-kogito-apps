@@ -27,6 +27,10 @@ import org.kie.kogito.trusty.storage.api.model.decision.DecisionInput;
  */
 public class DecisionStructuredInputsResponse extends StructuredInputsResponse<DecisionInput> {
 
+    protected DecisionStructuredInputsResponse() {
+        // serialization
+    }
+
     public DecisionStructuredInputsResponse(Collection<DecisionInput> inputs) {
         super(inputs, ModelDomain.DECISION);
     }

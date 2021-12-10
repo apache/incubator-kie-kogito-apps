@@ -31,6 +31,10 @@ public final class ProcessHeaderResponse extends ExecutionHeaderResponse {
     @JsonProperty("executedModelNamespace")
     private String executedModelNamespace;
 
+    protected ProcessHeaderResponse() {
+        // serialization
+    }
+
     public ProcessHeaderResponse(String executionId,
             OffsetDateTime executionDate,
             Boolean hasSucceeded,

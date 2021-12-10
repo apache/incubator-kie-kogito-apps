@@ -61,7 +61,7 @@ public abstract class ExecutionHeaderResponse {
     @JsonProperty("@type")
     private ModelDomain modelDomain;
 
-    private ExecutionHeaderResponse() {
+    protected ExecutionHeaderResponse() {
     }
 
     public ExecutionHeaderResponse(String executionId,

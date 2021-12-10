@@ -45,7 +45,7 @@ public abstract class StructuredInputsResponse<T extends Input> {
     @JsonProperty("@type")
     private ModelDomain modelDomain;
 
-    private StructuredInputsResponse() {
+    protected StructuredInputsResponse() {
     }
 
     public StructuredInputsResponse(Collection<T> inputs, ModelDomain modelDomain) {

@@ -31,6 +31,10 @@ public final class DecisionHeaderResponse extends ExecutionHeaderResponse {
     @JsonProperty("executedModelNamespace")
     private String executedModelNamespace;
 
+    protected DecisionHeaderResponse() {
+        // serialization
+    }
+
     public DecisionHeaderResponse(String executionId,
             OffsetDateTime executionDate,
             Boolean hasSucceeded,

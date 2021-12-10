@@ -27,6 +27,10 @@ import org.kie.kogito.trusty.storage.api.model.process.ProcessOutcome;
  */
 public final class ProcessOutcomesResponse extends OutcomesResponse<ProcessHeaderResponse, ProcessOutcome> {
 
+    protected ProcessOutcomesResponse() {
+        // serialization
+    }
+
     public ProcessOutcomesResponse(ProcessHeaderResponse header, Collection<ProcessOutcome> outcomes) {
         super(header, outcomes, ModelDomain.PROCESS);
     }
