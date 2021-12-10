@@ -72,29 +72,13 @@
 
     <build>
         <plugins>
-          <!-- frontend related plugins-->
-          <!--
-            Installs node and yarn in the webapp's node and node_modules folders.
-            Run 'mvn package':
-              * the first time you have checked out the source.
-              * whenever the dependencies have been changed in package.json (delete the webapp's node_modules folder first!)
-            If you want to skip installation of the packages, turn the profile off by setting property `-Dskip.ui.deps`.
-          -->
           <plugin>
             <groupId>com.github.eirslett</groupId>
             <artifactId>frontend-maven-plugin</artifactId>
             <configuration>
-              <workingDirectory>../../ui-packages</workingDirectory>
+              <workingDirectory>${project.root.dir}/ui-packages</workingDirectory>
             </configuration>
             <executions>
-              <!--
-                It works only if docker contains images from previous build.
-                This was just verification that this way is imposible.
-                In case that docker images are empty than the build fails. 
-                For example: org.kie.kogito/integration-tests-trusty-service-quarkus:2.0.0-SNAPSHOT is missing
-
-                TODO: parametrize base url to localhost:1337
-                -->
               <execution>
                 <id>yarn e2e test</id>
                 <goals>
@@ -103,7 +87,7 @@
                 <phase>integration-test</phase>
                 <configuration>
                   <skip>${skip.ui.build}</skip>
-                  <arguments>run test:e2e</arguments>
+                  <arguments>run test:e2e:trusty</arguments>
                 </configuration>
               </execution>
             </executions>
@@ -130,12 +114,6 @@
                                 <name>trusty-nw</name>
                                 <alias>zookeper</alias>
                               </network>
-                              <!--<wait>
-                                <http>
-                                  <url>http://localhost:2181/</url>
-                                </http>
-                                <time>60000</time>
-                              </wait>-->
                             </run>
                         </image>
                         <image>
@@ -148,15 +126,15 @@
                               </dependsOn>
                               <ports>
                                 <port>9092:9092</port>
-                                <!-- expose: - "9093" !-->
+                                <!-- This plugin does not suport the expose port ("9093") !-->
                                 <port>9093:9093</port>
                               </ports>
                               <env>
                                 <LOG_DIR>/tmp/logs</LOG_DIR>
-                                <KAFKA_ADVERTISED_LISTENERS>INSIDE://kafka:9093,OUTSIDE://localhost:9092</KAFKA_ADVERTISED_LISTENERS> 
+                                <KAFKA_ADVERTISED_LISTENERS>INSIDE://kafka-1:9093,OUTSIDE://localhost:9092</KAFKA_ADVERTISED_LISTENERS>
                                 <KAFKA_LISTENER_SECURITY_PROTOCOL_MAP>INSIDE:PLAINTEXT,OUTSIDE:PLAINTEXT</KAFKA_LISTENER_SECURITY_PROTOCOL_MAP> 
                                 <KAFKA_LISTENERS>INSIDE://0.0.0.0:9093,OUTSIDE://0.0.0.0:9092</KAFKA_LISTENERS>
-                                <KAFKA_ZOOKEEPER_CONNECT>zookeeper:2181</KAFKA_ZOOKEEPER_CONNECT>
+                                <KAFKA_ZOOKEEPER_CONNECT>zookeeper-1:2181</KAFKA_ZOOKEEPER_CONNECT>
                                 <KAFKA_INTER_BROKER_LISTENER_NAME>INSIDE</KAFKA_INTER_BROKER_LISTENER_NAME>
                               </env>
                               <network>
@@ -164,12 +142,6 @@
                                 <name>trusty-nw</name>
                                 <alias>kafka</alias>
                               </network>
-                              <!--<wait>
-                                <http>
-                                  <url>http://localhost:9092/</url>
-                                </http>
-                                <time>3000</time>
-                              </wait>-->
                             </run>
                         </image>
                         <image>
@@ -184,7 +156,7 @@
                                 <port>9000:9000</port>
                               </ports>
                               <env>
-                                <KAFKA_BROKERCONNECT>kafka:9093</KAFKA_BROKERCONNECT>
+                                <KAFKA_BROKERCONNECT>kafka-1:9093</KAFKA_BROKERCONNECT>
                                 <JVM_OPTS>-Xms32M -Xmx64M</JVM_OPTS> 
                                 <SERVER_SERVLET_CONTEXTPATH>/</SERVER_SERVLET_CONTEXTPATH> 
                               </env>
@@ -200,7 +172,6 @@
                             <name>infinispan/server:13.0.2.Final</name>
 
                             <run>
-                              <!--container_name: infinispan-->
                               <ports>
                                 <port>11222:11222</port>
                               </ports>
@@ -212,7 +183,7 @@
                               </network>
                               <volumes>
                                 <bind>
-                                  <volume>./infinispan/infinispan.xml:/opt/infinispan/server/conf/infinispan-demo.xml:z</volume>
+                                  <volume>./infinispan.xml:/opt/infinispan/server/conf/infinispan-demo.xml:z</volume>
                                 </bind>
                               </volumes>
                             </run>
@@ -229,20 +200,14 @@
                                 <port>8080:8080</port>
                               </ports>
                               <env>
-                                <KAFKA_BOOTSTRAP_SERVERS>kafka:9093</KAFKA_BOOTSTRAP_SERVERS>
-                                <KOGITO_SERVICE_URL>http://kogito-app:8080</KOGITO_SERVICE_URL> 
+                                <KAFKA_BOOTSTRAP_SERVERS>kafka-1:9093</KAFKA_BOOTSTRAP_SERVERS>
+                                <KOGITO_SERVICE_URL>http://integration-tests-trusty-service-quarkus-1:8080</KOGITO_SERVICE_URL>
                               </env>
                               <network>
                                 <mode>custom</mode>
                                 <name>trusty-nw</name>
                                 <alias>kogito-app</alias>
                               </network>
-                              <!--<wait>
-                                <http>
-                                  <url>http://localhost:8080/</url>
-                                </http>
-                                <time>180000</time>
-                              </wait>-->
                             </run>
                         </image>
                         <image>
@@ -258,7 +223,7 @@
                                 <port>1336:8080</port>
                               </ports>
                               <env>
-                                <KAFKA_BOOTSTRAP_SERVERS>kafka:9093</KAFKA_BOOTSTRAP_SERVERS>
+                                <KAFKA_BOOTSTRAP_SERVERS>kafka-1:9093</KAFKA_BOOTSTRAP_SERVERS>
                               </env>
                               <network>
                                 <mode>custom</mode>
@@ -280,8 +245,8 @@
                                 <port>1337:8080</port>
                               </ports>
                               <env>
-                                <KAFKA_BOOTSTRAP_SERVERS>kafka:9093</KAFKA_BOOTSTRAP_SERVERS>
-                                <QUARKUS_INFINISPAN_CLIENT_SERVER_LIST>infinispan:11222</QUARKUS_INFINISPAN_CLIENT_SERVER_LIST> 
+                                <KAFKA_BOOTSTRAP_SERVERS>kafka-1:9093</KAFKA_BOOTSTRAP_SERVERS>
+                                <QUARKUS_INFINISPAN_CLIENT_SERVER_LIST>server-1:11222</QUARKUS_INFINISPAN_CLIENT_SERVER_LIST>
                                 <QUARKUS_INFINISPAN_CLIENT_USE_AUTH>"false"</QUARKUS_INFINISPAN_CLIENT_USE_AUTH>
                                 <TRUSTY_EXPLAINABILITY_ENABLED>"true"</TRUSTY_EXPLAINABILITY_ENABLED>
                               </env>
