@@ -39,16 +39,18 @@ export class ProcessFormGatewayApiImpl implements ProcessFormGatewayApi {
     return this.businessKey;
   }
 
-  getProcessFormSchema(processDefinitionData: ProcessDefinition): Promise<any> {
+  getProcessFormSchema(
+    processDefinitionData: ProcessDefinition
+  ): Promise<Record<string, any>> {
     return getProcessSchema(processDefinitionData);
   }
 
   startProcess(
-    formJSON: any,
+    formData: any,
     processDefinitionData: ProcessDefinition
   ): Promise<any> {
     return startProcessInstance(
-      formJSON,
+      formData,
       this.businessKey,
       processDefinitionData
     );

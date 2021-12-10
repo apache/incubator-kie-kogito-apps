@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, TextInput } from '@patternfly/react-core';
 import { PencilAltIcon, CheckIcon, TimesIcon } from '@patternfly/react-icons';
 import { useProcessFormGatewayApi } from '../../../../../channel/ProcessForm/ProcessFormContext';
@@ -24,6 +24,13 @@ const InlineEdit: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>('');
 
   const gatewayApi: ProcessFormGatewayApi = useProcessFormGatewayApi();
+  const businessKeyValue: string = gatewayApi.getBusinessKey();
+
+  useEffect(() => {
+    if (businessKeyValue.length === 0) {
+      setInputValue('');
+    }
+  }, [businessKeyValue]);
 
   const toggleEditableMode = (): void => {
     setIsEditable(!isEditable);
@@ -47,9 +54,11 @@ const InlineEdit: React.FC = () => {
           className="pf-c-inline-edit__value"
           id="single-editable-example-label"
         >
-          {gatewayApi.getBusinessKey().length > 0
-            ? gatewayApi.getBusinessKey()
-            : 'Business key'}
+          {gatewayApi.getBusinessKey().length > 0 ? (
+            gatewayApi.getBusinessKey()
+          ) : (
+            <span className="pf-u-disabled-color-100">Business key</span>
+          )}
         </div>
         <div className="pf-c-inline-edit__action pf-m-enable-editable">
           <Button variant="plain" onClick={toggleEditableMode}>

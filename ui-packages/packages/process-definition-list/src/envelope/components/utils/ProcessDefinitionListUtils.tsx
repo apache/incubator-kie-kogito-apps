@@ -22,7 +22,7 @@ export const getActionColumn = (
     path: 'actions',
     bodyCellTransformer: (value, rowData: ProcessDefinition) => (
       <div onClick={() => startProcess(rowData)}>
-        <Tooltip content="start process">
+        <Tooltip content="Start new process">
           <PlayIcon />
         </Tooltip>
       </div>

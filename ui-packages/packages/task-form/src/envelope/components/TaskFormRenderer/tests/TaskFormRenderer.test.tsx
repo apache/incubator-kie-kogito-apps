@@ -209,7 +209,7 @@ describe('TaskFormRenderer Test', () => {
     wrapper = wrapper.update();
 
     renderer = wrapper.find(TaskFormRenderer).find(FormRenderer);
-    renderer.props().onSubmit(formData, {});
+    renderer.props().onSubmit(formData);
 
     expect(doSubmit).toHaveBeenCalledWith('complete', formData);
   });

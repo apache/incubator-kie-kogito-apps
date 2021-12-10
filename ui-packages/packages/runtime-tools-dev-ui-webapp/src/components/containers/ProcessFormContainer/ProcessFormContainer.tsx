@@ -47,6 +47,7 @@ const ProcessFormContainer: React.FC<ProcessFormContainerProps & OUIAProps> = ({
           return gatewayApi
             .startProcess(formJSON, processDefinitionData)
             .then(response => {
+              gatewayApi.setBusinessKey('');
               onSubmitSuccess(response.id);
             })
             .catch(error => {

@@ -26,11 +26,11 @@ export class EmbeddedProcessFormChannelApiImpl
 
   processForm__getProcessFormSchema(
     processDefinitionData: ProcessDefinition
-  ): Promise<any> {
+  ): Promise<Record<string, any>> {
     return this.driver.getProcessFormSchema(processDefinitionData);
   }
 
-  processForm__startProcess(formJSON: any): Promise<void> {
-    return this.driver.startProcess(formJSON);
+  processForm__startProcess(formData: any): Promise<void> {
+    return this.driver.startProcess(formData);
   }
 }

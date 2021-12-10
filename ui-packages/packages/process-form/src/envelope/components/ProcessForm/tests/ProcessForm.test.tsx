@@ -41,7 +41,6 @@ jest.mock('@kogito-apps/components-common', () => ({
 
 let props: ProcessFormProps;
 let driverGetProcessFormSchemaSpy;
-
 const getProcessFormDriver = (schema?: any): ProcessFormDriver => {
   const driver = new MockedProcessFormDriver();
   driverGetProcessFormSchemaSpy = jest.spyOn(driver, 'getProcessFormSchema');
@@ -71,7 +70,6 @@ describe('ProcessForm Test', () => {
     const driver = getProcessFormDriver();
 
     props.isEnvelopeConnectedToChannel = false;
-
     const wrapper = getProcessFormWrapper();
 
     expect(wrapper).toMatchSnapshot();
@@ -94,6 +92,7 @@ describe('ProcessForm Test', () => {
       wait();
     });
     const driverStartProcessSpy = jest.spyOn(driver, 'startProcess');
+    driverStartProcessSpy.mockReturnValue(Promise.resolve());
     wrapper = wrapper.update().find('ProcessForm');
 
     expect(wrapper).toMatchSnapshot();
@@ -113,10 +112,9 @@ describe('ProcessForm Test', () => {
       },
       it_approval: true
     };
-    const formApiRef = {};
 
     await act(async () => {
-      ProcessForm.props().onSubmit(formData, formApiRef);
+      ProcessForm.props().onSubmit(formData);
       wait();
     });
     expect(driverStartProcessSpy).toHaveBeenCalled();

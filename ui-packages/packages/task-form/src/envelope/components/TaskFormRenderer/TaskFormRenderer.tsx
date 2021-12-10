@@ -71,7 +71,7 @@ const TaskFormRenderer: React.FC<IOwnProps & OUIAProps> = ({
     return false;
   };
 
-  const doSubmit = (data: any, formApiRef: any) => {
+  const doSubmit = (data: any) => {
     submit(selectedPhase, data);
   };
 

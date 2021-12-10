@@ -4138,15 +4138,5 @@ UserTaskInstances: [
     endpoint:
       'http://localhost:4000/hiring/b4096227-2c8a-463f-a7a9-776027f7123422/HRInterview/5fe852de-8d00-4197-9936-3842c648fe123422'
   }
-],
-ProcessDefinitions:[
-  {
-    processName:'ApplyForVisa',
-    endpoint:'http://localhost:4000'
-  },
-  {
-    processName:'ConfirmTravel',
-    endpoint:'http://localhost:4000'
-  }
 ]
 }

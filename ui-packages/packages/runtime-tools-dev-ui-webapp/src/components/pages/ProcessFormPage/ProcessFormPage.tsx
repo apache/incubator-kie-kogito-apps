@@ -28,14 +28,11 @@ import { ProcessDefinition } from '@kogito-apps/process-definition-list';
 import { PageTitle } from '@kogito-apps/consoles-common';
 import { FormNotification, Notification } from '@kogito-apps/components-common';
 import InlineEdit from './components/InlineEdit/InlineEdit';
-import { useProcessFormGatewayApi } from '../../../channel/ProcessForm/ProcessFormContext';
-import { ProcessFormGatewayApi } from '../../../channel/ProcessForm/ProcessFormGatewayApi';
 
 const ProcessFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const [notification, setNotification] = useState<Notification>();
 
   const history = useHistory();
-  const gatewayApi: ProcessFormGatewayApi = useProcessFormGatewayApi();
 
   const processDefinition: ProcessDefinition =
     history.location.state['processDefinition'];
@@ -87,7 +84,6 @@ const ProcessFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
 
   const onSubmitSuccess = (id: string): void => {
     processId = id;
-    gatewayApi.setBusinessKey('');
     const message = `The process with id: ${id} has started successfully`;
     showNotification('success', message);
   };
@@ -99,15 +95,14 @@ const ProcessFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
 
   return (
     <React.Fragment>
-      <PageSection variant="light">
+      <PageSection
+        variant="light"
+        {...componentOuiaProps(ouiaId, 'process-form-page-section', ouiaSafe)}
+      >
         <PageTitle
           title={`Start ${processDefinition.processName}`}
           extra={<InlineEdit />}
         />
-      </PageSection>
-      <PageSection
-        {...componentOuiaProps(ouiaId, 'process-form-page-section', ouiaSafe)}
-      >
         {notification && (
           <div>
             <FormNotification notification={notification} />

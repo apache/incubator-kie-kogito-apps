@@ -16,12 +16,12 @@
 
 import cloneDeep from 'lodash/cloneDeep';
 import set from 'lodash/set';
+import { SCHEMA_VERSION } from '../../../types/types';
 import {
   Draft2019_09Validator,
   Draft7FormValidator,
   lookupValidator
 } from '../FormValidator';
-import { SCHEMA_VERSION } from '../../types';
 
 const schema = {
   type: 'object',

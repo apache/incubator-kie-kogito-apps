@@ -20,6 +20,7 @@ import { ProcessDefinition, ProcessFormDriver } from '../../../api';
 import {
   FormRenderer,
   KogitoSpinner,
+  DoResetAction,
   ServerErrors
 } from '@kogito-apps/components-common';
 import { Bullseye } from '@patternfly/react-core';
@@ -36,6 +37,7 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
+  const doResetAction = React.useRef<DoResetAction>();
   const [processFormSchema, setProcessFormSchema] = useState<any>({});
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>(null);
@@ -58,26 +60,25 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
     try {
       const schema = await driver.getProcessFormSchema(processDefinition);
       setProcessFormSchema(schema);
-      setIsLoading(false);
     } catch (errorContent) {
       setError(errorContent);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const onSubmit = async (value: any, formApiRef: any): Promise<void> => {
-    try {
-      await driver.startProcess(value);
-      formApiRef.reset();
-    } catch (e) {
-      setError(e);
-    }
+  const onSubmit = (value: any): void => {
+    driver.startProcess(value).then(() => {
+      doResetAction?.current?.doReset();
+    });
   };
+
   if (isLoading) {
     return (
       <Bullseye>
         <KogitoSpinner
-          spinnerText="Loading forms..."
-          ouiaId="process-list-loading-forms"
+          spinnerText="Loading process forms..."
+          ouiaId="process-form-loading"
         />
       </Bullseye>
     );
@@ -95,6 +96,7 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
         readOnly={false}
         onSubmit={onSubmit}
         formActions={formAction}
+        ref={doResetAction}
       />
     </div>
   );

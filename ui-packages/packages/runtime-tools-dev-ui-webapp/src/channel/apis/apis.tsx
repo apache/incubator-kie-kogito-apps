@@ -369,7 +369,7 @@ export const getProcessDefinitionList = (
 
 export const getProcessSchema = (
   processDefinitionData: ProcessDefinition
-): Promise<any> => {
+): Promise<Record<string, any>> => {
   return new Promise((resolve, reject) => {
     axios
       .get(`${processDefinitionData.endpoint}/schema`)

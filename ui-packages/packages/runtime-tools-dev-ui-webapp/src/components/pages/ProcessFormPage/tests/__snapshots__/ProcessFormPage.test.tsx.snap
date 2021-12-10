@@ -26,10 +26,14 @@ exports[`ProcessFormPage tests Snapshot 1`] = `
   >
     <ProcessFormPage>
       <PageSection
+        data-ouia-component-type="process-form-page-section"
+        data-ouia-safe={true}
         variant="light"
       >
         <section
           className="pf-c-page__main-section pf-m-light"
+          data-ouia-component-type="process-form-page-section"
+          data-ouia-safe={true}
         >
           <PageTitle
             extra={<MockedComponent />}
@@ -83,16 +87,6 @@ exports[`ProcessFormPage tests Snapshot 1`] = `
             </Flex>
           </PageTitle>
         </section>
-      </PageSection>
-      <PageSection
-        data-ouia-component-type="process-form-page-section"
-        data-ouia-safe={true}
-      >
-        <section
-          className="pf-c-page__main-section"
-          data-ouia-component-type="process-form-page-section"
-          data-ouia-safe={true}
-        />
       </PageSection>
       <PageSection>
         <section

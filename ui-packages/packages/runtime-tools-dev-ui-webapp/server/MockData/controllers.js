@@ -10,7 +10,7 @@ const itInterviewForm = require('./forms/ITInterview');
 const emptyForm = require('./forms/EmptyForm');
 const formData = require('../MockData/forms/formData');
 const hiringSchema = require('./process-forms-schema/hiring');
-const uuidv4  = require('uuid');
+const uuidv4 = require('uuid');
 const tasksUnableToTransition = [
   '047ec38d-5d57-4330-8c8d-9bd67b53a529',
   '841b9dba-3d91-4725-9de3-f9f4853b417e',
@@ -345,27 +345,26 @@ module.exports = controller = {
       res.send('Saved!');
     }
   },
+
   getProcessFormSchema: (req, res) => {
     console.log(`processName: ${req.params.processName}`);
     const processName = req.params.processName;
     let schema;
-    switch (processName) {
-      case 'hiring': {
-        schema = _.cloneDeep(hiringSchema);
-        break;
-      }
-    };
+    if (processName === 'hiring') {
+      schema = _.cloneDeep(hiringSchema);
+    } else {
+      res.status(500).send('internal server error');
+    }
     res.send(JSON.stringify(schema));
   },
+
   startProcessInstance: (req, res) => {
-    console.log(req.query)
-    const busiessKey = req.query.businessKey?req.query.businessKey:null;
-    console.log(busiessKey)
+    const businessKey = req.query.businessKey ? req.query.businessKey : null;
     const processId = uuidv4();
-    const processInstance ={
+    const processInstance = {
       id: processId,
       processId: 'hiring',
-      businessKey: busiessKey,
+      businessKey: businessKey,
       parentProcessInstanceId: null,
       parentProcessInstance: null,
       processName: 'Hiring',
@@ -397,9 +396,12 @@ module.exports = controller = {
       milestones: [],
       childProcessInstances: []
     };
+    if (businessKey && businessKey.toLowerCase() === 'error') {
+      res.status(500).send('internal server error')
+    }
     graphData['ProcessInstanceData'].push(processInstance);
-     res.send({
-      id:processId
+    res.send({
+      id: processId
     })
   }
 };

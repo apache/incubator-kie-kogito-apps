@@ -19,6 +19,6 @@ import { ProcessDefinition } from './ProcessFormEnvelopeApi';
 export interface ProcessFormChannelApi {
   processForm__getProcessFormSchema(
     processDefinitionData: ProcessDefinition
-  ): Promise<any>;
-  processForm__startProcess(formJSON: any): Promise<void>;
+  ): Promise<Record<string, any>>;
+  processForm__startProcess(formData: any): Promise<void>;
 }

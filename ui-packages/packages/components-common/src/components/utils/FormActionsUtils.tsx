@@ -33,7 +33,7 @@ interface FormButton {
 export const convertActionsToButton = (
   actions: FormAction[],
   enabled: boolean,
-  formApiRef
+  onSubmitForm: () => void
 ) => {
   if (_.isEmpty(actions)) {
     return null;
@@ -46,7 +46,7 @@ export const convertActionsToButton = (
   const isPrimary = (label: string): boolean => {
     // Assuming that Complete will be the default act
     return (
-      label.toLowerCase() === 'complete' || label.toLowerCase() === 'start'
+      label.toLowerCase() === 'complete' || (actions && actions.length === 1)
     );
   };
 
@@ -64,7 +64,7 @@ export const convertActionsToButton = (
       variant: resolveButtonVariant(action),
       onClick: () => {
         action.execute && action.execute();
-        formApiRef.submit();
+        onSubmitForm();
       }
     };
   });

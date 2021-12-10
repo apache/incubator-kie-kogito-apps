@@ -355,29 +355,6 @@ const resolvers = {
         result = result.slice(offset, offset + limit);
       }
       return result;
-    },
-    ProcessDefinitions: async (parent, args) => {
-      console.log(args['where']);
-      let result = data.ProcessDefinitions.filter(datum => {
-        if (args['where'].or) {
-          if (args['where'].or.length === 0) {
-            return true;
-          } else {
-            for (let i = 0; i < args['where'].or.length; i++) {
-              if (
-                datum.processName
-                  .toLowerCase()
-                  .indexOf(
-                    args['where'].or[i].processName.like.toLowerCase()
-                  ) > -1
-              ) {
-                return true;
-              }
-            }
-          }
-        }
-      })
-      return result;
     }
   },
 

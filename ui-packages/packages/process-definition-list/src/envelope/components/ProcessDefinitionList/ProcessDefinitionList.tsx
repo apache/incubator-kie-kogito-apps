@@ -36,7 +36,7 @@ export interface ProcessDefinitionListProps {
 }
 const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
   OUIAProps> = ({ isEnvelopeConnectedToChannel, driver, ouiaId, ouiaSafe }) => {
-  const [processDefinitionList, SetProcessDefinitionList] = useState<
+  const [processDefinitionList, setProcessDefinitionList] = useState<
     ProcessDefinition[]
   >([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -49,6 +49,9 @@ const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
       return;
     }
     init();
+    return () => {
+      setFilterProcessNames([]);
+    };
   }, [isEnvelopeConnectedToChannel]);
 
   const init = async (): Promise<void> => {
@@ -56,7 +59,7 @@ const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
       const response = await driver.getProcessDefinitionsQuery();
       const pdFilter = await driver.getProcessDefinitionFilter();
       setFilterProcessNames(pdFilter);
-      SetProcessDefinitionList(response);
+      setProcessDefinitionList(response);
       setIsLoading(false);
     } catch (errorContent) {
       setError(errorContent);

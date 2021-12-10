@@ -146,9 +146,7 @@ describe('Form Footer test', () => {
     const props = {
       actions: [releaseAction, completeAction],
       enabled: true,
-      formApiRef: {
-        submit: jest.fn()
-      }
+      onSubmitForm: jest.fn()
     };
 
     const wrapper = mount(<FormFooter {...props} />);
@@ -166,5 +164,6 @@ describe('Form Footer test', () => {
     completeButton.props().onClick();
 
     expect(completeAction.execute).toBeCalledTimes(1);
+    expect(props.onSubmitForm).toHaveBeenCalled();
   });
 });

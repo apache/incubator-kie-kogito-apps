@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`FormRenderer test Render form with actions 1`] = `
-<FormRenderer
+<ForwardRef
   formActions={
     Array [
       Object {
@@ -138,153 +138,148 @@ exports[`FormRenderer test Render form with actions 1`] = `
   onSubmit={[MockFunction]}
   readOnly={false}
 >
-   
-  <div
-    className="kogito-components-common__form-renderer"
-  >
-    <AutoForm
-      data-ouia-component-type="form-renderer"
-      data-ouia-safe={true}
-      disabled={false}
-      model={
-        Object {
-          "NodeName": "Apply for visa",
-          "Priority": "1",
-          "Skippable": "true",
-          "TaskName": "VisaApplication",
-          "traveller": Object {
-            "address": Object {
-              "city": "Zerf",
-              "country": "Poland",
-              "street": "Cabalone",
-              "zipCode": "765756",
-            },
-            "email": "rwhite@gorle.com",
-            "firstName": "Rachel",
-            "lastName": "White",
-            "nationality": "Polish",
+  <AutoForm
+    data-ouia-component-type="form-renderer"
+    data-ouia-safe={true}
+    disabled={false}
+    model={
+      Object {
+        "NodeName": "Apply for visa",
+        "Priority": "1",
+        "Skippable": "true",
+        "TaskName": "VisaApplication",
+        "traveller": Object {
+          "address": Object {
+            "city": "Zerf",
+            "country": "Poland",
+            "street": "Cabalone",
+            "zipCode": "765756",
           },
-          "trip": Object {
-            "city": "Boston",
-            "country": "US",
-            "visaRequired": true,
-          },
-        }
+          "email": "rwhite@gorle.com",
+          "firstName": "Rachel",
+          "lastName": "White",
+          "nationality": "Polish",
+        },
+        "trip": Object {
+          "city": "Boston",
+          "country": "US",
+          "visaRequired": true,
+        },
       }
-      onSubmit={[Function]}
-      placeholder={true}
-      schema={
-        JSONSchemaBridge {
-          "_compiledSchema": Object {},
-          "getField": [Function],
-          "getSubfields": [Function],
-          "getType": [Function],
-          "schema": Object {
-            "phases": Array [
-              "complete",
-              "release",
-            ],
-            "properties": Object {
-              "traveller": Object {
-                "properties": Object {
-                  "address": Object {
-                    "properties": Object {
-                      "city": Object {
-                        "type": "string",
-                      },
-                      "country": Object {
-                        "type": "string",
-                      },
-                      "street": Object {
-                        "type": "string",
-                      },
-                      "zipCode": Object {
-                        "type": "string",
-                      },
+    }
+    onSubmit={[Function]}
+    placeholder={true}
+    schema={
+      JSONSchemaBridge {
+        "_compiledSchema": Object {},
+        "getField": [Function],
+        "getSubfields": [Function],
+        "getType": [Function],
+        "schema": Object {
+          "phases": Array [
+            "complete",
+            "release",
+          ],
+          "properties": Object {
+            "traveller": Object {
+              "properties": Object {
+                "address": Object {
+                  "properties": Object {
+                    "city": Object {
+                      "type": "string",
                     },
-                    "type": "object",
+                    "country": Object {
+                      "type": "string",
+                    },
+                    "street": Object {
+                      "type": "string",
+                    },
+                    "zipCode": Object {
+                      "type": "string",
+                    },
                   },
-                  "email": Object {
-                    "format": "email",
-                    "type": "string",
-                  },
-                  "firstName": Object {
-                    "type": "string",
-                  },
-                  "lastName": Object {
-                    "type": "string",
-                  },
-                  "nationality": Object {
-                    "type": "string",
-                  },
+                  "type": "object",
                 },
-                "required": Array [
-                  "firstName",
-                  "lastName",
-                ],
-                "type": "object",
-              },
-              "trip": Object {
-                "output": false,
-                "properties": Object {
-                  "begin": Object {
-                    "format": "date-time",
-                    "type": "string",
-                  },
-                  "city": Object {
-                    "type": "string",
-                  },
-                  "country": Object {
-                    "type": "string",
-                  },
-                  "end": Object {
-                    "format": "date-time",
-                    "type": "string",
-                  },
-                  "visaRequired": Object {
-                    "type": "boolean",
-                  },
+                "email": Object {
+                  "format": "email",
+                  "type": "string",
                 },
-                "type": "object",
-              },
-              "visaApplication": Object {
-                "output": false,
-                "properties": Object {
-                  "city": Object {
-                    "type": "string",
-                  },
-                  "country": Object {
-                    "type": "string",
-                  },
-                  "duration": Object {
-                    "type": "integer",
-                  },
-                  "firstName": Object {
-                    "type": "string",
-                  },
-                  "lastName": Object {
-                    "type": "string",
-                  },
-                  "nationality": Object {
-                    "type": "string",
-                  },
-                  "passportNumber": Object {
-                    "type": "string",
-                  },
+                "firstName": Object {
+                  "type": "string",
                 },
-                "type": "object",
+                "lastName": Object {
+                  "type": "string",
+                },
+                "nationality": Object {
+                  "type": "string",
+                },
               },
+              "required": Array [
+                "firstName",
+                "lastName",
+              ],
+              "type": "object",
             },
-            "type": "object",
+            "trip": Object {
+              "output": false,
+              "properties": Object {
+                "begin": Object {
+                  "format": "date-time",
+                  "type": "string",
+                },
+                "city": Object {
+                  "type": "string",
+                },
+                "country": Object {
+                  "type": "string",
+                },
+                "end": Object {
+                  "format": "date-time",
+                  "type": "string",
+                },
+                "visaRequired": Object {
+                  "type": "boolean",
+                },
+              },
+              "type": "object",
+            },
+            "visaApplication": Object {
+              "output": false,
+              "properties": Object {
+                "city": Object {
+                  "type": "string",
+                },
+                "country": Object {
+                  "type": "string",
+                },
+                "duration": Object {
+                  "type": "integer",
+                },
+                "firstName": Object {
+                  "type": "string",
+                },
+                "lastName": Object {
+                  "type": "string",
+                },
+                "nationality": Object {
+                  "type": "string",
+                },
+                "passportNumber": Object {
+                  "type": "string",
+                },
+              },
+              "type": "object",
+            },
           },
-          "validator": [Function],
-        }
+          "type": "object",
+        },
+        "validator": [Function],
       }
-      showInlineError={true}
-    >
-      <MockedComponent />
-    </AutoForm>
-  </div>
+    }
+    showInlineError={true}
+  >
+    <MockedComponent />
+  </AutoForm>
   <MockedFormFooter
     actions={
       Array [
@@ -295,13 +290,13 @@ exports[`FormRenderer test Render form with actions 1`] = `
       ]
     }
     enabled={true}
-    formApiRef={null}
+    onSubmitForm={[Function]}
   />
-</FormRenderer>
+</ForwardRef>
 `;
 
 exports[`FormRenderer test Render form without actions 1`] = `
-<FormRenderer
+<ForwardRef
   formActions={Array []}
   formSchema={
     Object {
@@ -431,157 +426,152 @@ exports[`FormRenderer test Render form without actions 1`] = `
   onSubmit={[MockFunction]}
   readOnly={false}
 >
-   
-  <div
-    className="kogito-components-common__form-renderer"
-  >
-    <AutoForm
-      data-ouia-component-type="form-renderer"
-      data-ouia-safe={true}
-      disabled={false}
-      model={
-        Object {
-          "NodeName": "Apply for visa",
-          "Priority": "1",
-          "Skippable": "true",
-          "TaskName": "VisaApplication",
-          "traveller": Object {
-            "address": Object {
-              "city": "Zerf",
-              "country": "Poland",
-              "street": "Cabalone",
-              "zipCode": "765756",
-            },
-            "email": "rwhite@gorle.com",
-            "firstName": "Rachel",
-            "lastName": "White",
-            "nationality": "Polish",
+  <AutoForm
+    data-ouia-component-type="form-renderer"
+    data-ouia-safe={true}
+    disabled={false}
+    model={
+      Object {
+        "NodeName": "Apply for visa",
+        "Priority": "1",
+        "Skippable": "true",
+        "TaskName": "VisaApplication",
+        "traveller": Object {
+          "address": Object {
+            "city": "Zerf",
+            "country": "Poland",
+            "street": "Cabalone",
+            "zipCode": "765756",
           },
-          "trip": Object {
-            "city": "Boston",
-            "country": "US",
-            "visaRequired": true,
-          },
-        }
+          "email": "rwhite@gorle.com",
+          "firstName": "Rachel",
+          "lastName": "White",
+          "nationality": "Polish",
+        },
+        "trip": Object {
+          "city": "Boston",
+          "country": "US",
+          "visaRequired": true,
+        },
       }
-      onSubmit={[Function]}
-      placeholder={true}
-      schema={
-        JSONSchemaBridge {
-          "_compiledSchema": Object {},
-          "getField": [Function],
-          "getSubfields": [Function],
-          "getType": [Function],
-          "schema": Object {
-            "phases": Array [
-              "complete",
-              "release",
-            ],
-            "properties": Object {
-              "traveller": Object {
-                "properties": Object {
-                  "address": Object {
-                    "properties": Object {
-                      "city": Object {
-                        "type": "string",
-                      },
-                      "country": Object {
-                        "type": "string",
-                      },
-                      "street": Object {
-                        "type": "string",
-                      },
-                      "zipCode": Object {
-                        "type": "string",
-                      },
+    }
+    onSubmit={[Function]}
+    placeholder={true}
+    schema={
+      JSONSchemaBridge {
+        "_compiledSchema": Object {},
+        "getField": [Function],
+        "getSubfields": [Function],
+        "getType": [Function],
+        "schema": Object {
+          "phases": Array [
+            "complete",
+            "release",
+          ],
+          "properties": Object {
+            "traveller": Object {
+              "properties": Object {
+                "address": Object {
+                  "properties": Object {
+                    "city": Object {
+                      "type": "string",
                     },
-                    "type": "object",
+                    "country": Object {
+                      "type": "string",
+                    },
+                    "street": Object {
+                      "type": "string",
+                    },
+                    "zipCode": Object {
+                      "type": "string",
+                    },
                   },
-                  "email": Object {
-                    "format": "email",
-                    "type": "string",
-                  },
-                  "firstName": Object {
-                    "type": "string",
-                  },
-                  "lastName": Object {
-                    "type": "string",
-                  },
-                  "nationality": Object {
-                    "type": "string",
-                  },
+                  "type": "object",
                 },
-                "required": Array [
-                  "firstName",
-                  "lastName",
-                ],
-                "type": "object",
-              },
-              "trip": Object {
-                "output": false,
-                "properties": Object {
-                  "begin": Object {
-                    "format": "date-time",
-                    "type": "string",
-                  },
-                  "city": Object {
-                    "type": "string",
-                  },
-                  "country": Object {
-                    "type": "string",
-                  },
-                  "end": Object {
-                    "format": "date-time",
-                    "type": "string",
-                  },
-                  "visaRequired": Object {
-                    "type": "boolean",
-                  },
+                "email": Object {
+                  "format": "email",
+                  "type": "string",
                 },
-                "type": "object",
-              },
-              "visaApplication": Object {
-                "output": false,
-                "properties": Object {
-                  "city": Object {
-                    "type": "string",
-                  },
-                  "country": Object {
-                    "type": "string",
-                  },
-                  "duration": Object {
-                    "type": "integer",
-                  },
-                  "firstName": Object {
-                    "type": "string",
-                  },
-                  "lastName": Object {
-                    "type": "string",
-                  },
-                  "nationality": Object {
-                    "type": "string",
-                  },
-                  "passportNumber": Object {
-                    "type": "string",
-                  },
+                "firstName": Object {
+                  "type": "string",
                 },
-                "type": "object",
+                "lastName": Object {
+                  "type": "string",
+                },
+                "nationality": Object {
+                  "type": "string",
+                },
               },
+              "required": Array [
+                "firstName",
+                "lastName",
+              ],
+              "type": "object",
             },
-            "type": "object",
+            "trip": Object {
+              "output": false,
+              "properties": Object {
+                "begin": Object {
+                  "format": "date-time",
+                  "type": "string",
+                },
+                "city": Object {
+                  "type": "string",
+                },
+                "country": Object {
+                  "type": "string",
+                },
+                "end": Object {
+                  "format": "date-time",
+                  "type": "string",
+                },
+                "visaRequired": Object {
+                  "type": "boolean",
+                },
+              },
+              "type": "object",
+            },
+            "visaApplication": Object {
+              "output": false,
+              "properties": Object {
+                "city": Object {
+                  "type": "string",
+                },
+                "country": Object {
+                  "type": "string",
+                },
+                "duration": Object {
+                  "type": "integer",
+                },
+                "firstName": Object {
+                  "type": "string",
+                },
+                "lastName": Object {
+                  "type": "string",
+                },
+                "nationality": Object {
+                  "type": "string",
+                },
+                "passportNumber": Object {
+                  "type": "string",
+                },
+              },
+              "type": "object",
+            },
           },
-          "validator": [Function],
-        }
+          "type": "object",
+        },
+        "validator": [Function],
       }
-      showInlineError={true}
-    >
-      <MockedComponent />
-    </AutoForm>
-  </div>
+    }
+    showInlineError={true}
+  >
+    <MockedComponent />
+  </AutoForm>
   <MockedFormFooter
     actions={Array []}
     enabled={true}
-    formApiRef={null}
+    onSubmitForm={[Function]}
   />
-</FormRenderer>
+</ForwardRef>
 `;

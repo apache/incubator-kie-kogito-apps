@@ -24,13 +24,13 @@ import '../styles.css';
 interface IOwnProps {
   actions?: FormAction[];
   enabled?: boolean;
-  formApiRef?: any;
+  onSubmitForm?: () => void;
 }
 
 const FormFooter: React.FC<IOwnProps & OUIAProps> = ({
   actions,
   enabled = true,
-  formApiRef,
+  onSubmitForm,
   ouiaId,
   ouiaSafe
 }) => {
@@ -38,21 +38,22 @@ const FormFooter: React.FC<IOwnProps & OUIAProps> = ({
     return null;
   }
 
-  const actionItems = convertActionsToButton(actions, enabled, formApiRef).map(
-    (button, index) => {
-      return (
-        <ActionListItem key={`form-action-${index}`}>{button}</ActionListItem>
-      );
-    }
-  );
+  const actionItems = convertActionsToButton(
+    actions,
+    enabled,
+    onSubmitForm
+  ).map((button, index) => {
+    return (
+      <ActionListItem key={`form-action-${index}`}>{button}</ActionListItem>
+    );
+  });
 
   return (
-    <ActionList
-      {...componentOuiaProps(ouiaId, 'form-footer', ouiaSafe)}
-      className="kogito-components-common__form-footer"
-    >
-      {actionItems}
-    </ActionList>
+    <div className="kogito-components-common__form-footer-padding-top">
+      <ActionList {...componentOuiaProps(ouiaId, 'form-footer', ouiaSafe)}>
+        {actionItems}
+      </ActionList>
+    </div>
   );
 };
 

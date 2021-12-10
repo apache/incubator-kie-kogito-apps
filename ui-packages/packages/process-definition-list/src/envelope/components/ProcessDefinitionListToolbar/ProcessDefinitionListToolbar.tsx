@@ -28,7 +28,7 @@ import {
   Tooltip
 } from '@patternfly/react-core';
 import { FilterIcon, SyncIcon } from '@patternfly/react-icons';
-import _ from 'lodash';
+import remove from 'lodash/remove';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 interface ProcessDefinitionListToolbarProps {
   filterProcessNames: string[];
@@ -70,7 +70,7 @@ const ProcessDefinitionListToolbar: React.FC<ProcessDefinitionListToolbarProps &
   const onDeleteFilterGroup = (categoryName: Category, value: string): void => {
     const newfilterProcessNames = [...filterProcessNames];
     if (categoryName === Category.PROCESS_NAME) {
-      _.remove(newfilterProcessNames, (status: string) => {
+      remove(newfilterProcessNames, (status: string) => {
         return status === value;
       });
       setFilterProcessNames(newfilterProcessNames);

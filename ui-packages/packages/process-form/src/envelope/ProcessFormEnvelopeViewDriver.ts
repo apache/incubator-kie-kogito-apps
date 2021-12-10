@@ -29,13 +29,15 @@ export class ProcessFormEnvelopeViewDriver implements ProcessFormDriver {
     private readonly channelApi: MessageBusClientApi<ProcessFormChannelApi>
   ) {}
 
-  getProcessFormSchema(processDefinitionData: ProcessDefinition): Promise<any> {
+  getProcessFormSchema(
+    processDefinitionData: ProcessDefinition
+  ): Promise<Record<string, any>> {
     return this.channelApi.requests.processForm__getProcessFormSchema(
       processDefinitionData
     );
   }
 
-  startProcess(formJSON: any): Promise<void> {
-    return this.channelApi.requests.processForm__startProcess(formJSON);
+  startProcess(formData: any): Promise<void> {
+    return this.channelApi.requests.processForm__startProcess(formData);
   }
 }

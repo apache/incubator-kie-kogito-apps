@@ -21,17 +21,17 @@ exports[`ProcessForm Test Envelope not connected 1`] = `
       className="pf-l-bullseye"
     >
       <KogitoSpinner
-        ouiaId="process-list-loading-forms"
-        spinnerText="Loading forms..."
+        ouiaId="process-form-loading"
+        spinnerText="Loading process forms..."
       >
         <EmptyState
-          data-ouia-component-id="process-list-loading-forms"
+          data-ouia-component-id="process-form-loading"
           data-ouia-component-type="kogito-spinner"
           data-ouia-safe={true}
         >
           <div
             className="pf-c-empty-state"
-            data-ouia-component-id="process-list-loading-forms"
+            data-ouia-component-id="process-form-loading"
             data-ouia-component-type="kogito-spinner"
             data-ouia-safe={true}
           >
@@ -71,7 +71,7 @@ exports[`ProcessForm Test Envelope not connected 1`] = `
                 <h3
                   className="pf-c-title pf-m-lg"
                 >
-                  Loading forms...
+                  Loading process forms...
                 </h3>
               </Title>
             </div>

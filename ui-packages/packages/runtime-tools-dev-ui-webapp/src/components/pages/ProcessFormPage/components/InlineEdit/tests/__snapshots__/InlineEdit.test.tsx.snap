@@ -13,7 +13,11 @@ exports[`inline edit tests snapshot 1`] = `
         className="pf-c-inline-edit__value"
         id="single-editable-example-label"
       >
-        Business key
+        <span
+          className="pf-u-disabled-color-100"
+        >
+          Business key
+        </span>
       </div>
       <div
         className="pf-c-inline-edit__action pf-m-enable-editable"
