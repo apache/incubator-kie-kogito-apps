@@ -114,6 +114,9 @@
                                 <name>trusty-nw</name>
                                 <alias>zookeper</alias>
                               </network>
+                              <log>
+                                <prefix>%a</prefix>
+                              </log>
                             </run>
                         </image>
                         <image>
@@ -142,6 +145,9 @@
                                 <name>trusty-nw</name>
                                 <alias>kafka</alias>
                               </network>
+                              <log>
+                                <prefix>%a</prefix>
+                              </log>
                             </run>
                         </image>
                         <image>
@@ -186,6 +192,9 @@
                                   <volume>./infinispan.xml:/opt/infinispan/server/conf/infinispan-demo.xml:z</volume>
                                 </bind>
                               </volumes>
+                              <log>
+                                <prefix>%a</prefix>
+                              </log>
                             </run>
                         </image>
                         <image>
