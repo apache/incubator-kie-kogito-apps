@@ -135,7 +135,7 @@ public class OracleQuery<T> implements Query<T> {
 
         LOGGER.debug("Executing Oracle query: {}", queryString);
         javax.persistence.Query query = repository.getEntityManager()
-                .createNativeQuery(queryString.toString())//, CacheEntity.class)
+                .createNativeQuery(queryString.toString())
                 .unwrap(NativeQuery.class)
                 .addScalar("json_value", new JsonBlobType(type));
 
