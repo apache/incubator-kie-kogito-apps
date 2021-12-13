@@ -1,21 +1,13 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require('webpack');
 const BG_IMAGES_DIRNAME = 'bgimages';
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'src', 'index.tsx')
-  },
-  devServer: {
-    contentBase: path.join(__dirname, 'static')
+    app: path.resolve(__dirname, 'src', 'index.ts')
   },
   plugins: [
-    new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, 'src', 'index.html'),
-      favicon: 'src/favicon.ico'
-    }),
     new webpack.EnvironmentPlugin({
       KOGITO_APP_VERSION: 'DEV',
       KOGITO_APP_NAME: 'Trusty',
@@ -90,7 +82,9 @@ module.exports = {
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
-    publicPath: '/'
+    publicPath: '/',
+    libraryTarget: 'umd',
+    globalObject: 'this'
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
@@ -101,5 +95,12 @@ module.exports = {
     ],
     symlinks: false,
     cacheWithContext: false
+  },
+  externals: {
+    react: 'umd react',
+    'react-dom': 'umd react-dom',
+    'react-router-dom': 'umd react-router-dom',
+    'react-router': 'umd react-router',
+    '@patternfly/react-core': 'umd @patternfly/react-core'
   }
 };

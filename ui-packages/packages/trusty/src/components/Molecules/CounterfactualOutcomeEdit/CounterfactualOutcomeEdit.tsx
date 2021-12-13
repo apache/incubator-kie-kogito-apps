@@ -2,15 +2,15 @@ import React, { useEffect, useMemo, useState } from 'react';
 import {
   Checkbox,
   FormGroup,
+  NumberInput,
   Switch,
   Text,
   TextContent,
   TextInput,
-  TextVariants,
-  NumberInput
+  TextVariants
 } from '@patternfly/react-core';
 import { v4 as uuid } from 'uuid';
-import { CFGoal, CFGoalRole } from '../../../types';
+import { CFGoal, CFGoalRole, ItemObjectUnit } from '../../../types';
 import CounterfactualOutcomeUnsupported from '../../Atoms/CounterfactualOutcomeUnsupported/CounterfactualOutcomeUnsupported';
 import './CounterfactualOutcomeEdit.scss';
 
@@ -28,7 +28,7 @@ const CounterfactualOutcomeEdit = (props: CounterfactualOutcomeEditProps) => {
   }
 
   let valueEdit;
-  switch (typeof goal.value) {
+  switch (typeof goal.value.value) {
     case 'boolean':
       valueEdit = (
         <CounterfactualOutcomeBoolean
@@ -98,17 +98,20 @@ const CounterfactualOutcomeBoolean = (
   props: CounterfactualOutcomeEditProps
 ) => {
   const { goal, onUpdateGoal } = props;
-  const [booleanValue, setBooleanValue] = useState(goal.value as boolean);
+  const [booleanValue, setBooleanValue] = useState(goal.value.value as boolean);
 
   useEffect(() => {
-    setBooleanValue(goal.value as boolean);
+    setBooleanValue(goal.value.value as boolean);
   }, [goal.value]);
 
   const handleChange = (checked: boolean) => {
     if (isFloating(goal)) {
       return;
     }
-    onUpdateGoal({ ...goal, value: checked });
+    onUpdateGoal({
+      ...goal,
+      value: { ...(goal.value as ItemObjectUnit), value: checked }
+    });
   };
 
   return (
@@ -127,6 +130,8 @@ const CounterfactualOutcomeNumber = (props: CounterfactualOutcomeEditProps) => {
   const { goal, index, onUpdateGoal } = props;
   const [numberValue, setNumberValue] = useState<number>();
 
+  const decimalPlaces = goal.value.value.toString().split('.')[1]?.length || 0;
+
   const touchSpinWidth = useMemo(() => String(goal.value).length + 2, [
     goal.value
   ]);
@@ -135,25 +140,43 @@ const CounterfactualOutcomeNumber = (props: CounterfactualOutcomeEditProps) => {
     if (isFloating(goal)) {
       return;
     }
-    onUpdateGoal({ ...goal, value: (goal.value as number) - 1 });
+    onUpdateGoal({
+      ...goal,
+      value: {
+        ...(goal.value as ItemObjectUnit),
+        value: Number(((goal.value.value as number) - 1).toFixed(decimalPlaces))
+      }
+    });
   };
 
   const onChange = event => {
     if (isFloating(goal)) {
       return;
     }
-    onUpdateGoal({ ...goal, value: Number(event.target.value) });
+    onUpdateGoal({
+      ...goal,
+      value: {
+        ...(goal.value as ItemObjectUnit),
+        value: Number(event.target.value)
+      }
+    });
   };
 
   const onPlus = () => {
     if (isFloating(goal)) {
       return;
     }
-    onUpdateGoal({ ...goal, value: (goal.value as number) + 1 });
+    onUpdateGoal({
+      ...goal,
+      value: {
+        ...(goal.value as ItemObjectUnit),
+        value: Number(((goal.value.value as number) + 1).toFixed(decimalPlaces))
+      }
+    });
   };
 
   useEffect(() => {
-    setNumberValue(goal.value as number);
+    setNumberValue(goal.value.value as number);
   }, [goal.value]);
 
   return (
@@ -180,14 +203,17 @@ const CounterfactualOutcomeString = (props: CounterfactualOutcomeEditProps) => {
     if (isFloating(goal)) {
       return;
     }
-    onUpdateGoal({ ...goal, value });
+    onUpdateGoal({
+      ...goal,
+      value: { ...(goal.value as ItemObjectUnit), value: value }
+    });
   };
 
   return (
     <TextInput
       id={`goal-${index}-${goal.name}`}
       name={`goal-${index}-${goal.name}`}
-      value={goal.value as string}
+      value={goal.value.value as string}
       onChange={handleChange}
       style={{ width: 250 }}
       isDisabled={isFloating(goal)}

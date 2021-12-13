@@ -1,26 +1,43 @@
 import { cfInitState, cfReducer, CFState } from '../counterfactualReducer';
-import { CFExecutionStatus, CFGoalRole } from '../../../../types';
+import {
+  CFExecutionStatus,
+  CFGoalRole,
+  CFSearchInputStructure,
+  CFSearchInputUnit,
+  ItemObjectUnit
+} from '../../../../types';
 
 const initialState: CFState = {
   goals: [
     {
       id: '1',
       name: 'goal1',
-      kind: 'UNIT',
-      typeRef: 'string',
       role: CFGoalRole.ORIGINAL,
-      value: null,
-      originalValue: 'originalValue'
+      value: {
+        kind: 'UNIT',
+        type: 'string',
+        value: null
+      },
+      originalValue: {
+        kind: 'UNIT',
+        type: 'string',
+        value: 'originalValue'
+      }
     }
   ],
   searchDomains: [
     {
       name: 'sd1',
-      kind: 'UNIT',
-      typeRef: 'number',
-      value: 123,
-      components: null,
-      fixed: true
+      value: {
+        kind: 'UNIT',
+        type: 'number',
+        fixed: true,
+        originalValue: {
+          kind: 'UNIT',
+          type: 'number',
+          value: 123
+        }
+      }
     }
   ],
   results: [],
@@ -37,16 +54,19 @@ describe('InitialStateMapping', () => {
       inputs: [
         {
           name: 'i1',
-          value: 123,
-          typeRef: 'number',
-          components: null,
-          kind: 'UNIT'
+          value: {
+            kind: 'UNIT',
+            type: 'number',
+            value: 123
+          }
         }
       ],
       outcomes: []
     });
     expect(initialState.searchDomains.length).toBe(1);
-    expect(initialState.searchDomains[0].fixed).toBeTruthy();
+    expect(
+      (initialState.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeTruthy();
   });
 
   test('SearchDomain::fixed::Boolean', () => {
@@ -54,16 +74,19 @@ describe('InitialStateMapping', () => {
       inputs: [
         {
           name: 'i1',
-          value: 123,
-          typeRef: 'number',
-          components: null,
-          kind: 'UNIT'
+          value: {
+            kind: 'UNIT',
+            type: 'number',
+            value: 123
+          }
         }
       ],
       outcomes: []
     });
     expect(initialState.searchDomains.length).toBe(1);
-    expect(initialState.searchDomains[0].fixed).toBeTruthy();
+    expect(
+      (initialState.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeTruthy();
   });
 
   test('SearchDomain::fixed::String', () => {
@@ -71,16 +94,19 @@ describe('InitialStateMapping', () => {
       inputs: [
         {
           name: 'i1',
-          value: 'value',
-          typeRef: 'string',
-          components: null,
-          kind: 'UNIT'
+          value: {
+            kind: 'UNIT',
+            type: 'string',
+            value: 'value'
+          }
         }
       ],
       outcomes: []
     });
     expect(initialState.searchDomains.length).toBe(1);
-    expect(initialState.searchDomains[0].fixed).toBeUndefined();
+    expect(
+      (initialState.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeUndefined();
   });
 
   test('SearchDomain::fixed::String::EmptyArrayComponents', () => {
@@ -88,16 +114,19 @@ describe('InitialStateMapping', () => {
       inputs: [
         {
           name: 'i1',
-          value: 'value',
-          typeRef: 'string',
-          components: [],
-          kind: 'UNIT'
+          value: {
+            kind: 'UNIT',
+            type: 'string',
+            value: 'value'
+          }
         }
       ],
       outcomes: []
     });
     expect(initialState.searchDomains.length).toBe(1);
-    expect(initialState.searchDomains[0].fixed).toBeUndefined();
+    expect(
+      (initialState.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeUndefined();
   });
 
   test('SearchDomain::fixed::Object', () => {
@@ -105,24 +134,72 @@ describe('InitialStateMapping', () => {
       inputs: [
         {
           name: 'i1',
-          value: null,
-          typeRef: 'tStructure',
-          components: [
-            {
-              name: 'i2',
-              value: 'value',
-              typeRef: 'string',
-              components: null,
-              kind: 'UNIT'
+          value: {
+            kind: 'STRUCTURE',
+            type: 'tStructure',
+            value: {
+              i2: {
+                kind: 'UNIT',
+                type: 'string',
+                value: 'value'
+              }
             }
-          ],
-          kind: 'STRUCTURE'
+          }
         }
       ],
       outcomes: []
     });
     expect(initialState.searchDomains.length).toBe(1);
-    expect(initialState.searchDomains[0].fixed).toBeUndefined();
+    expect(
+      (initialState.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeUndefined();
+  });
+
+  test('SearchDomain::Object::JSON.stringify', () => {
+    const checks = object => {
+      const i2 = (object.searchDomains[0].value as CFSearchInputStructure)
+        .value['i2'];
+      expect(i2).not.toBeUndefined();
+      expect(i2.type).toEqual('string');
+      expect(i2.kind).toEqual('UNIT');
+
+      const i2Unit = i2 as CFSearchInputUnit;
+      expect(i2Unit.fixed).toBeUndefined();
+      expect(i2Unit.domain).toBeUndefined();
+      expect(i2Unit.originalValue.type).toEqual('string');
+      expect(i2Unit.originalValue.kind).toEqual('UNIT');
+      const i2UnitOriginalValue = i2Unit.originalValue as ItemObjectUnit;
+      expect(i2UnitOriginalValue.value).toEqual('value');
+    };
+
+    // See https://issues.redhat.com/browse/FAI-662. In addition to the NPE in the Java code;
+    // Axios HTTPClient was failing to stringify use of ES6 Map object defining the CFSearchInputStructure.
+    // This lead to an additional error where the Search Domain structure differed from that for the
+    // original inputs and Counterfactual execution was terminated.
+    const initialState = cfInitState({
+      inputs: [
+        {
+          name: 'i1',
+          value: {
+            kind: 'STRUCTURE',
+            type: 'tStructure',
+            value: {
+              i2: {
+                kind: 'UNIT',
+                type: 'string',
+                value: 'value'
+              }
+            }
+          }
+        }
+      ],
+      outcomes: []
+    });
+    checks(initialState);
+
+    // Round-trip to string and object to check it can be stringified correctly.
+    const json = JSON.stringify(initialState);
+    checks(JSON.parse(json));
   });
 
   test('SearchDomain::fixed::Collection', () => {
@@ -130,26 +207,25 @@ describe('InitialStateMapping', () => {
       inputs: [
         {
           name: 'i1',
-          value: null,
-          typeRef: 'tStructure',
-          components: [
-            [
-              {
-                name: 'i2',
-                value: 'value',
-                typeRef: 'string',
-                components: null,
-                kind: 'UNIT'
+          value: {
+            kind: 'STRUCTURE',
+            type: 'tStructure',
+            value: {
+              i2: {
+                kind: 'UNIT',
+                type: 'string',
+                value: 'value'
               }
-            ]
-          ],
-          kind: 'STRUCTURE'
+            }
+          }
         }
       ],
       outcomes: []
     });
     expect(initialState.searchDomains.length).toBe(1);
-    expect(initialState.searchDomains[0].fixed).toBeUndefined();
+    expect(
+      (initialState.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeUndefined();
   });
 });
 
@@ -221,11 +297,17 @@ describe('State::isDisabled::Goal_Then_SearchDomain', () => {
 
 describe('ToggleAll', () => {
   test('InitialState::SingleSearchDomain', () => {
-    expect(initialState.searchDomains[0].fixed).toBeTruthy();
+    expect(
+      (initialState.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeTruthy();
     const state1 = toggleSearchDomains(initialState, true);
-    expect(state1.searchDomains[0].fixed).toBeFalsy();
+    expect(
+      (state1.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeFalsy();
     const state2 = toggleSearchDomains(state1, false);
-    expect(state2.searchDomains[0].fixed).toBeTruthy();
+    expect(
+      (state2.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeTruthy();
   });
 
   test('InitialState::MultipleSearchDomains', () => {
@@ -234,30 +316,54 @@ describe('ToggleAll', () => {
       searchDomains: [
         {
           name: 'sd1',
-          kind: 'UNIT',
-          typeRef: 'number',
-          value: 123,
-          components: null,
-          fixed: true
+          value: {
+            kind: 'UNIT',
+            type: 'number',
+            value: 123,
+            fixed: true,
+            originalValue: {
+              kind: 'UNIT',
+              type: 'number',
+              value: 123
+            }
+          }
         },
         {
           name: 'sd2',
-          kind: 'UNIT',
-          typeRef: 'boolean',
-          value: true,
-          components: null,
-          fixed: true
+          value: {
+            kind: 'UNIT',
+            type: 'boolean',
+            value: true,
+            fixed: true,
+            originalValue: {
+              kind: 'UNIT',
+              type: 'boolean',
+              value: true
+            }
+          }
         }
       ]
     };
-    expect(state1.searchDomains[0].fixed).toBeTruthy();
-    expect(state1.searchDomains[1].fixed).toBeTruthy();
+    expect(
+      (state1.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeTruthy();
+    expect(
+      (state1.searchDomains[1].value as CFSearchInputUnit).fixed
+    ).toBeTruthy();
     const state2 = toggleSearchDomains(state1, true);
-    expect(state2.searchDomains[0].fixed).toBeFalsy();
-    expect(state2.searchDomains[1].fixed).toBeFalsy();
+    expect(
+      (state2.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeFalsy();
+    expect(
+      (state2.searchDomains[1].value as CFSearchInputUnit).fixed
+    ).toBeFalsy();
     const state3 = toggleSearchDomains(state2, false);
-    expect(state3.searchDomains[0].fixed).toBeTruthy();
-    expect(state3.searchDomains[1].fixed).toBeTruthy();
+    expect(
+      (state3.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeTruthy();
+    expect(
+      (state3.searchDomains[1].value as CFSearchInputUnit).fixed
+    ).toBeTruthy();
   });
 
   test('InitialState::MultipleSearchDomains::WithUnsupportedType', () => {
@@ -266,30 +372,48 @@ describe('ToggleAll', () => {
       searchDomains: [
         {
           name: 'sd1',
-          kind: 'UNIT',
-          typeRef: 'number',
-          value: 123,
-          components: null,
-          fixed: true
+          value: {
+            kind: 'UNIT',
+            type: 'number',
+            value: 123,
+            fixed: true,
+            originalValue: {
+              kind: 'UNIT',
+              type: 'number',
+              value: 123
+            }
+          }
         },
         {
           name: 'sd2',
-          kind: 'STRUCTURE',
-          typeRef: 'tObject',
-          value: {},
-          components: null,
-          fixed: false
+          value: {
+            kind: 'STRUCTURE',
+            type: 'tObject',
+            value: {}
+          }
         }
       ]
     };
-    expect(state1.searchDomains[0].fixed).toBeTruthy();
-    expect(state1.searchDomains[1].fixed).toBeFalsy();
+    expect(
+      (state1.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeTruthy();
+    expect(
+      (state1.searchDomains[1].value as CFSearchInputUnit).fixed
+    ).toBeFalsy();
     const state2 = toggleSearchDomains(state1, true);
-    expect(state2.searchDomains[0].fixed).toBeFalsy();
-    expect(state2.searchDomains[1].fixed).toBeFalsy();
+    expect(
+      (state2.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeFalsy();
+    expect(
+      (state2.searchDomains[1].value as CFSearchInputUnit).fixed
+    ).toBeFalsy();
     const state3 = toggleSearchDomains(state2, false);
-    expect(state3.searchDomains[0].fixed).toBeTruthy();
-    expect(state3.searchDomains[1].fixed).toBeFalsy();
+    expect(
+      (state3.searchDomains[0].value as CFSearchInputUnit).fixed
+    ).toBeTruthy();
+    expect(
+      (state3.searchDomains[1].value as CFSearchInputUnit).fixed
+    ).toBeFalsy();
   });
 });
 
@@ -320,11 +444,17 @@ const setGoalUnsupported = state => {
       {
         id: '1',
         name: 'goal1',
-        kind: 'STRUCTURE',
         role: CFGoalRole.UNSUPPORTED,
-        typeRef: 'string',
-        value: 'value',
-        originalValue: 'originalValue'
+        value: {
+          kind: 'STRUCTURE',
+          type: 'tStructure',
+          value: {}
+        },
+        originalValue: {
+          kind: 'STRUCTURE',
+          type: 'tStructure',
+          value: {}
+        }
       }
     ]
   });
@@ -337,11 +467,17 @@ const setGoalOriginal = state => {
       {
         id: '1',
         name: 'goal1',
-        kind: 'UNIT',
         role: CFGoalRole.ORIGINAL,
-        typeRef: 'string',
-        value: 'originalValue',
-        originalValue: 'originalValue'
+        value: {
+          kind: 'UNIT',
+          type: 'string',
+          value: 'originalValue'
+        },
+        originalValue: {
+          kind: 'UNIT',
+          type: 'string',
+          value: 'originalValue'
+        }
       }
     ]
   });
@@ -354,11 +490,17 @@ const setGoalFloating = state => {
       {
         id: '1',
         name: 'goal1',
-        kind: 'UNIT',
         role: CFGoalRole.FLOATING,
-        typeRef: 'string',
-        value: 'originalValue',
-        originalValue: 'originalValue'
+        value: {
+          kind: 'UNIT',
+          type: 'string',
+          value: 'originalValue'
+        },
+        originalValue: {
+          kind: 'UNIT',
+          type: 'string',
+          value: 'originalValue'
+        }
       }
     ]
   });
@@ -371,11 +513,17 @@ const setGoalFixed = state => {
       {
         id: '1',
         name: 'goal1',
-        kind: 'UNIT',
         role: CFGoalRole.FIXED,
-        typeRef: 'string',
-        value: 'value',
-        originalValue: 'originalValue'
+        value: {
+          kind: 'UNIT',
+          type: 'string',
+          value: 'value'
+        },
+        originalValue: {
+          kind: 'UNIT',
+          type: 'string',
+          value: 'value'
+        }
       }
     ]
   });

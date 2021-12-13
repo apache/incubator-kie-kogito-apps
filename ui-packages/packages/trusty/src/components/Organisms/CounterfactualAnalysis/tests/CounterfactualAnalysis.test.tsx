@@ -110,15 +110,7 @@ describe('CounterfactualAnalysis', () => {
       />
     );
 
-    expect(wrapper.find('CounterfactualHint')).toHaveLength(1);
-    expect(wrapper.find('CounterfactualHint Hint')).toHaveLength(1);
-
-    wrapper
-      .find('CounterfactualHint button#hint-kebab-toggle')
-      .simulate('click');
-    wrapper.find('CounterfactualHint #hint-close button').simulate('click');
-
-    expect(wrapper.find('CounterfactualHint Hint')).toHaveLength(0);
+    expect(wrapper.find('div.counterfactual__hint')).toHaveLength(1);
   });
 
   test('handles input selection, constraints change and outcome selection', async () => {
@@ -283,51 +275,79 @@ describe('CounterfactualAnalysis', () => {
         {
           id: '_c6e56793-68d0-4683-b34b-5e9d69e7d0d4',
           role: CFGoalRole.FIXED,
-          kind: 'UNIT',
           name: 'Risk Score',
-          originalValue: 1,
-          typeRef: 'number',
-          value: 2
+          value: {
+            kind: 'UNIT',
+            type: 'number',
+            value: 2
+          },
+          originalValue: {
+            kind: 'UNIT',
+            type: 'number',
+            value: 1
+          }
         },
         {
           id: '_46B5CA54-27CA-4950-B601-63F58BC3BDFE',
           role: CFGoalRole.FIXED,
-          kind: 'UNIT',
           name: 'canRequestLoan',
-          originalValue: false,
-          typeRef: 'boolean',
-          value: true
+          value: {
+            kind: 'UNIT',
+            type: 'boolean',
+            value: true
+          },
+          originalValue: {
+            kind: 'UNIT',
+            type: 'boolean',
+            value: false
+          }
         },
         {
           id: '_047FFF53-0583-4FAD-B08F-8E1C077021D6',
           role: CFGoalRole.FLOATING,
-          kind: 'UNIT',
           name: 'Asset Score',
-          originalValue: '33',
-          typeRef: 'number',
-          value: '33'
+          value: {
+            kind: 'UNIT',
+            type: 'number',
+            value: '33'
+          },
+          originalValue: {
+            kind: 'UNIT',
+            type: 'number',
+            value: '33'
+          }
         }
       ],
       searchDomains: [
         {
-          components: null,
-          domain: {
-            type: 'RANGE',
-            lowerBound: 1,
-            upperBound: 10
-          },
-          fixed: false,
-          kind: 'UNIT',
           name: 'Credit Score',
-          typeRef: 'number',
-          value: 738
+          value: {
+            kind: 'UNIT',
+            type: 'number',
+            fixed: false,
+            domain: {
+              type: 'RANGE',
+              lowerBound: 1,
+              upperBound: 10
+            },
+            originalValue: {
+              kind: 'UNIT',
+              type: 'number',
+              value: 738
+            }
+          }
         },
         {
-          components: null,
-          kind: 'UNIT',
           name: 'Type',
-          typeRef: 'string',
-          value: 'Lease'
+          value: {
+            kind: 'UNIT',
+            type: 'string',
+            originalValue: {
+              kind: 'UNIT',
+              type: 'string',
+              value: 'Lease'
+            }
+          }
         }
       ]
     });
@@ -361,8 +381,9 @@ describe('CounterfactualAnalysis', () => {
         .at(1)
         .find('Td')
         .at(5)
-        .text()
-    ).toMatch(cfResultsFinal.solutions[0].inputs[0].value.toString());
+        .find('FormattedValue')
+        .prop('value')
+    ).toEqual(cfResultsFinal.solutions[0].inputs[0].value.value);
 
     expect(
       wrapper.find('CounterfactualCompletedMessage').props()['status']
@@ -566,22 +587,48 @@ describe('CounterfactualAnalysis', () => {
     expect(constraintButton.text()).toMatch('Constraint');
     expect(constraintButton.props()['isDisabled']).toBeTruthy();
   });
+
+  test('displays a warning message for unsupported low screen sizes', () => {
+    (useCounterfactualExecution as jest.Mock).mockReturnValue({
+      runCFAnalysis,
+      cfResults: undefined
+    });
+    const wrapper = mount(
+      <CounterfactualAnalysis
+        inputs={inputs}
+        outcomes={outcomes}
+        executionId={executionId}
+        containerHeight={900}
+        containerWidth={700}
+      />
+    );
+
+    expect(wrapper).toMatchSnapshot();
+
+    expect(
+      wrapper.find('div.counterfactual__unsupported-screen-size')
+    ).toHaveLength(1);
+    expect(wrapper.find('CounterfactualToolbar')).toHaveLength(0);
+    expect(wrapper.find('CounterfactualTable')).toHaveLength(0);
+  });
 });
 
 const inputs: ItemObject[] = [
   {
-    components: null,
     name: 'Credit Score',
-    kind: 'UNIT',
-    typeRef: 'number',
-    value: 738
+    value: {
+      kind: 'UNIT',
+      type: 'number',
+      value: 738
+    }
   },
   {
-    components: null,
     name: 'Type',
-    kind: 'UNIT',
-    typeRef: 'string',
-    value: 'Lease'
+    value: {
+      kind: 'UNIT',
+      type: 'string',
+      value: 'Lease'
+    }
   }
 ];
 
@@ -593,11 +640,9 @@ const outcomes: Outcome[] = [
     outcomeId: '_c6e56793-68d0-4683-b34b-5e9d69e7d0d4',
     outcomeName: 'Risk Score',
     outcomeResult: {
-      name: 'Risk Score',
       kind: 'UNIT',
-      typeRef: 'number',
-      value: 1,
-      components: null
+      type: 'number',
+      value: 1
     }
   },
   {
@@ -607,11 +652,9 @@ const outcomes: Outcome[] = [
     outcomeId: '_46B5CA54-27CA-4950-B601-63F58BC3BDFE',
     outcomeName: 'canRequestLoan',
     outcomeResult: {
-      name: 'canRequestLoan',
       kind: 'UNIT',
-      typeRef: 'boolean',
-      value: false,
-      components: null
+      type: 'boolean',
+      value: false
     }
   },
   {
@@ -621,11 +664,9 @@ const outcomes: Outcome[] = [
     outcomeId: '_047FFF53-0583-4FAD-B08F-8E1C077021D6',
     outcomeName: 'Asset Score',
     outcomeResult: {
-      name: 'Asset Score',
       kind: 'UNIT',
-      typeRef: 'number',
-      value: '33',
-      components: null
+      type: 'number',
+      value: '33'
     }
   }
 ];
@@ -645,17 +686,19 @@ const cfResultsFinal: CFAnalysisResultsSets = {
       inputs: [
         {
           name: 'Credit Score',
-          typeRef: 'number',
-          kind: 'UNIT',
-          value: 5,
-          components: null
+          value: {
+            kind: 'UNIT',
+            type: 'number',
+            value: 5
+          }
         },
         {
           name: 'Lease',
-          typeRef: 'string',
-          kind: 'UNIT',
-          value: 'alpha',
-          components: null
+          value: {
+            kind: 'UNIT',
+            type: 'string',
+            value: 'alpha'
+          }
         }
       ],
       isValid: true,

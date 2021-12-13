@@ -16,27 +16,40 @@
 
 package org.kie.kogito.it.trusty;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.Callable;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.AccessTokenResponse;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomain;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomainCollectionValue;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomainStructureValue;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomainUnitValue;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomainValue;
+import org.kie.kogito.explainability.api.NamedTypedValue;
 import org.kie.kogito.testcontainers.ExplainabilityServiceMessagingContainer;
 import org.kie.kogito.testcontainers.InfinispanTrustyServiceContainer;
 import org.kie.kogito.testcontainers.KogitoInfinispanContainer;
 import org.kie.kogito.testcontainers.KogitoKafkaContainer;
 import org.kie.kogito.testcontainers.KogitoKeycloakContainer;
 import org.kie.kogito.testcontainers.KogitoServiceContainer;
+import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.service.common.requests.CounterfactualRequest;
 import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
+import org.kie.kogito.trusty.service.common.responses.CounterfactualResultsResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionOutcomesResponse;
 import org.kie.kogito.trusty.service.common.responses.DecisionStructuredInputsResponse;
 import org.kie.kogito.trusty.service.common.responses.ExecutionsResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
-import org.kie.kogito.trusty.storage.api.model.CounterfactualSearchDomain;
+import org.kie.kogito.trusty.storage.api.model.DecisionInput;
 import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
-import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.KafkaContainer;
@@ -50,6 +63,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -172,8 +186,10 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
 
             assertNotNull(accessToken);
 
+            final List<String> executionIds = new ArrayList<>();
             final int expectedExecutions = KOGITO_SERVICE_PAYLOADS.size();
 
+            LOGGER.info("Invoke Decision endpoint to generate LIME explanations...");
             KOGITO_SERVICE_PAYLOADS.forEach(json -> given()
                     .port(kogitoService.getFirstMappedPort())
                     .contentType("application/json")
@@ -181,6 +197,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                     .when().post("/Traffic Violation")
                     .then().statusCode(200));
 
+            LOGGER.info("Check Decisions executed...");
             await()
                     .atLeast(5, SECONDS)
                     .atMost(30, SECONDS)
@@ -194,12 +211,16 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                                 .extract().as(ExecutionsResponse.class);
 
                         assertSame(expectedExecutions, executionsResponse.getHeaders().size());
+                        executionsResponse.getHeaders().forEach(h -> executionIds.add(h.getExecutionId()));
+                    });
 
-                        executionsResponse.getHeaders().forEach(execution -> {
-                            String executionId = execution.getExecutionId();
-
-                            assertNotNull(executionId);
-
+            LOGGER.info("Check LIME explanations generated...");
+            await()
+                    .atLeast(5, SECONDS)
+                    .atMost(60, SECONDS)
+                    .with().pollInterval(5, SECONDS)
+                    .untilAsserted(() -> {
+                        executionIds.forEach(executionId -> {
                             SalienciesResponse salienciesResponse = given()
                                     .port(trustyService.getFirstMappedPort())
                                     .auth().oauth2(accessToken)
@@ -208,17 +229,29 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                                     .extract().as(SalienciesResponse.class);
 
                             assertEquals("SUCCEEDED", salienciesResponse.getStatus());
-
-                            doCounterfactuals(trustyService, accessToken, executionId);
                         });
                     });
+
+            LOGGER.info("Request Counterfactuals for each execution and check responses generated...");
+            executionIds.forEach(executionId -> {
+                await()
+                        .atLeast(500, MILLISECONDS)
+                        .atMost(60, SECONDS)
+                        .with().pollInterval(500, MILLISECONDS)
+                        .until(doCounterfactualRequests(trustyService, accessToken, executionId));
+                await()
+                        .atLeast(500, MILLISECONDS)
+                        .atMost(60, SECONDS)
+                        .with().pollInterval(500, MILLISECONDS)
+                        .until(doCounterfactualResponses(trustyService, accessToken, executionId));
+            });
         }
     }
 
-    private void doCounterfactuals(final InfinispanTrustyServiceContainer trustyService,
+    private Callable<Boolean> doCounterfactualRequests(final InfinispanTrustyServiceContainer trustyService,
             final String accessToken,
             final String executionId) {
-        //Decision's Inputs
+        LOGGER.info(String.format("Reading Decision [%s]'s Inputs...", executionId));
         DecisionStructuredInputsResponse inputs = given()
                 .port(trustyService.getFirstMappedPort())
                 .auth().oauth2(accessToken)
@@ -226,7 +259,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                 .then().statusCode(200)
                 .extract().as(DecisionStructuredInputsResponse.class);
 
-        //Decision's Outcomes
+        LOGGER.info(String.format("Reading Decision [%s]'s Outputs...", executionId));
         DecisionOutcomesResponse outcomes = given()
                 .port(trustyService.getFirstMappedPort())
                 .auth().oauth2(accessToken)
@@ -254,42 +287,103 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                 //Swallow
             }
         });
-        LOGGER.info(sb.toString());
+        LOGGER.debug(sb.toString());
 
-        // The Goals and Search Domain structures must match those of the original decision
-        // See https://issues.redhat.com/browse/FAI-486
-        CounterfactualRequestResponse counterfactualRequestResponse = given()
-                .port(trustyService.getFirstMappedPort())
-                .auth().oauth2(accessToken)
-                .when()
-                .contentType(ContentType.JSON)
-                .body(new CounterfactualRequest(
-                        outcomes.getOutcomes().stream().map(DecisionOutcome::getOutcomeResult).collect(Collectors.toList()),
-                        inputs.getInputs().stream().map(AbstractTrustyExplainabilityEnd2EndIT::toCounterfactualSearchDomain).collect(Collectors.toList())))
-                .post("/executions/decisions/" + executionId + "/explanations/counterfactuals")
-                .then().statusCode(200)
-                .extract().as(CounterfactualRequestResponse.class);
+        return () -> {
+            LOGGER.info(String.format("Checking Decision [%s]'s Counterfactual request was successful...", executionId));
+            // The Goals and Search Domain structures must match those of the original decision
+            // See https://issues.redhat.com/browse/FAI-486
+            CounterfactualRequestResponse counterfactualRequestResponse = given()
+                    .port(trustyService.getFirstMappedPort())
+                    .auth().oauth2(accessToken)
+                    .when()
+                    .contentType(ContentType.JSON)
+                    .body(new CounterfactualRequest(
+                            outcomes.getOutcomes().stream().map(AbstractTrustyExplainabilityEnd2EndIT::toCounterfactualGoal).collect(Collectors.toList()),
+                            inputs.getInputs().stream().map(AbstractTrustyExplainabilityEnd2EndIT::toCounterfactualSearchDomain).collect(Collectors.toList())))
+                    .post("/executions/decisions/" + executionId + "/explanations/counterfactuals")
+                    .then().statusCode(200)
+                    .extract().as(CounterfactualRequestResponse.class);
 
-        assertEquals(executionId, counterfactualRequestResponse.getExecutionId());
-        assertNotNull(counterfactualRequestResponse.getCounterfactualId());
+            return Objects.nonNull(counterfactualRequestResponse)
+                    && Objects.equals(executionId, counterfactualRequestResponse.getExecutionId())
+                    && Objects.nonNull(counterfactualRequestResponse.getCounterfactualId());
+        };
     }
 
-    private static CounterfactualSearchDomain toCounterfactualSearchDomain(TypedVariableWithValue input) {
-        switch (input.getKind()) {
+    private static NamedTypedValue toCounterfactualGoal(DecisionOutcome outcome) {
+        TypedValue value = outcome.getOutcomeResult();
+        return new NamedTypedValue(outcome.getOutcomeName(), value);
+    }
+
+    private static CounterfactualSearchDomain toCounterfactualSearchDomain(DecisionInput input) {
+        TypedValue value = input.getValue();
+        return new CounterfactualSearchDomain(input.getName(), toCounterfactualSearchDomainValue(value));
+    }
+
+    private static CounterfactualSearchDomainValue toCounterfactualSearchDomainValue(TypedValue value) {
+        switch (value.getKind()) {
             case COLLECTION:
-                return CounterfactualSearchDomain.buildCollection(input.getName(),
-                        input.getTypeRef(),
-                        input.getComponents().stream().map(AbstractTrustyExplainabilityEnd2EndIT::toCounterfactualSearchDomain).collect(Collectors.toList()),
-                        true,
-                        null);
+                Collection<CounterfactualSearchDomainValue> cfCollectionValues = value.toCollection()
+                        .getValue()
+                        .stream()
+                        .map(AbstractTrustyExplainabilityEnd2EndIT::toCounterfactualSearchDomainValue)
+                        .collect(Collectors.toList());
+                return new CounterfactualSearchDomainCollectionValue(value.getType(), cfCollectionValues);
             case STRUCTURE:
-                return CounterfactualSearchDomain.buildStructure(input.getName(),
-                        input.getTypeRef(),
-                        input.getComponents().stream().map(AbstractTrustyExplainabilityEnd2EndIT::toCounterfactualSearchDomain).collect(Collectors.toList()));
+                Map<String, CounterfactualSearchDomainValue> cfStructureValues = value.toStructure()
+                        .getValue()
+                        .entrySet()
+                        .stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey,
+                                e -> toCounterfactualSearchDomainValue(e.getValue())));
+
+                return new CounterfactualSearchDomainStructureValue(value.getType(), cfStructureValues);
             case UNIT:
-                return CounterfactualSearchDomain.buildFixedUnit(input.getName(),
-                        input.getTypeRef());
+                return new CounterfactualSearchDomainUnitValue(value.getType(),
+                        value.getType(),
+                        Boolean.TRUE,
+                        null);
         }
-        throw new IllegalArgumentException("An unexpected TypedVariableWithValue.Kind detected. Unable to process.");
+        throw new IllegalArgumentException("An unexpected TypedValue.Kind detected. Unable to process.");
+    }
+
+    private Callable<Boolean> doCounterfactualResponses(final InfinispanTrustyServiceContainer trustyService,
+            final String accessToken,
+            final String executionId) {
+        return () -> {
+            LOGGER.info(String.format("Checking Decision [%s] has only one Counterfactual request...", executionId));
+            // Get all counterfactual requests for an execution
+            List<CounterfactualRequestResponse> counterfactualRequests = Arrays.asList(given()
+                    .port(trustyService.getFirstMappedPort())
+                    .auth().oauth2(accessToken)
+                    .when()
+                    .contentType(ContentType.JSON)
+                    .get("/executions/decisions/" + executionId + "/explanations/counterfactuals")
+                    .then().statusCode(200)
+                    .extract().as(CounterfactualRequestResponse[].class));
+
+            // We should only have one per execution
+            assertNotNull(counterfactualRequests);
+            assertEquals(1, counterfactualRequests.size());
+
+            // Verify there are counterfactual results available
+            String counterfactualId = counterfactualRequests.get(0).getCounterfactualId();
+
+            LOGGER.info(String.format("Checking Decision [%s] Counterfactual results exist...", executionId));
+            CounterfactualResultsResponse details = given()
+                    .port(trustyService.getFirstMappedPort())
+                    .auth().oauth2(accessToken)
+                    .when()
+                    .contentType(ContentType.JSON)
+                    .get("/executions/decisions/" + executionId + "/explanations/counterfactuals/" + counterfactualId)
+                    .then().statusCode(200)
+                    .extract().as(CounterfactualResultsResponse.class);
+
+            return Objects.nonNull(details)
+                    && Objects.equals(executionId, details.getExecutionId())
+                    && Objects.equals(counterfactualId, details.getCounterfactualId())
+                    && !details.getSolutions().isEmpty();
+        };
     }
 }

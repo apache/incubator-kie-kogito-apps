@@ -364,4 +364,16 @@ class CounterfactualEntityFactoryTest {
         assertTrue(entities.get(2).isConstrained());
         assertFalse(entities.get(3).isConstrained());
     }
+
+    @Test
+    void testValidateNullNumericalFeature() {
+        final Feature feature = FeatureFactory.newNumericalFeature("double-feature", null);
+        final FeatureDomain domain = EmptyFeatureDomain.create();
+
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            CounterfactualEntityFactory.from(feature, true, domain);
+        });
+
+        assertEquals("Null numeric features are not supported in counterfactuals", exception.getMessage());
+    }
 }
