@@ -95,7 +95,7 @@ class DummyDmnModelsLimeExplainerTest {
         for (int n = 0; n < 10; n++) {
             inputs.add(new PredictionInput(DataUtils.perturbFeatures(features, perturbationContext)));
         }
-        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
+        DataDistribution distribution = new PredictionInputsDataDistribution(inputs, random);
         int k = 2;
         int chunkSize = 5;
         double precision = ExplainabilityMetrics.getLocalSaliencyPrecision(decision, model, limeExplainer, distribution, k, chunkSize);

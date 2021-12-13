@@ -92,7 +92,7 @@ class FraudScoringDmnLimeExplainerTest {
         for (int n = 0; n < 10; n++) {
             inputs.add(new PredictionInput(DataUtils.perturbFeatures(predictionInput.getFeatures(), perturbationContext)));
         }
-        DataDistribution distribution = new PredictionInputsDataDistribution(inputs);
+        DataDistribution distribution = new PredictionInputsDataDistribution(inputs, random);
         int k = 2;
         int chunkSize = 2;
         double f1 = ExplainabilityMetrics.getLocalSaliencyF1(decision, model, limeExplainer, distribution, k, chunkSize);
