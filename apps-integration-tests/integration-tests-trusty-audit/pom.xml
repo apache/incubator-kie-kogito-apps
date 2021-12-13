@@ -189,7 +189,7 @@
                               </network>
                               <volumes>
                                 <bind>
-                                  <volume>./infinispan.xml:/opt/infinispan/server/conf/infinispan-demo.xml:z</volume>
+                                  <volume>./src/test/resources/infinispan/infinispan.xml:/opt/infinispan/server/conf/infinispan-demo.xml:z</volume>
                                 </bind>
                               </volumes>
                               <log>
