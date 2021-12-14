@@ -4,6 +4,8 @@ exports[`inline edit tests snapshot 1`] = `
 <InlineEdit>
   <div
     className="pf-c-inline-edit false"
+    data-ouia-component-type="inline-edit"
+    data-ouia-safe={true}
     id="inline-edit-toggle-example"
   >
     <div

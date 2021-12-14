@@ -33,7 +33,7 @@ interface FormButton {
 export const convertActionsToButton = (
   actions: FormAction[],
   enabled: boolean,
-  onSubmitForm: () => void
+  onSubmitForm?: () => void
 ) => {
   if (_.isEmpty(actions)) {
     return null;
@@ -64,7 +64,7 @@ export const convertActionsToButton = (
       variant: resolveButtonVariant(action),
       onClick: () => {
         action.execute && action.execute();
-        onSubmitForm();
+        onSubmitForm && onSubmitForm();
       }
     };
   });

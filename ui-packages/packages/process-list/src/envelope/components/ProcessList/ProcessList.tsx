@@ -223,7 +223,7 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
     <div
       {...componentOuiaProps(
         ouiaId,
-        'process-list-page',
+        'process-list',
         ouiaSafe ? ouiaSafe : !isLoading
       )}
     >

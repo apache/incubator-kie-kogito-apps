@@ -20,7 +20,7 @@ const typeDefs = require('./MockData/types');
 
 const swaggerOptions = {
   swaggerOptions: {
-      url: "/docs/openapi.json",
+      url: "/q/openapi.json",
   },
 }
 
@@ -47,7 +47,7 @@ app.use(
     optionsSuccessStatus: 200
   })
 );
-app.get("/docs/openapi.json", (req, res) => res.json(swaggerApiDoc));
+app.get("/q/openapi.json", (req, res) => res.json(swaggerApiDoc));
 app.use('/docs', swaggerUi.serveFiles(null,swaggerOptions), swaggerUi.setup(null,swaggerOptions));
 
 //Rest Api's

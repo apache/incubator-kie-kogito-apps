@@ -96,8 +96,12 @@ const ProcessFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   return (
     <React.Fragment>
       <PageSection
+        {...componentOuiaProps(
+          `title${ouiaId ? '-' + ouiaId : ''}`,
+          'process-form-page-section',
+          ouiaSafe
+        )}
         variant="light"
-        {...componentOuiaProps(ouiaId, 'process-form-page-section', ouiaSafe)}
       >
         <PageTitle
           title={`Start ${processDefinition.processName}`}
@@ -109,7 +113,13 @@ const ProcessFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
           </div>
         )}
       </PageSection>
-      <PageSection>
+      <PageSection
+        {...componentOuiaProps(
+          `content${ouiaId ? '-' + ouiaId : ''}`,
+          'process-form-page-section',
+          ouiaSafe
+        )}
+      >
         <Card className="Dev-ui__card-size">
           <CardBody className="pf-u-h-100">
             <ProcessFormContainer

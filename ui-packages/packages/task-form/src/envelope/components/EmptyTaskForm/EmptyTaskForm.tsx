@@ -61,7 +61,7 @@ const EmptyTaskForm: React.FC<IOwnProps & OUIAProps> = ({
 
   const actions = canTransition() ? (
     <EmptyStateSecondaryActions>
-      {convertActionsToButton(buildFormActions(), enabled, null)}
+      {convertActionsToButton(buildFormActions(), enabled)}
     </EmptyStateSecondaryActions>
   ) : null;
 

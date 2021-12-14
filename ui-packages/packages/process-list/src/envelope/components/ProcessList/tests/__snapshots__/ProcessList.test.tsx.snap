@@ -93,7 +93,7 @@ exports[`ProcessList test Envelope not connected 1`] = `
   isEnvelopeConnectedToChannel={false}
 >
   <div
-    data-ouia-component-type="process-list-page"
+    data-ouia-component-type="process-list"
     data-ouia-safe={false}
   >
     <MockedProcessListToolbar

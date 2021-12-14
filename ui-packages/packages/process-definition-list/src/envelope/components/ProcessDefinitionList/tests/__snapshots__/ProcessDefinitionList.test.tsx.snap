@@ -7,7 +7,7 @@ exports[`ProcessDefinition list tests render ProcessDefinition list - table 1`] 
 >
   <div
     data-ouia-component-type="process-definition-list"
-    data-ouia-safe={true}
+    data-ouia-safe={false}
   >
     <ProcessDefinitionListToolbar
       applyFilter={[Function]}
@@ -19,13 +19,13 @@ exports[`ProcessDefinition list tests render ProcessDefinition list - table 1`] 
         clearAllFilters={[Function]}
         clearFiltersButtonText="Reset to default"
         collapseListedFiltersBreakpoint="xl"
-        data-ouia-component-type="process-defintion-list-toolbar"
+        data-ouia-component-type="process-definition-list-toolbar"
         data-ouia-safe={true}
         id="process-definition-list-with-filter"
       >
         <div
           className="pf-c-toolbar pf-m-toggle-group-container"
-          data-ouia-component-type="process-defintion-list-toolbar"
+          data-ouia-component-type="process-definition-list-toolbar"
           data-ouia-safe={true}
           id="process-definition-list-with-filter"
         >

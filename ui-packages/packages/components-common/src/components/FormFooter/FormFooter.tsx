@@ -49,10 +49,11 @@ const FormFooter: React.FC<IOwnProps & OUIAProps> = ({
   });
 
   return (
-    <div className="kogito-components-common__form-footer-padding-top">
-      <ActionList {...componentOuiaProps(ouiaId, 'form-footer', ouiaSafe)}>
-        {actionItems}
-      </ActionList>
+    <div
+      className="kogito-components-common__form-footer-padding-top"
+      {...componentOuiaProps(ouiaId, 'form-footer', ouiaSafe)}
+    >
+      <ActionList>{actionItems}</ActionList>
     </div>
   );
 };

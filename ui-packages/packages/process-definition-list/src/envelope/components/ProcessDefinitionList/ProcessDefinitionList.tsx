@@ -100,7 +100,13 @@ const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
   }
 
   return (
-    <div {...componentOuiaProps(ouiaId, 'process-definition-list', ouiaSafe)}>
+    <div
+      {...componentOuiaProps(
+        ouiaId,
+        'process-definition-list',
+        ouiaSafe ? ouiaSafe : !isLoading
+      )}
+    >
       <ProcessDefinitionListToolbar
         filterProcessNames={filterProcessNames}
         setFilterProcessNames={setFilterProcessNames}

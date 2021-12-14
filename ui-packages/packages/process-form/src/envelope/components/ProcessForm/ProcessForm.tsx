@@ -89,7 +89,13 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
   }
 
   return (
-    <div {...componentOuiaProps(ouiaId, 'process-form-renderer', ouiaSafe)}>
+    <div
+      {...componentOuiaProps(
+        ouiaId,
+        'process-form',
+        ouiaSafe ? ouiaSafe : !isLoading
+      )}
+    >
       <FormRenderer
         formSchema={processFormSchema}
         model={{}}

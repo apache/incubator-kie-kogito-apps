@@ -178,27 +178,27 @@ describe('EmptyTaskForm Test', () => {
     expect(buttons.get(0).props.isDisabled).toBeTruthy();
     expect(buttons.get(1).props.isDisabled).toBeTruthy();
   });
-  // need to verify
-  // it('Empty form actions', async () => {
-  //   const wrapper = getEmptyTaskFormWrapper(
-  //     _.cloneDeep(testTask),
-  //     _.cloneDeep(ApplyForVisaForm),
-  //     true
-  //   );
 
-  //   const buttons = wrapper.find(Button);
-  //   expect(buttons).toHaveLength(2);
+  it('Empty form actions', async () => {
+    const wrapper = getEmptyTaskFormWrapper(
+      _.cloneDeep(testTask),
+      _.cloneDeep(ApplyForVisaForm),
+      true
+    );
 
-  //   const completeButton = wrapper.findWhere(
-  //     node => node.key() === 'submit-complete'
-  //   );
-  //   completeButton.props().onClick();
-  //   expect(doSubmit).toHaveBeenLastCalledWith('complete');
+    const buttons = wrapper.find(Button);
+    expect(buttons).toHaveLength(2);
 
-  //   const releaseButton = wrapper.findWhere(
-  //     node => node.key() === 'submit-release'
-  //   );
-  //   releaseButton.props().onClick();
-  //   expect(doSubmit).toHaveBeenLastCalledWith('release');
-  // });
+    const completeButton = wrapper.findWhere(
+      node => node.key() === 'submit-complete'
+    );
+    completeButton.props().onClick();
+    expect(doSubmit).toHaveBeenLastCalledWith('complete');
+
+    const releaseButton = wrapper.findWhere(
+      node => node.key() === 'submit-release'
+    );
+    releaseButton.props().onClick();
+    expect(doSubmit).toHaveBeenLastCalledWith('release');
+  });
 });

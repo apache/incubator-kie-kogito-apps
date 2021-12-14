@@ -115,7 +115,7 @@ exports[`ProcessForm Test Process Form rendering 1`] = `
   }
 >
   <div
-    data-ouia-component-type="process-form-renderer"
+    data-ouia-component-type="process-form"
     data-ouia-safe={true}
   >
     <FormRenderer

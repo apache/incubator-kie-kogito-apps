@@ -11,13 +11,13 @@ exports[`ProcessDefinition list toolbar tests render toolbar 1`] = `
     clearAllFilters={[Function]}
     clearFiltersButtonText="Reset to default"
     collapseListedFiltersBreakpoint="xl"
-    data-ouia-component-type="process-defintion-list-toolbar"
+    data-ouia-component-type="process-definition-list-toolbar"
     data-ouia-safe={true}
     id="process-definition-list-with-filter"
   >
     <div
       className="pf-c-toolbar pf-m-toggle-group-container"
-      data-ouia-component-type="process-defintion-list-toolbar"
+      data-ouia-component-type="process-definition-list-toolbar"
       data-ouia-safe={true}
       id="process-definition-list-with-filter"
     >

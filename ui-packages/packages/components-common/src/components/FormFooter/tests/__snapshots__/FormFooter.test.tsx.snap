@@ -21,15 +21,12 @@ exports[`Form Footer test showing actions 1`] = `
 >
   <div
     className="kogito-components-common__form-footer-padding-top"
+    data-ouia-component-type="form-footer"
+    data-ouia-safe={true}
   >
-    <ActionList
-      data-ouia-component-type="form-footer"
-      data-ouia-safe={true}
-    >
+    <ActionList>
       <div
         className="pf-c-action-list"
-        data-ouia-component-type="form-footer"
-        data-ouia-safe={true}
       >
         <ActionListItem
           key="form-action-0"
@@ -110,15 +107,12 @@ exports[`Form Footer test showing disabled 1`] = `
 >
   <div
     className="kogito-components-common__form-footer-padding-top"
+    data-ouia-component-type="form-footer"
+    data-ouia-safe={true}
   >
-    <ActionList
-      data-ouia-component-type="form-footer"
-      data-ouia-safe={true}
-    >
+    <ActionList>
       <div
         className="pf-c-action-list"
-        data-ouia-component-type="form-footer"
-        data-ouia-safe={true}
       >
         <ActionListItem
           key="form-action-0"

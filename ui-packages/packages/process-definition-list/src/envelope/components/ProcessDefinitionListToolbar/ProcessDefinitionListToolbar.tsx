@@ -145,7 +145,7 @@ const ProcessDefinitionListToolbar: React.FC<ProcessDefinitionListToolbarProps &
       clearFiltersButtonText="Reset to default"
       {...componentOuiaProps(
         ouiaId,
-        'process-defintion-list-toolbar',
+        'process-definition-list-toolbar',
         ouiaSafe
       )}
     >

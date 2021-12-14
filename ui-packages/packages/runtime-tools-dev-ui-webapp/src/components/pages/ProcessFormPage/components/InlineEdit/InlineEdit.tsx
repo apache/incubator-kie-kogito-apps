@@ -18,8 +18,9 @@ import { Button, TextInput } from '@patternfly/react-core';
 import { PencilAltIcon, CheckIcon, TimesIcon } from '@patternfly/react-icons';
 import { useProcessFormGatewayApi } from '../../../../../channel/ProcessForm/ProcessFormContext';
 import { ProcessFormGatewayApi } from '../../../../../channel/ProcessForm/ProcessFormGatewayApi';
+import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 
-const InlineEdit: React.FC = () => {
+const InlineEdit: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
 
@@ -46,6 +47,7 @@ const InlineEdit: React.FC = () => {
 
   return (
     <div
+      {...componentOuiaProps(ouiaId, 'inline-edit', ouiaSafe)}
       className={`pf-c-inline-edit ${isEditable && 'pf-m-inline-editable'}`}
       id="inline-edit-toggle-example"
     >
