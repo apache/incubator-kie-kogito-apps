@@ -17,9 +17,10 @@ package org.kie.kogito.index;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
@@ -411,7 +412,7 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("$.size", is(1))
                         .body("[0].content", is(commentContent)));
 
-        Map commentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+        Map<String, String> commentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
                         "id description priority potentialGroups comments {id content updatedBy updatedAt} } }\"}")
                 .when().post("/graphql")
@@ -437,7 +438,7 @@ public abstract class AbstractProcessDataIndexIT {
                 .body("errors", nullValue())
                 .extract().path("data.UserTaskInstanceCommentUpdate");
 
-        Map comment2Map = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+        Map<String, String> comment2Map = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
                         "comments {id content updatedBy updatedAt} } }\"}")
                 .when().post("/graphql")
@@ -459,13 +460,15 @@ public abstract class AbstractProcessDataIndexIT {
                 .statusCode(200)
                 .body("errors", nullValue());
 
-        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
-                        "comments {id} } }\"}")
-                .when().post("/graphql")
-                .then()
-                .statusCode(200)
-                .body("data.UserTaskInstances[0].comments.size()", is(0));
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                                "comments {id} } }\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.UserTaskInstances[0].comments.size()", is(0)));
     }
 
     public void testProcessGatewayAPIAttachments(String taskId, String processInstanceId) throws IOException {
@@ -497,7 +500,7 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("$.size", is(1))
                         .body("[0].name", is(attachmentName)));
 
-        Map attachmentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+        Map<String, String> attachmentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
                         "id description priority potentialGroups attachments {id name content updatedBy updatedAt} } }\"}")
                 .when().post("/graphql")
@@ -528,7 +531,7 @@ public abstract class AbstractProcessDataIndexIT {
                 .body("errors", nullValue())
                 .extract().path("data.UserTaskInstanceAttachmentUpdate");
 
-        Map attachmentMap2 = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+        Map<String, String> attachmentMap2 = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
                         "attachments {id name content updatedBy updatedAt} } }\"}")
                 .when().post("/graphql")
@@ -551,13 +554,15 @@ public abstract class AbstractProcessDataIndexIT {
                 .statusCode(200)
                 .body("errors", nullValue());
 
-        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
-                        "attachments {id} } }\"}")
-                .when().post("/graphql")
-                .then()
-                .statusCode(200)
-                .body("data.UserTaskInstances[0].attachments.size()", is(0));
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                                "attachments {id} } }\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.UserTaskInstances[0].attachments.size()", is(0)));
     }
 
     protected String createTestProcessInstance() {
@@ -584,53 +589,63 @@ public abstract class AbstractProcessDataIndexIT {
                 .body("data.ProcessInstances[0].state", is(state));
     }
 
-    private void checkExpectedCreatedItemData(String creationData, Map resultMap) throws IOException {
+    private void checkExpectedCreatedItemData(String creationData, Map<String, String> resultMap) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode creationJsonNode = mapper.readTree(creationData);
-        assertEquals("\"" + resultMap.get("updatedBy") + "\"", creationJsonNode.at("/updatedBy").toString());
-        assertEquals(Date.from(ZonedDateTime.parse(resultMap.get("updatedAt").toString(), DateTimeFormatter.ISO_DATE_TIME).toInstant()),
-                Date.from(ZonedDateTime.parse(creationJsonNode.at("/updatedAt").asText(), DateTimeFormatter.ISO_DATE_TIME).toInstant()));
-        assertEquals("\"" + resultMap.get("content") + "\"", creationJsonNode.at("/content").toString());
+        assertEquals(resultMap.get("updatedBy"), creationJsonNode.at("/updatedBy").asText());
+        assertEquals(resultMap.get("updatedAt"),
+                ZonedDateTime.parse(creationJsonNode.at("/updatedAt").asText())
+                        .withZoneSameInstant(ZoneOffset.UTC).truncatedTo(ChronoUnit.MILLIS)
+                        .format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        assertEquals(resultMap.get("content"), creationJsonNode.at("/content").asText());
     }
 
     private void checkExpectedTaskSchema(String taskSchema) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode schemaJsonNode = mapper.readTree(taskSchema);
-        assertEquals("\"object\"", schemaJsonNode.at("/type").toString());
+        assertEquals("object", schemaJsonNode.at("/type").asText());
 
+        // Check Schema phases
         assertEquals(4, schemaJsonNode.at("/phases").size());
         assertTrue(schemaJsonNode.get("phases").toString().contains("abort"));
         assertTrue(schemaJsonNode.get("phases").toString().contains("claim"));
         assertTrue(schemaJsonNode.get("phases").toString().contains("skip"));
         assertTrue(schemaJsonNode.get("phases").toString().contains("complete"));
 
+        // Check Schema properties
         assertEquals(2, schemaJsonNode.at("/properties").size());
 
-        assertEquals("true", schemaJsonNode.at("/properties/approved/output").toString());
-        assertEquals("\"boolean\"", schemaJsonNode.at("/properties/approved/type").toString());
+        assertEquals("true", schemaJsonNode.at("/properties/approved/output").asText());
+        assertEquals("boolean", schemaJsonNode.at("/properties/approved/type").asText());
+        assertEquals("#/$defs/Traveller", schemaJsonNode.at("/properties/traveller/$ref").asText());
+        assertEquals("true", schemaJsonNode.at("/properties/traveller/input").asText());
 
-        assertEquals("\"object\"", schemaJsonNode.at("/properties/traveller/type").toString());
-        assertEquals("true", schemaJsonNode.at("/properties/traveller/input").toString());
-        assertEquals(6, schemaJsonNode.at("/properties/traveller/properties").size());
-        assertEquals("\"object\"", schemaJsonNode.at("/properties/traveller/properties/address/type").toString());
-        assertEquals(4, schemaJsonNode.at("/properties/traveller/properties/address/properties").size());
-        assertEquals("\"string\"",
-                schemaJsonNode.at("/properties/traveller/properties/address/properties/city/type").toString());
-        assertEquals("\"string\"",
-                schemaJsonNode.at("/properties/traveller/properties/address/properties/country/type").toString());
-        assertEquals("\"string\"",
-                schemaJsonNode.at("/properties/traveller/properties/address/properties/street/type").toString());
-        assertEquals("\"string\"",
-                schemaJsonNode.at("/properties/traveller/properties/address/properties/zipCode/type").toString());
-        assertEquals("\"string\"",
-                schemaJsonNode.at("/properties/traveller/properties/email/type").toString());
-        assertEquals("\"string\"",
-                schemaJsonNode.at("/properties/traveller/properties/firstName/type").toString());
-        assertEquals("\"string\"",
-                schemaJsonNode.at("/properties/traveller/properties/lastName/type").toString());
-        assertEquals("\"string\"",
-                schemaJsonNode.at("/properties/traveller/properties/nationality/type").toString());
-        assertEquals("\"boolean\"",
-                schemaJsonNode.at("/properties/traveller/properties/processed/type").toString());
+        // Check Schema definitions
+        assertEquals(2, schemaJsonNode.at("/$defs").size());
+
+        assertEquals("object", schemaJsonNode.at("/$defs/Traveller/type").asText());
+        assertEquals(6, schemaJsonNode.at("/$defs/Traveller/properties").size());
+        assertEquals("#/$defs/Address", schemaJsonNode.at("/$defs/Traveller/properties/address/$ref").asText());
+        assertEquals("string",
+                schemaJsonNode.at("/$defs/Traveller/properties/email/type").asText());
+        assertEquals("string",
+                schemaJsonNode.at("/$defs/Traveller/properties/firstName/type").asText());
+        assertEquals("string",
+                schemaJsonNode.at("/$defs/Traveller/properties/lastName/type").asText());
+        assertEquals("string",
+                schemaJsonNode.at("/$defs/Traveller/properties/nationality/type").asText());
+        assertEquals("boolean",
+                schemaJsonNode.at("/$defs/Traveller/properties/processed/type").asText());
+
+        assertEquals(4, schemaJsonNode.at("/$defs/Address/properties").size());
+        assertEquals("string",
+                schemaJsonNode.at("/$defs/Address/properties/city/type").asText());
+        assertEquals("string",
+                schemaJsonNode.at("/$defs/Address/properties/country/type").asText());
+        assertEquals("string",
+                schemaJsonNode.at("/$defs/Address/properties/street/type").asText());
+        assertEquals("string",
+                schemaJsonNode.at("/$defs/Address/properties/zipCode/type").asText());
+
     }
 }

@@ -13,21 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.kie.kogito.explainability.utils;
 
-package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.jobs;
+import org.apache.commons.math3.linear.RealVector;
 
-import javax.json.JsonObject;
-import javax.json.bind.adapter.JsonbAdapter;
+public class LassoLarsICResults {
+    private final RealVector coefs;
+    private final double alpha;
+    private final double intercept;
 
-public class JobsInstancesAdapter implements JsonbAdapter<Jobs, JsonObject> {
-
-    @Override
-    public JsonObject adaptToJson(final Jobs jobs) {
-        return null; // not used
+    public LassoLarsICResults(RealVector coefs, double alpha, double intercept) {
+        this.coefs = coefs;
+        this.alpha = alpha;
+        this.intercept = intercept;
     }
 
-    @Override
-    public Jobs adaptFromJson(final JsonObject jsonObject) {
-        return new Jobs(jsonObject.getJsonArray("Jobs").getValuesAs(Job.class));
+    public RealVector getCoefs() {
+        return coefs;
+    }
+
+    public double getAlpha() {
+        return alpha;
+    }
+
+    public double getIntercept() {
+        return intercept;
     }
 }

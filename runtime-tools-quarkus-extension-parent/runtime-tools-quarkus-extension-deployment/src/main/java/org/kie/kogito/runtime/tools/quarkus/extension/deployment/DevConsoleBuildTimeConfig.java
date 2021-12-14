@@ -14,20 +14,18 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.processes;
+package org.kie.kogito.runtime.tools.quarkus.extension.deployment;
 
-import javax.json.JsonObject;
-import javax.json.bind.adapter.JsonbAdapter;
+import io.quarkus.runtime.annotations.ConfigItem;
+import io.quarkus.runtime.annotations.ConfigPhase;
+import io.quarkus.runtime.annotations.ConfigRoot;
 
-public class ProcessInstancesAdapter implements JsonbAdapter<ProcessInstances, JsonObject> {
+@ConfigRoot(name = "kogito", prefix = "", phase = ConfigPhase.BUILD_TIME)
+public class DevConsoleBuildTimeConfig {
 
-    @Override
-    public JsonObject adaptToJson(final ProcessInstances processInstances) {
-        return null; // not used
-    }
-
-    @Override
-    public ProcessInstances adaptFromJson(final JsonObject jsonObject) {
-        return new ProcessInstances(jsonObject.getJsonArray("ProcessInstances").getValuesAs(ProcessInstance.class));
-    }
+    /**
+     * Configuration for Runtime Tools DevConsole services. It should keep data-index url to initialize DataIndexClient accordingly
+     */
+    @ConfigItem(name = "data-index.url", defaultValue = "http://localhost:8180")
+    public String dataIndexUrl;
 }

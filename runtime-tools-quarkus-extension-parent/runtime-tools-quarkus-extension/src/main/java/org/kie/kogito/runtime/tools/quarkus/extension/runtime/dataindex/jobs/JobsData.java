@@ -14,20 +14,29 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.tasks;
+package org.kie.kogito.runtime.tools.quarkus.extension.runtime.dataindex.jobs;
 
-import javax.json.JsonObject;
-import javax.json.bind.adapter.JsonbAdapter;
+import java.util.List;
 
-public class UserTaskInstancesAdapter implements JsonbAdapter<UserTaskInstances, JsonObject> {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    @Override
-    public JsonObject adaptToJson(final UserTaskInstances userTaskInstances) {
-        return null; // not used
+public class JobsData {
+
+    @JsonProperty("Jobs")
+    private List<Job> jobsList;
+
+    public JobsData() {
     }
 
-    @Override
-    public UserTaskInstances adaptFromJson(final JsonObject jsonObject) {
-        return new UserTaskInstances(jsonObject.getJsonArray("UserTaskInstances").getValuesAs(Task.class));
+    public JobsData(final List<Job> jobsList) {
+        this.jobsList = jobsList;
+    }
+
+    public List<Job> getJobs() {
+        return jobsList;
+    }
+
+    public void setJobs(final List<Job> jobsList) {
+        this.jobsList = jobsList;
     }
 }
