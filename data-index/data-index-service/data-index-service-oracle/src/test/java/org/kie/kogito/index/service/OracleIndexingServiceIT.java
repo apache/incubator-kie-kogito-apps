@@ -26,7 +26,7 @@ import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
 @TestProfile(InMemoryMessageTestProfile.class)
-class PostgreSqlIndexingServiceIT extends AbstractIndexingServiceIT {
+class OracleIndexingServiceIT extends AbstractIndexingServiceIT {
 
     @Override
     protected String formatZonedDateTime(ZonedDateTime time) {

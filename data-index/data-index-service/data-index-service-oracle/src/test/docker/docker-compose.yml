@@ -35,7 +35,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       LOG_DIR: "/tmp/logs"
 
-  postgres:
+  oracle:
     image: gvenzl/oracle-xe:21.3.0
     container_name: data-index-oracle
     environment:

@@ -1,195 +1,209 @@
-    create table JobEntity (
+create table attachments (
+      id varchar(255) not null,
+      content varchar(255),
+      name varchar(255),
+      updated_at timestamp,
+      updated_by varchar(255),
+      task_id varchar(255) not null,
+      CONSTRAINT attachment_pk PRIMARY KEY(id)
+);
+
+create table comments (
+      id varchar(255) not null,
+      content varchar(255),
+      updated_at timestamp,
+      updated_by varchar(255),
+      task_id varchar(255) not null,
+      CONSTRAINT comment_pk PRIMARY KEY(id)
+);
+
+create table jobs (
        id varchar(255) not null,
-        callbackEndpoint varchar(255),
+        callback_endpoint varchar(255),
         endpoint varchar(255),
-        executionCounter NUMBER(10),
-        expirationTime timestamp,
-        lastUpdate timestamp,
-        nodeInstanceId varchar(255),
+        execution_counter NUMBER(10),
+        expiration_time timestamp,
+        last_update timestamp,
+        node_instance_id varchar(255),
         priority NUMBER(10),
-        processId varchar(255),
-        processInstanceId varchar(255),
-        repeatInterval NUMBER(19),
-        repeatLimit NUMBER(10),
+        process_id varchar(255),
+        process_instance_id varchar(255),
+        repeat_interval NUMBER(19),
+        repeat_limit NUMBER(10),
         retries NUMBER(10),
-        rootProcessId varchar(255),
-        rootProcessInstanceId varchar(255),
-        scheduledId varchar(255),
+        root_process_id varchar(255),
+        root_process_instance_id varchar(255),
+        scheduled_id varchar(255),
         status varchar(255),
-        CONSTRAINT JobEntity_primary PRIMARY KEY(id)
+        CONSTRAINT jobs_pk PRIMARY KEY(id)
     );
 
-    create table MilestoneEntity (
+    create table milestones (
         id varchar(255) not null,
+        process_instance_id varchar(255) not null,
         name varchar(255),
         status varchar(255),
-        CONSTRAINT MilestoneEntity_primary PRIMARY KEY(id)
+        CONSTRAINT milestones_pk PRIMARY KEY(id, process_instance_id)
     );
 
-    create table NodeInstanceEntity (
+    create table nodes (
         id varchar(255) not null,
-        definitionId varchar(255),
+        definition_id varchar(255),
         enter timestamp,
         exit timestamp,
         name varchar(255),
-        nodeId varchar(255),
+        node_id varchar(255),
         type varchar(255),
-        CONSTRAINT NodeInstanceEntity_primary PRIMARY KEY(id)
+        process_instance_id varchar(255) not null,
+        CONSTRAINT nodes_pk PRIMARY KEY(id)
     );
 
-    create table ProcessInstanceEntity (
+    create table processes (
         id varchar(255) not null,
-        businessKey varchar(255),
+        business_key varchar(255),
         end_time timestamp,
         endpoint varchar(255),
         message varchar(255),
-        nodeDefinitionId varchar(255),
+        node_definition_id varchar(255),
         last_update_time timestamp,
-        parentProcessInstanceId varchar(255),
-        processId varchar(255),
-        processName varchar(255),
-        rootProcessId varchar(255),
-        rootProcessInstanceId varchar(255),
+        parent_process_instance_id varchar(255),
+        process_id varchar(255),
+        process_name varchar(255),
+        root_process_id varchar(255),
+        root_process_instance_id varchar(255),
         start_time timestamp,
         state NUMBER(10),
-        variables clob,
-        CONSTRAINT ProcessInstanceEntity_primary PRIMARY KEY(id),
-        CONSTRAINT variables_json CHECK (variables IS JSON)
+        variables blob,
+        CONSTRAINT processes_pk PRIMARY KEY(id),
+        CONSTRAINT processes_variables_json CHECK (variables IS JSON)
     );
 
-    create table ProcessInstanceEntity_addons (
-       ProcessInstanceEntity_id varchar(255) not null,
-        addons varchar(255),
-       CONSTRAINT FKsdc13xvts9tdmimek9pfei5up FOREIGN KEY (ProcessInstanceEntity_id)
-       		REFERENCES ProcessInstanceEntity(id)
-       		ON DELETE CASCADE
+    create table processes_addons (
+       process_id varchar(255) not null,
+       addon varchar(255) not null,
+       CONSTRAINT processes_addons_pk PRIMARY KEY(process_id, addon)
     );
 
-    create table ProcessInstanceEntity_MilestoneEntity (
-       ProcessInstanceEntity_id varchar(255) not null,
-       milestones_id varchar(255) not NULL,
-       CONSTRAINT UK_iw2hpwwogyfuwe1oss9oqar93 UNIQUE (milestones_id),
-       CONSTRAINT FKkk3pdt6yntyad4257jbcul7xk FOREIGN KEY (milestones_id) REFERENCES MilestoneEntity(id),
-       CONSTRAINT FK8frxihvalnxacv1vcdbrt4rwa FOREIGN KEY (ProcessInstanceEntity_id) REFERENCES ProcessInstanceEntity(id)
+    create table processes_roles (
+        process_id varchar(255) not null,
+        role varchar(255) not null,
+        CONSTRAINT processes_roles_pk PRIMARY KEY(process_id, role)
     );
 
-    create table ProcessInstanceEntity_NodeInstanceEntity (
-       ProcessInstanceEntity_id varchar(255) not null,
-       nodes_id varchar(255) not NULL,
-       CONSTRAINT UK_sdve1m52p29bajp0ui95er5qj UNIQUE (nodes_id),
-       CONSTRAINT FKrsiysusml360wxgiqkfjbuftg FOREIGN KEY (nodes_id) REFERENCES NodeInstanceEntity(id),
-       CONSTRAINT FK2w1s1fhpoaeighh1og96q24dn FOREIGN KEY (ProcessInstanceEntity_id) REFERENCES ProcessInstanceEntity(id)
-    );
-
-    create table ProcessInstanceEntity_roles (
-       ProcessInstanceEntity_id varchar(255) not null,
-        roles varchar(255),
-       CONSTRAINT FK2cwq2idof87vgrg6wy5ng15h2 FOREIGN KEY (ProcessInstanceEntity_id)
-       		REFERENCES ProcessInstanceEntity(id)
-       		ON DELETE CASCADE
-    );
-
-    create table UserTaskInstanceEntity (
-       id varchar(255) not null,
-        actualOwner varchar(255),
+    create table tasks (
+        id varchar(255) not null,
+        actual_owner varchar(255),
         completed timestamp,
         description varchar(255),
         endpoint varchar(255),
-        inputs clob,
-        lastUpdate timestamp,
+        inputs blob,
+        last_update timestamp,
         name varchar(255),
-        outputs clob,
+        outputs blob,
         priority varchar(255),
-        processId varchar(255),
-        processInstanceId varchar(255),
-        referenceName varchar(255),
-        rootProcessId varchar(255),
-        rootProcessInstanceId varchar(255),
+        process_id varchar(255),
+        process_instance_id varchar(255),
+        reference_name varchar(255),
+        root_process_id varchar(255),
+        root_process_instance_id varchar(255),
         started timestamp,
         state varchar(255),
-        CONSTRAINT UserTaskInstanceEntity_primary PRIMARY KEY(id),
+        CONSTRAINT tasks_pk PRIMARY KEY(id),
         CONSTRAINT inputs_json CHECK (inputs IS JSON),
         CONSTRAINT outputs_json CHECK (outputs IS JSON)
     );
-
-    create table UserTaskInstanceEntity_adminGroups (
-       UserTaskInstanceEntity_id varchar(255) not null,
-       adminGroups varchar(255),
-       CONSTRAINT FKae51g1f8eyy6695mdecdi3bjd FOREIGN KEY (UserTaskInstanceEntity_id)
-       		REFERENCES UserTaskInstanceEntity(id)
-       		ON DELETE CASCADE
+    create table tasks_admin_groups (
+        task_id varchar(255) not null,
+        group_id varchar(255) not null,
+        CONSTRAINT tasks_admin_groups_pk PRIMARY KEY(task_id, group_id)
     );
 
-    create table UserTaskInstanceEntity_adminUsers (
-       UserTaskInstanceEntity_id varchar(255) not null,
-       adminUsers varchar(255),
-       CONSTRAINT FK142t43lxnp57eq9wiwtlayat4 FOREIGN KEY (UserTaskInstanceEntity_id)
-       		REFERENCES UserTaskInstanceEntity(id)
-       		ON DELETE CASCADE
+    create table tasks_admin_users (
+        task_id varchar(255) not null,
+        user_id varchar(255) not null,
+        CONSTRAINT tasks_admin_users_pk PRIMARY KEY(task_id, user_id)
     );
 
-    create table UserTaskInstanceEntity_excludedUsers (
-       UserTaskInstanceEntity_id varchar(255) not null,
-       excludedUsers varchar(255),
-       CONSTRAINT FKl3j5dxg2be39bc8rqtxp5stvj FOREIGN KEY (UserTaskInstanceEntity_id)
-       		REFERENCES UserTaskInstanceEntity(id)
-       		ON DELETE CASCADE
+    create table tasks_excluded_users  (
+        task_id varchar(255) not null,
+        user_id varchar(255) not null,
+        CONSTRAINT tasks_excluded_users_pk PRIMARY KEY(task_id, user_id)
     );
 
-    create table UserTaskInstanceEntity_potentialGroups (
-       UserTaskInstanceEntity_id varchar(255) not null,
-        potentialGroups varchar(255),
-       CONSTRAINT FKr1s3ekcbpoe38m13jb680qoo8 FOREIGN KEY (UserTaskInstanceEntity_id)
-       		REFERENCES UserTaskInstanceEntity(id)
-       		ON DELETE CASCADE
+    create table tasks_potential_groups (
+        task_id varchar(255) not null,
+        group_id varchar(255) not null,
+        CONSTRAINT tasks_potential_groups_pk PRIMARY KEY(task_id, group_id)
     );
 
-    create table UserTaskInstanceEntity_potentialUsers (
-       UserTaskInstanceEntity_id varchar(255) not null,
-       potentialUsers varchar(255),
-       CONSTRAINT FK472u4nopslxglrwxldys5axje FOREIGN KEY (UserTaskInstanceEntity_id)
-       		REFERENCES UserTaskInstanceEntity(id)
-       		ON DELETE CASCADE
+    create table tasks_potential_users (
+        task_id varchar(255) not null,
+        user_id varchar(255) not null,
+        CONSTRAINT tasks_potential_users_pk PRIMARY KEY(task_id, user_id)
     );
 
-    create table CommentEntity (
-       id varchar(255) not null,
-       content varchar(255),
-       updatedAt timestamp,
-       updatedBy varchar(255),
-	   CONSTRAINT CommentEntity_primary PRIMARY KEY(id)
-    );
+    ALTER TABLE attachments
+        ADD CONSTRAINT fk_attachments_tasks
+        FOREIGN KEY (task_id)
+        REFERENCES tasks (id)
+        on delete cascade;
 
-    create table UserTaskInstanceEntity_CommentEntity (
-       UserTaskInstanceEntity_id varchar(255) not null,
-       comments_id varchar(255) not NULL,
-       CONSTRAINT UserTaskInstanceEntity_CommentEntity UNIQUE (comments_id),
-       CONSTRAINT UserTaskInstanceEntity_CommentEntity_commentId FOREIGN KEY (comments_id)
-       		REFERENCES CommentEntity(id)
-       		ON DELETE CASCADE,
-       CONSTRAINT UserTaskInstanceEntity_CommentEntity_id FOREIGN KEY (UserTaskInstanceEntity_id)
-       		REFERENCES UserTaskInstanceEntity(id)
-       		ON DELETE CASCADE
-    );
+    ALTER TABLE comments
+        ADD CONSTRAINT fk_comments_tasks
+        FOREIGN KEY (task_id)
+        REFERENCES tasks (id)
+        on delete cascade;
 
-    create table AttachmentEntity (
-       id varchar(255) not null,
-       name varchar(255),
-       content varchar(255),
-       updatedAt timestamp,
-       updatedBy varchar(255),
-	   CONSTRAINT AttachmentEntity_primary PRIMARY KEY(id)
+    ALTER TABLE milestones
+        ADD CONSTRAINT fk_milestones_process
+        FOREIGN KEY (process_instance_id)
+        REFERENCES processes (id)
+        on delete cascade;
 
-    );
+    ALTER TABLE nodes
+        ADD CONSTRAINT fk_nodes_process
+        FOREIGN KEY (process_instance_id)
+        REFERENCES processes (id)
+        on delete cascade;
 
-    create table UserTaskInstanceEntity_AttachmentEntity(
-        UserTaskInstanceEntity_id varchar(255) not null,
-        attachments_id varchar(255) not NULL,
-        CONSTRAINT UserTaskInstanceEntity_AttachmentEntity_pk UNIQUE (attachments_id),
-        CONSTRAINT UserTaskInstanceEntity_AttachmentEntity_attachmentId FOREIGN KEY (attachments_id)
-       		REFERENCES AttachmentEntity(id)
-       		ON DELETE CASCADE,
-        CONSTRAINT UserTaskInstanceEntity_AttachmentEntity_id FOREIGN KEY (UserTaskInstanceEntity_id)
-       		REFERENCES UserTaskInstanceEntity(id)
-       		ON DELETE CASCADE
-    );
+    ALTER TABLE processes_addons
+        ADD CONSTRAINT fk_processes_addons_processes
+        FOREIGN KEY (process_id)
+        REFERENCES processes (id)
+        on delete cascade;
+
+    ALTER TABLE processes_roles
+        ADD CONSTRAINT fk_processes_roles_processes
+        FOREIGN KEY (process_id)
+        REFERENCES processes (id)
+        on delete cascade;
+
+    ALTER TABLE tasks_admin_groups
+        ADD CONSTRAINT fk_tasks_admin_groups_tasks
+        FOREIGN KEY (task_id)
+        REFERENCES tasks (id)
+        on delete cascade;
+
+    ALTER TABLE tasks_admin_users
+        ADD CONSTRAINT fk_tasks_admin_users_tasks
+        FOREIGN KEY (task_id)
+        REFERENCES tasks (id)
+        on delete cascade;
+
+    ALTER TABLE tasks_excluded_users
+        ADD CONSTRAINT fk_tasks_excluded_users_tasks
+        FOREIGN KEY (task_id)
+        REFERENCES tasks (id)
+        on delete cascade;
+
+    ALTER TABLE tasks_potential_groups
+        ADD CONSTRAINT fk_tasks_potential_groups_tasks
+        FOREIGN KEY (task_id)
+        REFERENCES tasks (id)
+        on delete cascade;
+
+    ALTER TABLE tasks_potential_users
+        ADD CONSTRAINT fk_tasks_potential_users_tasks
+        FOREIGN KEY (task_id)
+        REFERENCES tasks (id)
+        on delete cascade;

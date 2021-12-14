@@ -27,6 +27,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
 import org.hibernate.tool.hbm2ddl.SchemaExport;
 import org.hibernate.tool.schema.TargetType;
+import org.kie.kogito.index.oracle.model.AttachmentEntity;
+import org.kie.kogito.index.oracle.model.CommentEntity;
 import org.kie.kogito.index.oracle.model.JobEntity;
 import org.kie.kogito.index.oracle.model.MilestoneEntity;
 import org.kie.kogito.index.oracle.model.NodeInstanceEntity;
@@ -46,6 +48,7 @@ public class DDLSchemaExporter {
             settings.put(Environment.URL, oracleSql.getJdbcUrl());
             settings.put(Environment.USER, oracleSql.getUsername());
             settings.put(Environment.PASS, oracleSql.getPassword());
+            settings.put(Environment.PHYSICAL_NAMING_STRATEGY, "org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy");
 
             StandardServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder().applySettings(settings).build();
 
@@ -55,12 +58,15 @@ public class DDLSchemaExporter {
             metadataSources.addAnnotatedClass(NodeInstanceEntity.class);
             metadataSources.addAnnotatedClass(ProcessInstanceEntity.class);
             metadataSources.addAnnotatedClass(ProcessInstanceErrorEntity.class);
+            metadataSources.addAnnotatedClass(AttachmentEntity.class);
+            metadataSources.addAnnotatedClass(CommentEntity.class);
             metadataSources.addAnnotatedClass(UserTaskInstanceEntity.class);
             Metadata metadata = metadataSources.buildMetadata();
 
             SchemaExport schemaExport = new SchemaExport();
             schemaExport.setDelimiter(";");
             schemaExport.setFormat(true);
+            schemaExport.setOverrideOutputFileContent();
             schemaExport.setOutputFile("src/main/resources/data_index_create.sql");
             schemaExport.createOnly(EnumSet.of(TargetType.SCRIPT), metadata);
             schemaExport.getExceptions().forEach(System.err::println);

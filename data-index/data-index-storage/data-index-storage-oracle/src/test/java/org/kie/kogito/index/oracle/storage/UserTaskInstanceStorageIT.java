@@ -30,6 +30,9 @@ import org.kie.kogito.index.test.TestUtils;
 import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.testcontainers.quarkus.OracleSqlQuarkusTestResource;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
@@ -70,6 +73,10 @@ public class UserTaskInstanceStorageIT extends AbstractStorageIT<UserTaskInstanc
                 .createUserTaskInstance(taskId, processInstanceId, RandomStringUtils.randomAlphabetic(5),
                         UUID.randomUUID().toString(),
                         RandomStringUtils.randomAlphabetic(10), "Completed", 1000L);
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode node = objectMapper.createObjectNode();
+        node.put("test", "test");
+        userTaskInstance1.setInputs(node);
         testStorage(taskId, userTaskInstance1, userTaskInstance2);
     }
 

@@ -23,6 +23,6 @@ import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
 @TestProfile(KeycloakTestProfile.class)
-class KeycloakPostgreSqlIndexingServiceIT extends AbstractKeycloakIntegrationIndexingServiceIT {
+class KeycloakOracleIndexingServiceIT extends AbstractKeycloakIntegrationIndexingServiceIT {
 
 }
