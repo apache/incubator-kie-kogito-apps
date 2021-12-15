@@ -100,7 +100,7 @@
                     <images>
                         <image>
                             <alias>zookeeper</alias>
-                            <name>wurstmeister/zookeeper:3.4.6</name>
+                            <name>wurstmeister/zookeeper:latest</name>
                             
                             <run>
                               <ports>
