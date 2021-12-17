@@ -97,6 +97,7 @@
                 <artifactId>docker-maven-plugin</artifactId>
                 <configuration>
                     <autoCreateCustomNetworks>true</autoCreateCustomNetworks>
+                    <registry>${env.DOCKER_REGISTRY_MIRROR}</registry>
                     <images>
                         <image>
                             <alias>zookeeper</alias>
