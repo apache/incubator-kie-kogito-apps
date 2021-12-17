@@ -69,7 +69,6 @@ public class ProcessInstanceEntity extends AbstractEntity {
     @Column(name = "lastUpdateTime")
     private ZonedDateTime lastUpdate;
     @Type(type = "jsonb")
-    //@Column(columnDefinition = "jsonb")
     private ObjectNode variables;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "processInstance")
     private List<NodeInstanceEntity> nodes;

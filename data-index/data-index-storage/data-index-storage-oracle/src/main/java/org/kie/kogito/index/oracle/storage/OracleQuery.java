@@ -15,6 +15,9 @@
  */
 package org.kie.kogito.index.oracle.storage;
 
+import java.time.Instant;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -112,51 +115,55 @@ public class OracleQuery<E extends AbstractEntity, T> implements Query<T> {
 
     private Function<AttributeFilter<?>, Predicate> filterPredicateFunction(Root<E> root, CriteriaBuilder builder) {
         return filter -> {
+            String attribute = filter.getAttribute();
+            Object value = filter.getValue();
+            if (root.get(attribute).type().getJavaType().equals(ZonedDateTime.class) && value instanceof Long) {
+                Instant i = Instant.ofEpochMilli((long) value);
+                value = ZonedDateTime.ofInstant(i, ZoneOffset.UTC);
+            }
             switch (filter.getCondition()) {
                 case CONTAINS:
-                    return builder.isMember(filter.getValue(), getAttributePath(root, filter.getAttribute()));
+                    return builder.isMember(value, getAttributePath(root, attribute));
                 case CONTAINS_ALL:
-                    List<Predicate> predicatesAll = (List<Predicate>) ((List) filter.getValue()).stream()
-                            .map(o -> builder.isMember(o, getAttributePath(root, filter.getAttribute()))).collect(toList());
+                    List<Predicate> predicatesAll = (List<Predicate>) ((List) value).stream()
+                            .map(o -> builder.isMember(o, getAttributePath(root, attribute))).collect(toList());
                     return builder.and(predicatesAll.toArray(new Predicate[] {}));
                 case CONTAINS_ANY:
-                    List<Predicate> predicatesAny = (List<Predicate>) ((List) filter.getValue()).stream()
-                            .map(o -> builder.isMember(o, getAttributePath(root, filter.getAttribute()))).collect(toList());
+                    List<Predicate> predicatesAny = (List<Predicate>) ((List) value).stream()
+                            .map(o -> builder.isMember(o, getAttributePath(root, attribute))).collect(toList());
                     return builder.or(predicatesAny.toArray(new Predicate[] {}));
                 case IN:
-                    return getAttributePath(root, filter.getAttribute()).in((Collection<?>) filter.getValue());
+                    return getAttributePath(root, attribute).in((Collection<?>) value);
                 case LIKE:
-                    return builder.like(getAttributePath(root, filter.getAttribute()),
-                            filter.getValue().toString().replaceAll("\\*", "%"));
+                    return builder.like(getAttributePath(root, attribute),
+                            value.toString().replaceAll("\\*", "%"));
                 case EQUAL:
-                    return builder.equal(getAttributePath(root, filter.getAttribute()), filter.getValue());
+                    return builder.equal(getAttributePath(root, attribute), value);
                 case IS_NULL:
-                    Path pathNull = getAttributePath(root, filter.getAttribute());
+                    Path pathNull = getAttributePath(root, attribute);
                     return pathNull instanceof PluralAttributePath ? builder.isEmpty(pathNull) : builder.isNull(pathNull);
                 case NOT_NULL:
-                    Path pathNotNull = getAttributePath(root, filter.getAttribute());
+                    Path pathNotNull = getAttributePath(root, attribute);
                     return pathNotNull instanceof PluralAttributePath ? builder.isNotEmpty(pathNotNull) : builder.isNotNull(pathNotNull);
                 case BETWEEN:
-                    List<Object> value = (List<Object>) filter.getValue();
-                    return builder
-                            .between(getAttributePath(root, filter.getAttribute()), (Comparable) value.get(0),
-                                    (Comparable) value.get(1));
+                    List<Object> v = (List<Object>) value;
+                    return builder.between(getAttributePath(root, attribute), (Comparable) v.get(0),
+                            (Comparable) v.get(1));
                 case GT:
-                    return builder.greaterThan(getAttributePath(root, filter.getAttribute()), (Comparable) filter.getValue());
+                    return builder.greaterThan(getAttributePath(root, attribute), (Comparable) value);
                 case GTE:
-                    return builder.greaterThanOrEqualTo(getAttributePath(root, filter.getAttribute()),
-                            (Comparable) filter.getValue());
+                    return builder.greaterThanOrEqualTo(getAttributePath(root, attribute),
+                            (Comparable) value);
                 case LT:
-                    return builder.lessThan(getAttributePath(root, filter.getAttribute()), (Comparable) filter.getValue());
+                    return builder.lessThan(getAttributePath(root, attribute), (Comparable) value);
                 case LTE:
-                    return builder
-                            .lessThanOrEqualTo(getAttributePath(root, filter.getAttribute()), (Comparable) filter.getValue());
+                    return builder.lessThanOrEqualTo(getAttributePath(root, attribute), (Comparable) value);
                 case OR:
                     return builder.or(getRecursivePredicate(filter, root, builder).toArray(new Predicate[] {}));
                 case AND:
                     return builder.and(getRecursivePredicate(filter, root, builder).toArray(new Predicate[] {}));
                 case NOT:
-                    return builder.not(filterPredicateFunction(root, builder).apply((AttributeFilter<?>) filter.getValue()));
+                    return builder.not(filterPredicateFunction(root, builder).apply((AttributeFilter<?>) value));
                 default:
                     return null;
             }
