@@ -116,7 +116,7 @@
                                 <alias>zookeper</alias>
                               </network>
                               <log>
-                                <prefix>%a</prefix>
+                                <prefix>%a </prefix>
                               </log>
                             </run>
                         </image>
@@ -147,7 +147,7 @@
                                 <alias>kafka</alias>
                               </network>
                               <log>
-                                <prefix>%a</prefix>
+                                <prefix>%a </prefix>
                               </log>
                             </run>
                         </image>
@@ -172,6 +172,9 @@
                                 <name>trusty-nw</name>
                                 <alias>kafkadrop</alias>
                               </network>
+                              <log>
+                                <prefix>%a </prefix>
+                              </log>
                             </run>
                         </image>
                         <image>
@@ -194,7 +197,7 @@
                                 </bind>
                               </volumes>
                               <log>
-                                <prefix>%a</prefix>
+                                <prefix>%a </prefix>
                               </log>
                             </run>
                         </image>
@@ -218,6 +221,9 @@
                                 <name>trusty-nw</name>
                                 <alias>kogito-app</alias>
                               </network>
+                              <log>
+                                <prefix>%a </prefix>
+                              </log>
                             </run>
                         </image>
                         <image>
@@ -240,6 +246,9 @@
                                 <name>trusty-nw</name>
                                 <alias>explainability</alias>
                               </network>
+                              <log>
+                                <prefix>%a </prefix>
+                              </log>
                             </run>
                         </image>
                         <image>
@@ -265,6 +274,9 @@
                                 <name>trusty-nw</name>
                                 <alias>trusty</alias>
                               </network>
+                              <log>
+                                <prefix>%a </prefix>
+                              </log>
                             </run>
                         </image>
                         <image>
@@ -286,6 +298,9 @@
                                 <name>trusty-nw</name>
                                 <alias>trusty-ui</alias>
                               </network>
+                              <log>
+                                <prefix>%a </prefix>
+                              </log>
                             </run>
                         </image>
                     </images>
