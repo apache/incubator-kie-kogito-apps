@@ -39,8 +39,6 @@ services:
     image: gvenzl/oracle-xe:21.3.0
     container_name: data-index-oracle
     environment:
-      APP_USER: kogito
-      APP_USER_PASSWORD: kogito
-#      ORACLE_DATABASE: XEPDB1
+      ORACLE_PASSWORD: test
     ports:
       - 1521:1521
