@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.fail;
 
 public class OracleDateTimeCoercingTest {
 
-    PostgreSqlDateTimeCoercing dateTimeCoercing = new PostgreSqlDateTimeCoercing();
+    OracleDateTimeCoercing dateTimeCoercing = new OracleDateTimeCoercing();
 
     @Test
     public void testParseValueAsZonedDateTime() {

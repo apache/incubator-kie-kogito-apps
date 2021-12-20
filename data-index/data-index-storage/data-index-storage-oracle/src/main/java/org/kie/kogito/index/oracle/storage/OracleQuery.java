@@ -15,9 +15,6 @@
  */
 package org.kie.kogito.index.oracle.storage;
 
-import java.time.Instant;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
@@ -117,10 +114,6 @@ public class OracleQuery<E extends AbstractEntity, T> implements Query<T> {
         return filter -> {
             String attribute = filter.getAttribute();
             Object value = filter.getValue();
-            if (root.get(attribute).type().getJavaType().equals(ZonedDateTime.class) && value instanceof Long) {
-                Instant i = Instant.ofEpochMilli((long) value);
-                value = ZonedDateTime.ofInstant(i, ZoneOffset.UTC);
-            }
             switch (filter.getCondition()) {
                 case CONTAINS:
                     return builder.isMember(value, getAttributePath(root, attribute));
