@@ -87,6 +87,7 @@
                 <phase>integration-test</phase>
                 <configuration>
                   <skip>${skip.ui.build}</skip>
+                  <npmRegistryURL></npmRegistryURL>
                   <arguments>run test:e2e:trusty</arguments>
                 </configuration>
               </execution>
@@ -117,6 +118,7 @@
                               </network>
                               <log>
                                 <prefix>%a </prefix>
+                                <file>zookeeper.log</file>
                               </log>
                             </run>
                         </image>
@@ -148,6 +150,7 @@
                               </network>
                               <log>
                                 <prefix>%a </prefix>
+                                <file>kafka.log</file>
                               </log>
                             </run>
                         </image>
@@ -174,6 +177,7 @@
                               </network>
                               <log>
                                 <prefix>%a </prefix>
+                                <file>kafkadrop.log</file>
                               </log>
                             </run>
                         </image>
@@ -198,6 +202,7 @@
                               </volumes>
                               <log>
                                 <prefix>%a </prefix>
+                                <file>infinispan.log</file>
                               </log>
                             </run>
                         </image>
@@ -223,6 +228,7 @@
                               </network>
                               <log>
                                 <prefix>%a </prefix>
+                                <file>kogito-app.log</file>
                               </log>
                             </run>
                         </image>
@@ -248,6 +254,7 @@
                               </network>
                               <log>
                                 <prefix>%a </prefix>
+                                <file>explainability.log</file>
                               </log>
                             </run>
                         </image>
@@ -276,6 +283,7 @@
                               </network>
                               <log>
                                 <prefix>%a </prefix>
+                                <file>trusty.log</file>
                               </log>
                             </run>
                         </image>
@@ -300,6 +308,7 @@
                               </network>
                               <log>
                                 <prefix>%a </prefix>
+                                <file>trusty-ui.log</file>
                               </log>
                             </run>
                         </image>
