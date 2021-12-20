@@ -49,9 +49,7 @@ setupSonarCloudJob()
 KogitoJobUtils.createAllEnvsPerRepoPRJobs(this) { jobFolder -> getMultijobPRConfig(jobFolder) }
 
 // Nightly jobs
-setupDeployJob(Folder.NIGHTLY)
-setupNativeJob()
-setupMandrelJob()
+KogitoJobUtils.createAllJobsForArtifactsRepository(this, ['kogito'])
 
 // Release jobs
 setupDeployJob(Folder.RELEASE)
