@@ -56,6 +56,8 @@ export const MockedEnvelopeBusController = jest.fn<
   []
 >(() => ({
   bus: jest.fn(),
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   manager: jest.fn(),
   associate: jest.fn(),
   channelApi: new MockedMessageBusClientApi(),

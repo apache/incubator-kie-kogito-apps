@@ -102,10 +102,13 @@ module.exports = {
             '../../node_modules/@kogito-apps/form-displayer/dist/static'
           ),
           path.resolve(
-            '../../node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf'
+            '../../node_modules/@kogito-apps/process-form/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/process-form/dist/static'
+            '../../node_modules/@kogito-apps/process-definition-list/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf'
           )
         ],
         use: {
@@ -189,6 +192,9 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/process-form/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/process-definition-list/dist/static'
           )
         ],
         use: [

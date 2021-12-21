@@ -29,15 +29,16 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@kogito-apps/components-common', () => ({
-  ...jest.requireActual('@kogito-apps/components-common'),
-  ServerErrors: () => {
-    return <MockedComponent />;
-  },
-  FormRenderer: () => {
-    return <MockedComponent />;
-  }
-}));
+jest.mock('@kogito-apps/components-common', () =>
+  Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
+    ServerErrors: () => {
+      return <MockedComponent />;
+    },
+    FormRenderer: () => {
+      return <MockedComponent />;
+    }
+  })
+);
 
 let props: ProcessFormProps;
 let driverGetProcessFormSchemaSpy;

@@ -43,20 +43,16 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@kogito-apps/components-common', () => (
-  Object.assign(
-    {},
-    jest.requireActual('@kogito-apps/components-common'),
-    {
-      KogitoSpinner: () => {
-        return <MockedComponent />;
-      },
-      FormFooter: () => {
-        return <MockedComponent />;
-      }
+jest.mock('@kogito-apps/components-common', () =>
+  Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
+    KogitoSpinner: () => {
+      return <MockedComponent />;
+    },
+    FormFooter: () => {
+      return <MockedComponent />;
     }
-  )
-));
+  })
+);
 
 Date.now = jest.fn(() => 1592000000000);
 

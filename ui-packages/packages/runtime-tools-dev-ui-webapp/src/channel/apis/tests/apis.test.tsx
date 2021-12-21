@@ -891,8 +891,7 @@ describe('handle node instance cancel', () => {
   });
 
   it('swager parser success', async () => {
-    //@ts-ignore
-    SwaggerParser.parse.mockImplementation(() =>
+    SwaggerParser.parse['mockImplementation'](() =>
       Promise.resolve({
         paths: {
           '/hiring/schema': {

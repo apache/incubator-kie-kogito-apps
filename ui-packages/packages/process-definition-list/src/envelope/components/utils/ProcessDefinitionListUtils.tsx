@@ -1,7 +1,7 @@
 import React from 'react';
 import { DataTableColumn } from '@kogito-apps/components-common';
 import { PlayIcon } from '@patternfly/react-icons';
-import { Tooltip } from '@patternfly/react-core';
+import { Tooltip, Button } from '@patternfly/react-core';
 import { ProcessDefinition } from '../../../api/ProcessDefinitionListEnvelopeApi';
 export const getColumn = (
   columnPath: string,
@@ -21,11 +21,11 @@ export const getActionColumn = (
     label: 'Actions',
     path: 'actions',
     bodyCellTransformer: (value, rowData: ProcessDefinition) => (
-      <div onClick={() => startProcess(rowData)}>
-        <Tooltip content="Start new process">
+      <Tooltip content="Start new process">
+        <Button onClick={() => startProcess(rowData)} variant="link">
           <PlayIcon />
-        </Tooltip>
-      </div>
+        </Button>
+      </Tooltip>
     )
   };
 };
