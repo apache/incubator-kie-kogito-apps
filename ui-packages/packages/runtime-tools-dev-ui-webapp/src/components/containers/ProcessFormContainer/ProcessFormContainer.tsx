@@ -43,12 +43,12 @@ const ProcessFormContainer: React.FC<ProcessFormContainerProps & OUIAProps> = ({
         ): Promise<any> {
           return gatewayApi.getProcessFormSchema(processDefinitionData);
         },
-        async startProcess(formJSON: any): Promise<any> {
+        async startProcess(formData: any): Promise<void> {
           return gatewayApi
-            .startProcess(formJSON, processDefinitionData)
-            .then(response => {
+            .startProcess(formData, processDefinitionData)
+            .then((id: string) => {
               gatewayApi.setBusinessKey('');
-              onSubmitSuccess(response.id);
+              onSubmitSuccess(id);
             })
             .catch(error => {
               const message = error.response

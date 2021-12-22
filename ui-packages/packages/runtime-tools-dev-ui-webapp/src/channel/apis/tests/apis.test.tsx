@@ -914,7 +914,7 @@ describe('handle node instance cancel', () => {
     ]);
   });
   it('start process instance success', async () => {
-    const formJson = {
+    const formData = {
       candidate: {
         name: 'person1',
         age: 15
@@ -930,11 +930,11 @@ describe('handle node instance cancel', () => {
       endpoint: 'http://localhost:8080/hiring'
     };
     const result = await startProcessInstance(
-      formJson,
+      formData,
       'AAA',
       processDefinitioData
     );
-    expect(result).toEqual({ id: '1234' });
+    expect(result).toEqual('1234');
   });
 
   it('get process schema success', async () => {

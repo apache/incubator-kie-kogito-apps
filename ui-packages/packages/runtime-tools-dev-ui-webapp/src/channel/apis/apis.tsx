@@ -386,22 +386,22 @@ export const getProcessSchema = (
 };
 
 export const startProcessInstance = (
-  formJSON: any,
+  formData: any,
   businessKey: string,
   processDefinitionData: ProcessDefinition
-): Promise<void> => {
+): Promise<string> => {
   return new Promise((resolve, reject) => {
     const requestURL = `${processDefinitionData.endpoint}${
       businessKey.length > 0 ? `?businessKey=${businessKey}` : ''
     }`;
     axios
-      .post(requestURL, JSON.stringify(formJSON), {
+      .post(requestURL, JSON.stringify(formData), {
         headers: {
           'Content-Type': 'application/json'
         }
       })
       .then(response => {
-        resolve(response.data);
+        resolve(response.data.id);
       })
       .catch(error => reject(error));
   });

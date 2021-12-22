@@ -18,9 +18,9 @@ import { getProcessSchema, startProcessInstance } from '../apis';
 export interface ProcessFormGatewayApi {
   getProcessFormSchema(processDefinitionData: ProcessDefinition): Promise<any>;
   startProcess(
-    formJSON: any,
+    formData: any,
     processDefinitionData: ProcessDefinition
-  ): Promise<any>;
+  ): Promise<string>;
   setBusinessKey(bk: string): void;
   getBusinessKey(): string;
 }
@@ -48,7 +48,7 @@ export class ProcessFormGatewayApiImpl implements ProcessFormGatewayApi {
   startProcess(
     formData: any,
     processDefinitionData: ProcessDefinition
-  ): Promise<any> {
+  ): Promise<string> {
     return startProcessInstance(
       formData,
       this.businessKey,
