@@ -139,6 +139,7 @@ exports[`ProcessListTable test initial render with data 1`] = `
       },
     ]
   }
+  refreshProcessList={[MockFunction]}
   selectableInstances={0}
   selectedInstances={Array []}
   setExpanded={[MockFunction]}

@@ -76,6 +76,7 @@ interface ProcessListTableProps {
   selectableInstances: number;
   setSelectableInstances: React.Dispatch<React.SetStateAction<number>>;
   setIsAllChecked: React.Dispatch<React.SetStateAction<boolean>>;
+  refreshProcessList: () => void;
 }
 
 const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
@@ -92,6 +93,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
   setSelectableInstances,
   setIsAllChecked,
   driver,
+  refreshProcessList,
   ouiaId,
   ouiaSafe
 }) => {
@@ -140,6 +142,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
         TitleType.SUCCESS,
         processInstance
       );
+      refreshProcessList();
     } catch (error) {
       onShowMessage(
         'Skip operation',
@@ -163,6 +166,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
         TitleType.SUCCESS,
         processInstance
       );
+      refreshProcessList();
     } catch (error) {
       onShowMessage(
         'Retry operation',
@@ -192,6 +196,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
         }
       });
       setProcessInstances([...processInstances]);
+      refreshProcessList();
     } catch (error) {
       onShowMessage(
         'Abort operation',

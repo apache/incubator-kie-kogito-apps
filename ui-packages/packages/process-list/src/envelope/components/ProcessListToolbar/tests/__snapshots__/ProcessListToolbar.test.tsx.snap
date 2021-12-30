@@ -142,6 +142,7 @@ exports[`ProcessListToolbar test Snapshot tests 1`] = `
     ]
   }
   refresh={[MockFunction]}
+  refreshProcessList={[MockFunction]}
   selectedInstances={
     Array [
       Object {

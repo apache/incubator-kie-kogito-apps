@@ -36,39 +36,33 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@kogito-apps/components-common', () => (
-  Object.assign(
-    {},
-    jest.requireActual('@kogito-apps/components-common'),
-    {
-      LoadMore: () => {
-        return <MockedComponent />;
-      },
-      KogitoEmptyState: () => {
-        return <MockedComponent />;
-      },
-      KogitoSpinner: () => {
-        return <MockedComponent />;
-      }
+jest.mock('@kogito-apps/components-common', () =>
+  Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
+    LoadMore: () => {
+      return <MockedComponent />;
+    },
+    KogitoEmptyState: () => {
+      return <MockedComponent />;
+    },
+    KogitoSpinner: () => {
+      return <MockedComponent />;
     }
-  )
-));
+  })
+);
 
 const mockMath = Object.create(global.Math);
 mockMath.random = () => 0.5;
 global.Math = mockMath;
 
-jest.mock('@kogito-apps/management-console-shared', () => (
-  Object.assign(
-    jest.requireActual('@kogito-apps/management-console-shared'),
-    {
-      ProcessInfo: () => {
-        return <MockedComponent />;
-      }
+jest.mock('@kogito-apps/management-console-shared', () =>
+  Object.assign(jest.requireActual('@kogito-apps/management-console-shared'), {
+    ProcessInfo: () => {
+      return <MockedComponent />;
     }
-  )
-));
+  })
+);
 
+const refreshProcessListMock = jest.fn();
 const props = {
   processInstances: ProcessInstances,
   isLoading: false,
@@ -84,7 +78,8 @@ const props = {
   setSelectedInstances: jest.fn(),
   selectableInstances: 0,
   setSelectableInstances: jest.fn(),
-  setIsAllChecked: jest.fn()
+  setIsAllChecked: jest.fn(),
+  refreshProcessList: refreshProcessListMock
 };
 describe('ProcessListTable test', () => {
   it('initial render with data', () => {
@@ -207,6 +202,7 @@ describe('ProcessListTable test', () => {
       expect(
         skipSuccessWrapper.find('ProcessInfoModal').props()['modalContent']
       ).toEqual('The process travels was successfully skipped.');
+      expect(refreshProcessListMock).toHaveBeenCalled();
     });
   });
 
@@ -232,6 +228,7 @@ describe('ProcessListTable test', () => {
       expect(
         retrySuccessWrapper.find('ProcessInfoModal').props()['modalContent']
       ).toEqual('The process travels was successfully re-executed.');
+      expect(refreshProcessListMock).toHaveBeenCalled();
     });
   });
 
@@ -257,6 +254,7 @@ describe('ProcessListTable test', () => {
       expect(
         abortSuccessWrapper.find('ProcessInfoModal').props()['modalContent']
       ).toEqual('The process travels was successfully aborted.');
+      expect(refreshProcessListMock).toHaveBeenCalled();
     });
   });
 });

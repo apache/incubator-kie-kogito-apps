@@ -302,6 +302,7 @@ exports[`ProcessListPage test Envelope not connected 1`] = `
       isLoading={true}
       onSort={[Function]}
       processInstances={Array []}
+      refreshProcessList={[Function]}
       selectableInstances={0}
       selectedInstances={Array []}
       setExpanded={[Function]}

@@ -83,6 +83,7 @@ interface ProcessListToolbarProps {
   isAllChecked: boolean;
   setIsAllChecked: React.Dispatch<React.SetStateAction<boolean>>;
   driver: ProcessListDriver;
+  refreshProcessList: () => void;
 }
 
 const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
@@ -99,6 +100,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
   isAllChecked,
   setIsAllChecked,
   driver,
+  refreshProcessList,
   ouiaId,
   ouiaSafe
 }) => {
@@ -183,6 +185,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
                 });
               });
               setProcessInstances([...processInstances]);
+              refreshProcessList();
             });
         }
       }

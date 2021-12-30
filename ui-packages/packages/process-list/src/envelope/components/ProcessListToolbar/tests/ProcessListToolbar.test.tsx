@@ -36,6 +36,7 @@ import axios from 'axios';
 import _ from 'lodash';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
+const refreshProcessListMock = jest.fn();
 const props = {
   filters: {
     status: [ProcessInstanceState.Active],
@@ -52,7 +53,8 @@ const props = {
   setProcessInstances: jest.fn(),
   isAllChecked: false,
   setIsAllChecked: jest.fn(),
-  driver: null
+  driver: null,
+  refreshProcessList: refreshProcessListMock
 };
 beforeEach(() => {
   props.setProcessStates.mockClear();
@@ -264,6 +266,7 @@ describe('ProcessListToolbar test', () => {
         await wait(0);
       });
       expect(driverhandleProcessMultipleActionMock).toHaveBeenCalled();
+      expect(refreshProcessListMock).toHaveBeenCalled();
     });
     it('multi abort click fail', async () => {
       abortProps.selectedInstances = [ProcessInstances[0]];
@@ -324,6 +327,7 @@ describe('ProcessListToolbar test', () => {
         await wait(0);
       });
       expect(driverhandleProcessMultipleActionMock).toHaveBeenCalled();
+      expect(refreshProcessListMock).toHaveBeenCalled();
     });
     it('multi skip click fail', async () => {
       skipProps.selectedInstances = [ProcessInstances[0]];
@@ -385,6 +389,7 @@ describe('ProcessListToolbar test', () => {
         await wait(0);
       });
       expect(driverhandleProcessMultipleActionMock).toHaveBeenCalled();
+      expect(refreshProcessListMock).toHaveBeenCalled();
     });
     it('multi retry click fail', async () => {
       retryProps.selectedInstances = [ProcessInstances[0]];

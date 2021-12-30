@@ -258,6 +258,7 @@ const ProcessListPage: React.FC<ProcessListPageProps & OUIAProps> = ({
             selectableInstances={selectableInstances}
             setSelectableInstances={setSelectableInstances}
             setIsAllChecked={setIsAllChecked}
+            refreshProcessList={doRefresh}
           />
           {mustShowLoadMore && (
             <LoadMore
