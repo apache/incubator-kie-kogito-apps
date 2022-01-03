@@ -39,9 +39,9 @@
     "cypress:open:it": "yarn run cypress open --project it-tests --config-file cypress.it.json",
     "cypress:run:it": "yarn run cypress run --project it-tests --config-file cypress.it.json",
     "cypress:open:e2e": "yarn run cypress open --project it-tests --config-file cypress.e2e.json",
-    "cypress:run:e2e": "yarn run cypress run -b chrome --project it-tests --config-file cypress.e2e.json",
+    "cypress:run:e2e": "yarn run cypress run --project it-tests --config-file cypress.e2e.json",
     "test:it": "start-server-and-test 'yarn start:it' http://0.0.0.0:9000 'yarn cypress:run:it' && echo",
-    "test:e2e:trusty": "yarn cypress:run:e2e"
+    "test:e2e:trusty": "yarn cypress:run:e2e && echo"
   },
   "devDependencies": {
     "faker": "^4.1.0",
