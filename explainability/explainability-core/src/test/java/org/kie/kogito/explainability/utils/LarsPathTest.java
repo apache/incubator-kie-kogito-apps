@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.utils;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.math3.linear.MatrixUtils;
@@ -126,7 +125,7 @@ class LarsPathTest {
             { 45., 46., 47., 48., 49. },
     });
     RealVector yDGR = MatrixUtils.createRealVector(new double[] { 0., 50., 100., 150., 200., 250., 300., 350., 400., 450. });
-    double[] dummyWeights = Arrays.stream(yDGR.toArray()).map(x -> 1.).toArray();
+    RealVector dummyWeights = yDGR.map(x -> 1.);
 
     @Test
     void testLarsDGR() {
@@ -135,8 +134,8 @@ class LarsPathTest {
         double mse = WeightedLinearRegression.getMSE(
                 XDGR,
                 yDGR,
-                MatrixUtils.createRealVector(dummyWeights),
-                coefs.getRowVector(coefs.getRowDimension() - 1));
+                dummyWeights,
+                coefs.getColumnVector(coefs.getColumnDimension() - 1));
         assertTrue(mse < 1e-16);
     }
 
