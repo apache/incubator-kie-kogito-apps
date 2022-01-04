@@ -44,7 +44,7 @@ describe('ProcessFormPage tests', () => {
       </BrowserRouter>
     );
 
-    expect(wrapper).toMatchSnapshot();
+    expect(wrapper.find('ProcessFormPage')).toMatchSnapshot();
     expect(wrapper.find('MockedProcessFormContainer').exists()).toBeTruthy();
   });
 });
