@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -131,9 +131,12 @@ class LarsPathTest {
     @Test
     void testLarsDGR() {
         LarsPathResults lpr = LarsPath.fit(XDGR, yDGR, 500, false);
-        RealMatrix coefRowVect = MatrixUtils.createRealMatrix(lpr.getCoefs().getRowDimension(), 1);
-        coefRowVect.setColumnVector(0, lpr.getCoefs().getColumnVector(lpr.getCoefs().getColumnDimension() - 1));
-        double mse = WeightedLinearRegression.getMSE(XDGR.getData(), yDGR.toArray(), dummyWeights, coefRowVect.getData());
+        RealMatrix coefs = lpr.getCoefs();
+        double mse = WeightedLinearRegression.getMSE(
+                XDGR,
+                yDGR,
+                MatrixUtils.createRealVector(dummyWeights),
+                coefs.getRowVector(coefs.getRowDimension() - 1));
         assertTrue(mse < 1e-16);
     }
 
