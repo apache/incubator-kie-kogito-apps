@@ -16,13 +16,14 @@
 
 package org.kie.kogito.explainability.local.shap;
 
+import org.apache.commons.math3.linear.RealVector;
 import org.kie.kogito.explainability.model.Saliency;
 
 public class ShapResults {
     private final Saliency[] saliencies;
-    private final double[] fnull;
+    private final RealVector fnull;
 
-    public ShapResults(Saliency[] saliencies, double[] fnull) {
+    public ShapResults(Saliency[] saliencies, RealVector fnull) {
         this.saliencies = saliencies;
         this.fnull = fnull;
     }
@@ -31,7 +32,7 @@ public class ShapResults {
         return saliencies;
     }
 
-    public double[] getFnull() {
+    public RealVector getFnull() {
         return fnull;
     }
 }

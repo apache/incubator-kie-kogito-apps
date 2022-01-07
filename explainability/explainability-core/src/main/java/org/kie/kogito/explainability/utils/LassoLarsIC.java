@@ -40,14 +40,15 @@ public class LassoLarsIC {
         RealVector xMean = MatrixUtilsExtensions.rowSum(X).mapDivide(nSamples);
         double yMean = Arrays.stream(y.toArray()).sum() / nSamples;
 
-        RealMatrix xCenter = MatrixUtilsExtensions.rowDifference(X, xMean);
+        RealMatrix xCenter = MatrixUtilsExtensions.vectorDifference(X, xMean, MatrixUtilsExtensions.Axis.ROW);
         RealVector yCenter = y.mapSubtract(yMean);
 
         LarsPathResults lpResults = LarsPath.fit(xCenter, yCenter, maxIterations, true);
 
         double K = c == Criterion.AIC ? 2 : Math.log(nSamples);
-        RealMatrix residuals = MatrixUtilsExtensions.colDifference(
-                MatrixUtilsExtensions.matrixDot(xCenter, lpResults.getCoefs()), yCenter);
+        RealMatrix residuals = MatrixUtilsExtensions.vectorDifference(
+                MatrixUtilsExtensions.matrixDot(xCenter, lpResults.getCoefs()), yCenter,
+                MatrixUtilsExtensions.Axis.COLUMN);
         RealVector mse = MatrixUtilsExtensions.rowSquareSum(residuals).mapDivide(residuals.getRowDimension());
         double sigma2 = MatrixUtilsExtensions.variance(yCenter);
 
