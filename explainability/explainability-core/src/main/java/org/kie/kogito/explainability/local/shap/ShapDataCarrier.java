@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import org.apache.commons.math3.linear.RealVector;
 import org.kie.kogito.explainability.model.PredictionProvider;
 
 public class ShapDataCarrier {
-    private ShapConfig.LinkType link;
     private PredictionProvider model;
     private CompletableFuture<RealVector> linkNull;
     private CompletableFuture<RealVector> fnull;
@@ -101,10 +100,6 @@ public class ShapDataCarrier {
 
     // runtime accumulators ==========================================================
     //sample trackers
-    public List<ShapSyntheticDataSample> getSamplesAdded() {
-        return samplesAdded;
-    }
-
     public ShapSyntheticDataSample getSamplesAdded(int i) {
         return samplesAdded.get(i);
     }

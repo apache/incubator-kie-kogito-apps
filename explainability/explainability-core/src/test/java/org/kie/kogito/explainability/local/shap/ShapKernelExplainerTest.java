@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package org.kie.kogito.explainability.local.shap;
 
-import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,7 +43,6 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.SimplePrediction;
-import org.kie.kogito.explainability.utils.MatrixUtilsExtensions;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -131,7 +129,6 @@ class ShapKernelExplainerTest {
             { { -4.33333333, 0., -5.33333333, 8., -6. }, { -8.6666666667, 0., -10.666666666, 16., -12. } },
     };
 
-
     PerturbationContext pc = new PerturbationContext(new Random(0), 0);
     ShapConfig.Builder testConfig = ShapConfig.builder().withLink(ShapConfig.LinkType.IDENTITY).withPC(pc);
 
@@ -139,7 +136,7 @@ class ShapKernelExplainerTest {
     // create a list of prediction inputs from double matrix
     private List<PredictionInput> createPIFromMatrix(double[][] m) {
         List<PredictionInput> pis = new ArrayList<>();
-        int[] shape = new int[]{m.length, m[0].length};
+        int[] shape = new int[] { m.length, m[0].length };
         for (int i = 0; i < shape[0]; i++) {
             List<Feature> fs = new ArrayList<>();
             for (int j = 0; j < shape[1]; j++) {
@@ -153,12 +150,12 @@ class ShapKernelExplainerTest {
     private RealMatrix[] saliencyToMatrix(Saliency[] saliencies) {
         RealMatrix emptyMatrix = MatrixUtils.createRealMatrix(
                 new double[saliencies.length][saliencies[0].getPerFeatureImportance().size()]);
-        RealMatrix[] out = new RealMatrix[]{emptyMatrix.copy(), emptyMatrix.copy()};
+        RealMatrix[] out = new RealMatrix[] { emptyMatrix.copy(), emptyMatrix.copy() };
         for (int i = 0; i < saliencies.length; i++) {
             List<FeatureImportance> fis = saliencies[i].getPerFeatureImportance();
             for (int j = 0; j < fis.size(); j++) {
-                out[0].setEntry(i,j, fis.get(j).getScore());
-                out[1].setEntry(i,j, fis.get(j).getConfidence());
+                out[0].setEntry(i, j, fis.get(j).getScore());
+                out[1].setEntry(i, j, fis.get(j).getConfidence());
             }
         }
         return out;
@@ -493,7 +490,6 @@ class ShapKernelExplainerTest {
     @ParameterizedTest
     @ValueSource(doubles = { .001, .1, .25, .5 })
     void testErrorBounds(double noise) throws InterruptedException, ExecutionException {
-        long startTime = System.currentTimeMillis();
         for (double interval : new double[] { .95, .975, .99 }) {
             int[] testResults = new int[600];
             for (int test = 0; test < 100; test++) {
@@ -513,8 +509,8 @@ class ShapKernelExplainerTest {
 
                 for (int i = 0; i < explanations.getRowDimension(); i++) {
                     for (int j = 0; j < explanations.getColumnDimension(); j++) {
-                        double conf = confidence.getEntry(i,j);
-                        double exp = explanations.getEntry(i,j);
+                        double conf = confidence.getEntry(i, j);
+                        double exp = explanations.getEntry(i, j);
 
                         // see if true value falls into confidence interval
                         testResults[test * 6 + j] = (exp + conf) > 1.0 & 1.0 > (exp - conf) ? 1 : 0;
@@ -526,7 +522,5 @@ class ShapKernelExplainerTest {
             double score = Arrays.stream(testResults).sum() / 600.;
             assertEquals(interval, score, .05);
         }
-        long endTime = System.currentTimeMillis();
-        System.out.println("Long test took " + (endTime - startTime) + " milliseconds");
     }
 }

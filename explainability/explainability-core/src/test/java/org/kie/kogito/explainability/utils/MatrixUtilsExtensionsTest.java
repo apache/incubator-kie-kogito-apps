@@ -30,12 +30,12 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class MatrixUtilsExtensionsTest {
     // === Make some matrices to use in tests ===
-    double[] vector = { 5., 6., 7 };
-
     double[][] mat3X5 = {
             { 1., 10., 3., -4., 0. },
             { 10., 5., -3., 3.7, 1. },
@@ -69,23 +69,6 @@ class MatrixUtilsExtensionsTest {
             { 4., 5., 6. },
             { 7., 8., 9. },
     };
-    double[][] identity = {
-            { 1., 0., 0. },
-            { 0., 1., 0. },
-            { 0., 0., 1. },
-    };
-
-    double[][] matIdentityPlusVector = {
-            { 6., 6., 7. },
-            { 5., 7., 7. },
-            { 5., 6., 8. },
-    };
-
-    double[][] matIdentityPlusVectorCol = {
-            { 6., 5., 5. },
-            { 6., 7., 6. },
-            { 7., 7., 8. },
-    };
     double[] mssSumRow = { 12., 15., 18. };
 
     RealVector v = MatrixUtils.createRealVector(new double[] { 1, 2, 3 });
@@ -94,14 +77,13 @@ class MatrixUtilsExtensionsTest {
     RealMatrix colDiffResult = MatrixUtils.createRealMatrix(new double[][] { { 0, 1, 2 }, { 2, 3, 4 }, { 4, 5, 6 } });
     RealMatrix swapResult = MatrixUtils.createRealMatrix(new double[][] { { 7, 8, 9 }, { 4, 5, 6 }, { 1, 2, 3 } });
     RealVector swapResultV = MatrixUtils.createRealVector(new double[] { 3, 2, 1 });
-    RealMatrix rowMatrix = MatrixUtils.createRealMatrix(new double[][] { { 1, 2, 3 } });
+
     RealMatrix dotInput1 = MatrixUtils.createRealMatrix(new double[][] { { 0, 1, 2 }, { 3, 4, 5 } });
     RealMatrix dotInput2 = MatrixUtils.createRealMatrix(new double[][] { { 0, 1, 2 }, { 3, 4, 5 }, { 6, 7, 8 } });
     RealMatrix dotResult = MatrixUtils.createRealMatrix(new double[][] { { 15, 18, 21 }, { 42, 54, 66 } });
     RealVector vMix = MatrixUtils.createRealVector(new double[] { -3, -2, -1, 1, 2, 3 });
     RealVector allNeg = MatrixUtils.createRealVector(new double[] { -3, -2, -1 });
     RealVector varInput = MatrixUtils.createRealVector(new double[] { 0, 4, 16, 2, -128, -4 });
-
 
     // === Matrix creation tests =======================================================================================
     // test creation of matrix from single PredictionInput
@@ -134,7 +116,6 @@ class MatrixUtilsExtensionsTest {
         assertArrayEquals(mat3X5, converted.getData());
     }
 
-
     // test creation of matrix from single PredictionOutput
     @Test
     void testPOCreation() {
@@ -143,7 +124,6 @@ class MatrixUtilsExtensionsTest {
         for (int j = 0; j < 5; j++) {
             Value v = new Value(mat3X5[0][j]);
             os.add(new Output("o", Type.NUMBER, v, 0.0));
-            ;
         }
         PredictionOutput po = new PredictionOutput(os);
         RealVector converted = MatrixUtilsExtensions.vectorFromPredictionOutput(po);
@@ -174,7 +154,7 @@ class MatrixUtilsExtensionsTest {
     void testGetCols() {
         RealMatrix output = MatrixUtilsExtensions.getCols(MatrixUtils.createRealMatrix(mat3X5), List.of(0, 1, 3));
         for (int i = 0; i < mat3X5get013.length; i++) {
-            assertArrayEquals(mat3X5get013[i], output.getColumn(i));
+            assertArrayEquals(mat3X5get013[i], output.getRow(i));
         }
     }
 
@@ -183,7 +163,7 @@ class MatrixUtilsExtensionsTest {
     void testGetDupCols() {
         RealMatrix output = MatrixUtilsExtensions.getCols(MatrixUtils.createRealMatrix(mat3X5), List.of(0, 3, 1, 3, 0));
         for (int i = 0; i < mat3X5get03130.length; i++) {
-            assertArrayEquals(mat3X5get03130[i], output.getColumn(i));
+            assertArrayEquals(mat3X5get03130[i], output.getRow(i));
         }
     }
 
@@ -211,7 +191,6 @@ class MatrixUtilsExtensionsTest {
                 MatrixUtils.createRealMatrix(mat3X5), testIdxs));
     }
 
-
     // === Matrix Sum Tests ============================================================================================
     // test that summing all the rows of matrix returns expected result
     @Test
@@ -229,7 +208,6 @@ class MatrixUtilsExtensionsTest {
     void rowSquareSum() {
         assertArrayEquals(new double[] { 66, 93, 126 }, MatrixUtilsExtensions.rowSquareSum(mssMatrix).toArray());
     }
-
 
     @Test
     void rowDifference() {
@@ -271,7 +249,6 @@ class MatrixUtilsExtensionsTest {
         }
     }
 
-
     // RealVector statistics tests =====================================================================================
     @Test
     void testMinPos() {
@@ -282,7 +259,6 @@ class MatrixUtilsExtensionsTest {
     void testMinPosNoNeg() {
         assertEquals(Double.MAX_VALUE, MatrixUtilsExtensions.minPos(allNeg), 1e-4);
     }
-
 
     @Test
     void testVar() {
@@ -310,6 +286,5 @@ class MatrixUtilsExtensionsTest {
         MatrixUtilsExtensions.swap(arr, 0, 2);
         assertArrayEquals(new int[] { 3, 2, 1 }, arr);
     }
-
 
 }

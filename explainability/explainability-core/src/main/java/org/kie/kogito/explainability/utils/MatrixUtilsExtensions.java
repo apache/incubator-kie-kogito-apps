@@ -16,9 +16,14 @@
 
 package org.kie.kogito.explainability.utils;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
-import org.apache.commons.math3.linear.*;
+import org.apache.commons.math3.linear.MatrixUtils;
+import org.apache.commons.math3.linear.RealMatrix;
+import org.apache.commons.math3.linear.RealVector;
+import org.apache.commons.math3.linear.SingularMatrixException;
+import org.apache.commons.math3.linear.SingularValueDecomposition;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 
@@ -33,7 +38,6 @@ public class MatrixUtilsExtensions {
     private MatrixUtilsExtensions() {
         throw new IllegalStateException("Utility class");
     }
-
 
     // === Creation ops ================================================================================================
     /**
@@ -71,8 +75,8 @@ public class MatrixUtilsExtensions {
      */
     public static RealVector vectorFromPredictionOutput(PredictionOutput p) {
         return MatrixUtils.createRealVector(p.getOutputs().stream()
-                        .mapToDouble(f -> f.getValue().asNumber())
-                        .toArray());
+                .mapToDouble(f -> f.getValue().asNumber())
+                .toArray());
     }
 
     /**
@@ -89,7 +93,6 @@ public class MatrixUtilsExtensions {
                                 .toArray())
                         .toArray(double[][]::new));
     }
-
 
     // === RealMAtrix Operations =======================================================================================
     /**
@@ -188,7 +191,7 @@ public class MatrixUtilsExtensions {
         }
     }
 
-        /*
+    /*
      * Retrieve a list of columns of a matrix
      *
      * @param x: double array
@@ -203,7 +206,7 @@ public class MatrixUtilsExtensions {
         }
 
         RealMatrix out = MatrixUtils.createRealMatrix(new double[x.getRowDimension()][idxs.size()]);
-        for (int col=0; col<idxs.size(); col++) {
+        for (int col = 0; col < idxs.size(); col++) {
             if (idxs.get(col) >= x.getColumnDimension() || idxs.get(col) < 0) {
                 throw new IllegalArgumentException(
                         String.format("Column index %d output bounds, matrix only has %d column(s)", idxs.get(col), x.getColumnDimension()));
@@ -243,7 +246,6 @@ public class MatrixUtilsExtensions {
         return out;
     }
 
-
     // === REAL VECTOR STATISTICS =====================================
     /**
      * Find the minimum positive value of a vector. Returns the max double if no values are positive.
@@ -277,7 +279,7 @@ public class MatrixUtilsExtensions {
         return Arrays.stream(v.map(a -> Math.pow(a - mean, 2)).toArray()).sum() / v.getDimension();
     }
 
-        /**
+    /**
      * Find the total sum of a vector
      *
      * @param v the vector to compute the sum of
@@ -288,9 +290,8 @@ public class MatrixUtilsExtensions {
         return Arrays.stream(v.toArray()).sum();
     }
 
-
     // === SWAP FUNCTIONS ==============================================================================================
-        /**
+    /**
      * Functions to swap the ith and jth element of x in-place
      *
      * @param x the object to perform the swap within

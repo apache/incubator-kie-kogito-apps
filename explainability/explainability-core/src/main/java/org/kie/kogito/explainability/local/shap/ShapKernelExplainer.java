@@ -153,7 +153,7 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
     private void setVaryingFeatureGroups(PredictionInput input, ShapDataCarrier sdc) {
         List<Integer> varyingFeatureGroups = new ArrayList<>();
         RealVector inputVector = MatrixUtilsExtensions.vectorFromPredictionInput(input);
-        RealVector columnFeatures = MatrixUtils.createRealVector(new double[sdc.getRows()+1]);
+        RealVector columnFeatures = MatrixUtils.createRealVector(new double[sdc.getRows() + 1]);
         for (int col = 0; col < sdc.getCols(); col++) {
             columnFeatures.setSubVector(0, this.config.getBackgroundMatrix().getColumnVector(col));
             columnFeatures.setEntry(sdc.getRows(), inputVector.getEntry(col));
@@ -176,7 +176,7 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
     private RealVector normalizeWeightVector(RealVector v) {
         try {
             return v.unitVector();
-        } catch (MathArithmeticException e){
+        } catch (MathArithmeticException e) {
             return v;
         }
     }
@@ -201,8 +201,8 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
             }
         }
 
-        for (int i = 0; i < combination.size(); i++) {
-            mask[sdc.getVaryingFeatureGroups(combination.get(i))] = !inverse;
+        for (Integer i : combination) {
+            mask[sdc.getVaryingFeatureGroups(i)] = !inverse;
         }
         int maskHash = this.hashMask(mask);
         if (sdc.getMasksUsed().containsKey(maskHash)) {
@@ -248,7 +248,7 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
         for (int i = 0; i < m.getRowDimension(); i++) {
             List<FeatureImportance> fis = new ArrayList<>();
             for (int j = 0; j < m.getColumnDimension(); j++) {
-                fis.add(new FeatureImportance(pi.getFeatures().get(j), m.getEntry(i,j)));
+                fis.add(new FeatureImportance(pi.getFeatures().get(j), m.getEntry(i, j)));
             }
             saliencies[i] = new Saliency(po.getOutputs().get(i), fis);
         }
@@ -271,7 +271,7 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
         for (int i = 0; i < m.getRowDimension(); i++) {
             List<FeatureImportance> fis = new ArrayList<>();
             for (int j = 0; j < m.getColumnDimension(); j++) {
-                fis.add(new FeatureImportance(pi.getFeatures().get(j), m.getEntry(i,j), bounds.getEntry(i,j)));
+                fis.add(new FeatureImportance(pi.getFeatures().get(j), m.getEntry(i, j), bounds.getEntry(i, j)));
             }
             saliencies[i] = new Saliency(po.getOutputs().get(i), fis);
         }
@@ -595,7 +595,7 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
 
         for (int i = 0; i < sdc.getSamplesAddedSize(); i++) {
             for (int j = 0; j < sdc.getCols(); j++) {
-                xs.setEntry(i,j, sdc.getSamplesAdded(i).getMask()[j] ? 1. : 0.);
+                xs.setEntry(i, j, sdc.getSamplesAdded(i).getMask()[j] ? 1. : 0.);
             }
             ys.setEntry(i, expectations.getEntry(i, output));
             ws.setEntry(i, sdc.getSamplesAdded(i).getWeight());
@@ -644,8 +644,8 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
             RealMatrix outputMatrix = MatrixUtils.createRealMatrix(new double[os][sdc.getCols()]);
             final CompletableFuture<RealMatrix[]>[] shapVals = new CompletableFuture[] {
                     CompletableFuture.supplyAsync(
-                            () -> new RealMatrix[]{outputMatrix.copy(), outputMatrix.copy()},
-                            this.config.getExecutor())};
+                            () -> new RealMatrix[] { outputMatrix.copy(), outputMatrix.copy() },
+                            this.config.getExecutor()) };
             shapSlices.forEach((idx, slice) -> shapVals[0] = shapVals[0].thenCompose(e -> slice.thenApply(s -> {
                 // store shap values in first matrix
                 e[0].setRowVector(idx, s[0]);
