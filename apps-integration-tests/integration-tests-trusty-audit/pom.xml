@@ -197,6 +197,7 @@
                               <volumes>
                                 <bind>
                                   <volume>./src/test/resources/infinispan/infinispan.xml:/opt/infinispan/server/conf/infinispan-demo.xml:z</volume>
+                                  <volume>./src/test/resources/infinispan/log4j2.xml:/opt/infinispan/server/conf/log4j2.xml:z</volume>
                                 </bind>
                               </volumes>
                               <log>
