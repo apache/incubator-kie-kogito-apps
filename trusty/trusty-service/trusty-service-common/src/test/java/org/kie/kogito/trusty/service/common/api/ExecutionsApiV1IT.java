@@ -23,9 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
-import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.trusty.service.common.TrustyService;
@@ -36,6 +33,10 @@ import org.kie.kogito.trusty.storage.api.model.decision.DMNModelMetadata;
 import org.kie.kogito.trusty.storage.api.model.decision.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.decision.Decision;
 import org.mockito.Mockito;
+
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.jupiter.api.Assertions.assertEquals;
