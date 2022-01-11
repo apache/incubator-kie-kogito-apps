@@ -29,20 +29,124 @@ const ApolloClientMock = ApolloClient as jest.MockedClass<typeof ApolloClient>;
 describe('DevUILayout tests', () => {
   it('Snapshot test with default props', () => {
     // eslint-disable-next-line
+    // @ts-ignore
     const client = new ApolloClientMock();
     const props = {
       apolloClient: client,
       users: [{ id: 'John snow', groups: ['admin'] }],
       devUIUrl: 'http://localhost:8080',
-      openApiPath: '/docs/opeapi.json'
+      openApiPath: '/docs/opeapi.json',
+      isProcessEnabled: true,
+      isTracingEnabled: true
     };
     const wrapper = mount(
       <DevUILayout {...props}>
         <MemoryRouter initialEntries={['/']} keyLength={0}>
-          <DevUIRoutes navigate={'JobsManagement'} />
+          <DevUIRoutes
+            trustyServiceUrl={'http://localhost:8081'}
+            navigate={'JobsManagement'}
+          />
         </MemoryRouter>
       </DevUILayout>
     );
     expect(wrapper.find('PageLayout')).toMatchSnapshot();
+
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="processes-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="jobs-management-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="task-inbox-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="forms-list-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="audit-nav"]')
+    ).toBeTruthy();
+  });
+
+  it('Snapshot test with Processing disabled', () => {
+    // eslint-disable-next-line
+    // @ts-ignore
+    const client = new ApolloClientMock();
+    const props = {
+      apolloClient: client,
+      users: [{ id: 'John snow', groups: ['admin'] }],
+      devUIUrl: 'http://localhost:8080',
+      openApiPath: '/docs/opeapi.json',
+      isProcessEnabled: false,
+      isTracingEnabled: true
+    };
+    const wrapper = mount(
+      <DevUILayout {...props}>
+        <MemoryRouter initialEntries={['/']} keyLength={0}>
+          <DevUIRoutes
+            trustyServiceUrl={'http://localhost:8081'}
+            navigate={'JobsManagement'}
+          />
+        </MemoryRouter>
+      </DevUILayout>
+    );
+    expect(wrapper.find('PageLayout')).toMatchSnapshot();
+
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="processes-nav"]')
+    ).toBeFalsy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="jobs-management-nav"]')
+    ).toBeFalsy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="task-inbox-nav"]')
+    ).toBeFalsy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="forms-list-nav"]')
+    ).toBeFalsy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="audit-nav"]')
+    ).toBeTruthy();
+  });
+
+  it('Snapshot test with Tracing disabled', () => {
+    // eslint-disable-next-line
+    // @ts-ignore
+    const client = new ApolloClientMock();
+    const props = {
+      apolloClient: client,
+      users: [{ id: 'John snow', groups: ['admin'] }],
+      devUIUrl: 'http://localhost:8080',
+      openApiPath: '/docs/opeapi.json',
+      isProcessEnabled: true,
+      isTracingEnabled: false
+    };
+    const wrapper = mount(
+      <DevUILayout {...props}>
+        <MemoryRouter initialEntries={['/']} keyLength={0}>
+          <DevUIRoutes
+            trustyServiceUrl={'http://localhost:8081'}
+            navigate={'JobsManagement'}
+          />
+        </MemoryRouter>
+      </DevUILayout>
+    );
+    expect(wrapper.find('PageLayout')).toMatchSnapshot();
+
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="processes-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="jobs-management-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="task-inbox-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="forms-list-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="audit-nav"]')
+    ).toBeFalsy();
   });
 });

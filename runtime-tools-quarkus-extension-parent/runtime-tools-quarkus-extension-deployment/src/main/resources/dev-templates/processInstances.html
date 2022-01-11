@@ -33,6 +33,8 @@
 <script>
     const devUI = RuntimeToolsDevUI.open({
         container: document.getElementById("envelope-app"),
+        isProcessEnabled: {info:isProcessEnabled},
+        isTracingEnabled: {info:isTracingEnabled},
         users: {info:userInfo.arrayRepresentation.raw},
         dataIndexUrl: "{config:property('kogito.data-index.url')}/graphql",
         trustyServiceUrl: "{config:property('kogito.trusty.http.url')}",

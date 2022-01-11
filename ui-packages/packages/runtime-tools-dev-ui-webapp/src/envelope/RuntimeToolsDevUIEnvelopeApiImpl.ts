@@ -60,6 +60,8 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
 
     this.ackCapturedInitRequest();
 
+    this.args.view().setProcessEnabled(initArgs.isProcessEnabled);
+    this.args.view().setTracingEnabled(initArgs.isTracingEnabled);
     this.args.view().setDataIndexUrl(initArgs.dataIndexUrl);
     this.args.view().setTrustyServiceUrl(initArgs.trustyServiceUrl);
     this.args.view().setUsers(initArgs.users);
