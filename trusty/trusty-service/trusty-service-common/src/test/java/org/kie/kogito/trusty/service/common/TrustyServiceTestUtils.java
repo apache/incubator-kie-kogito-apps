@@ -25,7 +25,7 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import org.kie.kogito.cloudevents.CloudEventUtils;
+import org.kie.kogito.event.cloudevents.utils.CloudEventUtils;
 import org.kie.kogito.tracing.event.model.ModelEvent;
 import org.kie.kogito.tracing.event.trace.TraceEvent;
 import org.kie.kogito.tracing.event.trace.TraceHeader;

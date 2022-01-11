@@ -15,10 +15,6 @@
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-events-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-addons-jobs-api</artifactId>
     </dependency>
     <dependency>
@@ -31,11 +27,15 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx-web</artifactId>
+      <artifactId>quarkus-reactive-routes</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-vertx</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-mutiny</artifactId>
     </dependency>
     <dependency>
       <groupId>io.smallrye.reactive</groupId>
@@ -96,11 +96,21 @@
       <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-events-api</artifactId>
+    </dependency>
 
     <!-- Health Check -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+
+    <!-- Fault tolerance -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-fault-tolerance</artifactId>
     </dependency>
 
     <dependency>
