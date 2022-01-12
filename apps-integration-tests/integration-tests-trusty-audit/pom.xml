@@ -204,6 +204,14 @@
                                 <prefix>%a </prefix>
                                 <file>infinispan.log</file>
                               </log>
+                              <wait>
+                                <time>60000</time>
+                                <tcp>
+                                  <ports>
+                                    <port>11222</port>
+                                  </ports>
+                                </tcp>
+                              </wait>
                             </run>
                         </image>
                         <image>
