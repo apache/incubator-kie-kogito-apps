@@ -44,7 +44,7 @@ services:
       LOG_DIR: "/tmp/logs"
 
   oracle:
-    image: gvenzl/oracle-xe:21.3.0
+    image: gvenzl/oracle-xe:21.3.0-slim
     container_name: data-index-oracle
     environment:
       ORACLE_PASSWORD: test

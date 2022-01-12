@@ -91,10 +91,8 @@ public class UserTaskInstanceEntity extends AbstractEntity {
     private String rootProcessId;
     private String rootProcessInstanceId;
     @Type(type = "jsonb")
-    //@Column(columnDefinition = "jsonb")
     private ObjectNode inputs;
     @Type(type = "jsonb")
-    //@Column(columnDefinition = "jsonb")
     private ObjectNode outputs;
     private String endpoint;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTask")

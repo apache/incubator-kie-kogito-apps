@@ -48,7 +48,7 @@ public class CacheEntity {
     private String key;
 
     @Type(type = "jsonb")
-    @Column(name = "json_value") //, columnDefinition = "clob")
+    @Column(name = "json_value")
     private ObjectNode value;
 
     public CacheEntity() {

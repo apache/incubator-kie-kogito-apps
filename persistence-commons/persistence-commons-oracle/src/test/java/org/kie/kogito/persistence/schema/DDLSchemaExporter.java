@@ -31,7 +31,6 @@ import org.kie.kogito.persistence.oracle.model.CacheEntity;
 import org.kie.kogito.testcontainers.KogitoOracleSqlContainer;
 import org.testcontainers.containers.wait.strategy.Wait;
 
-//TODO: remove?
 public class DDLSchemaExporter {
 
     public static void main(String[] args) {
