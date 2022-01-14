@@ -49,7 +49,7 @@ clean() {
         'org.kie.kogito/integration-tests-task-assigning-service-processes'
         'org.kie.kogito/task-assigning-service'
         'org.kie.kogito/data-index-service-inmemory'
-        'org.kie.kogito/jobs-service-inmemory'        
+        'org.kie.kogito/jobs-service-inmemory'
     )
 
     for img in ${kie_images[@]}; do
@@ -103,7 +103,7 @@ while getopts "ch" opt; do
         usage
         exit 1
         ;;
-    :)  ;;
+    :) ;;
 
     *)
         usage
@@ -127,7 +127,11 @@ fi
 
 cd $(tr --delete '\r' <<<${kogito_apps})
 if [[ "${PWD}" == */kogito-apps ]]; then
-    echo "build the kogito-apps project:"
+    #create environment file for docker compose. The content is based on actual project version
+    project_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+    rm --force ui-packages/packages/trusty/it-tests/docker-compose/.env
+    echo VERSION=${project_version} >>ui-packages/packages/trusty/it-tests/docker-compose/.env
+
     mvn clean install -DskipTests
 else
     echo >&2 "error: script is not in kogito-apps ${kogito_apps}"
