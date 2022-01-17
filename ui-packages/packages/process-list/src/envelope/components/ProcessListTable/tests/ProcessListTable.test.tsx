@@ -23,7 +23,7 @@ import { Button, Checkbox } from '@patternfly/react-core';
 import _ from 'lodash';
 import axios from 'axios';
 import { BrowserRouter } from 'react-router-dom';
-import TestProcessListDriver from '../../ProcessListPage/tests/mocks/TestProcessListDriver';
+import TestProcessListDriver from '../../ProcessList/tests/mocks/TestProcessListDriver';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 jest.mock('../../ProcessListChildTable/ProcessListChildTable');
@@ -36,29 +36,38 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@kogito-apps/components-common', () => ({
-  ...jest.requireActual('@kogito-apps/components-common'),
-  LoadMore: () => {
-    return <MockedComponent />;
-  },
-  KogitoEmptyState: () => {
-    return <MockedComponent />;
-  },
-  KogitoSpinner: () => {
-    return <MockedComponent />;
-  }
-}));
+jest.mock('@kogito-apps/components-common', () => (
+  Object.assign(
+    {},
+    jest.requireActual('@kogito-apps/components-common'),
+    {
+      LoadMore: () => {
+        return <MockedComponent />;
+      },
+      KogitoEmptyState: () => {
+        return <MockedComponent />;
+      },
+      KogitoSpinner: () => {
+        return <MockedComponent />;
+      }
+    }
+  )
+));
 
 const mockMath = Object.create(global.Math);
 mockMath.random = () => 0.5;
 global.Math = mockMath;
 
-jest.mock('@kogito-apps/management-console-shared', () => ({
-  ...jest.requireActual('@kogito-apps/management-console-shared'),
-  ProcessInfo: () => {
-    return <MockedComponent />;
-  }
-}));
+jest.mock('@kogito-apps/management-console-shared', () => (
+  Object.assign(
+    jest.requireActual('@kogito-apps/management-console-shared'),
+    {
+      ProcessInfo: () => {
+        return <MockedComponent />;
+      }
+    }
+  )
+));
 
 const props = {
   processInstances: ProcessInstances,

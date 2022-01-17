@@ -35,11 +35,15 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-addons-cloudevents-utils</artifactId>
+      <artifactId>kogito-events-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>trusty-service-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>trusty-storage-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
@@ -51,7 +55,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-addons-tracing-decision-api</artifactId>
+      <artifactId>kogito-addons-tracing-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>

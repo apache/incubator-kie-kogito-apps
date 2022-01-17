@@ -62,7 +62,7 @@ pipeline {
         }
         unsuccessful {
             script {
-                mailer.sendZulipTestSummaryNotification('SonarCloud', "[${getBuildBranch()}] Kogito Apps", [env.KOGITO_CI_EMAIL_TO])
+                mailer.sendMarkdownTestSummaryNotification('SonarCloud', "[${params.BUILD_BRANCH_NAME}] Kogito Apps", [env.KOGITO_CI_EMAIL_TO])
             }
         }
         cleanup {
@@ -74,6 +74,6 @@ pipeline {
 }
 
 MavenCommand getMavenCommand(){
-    return new MavenCommand(this, ['-fae'])
+    return new MavenCommand(this, ['-fae', '-ntp'])
                 .withSettingsXmlId('kogito_release_settings')
 }

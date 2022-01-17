@@ -225,27 +225,28 @@ exports[`DevUINav tests Snapshot testing with forms list props 1`] = `
         >
           <NavItem
             isActive={false}
-            key="process-instances-nav"
+            key="processes-nav"
           >
             <li
               className="pf-c-nav__item"
               data-ouia-component-id="OUIA-Generated-NavItem-9"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current={null}
                 className="pf-c-nav__link"
-                data-ouia-navigation-name="process-instances"
+                data-ouia-navigation-name="processes"
                 onClick={[Function]}
                 tabIndex={null}
-                to="/ProcessInstances"
+                to="/Processes"
               >
                 <LinkAnchor
                   aria-current={null}
                   className="pf-c-nav__link"
-                  data-ouia-navigation-name="process-instances"
-                  href="/ProcessInstances"
+                  data-ouia-navigation-name="processes"
+                  href="/Processes"
                   navigate={[Function]}
                   onClick={[Function]}
                   tabIndex={null}
@@ -253,8 +254,8 @@ exports[`DevUINav tests Snapshot testing with forms list props 1`] = `
                   <a
                     aria-current={null}
                     className="pf-c-nav__link"
-                    data-ouia-navigation-name="process-instances"
-                    href="/ProcessInstances"
+                    data-ouia-navigation-name="processes"
+                    href="/Processes"
                     onClick={[Function]}
                     tabIndex={null}
                   >
@@ -273,6 +274,7 @@ exports[`DevUINav tests Snapshot testing with forms list props 1`] = `
               data-ouia-component-id="OUIA-Generated-NavItem-10"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current={null}
@@ -314,6 +316,7 @@ exports[`DevUINav tests Snapshot testing with forms list props 1`] = `
               data-ouia-component-id="OUIA-Generated-NavItem-11"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current={null}
@@ -355,6 +358,7 @@ exports[`DevUINav tests Snapshot testing with forms list props 1`] = `
               data-ouia-component-id="OUIA-Generated-NavItem-12"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current="page"
@@ -422,27 +426,28 @@ exports[`DevUINav tests Snapshot testing with jobs management props 1`] = `
         >
           <NavItem
             isActive={false}
-            key="process-instances-nav"
+            key="processes-nav"
           >
             <li
               className="pf-c-nav__item"
               data-ouia-component-id="OUIA-Generated-NavItem-5"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current={null}
                 className="pf-c-nav__link"
-                data-ouia-navigation-name="process-instances"
+                data-ouia-navigation-name="processes"
                 onClick={[Function]}
                 tabIndex={null}
-                to="/ProcessInstances"
+                to="/Processes"
               >
                 <LinkAnchor
                   aria-current={null}
                   className="pf-c-nav__link"
-                  data-ouia-navigation-name="process-instances"
-                  href="/ProcessInstances"
+                  data-ouia-navigation-name="processes"
+                  href="/Processes"
                   navigate={[Function]}
                   onClick={[Function]}
                   tabIndex={null}
@@ -450,8 +455,8 @@ exports[`DevUINav tests Snapshot testing with jobs management props 1`] = `
                   <a
                     aria-current={null}
                     className="pf-c-nav__link"
-                    data-ouia-navigation-name="process-instances"
-                    href="/ProcessInstances"
+                    data-ouia-navigation-name="processes"
+                    href="/Processes"
                     onClick={[Function]}
                     tabIndex={null}
                   >
@@ -470,6 +475,7 @@ exports[`DevUINav tests Snapshot testing with jobs management props 1`] = `
               data-ouia-component-id="OUIA-Generated-NavItem-6"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current="page"
@@ -511,6 +517,7 @@ exports[`DevUINav tests Snapshot testing with jobs management props 1`] = `
               data-ouia-component-id="OUIA-Generated-NavItem-7"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current={null}
@@ -552,6 +559,7 @@ exports[`DevUINav tests Snapshot testing with jobs management props 1`] = `
               data-ouia-component-id="OUIA-Generated-NavItem-8"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current={null}
@@ -591,9 +599,9 @@ exports[`DevUINav tests Snapshot testing with jobs management props 1`] = `
 </DevUINav>
 `;
 
-exports[`DevUINav tests Snapshot testing with process list props 1`] = `
+exports[`DevUINav tests Snapshot testing with processes props 1`] = `
 <DevUINav
-  pathname="/ProcessInstances"
+  pathname="/Processes"
 >
   <Nav
     aria-label="Nav"
@@ -619,27 +627,28 @@ exports[`DevUINav tests Snapshot testing with process list props 1`] = `
         >
           <NavItem
             isActive={true}
-            key="process-instances-nav"
+            key="processes-nav"
           >
             <li
               className="pf-c-nav__item"
               data-ouia-component-id="OUIA-Generated-NavItem-1"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current="page"
                 className="pf-c-nav__link pf-m-current"
-                data-ouia-navigation-name="process-instances"
+                data-ouia-navigation-name="processes"
                 onClick={[Function]}
                 tabIndex={null}
-                to="/ProcessInstances"
+                to="/Processes"
               >
                 <LinkAnchor
                   aria-current="page"
                   className="pf-c-nav__link pf-m-current"
-                  data-ouia-navigation-name="process-instances"
-                  href="/ProcessInstances"
+                  data-ouia-navigation-name="processes"
+                  href="/Processes"
                   navigate={[Function]}
                   onClick={[Function]}
                   tabIndex={null}
@@ -647,8 +656,8 @@ exports[`DevUINav tests Snapshot testing with process list props 1`] = `
                   <a
                     aria-current="page"
                     className="pf-c-nav__link pf-m-current"
-                    data-ouia-navigation-name="process-instances"
-                    href="/ProcessInstances"
+                    data-ouia-navigation-name="processes"
+                    href="/Processes"
                     onClick={[Function]}
                     tabIndex={null}
                   >
@@ -667,6 +676,7 @@ exports[`DevUINav tests Snapshot testing with process list props 1`] = `
               data-ouia-component-id="OUIA-Generated-NavItem-2"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current={null}
@@ -708,6 +718,7 @@ exports[`DevUINav tests Snapshot testing with process list props 1`] = `
               data-ouia-component-id="OUIA-Generated-NavItem-3"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current={null}
@@ -749,6 +760,7 @@ exports[`DevUINav tests Snapshot testing with process list props 1`] = `
               data-ouia-component-id="OUIA-Generated-NavItem-4"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
+              onMouseOver={[Function]}
             >
               <Link
                 aria-current={null}
