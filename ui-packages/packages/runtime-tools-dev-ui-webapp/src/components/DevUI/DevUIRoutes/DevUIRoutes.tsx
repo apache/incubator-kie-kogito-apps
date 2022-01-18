@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router-dom';
-import { JobsManagementPage, ProcessListPage } from '../../pages';
+import { JobsManagementPage, ProcessesPage } from '../../pages';
 import { PageNotFound, NoData } from '@kogito-apps/consoles-common';
 import ProcessDetailsPage from '../../pages/ProcessDetailsPage/ProcessDetailsPage';
 import TaskInboxPage from '../../pages/TaskInboxPage/TaskInboxPage';
@@ -24,21 +24,28 @@ import TaskDetailsPage from '../../pages/TaskDetailsPage/TaskDetailsPage';
 import FormsListPage from '../../pages/FormsListPage/FormsListPage';
 import FormDetailPage from '../../pages/FormDetailsPage/FormDetailsPage';
 import { TrustyApp } from '@kogito-apps/trusty';
+import ProcessFormPage from '../../pages/ProcessFormPage/ProcessFormPage';
 
 interface IOwnProps {
+  trustyServiceUrl: string;
   navigate: string;
 }
 
-const DevUIRoutes: React.FC<IOwnProps> = ({ navigate }) => {
+const DevUIRoutes: React.FC<IOwnProps> = ({ trustyServiceUrl, navigate }) => {
   return (
     <Switch>
       <Route exact path="/" render={() => <Redirect to={`/${navigate}`} />} />
-      <Route exact path="/ProcessInstances" component={ProcessListPage} />
+      <Route exact path="/Processes" component={ProcessesPage} />
       <Route exact path="/Process/:instanceID" component={ProcessDetailsPage} />
       <Route exact path="/JobsManagement" component={JobsManagementPage} />
       <Route exact path="/TaskInbox" component={TaskInboxPage} />
       <Route exact path="/Forms" component={FormsListPage} />
       <Route exact path="/Forms/:formName" component={FormDetailPage} />
+      <Route
+        exact
+        path="/ProcessDefinition/Form/:processName"
+        component={ProcessFormPage}
+      />
       <Route
         exact
         path="/TaskDetails/:taskId"
@@ -50,6 +57,7 @@ const DevUIRoutes: React.FC<IOwnProps> = ({ navigate }) => {
           explanationEnabled={false}
           containerConfiguration={{
             pageWrapper: false,
+            serverRoot: trustyServiceUrl,
             basePath: '/Audit',
             excludeReactRouter: true,
             useHrefLinks: false

@@ -192,7 +192,7 @@ pipeline {
 
 void sendNotification() {
     if (params.SEND_NOTIFICATION) {
-        mailer.sendZulipTestSummaryNotification('Deploy', "[${getBuildBranch()}] Kogito Apps", [env.KOGITO_CI_EMAIL_TO])
+        mailer.sendMarkdownTestSummaryNotification('Deploy', "[${getBuildBranch()}] Kogito Apps", [env.KOGITO_CI_EMAIL_TO])
     } else {
         echo 'No notification sent per configuration'
     }
@@ -291,7 +291,7 @@ void setDeployPropertyIfNeeded(String key, def value) {
 }
 
 MavenCommand getMavenCommand() {
-    MavenCommand mvnCmd = new MavenCommand(this, ['-fae'])
+    MavenCommand mvnCmd = new MavenCommand(this, ['-fae', '-ntp'])
                 .withSettingsXmlId(env.MAVEN_SETTINGS_CONFIG_FILE_ID)
                 .inDirectory(getRepoName())
                 .withProperty('full')

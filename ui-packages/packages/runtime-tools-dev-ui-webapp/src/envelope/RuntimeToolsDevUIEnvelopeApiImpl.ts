@@ -61,7 +61,12 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
     this.ackCapturedInitRequest();
 
     this.args.view().setDataIndexUrl(initArgs.dataIndexUrl);
+    this.args.view().setTrustyServiceUrl(initArgs.trustyServiceUrl);
     this.args.view().setUsers(initArgs.users);
     this.args.view().navigateTo(initArgs.page);
+    this.args.view().setDevUIUrl &&
+      this.args.view().setDevUIUrl(initArgs.devUIUrl);
+    this.args.view().setOpenApiPath &&
+      this.args.view().setOpenApiPath(initArgs.openApiPath);
   };
 }

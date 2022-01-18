@@ -23,25 +23,39 @@ import ApolloClient from 'apollo-client';
 import DevUIRoutes from '../DevUIRoutes/DevUIRoutes';
 import DevUILayout from '../DevUILayout/DevUILayout';
 import ReactDOM from 'react-dom';
-
 interface IOwnProps {
   users: User[];
-  dataIndex: string;
+  dataIndexUrl: string;
+  trustyServiceUrl: string;
   navigate: string;
+  devUIUrl: string;
+  openApiPath: string;
 }
 
-const RuntimeTools: React.FC<IOwnProps> = ({ users, dataIndex, navigate }) => {
+const RuntimeTools: React.FC<IOwnProps> = ({
+  users,
+  dataIndexUrl,
+  trustyServiceUrl,
+  navigate,
+  devUIUrl,
+  openApiPath
+}) => {
   const httpLink = new HttpLink({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
-    uri: dataIndex
+    uri: dataIndexUrl
   });
 
   const fallbackUI = onError(({ networkError }: any) => {
     if (networkError && networkError.stack === 'TypeError: Failed to fetch') {
       // eslint-disable-next-line react/no-render-return-value
       return ReactDOM.render(
-        <DevUILayout apolloClient={client} users={users}>
+        <DevUILayout
+          apolloClient={client}
+          users={users}
+          devUIUrl={devUIUrl}
+          openApiPath={openApiPath}
+        >
           <ServerUnavailablePage
             displayName={'Runtime Dev UI'}
             reload={() => window.location.reload()}
@@ -59,8 +73,13 @@ const RuntimeTools: React.FC<IOwnProps> = ({ users, dataIndex, navigate }) => {
   });
 
   return (
-    <DevUILayout apolloClient={client} users={users}>
-      <DevUIRoutes navigate={navigate} />
+    <DevUILayout
+      apolloClient={client}
+      users={users}
+      devUIUrl={devUIUrl}
+      openApiPath={openApiPath}
+    >
+      <DevUIRoutes navigate={navigate} trustyServiceUrl={trustyServiceUrl} />
     </DevUILayout>
   );
 };

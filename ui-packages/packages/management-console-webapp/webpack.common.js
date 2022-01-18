@@ -56,10 +56,10 @@ module.exports = {
           ),
           path.resolve('./src/static/'),
           path.resolve(
-            '../../node_modules/@kogito-apps/consoles-common/dist/src/static'
+            '../../node_modules/@kogito-apps/consoles-common/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/components-common/dist/src/static'
+            '../../node_modules/@kogito-apps/components-common/dist/static'
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/jobs-management/dist/static'
@@ -68,7 +68,10 @@ module.exports = {
             '../../node_modules/@kogito-apps/process-details/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/management-console-shared/dist/src/static'
+            '../../node_modules/@kogito-apps/management-console-shared/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/components-common/dist/static'
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/process-list/dist/static'
@@ -127,10 +130,10 @@ module.exports = {
             '../../node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css/assets/images'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/consoles-common/dist/src/static'
+            '../../node_modules/@kogito-apps/consoles-common/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/components-common/dist/src/static'
+            '../../node_modules/@kogito-apps/components-common/dist/static'
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/jobs-management/dist/static'
@@ -139,7 +142,7 @@ module.exports = {
             '../../node_modules/@kogito-apps/process-details/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/management-console-shared/dist/src/static'
+            '../../node_modules/@kogito-apps/management-console-shared/dist/static'
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/process-list/dist/static'

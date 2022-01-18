@@ -15,8 +15,16 @@
  */
 
 import { GraphQL, User } from '@kogito-apps/consoles-common';
+import { ProcessDefinition } from '@kogito-apps/process-definition-list';
 
 import UserTaskInstance = GraphQL.UserTaskInstance;
+
+declare global {
+  interface Window {
+    KOGITO_TASK_STATES_LIST: string;
+    KOGITO_TASK_ACTIVE_STATES_LIST: string;
+  }
+}
 
 export const getTaskSchemaEndPoint = (
   task: UserTaskInstance,
@@ -69,14 +77,10 @@ export const trimTaskEndpoint = (userTask: UserTaskInstance): string => {
 };
 
 export const getAllTaskStates = (): string[] => {
-  // @ts-ignore
   if (window.KOGITO_TASK_STATES_LIST) {
-    // @ts-ignore
     return window.KOGITO_TASK_STATES_LIST.split(',').map(state => state.trim());
   }
-  // @ts-ignore
   if (process.env.KOGITO_TASK_STATES_LIST) {
-    // @ts-ignore
     return process.env.KOGITO_TASK_STATES_LIST.split(',').map(state =>
       state.trim()
     );
@@ -85,19 +89,31 @@ export const getAllTaskStates = (): string[] => {
 };
 
 export const getActiveTaskStates = (): string[] => {
-  // @ts-ignore
   if (window.KOGITO_TASK_ACTIVE_STATES_LIST) {
-    // @ts-ignore
     return window.KOGITO_TASK_ACTIVE_STATES_LIST.split(',').map(state =>
       state.trim()
     );
   }
-  // @ts-ignore
   if (process.env.KOGITO_TASK_ACTIVE_STATES_LIST) {
-    // @ts-ignore
     return process.env.KOGITO_TASK_ACTIVE_STATES_LIST.split(',').map(state =>
       state.trim()
     );
   }
   return ['Ready', 'Reserved'];
+};
+
+export const createProcessDefinitionList = (
+  processDefinitionObjs,
+  url: string
+): ProcessDefinition[] => {
+  const processDefinitionList = [];
+  processDefinitionObjs.forEach(processDefObj => {
+    const processName = Object.keys(processDefObj)[0].split('/')[1];
+    const endpoint = `${url}/${processName}`;
+    processDefinitionList.push({
+      processName,
+      endpoint
+    });
+  });
+  return processDefinitionList;
 };

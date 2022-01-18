@@ -19,7 +19,7 @@ import { mount } from 'enzyme';
 import DevUIRoutes from '../DevUIRoutes';
 import { MemoryRouter, Route } from 'react-router-dom';
 
-jest.mock('../../../pages/ProcessListPage/ProcessListPage');
+jest.mock('../../../pages/ProcessesPage/ProcessesPage');
 jest.mock('../../../pages/JobsManagementPage/JobsManagementPage');
 jest.mock('../../../pages/FormsListPage/FormsListPage');
 
@@ -27,15 +27,16 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@kogito-apps/consoles-common', () => ({
-  ...jest.requireActual('@kogito-apps/consoles-common'),
-  NoData: () => {
-    return <MockedComponent />;
-  },
-  PageNotFound: () => {
-    return <MockedComponent />;
-  }
-}));
+jest.mock('@kogito-apps/consoles-common', () =>
+  Object.assign({}, jest.requireActual('@kogito-apps/consoles-common'), {
+    NoData: () => {
+      return <MockedComponent />;
+    },
+    PageNotFound: () => {
+      return <MockedComponent />;
+    }
+  })
+);
 
 jest.mock('@kogito-apps/trusty', () => ({
   ...jest.requireActual('@kogito-apps/trusty'),
@@ -45,6 +46,7 @@ jest.mock('@kogito-apps/trusty', () => ({
 }));
 
 const props = {
+  trustyServiceUrl: 'http://url-to-service',
   navigate: 'JobsManagement'
 };
 describe('DevUIRoutes tests', () => {
@@ -63,9 +65,9 @@ describe('DevUIRoutes tests', () => {
     const MockedJobsManagementPage = wrapper.find('MockedJobsManagementPage');
     expect(MockedJobsManagementPage.exists()).toBeTruthy();
   });
-  it('process list test', () => {
+  it('processes test', () => {
     const wrapper = mount(
-      <MemoryRouter keyLength={0} initialEntries={['/ProcessInstances']}>
+      <MemoryRouter keyLength={0} initialEntries={['/Processes']}>
         <DevUIRoutes {...props} />
       </MemoryRouter>
     );
@@ -74,7 +76,7 @@ describe('DevUIRoutes tests', () => {
     const route = wrapper.find(Route);
     expect(route.exists()).toBeTruthy();
 
-    const MockedProcessListPage = wrapper.find('MockedProcessListPage');
+    const MockedProcessListPage = wrapper.find('MockedProcessesPage');
     expect(MockedProcessListPage.exists()).toBeTruthy();
   });
   it('jobs management page test', () => {
@@ -118,7 +120,18 @@ describe('DevUIRoutes tests', () => {
     const route = wrapper.find(Route);
     expect(route.exists()).toBeTruthy();
 
-    expect(wrapper.find('TrustyApp').exists()).toBeTruthy();
+    const trusty = wrapper.find('TrustyApp');
+    expect(trusty.exists()).toBeTruthy();
+
+    const trustyProps = trusty.props();
+    expect(trustyProps).not.toBeUndefined();
+    expect(trustyProps['containerConfiguration']).not.toBeUndefined();
+    expect(
+      trustyProps['containerConfiguration']['serverRoot']
+    ).not.toBeUndefined();
+    expect(trustyProps['containerConfiguration']['serverRoot']).toEqual(
+      props.trustyServiceUrl
+    );
   });
 
   it('no data page test', () => {

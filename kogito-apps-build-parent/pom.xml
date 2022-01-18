@@ -21,9 +21,9 @@
         <tests.quarkus.http.port>0</tests.quarkus.http.port>
 
         <version.frontend.plugin>1.9.1</version.frontend.plugin>
-        <version.node>v12.20.0</version.node>
+        <version.node>v16.2.0</version.node>
         <version.npm>6.10.3</version.npm>
-        <version.yarn>v1.19.1</version.yarn>
+        <version.yarn>v1.22.10</version.yarn>
 
         <!-- external containers used for testing -->
         <container.image.redis>redislabs/redisearch:${version.org.redis}</container.image.redis>
@@ -40,7 +40,7 @@
         <container.image.task-assigning-service>org.kie.kogito/task-assigning-service:${project.version}</container.image.task-assigning-service>
 
         <!-- OptaPlanner version -->
-        <version.org.optaplanner>8.15.0-SNAPSHOT</version.org.optaplanner>
+        <version.org.optaplanner>8.17.0-SNAPSHOT</version.org.optaplanner>
 
         <version.com.vladmihalcea.hibernate-types-55>2.12.1</version.com.vladmihalcea.hibernate-types-55>
         <version.org.apache.opennlp>1.9.2</version.org.apache.opennlp>

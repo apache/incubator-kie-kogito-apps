@@ -60,7 +60,6 @@ export const MockedEnvelopeBusController = jest.fn<
   []
 >(() => ({
   bus: jest.fn(),
-  // @ts-ignore
   manager: jest.fn(),
   associate: jest.fn(),
   channelApi: new MockedMessageBusClientApi(),
@@ -75,6 +74,7 @@ export const MockedRuntimeToolsDevUIEnvelopeViewApi = jest.fn<
   []
 >(() => ({
   setDataIndexUrl: jest.fn(),
+  setTrustyServiceUrl: jest.fn(),
   setUsers: jest.fn(),
   navigateTo: jest.fn()
 }));

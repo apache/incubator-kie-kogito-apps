@@ -36,8 +36,11 @@ describe('RuntimeToolsDevUIEnvelopeView tests', () => {
     act(() => {
       if (forwardRef.current) {
         forwardRef.current.setDataIndexUrl('http://localhost:4000');
+        forwardRef.current.setTrustyServiceUrl('http://localhost:1336');
         forwardRef.current.setUsers([]);
         forwardRef.current.navigateTo('test');
+        forwardRef.current.setDevUIUrl('http://localhost:8080');
+        forwardRef.current.setOpenApiPath('/docs/openapi.json');
       }
     });
     const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);

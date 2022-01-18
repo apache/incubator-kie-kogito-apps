@@ -2,11 +2,11 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "declarationDir": "./dist",
-        "declaration": true
+        "declaration": true,
+        "outDir": "dist",
+        "target": "es5",
+        "esModuleInterop": true
     },
-    "files": [
-        "./index.ts"
-    ],
     "include": [
         "src/",
         "../../config/declare.d.ts"
@@ -14,6 +14,7 @@
     "exclude": [
         "src/**/*.test.ts",
         "src/**/*.test.tsx",
-        "src/**/__mocks__"
+        "src/**/__mocks__",
+        "src/**/tests"
     ] 
 }
