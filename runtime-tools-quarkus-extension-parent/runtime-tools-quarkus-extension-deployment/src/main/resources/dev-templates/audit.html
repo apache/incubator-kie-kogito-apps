@@ -38,7 +38,9 @@ height: calc(100vh - 98px);
         users: {info:userInfo.arrayRepresentation.raw},
         dataIndexUrl: "{config:property('kogito.data-index.url')}/graphql",
         trustyServiceUrl: "{config:property('kogito.trusty.http.url')}",
-        page: "Audit"
+        page: "Audit",
+        devUIUrl:"{config:property('kogito.data-index.url')}",
+        openApiPath:"/q/openapi.json"
     })
 </script>
 {/body}

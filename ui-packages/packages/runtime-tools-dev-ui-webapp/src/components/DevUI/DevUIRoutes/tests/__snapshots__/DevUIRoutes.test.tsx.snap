@@ -64,6 +64,7 @@ exports[`DevUIRoutes tests::Process and Tracing enabled Test Jobs management rou
               }
             }
             exact={true}
+            key="3"
             location={
               Object {
                 "hash": "",
@@ -192,6 +193,7 @@ exports[`DevUIRoutes tests::Process and Tracing enabled Test NoData route 1`] = 
                 "url": "/NoData",
               }
             }
+            key="10"
             location={
               Object {
                 "hash": "",
@@ -327,6 +329,7 @@ exports[`DevUIRoutes tests::Process and Tracing enabled Test PageNotFound route 
                 "url": "*",
               }
             }
+            key="11"
             location={
               Object {
                 "hash": "",
@@ -462,6 +465,7 @@ exports[`DevUIRoutes tests::Process and Tracing enabled audit investigation page
                 "url": "/Audit",
               }
             }
+            key="9"
             location={
               Object {
                 "hash": "",
@@ -559,6 +563,7 @@ exports[`DevUIRoutes tests::Process and Tracing enabled forms list page test 1`]
               }
             }
             exact={true}
+            key="5"
             location={
               Object {
                 "hash": "",
@@ -689,6 +694,7 @@ exports[`DevUIRoutes tests::Process and Tracing enabled jobs management page tes
               }
             }
             exact={true}
+            key="3"
             location={
               Object {
                 "hash": "",
@@ -817,6 +823,7 @@ exports[`DevUIRoutes tests::Process and Tracing enabled no data page test 1`] = 
                 "url": "/NoData",
               }
             }
+            key="10"
             location={
               Object {
                 "hash": "",
@@ -952,6 +959,7 @@ exports[`DevUIRoutes tests::Process and Tracing enabled page not found page test
                 "url": "*",
               }
             }
+            key="11"
             location={
               Object {
                 "hash": "",
@@ -1089,6 +1097,7 @@ exports[`DevUIRoutes tests::Process and Tracing enabled processes test 1`] = `
               }
             }
             exact={true}
+            key="1"
             location={
               Object {
                 "hash": "",
