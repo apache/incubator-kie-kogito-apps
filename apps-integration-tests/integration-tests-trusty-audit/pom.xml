@@ -154,32 +154,6 @@
                             </run>
                         </image>
                         <image>
-                            <alias>kafkadrop</alias>
-                            <name>obsidiandynamics/kafdrop</name>
-
-                            <run>
-                                <dependsOn>
-                                    <container>kafka</container>
-                                </dependsOn>
-                                <ports>
-                                    <port>9000:9000</port>
-                                </ports>
-                                <env>
-                                    <KAFKA_BROKERCONNECT>kafka-1:9093</KAFKA_BROKERCONNECT>
-                                    <JVM_OPTS>-Xms32M -Xmx64M</JVM_OPTS> 
-                                    <SERVER_SERVLET_CONTEXTPATH>/</SERVER_SERVLET_CONTEXTPATH> 
-                                </env>
-                                <network>
-                                    <mode>custom</mode>
-                                    <name>trusty-nw</name>
-                                </network>
-                                <log>
-                                    <prefix>%a </prefix>
-                                    <file>${project.build.directory}/kafkadrop.log</file>
-                                </log>
-                            </run>
-                        </image>
-                        <image>
                             <alias>infinispan</alias>
                             <name>infinispan/server:13.0.2.Final</name>
 

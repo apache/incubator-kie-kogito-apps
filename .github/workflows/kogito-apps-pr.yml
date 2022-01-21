@@ -49,13 +49,3 @@ jobs:
         if: ${{ always() }}
         with:
           report_paths: '**/*-reports/TEST-*.xml'
-      - name: 'Upload artifacts'
-        uses: actions/upload-artifact@v2
-        if: always() && !cancelled()
-        with:
-          name: artifacts-${{ matrix.os }}
-          if-no-files-found: warn
-          path: |
-            **/*.log
-            **/cypress/screenshots/**
-            **/cypress/videos/**
