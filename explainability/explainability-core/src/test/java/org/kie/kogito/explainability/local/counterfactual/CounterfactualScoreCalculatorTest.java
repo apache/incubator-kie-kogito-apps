@@ -903,7 +903,7 @@ class CounterfactualScoreCalculatorTest {
 
         final int nFeatures = 1000;
         // Create a large number of identical features
-        for (int n = 0 ; n < nFeatures ; n++) {
+        for (int n = 0; n < nFeatures; n++) {
             features.add(FeatureFactory.newNumericalFeature("f-" + n, random.nextDouble() * 1e-100));
             featureDomains.add(NumericalFeatureDomain.create(0.0, 10.0));
             constraints.add(false);
@@ -911,7 +911,8 @@ class CounterfactualScoreCalculatorTest {
 
         final PredictionInput input = new PredictionInput(features);
         final PredictionFeatureDomain domain = new PredictionFeatureDomain(featureDomains);
-        final List<CounterfactualEntity> entities = CounterfactualEntityFactory.createEntities(input, domain, constraints, null);
+        final List<CounterfactualEntity> entities =
+                CounterfactualEntityFactory.createEntities(input, domain, constraints, null);
 
         // Create score calculator and model
         final CounterFactualScoreCalculator scoreCalculator = new CounterFactualScoreCalculator();
@@ -919,7 +920,7 @@ class CounterfactualScoreCalculatorTest {
 
         // Create goal
         final List<Output> goal = new ArrayList<>();
-        for (int n = 1 ; n < nFeatures ; n++) {
+        for (int n = 1; n < nFeatures; n++) {
             goal.add(new Output("f-" + n, Type.NUMBER, features.get(n).getValue(), 1.0));
         }
 
