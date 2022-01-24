@@ -20,17 +20,17 @@ import DevUILayout from '../DevUILayout';
 import DevUIRoutes from '../../DevUIRoutes/DevUIRoutes';
 import { ApolloClient } from 'apollo-client';
 import { MemoryRouter } from 'react-router-dom';
+import { InMemoryCache } from 'apollo-cache-inmemory';
 
 jest.mock('../../DevUIRoutes/DevUIRoutes');
 
 jest.mock('apollo-client');
 const ApolloClientMock = ApolloClient as jest.MockedClass<typeof ApolloClient>;
+const cache = new InMemoryCache();
 
 describe('DevUILayout tests', () => {
   it('Snapshot test with default props', () => {
-    // eslint-disable-next-line
-    // @ts-ignore
-    const client = new ApolloClientMock();
+    const client = new ApolloClientMock({ cache: cache });
     const props = {
       apolloClient: client,
       users: [{ id: 'John snow', groups: ['admin'] }],
@@ -69,9 +69,7 @@ describe('DevUILayout tests', () => {
   });
 
   it('Snapshot test with Processing disabled', () => {
-    // eslint-disable-next-line
-    // @ts-ignore
-    const client = new ApolloClientMock();
+    const client = new ApolloClientMock({ cache: cache });
     const props = {
       apolloClient: client,
       users: [{ id: 'John snow', groups: ['admin'] }],
@@ -110,9 +108,7 @@ describe('DevUILayout tests', () => {
   });
 
   it('Snapshot test with Tracing disabled', () => {
-    // eslint-disable-next-line
-    // @ts-ignore
-    const client = new ApolloClientMock();
+    const client = new ApolloClientMock({ cache: cache });
     const props = {
       apolloClient: client,
       users: [{ id: 'John snow', groups: ['admin'] }],
