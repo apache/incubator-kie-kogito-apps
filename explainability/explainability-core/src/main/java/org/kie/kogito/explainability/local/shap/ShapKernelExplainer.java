@@ -593,7 +593,7 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
      */
     private List<Integer> getRegularizationIndexes(RealMatrix augX, RealVector augY) {
         List<Integer> nonzeros = List.of();
-        switch (this.config.getRegularizerType()){
+        switch (this.config.getRegularizerType()) {
             case AUTO:
             case AIC:
                 nonzeros = MatrixUtilsExtensions.nonzero(
@@ -601,7 +601,7 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
                 break;
             case BIC:
                 nonzeros = MatrixUtilsExtensions.nonzero(
-                    LassoLarsIC.fit(augX, augY, LassoLarsIC.Criterion.BIC).getCoefs());
+                        LassoLarsIC.fit(augX, augY, LassoLarsIC.Criterion.BIC).getCoefs());
                 break;
             case TOP_N_FEATURES:
                 nonzeros = LarsPath.fit(augX, augY, this.config.getNRegularizationFeatures(), false)
@@ -612,8 +612,6 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
         }
         return nonzeros;
     }
-
-
 
     /**
      * Create a WLR model to retrieve the SHAP values for a particular output of the model
@@ -631,7 +629,6 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
         RealMatrix xs = MatrixUtils.createRealMatrix(new double[sdc.getSamplesAddedSize()][sdc.getCols()]);
         RealVector ws = MatrixUtils.createRealVector(new double[sdc.getSamplesAddedSize()]);
         RealVector ys = MatrixUtils.createRealVector(new double[sdc.getSamplesAddedSize()]);
-
 
         for (int i = 0; i < sdc.getSamplesAddedSize(); i++) {
             for (int j = 0; j < sdc.getCols(); j++) {
@@ -652,21 +649,21 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
             RealVector maskSum = MatrixUtilsExtensions.colSum(xs);
 
             // augment weights
-            RealVector augWeights = MatrixUtils.createRealVector(new double[ws.getDimension()*2]);
+            RealVector augWeights = MatrixUtils.createRealVector(new double[ws.getDimension() * 2]);
             augWeights.setSubVector(0, ws.ebeMultiply(maskSum.map(x -> sdc.getNumVarying() - x)));
             augWeights.setSubVector(ws.getDimension(), ws.ebeMultiply(maskSum));
             RealVector sqrtAugWeights = augWeights.map(Math::sqrt);
 
             // augment ys
-            RealVector augYs = MatrixUtils.createRealVector(new double[ys.getDimension()*2]);
+            RealVector augYs = MatrixUtils.createRealVector(new double[ys.getDimension() * 2]);
             augYs.setSubVector(0, ys);
             augYs.setSubVector(ys.getDimension(), ys.mapSubtract(outputChange));
             augYs = augYs.ebeMultiply(sqrtAugWeights);
 
             // augment xs
-            RealMatrix augXsRaw = MatrixUtils.createRealMatrix(xs.getRowDimension()*2, xs.getColumnDimension());
+            RealMatrix augXsRaw = MatrixUtils.createRealMatrix(xs.getRowDimension() * 2, xs.getColumnDimension());
             augXsRaw.setSubMatrix(xs.getData(), 0, 0);
-            augXsRaw.setSubMatrix(MatrixUtilsExtensions.map(xs,x -> x-1).getData(), xs.getRowDimension(), 0);
+            augXsRaw.setSubMatrix(MatrixUtilsExtensions.map(xs, x -> x - 1).getData(), xs.getRowDimension(), 0);
             RealMatrix augXs = MatrixUtilsExtensions.vectorRowProduct(augXsRaw.transpose(), sqrtAugWeights).transpose();
 
             nonzeros = getRegularizationIndexes(augXs, augYs);
@@ -675,16 +672,16 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
         }
 
         // select features for regularization as specified by nonzeros
-        dropIdx = nonzeros.get(nonzeros.size()-1);
+        dropIdx = nonzeros.get(nonzeros.size() - 1);
         RealVector dropMask = xs.getColumnVector(dropIdx);
         RealVector dropEffect = dropMask.mapMultiply(outputChange);
         RealVector adjY = ys.subtract(dropEffect);
-        List<Integer> allNZButLast = nonzeros.subList(0, nonzeros.size()-1);
+        List<Integer> allNZButLast = nonzeros.subList(0, nonzeros.size() - 1);
         RealMatrix includedXS = MatrixUtilsExtensions.getCols(xs, allNZButLast);
         RealMatrix xsAdj = MatrixUtilsExtensions.vectorDifference(
-                        MatrixUtilsExtensions.getCols(xs, allNZButLast),
-                        dropMask,
-                        MatrixUtilsExtensions.Axis.COLUMN);
+                MatrixUtilsExtensions.getCols(xs, allNZButLast),
+                dropMask,
+                MatrixUtilsExtensions.Axis.COLUMN);
 
         // run the regression
         return this.runWLRR(xsAdj, adjY, ws, outputChange, dropIdx, nonzeros, sdc);
@@ -742,7 +739,7 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
      */
     // run the WLRR for a single output
     private RealVector[] runWLRR(RealMatrix maskDiff, RealVector adjY, RealVector ws, double outputChange,
-            int dropIdx,  List<Integer> nonzeros, ShapDataCarrier sdc) {
+            int dropIdx, List<Integer> nonzeros, ShapDataCarrier sdc) {
 
         // temporary conversion to and from MAtrixUtils data structures; these will be used throughout after FAI-661
         WeightedLinearRegressionResults wlrr = WeightedLinearRegression.fit(maskDiff, adjY, ws, false);

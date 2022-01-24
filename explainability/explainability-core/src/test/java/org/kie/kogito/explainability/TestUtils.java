@@ -92,7 +92,7 @@ public class TestUtils {
         });
     }
 
-        public static PredictionProvider getLinearModel(double[] weights) {
+    public static PredictionProvider getLinearModel(double[] weights) {
         return inputs -> supplyAsync(() -> {
             List<PredictionOutput> predictionOutputs = new LinkedList<>();
             for (PredictionInput predictionInput : inputs) {

@@ -153,8 +153,7 @@ public class MatrixUtilsExtensions {
         return out;
     }
 
-
-        /**
+    /**
      * Sums the columns of a RealMatrix together
      *
      * @param m the matrix to be column-summed
@@ -235,9 +234,9 @@ public class MatrixUtilsExtensions {
         return out;
     }
 
-    public static RealMatrix map(RealMatrix m, UnivariateFunction op){
+    public static RealMatrix map(RealMatrix m, UnivariateFunction op) {
         RealMatrix output = m.copy();
-        for (int i=0; i<m.getRowDimension(); i++){
+        for (int i = 0; i < m.getRowDimension(); i++) {
             output.setRowVector(i, m.getRowVector(i).map(op));
         }
         return output;
@@ -298,7 +297,6 @@ public class MatrixUtilsExtensions {
         return out;
     }
 
-
     // === REAL VECTOR STATISTICS =====================================
     /**
      * Find the minimum positive value of a vector. Returns the max double if no values are positive.
@@ -320,9 +318,9 @@ public class MatrixUtilsExtensions {
         return minPos;
     }
 
-        /**
+    /**
      * Find nonzero indexs of a vector.
-         *
+     *
      * @param v the vector to find nonzeros in
      * @return a list of nonzero indexes
      *
@@ -330,7 +328,7 @@ public class MatrixUtilsExtensions {
     public static List<Integer> nonzero(RealVector v) {
         List<Integer> output = new ArrayList<>();
         for (int i = 0; i < v.getDimension(); i++) {
-            if (v.getEntry(i) != 0 ) {
+            if (v.getEntry(i) != 0) {
                 output.add(i);
             }
         }

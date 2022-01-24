@@ -70,7 +70,7 @@ class MatrixUtilsExtensionsTest {
             { 7., 8., 9. },
     };
 
-        double[][] matSquareSingularPow = {
+    double[][] matSquareSingularPow = {
             { 1., 4., 9. },
             { 16., 25., 36. },
             { 49., 64., 81. },
@@ -230,7 +230,7 @@ class MatrixUtilsExtensionsTest {
 
     @Test
     void matMap() {
-        assertArrayEquals(matSquareSingularPow, MatrixUtilsExtensions.map(mssMatrix, x -> x*x).getData());
+        assertArrayEquals(matSquareSingularPow, MatrixUtilsExtensions.map(mssMatrix, x -> x * x).getData());
     }
 
     // Matrix Product tests ============================================================================================

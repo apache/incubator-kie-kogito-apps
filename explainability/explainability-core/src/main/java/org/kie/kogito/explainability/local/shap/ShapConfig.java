@@ -22,7 +22,6 @@ import java.util.Optional;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 
-import io.micrometer.core.lang.Nullable;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -69,11 +68,11 @@ public class ShapConfig {
      * @param nSamples: int, the number of data samples to run when computing shap values
      * @param confidence: The size of the confidence window to use for shap values
      * @param regularizerType: The choice of regularizer to use when fitting data. This will select a certain fraction
-     *                         of features to use, based on which are most important to the regression
+     *        of features to use, based on which are most important to the regression
      * @param nRegularizationFeatures: If desired, the exact number of top regularization features can be specified
      */
     protected ShapConfig(LinkType link, List<PredictionInput> background, PerturbationContext pc, Executor executor,
-                         Integer nSamples, double confidence, RegularizerType regularizerType, Integer nRegularizationFeatures) {
+            Integer nSamples, double confidence, RegularizerType regularizerType, Integer nRegularizationFeatures) {
         this.link = link;
         this.background = background;
         this.backgroundMatrix = MatrixUtilsExtensions.matrixFromPredictionInput(background);
@@ -106,7 +105,7 @@ public class ShapConfig {
         private Builder() {
         }
 
-        public Builder copy(){
+        public Builder copy() {
             Builder output = new Builder()
                     .withLink(this.builderLink)
                     .withBackground(this.builderBackground)
@@ -207,7 +206,7 @@ public class ShapConfig {
          * @return Builder
          */
         public Builder withRegularizer(RegularizerType rt) {
-            if (rt == RegularizerType.TOP_N_FEATURES){
+            if (rt == RegularizerType.TOP_N_FEATURES) {
                 throw new IllegalArgumentException("To use a top-n feature regularizer, simply pass the desired number " +
                         "of features as an integer");
             }
@@ -227,8 +226,6 @@ public class ShapConfig {
             this.builderNRegularizerFeatures = nTopFeatures;
             return this;
         }
-
-
 
         /**
          * Build
