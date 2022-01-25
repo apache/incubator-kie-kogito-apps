@@ -39,11 +39,9 @@ public class LarsPath {
      */
     private static void updateCovarianceTrackers(LarsPathDataCarrier lpdc) {
         if (lpdc.getCov().getDimension() > 0) {
-            //System.out.printf("cov: %s %n", lpdc.getCov());
             lpdc.setcIdx(lpdc.getCov().map(Math::abs).map(x -> Precision.round(x, 16)).getMaxIndex());
             lpdc.setC_(lpdc.getCov().getEntry(lpdc.getcIdx()));
         } else {
-            //System.out.printf("no cov dimension %n");
             lpdc.setC_(0);
             lpdc.setcIdx(0);
         }
@@ -158,7 +156,6 @@ public class LarsPath {
                 lpdc.getAlphas().setEntry(nIter, 0);
             }
             lpdc.getCoefs().setRowVector(nIter, coef);
-            //System.out.println("!!!min alpha break!!!");
             return true;
         }
         return false;
@@ -186,7 +183,6 @@ public class LarsPath {
         int nActive = lpdc.getnActive();
 
         if (nIter > 0 && alphas.getEntry(nIter - 1) < alphas.getEntry(nIter)) {
-            //System.out.println("!!!early stopping break!!!");
             String logMessage = String.format(
                     "Early stopping the lars path, as the residues " +
                             "are small and the current value of alpha is no " +
@@ -394,7 +390,6 @@ public class LarsPath {
         int nIter = lpdc.getnIter();
         RealVector rawAlphas = lpdc.getAlphas();
         RealMatrix rawCoefs = lpdc.getCoefs();
-        //System.out.printf("rawCoefs %s %n",rawCoefs);
 
         if (nIter + 1 < rawAlphas.getDimension()) {
             lpdc.setAlphas(
@@ -429,13 +424,11 @@ public class LarsPath {
         LarsPathDataCarrier lpdc = new LarsPathDataCarrier(X, y, maxIterations, lasso);
 
         while (true) {
-            //System.out.println("iter");
             updateCovarianceTrackers(lpdc);
 
             // check preliminary break conditions
             if (minimumAlphaBreakCondition(lpdc) || maximumIterationBreakCondition(lpdc))
                 break;
-            //System.out.println("postalpha?");
             // get the decomposition of the X transpose subset
             getCholeskyDecomposition(lpdc);
             if (lpdc.isDegenerateRegressor()) {
@@ -443,7 +436,6 @@ public class LarsPath {
             }
 
             if (lpdc.isLasso() && earlyStoppingBreakCondition(lpdc)) {
-                //System.out.println("!!!early stop break!!!");
                 break;
             }
 

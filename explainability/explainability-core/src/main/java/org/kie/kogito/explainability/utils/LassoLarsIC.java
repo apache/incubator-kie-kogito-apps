@@ -40,21 +40,12 @@ public class LassoLarsIC {
         double epsilon32 = Math.ulp((float) 1.0);
         double epsilon64 = Math.ulp(1.0);
 
-        //System.out.printf("prenorm X %s %n", X.getColumnVector(0));
-        //System.out.printf("prenorm Y %s %n", y.getSubVector(0, 3));
-
-        //System.out.printf("maxIter %d %n",maxIterations);
-
         // center input data
         RealVector xMean = MatrixUtilsExtensions.rowSum(X).mapDivide(nSamples);
-        //System.out.printf("xMean %s %n",xMean);
         double yMean = Arrays.stream(y.toArray()).sum() / nSamples;
 
         RealMatrix xCenter = MatrixUtilsExtensions.vectorDifference(X, xMean, MatrixUtilsExtensions.Axis.ROW);
         RealVector yCenter = y.mapSubtract(yMean);
-
-        //System.out.printf("postnorm X %s %n", xCenter.getColumnVector(0));
-        //System.out.printf("postnorm Y %s %n", yCenter.getSubVector(0, 3));
 
         LarsPathResults lpResults = LarsPath.fit(xCenter, yCenter, maxIterations, true);
 
@@ -78,7 +69,6 @@ public class LassoLarsIC {
         }
         RealVector criterion = mse.mapMultiply(nSamples).mapDivide(sigma2 + epsilon64).add(dof.mapMultiply(K));
         int best = criterion.getMinIndex();
-        //System.out.printf("lassoaic coefs %s %n",lpResults.getCoefs());
         RealVector bestCoef = lpResults.getCoefs().getColumnVector(best);
         double bestAlpha = lpResults.getAlphas().getEntry(best);
         double intercept = yMean - xMean.dotProduct(bestCoef);

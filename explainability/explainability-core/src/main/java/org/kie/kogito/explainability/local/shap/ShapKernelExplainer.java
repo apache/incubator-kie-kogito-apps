@@ -346,7 +346,6 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
 
             // renormalize weights after full subsets have been added
             this.renormalizeWeights(shapStats);
-            //System.out.printf("weightsum: %f %n", IntStream.range(0, sdc.getSamplesAddedSize()).mapToDouble(i -> sdc.getSamplesAdded(i).getWeight()).sum());
 
             // sample non-fully enumerated subsets
             this.addNonCompleteSubsets(shapStats, pi, sdc);
@@ -508,10 +507,9 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
                 }
 
                 // add compliment if possible
-                if (shapStats.getNumSamplesRemaining() > 0 && subsetSize <= shapStats.getLargestPairedSubsetSize()) {
-                    if (this.addSample(pi, maskIdxs, 1., true, false, sdc)) {
-                        shapStats.decreaseNumSamplesRemainingBy(1);
-                    }
+                if ((shapStats.getNumSamplesRemaining() > 0 && subsetSize <= shapStats.getLargestPairedSubsetSize()) &&
+                        (this.addSample(pi, maskIdxs, 1., true, false, sdc))) {
+                    shapStats.decreaseNumSamplesRemainingBy(1);
                 }
             }
             this.normalizeSampleWeights(shapStats, sdc);
@@ -620,12 +618,11 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
      * @param output: The index of the particular output
      * @param poVector: The predictionOutputs for this explanation's prediction
      * @param fnull: The value stored in the CompletableFuture this.fnull
-     * @param dropIdx: The regularization feature to use in the wlr model
      *
      * @return the shap values as found by the WLR
      */
     private RealVector[] solve(RealMatrix expectations, int output, RealVector poVector, RealVector fnull,
-            int dropIdx, ShapDataCarrier sdc) {
+            ShapDataCarrier sdc) {
         RealMatrix xs = MatrixUtils.createRealMatrix(new double[sdc.getSamplesAddedSize()][sdc.getCols()]);
         RealVector ws = MatrixUtils.createRealVector(new double[sdc.getSamplesAddedSize()]);
         RealVector ys = MatrixUtils.createRealVector(new double[sdc.getSamplesAddedSize()]);
@@ -672,12 +669,11 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
         }
 
         // select features for regularization as specified by nonzeros
-        dropIdx = nonzeros.get(nonzeros.size() - 1);
+        int dropIdx = nonzeros.get(nonzeros.size() - 1);
         RealVector dropMask = xs.getColumnVector(dropIdx);
         RealVector dropEffect = dropMask.mapMultiply(outputChange);
         RealVector adjY = ys.subtract(dropEffect);
         List<Integer> allNZButLast = nonzeros.subList(0, nonzeros.size() - 1);
-        RealMatrix includedXS = MatrixUtilsExtensions.getCols(xs, allNZButLast);
         RealMatrix xsAdj = MatrixUtilsExtensions.vectorDifference(
                 MatrixUtilsExtensions.getCols(xs, allNZButLast),
                 dropMask,
@@ -697,14 +693,12 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
      */
     private CompletableFuture<RealMatrix[]> solveSystem(CompletableFuture<RealMatrix> expectations, RealVector poVector,
             ShapDataCarrier sdc) {
-        int dropIdx = sdc.getVaryingFeatureGroups(sdc.getVaryingFeatureGroups().size() - 1);
-
         return expectations.thenCompose(exps -> sdc.getFnull().thenCompose(fn -> sdc.getOutputSize().thenCompose(os -> {
             HashMap<Integer, CompletableFuture<RealVector[]>> shapSlices = new HashMap<>();
             for (int output = 0; output < os; output++) {
                 int finalOutput = output;
                 shapSlices.put(output, CompletableFuture.supplyAsync(
-                        () -> solve(exps, finalOutput, poVector, fn, dropIdx, sdc),
+                        () -> solve(exps, finalOutput, poVector, fn, sdc),
                         this.config.getExecutor()));
             }
 
@@ -749,8 +743,7 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
         int usedCoefs = 0;
         RealVector shapSlice = MatrixUtils.createRealVector(new double[sdc.getCols()]);
         RealVector boundsReg = shapSlice.copy();
-        for (int i = 0; i < nonzeros.size(); i++) {
-            int idx = nonzeros.get(i);
+        for (int idx : nonzeros) {
             if (idx != dropIdx) {
                 shapSlice.setEntry(idx, coeffs.getEntry(usedCoefs));
                 boundsReg.setEntry(idx, bounds.getEntry(usedCoefs));
