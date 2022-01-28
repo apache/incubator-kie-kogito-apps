@@ -17,7 +17,10 @@ package org.kie.kogito.explainability.local.lime.optim;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -27,11 +30,24 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.TestUtils;
+import org.kie.kogito.explainability.local.lime.LimeConfig;
+import org.kie.kogito.explainability.local.lime.LimeExplainer;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
+import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.Saliency;
+import org.kie.kogito.explainability.model.SimplePrediction;
+import org.kie.kogito.explainability.model.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
 class RecordingLimeExplainerTest {
@@ -95,5 +111,31 @@ class RecordingLimeExplainerTest {
             queue.offer(s);
         }
         assertThat(queue).containsExactly("c d e f g".split(" "));
+    }
+
+    @ParameterizedTest
+    @ValueSource(longs = { 0 })
+    void testAutomaticConfigOptimization(long seed) throws Exception {
+        PredictionProvider model = TestUtils.getSumThresholdModel(10, 10);
+        PerturbationContext pc = new PerturbationContext(seed, new Random(), 1);
+        LimeConfig config = new LimeConfig().withPerturbationContext(pc);
+        LimeExplainer limeExplainer = new RecordingLimeExplainer(config, 5);
+        for (int i = 0; i < 10; i++) {
+            List<Feature> features = new LinkedList<>();
+            features.add(TestUtils.getMockedNumericFeature(Type.NUMBER.randomValue(pc).asNumber()));
+            features.add(TestUtils.getMockedNumericFeature(Type.NUMBER.randomValue(pc).asNumber()));
+            features.add(TestUtils.getMockedNumericFeature(Type.NUMBER.randomValue(pc).asNumber()));
+            PredictionInput input = new PredictionInput(features);
+            List<PredictionOutput> outputs = model.predictAsync(List.of(input))
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+            Prediction prediction = new SimplePrediction(input, outputs.get(0));
+
+            Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model).toCompletableFuture()
+                    .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+            for (Saliency saliency : saliencyMap.values()) {
+                assertNotNull(saliency);
+            }
+        }
+
     }
 }
