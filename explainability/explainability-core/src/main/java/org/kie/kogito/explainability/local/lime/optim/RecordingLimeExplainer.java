@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -112,5 +113,25 @@ public class RecordingLimeExplainer extends LimeExplainer {
 
     public LimeConfig getExecutionConfig() {
         return executionConfig;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        RecordingLimeExplainer that = (RecordingLimeExplainer) o;
+        return executionConfig.equals(that.executionConfig);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), executionConfig);
     }
 }
