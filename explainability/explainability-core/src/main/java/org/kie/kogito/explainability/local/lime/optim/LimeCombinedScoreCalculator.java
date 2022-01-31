@@ -18,6 +18,9 @@ package org.kie.kogito.explainability.local.lime.optim;
 import org.optaplanner.core.api.score.buildin.simplebigdecimal.SimpleBigDecimalScore;
 import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
 
+/**
+ * A score calculator which combines stability and impact-score scores.
+ */
 public class LimeCombinedScoreCalculator implements EasyScoreCalculator<LimeConfigSolution, SimpleBigDecimalScore> {
 
     private final EasyScoreCalculator<LimeConfigSolution, SimpleBigDecimalScore> stability = new LimeStabilityScoreCalculator();

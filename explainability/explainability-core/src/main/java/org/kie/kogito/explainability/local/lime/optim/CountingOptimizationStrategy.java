@@ -23,6 +23,9 @@ import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionProvider;
 
+/**
+ * Simple count based {@link LimeConfigOptimizationStrategy}.
+ */
 public class CountingOptimizationStrategy implements LimeConfigOptimizationStrategy {
 
     private final int epochLength;

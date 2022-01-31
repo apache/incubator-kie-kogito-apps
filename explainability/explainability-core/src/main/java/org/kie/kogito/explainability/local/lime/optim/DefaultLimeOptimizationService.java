@@ -27,6 +27,9 @@ import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Default implementation for {@link LimeOptimizationService}.
+ */
 public class DefaultLimeOptimizationService implements LimeOptimizationService {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultLimeOptimizationService.class);

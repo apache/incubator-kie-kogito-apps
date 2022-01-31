@@ -18,9 +18,26 @@ package org.kie.kogito.explainability.local.lime.optim;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
 
+/**
+ * A service used to perform LIME hyperparameter optimization.
+ * <p>
+ * See also {@link LimeConfigOptimizer}.
+ */
 public interface LimeOptimizationService {
 
+    /**
+     * Submit a LimeOptimizationRequest.
+     *
+     * @param limeOptimizationRequest the request to be sumitted
+     * @return whether the request has been accepted or not
+     */
     boolean submit(LimeOptimizationRequest limeOptimizationRequest);
 
+    /**
+     * Obtain the best config for a given LIME explainer.
+     *
+     * @param limeExplainer the LIME explainer
+     * @return the best config available
+     */
     LimeConfig getBestConfigFor(LimeExplainer limeExplainer);
 }

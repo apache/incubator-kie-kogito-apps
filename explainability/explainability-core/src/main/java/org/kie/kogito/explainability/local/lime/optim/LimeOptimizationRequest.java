@@ -22,6 +22,9 @@ import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionProvider;
 
+/**
+ * A request for LIME hyperparameter optimization.
+ */
 public class LimeOptimizationRequest {
 
     private final LimeConfig limeConfig;
