@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.Executors;
 
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
@@ -51,13 +50,20 @@ public class RecordingLimeExplainer extends LimeExplainer {
     private LimeConfig executionConfig;
 
     public RecordingLimeExplainer(int capacity) {
-        this(new LimeConfig(), capacity, new LimeConfigOptimizer().forImpactScore().withTimeLimit(5));
+        this(new LimeConfig(), capacity, new LimeConfigOptimizer().forImpactScore());
     }
 
     public RecordingLimeExplainer(LimeConfig limeConfig, int capacity, LimeConfigOptimizer limeConfigOptimizer) {
         super(limeConfig);
         this.recordedPredictions = new FixedSizeConcurrentLinkedDeque<>(capacity);
-        this.strategy = new CountingOptimizationStrategy(capacity, new DefaultLimeOptimizationService(Executors.newCachedThreadPool(), limeConfigOptimizer));
+        this.strategy = new CountingOptimizationStrategy(capacity, new DefaultLimeOptimizationService(limeConfigOptimizer, 1));
+        this.executionConfig = limeConfig.copy();
+    }
+
+    public RecordingLimeExplainer(LimeConfig limeConfig, int capacity, LimeConfigOptimizationStrategy strategy) {
+        super(limeConfig);
+        this.recordedPredictions = new FixedSizeConcurrentLinkedDeque<>(capacity);
+        this.strategy = strategy;
         this.executionConfig = limeConfig.copy();
     }
 
@@ -102,5 +108,9 @@ public class RecordingLimeExplainer extends LimeExplainer {
         public boolean offer(T o) {
             return !contains(o) && (super.offer(o) && (size() <= capacity || super.pop() != null));
         }
+    }
+
+    public LimeConfig getExecutionConfig() {
+        return executionConfig;
     }
 }

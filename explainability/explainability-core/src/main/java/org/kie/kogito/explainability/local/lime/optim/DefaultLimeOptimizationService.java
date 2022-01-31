@@ -15,12 +15,12 @@
  */
 package org.kie.kogito.explainability.local.lime.optim;
 
+import java.util.Deque;
+import java.util.List;
 import java.util.WeakHashMap;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.stream.Collectors;
 
 import org.kie.kogito.explainability.local.lime.LimeConfig;
 import org.kie.kogito.explainability.local.lime.LimeExplainer;
@@ -31,43 +31,45 @@ public class DefaultLimeOptimizationService implements LimeOptimizationService {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultLimeOptimizationService.class);
 
-    private final ExecutorService executor;
-    private final BlockingQueue<Future<LimeOptimizationResponse>> queue;
+    private final Deque<CompletableFuture<Void>> queue;
     private final WeakHashMap<LimeExplainer, LimeConfig> register;
     private final LimeConfigOptimizer limeConfigOptimizer;
+    private final int maxJobsExecuted;
 
-    public DefaultLimeOptimizationService(ExecutorService executor, LimeConfigOptimizer limeConfigOptimizer) {
-        this.executor = executor;
+    public DefaultLimeOptimizationService(LimeConfigOptimizer limeConfigOptimizer, int maxJobsExecuted) {
+        this.maxJobsExecuted = maxJobsExecuted;
         this.limeConfigOptimizer = limeConfigOptimizer;
-        register = new WeakHashMap<>();
-        this.queue = new LinkedBlockingDeque<>();
-        this.executor.submit(() -> {
-            try {
-                Future<LimeOptimizationResponse> future;
-                while ((future = queue.take()) != null) { // blocking call
-                    LimeOptimizationResponse limeOptimizationResponse = future.get();
-                    register.put(limeOptimizationResponse.getExplainer(), limeOptimizationResponse.getLimeConfig());
-                    logger.info("optimized config registered");
-                }
-            } catch (InterruptedException | ExecutionException e) {
-                logger.error("could not complete task ... {}", e.getLocalizedMessage());
-            }
-        });
+        this.register = new WeakHashMap<>();
+        this.queue = new ConcurrentLinkedDeque<>();
     }
 
     @Override
     public boolean submit(LimeOptimizationRequest limeOptimizationRequest) {
-        Future<LimeOptimizationResponse> submittedJob = executor.submit(() -> {
-            LimeConfig optimizedConfig = limeConfigOptimizer.optimize(limeOptimizationRequest.getLimeConfig(),
-                    limeOptimizationRequest.getPredictions(),
-                    limeOptimizationRequest.getPredictionProvider());
-            return new LimeOptimizationResponse(limeOptimizationRequest.getExplainer(), optimizedConfig);
-        });
-        return queue.add(submittedJob);
+        if (queue.size() < maxJobsExecuted) {
+            CompletableFuture<Void> completableFuture = CompletableFuture
+                    .supplyAsync(() -> limeConfigOptimizer.optimize(limeOptimizationRequest.getLimeConfig(), limeOptimizationRequest.getPredictions(),
+                            limeOptimizationRequest.getPredictionProvider()))
+                    .thenAccept(c -> register.put(limeOptimizationRequest.getExplainer(), c))
+                    .thenRun(flushQueue());
+            logger.info("optimization job submitted");
+            return queue.offer(completableFuture);
+        }
+        logger.warn("busy optimizing (queue size: {}), next time!", queue.size());
+        return false;
+    }
+
+    private Runnable flushQueue() {
+        return () -> {
+            List<CompletableFuture<Void>> finished = queue.stream().filter(CompletableFuture::isDone).collect(Collectors.toList());
+            for (CompletableFuture<Void> f : finished) {
+                queue.remove(f);
+            }
+        };
     }
 
     @Override
     public LimeConfig getBestConfigFor(LimeExplainer limeExplainer) {
         return register.get(limeExplainer);
     }
+
 }

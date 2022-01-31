@@ -35,7 +35,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.Config;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.lime.LimeConfig;
-import org.kie.kogito.explainability.local.lime.LimeExplainer;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
@@ -119,8 +118,9 @@ class RecordingLimeExplainerTest {
         PredictionProvider model = TestUtils.getSumThresholdModel(10, 10);
         PerturbationContext pc = new PerturbationContext(seed, new Random(), 1);
         LimeConfig config = new LimeConfig().withPerturbationContext(pc);
-        LimeExplainer limeExplainer = new RecordingLimeExplainer(config, 5);
-        for (int i = 0; i < 10; i++) {
+        LimeConfigOptimizer optimizer = new LimeConfigOptimizer().forStabilityScore();
+        RecordingLimeExplainer limeExplainer = new RecordingLimeExplainer(config, 3, optimizer);
+        for (int i = 0; i < 50; i++) {
             List<Feature> features = new LinkedList<>();
             features.add(TestUtils.getMockedNumericFeature(Type.NUMBER.randomValue(pc).asNumber()));
             features.add(TestUtils.getMockedNumericFeature(Type.NUMBER.randomValue(pc).asNumber()));
@@ -136,6 +136,7 @@ class RecordingLimeExplainerTest {
                 assertNotNull(saliency);
             }
         }
-
+        LimeConfig optimizedConfig = limeExplainer.getExecutionConfig();
+        assertThat(optimizedConfig).isNotEqualTo(config);
     }
 }
