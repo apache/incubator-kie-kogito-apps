@@ -34,12 +34,12 @@ public interface LimeConfigOptimizationStrategy {
      * predictions, model, execution config, LIME explaier.
      *
      * @param recordedPredictions the list of recently recorded predictions
-     * @param model               the system whose predictions need to be explained
-     * @param limeExplainer       the LIME explainer used to produce explanations
-     * @param executionConfig     the execution config used in LIME explainer
+     * @param model the system whose predictions need to be explained
+     * @param limeExplainer the LIME explainer used to produce explanations
+     * @param executionConfig the execution config used in LIME explainer
      */
     void maybeOptimize(List<Prediction> recordedPredictions, PredictionProvider model,
-                       LimeExplainer limeExplainer, LimeConfig executionConfig);
+            LimeExplainer limeExplainer, LimeConfig executionConfig);
 
     /**
      * Obtain the best config for a given LIME explainer.
