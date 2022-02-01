@@ -89,7 +89,7 @@ public class CounterfactualEntityFactory {
             if (isConstrained) {
                 entity = FixedBinaryEntity.from(feature);
             } else {
-                throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
+                entity = BinaryEntity.from(feature, featureDomain.getCategories(), isConstrained);
             }
 
         } else if (feature.getType() == Type.URI) {

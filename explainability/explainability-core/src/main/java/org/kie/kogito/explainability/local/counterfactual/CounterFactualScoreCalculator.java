@@ -56,7 +56,8 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             Type.CATEGORICAL,
             Type.BOOLEAN,
             Type.TEXT,
-            Type.CURRENCY);
+            Type.CURRENCY,
+            Type.BINARY);
 
     public static Double outputDistance(Output prediction, Output goal, double threshold) throws IllegalArgumentException {
         final Type predictionType = prediction.getType();

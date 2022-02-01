@@ -38,7 +38,7 @@ public class CategoricalFeatureDomain implements FeatureDomain {
         return new CategoricalFeatureDomain(categories);
     }
 
-    public static FeatureDomain create(List<String> categories) {
+    public static FeatureDomain create(List<Object> categories) {
         return new CategoricalFeatureDomain(new HashSet<>(categories));
     }
 

@@ -28,8 +28,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.explainability.local.counterfactual.entities.BinaryEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.BooleanEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CategoricalEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
@@ -174,17 +177,20 @@ class CounterfactualEntityFactoryTest {
     void testBinaryFactory() {
         final ByteBuffer value = ByteBuffer.allocate(256);
         final Feature feature = FeatureFactory.newBinaryFeature("binary-feature", value);
-        final FeatureDomain domain = EmptyFeatureDomain.create();
+        FeatureDomain domain = EmptyFeatureDomain.create();
         CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature, true, domain);
         assertTrue(counterfactualEntity instanceof FixedBinaryEntity);
         assertEquals(Type.BINARY, counterfactualEntity.asFeature().getType());
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.from(feature, false, domain);
-        });
+        final List<Object> categories = Stream.of(
+                        "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
+                .map(ByteBuffer::wrap).collect(Collectors.toList());
 
-        assertEquals("Unsupported feature type: binary",
-                exception.getMessage());
+        domain = CategoricalFeatureDomain.create(categories);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof BinaryEntity);
+        assertEquals(domain.getCategories(), ((BinaryEntity) counterfactualEntity).getValueRange());
+        assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
     }
 
     @Test
@@ -232,7 +238,6 @@ class CounterfactualEntityFactoryTest {
         assertTrue(counterfactualEntity instanceof CurrencyEntity);
         assertEquals(domain.getCategories(), ((CurrencyEntity) counterfactualEntity).getValueRange());
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
-
     }
 
     @Test

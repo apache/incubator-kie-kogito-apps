@@ -23,12 +23,14 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -154,6 +156,26 @@ class SimilarityTest {
         assertEquals(LOWEST_SIMILARITY, x.similarity());
 
         x.setProposedValue(Currency.getInstance("GBP"));
+        assertEquals(HIGHEST_SIMILARITY, x.similarity());
+    }
+
+    @Test
+    void binarySimpleSimilarity() {
+        ByteBuffer bytes = ByteBuffer.wrap("foo".getBytes());
+
+        final List<Object> categories = Stream.of(
+                "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
+                .map(ByteBuffer::wrap).collect(Collectors.toList());
+
+        final BinaryEntity x = BinaryEntity.from(FeatureFactory.newBinaryFeature("f", bytes), new HashSet<>(categories));
+
+        x.setProposedValue(categories.get(0));
+        assertEquals(LOWEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(categories.get(1));
+        assertEquals(LOWEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(bytes);
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
     }
 
