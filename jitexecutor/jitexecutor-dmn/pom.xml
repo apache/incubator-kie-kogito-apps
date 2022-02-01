@@ -62,7 +62,7 @@
         <!-- Counterfactual explaination is not supported so excluding optaplanner to avoid undesired dependencies (e.g. drools-core-dynamic) -->
         <exclusion>
           <groupId>org.optaplanner</groupId>
-          <artifactId>optaplanner-core</artifactId>
+          <artifactId>optaplanner-quarkus</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -83,6 +83,11 @@
     <dependency>
       <groupId>io.rest-assured</groupId>
       <artifactId>rest-assured</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.assertj</groupId>
+      <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
   </dependencies>

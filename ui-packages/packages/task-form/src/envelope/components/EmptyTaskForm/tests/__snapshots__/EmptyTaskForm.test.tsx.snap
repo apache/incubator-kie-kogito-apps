@@ -5,6 +5,7 @@ exports[`EmptyTaskForm Test Empty form completed task rendering 1`] = `
   enabled={true}
   formSchema={
     Object {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
       "phases": Array [
         "complete",
         "release",
@@ -163,6 +164,9 @@ exports[`EmptyTaskForm Test Empty form completed task rendering 1`] = `
             >
               <h4
                 className="pf-c-title pf-m-lg"
+                data-ouia-component-id="OUIA-Generated-Title-2"
+                data-ouia-component-type="PF4/Title"
+                data-ouia-safe={true}
               >
                 Cannot show task form
               </h4>
@@ -197,6 +201,7 @@ exports[`EmptyTaskForm Test Empty form rendering 1`] = `
   enabled={true}
   formSchema={
     Object {
+      "$schema": "https://json-schema.org/draft/2019-09/schema",
       "phases": Array [
         "complete",
         "release",
@@ -355,6 +360,9 @@ exports[`EmptyTaskForm Test Empty form rendering 1`] = `
             >
               <h4
                 className="pf-c-title pf-m-lg"
+                data-ouia-component-id="OUIA-Generated-Title-1"
+                data-ouia-component-type="PF4/Title"
+                data-ouia-safe={true}
               >
                 Cannot show task form
               </h4>

@@ -24,7 +24,7 @@ import { RuntimeToolsDevUIEnvelopeViewApi } from '../RuntimeToolsDevUIEnvelopeVi
 jest.mock('../../components/DevUI/RuntimeTools/RuntimeTools');
 
 describe('RuntimeToolsDevUIEnvelopeView tests', () => {
-  it('Snapshot', () => {
+  it('Snapshot::Process and Tracing enabled', () => {
     const forwardRef = React.createRef<RuntimeToolsDevUIEnvelopeViewApi>();
 
     const wrapper = mount(
@@ -36,6 +36,37 @@ describe('RuntimeToolsDevUIEnvelopeView tests', () => {
     act(() => {
       if (forwardRef.current) {
         forwardRef.current.setDataIndexUrl('http://localhost:4000');
+        forwardRef.current.setTrustyServiceUrl('http://localhost:1336');
+        forwardRef.current.setUsers([]);
+        forwardRef.current.navigateTo('test');
+        forwardRef.current.setDevUIUrl('http://localhost:8080');
+        forwardRef.current.setOpenApiPath('/docs/openapi.json');
+        forwardRef.current.setProcessEnabled(true);
+        forwardRef.current.setTracingEnabled(true);
+      }
+    });
+    const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
+
+    expect(envelopeView).toMatchSnapshot();
+
+    const devUI = envelopeView.find(RuntimeTools);
+
+    expect(devUI.exists()).toBeTruthy();
+  });
+
+  it('Snapshot::Process enabled, Trusty disabled', () => {
+    const forwardRef = React.createRef<RuntimeToolsDevUIEnvelopeViewApi>();
+
+    const wrapper = mount(
+      <RuntimeToolsDevUIEnvelopeView ref={forwardRef} />
+    ).find('RuntimeToolsDevUIEnvelopeView');
+
+    act(() => {
+      if (forwardRef.current) {
+        forwardRef.current.setProcessEnabled(true);
+        forwardRef.current.setTracingEnabled(false);
+        forwardRef.current.setDataIndexUrl('http://localhost:4000');
+        forwardRef.current.setTrustyServiceUrl('http://localhost:8081');
         forwardRef.current.setUsers([]);
         forwardRef.current.navigateTo('test');
       }
@@ -47,5 +78,83 @@ describe('RuntimeToolsDevUIEnvelopeView tests', () => {
     const devUI = envelopeView.find(RuntimeTools);
 
     expect(devUI.exists()).toBeTruthy();
+  });
+
+  it('Snapshot::Process disabled, Trusty enabled', () => {
+    const forwardRef = React.createRef<RuntimeToolsDevUIEnvelopeViewApi>();
+
+    const wrapper = mount(
+      <RuntimeToolsDevUIEnvelopeView ref={forwardRef} />
+    ).find('RuntimeToolsDevUIEnvelopeView');
+
+    act(() => {
+      if (forwardRef.current) {
+        forwardRef.current.setProcessEnabled(false);
+        forwardRef.current.setTracingEnabled(true);
+        forwardRef.current.setDataIndexUrl('http://localhost:4000');
+        forwardRef.current.setTrustyServiceUrl('http://localhost:8081');
+        forwardRef.current.setUsers([]);
+        forwardRef.current.navigateTo('test');
+      }
+    });
+    const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
+
+    expect(envelopeView).toMatchSnapshot();
+
+    const devUI = envelopeView.find(RuntimeTools);
+
+    expect(devUI.exists()).toBeTruthy();
+  });
+
+  it('Snapshot::Process disabled, Trusty disabled', () => {
+    const forwardRef = React.createRef<RuntimeToolsDevUIEnvelopeViewApi>();
+
+    const wrapper = mount(
+      <RuntimeToolsDevUIEnvelopeView ref={forwardRef} />
+    ).find('RuntimeToolsDevUIEnvelopeView');
+
+    act(() => {
+      if (forwardRef.current) {
+        forwardRef.current.setProcessEnabled(false);
+        forwardRef.current.setTracingEnabled(false);
+        forwardRef.current.setDataIndexUrl('http://localhost:4000');
+        forwardRef.current.setTrustyServiceUrl('http://localhost:8081');
+        forwardRef.current.setUsers([]);
+        forwardRef.current.navigateTo('test');
+      }
+    });
+    const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
+
+    expect(envelopeView).toMatchSnapshot();
+
+    const devUI = envelopeView.find(RuntimeTools);
+
+    expect(devUI.exists()).toBeFalsy();
+  });
+
+  it('Snapshot::Process enabled, Trusty enabled, navitageTo empty', () => {
+    const forwardRef = React.createRef<RuntimeToolsDevUIEnvelopeViewApi>();
+
+    const wrapper = mount(
+      <RuntimeToolsDevUIEnvelopeView ref={forwardRef} />
+    ).find('RuntimeToolsDevUIEnvelopeView');
+
+    act(() => {
+      if (forwardRef.current) {
+        forwardRef.current.setProcessEnabled(true);
+        forwardRef.current.setTracingEnabled(true);
+        forwardRef.current.setDataIndexUrl('http://localhost:4000');
+        forwardRef.current.setTrustyServiceUrl('http://localhost:8081');
+        forwardRef.current.setUsers([]);
+        forwardRef.current.navigateTo('');
+      }
+    });
+    const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
+
+    expect(envelopeView).toMatchSnapshot();
+
+    const devUI = envelopeView.find(RuntimeTools);
+
+    expect(devUI.exists()).toBeFalsy();
   });
 });

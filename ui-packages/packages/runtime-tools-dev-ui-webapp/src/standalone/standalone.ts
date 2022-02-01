@@ -32,7 +32,10 @@ export interface Consoles {
     container: Element;
     users: User[];
     dataIndexUrl: string;
+    trustyServiceUrl: string;
     page: string;
+    devUIUrl: string;
+    openApiPath: string;
     origin?: string;
   }) => StandaloneDevUIApi;
 }
@@ -62,9 +65,14 @@ export const createDevUI = (
 
 const createEnvelopeServer = (
   iframe: HTMLIFrameElement,
+  isProcessEnabled: boolean,
+  isTracingEnabled: boolean,
   users: User[],
   dataIndexUrl: string,
+  trustyServiceUrl: string,
   page: string,
+  devUIUrl: string,
+  openApiPath: string,
   origin?: string
 ) => {
   const defaultOrigin =
@@ -82,9 +90,14 @@ const createEnvelopeServer = (
           envelopeServerId: self.id
         },
         {
+          isProcessEnabled,
+          isTracingEnabled,
           users,
           dataIndexUrl,
-          page
+          trustyServiceUrl,
+          page,
+          devUIUrl,
+          openApiPath
         }
       );
     }
@@ -93,9 +106,14 @@ const createEnvelopeServer = (
 
 export function open(args: {
   container: Element;
+  isProcessEnabled: boolean;
+  isTracingEnabled: boolean;
   users: User[];
   dataIndexUrl: string;
+  trustyServiceUrl: string;
   page: string;
+  devUIUrl: string;
+  openApiPath: string;
   origin?: string;
 }): StandaloneDevUIApi {
   const iframe = document.createElement('iframe');
@@ -107,9 +125,14 @@ export function open(args: {
 
   const envelopeServer = createEnvelopeServer(
     iframe,
+    args.isProcessEnabled,
+    args.isTracingEnabled,
     args.users,
     args.dataIndexUrl,
+    args.trustyServiceUrl,
     args.page,
+    args.devUIUrl,
+    args.openApiPath,
     args.origin
   );
 

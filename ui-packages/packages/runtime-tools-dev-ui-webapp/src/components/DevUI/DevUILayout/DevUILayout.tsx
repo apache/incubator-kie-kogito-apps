@@ -20,7 +20,7 @@ import { ApolloProvider } from 'react-apollo';
 import { ApolloClient } from 'apollo-client';
 import { MemoryRouter } from 'react-router';
 import { User, PageLayout } from '@kogito-apps/consoles-common';
-import ConsolesNav from '../DevUINav/DevUINav';
+import DevUINav from '../DevUINav/DevUINav';
 import JobsManagementContextProvider from '../../../channel/JobsManagement/JobsManagementContextProvider';
 import ProcessDetailsContextProvider from '../../../channel/ProcessDetails/ProcessDetailsContextProvider';
 import ProcessListContextProvider from '../../../channel/ProcessList/ProcessListContextProvider';
@@ -29,16 +29,26 @@ import TaskFormContextProvider from '../../../channel/TaskForms/TaskFormContextP
 import FormsListContextProvider from '../../../channel/FormsList/FormsListContextProvider';
 import FormDetailsContextProvider from '../../../channel/FormDetails/FormDetailsContextProvider';
 import DevUIAppContextProvider from '../../contexts/DevUIAppContextProvider';
+import ProcessDefinitionListContextProvider from '../../../channel/ProcessDefinitionList/ProcessDefinitionListContextProvider';
+import ProcessFormContextProvider from '../../../channel/ProcessForm/ProcessFormContextProvider';
 
 interface IOwnProps {
   apolloClient: ApolloClient<any>;
+  isProcessEnabled: boolean;
+  isTracingEnabled: boolean;
   users: User[];
   children: React.ReactElement;
+  devUIUrl: string;
+  openApiPath: string;
 }
 
 const DevUILayout: React.FC<IOwnProps> = ({
   apolloClient,
+  isProcessEnabled,
+  isTracingEnabled,
   users,
+  devUIUrl,
+  openApiPath,
   children
 }) => {
   const renderPage = routeProps => {
@@ -46,7 +56,7 @@ const DevUILayout: React.FC<IOwnProps> = ({
       <PageLayout
         pageNavOpen={true}
         withHeader={false}
-        PageNav={<ConsolesNav pathname={routeProps.location.pathname} />}
+        PageNav={<DevUINav pathname={routeProps.location.pathname} />}
       >
         {children}
       </PageLayout>
@@ -55,21 +65,31 @@ const DevUILayout: React.FC<IOwnProps> = ({
 
   return (
     <ApolloProvider client={apolloClient}>
-      <DevUIAppContextProvider users={users}>
+      <DevUIAppContextProvider
+        users={users}
+        devUIUrl={devUIUrl}
+        openApiPath={openApiPath}
+        isProcessEnabled={isProcessEnabled}
+        isTracingEnabled={isTracingEnabled}
+      >
         <TaskConsoleContextsProvider apolloClient={apolloClient}>
           <TaskFormContextProvider>
             <ProcessListContextProvider apolloClient={apolloClient}>
               <ProcessDetailsContextProvider apolloClient={apolloClient}>
                 <JobsManagementContextProvider apolloClient={apolloClient}>
-                  <FormsListContextProvider>
-                    <FormDetailsContextProvider>
-                      <MemoryRouter>
-                        <Switch>
-                          <Route path="/" render={renderPage} />
-                        </Switch>
-                      </MemoryRouter>
-                    </FormDetailsContextProvider>
-                  </FormsListContextProvider>
+                  <ProcessDefinitionListContextProvider>
+                    <FormsListContextProvider>
+                      <FormDetailsContextProvider>
+                        <ProcessFormContextProvider>
+                          <MemoryRouter>
+                            <Switch>
+                              <Route path="/" render={renderPage} />
+                            </Switch>
+                          </MemoryRouter>
+                        </ProcessFormContextProvider>
+                      </FormDetailsContextProvider>
+                    </FormsListContextProvider>
+                  </ProcessDefinitionListContextProvider>
                 </JobsManagementContextProvider>
               </ProcessDetailsContextProvider>
             </ProcessListContextProvider>

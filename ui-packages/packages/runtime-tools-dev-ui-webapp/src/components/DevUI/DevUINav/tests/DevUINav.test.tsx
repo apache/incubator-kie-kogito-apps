@@ -18,19 +18,28 @@ import React from 'react';
 import { mount } from 'enzyme';
 import DevUINav from '../DevUINav';
 import { MemoryRouter } from 'react-router-dom';
+import DevUIAppContextProvider from '../../../contexts/DevUIAppContextProvider';
 
-describe('DevUINav tests', () => {
-  it('Snapshot testing with process list props', () => {
+describe('DevUINav tests::Process and Tracing enabled', () => {
+  it('Snapshot testing with processes props', () => {
     const wrapper = mount(
-      <MemoryRouter>
-        <DevUINav pathname={'/ProcessInstances'} />
-      </MemoryRouter>
+      <DevUIAppContextProvider
+        users={[]}
+        devUIUrl="http://devUIUrl"
+        openApiPath="http://openApiPath"
+        isProcessEnabled={true}
+        isTracingEnabled={true}
+      >
+        <MemoryRouter>
+          <DevUINav pathname={'/Processes'} />
+        </MemoryRouter>
+      </DevUIAppContextProvider>
     );
 
     expect(wrapper.find('DevUINav')).toMatchSnapshot();
 
     const DevUINavWrapper = wrapper.findWhere(
-      nested => nested.key() === 'process-instances-nav'
+      nested => nested.key() === 'processes-nav'
     );
 
     expect(DevUINavWrapper.exists()).toBeTruthy();
@@ -39,9 +48,17 @@ describe('DevUINav tests', () => {
 
   it('Snapshot testing with jobs management props', () => {
     const wrapper = mount(
-      <MemoryRouter>
-        <DevUINav pathname={'/JobsManagement'} />
-      </MemoryRouter>
+      <DevUIAppContextProvider
+        users={[]}
+        devUIUrl="http://devUIUrl"
+        openApiPath="http://openApiPath"
+        isProcessEnabled={true}
+        isTracingEnabled={true}
+      >
+        <MemoryRouter>
+          <DevUINav pathname={'/JobsManagement'} />
+        </MemoryRouter>
+      </DevUIAppContextProvider>
     );
 
     expect(wrapper.find('DevUINav')).toMatchSnapshot();
@@ -56,9 +73,17 @@ describe('DevUINav tests', () => {
 
   it('Snapshot testing with forms list props', () => {
     const wrapper = mount(
-      <MemoryRouter>
-        <DevUINav pathname={'/Forms'} />
-      </MemoryRouter>
+      <DevUIAppContextProvider
+        users={[]}
+        devUIUrl="http://devUIUrl"
+        openApiPath="http://openApiPath"
+        isProcessEnabled={true}
+        isTracingEnabled={true}
+      >
+        <MemoryRouter>
+          <DevUINav pathname={'/Forms'} />
+        </MemoryRouter>
+      </DevUIAppContextProvider>
     );
 
     expect(wrapper.find('DevUINav')).toMatchSnapshot();
@@ -69,5 +94,168 @@ describe('DevUINav tests', () => {
 
     expect(DevUINavWrapper.exists()).toBeTruthy();
     expect(DevUINavWrapper.props().isActive).toBeTruthy();
+  });
+
+  it('Snapshot testing audit investigation link props', () => {
+    const wrapper = mount(
+      <DevUIAppContextProvider
+        users={[]}
+        devUIUrl="http://devUIUrl"
+        openApiPath="http://openApiPath"
+        isProcessEnabled={true}
+        isTracingEnabled={true}
+      >
+        <MemoryRouter>
+          <DevUINav pathname={'/Audit'} />
+        </MemoryRouter>
+      </DevUIAppContextProvider>
+    );
+
+    expect(wrapper.find('DevUINav')).toMatchSnapshot();
+
+    const DevUINavWrapper = wrapper.findWhere(
+      nested => nested.key() === 'audit-nav'
+    );
+
+    expect(DevUINavWrapper.exists()).toBeTruthy();
+    expect(DevUINavWrapper.props().isActive).toBeTruthy();
+  });
+});
+
+describe('DevUINav tests::Sections disabled', () => {
+  it('Snapshot testing with processes props', () => {
+    const wrapper = mount(
+      <DevUIAppContextProvider
+        users={[]}
+        devUIUrl="http://devUIUrl"
+        openApiPath="http://openApiPath"
+        isProcessEnabled={true}
+        isTracingEnabled={false}
+      >
+        <MemoryRouter>
+          <DevUINav pathname={'/Processes'} />
+        </MemoryRouter>
+      </DevUIAppContextProvider>
+    );
+
+    expect(wrapper.find('DevUINav')).toMatchSnapshot();
+
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="processes-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="jobs-management-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="task-inbox-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="forms-list-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="audit-nav"]')
+    ).toBeFalsy();
+  });
+
+  it('Snapshot testing with jobs management props', () => {
+    const wrapper = mount(
+      <DevUIAppContextProvider
+        users={[]}
+        devUIUrl="http://devUIUrl"
+        openApiPath="http://openApiPath"
+        isProcessEnabled={true}
+        isTracingEnabled={false}
+      >
+        <MemoryRouter>
+          <DevUINav pathname={'/JobsManagement'} />
+        </MemoryRouter>
+      </DevUIAppContextProvider>
+    );
+
+    expect(wrapper.find('DevUINav')).toMatchSnapshot();
+
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="processes-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="jobs-management-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="task-inbox-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="forms-list-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="audit-nav"]')
+    ).toBeFalsy();
+  });
+
+  it('Snapshot testing with forms list props', () => {
+    const wrapper = mount(
+      <DevUIAppContextProvider
+        users={[]}
+        devUIUrl="http://devUIUrl"
+        openApiPath="http://openApiPath"
+        isProcessEnabled={true}
+        isTracingEnabled={false}
+      >
+        <MemoryRouter>
+          <DevUINav pathname={'/Forms'} />
+        </MemoryRouter>
+      </DevUIAppContextProvider>
+    );
+
+    expect(wrapper.find('DevUINav')).toMatchSnapshot();
+
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="processes-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="jobs-management-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="task-inbox-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="forms-list-nav"]')
+    ).toBeTruthy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="audit-nav"]')
+    ).toBeFalsy();
+  });
+
+  it('Snapshot testing audit investigation link props', () => {
+    const wrapper = mount(
+      <DevUIAppContextProvider
+        users={[]}
+        devUIUrl="http://devUIUrl"
+        openApiPath="http://openApiPath"
+        isProcessEnabled={false}
+        isTracingEnabled={true}
+      >
+        <MemoryRouter>
+          <DevUINav pathname={'/Audit'} />
+        </MemoryRouter>
+      </DevUIAppContextProvider>
+    );
+
+    expect(wrapper.find('DevUINav')).toMatchSnapshot();
+
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="processes-nav"]')
+    ).toBeFalsy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="jobs-management-nav"]')
+    ).toBeFalsy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="task-inbox-nav"]')
+    ).toBeFalsy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="forms-list-nav"]')
+    ).toBeFalsy();
+    expect(
+      wrapper.exists('Link[data-ouia-navigation-name="audit-nav"]')
+    ).toBeTruthy();
   });
 });

@@ -46,8 +46,8 @@ import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.responses.CounterfactualRequestResponse;
 import org.kie.kogito.trusty.service.common.responses.CounterfactualResultsResponse;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
-import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
+import org.kie.kogito.trusty.storage.api.model.decision.Decision;
+import org.kie.kogito.trusty.storage.api.model.decision.DecisionOutcome;
 import org.mockito.ArgumentCaptor;
 import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
 
@@ -158,13 +158,13 @@ class ExplainabilityApiV1IT {
                 "Output1",
                 ExplainabilityStatus.SUCCEEDED.name(),
                 new UnitValue("type", new IntNode(1)),
-                Collections.emptyMap(),
+                Collections.emptyList(),
                 Collections.emptyList()));
         decision.getOutcomes().add(new DecisionOutcome("outcomeId2",
                 "Output2",
                 ExplainabilityStatus.SUCCEEDED.name(),
                 new UnitValue("type2", new IntNode(2)),
-                Collections.emptyMap(),
+                Collections.emptyList(),
                 Collections.emptyList()));
         when(executionService.getDecisionById(eq(TEST_EXECUTION_ID))).thenReturn(decision);
 

@@ -34,5 +34,10 @@ export interface User {
 export interface RuntimeToolsDevUIInitArgs {
   users: User[];
   dataIndexUrl: string;
+  trustyServiceUrl: string;
   page: string;
+  devUIUrl: string;
+  openApiPath: string;
+  isProcessEnabled: boolean;
+  isTracingEnabled: boolean;
 }

@@ -19,15 +19,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.dmn.api.core.DMNDecisionResult;
+import org.kie.kogito.explainability.api.NamedTypedValue;
 import org.kie.kogito.tracing.typedvalue.UnitValue;
-import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.DecisionInput;
-import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
+import org.kie.kogito.trusty.storage.api.model.decision.Decision;
+import org.kie.kogito.trusty.storage.api.model.decision.DecisionInput;
+import org.kie.kogito.trusty.storage.api.model.decision.DecisionOutcome;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -40,7 +40,7 @@ public class DecisionMarshallerTest extends MarshallerTestTemplate {
         List<DecisionOutcome> outcomes = Collections.singletonList(new DecisionOutcome("id", "out",
                 DMNDecisionResult.DecisionEvaluationStatus.SUCCEEDED.toString(),
                 new UnitValue("nameOut", "number", JsonNodeFactory.instance.numberNode(10)),
-                Map.of("nameOut", new UnitValue("number", "number", JsonNodeFactory.instance.numberNode(10))),
+                List.of(new NamedTypedValue("nameOut", new UnitValue("number", "number", JsonNodeFactory.instance.numberNode(10)))),
                 new ArrayList<>()));
         Decision decision = new Decision("executionId", "source", "serviceUrl", 0L, true, "executor", "model", "namespace", inputs, outcomes);
         DecisionMarshaller marshaller = new DecisionMarshaller(new ObjectMapper());

@@ -8,6 +8,7 @@
   "executedModelName": "Traffic Violation",
   "executedModelNamespace": "https://github.com/kiegroup/drools/kie-dmn/_A4BCA8B8-CF08-433F-93B2-A2598F19ECFF",
   "executionType": "DECISION",
+  "@type": "DECISION",
   "inputs": [
     {
       "id": "_1929CBD5-40E0-442D-B909-49CEDE0101DC",
@@ -76,29 +77,32 @@
           }
         }
       },
-      "outcomeInputs": {
-        "Violation": {
-          "kind": "STRUCTURE",
-          "type": "tViolation",
+      "outcomeInputs": [
+        {
+          "name": "Violation",
           "value": {
-            "Type": {
-              "kind": "UNIT",
-              "type": "string",
-              "value": "speed"
-            },
-            "Actual Speed": {
-              "kind": "UNIT",
-              "type": "number",
-              "value": 140
-            },
-            "Speed Limit": {
-              "kind": "UNIT",
-              "type": "number",
-              "value": 100
+            "kind": "STRUCTURE",
+            "type": "tViolation",
+            "value": {
+              "Type": {
+                "kind": "UNIT",
+                "type": "string",
+                "value": "speed"
+              },
+              "Actual Speed": {
+                "kind": "UNIT",
+                "type": "number",
+                "value": 140
+              },
+              "Speed Limit": {
+                "kind": "UNIT",
+                "type": "number",
+                "value": 100
+              }
             }
           }
         }
-      },
+      ],
       "messages": null,
       "hasErrors": false
     },
@@ -111,42 +115,48 @@
         "type": "string",
         "value": "Yes"
       },
-      "outcomeInputs": {
-        "Driver": {
-          "kind": "STRUCTURE",
-          "type": "tDriver",
-          "baseType": "tDriver",
+      "outcomeInputs": [
+        {
+          "name": "Driver",
           "value": {
-            "Age": {
-              "kind": "UNIT",
-              "type": "number",
-              "value": 25
-            },
-            "Points": {
-              "kind": "UNIT",
-              "type": "number",
-              "value": 13
+            "kind": "STRUCTURE",
+            "type": "tDriver",
+            "baseType": "tDriver",
+            "value": {
+              "Age": {
+                "kind": "UNIT",
+                "type": "number",
+                "value": 25
+              },
+              "Points": {
+                "kind": "UNIT",
+                "type": "number",
+                "value": 13
+              }
             }
           }
         },
-        "Fine": {
-          "kind": "STRUCTURE",
-          "type": "tFine",
-          "baseType": "tFine",
+        {
+          "name": "Fine",
           "value": {
-            "Amount": {
-              "kind": "UNIT",
-              "type": "number",
-              "value": 1000
-            },
-            "Points": {
-              "kind": "UNIT",
-              "type": "number",
-              "value": 7
+            "kind": "STRUCTURE",
+            "type": "tFine",
+            "baseType": "tFine",
+            "value": {
+              "Amount": {
+                "kind": "UNIT",
+                "type": "number",
+                "value": 1000
+              },
+              "Points": {
+                "kind": "UNIT",
+                "type": "number",
+                "value": 7
+              }
             }
           }
         }
-      },
+      ],
       "messages": null,
       "hasErrors": false
     }

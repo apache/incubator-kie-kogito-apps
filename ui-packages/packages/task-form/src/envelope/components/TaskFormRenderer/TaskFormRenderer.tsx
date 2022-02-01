@@ -18,16 +18,13 @@ import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
-import { TaskFormSchema } from '../../../types';
-
-import { FormAction } from '../utils';
-import FormRenderer from '../FormRenderer/FormRenderer';
+import { FormRenderer, FormAction } from '@kogito-apps/components-common';
 import { generateFormData } from '../utils/TaskFormDataUtils';
 
 interface IOwnProps {
   userTask: UserTaskInstance;
   formData?: any;
-  formSchema: TaskFormSchema;
+  formSchema: Record<string, any>;
   enabled: boolean;
   submit: (phase: string, payload: any) => void;
 }
@@ -59,7 +56,7 @@ const TaskFormRenderer: React.FC<IOwnProps & OUIAProps> = ({
   }, []);
 
   const isReadOnly = (): boolean => {
-    if (!enabled) {
+    if (!enabled || formActions.length === 0) {
       return true;
     }
 

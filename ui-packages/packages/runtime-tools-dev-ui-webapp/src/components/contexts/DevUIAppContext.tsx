@@ -18,10 +18,14 @@ import React, { useContext } from 'react';
 import { User } from '@kogito-apps/consoles-common';
 
 export interface DevUIAppContext {
+  isProcessEnabled: boolean;
+  isTracingEnabled: boolean;
   getCurrentUser(): User;
   getAllUsers(): User[];
   switchUser(userId: string): void;
   onUserChange(listener: UserChangeListener): UnSubscribeHandler;
+  getDevUIUrl(): string;
+  getOpenApiPath(): string;
 }
 
 export interface UserChangeListener {
@@ -36,12 +40,28 @@ export class DevUIAppContextImpl implements DevUIAppContext {
   private users: User[];
   private currentUser: User;
   private readonly userListeners: UserChangeListener[] = [];
+  private readonly devUIUrl: string;
+  private readonly openApiPath: string;
+  readonly isProcessEnabled: boolean;
+  readonly isTracingEnabled: boolean;
 
-  constructor(users) {
+  constructor(users, url, path, isProcessEnabled, isTracingEnabled) {
     this.users = users;
+    this.devUIUrl = url;
+    this.openApiPath = path;
+    this.isProcessEnabled = isProcessEnabled;
+    this.isTracingEnabled = isTracingEnabled;
     if (users.length > 0) {
       this.currentUser = users[0];
     }
+  }
+
+  getDevUIUrl(): string {
+    return this.devUIUrl;
+  }
+
+  getOpenApiPath(): string {
+    return this.openApiPath;
   }
 
   getCurrentUser(): User {

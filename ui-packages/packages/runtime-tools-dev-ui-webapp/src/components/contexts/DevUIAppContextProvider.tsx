@@ -22,12 +22,31 @@ import RuntimeToolsDevUIAppContext, {
 
 interface IOwnProps {
   users: User[];
+  devUIUrl: string;
+  openApiPath: string;
+  isProcessEnabled: boolean;
+  isTracingEnabled: boolean;
 }
 
-const DevUIAppContextProvider: React.FC<IOwnProps> = ({ users, children }) => {
+const DevUIAppContextProvider: React.FC<IOwnProps> = ({
+  users,
+  devUIUrl,
+  openApiPath,
+  isProcessEnabled,
+  isTracingEnabled,
+  children
+}) => {
   return (
     <RuntimeToolsDevUIAppContext.Provider
-      value={new DevUIAppContextImpl(users)}
+      value={
+        new DevUIAppContextImpl(
+          users,
+          devUIUrl,
+          openApiPath,
+          isProcessEnabled,
+          isTracingEnabled
+        )
+      }
     >
       {children}
     </RuntimeToolsDevUIAppContext.Provider>

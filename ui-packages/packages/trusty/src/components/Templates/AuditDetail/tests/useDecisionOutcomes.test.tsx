@@ -3,9 +3,28 @@ import { act } from 'react-test-renderer';
 import * as api from '../../../../utils/api/httpClient';
 import useDecisionOutcomes from '../useDecisionOutcomes';
 import { Execution, Outcome, RemoteDataStatus } from '../../../../types';
+import { AxiosPromise } from 'axios';
+import { TrustyContext } from '../../TrustyApp/TrustyApp';
+import React from 'react';
 
 const flushPromises = () => new Promise(setImmediate);
 const apiMock = jest.spyOn(api, 'httpClient');
+
+const contextWrapper = ({ children }) => (
+  <TrustyContext.Provider
+    value={{
+      config: {
+        counterfactualEnabled: false,
+        useHrefLinks: false,
+        explanationEnabled: false,
+        serverRoot: 'http://url-to-service',
+        basePath: '/'
+      }
+    }}
+  >
+    {children}
+  </TrustyContext.Provider>
+);
 
 beforeEach(() => {
   apiMock.mockClear();
@@ -28,10 +47,9 @@ describe('useDecisionOutcome', () => {
             outcomeName: 'Mortgage Approval',
             evaluationStatus: 'SUCCEEDED',
             outcomeResult: {
-              name: 'Mortgage Approval',
+              kind: 'UNIT',
               type: 'boolean',
-              value: true,
-              components: null
+              value: true
             },
             messages: [],
             hasErrors: false
@@ -41,10 +59,9 @@ describe('useDecisionOutcome', () => {
             outcomeName: 'Risk Score',
             evaluationStatus: 'SUCCEEDED',
             outcomeResult: {
-              name: 'Risk Score',
+              kind: 'UNIT',
               type: 'number',
-              value: 21.7031851958099,
-              components: null
+              value: 21.7031851958099
             },
             messages: [],
             hasErrors: false
@@ -53,13 +70,15 @@ describe('useDecisionOutcome', () => {
       }
     };
 
-    // @ts-ignore
-    apiMock.mockImplementation(() => Promise.resolve(outcomes));
+    apiMock.mockImplementation(() => Promise.resolve(outcomes) as AxiosPromise);
 
-    const { result } = renderHook(() => {
-      // tslint:disable-next-line:react-hooks-nesting
-      return useDecisionOutcomes('b2b0ed8d-c1e2-46b5-3ac54ff4beae-1000');
-    });
+    const { result } = renderHook(
+      () => {
+        // tslint:disable-next-line:react-hooks-nesting
+        return useDecisionOutcomes('b2b0ed8d-c1e2-46b5-3ac54ff4beae-1000');
+      },
+      { wrapper: contextWrapper }
+    );
 
     expect(result.current).toStrictEqual({ status: RemoteDataStatus.LOADING });
 

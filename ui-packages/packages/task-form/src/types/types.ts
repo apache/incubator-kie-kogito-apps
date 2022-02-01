@@ -13,13 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-import { JSONSchema7 } from 'json-schema';
-
-export type TaskFormSchema = JSONSchema7 & {
-  phases?: string[];
-};
-
 export enum FormType {
   HTML = 'HTML',
   TSX = 'TSX'

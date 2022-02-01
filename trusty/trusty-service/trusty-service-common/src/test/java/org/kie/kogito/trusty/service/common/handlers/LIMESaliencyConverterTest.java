@@ -31,8 +31,8 @@ import org.kie.kogito.tracing.typedvalue.UnitValue;
 import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.responses.SalienciesResponse;
 import org.kie.kogito.trusty.service.common.responses.SaliencyResponse;
-import org.kie.kogito.trusty.storage.api.model.Decision;
-import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
+import org.kie.kogito.trusty.storage.api.model.decision.Decision;
+import org.kie.kogito.trusty.storage.api.model.decision.DecisionOutcome;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -83,13 +83,13 @@ public class LIMESaliencyConverterTest {
                 "outcomeName1",
                 ExplainabilityStatus.SUCCEEDED.name(),
                 new UnitValue("type", new IntNode(1)),
-                Collections.emptyMap(),
+                Collections.emptyList(),
                 Collections.emptyList()));
         decision.getOutcomes().add(new DecisionOutcome("outcomeId2",
                 "outcomeName2",
                 ExplainabilityStatus.SUCCEEDED.name(),
                 new UnitValue("type2", new IntNode(2)),
-                Collections.emptyMap(),
+                Collections.emptyList(),
                 Collections.emptyList()));
         when(trustyService.getDecisionById(eq(EXECUTION_ID))).thenReturn(decision);
 
@@ -145,13 +145,13 @@ public class LIMESaliencyConverterTest {
                 "outcomeName1",
                 ExplainabilityStatus.SUCCEEDED.name(),
                 new UnitValue("type", new IntNode(1)),
-                Collections.emptyMap(),
+                Collections.emptyList(),
                 Collections.emptyList()));
         decision.getOutcomes().add(new DecisionOutcome("outcomeId2",
                 "outcomeNameX",
                 ExplainabilityStatus.SUCCEEDED.name(),
                 new UnitValue("type2", new IntNode(2)),
-                Collections.emptyMap(),
+                Collections.emptyList(),
                 Collections.emptyList()));
         when(trustyService.getDecisionById(eq(EXECUTION_ID))).thenReturn(decision);
 

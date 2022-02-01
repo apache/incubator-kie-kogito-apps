@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import {
+  CFSupportMessage,
   ItemObject,
   Outcome,
   RemoteData,
@@ -10,6 +11,7 @@ import { MemoryRouter } from 'react-router';
 import useInputData from '../../InputData/useInputData';
 import useDecisionOutcomes from '../../AuditDetail/useDecisionOutcomes';
 import Counterfactual from '../Counterfactual';
+import { TrustyContext } from '../../TrustyApp/TrustyApp';
 
 const executionId = 'b2b0ed8d-c1e2-46b5-3ac54ff4beae-1000';
 
@@ -105,7 +107,19 @@ describe('Counterfactual', () => {
           }
         ]}
       >
-        <Counterfactual />
+        <TrustyContext.Provider
+          value={{
+            config: {
+              counterfactualEnabled: false,
+              useHrefLinks: false,
+              explanationEnabled: false,
+              serverRoot: 'http://url-to-service',
+              basePath: '/'
+            }
+          }}
+        >
+          <Counterfactual />
+        </TrustyContext.Provider>
       </MemoryRouter>
     );
 
@@ -124,7 +138,196 @@ describe('Counterfactual', () => {
     ).toStrictEqual(executionId);
   });
 
-  test('renders the counterfactual unsupported component', () => {
+  test('renders the counterfactual unsupported component::Unsupported input', () => {
+    const outcomesData = {
+      status: RemoteDataStatus.SUCCESS,
+      data: [
+        {
+          outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
+          outcomeName: 'Mortgage Approval',
+          evaluationStatus: 'SUCCEEDED',
+          outcomeResult: {
+            kind: 'UNIT',
+            type: 'boolean',
+            value: true
+          },
+          messages: [],
+          hasErrors: false
+        }
+      ] as Outcome[]
+    };
+    const inputData = {
+      status: RemoteDataStatus.SUCCESS,
+      data: [
+        {
+          name: 'Asset Score',
+          value: {
+            type: 'number',
+            kind: 'UNIT',
+            value: 123
+          }
+        },
+        {
+          name: 'Asset Type',
+          value: {
+            type: 'tAssetType',
+            kind: 'STRUCTURE',
+            value: {
+              category: {
+                kind: 'UNIT',
+                type: 'string',
+                value: 'property'
+              }
+            }
+          }
+        }
+      ] as ItemObject[]
+    };
+
+    (useDecisionOutcomes as jest.Mock).mockReturnValue(outcomesData);
+    (useInputData as jest.Mock).mockReturnValue(inputData);
+
+    const wrapper = mount(
+      <MemoryRouter
+        initialEntries={[
+          {
+            pathname: `/audit/decision/${executionId}/counterfactual-analysis`,
+            key: 'counterfactual-analysis'
+          }
+        ]}
+      >
+        <Counterfactual />
+      </MemoryRouter>
+    );
+
+    expect(wrapper.find('CounterfactualUnsupported')).toHaveLength(1);
+    const messages = wrapper.find('CounterfactualUnsupported').props()[
+      'messages'
+    ];
+    expect(messages.length).toEqual(1);
+    expect((messages[0] as CFSupportMessage).id).toEqual('message-inputs');
+  });
+
+  test('renders the counterfactual unsupported component::Only String inputs', () => {
+    const outcomesData = {
+      status: RemoteDataStatus.SUCCESS,
+      data: [
+        {
+          outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
+          outcomeName: 'Mortgage Approval',
+          evaluationStatus: 'SUCCEEDED',
+          outcomeResult: {
+            kind: 'UNIT',
+            type: 'boolean',
+            value: true
+          },
+          messages: [],
+          hasErrors: false
+        }
+      ] as Outcome[]
+    };
+    const inputData = {
+      status: RemoteDataStatus.SUCCESS,
+      data: [
+        {
+          name: 'Asset name',
+          value: {
+            type: 'string',
+            kind: 'UNIT',
+            value: 'Cheese'
+          }
+        },
+        {
+          name: 'Asset nickname',
+          value: {
+            type: 'string',
+            kind: 'UNIT',
+            value: 'Charlie Cheddar'
+          }
+        }
+      ] as ItemObject[]
+    };
+
+    (useDecisionOutcomes as jest.Mock).mockReturnValue(outcomesData);
+    (useInputData as jest.Mock).mockReturnValue(inputData);
+
+    const wrapper = mount(
+      <MemoryRouter
+        initialEntries={[
+          {
+            pathname: `/audit/decision/${executionId}/counterfactual-analysis`,
+            key: 'counterfactual-analysis'
+          }
+        ]}
+      >
+        <Counterfactual />
+      </MemoryRouter>
+    );
+
+    expect(wrapper.find('CounterfactualUnsupported')).toHaveLength(1);
+    const messages = wrapper.find('CounterfactualUnsupported').props()[
+      'messages'
+    ];
+    expect(messages.length).toEqual(1);
+    expect((messages[0] as CFSupportMessage).id).toEqual(
+      'message-inputs-string'
+    );
+  });
+
+  test('renders the counterfactual unsupported component::Unsupported outcome', () => {
+    const outcomesData = {
+      status: RemoteDataStatus.SUCCESS,
+      data: [
+        {
+          outcomeId: '_12268B68-94A1-4960-B4C8-0B6071AFDE58',
+          outcomeName: 'Mortgage Approval',
+          evaluationStatus: 'SUCCEEDED',
+          outcomeResult: {
+            kind: 'STRUCTURE',
+            type: 'tMortgage',
+            value: {
+              approved: {
+                kind: 'UNIT',
+                type: 'boolean',
+                value: true
+              }
+            }
+          },
+          messages: [],
+          hasErrors: false
+        }
+      ] as Outcome[]
+    };
+    const inputData = {
+      status: RemoteDataStatus.SUCCESS,
+      data: [] as ItemObject[]
+    };
+
+    (useDecisionOutcomes as jest.Mock).mockReturnValue(outcomesData);
+    (useInputData as jest.Mock).mockReturnValue(inputData);
+
+    const wrapper = mount(
+      <MemoryRouter
+        initialEntries={[
+          {
+            pathname: `/audit/decision/${executionId}/counterfactual-analysis`,
+            key: 'counterfactual-analysis'
+          }
+        ]}
+      >
+        <Counterfactual />
+      </MemoryRouter>
+    );
+
+    expect(wrapper.find('CounterfactualUnsupported')).toHaveLength(1);
+    const messages = wrapper.find('CounterfactualUnsupported').props()[
+      'messages'
+    ];
+    expect(messages.length).toEqual(1);
+    expect((messages[0] as CFSupportMessage).id).toEqual('message-outcomes');
+  });
+
+  test('renders the counterfactual unsupported component::Unsupported input and outcome', () => {
     const outcomesData = {
       status: RemoteDataStatus.SUCCESS,
       data: [
@@ -154,13 +357,21 @@ describe('Counterfactual', () => {
         {
           name: 'Asset Score',
           value: {
-            type: 'tAssetScore',
+            type: 'number',
+            kind: 'UNIT',
+            value: 123
+          }
+        },
+        {
+          name: 'Asset Type',
+          value: {
+            type: 'tAssetType',
             kind: 'STRUCTURE',
             value: {
-              score: {
+              category: {
                 kind: 'UNIT',
-                type: 'number',
-                value: 123
+                type: 'string',
+                value: 'property'
               }
             }
           }
@@ -185,15 +396,12 @@ describe('Counterfactual', () => {
     );
 
     expect(wrapper.find('CounterfactualUnsupported')).toHaveLength(1);
-    expect(
-      wrapper.find('CounterfactualUnsupported').props()[
-        'isAtLeastOneInputSupported'
-      ]
-    ).toBeFalsy();
-    expect(
-      wrapper.find('CounterfactualUnsupported').props()[
-        'isAtLeastOneOutcomeSupported'
-      ]
-    ).toBeFalsy();
+    const messages = wrapper.find('CounterfactualUnsupported').props()[
+      'messages'
+    ];
+    expect(messages.length).toEqual(1);
+    expect((messages[0] as CFSupportMessage).id).toEqual(
+      'message-inputs-and-outcomes'
+    );
   });
 });

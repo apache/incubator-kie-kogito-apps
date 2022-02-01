@@ -28,6 +28,7 @@ import {
   MockedTaskFormDriver,
   testUserTask
 } from '../../../../embedded/tests/mocks/Mocks';
+import { parseTaskSchema } from '../../utils/TaskFormDataUtils';
 
 jest.mock('../../TaskFormRenderer/TaskFormRenderer');
 jest.mock('../../EmptyTaskForm/EmptyTaskForm');
@@ -36,12 +37,13 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@kogito-apps/components-common', () => ({
-  ...jest.requireActual('@kogito-apps/components-common'),
-  KogitoSpinner: () => {
-    return <MockedComponent />;
-  }
-}));
+jest.mock('@kogito-apps/components-common', () =>
+  Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
+    KogitoSpinner: () => {
+      return <MockedComponent />;
+    }
+  })
+);
 
 let props: TaskFormProps;
 let driverDoSubmitSpy;
@@ -123,7 +125,9 @@ describe('TaskForm Test', () => {
 
     expect(taskFormRenderer.props().enabled).toBeTruthy();
     expect(taskFormRenderer.props().userTask).toStrictEqual(props.userTask);
-    expect(taskFormRenderer.props().formSchema).toStrictEqual(props.schema);
+    expect(taskFormRenderer.props().formSchema).toStrictEqual(
+      parseTaskSchema(props.schema).schema
+    );
     expect(taskFormRenderer.props().formData).toBeNull();
 
     const formData = JSON.parse(props.userTask.inputs);
