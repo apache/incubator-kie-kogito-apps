@@ -39,7 +39,7 @@ public class EmptyFeatureDomain implements FeatureDomain {
     }
 
     @Override
-    public Set<String> getCategories() {
+    public Set<Object> getCategories() {
         return null;
     }
 }

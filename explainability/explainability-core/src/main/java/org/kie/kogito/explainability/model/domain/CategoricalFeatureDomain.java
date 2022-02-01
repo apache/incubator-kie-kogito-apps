@@ -22,9 +22,9 @@ import java.util.Set;
 
 public class CategoricalFeatureDomain implements FeatureDomain {
 
-    private final Set<String> categories;
+    private final Set<Object> categories;
 
-    private CategoricalFeatureDomain(Set<String> categories) {
+    private CategoricalFeatureDomain(Set<Object> categories) {
         this.categories = categories;
     }
 
@@ -34,7 +34,7 @@ public class CategoricalFeatureDomain implements FeatureDomain {
      * @param categories A set with all the allowed category values
      * @return A {@link FeatureDomain}
      */
-    public static FeatureDomain create(Set<String> categories) {
+    public static FeatureDomain create(Set<Object> categories) {
         return new CategoricalFeatureDomain(categories);
     }
 
@@ -42,7 +42,7 @@ public class CategoricalFeatureDomain implements FeatureDomain {
         return new CategoricalFeatureDomain(new HashSet<>(categories));
     }
 
-    public static FeatureDomain create(String... categories) {
+    public static FeatureDomain create(Object... categories) {
         return new CategoricalFeatureDomain(new HashSet<>(Arrays.asList(categories)));
     }
 
@@ -62,7 +62,7 @@ public class CategoricalFeatureDomain implements FeatureDomain {
     }
 
     @Override
-    public Set<String> getCategories() {
+    public Set<Object> getCategories() {
         return this.categories;
     }
 

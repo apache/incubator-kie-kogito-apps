@@ -28,13 +28,13 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
  * Mapping between a categorical feature an OptaPlanner {@link PlanningEntity}
  */
 @PlanningEntity
-public class URIEntity extends AbstractCategoricalEntity<URI> {
+public class URIEntity extends AbstractCategoricalEntity<Object> {
 
     public URIEntity() {
         super();
     }
 
-    private URIEntity(URI originalValue, String featureName, Set<URI> allowedCategories, boolean constrained) {
+    private URIEntity(URI originalValue, String featureName, Set<Object> allowedCategories, boolean constrained) {
         super(originalValue, featureName, allowedCategories, constrained);
     }
 
@@ -47,7 +47,7 @@ public class URIEntity extends AbstractCategoricalEntity<URI> {
      * @param categories      Set of allowed category values
      * @param constrained     Whether this entity's value should be fixed or not
      */
-    public static URIEntity from(Feature originalFeature, Set<URI> categories, boolean constrained) {
+    public static URIEntity from(Feature originalFeature, Set<Object> categories, boolean constrained) {
         return new URIEntity((URI) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), categories, constrained);
     }
 
@@ -59,12 +59,12 @@ public class URIEntity extends AbstractCategoricalEntity<URI> {
      * @param originalFeature feature Original input {@link Feature}
      * @param categories      Set of allowed category values
      */
-    public static URIEntity from(Feature originalFeature, Set<URI> categories) {
+    public static URIEntity from(Feature originalFeature, Set<Object> categories) {
         return URIEntity.from(originalFeature, categories, false);
     }
 
     @ValueRangeProvider(id = "categoricalRange")
-    public Set<URI> getValueRange() {
+    public Set<Object> getValueRange() {
         return allowedCategories;
     }
 
@@ -75,15 +75,15 @@ public class URIEntity extends AbstractCategoricalEntity<URI> {
      */
     @Override
     public Feature asFeature() {
-        return FeatureFactory.newURIFeature(featureName, this.proposedValue);
+        return FeatureFactory.newURIFeature(featureName, (URI) this.proposedValue);
     }
 
     @PlanningVariable(valueRangeProviderRefs = { "categoricalRange" })
-    public URI getProposedValue() {
+    public Object getProposedValue() {
         return proposedValue;
     }
 
-    public void setProposedValue(URI proposedValue) {
+    public void setProposedValue(Object proposedValue) {
         this.proposedValue = proposedValue;
     }
 

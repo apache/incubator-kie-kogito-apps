@@ -28,6 +28,7 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -105,7 +106,7 @@ class SimilarityTest {
     @Test
     void categoricalSimpleSimilarity() {
         final String value = "foo";
-        final Set<String> categories = Set.of("foo", "bar", "baz");
+        final Set<Object> categories = Set.of("foo", "bar", "baz");
         final CategoricalEntity x = CategoricalEntity.from(FeatureFactory.newCategoricalFeature("x", value), categories);
 
         x.setProposedValue("bar");
@@ -115,6 +116,24 @@ class SimilarityTest {
         assertEquals(LOWEST_SIMILARITY, x.similarity());
 
         x.setProposedValue("foo");
+        assertEquals(HIGHEST_SIMILARITY, x.similarity());
+    }
+
+    @Test
+    void uriSimpleSimilarity() throws URISyntaxException {
+        final URI value = new URI("https://kogito.kie.org/trustyai/");
+        final Set<Object> uris = Set.of(
+                new URI("https://example.com/foo"),
+                new URI("https://example.com/bar"));
+        final URIEntity x = URIEntity.from(FeatureFactory.newURIFeature("uri", value), uris);
+
+        x.setProposedValue(new URI("https://example.com/bar"));
+        assertEquals(LOWEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(new URI("https://example.com/baz"));
+        assertEquals(LOWEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(new URI("https://kogito.kie.org/trustyai/"));
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
     }
 

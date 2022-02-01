@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.local.counterfactual;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -35,6 +36,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.Counterfactua
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
 import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.IntegerEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.URIEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBinaryEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBooleanEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCategoricalEntity;
@@ -284,20 +286,18 @@ class CounterfactualEntityFactoryTest {
     }
 
     @Test
-    void testURIFactory() {
+    void testURIFactory() throws URISyntaxException {
         final URI value = URI.create("./");
         final Feature feature = FeatureFactory.newURIFeature("uri-feature", value);
-        final FeatureDomain domain = EmptyFeatureDomain.create();
+        FeatureDomain domain = EmptyFeatureDomain.create();
         CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature, true, domain);
         assertTrue(counterfactualEntity instanceof FixedURIEntity);
         assertEquals(Type.URI, counterfactualEntity.asFeature().getType());
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.from(feature, false, domain);
-        });
-
-        assertEquals("Unsupported feature type: uri",
-                exception.getMessage());
+        domain = CategoricalFeatureDomain.create(new URI("./"), new URI("../"), new URI("https://example.com"));
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof URIEntity);
+        assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
     }
 
     @Test

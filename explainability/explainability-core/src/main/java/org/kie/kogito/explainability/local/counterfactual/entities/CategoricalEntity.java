@@ -27,13 +27,13 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
  * Mapping between a categorical feature an OptaPlanner {@link PlanningEntity}
  */
 @PlanningEntity
-public class CategoricalEntity extends AbstractCategoricalEntity<String> {
+public class CategoricalEntity extends AbstractCategoricalEntity<Object> {
 
     public CategoricalEntity() {
         super();
     }
 
-    private CategoricalEntity(String originalValue, String featureName, Set<String> allowedCategories, boolean constrained) {
+    private CategoricalEntity(String originalValue, String featureName, Set<Object> allowedCategories, boolean constrained) {
         super(originalValue, featureName, allowedCategories, constrained);
     }
 
@@ -46,7 +46,7 @@ public class CategoricalEntity extends AbstractCategoricalEntity<String> {
      * @param categories      Set of allowed category values
      * @param constrained     Whether this entity's value should be fixed or not
      */
-    public static CategoricalEntity from(Feature originalFeature, Set<String> categories, boolean constrained) {
+    public static CategoricalEntity from(Feature originalFeature, Set<Object> categories, boolean constrained) {
         return new CategoricalEntity(originalFeature.getValue().asString(), originalFeature.getName(), categories, constrained);
     }
 
@@ -58,12 +58,12 @@ public class CategoricalEntity extends AbstractCategoricalEntity<String> {
      * @param originalFeature feature Original input {@link Feature}
      * @param categories      Set of allowed category values
      */
-    public static CategoricalEntity from(Feature originalFeature, Set<String> categories) {
+    public static CategoricalEntity from(Feature originalFeature, Set<Object> categories) {
         return CategoricalEntity.from(originalFeature, categories, false);
     }
 
     @ValueRangeProvider(id = "categoricalRange")
-    public Set<String> getValueRange() {
+    public Set<Object> getValueRange() {
         return allowedCategories;
     }
 
@@ -74,15 +74,15 @@ public class CategoricalEntity extends AbstractCategoricalEntity<String> {
      */
     @Override
     public Feature asFeature() {
-        return FeatureFactory.newCategoricalFeature(featureName, this.proposedValue);
+        return FeatureFactory.newCategoricalFeature(featureName, (String) this.proposedValue);
     }
 
     @PlanningVariable(valueRangeProviderRefs = { "categoricalRange" })
-    public String getProposedValue() {
+    public Object getProposedValue() {
         return proposedValue;
     }
 
-    public void setProposedValue(String proposedValue) {
+    public void setProposedValue(Object proposedValue) {
         this.proposedValue = proposedValue;
     }
 

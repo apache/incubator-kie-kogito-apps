@@ -15,8 +15,10 @@
  */
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -94,7 +96,7 @@ public class CounterfactualEntityFactory {
             if (isConstrained) {
                 entity = FixedURIEntity.from(feature);
             } else {
-                throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
+                entity = URIEntity.from(feature, featureDomain.getCategories(), isConstrained);
             }
 
         } else if (feature.getType() == Type.TIME) {

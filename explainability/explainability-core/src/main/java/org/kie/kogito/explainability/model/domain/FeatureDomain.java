@@ -49,6 +49,6 @@ public interface FeatureDomain {
      *
      * @return the end value
      */
-    Set<String> getCategories();
+    Set<Object> getCategories();
 
 }
