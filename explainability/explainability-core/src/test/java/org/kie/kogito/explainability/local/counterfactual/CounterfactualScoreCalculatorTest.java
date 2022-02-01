@@ -18,8 +18,11 @@ package org.kie.kogito.explainability.local.counterfactual;
 import java.math.BigDecimal;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -546,6 +549,95 @@ class CounterfactualScoreCalculatorTest {
 
         assertEquals(1.0, distance);
 
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void currencyDistanceDifferentValue(int seed) {
+        final Random random = new Random(seed);
+        Feature x = FeatureFactory.newCurrencyFeature("x", Currency.getInstance("GBP"));
+        Feature y = FeatureFactory.newCurrencyFeature("y", Currency.getInstance("EUR"));
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertEquals(Type.CURRENCY, ox.getType());
+        assertEquals(Type.CURRENCY, oy.getType());
+        assertEquals(1.0, distance);
+
+        // Use a random threshold, mustn't make a difference
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
+
+        assertEquals(1.0, distance);
+
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void currencyDistanceNull(int seed) {
+        final Random random = new Random(seed);
+        final Currency value = Currency.getInstance(Locale.UK);
+
+        // Null as a goal
+        Feature predictionFeature = FeatureFactory.newCurrencyFeature("x", value);
+        Feature goalFeature = FeatureFactory.newCurrencyFeature("y", null);
+
+        Output predictionOutput = outputFromFeature(predictionFeature);
+        Output goalOutput = outputFromFeature(goalFeature);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.CURRENCY, goalOutput.getType());
+        assertEquals(1.0, distance);
+
+        // Null as a prediction
+
+        predictionFeature = FeatureFactory.newCurrencyFeature("x", null);
+        goalFeature = FeatureFactory.newCurrencyFeature("y", value);
+
+        predictionOutput = outputFromFeature(predictionFeature);
+        goalOutput = outputFromFeature(goalFeature);
+
+        distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.CURRENCY, predictionOutput.getType());
+        assertEquals(1.0, distance);
+
+        // Null as both prediction and goal
+
+        predictionFeature = FeatureFactory.newCurrencyFeature("x", null);
+        goalFeature = FeatureFactory.newCurrencyFeature("y", null);
+
+        predictionOutput = outputFromFeature(predictionFeature);
+        goalOutput = outputFromFeature(goalFeature);
+
+        distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.CURRENCY, predictionOutput.getType());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void currencyDistanceSameValue(int seed) {
+        final Random random = new Random(seed);
+        final Currency value = Currency.getInstance(Locale.US);
+        Feature x = FeatureFactory.newCurrencyFeature("x", value);
+        Feature y = FeatureFactory.newCurrencyFeature("y", value);
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertEquals(Type.CURRENCY, ox.getType());
+        assertEquals(0.0, distance);
+
+        // Use a random threshold, mustn't make a difference
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
+
+        assertEquals(0.0, distance);
     }
 
     @ParameterizedTest

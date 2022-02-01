@@ -18,6 +18,7 @@ package org.kie.kogito.explainability.local.counterfactual;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -50,6 +51,12 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
     public static Double outputDistance(Output prediction, Output goal) throws IllegalArgumentException {
         return outputDistance(prediction, goal, 0.0);
     }
+
+    private static final Set<Type> SUPPORTED_CATEGORICAL_TYPES = Set.of(
+            Type.CATEGORICAL,
+            Type.BOOLEAN,
+            Type.TEXT,
+            Type.CURRENCY);
 
     public static Double outputDistance(Output prediction, Output goal, double threshold) throws IllegalArgumentException {
         final Type predictionType = prediction.getType();
@@ -84,9 +91,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             } else {
                 return distance;
             }
-
-        } else if (prediction.getType() == Type.CATEGORICAL || prediction.getType() == Type.BOOLEAN
-                || prediction.getType() == Type.TEXT) {
+        } else if (SUPPORTED_CATEGORICAL_TYPES.contains(prediction.getType())) {
             final Object goalValueObject = goal.getValue().getUnderlyingObject();
             final Object predictionValueObject = prediction.getValue().getUnderlyingObject();
             return Objects.equals(goalValueObject, predictionValueObject) ? 0.0 : 1.0;

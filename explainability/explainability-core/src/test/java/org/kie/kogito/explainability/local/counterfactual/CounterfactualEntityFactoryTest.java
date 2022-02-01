@@ -34,6 +34,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.BooleanEntity
 import org.kie.kogito.explainability.local.counterfactual.entities.CategoricalEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
+import org.kie.kogito.explainability.local.counterfactual.entities.CurrencyEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.IntegerEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.URIEntity;
@@ -221,17 +222,17 @@ class CounterfactualEntityFactoryTest {
     void testCurrencyFactory() {
         final Currency value = Currency.getInstance(Locale.ITALY);
         final Feature feature = FeatureFactory.newCurrencyFeature("currrency-feature", value);
-        final FeatureDomain domain = EmptyFeatureDomain.create();
+        FeatureDomain domain = EmptyFeatureDomain.create();
         CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature, true, domain);
         assertTrue(counterfactualEntity instanceof FixedCurrencyEntity);
         assertEquals(Type.CURRENCY, counterfactualEntity.asFeature().getType());
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.from(feature, false, domain);
-        });
+        domain = CategoricalFeatureDomain.create(Currency.getAvailableCurrencies());
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof CurrencyEntity);
+        assertEquals(domain.getCategories(), ((CurrencyEntity) counterfactualEntity).getValueRange());
+        assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
 
-        assertEquals("Unsupported feature type: currency",
-                exception.getMessage());
     }
 
     @Test

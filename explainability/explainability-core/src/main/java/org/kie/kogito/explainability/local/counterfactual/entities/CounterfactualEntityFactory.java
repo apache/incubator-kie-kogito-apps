@@ -131,7 +131,7 @@ public class CounterfactualEntityFactory {
             if (isConstrained) {
                 entity = FixedCurrencyEntity.from(feature);
             } else {
-                throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
+                entity = CurrencyEntity.from(feature, featureDomain.getCategories(), isConstrained);
             }
 
         } else if (feature.getType() == Type.CATEGORICAL) {

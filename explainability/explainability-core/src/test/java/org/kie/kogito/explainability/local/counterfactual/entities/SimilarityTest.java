@@ -137,6 +137,26 @@ class SimilarityTest {
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
     }
 
+    @Test
+    void currencySimpleSimilarity() {
+        final Currency value = Currency.getInstance("GBP");
+        final Set<Object> categories = Set.of(
+                Currency.getInstance("GBP"),
+                Currency.getInstance("EUR"),
+                Currency.getInstance("USD"));
+
+        final CurrencyEntity x = CurrencyEntity.from(FeatureFactory.newCurrencyFeature("currency", value), categories);
+
+        x.setProposedValue(Currency.getInstance("EUR"));
+        assertEquals(LOWEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(Currency.getInstance("USD"));
+        assertEquals(LOWEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(Currency.getInstance("GBP"));
+        assertEquals(HIGHEST_SIMILARITY, x.similarity());
+    }
+
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void fixedIntegerSimilarity(int seed) {
