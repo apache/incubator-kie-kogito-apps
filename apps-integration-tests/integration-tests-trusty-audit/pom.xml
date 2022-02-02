@@ -80,7 +80,13 @@
                 <configuration>
                     <workingDirectory>${project.root.dir}/ui-packages</workingDirectory>
                 </configuration>
+
                 <executions>
+                    <!--
+                        This module depends on the 'trusty-ui' which depends on 'kogito-apps-ui-packages' module.
+                        Please consider addition of executions from 'frontend-maven-plugin' in 
+                        the 'kogito-apps-ui-packages' module in case that this dependency will be removed.
+                    !-->        
                     <execution>
                         <id>yarn e2e test</id>
                         <goals>

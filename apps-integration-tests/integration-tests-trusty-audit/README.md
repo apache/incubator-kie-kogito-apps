@@ -17,15 +17,18 @@ The e2e test suite is performed during a build of whole project.
 
 Go to the root folder of this project (kogito-apps) and run `mvn install` to build and performed all tests.
 
+Note: We recommend running the e2e test suite after the `kogito-apps-ui-packages` module is built in your environment.
+Otherwise, be sure that your environment is clean and contains all necessary tools.
+
 In case that you want to run only the E2E test be sure that docker contains all images which are mentioned in the pom.xml file.
 
 ```
 docker images
 ```
 
-Use `mvn install -DskipTests` if you miss any docker image.
-
+Use `mvn install -pl :integration-tests-trusty-audit -am` if you miss any docker image.
 Go to this folder (integration-tests-trusty-audit) and perform `mvn install` directly in this module.
+
 In case that you want to run just services (without test suite) to investigate problems then perform `mvn docker:run` when you interrupt this execution all services are stopped and removed. See [DMP docs](https://dmp.fabric8.io/#maven-goals).
 
 ## Clear docker
