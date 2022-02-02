@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.local.counterfactual;
 
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Currency;
@@ -33,6 +34,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
+import org.kie.kogito.explainability.local.counterfactual.entities.DurationEntity;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
@@ -728,6 +730,101 @@ class CounterfactualScoreCalculatorTest {
         distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
 
         assertEquals(0.0, distance);
+    }
+
+    @Test
+    void durationDistanceDifferentValue() {
+        final double SECONDS = 120L;
+        Feature x = FeatureFactory.newDurationFeature("x", Duration.ZERO);
+        Feature y = FeatureFactory.newDurationFeature("y", Duration.ofSeconds((long) SECONDS));
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertEquals(Type.DURATION, ox.getType());
+        assertEquals(Type.DURATION, oy.getType());
+
+        assertEquals(SECONDS, distance);
+
+        x = FeatureFactory.newDurationFeature("x", Duration.ofSeconds((long) SECONDS));
+        y = FeatureFactory.newDurationFeature("y", Duration.ofDays(1L));
+        ox = outputFromFeature(x);
+        oy = outputFromFeature(y);
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+        assertEquals(0.9986, distance, 0.01);
+
+        x = FeatureFactory.newDurationFeature("x", Duration.ofDays(2L));
+        y = FeatureFactory.newDurationFeature("y", Duration.ofDays(1L));
+        ox = outputFromFeature(x);
+        oy = outputFromFeature(y);
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+        System.out.println(distance);
+        assertEquals(0.5, distance, 1e-4);
+    }
+
+    @Test
+    void durationDistanceNull() {
+        final Duration value = Duration.ofHours(72L);
+
+        // Null as a goal
+        Feature predictionFeature = FeatureFactory.newDurationFeature("x", value);
+        Feature goalFeature = FeatureFactory.newDurationFeature("y", null);
+
+        Output predictionOutput = outputFromFeature(predictionFeature);
+        Output goalOutput = outputFromFeature(goalFeature);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.DURATION, goalOutput.getType());
+        assertEquals(1.0, distance);
+
+        // Null as a prediction
+        predictionFeature = FeatureFactory.newDurationFeature("x", null);
+        goalFeature = FeatureFactory.newDurationFeature("y", value);
+
+        predictionOutput = outputFromFeature(predictionFeature);
+        goalOutput = outputFromFeature(goalFeature);
+
+        distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.DURATION, predictionOutput.getType());
+        assertEquals(1.0, distance);
+
+        // Null as both prediction and goal
+        predictionFeature = FeatureFactory.newDurationFeature("x", null);
+        goalFeature = FeatureFactory.newDurationFeature("y", null);
+
+        predictionOutput = outputFromFeature(predictionFeature);
+        goalOutput = outputFromFeature(goalFeature);
+
+        distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.DURATION, predictionOutput.getType());
+        System.out.println(distance);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void durationDistanceSameValue(int seed) {
+        final Random random = new Random(seed);
+        final Duration value = Duration.ofSeconds(random.nextLong());
+        Feature x = FeatureFactory.newDurationFeature("x", value);
+        Feature y = FeatureFactory.newDurationFeature("y", value);
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertEquals(Type.DURATION, ox.getType());
+        assertEquals(0.0, Math.abs(distance));
+
+        // Use a random threshold, mustn't make a difference
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
+
+        assertEquals(0.0, Math.abs(distance));
     }
 
     @ParameterizedTest

@@ -179,6 +179,28 @@ class SimilarityTest {
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
     }
 
+    @Test
+    void durationSimpleSimilarity() {
+        final Long days = 365L;
+        final Duration duration = Duration.ofDays(days);
+        final DurationEntity x = DurationEntity.from(FeatureFactory.newDurationFeature("x", duration), Duration.ZERO, Duration.ofDays(3*days));
+
+        assertEquals(HIGHEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(Duration.ofDays(2*days));
+        assertEquals(0.6666, x.similarity(), 1e-3);
+
+        x.setProposedValue(Duration.ofDays(-days));
+        assertEquals(0.333, x.similarity(), 1e-3);
+
+        x.setProposedValue(Duration.ofDays(days));
+        assertEquals(HIGHEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(Duration.ofSeconds(-5L));
+        assertEquals(0.6666, x.similarity(), 1e-3);
+
+    }
+
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void fixedIntegerSimilarity(int seed) {

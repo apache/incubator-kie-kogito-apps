@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.local.counterfactual;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -59,6 +60,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             Type.CURRENCY,
             Type.BINARY);
 
+
     public static Double outputDistance(Output prediction, Output goal, double threshold) throws IllegalArgumentException {
         final Type predictionType = prediction.getType();
         final Type goalType = goal.getType();
@@ -86,6 +88,28 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 distance = difference;
             } else {
                 distance = difference / Math.max(predictionValue, goalValue);
+            }
+            if (distance < threshold) {
+                return 0d;
+            } else {
+                return distance;
+            }
+        }else if (prediction.getType() == Type.DURATION){
+            final Duration predictionValue = (Duration) prediction.getValue().getUnderlyingObject();
+            final Duration goalValue = (Duration) goal.getValue().getUnderlyingObject();
+
+            if (Objects.isNull(predictionValue) || Objects.isNull(goalValue)) {
+                return 1.0;
+            }
+            // Duration distances calculated from value in seconds
+            final double difference = predictionValue.minus(goalValue).abs().getSeconds();
+            // If any of the values is zero use the difference instead of change
+            // If neither of the values is zero use the change rate
+            double distance;
+            if (predictionValue.isZero() || goalValue.isZero()) {
+                distance = difference;
+            } else {
+                distance = difference / Math.max(predictionValue.getSeconds(), goalValue.getSeconds());
             }
             if (distance < threshold) {
                 return 0d;

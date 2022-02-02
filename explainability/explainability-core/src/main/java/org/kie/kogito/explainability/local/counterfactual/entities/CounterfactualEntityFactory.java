@@ -16,6 +16,7 @@
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
 import java.net.URI;
+import java.time.Duration;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -40,6 +41,7 @@ import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.PredictionFeatureDomain;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.domain.DurationFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 
 public class CounterfactualEntityFactory {
@@ -110,7 +112,9 @@ public class CounterfactualEntityFactory {
             if (isConstrained) {
                 entity = FixedDurationEntity.from(feature);
             } else {
-                throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
+                DurationFeatureDomain domain = (DurationFeatureDomain) featureDomain;
+                entity = DurationEntity.from(feature, Duration.of(domain.getLowerBound().longValue(), domain.getUnit()), Duration.of(domain.getUpperBound().longValue(), domain.getUnit()),
+                        featureDistribution, isConstrained);
             }
 
         } else if (feature.getType() == Type.VECTOR) {

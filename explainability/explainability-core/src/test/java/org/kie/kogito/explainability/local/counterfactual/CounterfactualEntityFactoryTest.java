@@ -20,6 +20,7 @@ import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.HashMap;
@@ -39,6 +40,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.Counterfactua
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
 import org.kie.kogito.explainability.local.counterfactual.entities.CurrencyEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.DurationEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.IntegerEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.URIEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBinaryEntity;
@@ -59,6 +61,7 @@ import org.kie.kogito.explainability.model.PredictionFeatureDomain;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.domain.CategoricalFeatureDomain;
+import org.kie.kogito.explainability.model.domain.DurationFeatureDomain;
 import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
@@ -244,17 +247,16 @@ class CounterfactualEntityFactoryTest {
     void testDurationFactory() {
         final Duration value = Duration.ofDays(1);
         final Feature feature = FeatureFactory.newDurationFeature("duration-feature", value);
-        final FeatureDomain domain = EmptyFeatureDomain.create();
+        FeatureDomain domain = EmptyFeatureDomain.create();
         CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature, true, domain);
         assertTrue(counterfactualEntity instanceof FixedDurationEntity);
         assertEquals(Type.DURATION, counterfactualEntity.asFeature().getType());
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.from(feature, false, domain);
-        });
-
-        assertEquals("Unsupported feature type: duration",
-                exception.getMessage());
+        domain = DurationFeatureDomain.create(0, 60, ChronoUnit.SECONDS);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof DurationEntity);
+        assertEquals(Type.DURATION, counterfactualEntity.asFeature().getType());
+        assertFalse(counterfactualEntity.isConstrained());
     }
 
     @Test
