@@ -827,6 +827,99 @@ class CounterfactualScoreCalculatorTest {
         assertEquals(0.0, Math.abs(distance));
     }
 
+    @Test
+    void timeDistanceDifferentValue() {
+        final LocalTime value = LocalTime.now();
+        Feature x = FeatureFactory.newTimeFeature("x", LocalTime.of(15, 59));
+        Feature y = FeatureFactory.newTimeFeature("y", LocalTime.of(10, 1));
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertEquals(Type.TIME, ox.getType());
+        assertEquals(Type.TIME, oy.getType());
+
+        assertEquals(0.248, distance, 0.01);
+
+        x = FeatureFactory.newTimeFeature("x", LocalTime.of(12, 0));
+        y = FeatureFactory.newTimeFeature("y", LocalTime.of(12, 57));
+        ox = outputFromFeature(x);
+        oy = outputFromFeature(y);
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+        assertEquals(0.039, distance, 0.01);
+
+        x = FeatureFactory.newTimeFeature("x", LocalTime.of(0, 0));
+        y = FeatureFactory.newTimeFeature("y", LocalTime.of(15, 17));
+        ox = outputFromFeature(x);
+        oy = outputFromFeature(y);
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+        assertEquals(0.636, distance, 0.01);
+    }
+
+    @Test
+    void timeDistanceNull() {
+        final LocalTime value = LocalTime.of(17, 17);
+
+        // Null as a goal
+        Feature predictionFeature = FeatureFactory.newTimeFeature("x", value);
+        Feature goalFeature = FeatureFactory.newTimeFeature("y", null);
+
+        Output predictionOutput = outputFromFeature(predictionFeature);
+        Output goalOutput = outputFromFeature(goalFeature);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.TIME, goalOutput.getType());
+        assertEquals(1.0, distance);
+
+        // Null as a prediction
+        predictionFeature = FeatureFactory.newTimeFeature("x", null);
+        goalFeature = FeatureFactory.newTimeFeature("y", value);
+
+        predictionOutput = outputFromFeature(predictionFeature);
+        goalOutput = outputFromFeature(goalFeature);
+
+        distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.TIME, predictionOutput.getType());
+        assertEquals(1.0, distance);
+
+        // Null as both prediction and goal
+        predictionFeature = FeatureFactory.newTimeFeature("x", null);
+        goalFeature = FeatureFactory.newTimeFeature("y", null);
+
+        predictionOutput = outputFromFeature(predictionFeature);
+        goalOutput = outputFromFeature(goalFeature);
+
+        distance = CounterFactualScoreCalculator.outputDistance(predictionOutput, goalOutput);
+
+        assertEquals(Type.TIME, predictionOutput.getType());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void timeDistanceSameValue(int seed) {
+        final Random random = new Random(seed);
+        final LocalTime value = LocalTime.of(random.nextInt(24), random.nextInt(60));
+        Feature x = FeatureFactory.newTimeFeature("x", value);
+        Feature y = FeatureFactory.newTimeFeature("y", value);
+
+        Output ox = outputFromFeature(x);
+        Output oy = outputFromFeature(y);
+
+        double distance = CounterFactualScoreCalculator.outputDistance(ox, oy);
+
+        assertEquals(Type.TIME, ox.getType());
+        assertEquals(0.0, Math.abs(distance));
+
+        // Use a random threshold, mustn't make a difference
+        distance = CounterFactualScoreCalculator.outputDistance(ox, oy, random.nextDouble());
+
+        assertEquals(0.0, Math.abs(distance));
+    }
+
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void TextDistanceDifferentValue(int seed) {
@@ -862,8 +955,9 @@ class CounterfactualScoreCalculatorTest {
 
     @Test
     void unsupportedFeatureType() {
-        Feature x = FeatureFactory.newTimeFeature("x", LocalTime.now());
-        Feature y = FeatureFactory.newTimeFeature("y", LocalTime.now());
+
+        Feature x = FeatureFactory.newVectorFeature("x", 1, 2, 3, 4);
+        Feature y = FeatureFactory.newVectorFeature("y", 5, 6, 7, 8);
 
         Output ox = outputFromFeature(x);
         Output oy = outputFromFeature(y);
@@ -872,7 +966,7 @@ class CounterfactualScoreCalculatorTest {
             CounterFactualScoreCalculator.outputDistance(ox, oy);
         });
 
-        assertEquals("Feature 'x' has unsupported type 'time'", exception.getMessage());
+        assertEquals("Feature 'x' has unsupported type 'vector'", exception.getMessage());
     }
 
     /**

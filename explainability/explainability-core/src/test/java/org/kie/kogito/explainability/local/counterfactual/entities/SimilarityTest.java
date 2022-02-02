@@ -201,6 +201,24 @@ class SimilarityTest {
 
     }
 
+    @Test
+    void timeSimpleSimilarity() {
+        final LocalTime value = LocalTime.of(17, 17);
+        final TimeEntity x = TimeEntity.from(FeatureFactory.newTimeFeature("x", value),
+                LocalTime.of(10, 0), LocalTime.of(21, 18));
+
+        assertEquals(HIGHEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(LocalTime.of(17, 59));
+        assertEquals(0.938, x.similarity(), 1e-3);
+
+        x.setProposedValue(LocalTime.of(9, 23));
+        assertEquals(0.300, x.similarity(), 1e-3);
+
+        x.setProposedValue(value);
+        assertEquals(HIGHEST_SIMILARITY, x.similarity());
+    }
+
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void fixedIntegerSimilarity(int seed) {

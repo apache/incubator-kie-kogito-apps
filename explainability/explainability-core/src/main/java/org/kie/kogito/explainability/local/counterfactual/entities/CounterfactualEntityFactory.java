@@ -15,11 +15,10 @@
  */
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
-import java.net.URI;
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -105,7 +104,9 @@ public class CounterfactualEntityFactory {
             if (isConstrained) {
                 entity = FixedTimeEntity.from(feature);
             } else {
-                throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
+                final LocalTime lowerBound = LocalTime.MIN.plusSeconds(featureDomain.getLowerBound().longValue());
+                final LocalTime upperBound = LocalTime.MIN.plusSeconds(featureDomain.getUpperBound().longValue());
+                entity = TimeEntity.from(feature, lowerBound, upperBound, isConstrained);
             }
 
         } else if (feature.getType() == Type.DURATION) {

@@ -17,6 +17,8 @@ package org.kie.kogito.explainability.local.counterfactual;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
@@ -94,7 +96,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             } else {
                 return distance;
             }
-        }else if (prediction.getType() == Type.DURATION){
+        }else if (prediction.getType() == Type.DURATION) {
             final Duration predictionValue = (Duration) prediction.getValue().getUnderlyingObject();
             final Duration goalValue = (Duration) goal.getValue().getUnderlyingObject();
 
@@ -111,6 +113,21 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             } else {
                 distance = difference / Math.max(predictionValue.getSeconds(), goalValue.getSeconds());
             }
+            if (distance < threshold) {
+                return 0d;
+            } else {
+                return distance;
+            }
+        } else if (prediction.getType() == Type.TIME ){
+            final LocalTime predictionValue = (LocalTime) prediction.getValue().getUnderlyingObject();
+            final LocalTime goalValue = (LocalTime) goal.getValue().getUnderlyingObject();
+
+            if (Objects.isNull(predictionValue) || Objects.isNull(goalValue)) {
+                return 1.0;
+            }
+            final double interval = LocalTime.MIN.until(LocalTime.MAX, ChronoUnit.SECONDS);
+            // Time distances calculated from value in seconds
+            final double distance = Math.abs(predictionValue.until(goalValue, ChronoUnit.SECONDS)) / interval;
             if (distance < threshold) {
                 return 0d;
             } else {

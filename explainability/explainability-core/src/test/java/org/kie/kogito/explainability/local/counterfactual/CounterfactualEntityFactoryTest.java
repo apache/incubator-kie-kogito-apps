@@ -42,6 +42,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.CurrencyEntit
 import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.DurationEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.IntegerEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.TimeEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.URIEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBinaryEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBooleanEntity;
@@ -65,6 +66,7 @@ import org.kie.kogito.explainability.model.domain.DurationFeatureDomain;
 import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
+import org.kie.kogito.explainability.model.domain.TimeFeatureDomain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -280,17 +282,16 @@ class CounterfactualEntityFactoryTest {
     void testTimeFactory() {
         final LocalTime value = LocalTime.now();
         final Feature feature = FeatureFactory.newTimeFeature("time-feature", value);
-        final FeatureDomain domain = EmptyFeatureDomain.create();
+        FeatureDomain domain = EmptyFeatureDomain.create();
         CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature, true, domain);
         assertTrue(counterfactualEntity instanceof FixedTimeEntity);
         assertEquals(Type.TIME, counterfactualEntity.asFeature().getType());
 
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.from(feature, false, domain);
-        });
-
-        assertEquals("Unsupported feature type: time",
-                exception.getMessage());
+        domain = TimeFeatureDomain.create(value.minusHours(10), value.plusHours(10));
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof TimeEntity);
+        assertEquals(Type.TIME, counterfactualEntity.asFeature().getType());
+        assertEquals(value, ((TimeEntity) counterfactualEntity).getProposedValue());
     }
 
     @Test
