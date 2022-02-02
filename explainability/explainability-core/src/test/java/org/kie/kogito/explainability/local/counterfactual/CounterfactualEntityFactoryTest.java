@@ -63,12 +63,16 @@ import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.PredictionFeatureDomain;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.domain.BinaryFeatureDomain;
 import org.kie.kogito.explainability.model.domain.CategoricalFeatureDomain;
+import org.kie.kogito.explainability.model.domain.CurrencyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.DurationFeatureDomain;
 import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
+import org.kie.kogito.explainability.model.domain.ObjectFeatureDomain;
 import org.kie.kogito.explainability.model.domain.TimeFeatureDomain;
+import org.kie.kogito.explainability.model.domain.URIFeatureDomain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -189,11 +193,11 @@ class CounterfactualEntityFactoryTest {
         assertTrue(counterfactualEntity instanceof FixedBinaryEntity);
         assertEquals(Type.BINARY, counterfactualEntity.asFeature().getType());
 
-        final List<Object> categories = Stream.of(
-                        "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
+        final List<ByteBuffer> categories = Stream.of(
+                "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
                 .map(ByteBuffer::wrap).collect(Collectors.toList());
 
-        domain = CategoricalFeatureDomain.create(categories);
+        domain = BinaryFeatureDomain.create(categories);
         counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
         assertTrue(counterfactualEntity instanceof BinaryEntity);
         assertEquals(domain.getCategories(), ((BinaryEntity) counterfactualEntity).getValueRange());
@@ -240,7 +244,7 @@ class CounterfactualEntityFactoryTest {
         assertTrue(counterfactualEntity instanceof FixedCurrencyEntity);
         assertEquals(Type.CURRENCY, counterfactualEntity.asFeature().getType());
 
-        domain = CategoricalFeatureDomain.create(Currency.getAvailableCurrencies());
+        domain = CurrencyFeatureDomain.create(Currency.getAvailableCurrencies());
         counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
         assertTrue(counterfactualEntity instanceof CurrencyEntity);
         assertEquals(domain.getCategories(), ((CurrencyEntity) counterfactualEntity).getValueRange());
@@ -305,14 +309,14 @@ class CounterfactualEntityFactoryTest {
         assertTrue(counterfactualEntity instanceof FixedURIEntity);
         assertEquals(Type.URI, counterfactualEntity.asFeature().getType());
 
-        domain = CategoricalFeatureDomain.create(new URI("./"), new URI("../"), new URI("https://example.com"));
+        domain = URIFeatureDomain.create(new URI("./"), new URI("../"), new URI("https://example.com"));
         counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
         assertTrue(counterfactualEntity instanceof URIEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
     }
 
     @Test
-    void testObjectFactory() throws URISyntaxException {
+    void testObjectFactory() {
         final URI value = URI.create("./");
         final Feature feature = FeatureFactory.newObjectFeature("f", value);
         FeatureDomain domain = EmptyFeatureDomain.create();
@@ -320,7 +324,7 @@ class CounterfactualEntityFactoryTest {
         assertTrue(counterfactualEntity instanceof FixedObjectEntity);
         assertEquals(Type.UNDEFINED, counterfactualEntity.asFeature().getType());
 
-        domain = CategoricalFeatureDomain.create("test", 45L);
+        domain = ObjectFeatureDomain.create("test", 45L);
         counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
         assertTrue(counterfactualEntity instanceof ObjectEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());

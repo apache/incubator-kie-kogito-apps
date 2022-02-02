@@ -32,7 +32,7 @@ public class TimeFeatureDomain extends NumericalFeatureDomain {
      * @param upperBound The end point of the search space
      * @return A {@link FeatureDomain}
      */
-    public static FeatureDomain create(LocalTime lowerBound, LocalTime upperBound) {
+    public static FeatureDomain<LocalTime> create(LocalTime lowerBound, LocalTime upperBound) {
         final double minimum = LocalTime.MIN.until(lowerBound, ChronoUnit.SECONDS);
         final double maximum = LocalTime.MIN.until(upperBound, ChronoUnit.SECONDS);
         return new TimeFeatureDomain(minimum, maximum);
@@ -54,7 +54,7 @@ public class TimeFeatureDomain extends NumericalFeatureDomain {
     }
 
     @Override
-    public Set<Object> getCategories() {
+    public Set<LocalTime> getCategories() {
         return null;
     }
 

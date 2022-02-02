@@ -112,16 +112,19 @@ public class TimeEntity extends AbstractAlgebraicEntity<LocalTime> {
         this.proposedValue = proposedValue;
     }
 
-    @Override public double distance() {
+    @Override
+    public double distance() {
         return Math.abs(this.proposedValue.until(this.originalValue, ChronoUnit.SECONDS));
 
     }
 
-    @Override public Feature asFeature() {
+    @Override
+    public Feature asFeature() {
         return FeatureFactory.newTimeFeature(featureName, this.proposedValue);
     }
 
-    @Override public double similarity() {
+    @Override
+    public double similarity() {
         return 1.0 - Math.abs(this.proposedValue.until(this.originalValue, ChronoUnit.SECONDS)) / this.range;
     }
 }

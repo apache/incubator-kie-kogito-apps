@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
-import java.net.URI;
 import java.nio.ByteBuffer;
 import java.util.Set;
 
@@ -29,13 +28,13 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
  * Mapping between a binary categorical feature an OptaPlanner {@link PlanningEntity}
  */
 @PlanningEntity
-public class BinaryEntity extends AbstractCategoricalEntity<Object> {
+public class BinaryEntity extends AbstractCategoricalEntity<ByteBuffer> {
 
     public BinaryEntity() {
         super();
     }
 
-    private BinaryEntity(ByteBuffer originalValue, String featureName, Set<Object> allowedCategories, boolean constrained) {
+    private BinaryEntity(ByteBuffer originalValue, String featureName, Set<ByteBuffer> allowedCategories, boolean constrained) {
         super(originalValue, featureName, allowedCategories, constrained);
     }
 
@@ -45,10 +44,10 @@ public class BinaryEntity extends AbstractCategoricalEntity<Object> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param categories      Set of allowed category values
-     * @param constrained     Whether this entity's value should be fixed or not
+     * @param categories Set of allowed category values
+     * @param constrained Whether this entity's value should be fixed or not
      */
-    public static BinaryEntity from(Feature originalFeature, Set<Object> categories, boolean constrained) {
+    public static BinaryEntity from(Feature originalFeature, Set<ByteBuffer> categories, boolean constrained) {
         return new BinaryEntity((ByteBuffer) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), categories, constrained);
     }
 
@@ -58,14 +57,14 @@ public class BinaryEntity extends AbstractCategoricalEntity<Object> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param categories      Set of allowed category values
+     * @param categories Set of allowed category values
      */
-    public static BinaryEntity from(Feature originalFeature, Set<Object> categories) {
+    public static BinaryEntity from(Feature originalFeature, Set<ByteBuffer> categories) {
         return BinaryEntity.from(originalFeature, categories, false);
     }
 
     @ValueRangeProvider(id = "categoricalRange")
-    public Set<Object> getValueRange() {
+    public Set<ByteBuffer> getValueRange() {
         return allowedCategories;
     }
 
@@ -76,15 +75,15 @@ public class BinaryEntity extends AbstractCategoricalEntity<Object> {
      */
     @Override
     public Feature asFeature() {
-        return FeatureFactory.newBinaryFeature(featureName, (ByteBuffer) this.proposedValue);
+        return FeatureFactory.newBinaryFeature(featureName, this.proposedValue);
     }
 
     @PlanningVariable(valueRangeProviderRefs = { "categoricalRange" })
-    public Object getProposedValue() {
+    public ByteBuffer getProposedValue() {
         return proposedValue;
     }
 
-    public void setProposedValue(Object proposedValue) {
+    public void setProposedValue(ByteBuffer proposedValue) {
         this.proposedValue = proposedValue;
     }
 

@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
-import java.net.URI;
 import java.util.Currency;
 import java.util.Set;
 
@@ -29,13 +28,13 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
  * Mapping between a currency categorical feature an OptaPlanner {@link PlanningEntity}
  */
 @PlanningEntity
-public class CurrencyEntity extends AbstractCategoricalEntity<Object> {
+public class CurrencyEntity extends AbstractCategoricalEntity<Currency> {
 
     public CurrencyEntity() {
         super();
     }
 
-    private CurrencyEntity(Currency originalValue, String featureName, Set<Object> allowedCategories, boolean constrained) {
+    private CurrencyEntity(Currency originalValue, String featureName, Set<Currency> allowedCategories, boolean constrained) {
         super(originalValue, featureName, allowedCategories, constrained);
     }
 
@@ -45,10 +44,10 @@ public class CurrencyEntity extends AbstractCategoricalEntity<Object> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param categories      Set of allowed category values
-     * @param constrained     Whether this entity's value should be fixed or not
+     * @param categories Set of allowed category values
+     * @param constrained Whether this entity's value should be fixed or not
      */
-    public static CurrencyEntity from(Feature originalFeature, Set<Object> categories, boolean constrained) {
+    public static CurrencyEntity from(Feature originalFeature, Set<Currency> categories, boolean constrained) {
         return new CurrencyEntity((Currency) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), categories, constrained);
     }
 
@@ -58,14 +57,14 @@ public class CurrencyEntity extends AbstractCategoricalEntity<Object> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param categories      Set of allowed category values
+     * @param categories Set of allowed category values
      */
-    public static CurrencyEntity from(Feature originalFeature, Set<Object> categories) {
+    public static CurrencyEntity from(Feature originalFeature, Set<Currency> categories) {
         return CurrencyEntity.from(originalFeature, categories, false);
     }
 
     @ValueRangeProvider(id = "categoricalRange")
-    public Set<Object> getValueRange() {
+    public Set<Currency> getValueRange() {
         return allowedCategories;
     }
 
@@ -76,15 +75,15 @@ public class CurrencyEntity extends AbstractCategoricalEntity<Object> {
      */
     @Override
     public Feature asFeature() {
-        return FeatureFactory.newCurrencyFeature(featureName, (Currency) this.proposedValue);
+        return FeatureFactory.newCurrencyFeature(featureName, this.proposedValue);
     }
 
     @PlanningVariable(valueRangeProviderRefs = { "categoricalRange" })
-    public Object getProposedValue() {
+    public Currency getProposedValue() {
         return proposedValue;
     }
 
-    public void setProposedValue(Object proposedValue) {
+    public void setProposedValue(Currency proposedValue) {
         this.proposedValue = proposedValue;
     }
 

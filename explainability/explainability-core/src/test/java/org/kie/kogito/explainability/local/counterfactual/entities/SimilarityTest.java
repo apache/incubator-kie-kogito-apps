@@ -108,7 +108,7 @@ class SimilarityTest {
     @Test
     void categoricalSimpleSimilarity() {
         final String value = "foo";
-        final Set<Object> categories = Set.of("foo", "bar", "baz");
+        final Set<String> categories = Set.of("foo", "bar", "baz");
         final CategoricalEntity x = CategoricalEntity.from(FeatureFactory.newCategoricalFeature("x", value), categories);
 
         x.setProposedValue("bar");
@@ -124,7 +124,7 @@ class SimilarityTest {
     @Test
     void uriSimpleSimilarity() throws URISyntaxException {
         final URI value = new URI("https://kogito.kie.org/trustyai/");
-        final Set<Object> uris = Set.of(
+        final Set<URI> uris = Set.of(
                 new URI("https://example.com/foo"),
                 new URI("https://example.com/bar"));
         final URIEntity x = URIEntity.from(FeatureFactory.newURIFeature("uri", value), uris);
@@ -142,7 +142,7 @@ class SimilarityTest {
     @Test
     void currencySimpleSimilarity() {
         final Currency value = Currency.getInstance("GBP");
-        final Set<Object> categories = Set.of(
+        final Set<Currency> categories = Set.of(
                 Currency.getInstance("GBP"),
                 Currency.getInstance("EUR"),
                 Currency.getInstance("USD"));
@@ -163,7 +163,7 @@ class SimilarityTest {
     void binarySimpleSimilarity() {
         ByteBuffer bytes = ByteBuffer.wrap("foo".getBytes());
 
-        final List<Object> categories = Stream.of(
+        final List<ByteBuffer> categories = Stream.of(
                 "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
                 .map(ByteBuffer::wrap).collect(Collectors.toList());
 
@@ -183,11 +183,11 @@ class SimilarityTest {
     void durationSimpleSimilarity() {
         final Long days = 365L;
         final Duration duration = Duration.ofDays(days);
-        final DurationEntity x = DurationEntity.from(FeatureFactory.newDurationFeature("x", duration), Duration.ZERO, Duration.ofDays(3*days));
+        final DurationEntity x = DurationEntity.from(FeatureFactory.newDurationFeature("x", duration), Duration.ZERO, Duration.ofDays(3 * days));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
 
-        x.setProposedValue(Duration.ofDays(2*days));
+        x.setProposedValue(Duration.ofDays(2 * days));
         assertEquals(0.6666, x.similarity(), 1e-3);
 
         x.setProposedValue(Duration.ofDays(-days));

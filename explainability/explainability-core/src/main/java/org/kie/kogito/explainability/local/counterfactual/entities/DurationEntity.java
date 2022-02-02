@@ -109,15 +109,18 @@ public class DurationEntity extends AbstractAlgebraicEntity<Duration> {
         this.proposedValue = proposedValue;
     }
 
-    @Override public double distance() {
+    @Override
+    public double distance() {
         return Math.abs(this.proposedValue.getSeconds() - originalValue.getSeconds());
     }
 
-    @Override public Feature asFeature() {
+    @Override
+    public Feature asFeature() {
         return FeatureFactory.newDurationFeature(featureName, this.proposedValue);
     }
 
-    @Override public double similarity() {
+    @Override
+    public double similarity() {
         return 1.0 - Math.abs(this.proposedValue.getSeconds() - originalValue.getSeconds()) / this.range;
     }
 }

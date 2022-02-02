@@ -54,7 +54,7 @@ public class NumericalFeatureDomain implements FeatureDomain {
     }
 
     @Override
-    public Set<Object> getCategories() {
+    public Set<?> getCategories() {
         return null;
     }
 }

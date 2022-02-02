@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.explainability.model.domain;
 
+import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.Set;
 
@@ -34,7 +35,7 @@ public class DurationFeatureDomain extends NumericalFeatureDomain {
      * @param upperBound The end point of the search space
      * @return A {@link FeatureDomain}
      */
-    public static FeatureDomain create(double lowerBound, double upperBound, TemporalUnit unit) {
+    public static FeatureDomain<Duration> create(double lowerBound, double upperBound, TemporalUnit unit) {
         return new DurationFeatureDomain(lowerBound, upperBound, unit);
     }
 
@@ -54,7 +55,7 @@ public class DurationFeatureDomain extends NumericalFeatureDomain {
     }
 
     @Override
-    public Set<Object> getCategories() {
+    public Set<Duration> getCategories() {
         return null;
     }
 

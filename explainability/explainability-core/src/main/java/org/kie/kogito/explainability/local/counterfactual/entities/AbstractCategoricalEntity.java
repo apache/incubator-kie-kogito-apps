@@ -25,13 +25,13 @@ import org.optaplanner.core.api.domain.entity.PlanningEntity;
 @PlanningEntity
 public abstract class AbstractCategoricalEntity<T> extends AbstractEntity<T> {
 
-    protected Set<Object> allowedCategories;
+    protected Set<T> allowedCategories;
 
     public AbstractCategoricalEntity() {
         super();
     }
 
-    protected AbstractCategoricalEntity(T originalValue, String featureName, Set<Object> allowedCategories, boolean constrained) {
+    protected AbstractCategoricalEntity(T originalValue, String featureName, Set<T> allowedCategories, boolean constrained) {
         super(originalValue, featureName, constrained);
         this.allowedCategories = allowedCategories;
     }
@@ -52,9 +52,9 @@ public abstract class AbstractCategoricalEntity<T> extends AbstractEntity<T> {
         return 1.0 - distance();
     }
 
-    public abstract void setProposedValue(Object proposedValue);
+    public abstract void setProposedValue(T proposedValue);
 
-    public abstract Object getProposedValue();
+    public abstract T getProposedValue();
 
-    public abstract Set<Object> getValueRange();
+    public abstract Set<T> getValueRange();
 }

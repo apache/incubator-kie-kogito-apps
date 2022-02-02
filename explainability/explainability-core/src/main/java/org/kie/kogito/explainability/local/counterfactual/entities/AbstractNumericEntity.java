@@ -28,7 +28,6 @@ public abstract class AbstractNumericEntity<T extends Number> extends AbstractAl
 
     protected Double stdDev;
 
-
     protected AbstractNumericEntity() {
         super();
     }

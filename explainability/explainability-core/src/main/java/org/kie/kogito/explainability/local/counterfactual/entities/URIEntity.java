@@ -28,13 +28,13 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
  * Mapping between a categorical feature an OptaPlanner {@link PlanningEntity}
  */
 @PlanningEntity
-public class URIEntity extends AbstractCategoricalEntity<Object> {
+public class URIEntity extends AbstractCategoricalEntity<URI> {
 
     public URIEntity() {
         super();
     }
 
-    private URIEntity(URI originalValue, String featureName, Set<Object> allowedCategories, boolean constrained) {
+    private URIEntity(URI originalValue, String featureName, Set<URI> allowedCategories, boolean constrained) {
         super(originalValue, featureName, allowedCategories, constrained);
     }
 
@@ -44,10 +44,10 @@ public class URIEntity extends AbstractCategoricalEntity<Object> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param categories      Set of allowed category values
-     * @param constrained     Whether this entity's value should be fixed or not
+     * @param categories Set of allowed category values
+     * @param constrained Whether this entity's value should be fixed or not
      */
-    public static URIEntity from(Feature originalFeature, Set<Object> categories, boolean constrained) {
+    public static URIEntity from(Feature originalFeature, Set<URI> categories, boolean constrained) {
         return new URIEntity((URI) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), categories, constrained);
     }
 
@@ -57,14 +57,14 @@ public class URIEntity extends AbstractCategoricalEntity<Object> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param categories      Set of allowed category values
+     * @param categories Set of allowed category values
      */
-    public static URIEntity from(Feature originalFeature, Set<Object> categories) {
+    public static URIEntity from(Feature originalFeature, Set<URI> categories) {
         return URIEntity.from(originalFeature, categories, false);
     }
 
     @ValueRangeProvider(id = "categoricalRange")
-    public Set<Object> getValueRange() {
+    public Set<URI> getValueRange() {
         return allowedCategories;
     }
 
@@ -75,15 +75,15 @@ public class URIEntity extends AbstractCategoricalEntity<Object> {
      */
     @Override
     public Feature asFeature() {
-        return FeatureFactory.newURIFeature(featureName, (URI) this.proposedValue);
+        return FeatureFactory.newURIFeature(featureName, this.proposedValue);
     }
 
     @PlanningVariable(valueRangeProviderRefs = { "categoricalRange" })
-    public Object getProposedValue() {
+    public URI getProposedValue() {
         return proposedValue;
     }
 
-    public void setProposedValue(Object proposedValue) {
+    public void setProposedValue(URI proposedValue) {
         this.proposedValue = proposedValue;
     }
 

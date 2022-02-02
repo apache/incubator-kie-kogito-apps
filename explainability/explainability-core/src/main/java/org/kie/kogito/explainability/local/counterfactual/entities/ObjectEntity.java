@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
-import java.net.URI;
 import java.util.Set;
 
 import org.kie.kogito.explainability.model.Feature;
@@ -44,8 +43,8 @@ public class ObjectEntity extends AbstractCategoricalEntity<Object> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param categories      Set of allowed category values
-     * @param constrained     Whether this entity's value should be fixed or not
+     * @param categories Set of allowed category values
+     * @param constrained Whether this entity's value should be fixed or not
      */
     public static ObjectEntity from(Feature originalFeature, Set<Object> categories, boolean constrained) {
         return new ObjectEntity(originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), categories, constrained);
@@ -57,7 +56,7 @@ public class ObjectEntity extends AbstractCategoricalEntity<Object> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param categories      Set of allowed category values
+     * @param categories Set of allowed category values
      */
     public static ObjectEntity from(Feature originalFeature, Set<Object> categories) {
         return ObjectEntity.from(originalFeature, categories, false);

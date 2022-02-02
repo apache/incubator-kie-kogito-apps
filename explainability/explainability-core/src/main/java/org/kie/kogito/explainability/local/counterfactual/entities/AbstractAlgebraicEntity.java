@@ -15,12 +15,6 @@
  */
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
-import org.kie.kogito.explainability.model.Feature;
-import org.kie.kogito.explainability.model.FeatureDistribution;
-import org.kie.kogito.explainability.model.FeatureFactory;
-import org.kie.kogito.explainability.model.Value;
-import org.kie.kogito.explainability.utils.DataUtils;
-
 /**
  * Common class for numerical counterfactual entities
  */

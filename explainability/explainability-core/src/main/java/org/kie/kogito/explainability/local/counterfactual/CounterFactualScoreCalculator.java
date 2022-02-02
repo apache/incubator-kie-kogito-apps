@@ -63,7 +63,6 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             Type.BINARY,
             Type.UNDEFINED);
 
-
     public static Double outputDistance(Output prediction, Output goal, double threshold) throws IllegalArgumentException {
         final Type predictionType = prediction.getType();
         final Type goalType = goal.getType();
@@ -97,7 +96,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             } else {
                 return distance;
             }
-        }else if (predictionType == Type.DURATION) {
+        } else if (predictionType == Type.DURATION) {
             final Duration predictionValue = (Duration) prediction.getValue().getUnderlyingObject();
             final Duration goalValue = (Duration) goal.getValue().getUnderlyingObject();
 
@@ -119,7 +118,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             } else {
                 return distance;
             }
-        } else if (predictionType == Type.TIME ){
+        } else if (predictionType == Type.TIME) {
             final LocalTime predictionValue = (LocalTime) prediction.getValue().getUnderlyingObject();
             final LocalTime goalValue = (LocalTime) goal.getValue().getUnderlyingObject();
 

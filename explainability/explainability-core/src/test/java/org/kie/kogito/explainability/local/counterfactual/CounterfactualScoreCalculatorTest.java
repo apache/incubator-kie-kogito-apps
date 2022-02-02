@@ -24,7 +24,6 @@ import java.util.Currency;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -34,7 +33,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.TestUtils;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
-import org.kie.kogito.explainability.local.counterfactual.entities.DurationEntity;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
