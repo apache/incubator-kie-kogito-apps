@@ -60,7 +60,8 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             Type.BOOLEAN,
             Type.TEXT,
             Type.CURRENCY,
-            Type.BINARY);
+            Type.BINARY,
+            Type.UNDEFINED);
 
 
     public static Double outputDistance(Output prediction, Output goal, double threshold) throws IllegalArgumentException {
@@ -74,7 +75,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             throw new IllegalArgumentException(message);
         }
 
-        if (prediction.getType() == Type.NUMBER) {
+        if (predictionType == Type.NUMBER) {
             final double predictionValue = prediction.getValue().asNumber();
             final double goalValue = goal.getValue().asNumber();
             final double difference = Math.abs(predictionValue - goalValue);
@@ -96,7 +97,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             } else {
                 return distance;
             }
-        }else if (prediction.getType() == Type.DURATION) {
+        }else if (predictionType == Type.DURATION) {
             final Duration predictionValue = (Duration) prediction.getValue().getUnderlyingObject();
             final Duration goalValue = (Duration) goal.getValue().getUnderlyingObject();
 
@@ -118,7 +119,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             } else {
                 return distance;
             }
-        } else if (prediction.getType() == Type.TIME ){
+        } else if (predictionType == Type.TIME ){
             final LocalTime predictionValue = (LocalTime) prediction.getValue().getUnderlyingObject();
             final LocalTime goalValue = (LocalTime) goal.getValue().getUnderlyingObject();
 
@@ -133,7 +134,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
             } else {
                 return distance;
             }
-        } else if (SUPPORTED_CATEGORICAL_TYPES.contains(prediction.getType())) {
+        } else if (SUPPORTED_CATEGORICAL_TYPES.contains(predictionType)) {
             final Object goalValueObject = goal.getValue().getUnderlyingObject();
             final Object predictionValueObject = prediction.getValue().getUnderlyingObject();
             return Objects.equals(goalValueObject, predictionValueObject) ? 0.0 : 1.0;

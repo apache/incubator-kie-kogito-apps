@@ -30,6 +30,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCu
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDurationEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedIntegerEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedObjectEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTextEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTimeEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedURIEntity;
@@ -114,7 +115,8 @@ public class CounterfactualEntityFactory {
                 entity = FixedDurationEntity.from(feature);
             } else {
                 DurationFeatureDomain domain = (DurationFeatureDomain) featureDomain;
-                entity = DurationEntity.from(feature, Duration.of(domain.getLowerBound().longValue(), domain.getUnit()), Duration.of(domain.getUpperBound().longValue(), domain.getUnit()),
+                entity = DurationEntity.from(feature, Duration.of(domain.getLowerBound().longValue(), domain.getUnit()),
+                        Duration.of(domain.getUpperBound().longValue(), domain.getUnit()),
                         featureDistribution, isConstrained);
             }
 
@@ -145,6 +147,12 @@ public class CounterfactualEntityFactory {
             } else {
                 entity = CategoricalEntity.from(feature, featureDomain.getCategories(), isConstrained);
             }
+        } else if (feature.getType() == Type.UNDEFINED) {
+            if (isConstrained) {
+                entity = FixedObjectEntity.from(feature);
+            } else {
+                entity = ObjectEntity.from(feature, featureDomain.getCategories(), isConstrained);
+            }
         } else {
             throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
         }
@@ -153,7 +161,7 @@ public class CounterfactualEntityFactory {
 
     /**
      * Validation of features for counterfactual entity construction
-     * 
+     *
      * @param feature {@link Feature} to be validated
      */
     public static void validateFeature(Feature feature) {

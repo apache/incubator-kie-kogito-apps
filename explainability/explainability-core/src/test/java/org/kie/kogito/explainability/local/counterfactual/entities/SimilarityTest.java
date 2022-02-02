@@ -219,6 +219,24 @@ class SimilarityTest {
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
     }
 
+    @Test
+    void objectSimpleSimilarity() {
+        Long value = 20L;
+
+        final List<Object> categories = List.of(30L, "test");
+
+        final ObjectEntity x = ObjectEntity.from(FeatureFactory.newObjectFeature("f", value), new HashSet<>(categories));
+
+        x.setProposedValue(categories.get(0));
+        assertEquals(LOWEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(categories.get(1));
+        assertEquals(LOWEST_SIMILARITY, x.similarity());
+
+        x.setProposedValue(20L);
+        assertEquals(HIGHEST_SIMILARITY, x.similarity());
+    }
+
     @ParameterizedTest
     @ValueSource(ints = { 0, 1, 2, 3, 4 })
     void fixedIntegerSimilarity(int seed) {

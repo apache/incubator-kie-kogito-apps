@@ -42,6 +42,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.CurrencyEntit
 import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.DurationEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.IntegerEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.ObjectEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.TimeEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.URIEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBinaryEntity;
@@ -52,6 +53,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCu
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDurationEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedIntegerEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedObjectEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTextEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTimeEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedURIEntity;
@@ -306,6 +308,21 @@ class CounterfactualEntityFactoryTest {
         domain = CategoricalFeatureDomain.create(new URI("./"), new URI("../"), new URI("https://example.com"));
         counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
         assertTrue(counterfactualEntity instanceof URIEntity);
+        assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
+    }
+
+    @Test
+    void testObjectFactory() throws URISyntaxException {
+        final URI value = URI.create("./");
+        final Feature feature = FeatureFactory.newObjectFeature("f", value);
+        FeatureDomain domain = EmptyFeatureDomain.create();
+        CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature, true, domain);
+        assertTrue(counterfactualEntity instanceof FixedObjectEntity);
+        assertEquals(Type.UNDEFINED, counterfactualEntity.asFeature().getType());
+
+        domain = CategoricalFeatureDomain.create("test", 45L);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof ObjectEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
     }
 
