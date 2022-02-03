@@ -150,7 +150,8 @@ public class CounterfactualEntityFactory {
             if (isConstrained) {
                 entity = FixedCategoricalEntity.from(feature);
             } else {
-                entity = CategoricalEntity.from(feature, ((CategoricalFeatureDomain) featureDomain).getCategories(), isConstrained);
+                entity = CategoricalEntity.from(feature, ((CategoricalFeatureDomain) featureDomain).getCategories(),
+                        isConstrained);
             }
         } else if (feature.getType() == Type.UNDEFINED) {
             if (isConstrained) {

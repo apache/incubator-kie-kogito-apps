@@ -164,7 +164,7 @@ class SimilarityTest {
         ByteBuffer bytes = ByteBuffer.wrap("foo".getBytes());
 
         final List<ByteBuffer> categories = Stream.of(
-                "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
+                        "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
                 .map(ByteBuffer::wrap).collect(Collectors.toList());
 
         final BinaryEntity x = BinaryEntity.from(FeatureFactory.newBinaryFeature("f", bytes), new HashSet<>(categories));
@@ -183,7 +183,8 @@ class SimilarityTest {
     void durationSimpleSimilarity() {
         final Long days = 365L;
         final Duration duration = Duration.ofDays(days);
-        final DurationEntity x = DurationEntity.from(FeatureFactory.newDurationFeature("x", duration), Duration.ZERO, Duration.ofDays(3 * days));
+        final DurationEntity x =
+                DurationEntity.from(FeatureFactory.newDurationFeature("x", duration), Duration.ZERO, Duration.ofDays(3 * days));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
 

@@ -194,7 +194,7 @@ class CounterfactualEntityFactoryTest {
         assertEquals(Type.BINARY, counterfactualEntity.asFeature().getType());
 
         final List<ByteBuffer> categories = Stream.of(
-                "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
+                        "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
                 .map(ByteBuffer::wrap).collect(Collectors.toList());
 
         domain = BinaryFeatureDomain.create(categories);

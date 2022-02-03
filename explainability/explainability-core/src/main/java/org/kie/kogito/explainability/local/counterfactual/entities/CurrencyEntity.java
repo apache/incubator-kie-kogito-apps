@@ -44,11 +44,12 @@ public class CurrencyEntity extends AbstractCategoricalEntity<Currency> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param categories Set of allowed category values
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param categories      Set of allowed category values
+     * @param constrained     Whether this entity's value should be fixed or not
      */
     public static CurrencyEntity from(Feature originalFeature, Set<Currency> categories, boolean constrained) {
-        return new CurrencyEntity((Currency) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), categories, constrained);
+        return new CurrencyEntity((Currency) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(),
+                categories, constrained);
     }
 
     /**
@@ -57,7 +58,7 @@ public class CurrencyEntity extends AbstractCategoricalEntity<Currency> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param categories Set of allowed category values
+     * @param categories      Set of allowed category values
      */
     public static CurrencyEntity from(Feature originalFeature, Set<Currency> categories) {
         return CurrencyEntity.from(originalFeature, categories, false);

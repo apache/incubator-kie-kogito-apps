@@ -37,7 +37,8 @@ public class TimeEntity extends AbstractAlgebraicEntity<LocalTime> {
         super();
     }
 
-    private TimeEntity(LocalTime originalValue, String featureName, LocalTime minimum, LocalTime maximum, FeatureDistribution featureDistribution, boolean constrained) {
+    private TimeEntity(LocalTime originalValue, String featureName, LocalTime minimum, LocalTime maximum,
+            FeatureDistribution featureDistribution, boolean constrained) {
         super(originalValue, featureName, minimum, maximum, constrained);
         this.range = (double) (minimum.until(maximum, ChronoUnit.SECONDS));
     }
@@ -47,9 +48,9 @@ public class TimeEntity extends AbstractAlgebraicEntity<LocalTime> {
      * provided {@link Feature} and specifying whether the entity is constrained or not.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param minimum The start of the domain search space
-     * @param maximum The end of the domain search space
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param minimum         The start of the domain search space
+     * @param maximum         The end of the domain search space
+     * @param constrained     Whether this entity's value should be fixed or not
      */
     public static TimeEntity from(Feature originalFeature, LocalTime minimum, LocalTime maximum, boolean constrained) {
         return from(originalFeature, minimum, maximum, null, constrained);
@@ -60,14 +61,16 @@ public class TimeEntity extends AbstractAlgebraicEntity<LocalTime> {
      * provided {@link Feature} and specifying whether the entity is constrained or not.
      * If the feature distribution is available, it will be used to scale the feature distances.
      *
-     * @param originalFeature Original input {@link Feature}
-     * @param minimum The start of the domain search space
-     * @param maximum The end of the domain search space
+     * @param originalFeature     Original input {@link Feature}
+     * @param minimum             The start of the domain search space
+     * @param maximum             The end of the domain search space
      * @param featureDistribution The feature's distribution (as {@link FeatureDistribution}), if available
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param constrained         Whether this entity's value should be fixed or not
      */
-    public static TimeEntity from(Feature originalFeature, LocalTime minimum, LocalTime maximum, FeatureDistribution featureDistribution, boolean constrained) {
-        return new TimeEntity((LocalTime) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), minimum, maximum, featureDistribution, constrained);
+    public static TimeEntity from(Feature originalFeature, LocalTime minimum, LocalTime maximum,
+            FeatureDistribution featureDistribution, boolean constrained) {
+        return new TimeEntity((LocalTime) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), minimum,
+                maximum, featureDistribution, constrained);
     }
 
     /**
@@ -75,8 +78,8 @@ public class TimeEntity extends AbstractAlgebraicEntity<LocalTime> {
      * provided {@link Feature}.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param minimum The start of the domain search space
-     * @param maximum The end of the domain search space
+     * @param minimum         The start of the domain search space
+     * @param maximum         The end of the domain search space
      */
     public static TimeEntity from(Feature originalFeature, LocalTime minimum, LocalTime maximum) {
         return TimeEntity.from(originalFeature, minimum, maximum, null, false);
@@ -87,12 +90,13 @@ public class TimeEntity extends AbstractAlgebraicEntity<LocalTime> {
      * provided {@link Feature}.
      * If the feature distribution is available, it will be used to scale the feature distances.
      *
-     * @param originalFeature feature Original input {@link Feature}
-     * @param minimum The start of the domain search space
-     * @param maximum The end of the domain search space
+     * @param originalFeature     feature Original input {@link Feature}
+     * @param minimum             The start of the domain search space
+     * @param maximum             The end of the domain search space
      * @param featureDistribution The feature's distribution (as {@link FeatureDistribution}), if available
      */
-    public static TimeEntity from(Feature originalFeature, LocalTime minimum, LocalTime maximum, FeatureDistribution featureDistribution) {
+    public static TimeEntity from(Feature originalFeature, LocalTime minimum, LocalTime maximum,
+            FeatureDistribution featureDistribution) {
         return TimeEntity.from(originalFeature, minimum, maximum, featureDistribution, false);
     }
 

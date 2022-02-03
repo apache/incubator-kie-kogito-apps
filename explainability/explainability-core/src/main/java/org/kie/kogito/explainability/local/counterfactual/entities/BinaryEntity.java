@@ -44,11 +44,12 @@ public class BinaryEntity extends AbstractCategoricalEntity<ByteBuffer> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param categories Set of allowed category values
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param categories      Set of allowed category values
+     * @param constrained     Whether this entity's value should be fixed or not
      */
     public static BinaryEntity from(Feature originalFeature, Set<ByteBuffer> categories, boolean constrained) {
-        return new BinaryEntity((ByteBuffer) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), categories, constrained);
+        return new BinaryEntity((ByteBuffer) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(),
+                categories, constrained);
     }
 
     /**
@@ -57,7 +58,7 @@ public class BinaryEntity extends AbstractCategoricalEntity<ByteBuffer> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param categories Set of allowed category values
+     * @param categories      Set of allowed category values
      */
     public static BinaryEntity from(Feature originalFeature, Set<ByteBuffer> categories) {
         return BinaryEntity.from(originalFeature, categories, false);
