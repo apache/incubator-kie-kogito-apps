@@ -57,7 +57,7 @@ public class RecordingLimeExplainer extends LimeExplainer {
     public RecordingLimeExplainer(LimeConfig limeConfig, int capacity, LimeConfigOptimizer limeConfigOptimizer) {
         super(limeConfig);
         this.recordedPredictions = new FixedSizeConcurrentLinkedDeque<>(capacity);
-        this.strategy = new CountingOptimizationStrategy(capacity, new DefaultLimeOptimizationService(limeConfigOptimizer, 1));
+        this.strategy = new CountingOptimizationStrategy(10 * capacity, new DefaultLimeOptimizationService(limeConfigOptimizer, 1));
         this.executionConfig = limeConfig.copy();
     }
 
