@@ -738,9 +738,10 @@ class CounterfactualExplainerTest {
         solverConfig.setRandomSeed((long) seed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
 
-        @SuppressWarnings("unchecked")
-        final Consumer<CounterfactualResult> assertIntermediateCounterfactualNotNull = mock(Consumer.class);
-        final CounterfactualConfig counterfactualConfig = new CounterfactualConfig().withSolverConfig(solverConfig).withGoalThreshold(0.01);
+        @SuppressWarnings("unchecked") final Consumer<CounterfactualResult> assertIntermediateCounterfactualNotNull =
+                mock(Consumer.class);
+        final CounterfactualConfig counterfactualConfig =
+                new CounterfactualConfig().withSolverConfig(solverConfig).withGoalThreshold(0.01);
         final CounterfactualExplainer counterfactualExplainer =
                 new CounterfactualExplainer(counterfactualConfig);
 
@@ -780,7 +781,8 @@ class CounterfactualExplainerTest {
             sequenceIds.add(counterfactual.getSequenceId());
         };
 
-        ArgumentCaptor<Consumer<CounterfactualSolution>> intermediateSolutionConsumerCaptor = ArgumentCaptor.forClass(Consumer.class);
+        ArgumentCaptor<Consumer<CounterfactualSolution>> intermediateSolutionConsumerCaptor =
+                ArgumentCaptor.forClass(Consumer.class);
         CounterfactualResult result = mockExplainerInvocation(captureSequenceIds, null);
         verify(solverManager).solveAndListen(any(), any(), intermediateSolutionConsumerCaptor.capture(), any());
         Consumer<CounterfactualSolution> intermediateSolutionConsumer = intermediateSolutionConsumerCaptor.getValue();
@@ -1062,8 +1064,8 @@ class CounterfactualExplainerTest {
                 maxRunningTimeSeconds);
 
         return counterfactualExplainer.explainAsync(prediction,
-                (List<PredictionInput> inputs) -> CompletableFuture.completedFuture(Collections.emptyList()),
-                intermediateResultsConsumer)
+                        (List<PredictionInput> inputs) -> CompletableFuture.completedFuture(Collections.emptyList()),
+                        intermediateResultsConsumer)
                 .get(Config.INSTANCE.getAsyncTimeout(),
                         Config.INSTANCE.getAsyncTimeUnit());
     }

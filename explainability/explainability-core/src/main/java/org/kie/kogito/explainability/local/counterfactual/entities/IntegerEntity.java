@@ -34,7 +34,8 @@ public class IntegerEntity extends AbstractNumericEntity<Integer> {
         super();
     }
 
-    private IntegerEntity(Integer originalValue, String featureName, int minimum, int maximum, FeatureDistribution featureDistribution, boolean constrained) {
+    private IntegerEntity(Integer originalValue, String featureName, int minimum, int maximum,
+            FeatureDistribution featureDistribution, boolean constrained) {
         super(originalValue, featureName, minimum, maximum, featureDistribution, constrained);
     }
 
@@ -43,16 +44,18 @@ public class IntegerEntity extends AbstractNumericEntity<Integer> {
      * provided {@link Feature} and specifying whether the entity is constrained or not.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param minimum The start of the domain search space
-     * @param maximum The end of the domain search space
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param minimum         The start of the domain search space
+     * @param maximum         The end of the domain search space
+     * @param constrained     Whether this entity's value should be fixed or not
      */
     public static IntegerEntity from(Feature originalFeature, int minimum, int maximum, boolean constrained) {
         return from(originalFeature, minimum, maximum, null, constrained);
     }
 
-    public static IntegerEntity from(Feature originalFeature, int minimum, int maximum, FeatureDistribution featureDistribution, boolean constrained) {
-        return new IntegerEntity((int) originalFeature.getValue().asNumber(), originalFeature.getName(), minimum, maximum, featureDistribution, constrained);
+    public static IntegerEntity from(Feature originalFeature, int minimum, int maximum, FeatureDistribution featureDistribution,
+            boolean constrained) {
+        return new IntegerEntity((int) originalFeature.getValue().asNumber(), originalFeature.getName(), minimum, maximum,
+                featureDistribution, constrained);
     }
 
     /**
@@ -71,9 +74,9 @@ public class IntegerEntity extends AbstractNumericEntity<Integer> {
      * Creates an unconstrained {@link IntegerEntity}, taking the original input value from the
      * provided {@link Feature}.
      *
-     * @param feature feature Original input {@link Feature}
-     * @param minimum The start of the domain search space
-     * @param maximum The end of the domain search space
+     * @param feature             feature Original input {@link Feature}
+     * @param minimum             The start of the domain search space
+     * @param maximum             The end of the domain search space
      * @param featureDistribution The feature's distribution (as {@link FeatureDistribution}), if available
      */
     public static IntegerEntity from(Feature feature, int minimum, int maximum, FeatureDistribution featureDistribution) {

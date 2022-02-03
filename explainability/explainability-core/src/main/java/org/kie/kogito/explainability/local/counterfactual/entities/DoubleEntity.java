@@ -33,7 +33,8 @@ public class DoubleEntity extends AbstractNumericEntity<Double> {
         super();
     }
 
-    private DoubleEntity(Double originalValue, String featureName, double minimum, double maximum, FeatureDistribution featureDistribution, boolean constrained) {
+    private DoubleEntity(Double originalValue, String featureName, double minimum, double maximum,
+            FeatureDistribution featureDistribution, boolean constrained) {
         super(originalValue, featureName, minimum, maximum, featureDistribution, constrained);
     }
 
@@ -42,9 +43,9 @@ public class DoubleEntity extends AbstractNumericEntity<Double> {
      * provided {@link Feature} and specifying whether the entity is constrained or not.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param minimum The start of the domain search space
-     * @param maximum The end of the domain search space
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param minimum         The start of the domain search space
+     * @param maximum         The end of the domain search space
+     * @param constrained     Whether this entity's value should be fixed or not
      */
     public static DoubleEntity from(Feature originalFeature, double minimum, double maximum, boolean constrained) {
         return from(originalFeature, minimum, maximum, null, constrained);
@@ -55,14 +56,16 @@ public class DoubleEntity extends AbstractNumericEntity<Double> {
      * provided {@link Feature} and specifying whether the entity is constrained or not.
      * If the feature distribution is available, it will be used to scale the feature distances.
      *
-     * @param originalFeature Original input {@link Feature}
-     * @param minimum The start of the domain search space
-     * @param maximum The end of the domain search space
+     * @param originalFeature     Original input {@link Feature}
+     * @param minimum             The start of the domain search space
+     * @param maximum             The end of the domain search space
      * @param featureDistribution The feature's distribution (as {@link FeatureDistribution}), if available
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param constrained         Whether this entity's value should be fixed or not
      */
-    public static DoubleEntity from(Feature originalFeature, double minimum, double maximum, FeatureDistribution featureDistribution, boolean constrained) {
-        return new DoubleEntity(originalFeature.getValue().asNumber(), originalFeature.getName(), minimum, maximum, featureDistribution, constrained);
+    public static DoubleEntity from(Feature originalFeature, double minimum, double maximum,
+            FeatureDistribution featureDistribution, boolean constrained) {
+        return new DoubleEntity(originalFeature.getValue().asNumber(), originalFeature.getName(), minimum, maximum,
+                featureDistribution, constrained);
     }
 
     /**
@@ -70,8 +73,8 @@ public class DoubleEntity extends AbstractNumericEntity<Double> {
      * provided {@link Feature}.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param minimum The start of the domain search space
-     * @param maximum The end of the domain search space
+     * @param minimum         The start of the domain search space
+     * @param maximum         The end of the domain search space
      */
     public static DoubleEntity from(Feature originalFeature, double minimum, double maximum) {
         return DoubleEntity.from(originalFeature, minimum, maximum, null, false);
@@ -82,12 +85,13 @@ public class DoubleEntity extends AbstractNumericEntity<Double> {
      * provided {@link Feature}.
      * If the feature distribution is available, it will be used to scale the feature distances.
      *
-     * @param originalFeature feature Original input {@link Feature}
-     * @param minimum The start of the domain search space
-     * @param maximum The end of the domain search space
+     * @param originalFeature     feature Original input {@link Feature}
+     * @param minimum             The start of the domain search space
+     * @param maximum             The end of the domain search space
      * @param featureDistribution The feature's distribution (as {@link FeatureDistribution}), if available
      */
-    public static DoubleEntity from(Feature originalFeature, double minimum, double maximum, FeatureDistribution featureDistribution) {
+    public static DoubleEntity from(Feature originalFeature, double minimum, double maximum,
+            FeatureDistribution featureDistribution) {
         return DoubleEntity.from(originalFeature, minimum, maximum, featureDistribution, false);
     }
 

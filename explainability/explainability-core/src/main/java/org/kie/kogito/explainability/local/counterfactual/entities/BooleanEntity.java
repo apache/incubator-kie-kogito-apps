@@ -44,7 +44,7 @@ public class BooleanEntity extends AbstractEntity<Boolean> {
      * provided {@link Feature} and specifying whether the entity is contrained or not.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param constrained Whether this entity's value should be fixed or not
+     * @param constrained     Whether this entity's value should be fixed or not
      */
     public static BooleanEntity from(Feature originalFeature, boolean constrained) {
         return new BooleanEntity((Boolean) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(),
