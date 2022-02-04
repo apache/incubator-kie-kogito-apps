@@ -19,7 +19,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Queue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
@@ -51,25 +50,19 @@ public class RecordingLimeExplainer extends LimeExplainer {
     private LimeConfig executionConfig;
 
     public RecordingLimeExplainer(int capacity) {
-        this(new LimeConfig(), capacity, new LimeConfigOptimizer().forImpactScore());
-    }
-
-    public RecordingLimeExplainer(LimeConfig limeConfig, int capacity, LimeConfigOptimizer limeConfigOptimizer) {
-        super(limeConfig);
-        this.recordedPredictions = new FixedSizeConcurrentLinkedDeque<>(capacity);
-        this.strategy = new CountingOptimizationStrategy(10 * capacity, new DefaultLimeOptimizationService(limeConfigOptimizer, 1));
-        this.executionConfig = limeConfig.copy();
+        this(new LimeConfig(), capacity);
     }
 
     public RecordingLimeExplainer(LimeConfig limeConfig, int capacity, LimeConfigOptimizationStrategy strategy) {
         super(limeConfig);
         this.recordedPredictions = new FixedSizeConcurrentLinkedDeque<>(capacity);
         this.strategy = strategy;
-        this.executionConfig = limeConfig.copy();
+        this.executionConfig = limeConfig;
     }
 
-    public RecordingLimeExplainer(LimeConfig limeConfig, Integer recordedPredictions) {
-        this(limeConfig, recordedPredictions, new LimeConfigOptimizer().forImpactAndStabilityScore());
+    public RecordingLimeExplainer(LimeConfig limeConfig, int capacity) {
+        this(limeConfig, capacity, new CountingOptimizationStrategy(10 * capacity, new DefaultLimeOptimizationService(
+                new LimeConfigOptimizer().forImpactAndStabilityScore(), 1)));
     }
 
     @Override
@@ -115,23 +108,4 @@ public class RecordingLimeExplainer extends LimeExplainer {
         return executionConfig;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        if (!super.equals(o)) {
-            return false;
-        }
-        RecordingLimeExplainer that = (RecordingLimeExplainer) o;
-        return executionConfig.equals(that.executionConfig);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), executionConfig);
-    }
 }

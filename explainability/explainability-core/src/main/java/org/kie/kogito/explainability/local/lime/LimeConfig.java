@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.local.lime;
 
 import java.security.SecureRandom;
 import java.util.Collections;
+import java.util.Objects;
 import java.util.Optional;
 
 import org.kie.kogito.explainability.model.DataDistribution;
@@ -298,4 +299,26 @@ public class LimeConfig {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        LimeConfig that = (LimeConfig) o;
+        return Double.compare(that.separableDatasetRatio, separableDatasetRatio) == 0 && noOfSamples == that.noOfSamples && noOfRetries == that.noOfRetries
+                && adaptDatasetVariance == that.adaptDatasetVariance && highScoreFeatureZones == that.highScoreFeatureZones && penalizeBalanceSparse == that.penalizeBalanceSparse
+                && proximityFilter == that.proximityFilter && Double.compare(that.proximityThreshold, proximityThreshold) == 0 && Double.compare(that.proximityKernelWidth, proximityKernelWidth) == 0
+                && normalizeWeights == that.normalizeWeights && boostrapInputs == that.boostrapInputs && Objects.equals(perturbationContext, that.perturbationContext)
+                && Objects.equals(dataDistribution, that.dataDistribution) && Objects.equals(proximityFilteredDatasetMinimum, that.proximityFilteredDatasetMinimum)
+                && Objects.equals(encodingParams, that.encodingParams);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(separableDatasetRatio, noOfSamples, noOfRetries, perturbationContext, adaptDatasetVariance, dataDistribution, highScoreFeatureZones, penalizeBalanceSparse, proximityFilter,
+                proximityThreshold, proximityFilteredDatasetMinimum, proximityKernelWidth, encodingParams, normalizeWeights, boostrapInputs);
+    }
 }

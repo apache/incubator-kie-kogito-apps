@@ -46,6 +46,7 @@ import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.model.Type;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.mock;
 
@@ -118,8 +119,7 @@ class RecordingLimeExplainerTest {
         PredictionProvider model = TestUtils.getSumThresholdModel(10, 10);
         PerturbationContext pc = new PerturbationContext(seed, new Random(), 1);
         LimeConfig config = new LimeConfig().withPerturbationContext(pc);
-        LimeConfigOptimizer optimizer = new LimeConfigOptimizer().forStabilityScore();
-        RecordingLimeExplainer limeExplainer = new RecordingLimeExplainer(config, 2, optimizer);
+        RecordingLimeExplainer limeExplainer = new RecordingLimeExplainer(2);
         for (int i = 0; i < 50; i++) {
             List<Feature> features = new LinkedList<>();
             features.add(TestUtils.getMockedNumericFeature(Type.NUMBER.randomValue(pc).asNumber()));
@@ -139,4 +139,42 @@ class RecordingLimeExplainerTest {
         LimeConfig optimizedConfig = limeExplainer.getExecutionConfig();
         assertThat(optimizedConfig).isNotEqualTo(config);
     }
+
+    @Test
+    void testEmptyInput() {
+        RecordingLimeExplainer recordingLimeExplainer = new RecordingLimeExplainer(10);
+        PredictionProvider model = mock(PredictionProvider.class);
+        Prediction prediction = mock(Prediction.class);
+        assertThatCode(() -> recordingLimeExplainer.explainAsync(prediction, model)).hasMessage("cannot explain a prediction whose input is empty");
+    }
+
+    @Test
+    void testExplainNonOptimized() throws ExecutionException, InterruptedException, TimeoutException {
+        RecordingLimeExplainer limeExplainer = new RecordingLimeExplainer(10);
+        List<Feature> features = new ArrayList<>();
+        for (int i = 0; i < 4; i++) {
+            features.add(TestUtils.getMockedNumericFeature(i));
+        }
+        PredictionInput input = new PredictionInput(features);
+        PredictionProvider model = TestUtils.getSumSkipModel(0);
+        PredictionOutput output = model.predictAsync(List.of(input))
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit())
+                .get(0);
+        Prediction prediction = new SimplePrediction(input, output);
+        Map<String, Saliency> saliencyMap = limeExplainer.explainAsync(prediction, model)
+                .get(Config.INSTANCE.getAsyncTimeout(), Config.INSTANCE.getAsyncTimeUnit());
+        assertNotNull(saliencyMap);
+    }
+
+    @Test
+    void testEquals() {
+        RecordingLimeExplainer o1 = new RecordingLimeExplainer(10);
+        RecordingLimeExplainer o2 = new RecordingLimeExplainer(10);
+        assertThat(o1).isNotEqualTo(o2);
+        LimeConfig config = new LimeConfig();
+        RecordingLimeExplainer o3 = new RecordingLimeExplainer(config, 10);
+        RecordingLimeExplainer o4 = new RecordingLimeExplainer(config, 10);
+        assertThat(o3).isEqualTo(o4);
+    }
+
 }
