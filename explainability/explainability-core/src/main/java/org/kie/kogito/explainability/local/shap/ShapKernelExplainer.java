@@ -35,10 +35,12 @@ import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.util.CombinatoricsUtils;
 import org.kie.kogito.explainability.local.LocalExplainer;
 import org.kie.kogito.explainability.model.FeatureImportance;
+import org.kie.kogito.explainability.model.PPAWrapper;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.PredictionProviderArrow;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.utils.LarsPath;
 import org.kie.kogito.explainability.utils.LassoLarsIC;
@@ -771,6 +773,18 @@ public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
     @Override
     public CompletableFuture<ShapResults> explainAsync(Prediction prediction, PredictionProvider model) {
         return explainAsync(prediction, model, null);
+    }
+
+    /**
+     * Perform SHAP from a model and predictions.
+     *
+     * @param prediction: A ShapPrediction to be explained
+     * @param model: The model to be explained
+     * @return shap values, Saliency[] of shape [n_outputs], with each saliency reporting m feature importances+confidences
+     */
+    public CompletableFuture<ShapResults> explainAsyncArrow(Prediction prediction, PredictionProviderArrow model) {
+        PPAWrapper wrappedModel = new PPAWrapper(model, prediction.getInput());
+        return explainAsync(prediction, wrappedModel, null);
     }
 
     /**

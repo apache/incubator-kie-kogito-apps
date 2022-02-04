@@ -33,11 +33,13 @@ import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PPAWrapper;
 import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.PredictionProviderArrow;
 import org.kie.kogito.explainability.model.Saliency;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
@@ -74,6 +76,20 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
 
     public LimeConfig getLimeConfig() {
         return limeConfig;
+    }
+
+    public CompletableFuture<Map<String, Saliency>> explainAsyncArrow(Prediction prediction,
+            PredictionProviderArrow model) {
+        PPAWrapper wrappedModel = new PPAWrapper(model, prediction.getInput());
+        return this.explainAsync(prediction, wrappedModel, unused -> {
+            /* NOP */});
+    }
+
+    public CompletableFuture<Map<String, Saliency>> explainAsyncArrow(Prediction prediction,
+            PredictionProviderArrow model,
+            Consumer<Map<String, Saliency>> intermediateResultsConsumer) {
+        PPAWrapper wrappedModel = new PPAWrapper(model, prediction.getInput());
+        return this.explainAsync(prediction, wrappedModel, intermediateResultsConsumer);
     }
 
     @Override

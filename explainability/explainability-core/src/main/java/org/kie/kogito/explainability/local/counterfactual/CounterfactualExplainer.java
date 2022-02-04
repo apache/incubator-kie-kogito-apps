@@ -32,11 +32,13 @@ import org.kie.kogito.explainability.local.counterfactual.entities.Counterfactua
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntityFactory;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.PPAWrapper;
 import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionFeatureDomain;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.PredictionProviderArrow;
 import org.optaplanner.core.api.solver.SolverJob;
 import org.optaplanner.core.api.solver.SolverManager;
 import org.optaplanner.core.config.solver.SolverConfig;
@@ -102,6 +104,20 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
                 consumer.accept(result);
             }
         };
+    }
+
+    public CompletableFuture<CounterfactualResult> explainAsyncArrow(Prediction prediction,
+            PredictionProviderArrow model) {
+        PPAWrapper wrappedModel = new PPAWrapper(model, prediction.getInput());
+        return this.explainAsync(prediction, wrappedModel, unused -> {/* NOP */
+        });
+    }
+
+    public CompletableFuture<CounterfactualResult> explainAsyncArrow(Prediction prediction,
+            PredictionProviderArrow model,
+            Consumer<CounterfactualResult> intermediateResultsConsumer) {
+        PPAWrapper wrappedModel = new PPAWrapper(model, prediction.getInput());
+        return this.explainAsync(prediction, wrappedModel, intermediateResultsConsumer);
     }
 
     @Override

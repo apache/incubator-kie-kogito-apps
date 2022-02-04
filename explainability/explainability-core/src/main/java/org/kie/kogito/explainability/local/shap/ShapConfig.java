@@ -50,6 +50,7 @@ public class ShapConfig {
     private final Executor executor;
     private final List<PredictionInput> background;
     private final RealMatrix backgroundMatrix;
+    private final long returnBufferSize;
 
     /**
      * Create a ShapConfig instance. This sets the configuration of the SHAP explainer.
@@ -72,7 +73,7 @@ public class ShapConfig {
      * @param nRegularizationFeatures: If desired, the exact number of top regularization features can be specified
      */
     protected ShapConfig(LinkType link, List<PredictionInput> background, PerturbationContext pc, Executor executor,
-            Integer nSamples, double confidence, RegularizerType regularizerType, Integer nRegularizationFeatures) {
+            Integer nSamples, double confidence, RegularizerType regularizerType, long returnBufferSize, Integer nRegularizationFeatures) {
         this.link = link;
         this.background = background;
         this.backgroundMatrix = MatrixUtilsExtensions.matrixFromPredictionInput(background);
@@ -81,6 +82,7 @@ public class ShapConfig {
         this.nSamples = nSamples;
         this.confidence = confidence;
         this.regularizerType = regularizerType;
+        this.returnBufferSize = returnBufferSize;
         this.nRegularizationFeatures = nRegularizationFeatures;
     }
 
@@ -100,6 +102,7 @@ public class ShapConfig {
         private RegularizerType builderRegularizerType = RegularizerType.AUTO;
         private Integer builderNRegularizerFeatures = null;
         private double builderConfidence = .95;
+        private long builderReturnBufferSize = 256;
         private PerturbationContext builderPC = new PerturbationContext(new SecureRandom(), 0);
 
         private Builder() {
@@ -111,6 +114,7 @@ public class ShapConfig {
                     .withBackground(this.builderBackground)
                     .withExecutor(this.builderExecutor)
                     .withConfidence(this.builderConfidence)
+                    .withReturnBufferSize(this.builderReturnBufferSize)
                     .withPC(this.builderPC);
             output.builderRegularizerType = this.builderRegularizerType;
             output.builderNRegularizerFeatures = this.builderNRegularizerFeatures;
@@ -130,6 +134,11 @@ public class ShapConfig {
          */
         public Builder withLink(LinkType link) {
             this.builderLink = link;
+            return this;
+        }
+
+        public Builder withReturnBufferSize(long returnBufferSize) {
+            this.builderReturnBufferSize = returnBufferSize;
             return this;
         }
 
@@ -241,7 +250,7 @@ public class ShapConfig {
                 throw new IllegalArgumentException("Background data list cannot be empty.");
             }
             return new ShapConfig(this.builderLink, this.builderBackground, this.builderPC, this.builderExecutor,
-                    this.builderNSamples, this.builderConfidence, this.builderRegularizerType, this.builderNRegularizerFeatures);
+                    this.builderNSamples, this.builderConfidence, this.builderRegularizerType, this.builderReturnBufferSize, this.builderNRegularizerFeatures);
         }
     }
 
@@ -278,6 +287,10 @@ public class ShapConfig {
 
     public RegularizerType getRegularizerType() {
         return this.regularizerType;
+    }
+
+    public long getReturnBufferSize() {
+        return this.returnBufferSize;
     }
 
     public Integer getNRegularizationFeatures() {
