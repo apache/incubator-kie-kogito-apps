@@ -140,11 +140,10 @@ class ProcessInstanceVariableMappingIT {
         cache.put(pi1.getId(), pi1);
 
         @SuppressWarnings("unchecked")
-        final List<ProcessInstanceVariableExtract> results = Collections.checkedList(repository
+        final List<ProcessInstanceVariableExtract> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "ProcessInstanceVariableMappingMapping")
-                .getResultList(),
-                ProcessInstanceVariableExtract.class);
+                .getResultList();
 
         //... Consequentially we only expect there to be one entry in the extracts table
         assertThat(results).hasSize(1);

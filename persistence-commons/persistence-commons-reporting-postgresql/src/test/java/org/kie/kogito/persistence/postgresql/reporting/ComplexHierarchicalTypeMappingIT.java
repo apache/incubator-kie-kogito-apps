@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.persistence.postgresql.reporting;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -91,11 +90,10 @@ class ComplexHierarchicalTypeMappingIT {
         cache.put("key1", cht1);
 
         @SuppressWarnings("unchecked")
-        final List<ComplexHierarchicalTypeExtractRow> results = Collections.checkedList(repository
+        final List<ComplexHierarchicalTypeExtractRow> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "ComplexHierarchicalTypeMapping")
-                .getResultList(),
-                ComplexHierarchicalTypeExtractRow.class);
+                .getResultList();
 
         assertThat(results).hasSize(3);
         final ComplexHierarchicalTypeExtractRow row0 = results.get(0);
@@ -176,11 +174,10 @@ class ComplexHierarchicalTypeMappingIT {
         assertResultSize(1);
 
         @SuppressWarnings("unchecked")
-        final List<ComplexHierarchicalTypeExtractRow> results = Collections.checkedList(repository
+        final List<ComplexHierarchicalTypeExtractRow> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "ComplexHierarchicalTypeMapping")
-                .getResultList(),
-                ComplexHierarchicalTypeExtractRow.class);
+                .getResultList();
 
         assertThat(results).hasSize(1);
         final ComplexHierarchicalTypeExtractRow row0 = results.get(0);
@@ -193,11 +190,10 @@ class ComplexHierarchicalTypeMappingIT {
 
     @SuppressWarnings("unchecked")
     private void assertResultSize(final int expected) {
-        final List<BasicTypeMappingIT.BasicTypeExtractRow> results = Collections.checkedList(repository
+        final List<BasicTypeMappingIT.BasicTypeExtractRow> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "ComplexHierarchicalTypeMapping")
-                .getResultList(),
-                BasicTypeMappingIT.BasicTypeExtractRow.class);
+                .getResultList();
         assertThat(results).hasSize(expected);
     }
 

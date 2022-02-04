@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.persistence.postgresql.reporting;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -83,11 +82,10 @@ class HierarchicalTypeMappingIT {
         cache.put("key2", ht2);
 
         @SuppressWarnings("unchecked")
-        final List<HierarchicalTypeExtractRow> results = Collections.checkedList(repository
+        final List<HierarchicalTypeExtractRow> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "HierarchicalTypeMapping")
-                .getResultList(),
-                HierarchicalTypeExtractRow.class);
+                .getResultList();
 
         assertThat(results).hasSize(3);
         final HierarchicalTypeExtractRow row0 = results.get(0);
@@ -155,11 +153,10 @@ class HierarchicalTypeMappingIT {
         assertResultSize(2);
 
         @SuppressWarnings("unchecked")
-        final List<HierarchicalTypeExtractRow> results = Collections.checkedList(repository
+        final List<HierarchicalTypeExtractRow> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "HierarchicalTypeMapping")
-                .getResultList(),
-                HierarchicalTypeExtractRow.class);
+                .getResultList();
 
         assertThat(results).hasSize(2);
         final HierarchicalTypeExtractRow row0 = results.get(0);
@@ -177,11 +174,10 @@ class HierarchicalTypeMappingIT {
 
     @SuppressWarnings("unchecked")
     private void assertResultSize(final int expected) {
-        final List<HierarchicalTypeExtractRow> results = Collections.checkedList(repository
+        final List<HierarchicalTypeExtractRow> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "HierarchicalTypeMapping")
-                .getResultList(),
-                HierarchicalTypeExtractRow.class);
+                .getResultList();
         assertThat(results).hasSize(expected);
     }
 

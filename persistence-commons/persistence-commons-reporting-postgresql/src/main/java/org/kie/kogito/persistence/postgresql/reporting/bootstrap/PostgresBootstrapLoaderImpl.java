@@ -32,9 +32,8 @@ import org.kie.kogito.persistence.reporting.bootstrap.BaseBootstrapLoaderImpl;
 public class PostgresBootstrapLoaderImpl
         extends BaseBootstrapLoaderImpl<JsonType, PostgresField, PostgresPartitionField, PostgresMapping, PostgresMappingDefinition, PostgresMappingDefinitions> {
 
-    //For CDI
     PostgresBootstrapLoaderImpl() {
-        super();
+        //CDI proxy
     }
 
     //For unit testing

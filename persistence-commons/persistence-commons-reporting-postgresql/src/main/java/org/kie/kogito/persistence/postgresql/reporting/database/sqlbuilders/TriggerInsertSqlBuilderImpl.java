@@ -246,8 +246,7 @@ public class TriggerInsertSqlBuilderImpl implements TriggerInsertSqlBuilder<Json
             }
         }
         segmentsToJoin.add(0, parentGroupName);
-        if (Objects.equals(segment.getMapping().getTargetField().getFieldType(),
-                JsonType.STRING)) {
+        if (Objects.equals(segment.getMapping().getTargetField().getFieldType(), JsonType.STRING)) {
             final StringBuilder sb = new StringBuilder();
             final int segmentsToJoinCount = segmentsToJoin.size() - 1;
             for (int idx = 0; idx < segmentsToJoinCount; idx++) {

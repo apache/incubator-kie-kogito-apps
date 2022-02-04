@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.persistence.postgresql.reporting;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -75,11 +74,10 @@ class BasicTypeMappingIT {
         cache.put("key2", new BasicType(3, 4L, "B"));
 
         @SuppressWarnings("unchecked")
-        final List<BasicTypeExtractRow> results = Collections.checkedList(repository
+        final List<BasicTypeExtractRow> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "BasicTypeExtractMapping")
-                .getResultList(),
-                BasicTypeExtractRow.class);
+                .getResultList();
 
         assertThat(results).hasSize(2);
         final BasicTypeExtractRow row0 = results.get(0);
@@ -127,11 +125,10 @@ class BasicTypeMappingIT {
         assertResultSize(1);
 
         @SuppressWarnings("unchecked")
-        final List<BasicTypeExtractRow> results = Collections.checkedList(repository
+        final List<BasicTypeExtractRow> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "BasicTypeExtractMapping")
-                .getResultList(),
-                BasicTypeExtractRow.class);
+                .getResultList();
 
         assertThat(results).hasSize(1);
         final BasicTypeExtractRow row0 = results.get(0);
@@ -143,11 +140,10 @@ class BasicTypeMappingIT {
 
     @SuppressWarnings("unchecked")
     private void assertResultSize(final int expected) {
-        final List<BasicTypeExtractRow> results = Collections.checkedList(repository
+        final List<BasicTypeExtractRow> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "BasicTypeExtractMapping")
-                .getResultList(),
-                BasicTypeExtractRow.class);
+                .getResultList();
         assertThat(results).hasSize(expected);
     }
 
