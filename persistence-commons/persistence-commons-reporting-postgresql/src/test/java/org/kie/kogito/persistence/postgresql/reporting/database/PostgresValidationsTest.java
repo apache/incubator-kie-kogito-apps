@@ -30,27 +30,35 @@ class PostgresValidationsTest {
 
     @Test
     void testValidateSourceTableIdentityFieldsBlankFieldName() {
+        final PostgresField field = new PostgresField("", JsonType.STRING);
+        final List<PostgresField> fields = List.of(field);
         assertThrows(IllegalArgumentException.class,
-                () -> Validations.validateSourceTableIdentityFields(List.of(new PostgresField("", JsonType.STRING))));
+                () -> Validations.validateSourceTableIdentityFields(fields));
     }
 
     @Test
     void testValidateSourceTablePartitionFieldsBlankFieldName() {
+        final PostgresPartitionField field = new PostgresPartitionField("", JsonType.STRING, "value");
+        final List<PostgresPartitionField> fields = List.of(field);
         assertThrows(IllegalArgumentException.class,
-                () -> Validations.validateSourceTablePartitionFields(List.of(new PostgresPartitionField("", JsonType.STRING, "value"))));
+                () -> Validations.validateSourceTablePartitionFields(fields));
     }
 
     @Test
     void testValidateSourceTablePartitionFieldsBlankFieldValue() {
+        final PostgresPartitionField field = new PostgresPartitionField("field", JsonType.STRING, "");
+        final List<PostgresPartitionField> fields = List.of(field);
         assertThrows(IllegalArgumentException.class,
-                () -> Validations.validateSourceTablePartitionFields(List.of(new PostgresPartitionField("field", JsonType.STRING, ""))));
+                () -> Validations.validateSourceTablePartitionFields(fields));
     }
 
     @Test
     void testValidateTargetTableFieldsBlankSourceJsonPath() {
+        final PostgresMapping mapping = new PostgresMapping("",
+                new PostgresField("field", JsonType.STRING));
+        final List<PostgresMapping> mappings = List.of(mapping);
         assertThrows(IllegalArgumentException.class,
-                () -> Validations.validateFieldMappings(List.of(new PostgresMapping("",
-                        new PostgresField("field", JsonType.STRING)))));
+                () -> Validations.validateFieldMappings(mappings));
     }
 
 }

@@ -18,21 +18,26 @@ package org.kie.kogito.persistence.postgresql.reporting.database;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.persistence.postgresql.model.CacheEntityRepository;
 import org.kie.kogito.persistence.postgresql.reporting.database.sqlbuilders.IndexesSqlBuilderImpl;
+import org.kie.kogito.persistence.postgresql.reporting.database.sqlbuilders.PostgresContext;
 import org.kie.kogito.persistence.postgresql.reporting.database.sqlbuilders.TableSqlBuilderImpl;
 import org.kie.kogito.persistence.postgresql.reporting.database.sqlbuilders.TriggerDeleteSqlBuilderImpl;
 import org.kie.kogito.persistence.postgresql.reporting.database.sqlbuilders.TriggerInsertSqlBuilderImpl;
 import org.kie.kogito.persistence.postgresql.reporting.model.JsonType;
 import org.kie.kogito.persistence.postgresql.reporting.model.PostgresField;
 import org.kie.kogito.persistence.postgresql.reporting.model.PostgresMapping;
+import org.kie.kogito.persistence.postgresql.reporting.model.PostgresMappingDefinition;
 import org.kie.kogito.persistence.postgresql.reporting.model.paths.PostgresTerminalPathSegment;
 import org.kie.kogito.persistence.reporting.model.paths.JoinPathSegment;
 import org.kie.kogito.persistence.reporting.model.paths.PathSegment;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -40,10 +45,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class GenericPostgresDatabaseManagerImplTest {
+
+    private static final PostgresMappingDefinition DEFINITION = new PostgresMappingDefinition("mappingId",
+            "sourceTableName",
+            "sourceTableJsonFieldName",
+            List.of(new PostgresField("id", JsonType.STRING)),
+            "targetTableName",
+            List.of(new PostgresMapping("sourceJsonPath",
+                    new PostgresField("field1",
+                            JsonType.STRING))));
 
     @Mock
     private CacheEntityRepository repository;
@@ -51,22 +67,183 @@ class GenericPostgresDatabaseManagerImplTest {
     @Mock
     private EntityManager entityManager;
 
+    @Mock
+    private Query query;
+
+    @Mock
+    private IndexesSqlBuilderImpl indexesSqlBuilder;
+
+    @Mock
+    private TableSqlBuilderImpl tableSqlBuilder;
+
+    @Mock
+    private TriggerDeleteSqlBuilderImpl triggerDeleteSqlBuilder;
+
+    @Mock
+    private TriggerInsertSqlBuilderImpl triggerInsertSqlBuilder;
+
+    @Captor
+    private ArgumentCaptor<PostgresContext> contextArgumentCaptor;
+
     private GenericPostgresDatabaseManagerImpl manager;
 
     @BeforeEach
     public void setup() {
         this.manager = new GenericPostgresDatabaseManagerImpl(repository,
-                new IndexesSqlBuilderImpl(),
-                new TableSqlBuilderImpl(),
-                new TriggerDeleteSqlBuilderImpl(),
-                new TriggerInsertSqlBuilderImpl());
+                indexesSqlBuilder,
+                tableSqlBuilder,
+                triggerDeleteSqlBuilder,
+                triggerInsertSqlBuilder);
     }
 
     @Test
     void testGetEntityManager_Processes() {
         when(repository.getEntityManager()).thenReturn(entityManager);
+
         assertEquals(entityManager,
                 manager.getEntityManager("does-not-matter"));
+    }
+
+    @Test
+    void testCreateArtifacts_Indexes() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.createArtifacts(DEFINITION);
+
+        verify(indexesSqlBuilder).createTableIndexesSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testCreateArtifacts_Tables() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.createArtifacts(DEFINITION);
+
+        verify(tableSqlBuilder).createTableSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testCreateArtifacts_InsertTrigger() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.createArtifacts(DEFINITION);
+
+        verify(triggerInsertSqlBuilder).createInsertTriggerSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testCreateArtifacts_InsertTriggerFunction() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.createArtifacts(DEFINITION);
+
+        verify(triggerInsertSqlBuilder).createInsertTriggerFunctionSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testCreateArtifacts_DeleteTrigger() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.createArtifacts(DEFINITION);
+
+        verify(triggerDeleteSqlBuilder).createDeleteTriggerSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testCreateArtifacts_DeleteTriggerFunction() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.createArtifacts(DEFINITION);
+
+        verify(triggerDeleteSqlBuilder).createDeleteTriggerFunctionSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testDestroyArtifacts_Indexes() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.destroyArtifacts(DEFINITION);
+
+        verify(indexesSqlBuilder).dropTableIndexesSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testDestroyArtifacts_Tables() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.destroyArtifacts(DEFINITION);
+
+        verify(tableSqlBuilder).dropTableSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testDestroyArtifacts_InsertTrigger() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.destroyArtifacts(DEFINITION);
+
+        verify(triggerInsertSqlBuilder).dropInsertTriggerSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testDestroyArtifacts_InsertTriggerFunction() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.destroyArtifacts(DEFINITION);
+
+        verify(triggerInsertSqlBuilder).dropInsertTriggerFunctionSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testDestroyArtifacts_DeleteTrigger() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.destroyArtifacts(DEFINITION);
+
+        verify(triggerDeleteSqlBuilder).dropDeleteTriggerSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    @Test
+    void testDestroyArtifacts_DeleteTriggerFunction() {
+        when(repository.getEntityManager()).thenReturn(entityManager);
+        when(entityManager.createNativeQuery(any())).thenReturn(query);
+
+        manager.destroyArtifacts(DEFINITION);
+
+        verify(triggerDeleteSqlBuilder).dropDeleteTriggerFunctionSql(contextArgumentCaptor.capture());
+        assertPostgresContext(contextArgumentCaptor.getValue());
+    }
+
+    private void assertPostgresContext(final PostgresContext context) {
+        assertEquals(context.getMappingId(), DEFINITION.getMappingId());
+        assertEquals(context.getSourceTableName(), DEFINITION.getSourceTableName());
+        assertEquals(context.getSourceTableIdentityFields(), DEFINITION.getSourceTableIdentityFields());
+        assertEquals(context.getSourceTablePartitionFields(), DEFINITION.getSourceTablePartitionFields());
+        assertEquals(context.getSourceTableJsonFieldName(), DEFINITION.getSourceTableJsonFieldName());
+        assertEquals(context.getTargetTableName(), DEFINITION.getTargetTableName());
+        assertEquals(context.getMappings(), DEFINITION.getFieldMappings());
     }
 
     @Test
@@ -269,7 +446,5 @@ class GenericPostgresDatabaseManagerImplTest {
 
         final PostgresTerminalPathSegment terminal1b = (PostgresTerminalPathSegment) segment1b;
         assertEquals(mapping, terminal1b.getMapping());
-
     }
-
 }

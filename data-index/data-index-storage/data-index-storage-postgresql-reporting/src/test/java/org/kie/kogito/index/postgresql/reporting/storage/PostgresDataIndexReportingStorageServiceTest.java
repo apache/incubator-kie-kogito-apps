@@ -36,7 +36,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.quarkus.runtime.StartupEvent;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -90,8 +89,8 @@ class PostgresDataIndexReportingStorageServiceTest {
         service.onStart(event);
 
         verify(loader).load();
-        verify(databaseManager).createArtifacts(eq(definition));
-        verify(mappingService).saveMappingDefinition(eq(definition));
+        verify(databaseManager).createArtifacts(definition);
+        verify(mappingService).saveMappingDefinition(definition);
     }
 
 }

@@ -16,8 +16,12 @@
 package org.kie.kogito.persistence.reporting.database;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.persistence.reporting.model.BaseField;
+import org.kie.kogito.persistence.reporting.model.BaseMapping;
+import org.kie.kogito.persistence.reporting.model.PartitionField;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -98,8 +102,9 @@ class ValidationsTest {
 
     @Test
     void testValidateSourceTablePartitionFieldsEmpty() {
+        final List<PartitionField<Object>> partitionFields = Collections.emptyList();
         assertEquals(Collections.emptyList(),
-                Validations.validateSourceTablePartitionFields(Collections.emptyList()));
+                Validations.validateSourceTablePartitionFields(partitionFields));
     }
 
     @Test
@@ -128,7 +133,8 @@ class ValidationsTest {
 
     @Test
     void testValidateTargetTableFieldsEmpty() {
+        final List<BaseMapping<Object, BaseField<Object>>> mappings = Collections.emptyList();
         assertThrows(IllegalArgumentException.class,
-                () -> Validations.validateFieldMappings(Collections.emptyList()));
+                () -> Validations.validateFieldMappings(mappings));
     }
 }
