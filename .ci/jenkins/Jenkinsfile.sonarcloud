@@ -8,13 +8,13 @@ pipeline {
     }
 
     tools {
-        maven 'kie-maven-3.6.3'
+        maven 'kie-maven-3.8.1'
         jdk 'kie-jdk11'
     }
 
     options {
         timestamps()
-        timeout(time: 180, unit: 'MINUTES')
+        timeout(time: 210, unit: 'MINUTES')
     }
 
     environment {
