@@ -263,7 +263,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         double min = Arrays.stream(weights).min().orElse(0);
         if (max != min) {
             for (int k = 0; k < weights.length; k++) {
-                weights[k] = weights[k] / (max - min);
+                weights[k] = (weights[k] - min) / (max - min);
             }
         }
     }
