@@ -24,6 +24,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -201,6 +202,16 @@ class CounterfactualEntityFactoryTest {
         counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
         assertTrue(counterfactualEntity instanceof BinaryEntity);
         assertEquals(domain.getCategories(), ((BinaryEntity) counterfactualEntity).getValueRange());
+
+        domain = BinaryFeatureDomain.create(new HashSet<>(categories));
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertEquals(domain.getCategories(), ((BinaryEntity) counterfactualEntity).getValueRange());
+
+        domain = BinaryFeatureDomain.create(ByteBuffer.wrap("bar".getBytes()),
+                ByteBuffer.wrap("baz".getBytes()), ByteBuffer.wrap("fun".getBytes()));
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertEquals(domain.getCategories(), ((BinaryEntity) counterfactualEntity).getValueRange());
+
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
     }
 
@@ -265,6 +276,10 @@ class CounterfactualEntityFactoryTest {
         assertTrue(counterfactualEntity instanceof DurationEntity);
         assertEquals(Type.DURATION, counterfactualEntity.asFeature().getType());
         assertFalse(counterfactualEntity.isConstrained());
+
+        CounterfactualEntity entity = DurationEntity.from(feature, Duration.ZERO, Duration.ofDays(2));
+        assertEquals(0, entity.distance());
+        assertFalse(entity.isConstrained());
     }
 
     @Test

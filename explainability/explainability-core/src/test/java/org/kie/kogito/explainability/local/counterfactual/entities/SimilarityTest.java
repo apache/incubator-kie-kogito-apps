@@ -46,6 +46,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCu
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDurationEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedIntegerEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedObjectEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTextEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTimeEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedURIEntity;
@@ -305,6 +306,16 @@ class SimilarityTest {
         final Random random = new Random(seed);
         final String text = UUID.randomUUID().toString();
         final CounterfactualEntity x = FixedTextEntity.from(FeatureFactory.newTextFeature("x", text));
+
+        assertEquals(HIGHEST_SIMILARITY, x.similarity());
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2, 3, 4 })
+    void fixedObjectSimilarity(int seed) {
+        final Random random = new Random(seed);
+        final String text = UUID.randomUUID().toString();
+        final CounterfactualEntity x = FixedObjectEntity.from(FeatureFactory.newObjectFeature("x", text));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
     }
