@@ -164,7 +164,7 @@ class SimilarityTest {
         ByteBuffer bytes = ByteBuffer.wrap("foo".getBytes());
 
         final List<ByteBuffer> categories = Stream.of(
-                        "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
+                "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
                 .map(ByteBuffer::wrap).collect(Collectors.toList());
 
         final BinaryEntity x = BinaryEntity.from(FeatureFactory.newBinaryFeature("f", bytes), new HashSet<>(categories));

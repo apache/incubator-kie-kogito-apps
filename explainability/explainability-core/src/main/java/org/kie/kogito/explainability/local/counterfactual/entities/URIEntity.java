@@ -44,8 +44,8 @@ public class URIEntity extends AbstractCategoricalEntity<URI> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param categories      Set of allowed category values
-     * @param constrained     Whether this entity's value should be fixed or not
+     * @param categories Set of allowed category values
+     * @param constrained Whether this entity's value should be fixed or not
      */
     public static URIEntity from(Feature originalFeature, Set<URI> categories, boolean constrained) {
         return new URIEntity((URI) originalFeature.getValue().getUnderlyingObject(), originalFeature.getName(), categories,
@@ -58,7 +58,7 @@ public class URIEntity extends AbstractCategoricalEntity<URI> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param categories      Set of allowed category values
+     * @param categories Set of allowed category values
      */
     public static URIEntity from(Feature originalFeature, Set<URI> categories) {
         return URIEntity.from(originalFeature, categories, false);

@@ -738,7 +738,8 @@ class CounterfactualExplainerTest {
         solverConfig.setRandomSeed((long) seed);
         solverConfig.setEnvironmentMode(EnvironmentMode.REPRODUCIBLE);
 
-        @SuppressWarnings("unchecked") final Consumer<CounterfactualResult> assertIntermediateCounterfactualNotNull =
+        @SuppressWarnings("unchecked")
+        final Consumer<CounterfactualResult> assertIntermediateCounterfactualNotNull =
                 mock(Consumer.class);
         final CounterfactualConfig counterfactualConfig =
                 new CounterfactualConfig().withSolverConfig(solverConfig).withGoalThreshold(0.01);
@@ -1064,8 +1065,8 @@ class CounterfactualExplainerTest {
                 maxRunningTimeSeconds);
 
         return counterfactualExplainer.explainAsync(prediction,
-                        (List<PredictionInput> inputs) -> CompletableFuture.completedFuture(Collections.emptyList()),
-                        intermediateResultsConsumer)
+                (List<PredictionInput> inputs) -> CompletableFuture.completedFuture(Collections.emptyList()),
+                intermediateResultsConsumer)
                 .get(Config.INSTANCE.getAsyncTimeout(),
                         Config.INSTANCE.getAsyncTimeUnit());
     }

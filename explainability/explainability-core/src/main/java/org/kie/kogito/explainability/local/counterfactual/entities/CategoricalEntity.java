@@ -43,8 +43,8 @@ public class CategoricalEntity extends AbstractCategoricalEntity<String> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature Original input {@link Feature}
-     * @param categories      Set of allowed category values
-     * @param constrained     Whether this entity's value should be fixed or not
+     * @param categories Set of allowed category values
+     * @param constrained Whether this entity's value should be fixed or not
      */
     public static CategoricalEntity from(Feature originalFeature, Set<String> categories, boolean constrained) {
         return new CategoricalEntity(originalFeature.getValue().asString(), originalFeature.getName(), categories, constrained);
@@ -56,7 +56,7 @@ public class CategoricalEntity extends AbstractCategoricalEntity<String> {
      * A set of allowed category values must be passed.
      *
      * @param originalFeature feature Original input {@link Feature}
-     * @param categories      Set of allowed category values
+     * @param categories Set of allowed category values
      */
     public static CategoricalEntity from(Feature originalFeature, Set<String> categories) {
         return CategoricalEntity.from(originalFeature, categories, false);
