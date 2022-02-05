@@ -110,12 +110,10 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             Consumer<CounterfactualResult> intermediateResultsConsumer) {
         final AtomicLong sequenceId = new AtomicLong(0);
         final CounterfactualPrediction cfPrediction = (CounterfactualPrediction) prediction;
-        final PredictionFeatureDomain featureDomain = cfPrediction.getDomain();
-        final List<Boolean> constraints = cfPrediction.getConstraints();
         final UUID executionId = cfPrediction.getExecutionId();
         final Long maxRunningTimeSeconds = cfPrediction.getMaxRunningTimeSeconds();
         final List<CounterfactualEntity> entities =
-                CounterfactualEntityFactory.createEntities(prediction.getInput(), featureDomain, constraints,
+                CounterfactualEntityFactory.createEntities(prediction.getInput(),
                         cfPrediction.getDataDistribution());
 
         final List<Output> goal = prediction.getOutput().getOutputs();

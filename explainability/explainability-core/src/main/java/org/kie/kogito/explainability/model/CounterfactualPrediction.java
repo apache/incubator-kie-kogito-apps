@@ -23,33 +23,19 @@ import java.util.UUID;
  */
 public class CounterfactualPrediction extends BasePrediction {
 
-    private final PredictionFeatureDomain domain;
-    private final List<Boolean> constraints;
     private final DataDistribution dataDistribution;
     private final Long maxRunningTimeSeconds;
 
     public CounterfactualPrediction(PredictionInput input,
             PredictionOutput output,
-            PredictionFeatureDomain domain,
-            List<Boolean> constraints,
             DataDistribution dataDistribution,
             UUID executionId,
             Long maxRunningTimeSeconds) {
         super(input, output, executionId);
-        this.domain = domain;
-        this.constraints = constraints;
         this.dataDistribution = dataDistribution;
         this.maxRunningTimeSeconds = maxRunningTimeSeconds;
     }
-
-    public PredictionFeatureDomain getDomain() {
-        return domain;
-    }
-
-    public List<Boolean> getConstraints() {
-        return constraints;
-    }
-
+    
     public DataDistribution getDataDistribution() {
         return dataDistribution;
     }

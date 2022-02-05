@@ -123,8 +123,6 @@ public class CounterfactualExplainerServiceHandler
 
         return new CounterfactualPrediction(input,
                 output,
-                featureDomain,
-                featureConstraints,
                 null,
                 UUID.fromString(request.getExecutionId()),
                 maxRunningTimeSeconds);

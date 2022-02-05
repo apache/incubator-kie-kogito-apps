@@ -94,8 +94,6 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction = new CounterfactualPrediction(input,
                 output,
-                new PredictionFeatureDomain(featureBoundaries),
-                constraints,
                 null,
                 UUID.randomUUID(), 60L);
         final CounterfactualResult counterfactualResult =
@@ -157,8 +155,6 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction = new CounterfactualPrediction(input,
                 output,
-                new PredictionFeatureDomain(featureBoundaries),
-                constraints,
                 null,
                 UUID.randomUUID(), 60L);
         final CounterfactualResult counterfactualResult =
@@ -227,8 +223,6 @@ class ComplexEligibilityDmnCounterfactualExplainerTest {
         PredictionOutput output = new PredictionOutput(goal);
         Prediction prediction = new CounterfactualPrediction(input,
                 output,
-                new PredictionFeatureDomain(featureBoundaries),
-                constraints,
                 null,
                 UUID.randomUUID(), 60L);
         final CounterfactualResult counterfactualResult =

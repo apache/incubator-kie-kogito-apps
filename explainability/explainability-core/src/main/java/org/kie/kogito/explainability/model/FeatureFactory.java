@@ -76,7 +76,7 @@ public class FeatureFactory {
     }
 
     public static Feature newNumericalFeature(String name, Number number, FeatureDomain domain) {
-        return new Feature(name, Type.NUMBER, new Value(number));
+        return new Feature(name, Type.NUMBER, new Value(number), false, domain);
     }
 
     public static Feature newBooleanFeature(String name, Boolean truthValue) {
