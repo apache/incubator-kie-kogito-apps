@@ -20,13 +20,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.api.CounterfactualDomain;
 import org.kie.kogito.explainability.api.CounterfactualDomainCategorical;
 import org.kie.kogito.explainability.api.CounterfactualDomainRange;
+import org.kie.kogito.explainability.api.CounterfactualSearchDomain;
 import org.kie.kogito.explainability.api.CounterfactualSearchDomainUnitValue;
+import org.kie.kogito.explainability.api.NamedTypedValue;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.Type;
@@ -48,8 +53,6 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.node.TextNode;
 
-import io.vertx.core.json.JsonObject;
-
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -59,7 +62,63 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.vertx.core.json.JsonObject;
+
 class ConversionUtilsTest {
+
+    private static NamedTypedValue getDoubleUnit(String name, double value) {
+        return new NamedTypedValue(name, new UnitValue("number", DoubleNode.valueOf(value)));
+    }
+
+    private static CounterfactualSearchDomain getDoubleSearchDomain(String name, double lowerBound, double upperBound) {
+        final CounterfactualDomainRange range = new CounterfactualDomainRange(DoubleNode.valueOf(lowerBound),
+                DoubleNode.valueOf(upperBound));
+        CounterfactualSearchDomainUnitValue searchDomain = new CounterfactualSearchDomainUnitValue("double",
+                "double",
+                Boolean.FALSE,
+                range);
+        return new CounterfactualSearchDomain(name, searchDomain);
+    }
+
+    @Test
+    void toFeatureDomainsConstraintsSingleElement() {
+
+        NamedTypedValue typedValue = getDoubleUnit("f-1", 20.0);
+        CounterfactualSearchDomain domain = getDoubleSearchDomain("f-1", 18.0, 65.0);
+
+        final List<Feature> features = ConversionUtils.toFeatureList(List.of(typedValue), List.of(domain));
+
+        assertEquals(1, features.size());
+        final Feature feature = features.get(0);
+        assertEquals(Type.NUMBER, feature.getType());
+        assertEquals("f-1", feature.getName());
+        assertEquals(20.0, feature.getValue().asNumber());
+        assertFalse(feature.isConstrained());
+        assertFalse(feature.getDomain().isEmpty());
+        assertEquals(18, feature.getDomain().getLowerBound());
+        assertEquals(65, feature.getDomain().getUpperBound());
+    }
+
+    @Test
+    void toFeatureDomainsConstraintsMultiElement() {
+
+        final Random random = new Random();
+
+        List<NamedTypedValue> values = IntStream.range(0, 10).mapToObj(i -> getDoubleUnit("f-" + i, random.nextDouble()))
+                .collect(Collectors.toList());
+
+        List<CounterfactualSearchDomain> domains = IntStream.range(0, 10).mapToObj(i -> getDoubleSearchDomain("f-" + i, -1, 1)).collect(
+                Collectors.toList());
+
+        final List<Feature> features = ConversionUtils.toFeatureList(values, domains);
+
+        assertEquals(10, features.size());
+        assertTrue(features.stream().allMatch(f -> f.getType() == Type.NUMBER));
+        assertTrue(features.stream().noneMatch(Feature::isConstrained));
+        assertTrue(features.stream().map(Feature::getDomain).noneMatch(FeatureDomain::isEmpty));
+        assertTrue(features.stream().map(Feature::getDomain).map(FeatureDomain::getLowerBound).allMatch(lb -> lb == -1.0));
+        assertTrue(features.stream().map(Feature::getDomain).map(FeatureDomain::getUpperBound).allMatch(ub -> ub == 1.0));
+    }
 
     @Test
     void toFeatureTypedValue() {
@@ -68,14 +127,19 @@ class ConversionUtilsTest {
         assertEquals("name", name.getName());
         assertEquals(Type.NUMBER, name.getType());
         assertEquals(10d, name.getValue().getUnderlyingObject());
+        assertTrue(name.isConstrained());
+        assertTrue(name.getDomain().isEmpty());
 
         Feature name1 = ConversionUtils.toFeature("name1",
                 new StructureValue("complex", singletonMap(
                         "key",
                         new UnitValue("string1", new TextNode("stringValue")))));
         assertNotNull(name1);
+        assertTrue(name1.isConstrained());
+        assertTrue(name1.getDomain().isEmpty());
         assertEquals("name1", name1.getName());
         assertEquals(Type.COMPOSITE, name1.getType());
+
         assertTrue(name1.getValue().getUnderlyingObject() instanceof List);
         @SuppressWarnings("unchecked")
         List<Feature> features = (List<Feature>) name1.getValue().getUnderlyingObject();

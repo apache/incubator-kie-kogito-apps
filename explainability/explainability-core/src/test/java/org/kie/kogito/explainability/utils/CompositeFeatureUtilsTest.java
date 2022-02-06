@@ -173,8 +173,6 @@ class CompositeFeatureUtilsTest {
         final List<Feature> features = new ArrayList<>();
         features.add(FeatureFactory.newCompositeFeature("composite", map));
 
-        System.out.println(features);
-
         final List<Feature> flattened = CompositeFeatureUtils.flattenFeatures(features);
 
         // Test flattening
