@@ -21,9 +21,11 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Currency;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -36,6 +38,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.IntegerEntity
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBinaryEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBooleanEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCategoricalEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCompositeEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCurrencyEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDurationEntity;
@@ -176,36 +179,28 @@ class CounterfactualEntityFactoryTest {
                 exception.getMessage());
     }
 
-    //    @Test
-    //    void testCompositeFactory() {
-    //        Map<String, Object> map = new HashMap<>();
-    //        List<Feature> features = new LinkedList<>();
-    //        features.add(FeatureFactory.newObjectFeature("f1", new Object()));
-    //        features.add(FeatureFactory.newTextFeature("f2", "hola"));
-    //        features.add(FeatureFactory.newFulltextFeature("f3", "foo bar"));
-    //        features.add(FeatureFactory.newNumericalFeature("f4", 131));
-    //        features.add(FeatureFactory.newBooleanFeature("f5", false));
-    //        features.add(FeatureFactory.newDurationFeature("f6", Duration.ofDays(2)));
-    //        Map<String, Object> nestedMap = new HashMap<>();
-    //        nestedMap.put("nf-1", "nested text");
-    //        nestedMap.put("nf-2", ByteBuffer.allocate(1024));
-    //        features.add(FeatureFactory.newCompositeFeature("f7", nestedMap));
-    //        for (Feature f : features) {
-    //            map.put(f.getName(), f.getValue().getUnderlyingObject());
-    //        }
-    //        final Feature feature = FeatureFactory.newCompositeFeature("composite-feature", map);
-    //        final FeatureDomain domain = EmptyFeatureDomain.create();
-    //        CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature, true, domain);
-    //        assertTrue(counterfactualEntity instanceof FixedCompositeEntity);
-    //        assertEquals(Type.COMPOSITE, counterfactualEntity.asFeature().getType());
-    //
-    //        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-    //            CounterfactualEntityFactory.from(feature, false, domain);
-    //        });
-    //
-    //        assertEquals("Unsupported feature type: composite",
-    //                exception.getMessage());
-    //    }
+    @Test
+    void testCompositeFactory() {
+        Map<String, Object> map = new HashMap<>();
+        List<Feature> features = new LinkedList<>();
+        features.add(FeatureFactory.newObjectFeature("f1", new Object()));
+        features.add(FeatureFactory.newTextFeature("f2", "hola"));
+        features.add(FeatureFactory.newFulltextFeature("f3", "foo bar"));
+        features.add(FeatureFactory.newNumericalFeature("f4", 131));
+        features.add(FeatureFactory.newBooleanFeature("f5", false));
+        features.add(FeatureFactory.newDurationFeature("f6", Duration.ofDays(2)));
+        Map<String, Object> nestedMap = new HashMap<>();
+        nestedMap.put("nf-1", "nested text");
+        nestedMap.put("nf-2", ByteBuffer.allocate(1024));
+        features.add(FeatureFactory.newCompositeFeature("f7", nestedMap));
+        for (Feature f : features) {
+            map.put(f.getName(), f.getValue().getUnderlyingObject());
+        }
+        final Feature feature = FeatureFactory.newCompositeFeature("composite-feature", map);
+        CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
+        assertTrue(counterfactualEntity instanceof FixedCompositeEntity);
+        assertEquals(Type.COMPOSITE, counterfactualEntity.asFeature().getType());
+    }
 
     @Test
     void testCurrencyFactory() {
