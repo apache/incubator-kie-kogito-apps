@@ -16,10 +16,7 @@
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBinaryEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBooleanEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCategoricalEntity;
@@ -32,7 +29,6 @@ import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTe
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTimeEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedURIEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedVectorEntity;
-import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.PredictionInput;

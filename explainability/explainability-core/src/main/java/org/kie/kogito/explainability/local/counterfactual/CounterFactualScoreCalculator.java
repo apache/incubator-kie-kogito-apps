@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  */
 public class CounterFactualScoreCalculator implements EasyScoreCalculator<CounterfactualSolution, BendableBigDecimalScore> {
 
-    private final static double DEFAULT_DISTANCE = 1.0;
+    private static final double DEFAULT_DISTANCE = 1.0;
 
     private static final Logger logger =
             LoggerFactory.getLogger(CounterFactualScoreCalculator.class);

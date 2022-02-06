@@ -25,6 +25,10 @@ import org.kie.kogito.explainability.model.Value;
 
 public class CompositeFeatureUtils {
 
+    private CompositeFeatureUtils() {
+
+    }
+
     public static List<Feature> flattenFeatures(List<Feature> features) {
         return DataUtils.getLinearizedFeatures(features);
     }
