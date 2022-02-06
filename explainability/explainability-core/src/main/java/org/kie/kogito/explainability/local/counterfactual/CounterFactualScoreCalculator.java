@@ -139,10 +139,10 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         logger.debug("Feature distance: {}", -Math.abs(primarySoftScore));
 
         return BendableBigDecimalScore.of(new BigDecimal[] {
-                        BigDecimal.ZERO,
-                        BigDecimal.valueOf(secondaryHardScore),
-                        BigDecimal.ZERO
-                },
+                BigDecimal.ZERO,
+                BigDecimal.valueOf(secondaryHardScore),
+                BigDecimal.ZERO
+        },
                 new BigDecimal[] { BigDecimal.valueOf(-Math.abs(primarySoftScore)), BigDecimal.valueOf(secondarySoftScore) });
     }
 

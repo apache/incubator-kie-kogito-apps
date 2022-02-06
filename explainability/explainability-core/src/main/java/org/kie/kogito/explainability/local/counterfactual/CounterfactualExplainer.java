@@ -165,7 +165,7 @@ public class CounterfactualExplainer implements LocalExplainer<CounterfactualRes
             }
         }, this.counterfactualConfig.getExecutor());
 
-        final CompletableFuture<List<PredictionOutput>> cfOutputs =  cfSolution.thenCompose(s -> model.predictAsync(buildInput(s.getEntities())));
+        final CompletableFuture<List<PredictionOutput>> cfOutputs = cfSolution.thenCompose(s -> model.predictAsync(buildInput(s.getEntities())));
         return CompletableFuture.allOf(cfOutputs, cfSolution).thenApply(v -> {
             CounterfactualSolution solution = cfSolution.join();
             return new CounterfactualResult(solution.getEntities(),

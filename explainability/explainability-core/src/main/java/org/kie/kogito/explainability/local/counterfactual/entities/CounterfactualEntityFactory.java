@@ -17,6 +17,7 @@ package org.kie.kogito.explainability.local.counterfactual.entities;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBinaryEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBooleanEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCategoricalEntity;
@@ -160,7 +161,7 @@ public class CounterfactualEntityFactory {
     public static List<CounterfactualEntity> createEntities(PredictionInput predictionInput) {
         final List<Feature> linearizedFeatures = CompositeFeatureUtils.flattenFeatures(predictionInput.getFeatures());
         return linearizedFeatures.stream().map(
-                        (Feature feature) -> CounterfactualEntityFactory.from(feature, feature.getDistribution()))
+                (Feature feature) -> CounterfactualEntityFactory.from(feature, feature.getDistribution()))
                 .collect(Collectors.toList());
     }
 }
