@@ -134,7 +134,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
         logger.debug("Current solution: {}", builder);
 
         // Calculate Gower distance from the similarities
-        final double primarySoftScore = -Math.sqrt(1.0 - inputSimilarities);
+        final double primarySoftScore = -Math.sqrt(Math.abs(1.0 - inputSimilarities));
         logger.debug("Changed constraints penalty: {}", secondaryHardScore);
         logger.debug("Feature distance: {}", -Math.abs(primarySoftScore));
 
