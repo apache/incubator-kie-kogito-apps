@@ -313,7 +313,7 @@ class CounterfactualEntityFactoryTest {
         PredictionInput input = new PredictionInput(features);
 
         List<CounterfactualEntity> entities =
-                CounterfactualEntityFactory.createEntities(input, null);
+                CounterfactualEntityFactory.createEntities(input);
 
         // Check types
         assertTrue(entities.get(0) instanceof FixedDoubleEntity);

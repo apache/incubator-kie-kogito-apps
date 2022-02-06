@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.explainability.model;
 
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -35,7 +34,7 @@ public class CounterfactualPrediction extends BasePrediction {
         this.dataDistribution = dataDistribution;
         this.maxRunningTimeSeconds = maxRunningTimeSeconds;
     }
-    
+
     public DataDistribution getDataDistribution() {
         return dataDistribution;
     }

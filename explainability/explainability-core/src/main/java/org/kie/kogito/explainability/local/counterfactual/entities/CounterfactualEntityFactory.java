@@ -38,6 +38,7 @@ import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
+import org.kie.kogito.explainability.utils.CompositeFeatureUtils;
 
 public class CounterfactualEntityFactory {
 
@@ -147,7 +148,7 @@ public class CounterfactualEntityFactory {
 
     /**
      * Validation of features for counterfactual entity construction
-     * 
+     *
      * @param feature {@link Feature} to be validated
      */
     public static void validateFeature(Feature feature) {
@@ -160,16 +161,10 @@ public class CounterfactualEntityFactory {
         }
     }
 
-    public static List<CounterfactualEntity> createEntities(PredictionInput predictionInput, DataDistribution dataDistribution) {
-        return IntStream.range(0, predictionInput.getFeatures().size())
-                .mapToObj(featureIndex -> {
-                    final Feature feature = predictionInput.getFeatures().get(featureIndex);
-                    final FeatureDistribution featureDistribution = Optional
-                            .ofNullable(dataDistribution)
-                            .map(dd -> dd.asFeatureDistributions().get(featureIndex))
-                            .orElse(null);
-                    return CounterfactualEntityFactory
-                            .from(feature, featureDistribution);
-                }).collect(Collectors.toList());
+    public static List<CounterfactualEntity> createEntities(PredictionInput predictionInput) {
+        final List<Feature> linearizedFeatures = CompositeFeatureUtils.flattenFeatures(predictionInput.getFeatures());
+        return linearizedFeatures.stream().map(
+                        (Feature feature) -> CounterfactualEntityFactory.from(feature, feature.getDistribution()))
+                .collect(Collectors.toList());
     }
 }

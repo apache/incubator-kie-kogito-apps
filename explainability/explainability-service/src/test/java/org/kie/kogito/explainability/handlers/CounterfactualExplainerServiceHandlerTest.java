@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,7 @@ import org.kie.kogito.explainability.api.ModelIdentifier;
 import org.kie.kogito.explainability.api.NamedTypedValue;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualExplainer;
 import org.kie.kogito.explainability.local.counterfactual.CounterfactualResult;
+import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
 import org.kie.kogito.explainability.model.CounterfactualPrediction;
 import org.kie.kogito.explainability.model.Feature;
@@ -364,7 +366,9 @@ public class CounterfactualExplainerServiceHandlerTest {
                 Collections.emptyList(),
                 MAX_RUNNING_TIME_SECONDS);
 
-        CounterfactualResult counterfactuals = new CounterfactualResult(List.of(DoubleEntity.from(new Feature("input1", Type.NUMBER, new Value(123.0d)), 0, 1000)),
+        List<CounterfactualEntity> entities = List.of(DoubleEntity.from(new Feature("input1", Type.NUMBER, new Value(123.0d)), 0, 1000));
+        CounterfactualResult counterfactuals = new CounterfactualResult(entities,
+                entities.stream().map(CounterfactualEntity::asFeature).collect(Collectors.toList()),
                 List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 1.0)))),
                 true,
                 UUID.fromString(SOLUTION_ID),
@@ -406,6 +410,7 @@ public class CounterfactualExplainerServiceHandlerTest {
                 MAX_RUNNING_TIME_SECONDS);
 
         CounterfactualResult counterfactuals = new CounterfactualResult(Collections.emptyList(),
+                Collections.emptyList(),
                 null,
                 true,
                 UUID.fromString(SOLUTION_ID),
@@ -428,6 +433,7 @@ public class CounterfactualExplainerServiceHandlerTest {
 
         CounterfactualResult counterfactuals = new CounterfactualResult(Collections.emptyList(),
                 Collections.emptyList(),
+                Collections.emptyList(),
                 true,
                 UUID.fromString(SOLUTION_ID),
                 UUID.fromString(EXECUTION_ID),
@@ -447,7 +453,7 @@ public class CounterfactualExplainerServiceHandlerTest {
                 Collections.emptyList(),
                 MAX_RUNNING_TIME_SECONDS);
 
-        CounterfactualResult counterfactuals = new CounterfactualResult(Collections.emptyList(),
+        CounterfactualResult counterfactuals = new CounterfactualResult(Collections.emptyList(), Collections.emptyList(),
                 List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 1.0))),
                         new PredictionOutput(List.of(new Output("output2", Type.NUMBER, new Value(777.0d), 2.0)))),
                 true,
@@ -469,7 +475,10 @@ public class CounterfactualExplainerServiceHandlerTest {
                 Collections.emptyList(),
                 MAX_RUNNING_TIME_SECONDS);
 
-        CounterfactualResult counterfactuals = new CounterfactualResult(List.of(DoubleEntity.from(new Feature("input1", Type.NUMBER, new Value(123.0d)), 0, 1000)),
+        List<CounterfactualEntity> entities = List.of(DoubleEntity.from(new Feature("input1", Type.NUMBER, new Value(123.0d)), 0, 1000));
+        CounterfactualResult counterfactuals = new CounterfactualResult(entities, entities.stream().map(
+                CounterfactualEntity::asFeature).collect(
+                Collectors.toList()),
                 List.of(new PredictionOutput(List.of(new Output("output1", Type.NUMBER, new Value(555.0d), 1.0)))),
                 true,
                 UUID.fromString(SOLUTION_ID),
