@@ -53,6 +53,7 @@ public class CounterfactualResult {
         this.executionId = executionId;
         this.sequenceId = sequenceId;
     }
+
     public List<Feature> getFeatures() {
         return features;
     }
