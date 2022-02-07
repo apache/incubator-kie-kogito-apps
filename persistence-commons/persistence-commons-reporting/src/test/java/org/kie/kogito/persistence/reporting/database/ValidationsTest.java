@@ -21,6 +21,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.reporting.model.BaseField;
 import org.kie.kogito.persistence.reporting.model.BaseMapping;
+import org.kie.kogito.persistence.reporting.model.Field;
 import org.kie.kogito.persistence.reporting.model.PartitionField;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -90,8 +91,9 @@ class ValidationsTest {
 
     @Test
     void testValidateSourceTableIdentityFieldsEmpty() {
+        final List<Field<Object>> fields = Collections.emptyList();
         assertThrows(IllegalArgumentException.class,
-                () -> Validations.validateSourceTableIdentityFields(Collections.emptyList()));
+                () -> Validations.validateSourceTableIdentityFields(fields));
     }
 
     @Test

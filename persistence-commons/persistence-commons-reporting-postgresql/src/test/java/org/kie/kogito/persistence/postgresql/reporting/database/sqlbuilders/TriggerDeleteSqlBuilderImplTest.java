@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
-public class TriggerDeleteSqlBuilderImplTest extends BaseSqlBuilderImplTest {
+class TriggerDeleteSqlBuilderImplTest extends BaseSqlBuilderImplTest {
 
     private final TriggerDeleteSqlBuilderImpl triggerDeleteSqlBuilder = new TriggerDeleteSqlBuilderImpl();
 

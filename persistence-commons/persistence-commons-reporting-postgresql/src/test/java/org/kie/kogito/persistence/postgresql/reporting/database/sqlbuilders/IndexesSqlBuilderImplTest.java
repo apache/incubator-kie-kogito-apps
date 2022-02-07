@@ -21,7 +21,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
-public class IndexesSqlBuilderImplTest extends BaseSqlBuilderImplTest {
+class IndexesSqlBuilderImplTest extends BaseSqlBuilderImplTest {
 
     private final IndexesSqlBuilderImpl indexesSqlBuilder = new IndexesSqlBuilderImpl();
 

@@ -19,24 +19,11 @@ import java.util.List;
 
 import org.kie.kogito.persistence.reporting.model.Field;
 import org.kie.kogito.persistence.reporting.model.Mapping;
+import org.kie.kogito.persistence.reporting.model.MappingDefinition;
 import org.kie.kogito.persistence.reporting.model.PartitionField;
 import org.kie.kogito.persistence.reporting.model.paths.PathSegment;
 
-public interface Context<T, F extends Field<T>, P extends PartitionField<T>, M extends Mapping<T, F>> {
-
-    String getMappingId();
-
-    String getSourceTableName();
-
-    String getSourceTableJsonFieldName();
-
-    List<F> getSourceTableIdentityFields();
-
-    List<P> getSourceTablePartitionFields();
-
-    String getTargetTableName();
-
-    List<M> getMappings();
+public interface Context<T, F extends Field<T>, P extends PartitionField<T>, M extends Mapping<T, F>> extends MappingDefinition<T, F, P, M> {
 
     List<PathSegment> getMappingPaths();
 }

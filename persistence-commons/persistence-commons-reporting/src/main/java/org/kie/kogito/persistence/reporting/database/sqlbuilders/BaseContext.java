@@ -18,20 +18,14 @@ package org.kie.kogito.persistence.reporting.database.sqlbuilders;
 import java.util.List;
 import java.util.Objects;
 
+import org.kie.kogito.persistence.reporting.model.BaseMappingDefinition;
 import org.kie.kogito.persistence.reporting.model.Field;
 import org.kie.kogito.persistence.reporting.model.Mapping;
 import org.kie.kogito.persistence.reporting.model.PartitionField;
 import org.kie.kogito.persistence.reporting.model.paths.PathSegment;
 
-public abstract class BaseContext<T, F extends Field<T>, P extends PartitionField<T>, M extends Mapping<T, F>> implements Context<T, F, P, M> {
+public abstract class BaseContext<T, F extends Field<T>, P extends PartitionField<T>, M extends Mapping<T, F>> extends BaseMappingDefinition<T, F, P, M> implements Context<T, F, P, M> {
 
-    private final String mappingId;
-    private final String sourceTableName;
-    private final String sourceTableJsonFieldName;
-    private final List<F> sourceTableIdentityFields;
-    private final List<P> sourceTablePartitionFields;
-    private final String targetTableName;
-    private final List<M> mappings;
     private final List<PathSegment> mappingPaths;
 
     protected BaseContext(final String mappingId,
@@ -42,49 +36,14 @@ public abstract class BaseContext<T, F extends Field<T>, P extends PartitionFiel
             final String targetTableName,
             final List<M> mappings,
             final List<PathSegment> mappingPaths) {
-        this.mappingId = Objects.requireNonNull(mappingId);
-        this.sourceTableName = Objects.requireNonNull(sourceTableName);
-        this.sourceTableJsonFieldName = Objects.requireNonNull(sourceTableJsonFieldName);
-        this.sourceTableIdentityFields = Objects.requireNonNull(sourceTableIdentityFields);
-        this.sourceTablePartitionFields = Objects.requireNonNull(sourceTablePartitionFields);
-        this.targetTableName = Objects.requireNonNull(targetTableName);
-        this.mappings = Objects.requireNonNull(mappings);
+        super(mappingId,
+                sourceTableName,
+                sourceTableJsonFieldName,
+                sourceTableIdentityFields,
+                sourceTablePartitionFields,
+                targetTableName,
+                mappings);
         this.mappingPaths = Objects.requireNonNull(mappingPaths);
-    }
-
-    @Override
-    public String getMappingId() {
-        return mappingId;
-    }
-
-    @Override
-    public String getSourceTableName() {
-        return sourceTableName;
-    }
-
-    @Override
-    public String getSourceTableJsonFieldName() {
-        return sourceTableJsonFieldName;
-    }
-
-    @Override
-    public List<F> getSourceTableIdentityFields() {
-        return sourceTableIdentityFields;
-    }
-
-    @Override
-    public List<P> getSourceTablePartitionFields() {
-        return sourceTablePartitionFields;
-    }
-
-    @Override
-    public String getTargetTableName() {
-        return targetTableName;
-    }
-
-    @Override
-    public List<M> getMappings() {
-        return mappings;
     }
 
     @Override
@@ -100,26 +59,15 @@ public abstract class BaseContext<T, F extends Field<T>, P extends PartitionFiel
         if (!(o instanceof BaseContext)) {
             return false;
         }
+        if (!super.equals(o)) {
+            return false;
+        }
         BaseContext<?, ?, ?, ?> that = (BaseContext<?, ?, ?, ?>) o;
-        return getMappingId().equals(that.getMappingId())
-                && getSourceTableName().equals(that.getSourceTableName())
-                && getSourceTableJsonFieldName().equals(that.getSourceTableJsonFieldName())
-                && getSourceTableIdentityFields().equals(that.getSourceTableIdentityFields())
-                && Objects.equals(getSourceTablePartitionFields(), that.getSourceTablePartitionFields())
-                && getTargetTableName().equals(that.getTargetTableName())
-                && getMappings().equals(that.getMappings())
-                && getMappingPaths().equals(that.getMappingPaths());
+        return getMappingPaths().equals(that.getMappingPaths());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getMappingId(),
-                getSourceTableName(),
-                getSourceTableJsonFieldName(),
-                getSourceTableIdentityFields(),
-                getSourceTablePartitionFields(),
-                getTargetTableName(),
-                getMappings(),
-                getMappingPaths());
+        return Objects.hash(super.hashCode(), getMappingPaths());
     }
 }

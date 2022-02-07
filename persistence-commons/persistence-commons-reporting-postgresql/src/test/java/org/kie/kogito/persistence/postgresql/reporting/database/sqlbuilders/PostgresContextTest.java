@@ -63,7 +63,7 @@ class PostgresContextTest {
         assertEquals("targetTableName",
                 context.getTargetTableName());
         assertEquals(List.of(mapping),
-                context.getMappings());
+                context.getFieldMappings());
         assertEquals(List.of(pathSegment),
                 context.getMappingPaths());
     }

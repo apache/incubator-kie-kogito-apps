@@ -45,7 +45,7 @@ public class TableSqlBuilderImpl implements TableSqlBuilder<JsonType, PostgresFi
     @Override
     public String createTableSql(final PostgresContext context) {
         final String targetTableName = context.getTargetTableName();
-        final List<PostgresMapping> mappings = context.getMappings();
+        final List<PostgresMapping> getFieldMappings = context.getFieldMappings();
         final List<PostgresField> simpleMappings = new ArrayList<>();
         simpleMappings.addAll(context.getSourceTableIdentityFields());
         simpleMappings.addAll(context
@@ -60,7 +60,7 @@ public class TableSqlBuilderImpl implements TableSqlBuilder<JsonType, PostgresFi
                         .stream()
                         .map(TableSqlBuilderImpl::buildTargetIdentityFieldSql)
                         .collect(Collectors.joining(", " + String.format("%n"))),
-                mappings
+                getFieldMappings
                         .stream()
                         .map(TableSqlBuilderImpl::buildTargetFieldSql)
                         .collect(Collectors.joining(", " + String.format("%n"))));

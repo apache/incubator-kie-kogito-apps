@@ -33,7 +33,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ExtendWith(MockitoExtension.class)
-public abstract class BaseSqlBuilderImplTest {
+abstract class BaseSqlBuilderImplTest {
 
     protected static final PostgresMappingDefinition DEFINITION = new PostgresMappingDefinition("mappingId",
             "sourceTableName",
@@ -82,8 +82,6 @@ public abstract class BaseSqlBuilderImplTest {
     protected IndexesSqlBuilderImpl getIndexesBuilder() {
         return mockIndexesSqlBuilder;
     }
-
-    ;
 
     protected TableSqlBuilderImpl getTableBuilder() {
         return mockTableSqlBuilder;

@@ -243,7 +243,7 @@ class GenericPostgresDatabaseManagerImplTest {
         assertEquals(context.getSourceTablePartitionFields(), DEFINITION.getSourceTablePartitionFields());
         assertEquals(context.getSourceTableJsonFieldName(), DEFINITION.getSourceTableJsonFieldName());
         assertEquals(context.getTargetTableName(), DEFINITION.getTargetTableName());
-        assertEquals(context.getMappings(), DEFINITION.getFieldMappings());
+        assertEquals(context.getFieldMappings(), DEFINITION.getFieldMappings());
     }
 
     @Test
