@@ -241,13 +241,12 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
         double loss = linearModel.fit(trainingSet, sampleWeights);
         if (!Double.isNaN(loss)) {
             // create the output saliency
+            double[] weights = linearModel.getWeights();
+            if (limeConfig.isNormalizeWeights() && weights.length > 0) {
+                normalizeWeights(weights);
+            }
             int i = 0;
             for (Feature linearizedFeature : linearizedTargetInputFeatures) {
-                double[] weights = linearModel.getWeights();
-                if (limeConfig.isNormalizeWeights() && weights.length > 0) {
-                    normalizeWeights(weights);
-                }
-
                 FeatureImportance featureImportance = new FeatureImportance(linearizedFeature, weights[i]
                         * featureWeights[i]);
                 featureImportanceList.add(featureImportance);
