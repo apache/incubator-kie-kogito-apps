@@ -50,6 +50,8 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
+import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
+import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
 import org.kie.kogito.tracing.typedvalue.CollectionValue;
 import org.kie.kogito.tracing.typedvalue.StructureValue;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
@@ -284,37 +286,61 @@ public class CounterfactualExplainerServiceHandlerTest {
         assertThrows(IllegalArgumentException.class, () -> handler.getPrediction(request));
     }
 
-    //    @Test
-    //    public void testGetPredictionWithFlatSearchDomains() {
-    //        CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
-    //                SERVICE_URL,
-    //                MODEL_IDENTIFIER,
-    //                COUNTERFACTUAL_ID,
-    //                Collections.emptyList(),
-    //                Collections.emptyList(),
-    //                List.of(new CounterfactualSearchDomain("output1",
-    //                        new CounterfactualSearchDomainUnitValue("number",
-    //                                "number",
-    //                                true,
-    //                                new CounterfactualDomainRange(new IntNode(10), new IntNode(20))))),
-    //                MAX_RUNNING_TIME_SECONDS);
-    //
-    //        Prediction prediction = handler.getPrediction(request);
-    //        assertTrue(prediction instanceof CounterfactualPrediction);
-    //        CounterfactualPrediction counterfactualPrediction = (CounterfactualPrediction) prediction;
-    //
-    //        assertEquals(1, counterfactualPrediction.getDomain().getFeatureDomains().size());
-    //        FeatureDomain featureDomain1 = counterfactualPrediction.getDomain().getFeatureDomains().get(0);
-    //        assertEquals(10, featureDomain1.getLowerBound());
-    //        assertEquals(20, featureDomain1.getUpperBound());
-    //
-    //        assertTrue(counterfactualPrediction.getInput().getFeatures().isEmpty());
-    //        assertTrue(counterfactualPrediction.getOutput().getOutputs().isEmpty());
-    //        assertEquals(1, counterfactualPrediction.getConstraints().size());
-    //        assertTrue(counterfactualPrediction.getConstraints().get(0));
-    //
-    //        assertEquals(counterfactualPrediction.getMaxRunningTimeSeconds(), request.getMaxRunningTimeSeconds());
-    //    }
+    @Test
+    public void testGetPredictionWithFlatSearchDomainsFixed() {
+        CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER,
+                COUNTERFACTUAL_ID,
+                List.of(new NamedTypedValue("output1", new UnitValue("number", new IntNode(25)))),
+                Collections.emptyList(),
+                List.of(new CounterfactualSearchDomain("output1",
+                        new CounterfactualSearchDomainUnitValue("number",
+                                "number",
+                                true,
+                                new CounterfactualDomainRange(new IntNode(10), new IntNode(20))))),
+                MAX_RUNNING_TIME_SECONDS);
+
+        Prediction prediction = handler.getPrediction(request);
+        assertTrue(prediction instanceof CounterfactualPrediction);
+        CounterfactualPrediction counterfactualPrediction = (CounterfactualPrediction) prediction;
+
+        assertEquals(1, counterfactualPrediction.getInput().getFeatures().size());
+        Feature feature1 = counterfactualPrediction.getInput().getFeatures().get(0);
+        assertTrue(feature1.getDomain() instanceof EmptyFeatureDomain);
+
+        assertEquals(counterfactualPrediction.getMaxRunningTimeSeconds(), request.getMaxRunningTimeSeconds());
+    }
+
+    @Test
+    public void testGetPredictionWithFlatSearchDomainsNotFixed() {
+        CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
+                SERVICE_URL,
+                MODEL_IDENTIFIER,
+                COUNTERFACTUAL_ID,
+                List.of(new NamedTypedValue("output1", new UnitValue("number", new IntNode(25)))),
+                Collections.emptyList(),
+                List.of(new CounterfactualSearchDomain("output1",
+                        new CounterfactualSearchDomainUnitValue("number",
+                                "number",
+                                false,
+                                new CounterfactualDomainRange(new IntNode(10), new IntNode(20))))),
+                MAX_RUNNING_TIME_SECONDS);
+
+        Prediction prediction = handler.getPrediction(request);
+        assertTrue(prediction instanceof CounterfactualPrediction);
+        CounterfactualPrediction counterfactualPrediction = (CounterfactualPrediction) prediction;
+
+        assertEquals(1, counterfactualPrediction.getInput().getFeatures().size());
+        Feature feature1 = counterfactualPrediction.getInput().getFeatures().get(0);
+        assertTrue(feature1.getDomain() instanceof NumericalFeatureDomain);
+
+        final NumericalFeatureDomain domain = (NumericalFeatureDomain) feature1.getDomain();
+        assertEquals(10, domain.getLowerBound());
+        assertEquals(20, domain.getUpperBound());
+
+        assertEquals(counterfactualPrediction.getMaxRunningTimeSeconds(), request.getMaxRunningTimeSeconds());
+    }
 
     @Test
     public void testGetPredictionWithStructuredSearchDomains() {
