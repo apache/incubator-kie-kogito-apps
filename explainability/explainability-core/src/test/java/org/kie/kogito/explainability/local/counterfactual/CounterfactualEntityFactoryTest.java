@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Currency;
 import java.util.HashMap;
@@ -29,6 +30,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -60,7 +62,9 @@ import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTi
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedURIEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedVectorEntity;
 import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.FeatureDistribution;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.NumericFeatureDistribution;
 import org.kie.kogito.explainability.model.PredictionFeatureDomain;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
@@ -260,6 +264,21 @@ class CounterfactualEntityFactoryTest {
         assertTrue(counterfactualEntity instanceof CurrencyEntity);
         assertEquals(domain.getCategories(), ((CurrencyEntity) counterfactualEntity).getValueRange());
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
+
+        domain = CurrencyFeatureDomain.create(new ArrayList<>(Currency.getAvailableCurrencies()));
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof CurrencyEntity);
+        assertEquals(domain.getCategories(), ((CurrencyEntity) counterfactualEntity).getValueRange());
+        assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
+
+        Currency[] currencies = List.of(Locale.ITALY, Locale.UK, Locale.US).stream().map(Currency::getInstance).collect(
+                Collectors.toList()).toArray(new Currency[0]);
+        domain = CurrencyFeatureDomain.create(currencies);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof CurrencyEntity);
+        assertEquals(currencies.length, ((CurrencyEntity) counterfactualEntity).getValueRange().size());
+        assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
+
     }
 
     @Test
@@ -279,7 +298,19 @@ class CounterfactualEntityFactoryTest {
 
         CounterfactualEntity entity = DurationEntity.from(feature, Duration.ZERO, Duration.ofDays(2));
         assertEquals(0, entity.distance());
+        assertTrue(((DurationEntity) entity).getValueRange().contains(1e5));
+        assertFalse(((DurationEntity) entity).getValueRange().contains(2e5));
         assertFalse(entity.isConstrained());
+
+        entity = DurationEntity.from(feature, Duration.ZERO, Duration.ofDays(2), false);
+        assertEquals(0, entity.distance());
+        assertFalse(entity.isConstrained());
+
+        FeatureDistribution distribution = new NumericFeatureDistribution(feature, new Random().doubles(10).toArray());
+        entity = DurationEntity.from(feature, Duration.ZERO, Duration.ofDays(2), distribution);
+        assertEquals(0, entity.distance());
+        assertFalse(entity.isConstrained());
+
     }
 
     @Test
@@ -328,6 +359,16 @@ class CounterfactualEntityFactoryTest {
         counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
         assertTrue(counterfactualEntity instanceof URIEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
+
+        domain = URIFeatureDomain.create(List.of(new URI("./"), new URI("../"), new URI("https://example.com")));
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof URIEntity);
+        assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
+
+        domain = URIFeatureDomain.create(Set.of(new URI("./"), new URI("../"), new URI("https://example.com")));
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof URIEntity);
+        assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
     }
 
     @Test
@@ -340,6 +381,16 @@ class CounterfactualEntityFactoryTest {
         assertEquals(Type.UNDEFINED, counterfactualEntity.asFeature().getType());
 
         domain = ObjectFeatureDomain.create("test", 45L);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof ObjectEntity);
+        assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
+
+        domain = ObjectFeatureDomain.create(List.of("test", 45L));
+        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        assertTrue(counterfactualEntity instanceof ObjectEntity);
+        assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
+
+        domain = ObjectFeatureDomain.create(Set.of("test", 45L));
         counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
         assertTrue(counterfactualEntity instanceof ObjectEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
