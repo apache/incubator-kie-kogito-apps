@@ -101,9 +101,11 @@ class SimilarityTest {
 
         x.setProposedValue(!originalValue);
         assertEquals(LOWEST_SIMILARITY, x.similarity());
+        assertEquals(1, x.distance());
 
         x.setProposedValue(originalValue);
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @Test
@@ -114,12 +116,15 @@ class SimilarityTest {
 
         x.setProposedValue("bar");
         assertEquals(LOWEST_SIMILARITY, x.similarity());
+        assertEquals(1, x.distance());
 
         x.setProposedValue("baz");
         assertEquals(LOWEST_SIMILARITY, x.similarity());
+        assertEquals(1, x.distance());
 
         x.setProposedValue("foo");
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @Test
@@ -132,12 +137,15 @@ class SimilarityTest {
 
         x.setProposedValue(new URI("https://example.com/bar"));
         assertEquals(LOWEST_SIMILARITY, x.similarity());
+        assertEquals(1, x.distance());
 
         x.setProposedValue(new URI("https://example.com/baz"));
         assertEquals(LOWEST_SIMILARITY, x.similarity());
+        assertEquals(1, x.distance());
 
         x.setProposedValue(new URI("https://kogito.kie.org/trustyai/"));
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @Test
@@ -152,12 +160,15 @@ class SimilarityTest {
 
         x.setProposedValue(Currency.getInstance("EUR"));
         assertEquals(LOWEST_SIMILARITY, x.similarity());
+        assertEquals(1, x.distance());
 
         x.setProposedValue(Currency.getInstance("USD"));
         assertEquals(LOWEST_SIMILARITY, x.similarity());
+        assertEquals(1, x.distance());
 
         x.setProposedValue(Currency.getInstance("GBP"));
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @Test
@@ -172,12 +183,15 @@ class SimilarityTest {
 
         x.setProposedValue(categories.get(0));
         assertEquals(LOWEST_SIMILARITY, x.similarity());
+        assertEquals(1, x.distance());
 
         x.setProposedValue(categories.get(1));
         assertEquals(LOWEST_SIMILARITY, x.similarity());
+        assertEquals(1, x.distance());
 
         x.setProposedValue(bytes);
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @Test
@@ -191,15 +205,19 @@ class SimilarityTest {
 
         x.setProposedValue(Duration.ofDays(2 * days));
         assertEquals(0.6666, x.similarity(), 1e-3);
+        assertEquals(Math.abs(Duration.ofDays(days).minus(Duration.ofDays(2 * days)).getSeconds()), x.distance());
 
         x.setProposedValue(Duration.ofDays(-days));
         assertEquals(0.333, x.similarity(), 1e-3);
+        assertEquals(Math.abs(Duration.ofDays(days).minus(Duration.ofDays(-days)).getSeconds()), x.distance());
 
         x.setProposedValue(Duration.ofDays(days));
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
 
         x.setProposedValue(Duration.ofSeconds(-5L));
         assertEquals(0.6666, x.similarity(), 1e-3);
+        assertEquals(Math.abs(Duration.ofDays(days).minus(Duration.ofSeconds(-5)).getSeconds()), x.distance());
 
     }
 
@@ -213,12 +231,15 @@ class SimilarityTest {
 
         x.setProposedValue(LocalTime.of(17, 59));
         assertEquals(0.938, x.similarity(), 1e-3);
+        assertEquals(2520, x.distance());
 
         x.setProposedValue(LocalTime.of(9, 23));
         assertEquals(0.300, x.similarity(), 1e-3);
+        assertEquals(28440, x.distance());
 
         x.setProposedValue(value);
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @Test
@@ -247,6 +268,7 @@ class SimilarityTest {
         final CounterfactualEntity x = FixedIntegerEntity.from(FeatureFactory.newNumericalFeature("x", value));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @ParameterizedTest
@@ -257,6 +279,7 @@ class SimilarityTest {
         final CounterfactualEntity x = FixedDoubleEntity.from(FeatureFactory.newNumericalFeature("x", value));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @ParameterizedTest
@@ -267,6 +290,7 @@ class SimilarityTest {
         final CounterfactualEntity x = FixedBooleanEntity.from(FeatureFactory.newBooleanFeature("x", value));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @ParameterizedTest
@@ -276,6 +300,7 @@ class SimilarityTest {
         final CounterfactualEntity x = FixedBinaryEntity.from(FeatureFactory.newBinaryFeature("x", ByteBuffer.wrap(bytes)));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @ParameterizedTest
@@ -288,6 +313,7 @@ class SimilarityTest {
         final CounterfactualEntity x = FixedCurrencyEntity.from(FeatureFactory.newCurrencyFeature("x", currenciesArray[index]));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @ParameterizedTest
@@ -298,6 +324,7 @@ class SimilarityTest {
         final CounterfactualEntity x = FixedDurationEntity.from(FeatureFactory.newDurationFeature("x", duration));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @ParameterizedTest
@@ -308,6 +335,7 @@ class SimilarityTest {
         final CounterfactualEntity x = FixedTextEntity.from(FeatureFactory.newTextFeature("x", text));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @ParameterizedTest
@@ -318,6 +346,7 @@ class SimilarityTest {
         final CounterfactualEntity x = FixedObjectEntity.from(FeatureFactory.newObjectFeature("x", text));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @ParameterizedTest
@@ -328,6 +357,7 @@ class SimilarityTest {
         final CounterfactualEntity x = FixedTimeEntity.from(FeatureFactory.newTimeFeature("x", time));
 
         assertEquals(HIGHEST_SIMILARITY, x.similarity());
+        assertEquals(0, x.distance());
     }
 
     @ParameterizedTest
