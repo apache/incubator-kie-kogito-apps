@@ -42,9 +42,9 @@ import org.kie.kogito.explainability.model.domain.CategoricalFeatureDomain;
 import org.kie.kogito.explainability.model.domain.CurrencyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.DurationFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
-import org.kie.kogito.explainability.utils.CompositeFeatureUtils;
 import org.kie.kogito.explainability.model.domain.ObjectFeatureDomain;
 import org.kie.kogito.explainability.model.domain.URIFeatureDomain;
+import org.kie.kogito.explainability.utils.CompositeFeatureUtils;
 
 public class CounterfactualEntityFactory {
 
