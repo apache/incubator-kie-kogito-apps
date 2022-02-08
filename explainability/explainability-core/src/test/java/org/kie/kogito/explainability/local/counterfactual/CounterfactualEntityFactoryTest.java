@@ -187,32 +187,30 @@ class CounterfactualEntityFactoryTest {
     @Test
     void testBinaryFactory() {
         final ByteBuffer value = ByteBuffer.allocate(256);
-        final Feature feature = FeatureFactory.newBinaryFeature("binary-feature", value);
+        Feature feature = FeatureFactory.newBinaryFeature("binary-feature", value);
         CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof FixedBinaryEntity);
         assertEquals(Type.BINARY, counterfactualEntity.asFeature().getType());
 
-        final Feature fixedFeature = FeatureFactory.newBinaryFeature("binary-feature", value, EmptyFeatureDomain.create());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-
-            CounterfactualEntityFactory.from(fixedFeature);
-        });
         final List<ByteBuffer> categories = Stream.of(
                 "bar".getBytes(), "baz".getBytes(), "fun".getBytes())
                 .map(ByteBuffer::wrap).collect(Collectors.toList());
 
-        domain = BinaryFeatureDomain.create(categories);
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        FeatureDomain domain = BinaryFeatureDomain.create(categories);
+        feature = FeatureFactory.newBinaryFeature("binary-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof BinaryEntity);
         assertEquals(domain.getCategories(), ((BinaryEntity) counterfactualEntity).getValueRange());
 
         domain = BinaryFeatureDomain.create(new HashSet<>(categories));
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        feature = FeatureFactory.newBinaryFeature("binary-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertEquals(domain.getCategories(), ((BinaryEntity) counterfactualEntity).getValueRange());
 
         domain = BinaryFeatureDomain.create(ByteBuffer.wrap("bar".getBytes()),
                 ByteBuffer.wrap("baz".getBytes()), ByteBuffer.wrap("fun".getBytes()));
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        feature = FeatureFactory.newBinaryFeature("binary-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertEquals(domain.getCategories(), ((BinaryEntity) counterfactualEntity).getValueRange());
 
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
@@ -244,23 +242,22 @@ class CounterfactualEntityFactoryTest {
     @Test
     void testCurrencyFactory() {
         final Currency value = Currency.getInstance(Locale.ITALY);
-        final Feature feature = FeatureFactory.newCurrencyFeature("currrency-feature", value);
+        Feature feature = FeatureFactory.newCurrencyFeature("currrency-feature", value);
         CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof FixedCurrencyEntity);
         assertEquals(Type.CURRENCY, counterfactualEntity.asFeature().getType());
 
-        final Feature fixedFeature = FeatureFactory.newCurrencyFeature("currrency-feature", value, EmptyFeatureDomain.create());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.from(fixedFeature);
-        });
-        domain = CurrencyFeatureDomain.create(Currency.getAvailableCurrencies());
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        final Feature fixedFeature = FeatureFactory.newCurrencyFeature("currrency-feature", value);
+        FeatureDomain domain = CurrencyFeatureDomain.create(Currency.getAvailableCurrencies());
+        feature = FeatureFactory.newCurrencyFeature("currrency-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof CurrencyEntity);
         assertEquals(domain.getCategories(), ((CurrencyEntity) counterfactualEntity).getValueRange());
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
 
         domain = CurrencyFeatureDomain.create(new ArrayList<>(Currency.getAvailableCurrencies()));
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        feature = FeatureFactory.newCurrencyFeature("currrency-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof CurrencyEntity);
         assertEquals(domain.getCategories(), ((CurrencyEntity) counterfactualEntity).getValueRange());
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
@@ -268,7 +265,8 @@ class CounterfactualEntityFactoryTest {
         Currency[] currencies = List.of(Locale.ITALY, Locale.UK, Locale.US).stream().map(Currency::getInstance).collect(
                 Collectors.toList()).toArray(new Currency[0]);
         domain = CurrencyFeatureDomain.create(currencies);
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        feature = FeatureFactory.newCurrencyFeature("currrency-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof CurrencyEntity);
         assertEquals(currencies.length, ((CurrencyEntity) counterfactualEntity).getValueRange().size());
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
@@ -278,17 +276,14 @@ class CounterfactualEntityFactoryTest {
     @Test
     void testDurationFactory() {
         final Duration value = Duration.ofDays(1);
-        final Feature feature = FeatureFactory.newDurationFeature("duration-feature", value);
+        Feature feature = FeatureFactory.newDurationFeature("duration-feature", value);
         CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof FixedDurationEntity);
         assertEquals(Type.DURATION, counterfactualEntity.asFeature().getType());
 
-        final Feature varyingFeature = FeatureFactory.newDurationFeature("duration-feature", value, EmptyFeatureDomain.create());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.from(varyingFeature);
-        });
-        domain = DurationFeatureDomain.create(0, 60, ChronoUnit.SECONDS);
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        FeatureDomain domain = DurationFeatureDomain.create(0, 60, ChronoUnit.SECONDS);
+        feature = FeatureFactory.newDurationFeature("duration-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof DurationEntity);
         assertEquals(Type.DURATION, counterfactualEntity.asFeature().getType());
         assertFalse(counterfactualEntity.isConstrained());
@@ -330,20 +325,14 @@ class CounterfactualEntityFactoryTest {
     @Test
     void testTimeFactory() {
         final LocalTime value = LocalTime.now();
-        final Feature feature = FeatureFactory.newTimeFeature("time-feature", value);
+        Feature feature = FeatureFactory.newTimeFeature("time-feature", value);
         CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof FixedTimeEntity);
         assertEquals(Type.TIME, counterfactualEntity.asFeature().getType());
 
-        final Feature varyingFeature = FeatureFactory.newTimeFeature("time-feature", value, EmptyFeatureDomain.create());
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            CounterfactualEntityFactory.from(varyingFeature);
-        });
-
-        assertEquals("Unsupported feature type: time",
-                exception.getMessage());
-        domain = TimeFeatureDomain.create(value.minusHours(10), value.plusHours(10));
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        FeatureDomain domain = TimeFeatureDomain.create(value.minusHours(10), value.plusHours(10));
+        feature = FeatureFactory.newTimeFeature("time-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof TimeEntity);
         assertEquals(Type.TIME, counterfactualEntity.asFeature().getType());
         assertEquals(value, ((TimeEntity) counterfactualEntity).getProposedValue());
@@ -352,23 +341,26 @@ class CounterfactualEntityFactoryTest {
     @Test
     void testURIFactory() throws URISyntaxException {
         final URI value = URI.create("./");
-        final Feature feature = FeatureFactory.newURIFeature("uri-feature", value);
+        Feature feature = FeatureFactory.newURIFeature("uri-feature", value);
         CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof FixedURIEntity);
         assertEquals(Type.URI, counterfactualEntity.asFeature().getType());
 
-        domain = URIFeatureDomain.create(new URI("./"), new URI("../"), new URI("https://example.com"));
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        FeatureDomain domain = URIFeatureDomain.create(new URI("./"), new URI("../"), new URI("https://example.com"));
+        feature = FeatureFactory.newURIFeature("uri-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof URIEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
 
         domain = URIFeatureDomain.create(List.of(new URI("./"), new URI("../"), new URI("https://example.com")));
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        feature = FeatureFactory.newURIFeature("uri-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof URIEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
 
         domain = URIFeatureDomain.create(Set.of(new URI("./"), new URI("../"), new URI("https://example.com")));
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        feature = FeatureFactory.newURIFeature("uri-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof URIEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
     }
@@ -376,24 +368,26 @@ class CounterfactualEntityFactoryTest {
     @Test
     void testObjectFactory() {
         final URI value = URI.create("./");
-        final Feature feature = FeatureFactory.newObjectFeature("f", value);
-        FeatureDomain domain = EmptyFeatureDomain.create();
-        CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature, true, domain);
+        Feature feature = FeatureFactory.newObjectFeature("f", value);
+        CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof FixedObjectEntity);
         assertEquals(Type.UNDEFINED, counterfactualEntity.asFeature().getType());
 
-        domain = ObjectFeatureDomain.create("test", 45L);
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        FeatureDomain domain = ObjectFeatureDomain.create("test", 45L);
+        feature = FeatureFactory.newObjectFeature("uri-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof ObjectEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
 
         domain = ObjectFeatureDomain.create(List.of("test", 45L));
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        feature = FeatureFactory.newObjectFeature("uri-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof ObjectEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
 
         domain = ObjectFeatureDomain.create(Set.of("test", 45L));
-        counterfactualEntity = CounterfactualEntityFactory.from(feature, false, domain);
+        feature = FeatureFactory.newObjectFeature("uri-feature", value, domain);
+        counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertTrue(counterfactualEntity instanceof ObjectEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().getUnderlyingObject());
     }
