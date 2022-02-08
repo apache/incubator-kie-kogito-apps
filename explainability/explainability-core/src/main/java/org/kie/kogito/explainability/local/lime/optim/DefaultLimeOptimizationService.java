@@ -16,8 +16,9 @@
 package org.kie.kogito.explainability.local.lime.optim;
 
 import java.util.Deque;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.WeakHashMap;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.stream.Collectors;
@@ -35,14 +36,19 @@ public class DefaultLimeOptimizationService implements LimeOptimizationService {
     private static final Logger logger = LoggerFactory.getLogger(DefaultLimeOptimizationService.class);
 
     private final Deque<CompletableFuture<Void>> queue;
-    private final WeakHashMap<LimeExplainer, LimeConfig> register;
+    private final LinkedHashMap<LimeExplainer, LimeConfig> register;
     private final LimeConfigOptimizer limeConfigOptimizer;
     private final int maxJobsExecuted;
 
     public DefaultLimeOptimizationService(LimeConfigOptimizer limeConfigOptimizer, int maxJobsExecuted) {
         this.maxJobsExecuted = maxJobsExecuted;
         this.limeConfigOptimizer = limeConfigOptimizer;
-        this.register = new WeakHashMap<>();
+        this.register = new LinkedHashMap<LimeExplainer, LimeConfig>() {
+            @Override
+            protected boolean removeEldestEntry(Map.Entry<LimeExplainer, LimeConfig> eldest) {
+                return size() > Math.max(10, maxJobsExecuted);
+            }
+        };
         this.queue = new ConcurrentLinkedDeque<>();
     }
 
