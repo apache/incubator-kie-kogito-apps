@@ -76,6 +76,29 @@ class MatrixUtilsExtensionsTest {
             { 49., 64., 81. },
     };
 
+    double[][] matBatchMean = {
+            { 0., 0., 2., 2. },
+            { 10., 10., 10., 10. },
+            { 0., 0., 2., 2. },
+            { 10., 10., 10., 10. },
+            { 0., 0., 2., 2. },
+            { 10., 10., 10., 10. },
+            { 0., 0., 2., 2. },
+            { 10., 10., 10., 10. },
+    };
+
+    double[][] mat2BatchMean = {
+            { 5., 5., 6., 6. },
+            { 5., 5., 6., 6. },
+            { 5., 5., 6., 6. },
+            { 5., 5., 6., 6. },
+    };
+
+    double[][] mat4BatchMean = {
+            { 5., 5., 6., 6. },
+            { 5., 5., 6., 6. },
+    };
+
     double[] mssSumRow = { 12., 15., 18. };
 
     RealVector v = MatrixUtils.createRealVector(new double[] { 1, 2, 3 });
@@ -91,6 +114,7 @@ class MatrixUtilsExtensionsTest {
     RealVector vMix = MatrixUtils.createRealVector(new double[] { -3, -2, -1, 1, 2, 3 });
     RealVector allNeg = MatrixUtils.createRealVector(new double[] { -3, -2, -1 });
     RealVector varInput = MatrixUtils.createRealVector(new double[] { 0, 4, 16, 2, -128, -4 });
+    RealMatrix batchMean = MatrixUtils.createRealMatrix(matBatchMean);
 
     // === Matrix creation tests =======================================================================================
     // test creation of matrix from single PredictionInput
@@ -231,6 +255,12 @@ class MatrixUtilsExtensionsTest {
     @Test
     void matMap() {
         assertArrayEquals(matSquareSingularPow, MatrixUtilsExtensions.map(mssMatrix, x -> x * x).getData());
+    }
+
+    @Test
+    void matBatchMean() {
+        assertArrayEquals(mat2BatchMean, MatrixUtilsExtensions.batchRowMean(batchMean, 2).getData());
+        assertArrayEquals(mat4BatchMean, MatrixUtilsExtensions.batchRowMean(batchMean, 4).getData());
     }
 
     // Matrix Product tests ============================================================================================

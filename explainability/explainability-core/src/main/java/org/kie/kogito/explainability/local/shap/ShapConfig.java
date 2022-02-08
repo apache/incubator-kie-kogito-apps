@@ -50,7 +50,8 @@ public class ShapConfig {
     private final Executor executor;
     private final List<PredictionInput> background;
     private final RealMatrix backgroundMatrix;
-    private final long returnBufferSize;
+    private final int batchSize;
+    private final boolean batched;
 
     /**
      * Create a ShapConfig instance. This sets the configuration of the SHAP explainer.
@@ -73,7 +74,7 @@ public class ShapConfig {
      * @param nRegularizationFeatures: If desired, the exact number of top regularization features can be specified
      */
     protected ShapConfig(LinkType link, List<PredictionInput> background, PerturbationContext pc, Executor executor,
-            Integer nSamples, double confidence, RegularizerType regularizerType, long returnBufferSize, Integer nRegularizationFeatures) {
+            Integer nSamples, double confidence, RegularizerType regularizerType, int batchSize, Integer nRegularizationFeatures, boolean batched) {
         this.link = link;
         this.background = background;
         this.backgroundMatrix = MatrixUtilsExtensions.matrixFromPredictionInput(background);
@@ -82,7 +83,8 @@ public class ShapConfig {
         this.nSamples = nSamples;
         this.confidence = confidence;
         this.regularizerType = regularizerType;
-        this.returnBufferSize = returnBufferSize;
+        this.batchSize = batchSize;
+        this.batched = batched;
         this.nRegularizationFeatures = nRegularizationFeatures;
     }
 
@@ -102,7 +104,8 @@ public class ShapConfig {
         private RegularizerType builderRegularizerType = RegularizerType.AUTO;
         private Integer builderNRegularizerFeatures = null;
         private double builderConfidence = .95;
-        private long builderReturnBufferSize = 256;
+        private int builderBatchSize = 4;
+        private boolean builderFlag = false;
         private PerturbationContext builderPC = new PerturbationContext(new SecureRandom(), 0);
 
         private Builder() {
@@ -114,7 +117,7 @@ public class ShapConfig {
                     .withBackground(this.builderBackground)
                     .withExecutor(this.builderExecutor)
                     .withConfidence(this.builderConfidence)
-                    .withReturnBufferSize(this.builderReturnBufferSize)
+                    .withBatchSize(this.builderBatchSize)
                     .withPC(this.builderPC);
             output.builderRegularizerType = this.builderRegularizerType;
             output.builderNRegularizerFeatures = this.builderNRegularizerFeatures;
@@ -137,8 +140,16 @@ public class ShapConfig {
             return this;
         }
 
-        public Builder withReturnBufferSize(long returnBufferSize) {
-            this.builderReturnBufferSize = returnBufferSize;
+        public Builder withBatchSize(int batchSize) {
+            if (batchSize < 1) {
+                throw new IllegalArgumentException("Batch size must be greater than 0");
+            }
+            this.builderBatchSize = batchSize;
+            return this;
+        }
+
+        public Builder withBatched(boolean flag) {
+            this.builderFlag = flag;
             return this;
         }
 
@@ -250,7 +261,7 @@ public class ShapConfig {
                 throw new IllegalArgumentException("Background data list cannot be empty.");
             }
             return new ShapConfig(this.builderLink, this.builderBackground, this.builderPC, this.builderExecutor,
-                    this.builderNSamples, this.builderConfidence, this.builderRegularizerType, this.builderReturnBufferSize, this.builderNRegularizerFeatures);
+                    this.builderNSamples, this.builderConfidence, this.builderRegularizerType, this.builderBatchSize, this.builderNRegularizerFeatures, this.builderFlag);
         }
     }
 
@@ -289,8 +300,12 @@ public class ShapConfig {
         return this.regularizerType;
     }
 
-    public long getReturnBufferSize() {
-        return this.returnBufferSize;
+    public int getBatchSize() {
+        return this.batchSize;
+    }
+
+    public boolean isBatched() {
+        return this.batched;
     }
 
     public Integer getNRegularizationFeatures() {

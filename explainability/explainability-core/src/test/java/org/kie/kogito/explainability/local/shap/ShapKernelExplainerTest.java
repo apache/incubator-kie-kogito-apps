@@ -305,8 +305,9 @@ class ShapKernelExplainerTest {
     @Test
     void testLargeBackground() throws InterruptedException, TimeoutException, ExecutionException {
         // establish background data and desired data to explain
-        double[][] largeBackground = new double[100][10];
-        for (int i = 0; i < 100; i++) {
+        int nrows = 100;
+        double[][] largeBackground = new double[nrows][10];
+        for (int i = 0; i < nrows; i++) {
             for (int j = 0; j < 10; j++) {
                 largeBackground[i][j] = i / 100. + j;
             }
