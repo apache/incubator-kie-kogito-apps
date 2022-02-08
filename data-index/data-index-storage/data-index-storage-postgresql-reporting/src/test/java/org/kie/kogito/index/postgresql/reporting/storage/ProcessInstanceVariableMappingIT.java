@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.index.postgresql.reporting.storage;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -95,11 +94,10 @@ class ProcessInstanceVariableMappingIT {
         cache.put(pi1.getId(), pi1);
 
         @SuppressWarnings("unchecked")
-        final List<ProcessInstanceVariableExtract> results = Collections.checkedList(repository
+        final List<ProcessInstanceVariableExtract> results = repository
                 .getEntityManager()
                 .createNativeQuery(SQL, "ProcessInstanceVariableMappingMapping")
-                .getResultList(),
-                ProcessInstanceVariableExtract.class);
+                .getResultList();
 
         assertThat(results).hasSize(2);
         final ProcessInstanceVariableExtract row0 = results.get(0);
