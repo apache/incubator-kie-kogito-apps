@@ -68,7 +68,7 @@ class DecisionModelWrapper implements PredictionProvider {
                     Object result = decisionResult.getResult();
                     Value value = new Value(result);
                     Type type;
-                    if (result==null) {
+                    if (result == null) {
                         type = Type.TEXT;
                     } else {
                         if (result instanceof Boolean) {
