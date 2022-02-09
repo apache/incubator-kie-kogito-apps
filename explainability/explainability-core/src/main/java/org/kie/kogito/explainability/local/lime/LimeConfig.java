@@ -254,19 +254,11 @@ public class LimeConfig {
     }
 
     public LimeConfig copy() {
-        PerturbationContext newPC;
-        Optional<Long> seed = this.perturbationContext.getSeed();
-        newPC = seed.map(aLong -> new PerturbationContext(aLong,
-                this.perturbationContext.getRandom(),
-                this.perturbationContext.getNoOfPerturbations()))
-                .orElseGet(() -> new PerturbationContext(this.perturbationContext.getRandom(),
-                        this.perturbationContext.getNoOfPerturbations()));
-
         return new LimeConfig()
                 .withSeparableDatasetRatio(separableDatasetRatio)
                 .withSamples(noOfSamples)
                 .withRetries(noOfRetries)
-                .withPerturbationContext(newPC)
+                .withPerturbationContext(perturbationContext)
                 .withAdaptiveVariance(adaptDatasetVariance)
                 .withDataDistribution(dataDistribution)
                 .withPenalizeBalanceSparse(penalizeBalanceSparse)
@@ -274,8 +266,7 @@ public class LimeConfig {
                 .withProximityThreshold(proximityThreshold)
                 .withProximityFilteredDatasetMinimum(proximityFilteredDatasetMinimum)
                 .withProximityKernelWidth(proximityKernelWidth)
-                .withEncodingParams(new EncodingParams(encodingParams.getNumericTypeClusterGaussianFilterWidth(),
-                        encodingParams.getNumericTypeClusterThreshold()))
+                .withEncodingParams(encodingParams)
                 .withNormalizeWeights(normalizeWeights);
     }
 
