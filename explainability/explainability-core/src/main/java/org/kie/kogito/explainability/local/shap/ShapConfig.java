@@ -48,9 +48,9 @@ public class ShapConfig {
     private final double confidence;
     private final PerturbationContext pc;
     private final Executor executor;
-    private final List<PredictionInput> background;
-    private final RealMatrix backgroundMatrix;
-    private final int batchSize;
+    private List<PredictionInput> background;
+    private RealMatrix backgroundMatrix;
+    public int batchSize;
     private final boolean batched;
 
     /**
@@ -284,6 +284,11 @@ public class ShapConfig {
         return this.background;
     }
 
+    public void setBackground(List<PredictionInput> background) {
+        this.background = background;
+        this.backgroundMatrix = MatrixUtilsExtensions.matrixFromPredictionInput(this.background);
+    }
+
     public Executor getExecutor() {
         return this.executor;
     }
@@ -302,6 +307,10 @@ public class ShapConfig {
 
     public int getBatchSize() {
         return this.batchSize;
+    }
+
+    public void setBatchSize(int batchSize) {
+        this.batchSize = batchSize;
     }
 
     public boolean isBatched() {

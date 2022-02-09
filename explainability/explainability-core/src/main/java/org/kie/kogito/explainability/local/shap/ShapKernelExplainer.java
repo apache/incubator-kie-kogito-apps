@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ShapKernelExplainer implements LocalExplainer<ShapResults> {
     private static final Logger LOGGER = LoggerFactory.getLogger(ShapKernelExplainer.class);
-    private ShapConfig config;
+    public ShapConfig config;
 
     public ShapKernelExplainer(ShapConfig shapConfig) {
         this.config = shapConfig;
