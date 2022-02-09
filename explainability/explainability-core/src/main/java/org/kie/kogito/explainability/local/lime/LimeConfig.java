@@ -18,7 +18,6 @@ package org.kie.kogito.explainability.local.lime;
 import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.Objects;
-import java.util.Optional;
 
 import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.EncodingParams;
