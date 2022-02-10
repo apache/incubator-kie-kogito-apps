@@ -28,6 +28,7 @@ import org.kie.kogito.persistence.postgresql.reporting.model.JsonType;
 import org.kie.kogito.persistence.postgresql.reporting.model.PostgresField;
 import org.kie.kogito.persistence.postgresql.reporting.model.PostgresMapping;
 import org.kie.kogito.persistence.postgresql.reporting.model.PostgresMappingDefinition;
+import org.kie.kogito.persistence.postgresql.reporting.model.PostgresPartitionField;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -40,6 +41,7 @@ abstract class BaseSqlBuilderImplTest {
             "sourceTableName",
             "sourceTableJsonFieldName",
             List.of(new PostgresField("id", JsonType.STRING)),
+            List.of(new PostgresPartitionField("partition", JsonType.STRING, "chunk")),
             "targetTableName",
             List.of(new PostgresMapping("root",
                     new PostgresField("field1",
@@ -69,6 +71,9 @@ abstract class BaseSqlBuilderImplTest {
     @Mock
     private PostgresTriggerInsertSqlBuilder mockTriggerInsertSqlBuilder;
 
+    @Mock
+    private PostgresApplyMappingSqlBuilder mockApplyMappingSqlBuilder;
+
     protected BasePostgresDatabaseManagerImpl manager;
 
     @BeforeEach
@@ -76,7 +81,8 @@ abstract class BaseSqlBuilderImplTest {
         this.manager = new BasePostgresDatabaseManagerImpl(getIndexesBuilder(),
                 getTableBuilder(),
                 getTriggerDeleteBuilder(),
-                getTriggerInsertBuilder()) {
+                getTriggerInsertBuilder(),
+                getApplyMappingSqlBuilder()) {
             @Override
             protected EntityManager getEntityManager(final String sourceTableName) {
                 return entityManager;
@@ -98,6 +104,10 @@ abstract class BaseSqlBuilderImplTest {
 
     protected PostgresTriggerInsertSqlBuilder getTriggerInsertBuilder() {
         return mockTriggerInsertSqlBuilder;
+    }
+
+    protected PostgresApplyMappingSqlBuilder getApplyMappingSqlBuilder() {
+        return mockApplyMappingSqlBuilder;
     }
 
     protected abstract String getCreateSql(final PostgresContext context);
