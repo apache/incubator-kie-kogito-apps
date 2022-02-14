@@ -26,6 +26,7 @@ import java.util.stream.IntStream;
 import org.apache.arrow.memory.RootAllocator;
 import org.apache.arrow.vector.BitVector;
 import org.apache.arrow.vector.FieldVector;
+import org.apache.arrow.vector.Float4Vector;
 import org.apache.arrow.vector.Float8Vector;
 import org.apache.arrow.vector.IntVector;
 import org.apache.arrow.vector.VarCharVector;
@@ -66,6 +67,13 @@ public class ArrowConverters {
             int destinationCol = col;
             if (fv.getMinorType() == Types.MinorType.FLOAT8) {
                 Float8Vector castv = (Float8Vector) fv;
+                IntStream.range(0, rowCount).forEach(row -> outputBuffer[row][destinationCol] = new Output(
+                        fv.getName(),
+                        Type.NUMBER,
+                        new Value(castv.get(row)),
+                        1.0));
+            } else if (fv.getMinorType() == Types.MinorType.FLOAT4) {
+                Float4Vector castv = (Float4Vector) fv;
                 IntStream.range(0, rowCount).forEach(row -> outputBuffer[row][destinationCol] = new Output(
                         fv.getName(),
                         Type.NUMBER,

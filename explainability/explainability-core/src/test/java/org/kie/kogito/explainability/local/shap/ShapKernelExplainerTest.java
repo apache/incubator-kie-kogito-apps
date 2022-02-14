@@ -19,6 +19,7 @@ package org.kie.kogito.explainability.local.shap;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
@@ -717,5 +718,51 @@ class ShapKernelExplainerTest {
         assertTrue(Math.abs(predOut - actualOut) < 1e-6);
         double coefMSE = (data.getRowVector(100).ebeMultiply(modelWeights)).getDistance(explanations.getRowVector(0));
         assertTrue(coefMSE < .01);
+    }
+
+    @Test
+    void testBatched() throws ExecutionException, InterruptedException {
+        RealVector modelWeights = MatrixUtils.createRealMatrix(generateN(1, 25, "5021")).getRowVector(0);
+        PredictionProvider model = TestUtils.getLinearModel(modelWeights.toArray());
+        RealMatrix data = MatrixUtils.createRealMatrix(generateN(101, 25, "8629"));
+        List<PredictionInput> toExplain = createPIFromMatrix(data.getRowMatrix(100).getData());
+        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
+        RealVector predictionOutputVector = MatrixUtilsExtensions.vectorFromPredictionOutput(predictionOutputs.get(0));
+        Prediction p = new SimplePrediction(toExplain.get(0), predictionOutputs.get(0));
+        List<PredictionInput> bg = createPIFromMatrix(new double[100][25]);
+
+        ShapConfig.Builder skB = testConfig.copy()
+                .withBackground(bg)
+                .withNSamples(5000);
+
+
+        double[] non_batched_durations = new double[5];
+        for (int test=0; test<6; test++) {
+            long startTime = System.nanoTime();
+            ShapConfig sk = skB.copy().withBatched(false).build();
+            ShapKernelExplainer ske = new ShapKernelExplainer(sk);
+            ShapResults shapResults = ske.explainAsync(p, model).get();
+            long endTime = System.nanoTime();
+            if (test>0){
+                non_batched_durations[test-1] = (endTime - startTime) / 1e9;
+            }
+        }
+        String arraystr = Arrays.toString(non_batched_durations);
+        System.out.printf("java_nonbatched_durations=np.array(%s) %n", arraystr);
+
+        int nbatches = 75;
+        double[][] durations = new double[nbatches][5];
+        for (int batchSize = 1; batchSize < 1+nbatches; batchSize++) {
+            for (int test=0; test<5; test++) {
+                long startTime = System.nanoTime();
+                ShapConfig sk = skB.copy().withBatchSize(batchSize).build();
+                ShapKernelExplainer ske = new ShapKernelExplainer(sk);
+                ShapResults shapResults = ske.explainAsync(p, model).get();
+                long endTime = System.nanoTime();
+                durations[batchSize-1][test] = (endTime-startTime)/1e9;
+            }
+        }
+        arraystr = Arrays.deepToString(durations);
+        System.out.printf("java_batched_durations=np.array(%s) %n", arraystr);
     }
 }
