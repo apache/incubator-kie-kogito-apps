@@ -19,7 +19,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>persistence-commons-postgresql-reporting</artifactId>
+      <artifactId>persistence-commons-reporting-postgresql-base</artifactId>
     </dependency>
 
     <dependency>
