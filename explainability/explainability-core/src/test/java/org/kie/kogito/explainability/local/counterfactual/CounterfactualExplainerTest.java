@@ -85,13 +85,11 @@ class CounterfactualExplainerTest {
 
     private static final Logger logger =
             LoggerFactory.getLogger(CounterfactualExplainerTest.class);
+    private static final Long MAX_RUNNING_TIME_SECONDS = 60L;
     final long predictionTimeOut = 10L;
     final TimeUnit predictionTimeUnit = TimeUnit.MINUTES;
     final Long steps = 30_000L;
     final double DEFAULT_GOAL_THRESHOLD = 0.01;
-
-    private static final Long MAX_RUNNING_TIME_SECONDS = 60L;
-
     private Function<SolverConfig, SolverManager<CounterfactualSolution, UUID>> solverManagerFactory;
     private SolverManager<CounterfactualSolution, UUID> solverManager;
 
@@ -685,9 +683,8 @@ class CounterfactualExplainerTest {
 
         final List<Output> goal = new ArrayList<>();
 
-        List<Feature> features = List.of(FeatureFactory.newNumericalFeature("f-num1", 10.0));
-        List<FeatureDomain> featureBoundaries = List.of(NumericalFeatureDomain.create(0, 20));
-        List<Boolean> constraints = List.of(false);
+        List<Feature> features = List.of(FeatureFactory.newNumericalFeature("f-num1", 10.0,
+                NumericalFeatureDomain.create(0, 20)));
 
         PredictionProvider model = TestUtils.getFeaturePassModel(0);
 
@@ -747,9 +744,9 @@ class CounterfactualExplainerTest {
 
         final List<Output> goal = new ArrayList<>();
 
-        List<Feature> features = List.of(FeatureFactory.newNumericalFeature("f-num1", 10.0));
-        List<FeatureDomain> featureBoundaries = List.of(NumericalFeatureDomain.create(0, 20));
-        List<Boolean> constraints = List.of(false);
+        List<Feature> features = List.of(
+                FeatureFactory.newNumericalFeature("f-num1", 10.0,
+                        NumericalFeatureDomain.create(0, 20)));
 
         PredictionProvider model = TestUtils.getFeaturePassModel(0);
 
