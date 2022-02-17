@@ -34,13 +34,13 @@ Map getMultijobPRConfig(boolean isNative = false) {
                     // As we have only Community edition
                     DISABLE_SONARCLOUD: !Utils.isMainBranch(this),
                     ADDITIONAL_TIMEOUT: isNative ? '360' : '210',
-                ], [
-                    id: 'kogito-examples',
-                    dependsOn: 'kogito-apps',
-                    repository: 'kogito-examples',
-                    env : [
-                        BUILD_MVN_OPTS_CURRENT: isNative ? "-Pkogito-apps-downstream-native ${KogitoConstants.DEFAULT_NATIVE_CONTAINER_PARAMS}" : "-Pkogito-apps-downstream"
-                    ]
+                ]
+            ], [
+                id: 'kogito-examples',
+                dependsOn: 'kogito-apps',
+                repository: 'kogito-examples',
+                env : [
+                    BUILD_MVN_OPTS_CURRENT: isNative ? "-Pkogito-apps-downstream-native ${KogitoConstants.DEFAULT_NATIVE_CONTAINER_PARAMS}" : "-Pkogito-apps-downstream"
                 ]
             ]
         ]
