@@ -14,7 +14,7 @@
   <packaging>pom</packaging>
 
   <name>Kogito Apps</name>
-  <description>Kogito Apps</description>
+  <description>Kogito Apps </description>
 
   <profiles>
     <profile>
