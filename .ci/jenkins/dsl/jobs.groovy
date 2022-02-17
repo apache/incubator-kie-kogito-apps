@@ -1,5 +1,6 @@
 import org.kie.jenkins.jobdsl.templates.KogitoJobTemplate
 import org.kie.jenkins.jobdsl.FolderUtils
+import org.kie.jenkins.jobdsl.KogitoConstants
 import org.kie.jenkins.jobdsl.Utils
 import org.kie.jenkins.jobdsl.KogitoJobType
 
@@ -36,7 +37,10 @@ Map getMultijobPRConfig(boolean isNative = false) {
                 ], [
                     id: 'kogito-examples',
                     dependsOn: 'kogito-apps',
-                    repository: 'kogito-examples'
+                    repository: 'kogito-examples',
+                    env : [
+                        BUILD_MVN_OPTS_CURRENT: isNative ? "-Pkogito-apps-downstream-native ${KogitoConstants.DEFAULT_NATIVE_CONTAINER_PARAMS}" : "-Pkogito-apps-downstream"
+                    ]
                 ]
             ]
         ]
