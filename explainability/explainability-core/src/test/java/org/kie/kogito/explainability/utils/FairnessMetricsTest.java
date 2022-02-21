@@ -50,7 +50,7 @@ class FairnessMetricsTest {
         List<PredictionInput> testInputs = getTestInputs();
         DataDistribution dataDistribution = new PredictionInputsDataDistribution(testInputs);
         PredictionProvider model = TestUtils.getDummyTextClassifier();
-        double individualConsistency = FairnessMetrics.individualConsistency(proximityFunction, dataDistribution, model);
+        double individualConsistency = FairnessMetrics.individualConsistency(proximityFunction, dataDistribution.getAllSamples(), model);
         assertThat(individualConsistency).isBetween(0d, 1d);
     }
 
