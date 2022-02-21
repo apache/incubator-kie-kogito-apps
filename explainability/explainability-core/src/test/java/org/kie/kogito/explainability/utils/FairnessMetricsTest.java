@@ -52,7 +52,7 @@ class FairnessMetricsTest {
         List<PredictionInput> testInputs = getTestInputs();
         PredictionProvider model = TestUtils.getDummyTextClassifier();
         double individualConsistency = FairnessMetrics.individualConsistency(proximityFunction, testInputs, model);
-        assertThat(individualConsistency).isBetween(-1d, 1d);
+        assertThat(individualConsistency).isBetween(0d, 1d);
     }
 
     @Test
@@ -62,7 +62,7 @@ class FairnessMetricsTest {
         Predicate<PredictionInput> selector = predictionInput -> DataUtils.textify(predictionInput).contains("please");
         Output output = new Output("spam", Type.BOOLEAN, new Value(false), 1.0);
         double spd = FairnessMetrics.groupStatisticalParityDifference(selector, testInputs, model, output);
-        assertThat(spd).isBetween(0d, 1d);
+        assertThat(spd).isBetween(-1d, 1d);
     }
 
     @Test
