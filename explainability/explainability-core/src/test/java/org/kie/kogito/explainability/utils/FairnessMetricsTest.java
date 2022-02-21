@@ -22,17 +22,19 @@ import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
-import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
+import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
-import org.kie.kogito.explainability.model.PredictionInputsDataDistribution;
 import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.Value;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -48,10 +50,29 @@ class FairnessMetricsTest {
                     .collect(Collectors.toList()).subList(1, 3);
         };
         List<PredictionInput> testInputs = getTestInputs();
-        DataDistribution dataDistribution = new PredictionInputsDataDistribution(testInputs);
         PredictionProvider model = TestUtils.getDummyTextClassifier();
-        double individualConsistency = FairnessMetrics.individualConsistency(proximityFunction, dataDistribution.getAllSamples(), model);
-        assertThat(individualConsistency).isBetween(0d, 1d);
+        double individualConsistency = FairnessMetrics.individualConsistency(proximityFunction, testInputs, model);
+        assertThat(individualConsistency).isBetween(-1d, 1d);
+    }
+
+    @Test
+    void testGroupSPDTextClassifier() throws ExecutionException, InterruptedException {
+        List<PredictionInput> testInputs = getTestInputs();
+        PredictionProvider model = TestUtils.getDummyTextClassifier();
+        Predicate<PredictionInput> selector = predictionInput -> DataUtils.textify(predictionInput).contains("please");
+        Output output = new Output("spam", Type.BOOLEAN, new Value(false), 1.0);
+        double spd = FairnessMetrics.groupStatisticalParityDifference(selector, testInputs, model, output);
+        assertThat(spd).isBetween(0d, 1d);
+    }
+
+    @Test
+    void testGroupDIRTextClassifier() throws ExecutionException, InterruptedException {
+        List<PredictionInput> testInputs = getTestInputs();
+        PredictionProvider model = TestUtils.getDummyTextClassifier();
+        Predicate<PredictionInput> selector = predictionInput -> DataUtils.textify(predictionInput).contains("please");
+        Output output = new Output("spam", Type.BOOLEAN, new Value(false), 1.0);
+        double dir = FairnessMetrics.groupDisparateImpactRatio(selector, testInputs, model, output);
+        assertThat(dir).isGreaterThan(0);
     }
 
     private List<PredictionInput> getTestInputs() {

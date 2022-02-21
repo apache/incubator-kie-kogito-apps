@@ -74,7 +74,7 @@ public class FairnessMetrics {
      * @throws ExecutionException if any error occurs during model prediction
      * @throws InterruptedException if timeout or other interruption issues occur during model prediction
      */
-    public double groupStatisticalParityDifference(Predicate<PredictionInput> groupSelector, List<PredictionInput> samples,
+    public static double groupStatisticalParityDifference(Predicate<PredictionInput> groupSelector, List<PredictionInput> samples,
                                                    PredictionProvider model, Output favorableOutput)
             throws ExecutionException, InterruptedException {
 
@@ -95,7 +95,7 @@ public class FairnessMetrics {
      * @throws ExecutionException if any error occurs during model prediction
      * @throws InterruptedException if timeout or other interruption issues occur during model prediction
      */
-    public double groupDisparateImpactRatio(Predicate<PredictionInput> groupSelector, List<PredictionInput> samples,
+    public static double groupDisparateImpactRatio(Predicate<PredictionInput> groupSelector, List<PredictionInput> samples,
                                                    PredictionProvider model, Output favorableOutput)
             throws ExecutionException, InterruptedException {
 
