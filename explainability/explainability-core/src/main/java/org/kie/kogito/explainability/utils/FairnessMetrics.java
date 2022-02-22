@@ -15,14 +15,18 @@
  */
 package org.kie.kogito.explainability.utils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.function.BiFunction;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
+import org.kie.kogito.explainability.model.Dataset;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
@@ -110,14 +114,85 @@ public class FairnessMetrics {
         String outputName = favorableOutput.getName();
         Value outputValue = favorableOutput.getValue();
 
-        List<PredictionInput> selected = samples.stream().filter(groupSelector).collect(Collectors.toList());
-
-        List<PredictionOutput> selectedOutputs = model.predictAsync(selected).get();
+        List<PredictionOutput> selectedOutputs = getSelectedPredictionOutputs(groupSelector, samples, model);
 
         double numSelected = selectedOutputs.size();
         long numFavorableSelected = selectedOutputs.stream().map(po -> po.getByName(outputName)).map(Optional::get)
                 .filter(o -> o.getValue().equals(outputValue)).count();
 
         return numFavorableSelected / numSelected;
+    }
+
+    private static List<PredictionOutput> getSelectedPredictionOutputs(Predicate<PredictionInput> groupSelector, List<PredictionInput> samples, PredictionProvider model) throws InterruptedException, ExecutionException {
+        List<PredictionInput> selected = samples.stream().filter(groupSelector).collect(Collectors.toList());
+
+        return model.predictAsync(selected).get();
+    }
+
+    public static double groupAverageOddsDifference(Predicate<PredictionInput> inputSelector,
+                                                    Predicate<PredictionOutput> outputSelector, Dataset dataset,
+                                                    PredictionProvider model)
+            throws ExecutionException, InterruptedException {
+
+        // split in two groups priv vs unpriv
+        // in unpriv count true favorable and false unfavorable
+        // in priv count true favorable and false unfavorable
+        // in unpriv count false favorable and true unfavorable
+        // in priv count false favorable and true unfavorable
+
+        Dataset privileged = dataset.filterByInput(inputSelector);
+        Dataset unprivileged = dataset.filterByInput(inputSelector.negate());
+
+        List<PredictionInput> privilegedInputs = privileged.getInputs();
+        Map<String, Integer> privilegedCounts = count(privileged, model.predictAsync(privilegedInputs).get(), outputSelector);
+
+        List<PredictionInput> unprivilegedInputs = unprivileged.getInputs();
+        Map<String, Integer> unprivilegedCounts = count(unprivileged, model.predictAsync(unprivilegedInputs).get(), outputSelector);
+
+        double utp = unprivilegedCounts.get("tp");
+        double utn = unprivilegedCounts.get("tn");
+        double ufp = unprivilegedCounts.get("fp");
+        double ufn = unprivilegedCounts.get("fn");
+
+        double ptp = privilegedCounts.get("tp");
+        double ptn = privilegedCounts.get("tn");
+        double pfp = privilegedCounts.get("fp");
+        double pfn = privilegedCounts.get("fn");
+
+        return (utp / (utp + ufn) - ptp / (ptp + pfn + 1e-10)) / 2d + (ufp / (ufp + utn) - pfp / (pfp + ptn + 1e-10)) / 2;
+    }
+
+    private static Map<String, Integer> count(Dataset dataset, List<PredictionOutput> predictionOutputs,
+                                              Predicate<PredictionOutput> outputSelector) {
+        assert predictionOutputs.size() == dataset.getData().size() : "dataset and predictions must have same size";
+        int tp = 0;
+        int tn = 0;
+        int fp = 0;
+        int fn = 0;
+        int i = 0;
+        for (Prediction trainingExample : dataset.getData()) {
+            if (outputSelector.test(trainingExample.getOutput())) {
+                // positive
+                if (outputSelector.test(predictionOutputs.get(i))) {
+                    tp++;
+                } else {
+                    fn++;
+                }
+            } else {
+                // negative
+                if (outputSelector.test(predictionOutputs.get(i))) {
+                    fp++;
+                } else {
+                    tn++;
+                }
+            }
+            i++;
+        }
+        Map<String, Integer> map = new HashMap<>();
+        map.put("tp", tp);
+        map.put("tn", tn);
+        map.put("fp", fp);
+        map.put("fn", fn);
+        return map;
     }
 }

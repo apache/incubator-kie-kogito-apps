@@ -28,11 +28,15 @@ import java.util.stream.Collectors;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.TestUtils;
+import org.kie.kogito.explainability.model.Dataset;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureFactory;
 import org.kie.kogito.explainability.model.Output;
+import org.kie.kogito.explainability.model.Prediction;
 import org.kie.kogito.explainability.model.PredictionInput;
+import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.PredictionProvider;
+import org.kie.kogito.explainability.model.SimplePrediction;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
@@ -75,6 +79,17 @@ class FairnessMetricsTest {
         assertThat(dir).isGreaterThan(0);
     }
 
+    @Test
+    void testGroupAODTextClassifier() throws ExecutionException, InterruptedException {
+        List<Prediction> predictions = getTestData();
+        Dataset dataset = new Dataset(predictions);
+        PredictionProvider model = TestUtils.getDummyTextClassifier();
+        Predicate<PredictionInput> inputSelector = predictionInput -> DataUtils.textify(predictionInput).contains("please");
+        Predicate<PredictionOutput> outputSelector = predictionOutput -> predictionOutput.getByName("spam").get().getValue().asNumber() == 0;
+        double aod = FairnessMetrics.groupAverageOddsDifference(inputSelector, outputSelector, dataset, model);
+        assertThat(aod).isBetween(-1d, 1d);
+    }
+
     private List<PredictionInput> getTestInputs() {
         List<PredictionInput> inputs = new ArrayList<>();
         Function<String, List<String>> tokenizer = s -> Arrays.asList(s.split(" ").clone());
@@ -115,5 +130,56 @@ class FairnessMetricsTest {
         features.add(FeatureFactory.newFulltextFeature("text", "we stole your password, if you want it back, send some money .", tokenizer));
         inputs.add(new PredictionInput(features));
         return inputs;
+    }
+
+    private List<Prediction> getTestData() {
+        List<Prediction> data = new ArrayList<>();
+        Function<String, List<String>> tokenizer = s -> Arrays.asList(s.split(" ").clone());
+        List<Feature> features = new ArrayList<>();
+        features.add(FeatureFactory.newFulltextFeature("subject", "urgent inquiry", tokenizer));
+        features.add(FeatureFactory.newFulltextFeature("text", "please give me some money", tokenizer));
+        Output output = new Output("spam", Type.BOOLEAN, new Value(true), 1);
+        data.add(new SimplePrediction(new PredictionInput(features),new PredictionOutput(List.of(output))));
+        features = new ArrayList<>();
+        features.add(FeatureFactory.newFulltextFeature("subject", "do not reply", tokenizer));
+        features.add(FeatureFactory.newFulltextFeature("text", "if you asked to reset your password, ignore this", tokenizer));
+        output = new Output("spam", Type.BOOLEAN, new Value(false), 1);
+        data.add(new SimplePrediction(new PredictionInput(features),new PredictionOutput(List.of(output))));
+        features = new ArrayList<>();
+        features.add(FeatureFactory.newFulltextFeature("subject", "please reply", tokenizer));
+        features.add(FeatureFactory.newFulltextFeature("text", "we got money matter! please reply", tokenizer));
+        output = new Output("spam", Type.BOOLEAN, new Value(true), 1);
+        data.add(new SimplePrediction(new PredictionInput(features),new PredictionOutput(List.of(output))));
+        features = new ArrayList<>();
+        features.add(FeatureFactory.newFulltextFeature("subject", "inquiry", tokenizer));
+        features.add(FeatureFactory.newFulltextFeature("text", "would you like to get a 100% secure way to invest your money?", tokenizer));
+        output = new Output("spam", Type.BOOLEAN, new Value(true), 1);
+        data.add(new SimplePrediction(new PredictionInput(features),new PredictionOutput(List.of(output))));
+        features = new ArrayList<>();
+        features.add(FeatureFactory.newFulltextFeature("subject", "clear some space", tokenizer));
+        features.add(FeatureFactory.newFulltextFeature("text", "you just finished your space, upgrade today for 1 $ a week", tokenizer));
+        output = new Output("spam", Type.BOOLEAN, new Value(false), 1);
+        data.add(new SimplePrediction(new PredictionInput(features),new PredictionOutput(List.of(output))));
+        features = new ArrayList<>();
+        features.add(FeatureFactory.newFulltextFeature("subject", "prize waiting", tokenizer));
+        features.add(FeatureFactory.newFulltextFeature("text", "you are the lucky winner of a 100k $ prize", tokenizer));
+        output = new Output("spam", Type.BOOLEAN, new Value(true), 1);
+        data.add(new SimplePrediction(new PredictionInput(features),new PredictionOutput(List.of(output))));
+        features = new ArrayList<>();
+        features.add(FeatureFactory.newFulltextFeature("subject", "urgent matter", tokenizer));
+        features.add(FeatureFactory.newFulltextFeature("text", "we got an urgent inquiry for you to answer.", tokenizer));
+        output = new Output("spam", Type.BOOLEAN, new Value(true), 1);
+        data.add(new SimplePrediction(new PredictionInput(features),new PredictionOutput(List.of(output))));
+        features = new ArrayList<>();
+        features.add(FeatureFactory.newFulltextFeature("subject", "password change", tokenizer));
+        features.add(FeatureFactory.newFulltextFeature("text", "you just requested to change your password", tokenizer));
+        output = new Output("spam", Type.BOOLEAN, new Value(false), 1);
+        data.add(new SimplePrediction(new PredictionInput(features),new PredictionOutput(List.of(output))));
+        features = new ArrayList<>();
+        features.add(FeatureFactory.newFulltextFeature("subject", "password stolen", tokenizer));
+        features.add(FeatureFactory.newFulltextFeature("text", "we stole your password, if you want it back, send some money .", tokenizer));
+        output = new Output("spam", Type.BOOLEAN, new Value(true), 1);
+        data.add(new SimplePrediction(new PredictionInput(features),new PredictionOutput(List.of(output))));
+        return data;
     }
 }
