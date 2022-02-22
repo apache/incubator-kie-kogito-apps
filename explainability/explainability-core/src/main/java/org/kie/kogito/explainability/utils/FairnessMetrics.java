@@ -150,10 +150,10 @@ public class FairnessMetrics {
         Dataset unprivileged = dataset.filterByInput(inputSelector.negate());
 
         List<PredictionInput> privilegedInputs = privileged.getInputs();
-        Map<String, Integer> privilegedCounts = count(privileged, model.predictAsync(privilegedInputs).get(), outputSelector);
+        Map<String, Integer> privilegedCounts = countMatchingOutputSelector(privileged, model.predictAsync(privilegedInputs).get(), outputSelector);
 
         List<PredictionInput> unprivilegedInputs = unprivileged.getInputs();
-        Map<String, Integer> unprivilegedCounts = count(unprivileged, model.predictAsync(unprivilegedInputs).get(), outputSelector);
+        Map<String, Integer> unprivilegedCounts = countMatchingOutputSelector(unprivileged, model.predictAsync(unprivilegedInputs).get(), outputSelector);
 
         double utp = unprivilegedCounts.get("tp");
         double utn = unprivilegedCounts.get("tn");
@@ -168,7 +168,15 @@ public class FairnessMetrics {
         return (utp / (utp + ufn) - ptp / (ptp + pfn + 1e-10)) / 2d + (ufp / (ufp + utn) - pfp / (pfp + ptn + 1e-10)) / 2;
     }
 
-    private static Map<String, Integer> count(Dataset dataset, List<PredictionOutput> predictionOutputs,
+    /**
+     * Count true / false favorable and true / false unfavorable outputs with respect to a specified output selector.
+     * 
+     * @param dataset dataset used to match predictions with labels
+     * @param predictionOutputs predictions to match with the dataset labels
+     * @param outputSelector selector to define positive labelled samples / predictions
+     * @return a map containing counts for true positives ("tp"), true negatives ("tn"), false positives ("fp"), false negatives ("fn")
+     */
+    private static Map<String, Integer> countMatchingOutputSelector(Dataset dataset, List<PredictionOutput> predictionOutputs,
             Predicate<PredictionOutput> outputSelector) {
         assert predictionOutputs.size() == dataset.getData().size() : "dataset and predictions must have same size";
         int tp = 0;
