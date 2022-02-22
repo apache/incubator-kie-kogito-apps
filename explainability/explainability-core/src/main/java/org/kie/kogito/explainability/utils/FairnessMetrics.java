@@ -231,12 +231,14 @@ public class FairnessMetrics {
 
         double utp = unprivilegedCounts.get("tp");
         double utn = unprivilegedCounts.get("tn");
+        double ufp = unprivilegedCounts.get("fp");
         double ufn = unprivilegedCounts.get("fn");
 
         double ptp = privilegedCounts.get("tp");
         double ptn = privilegedCounts.get("tn");
+        double pfp = privilegedCounts.get("fp");
         double pfn = privilegedCounts.get("fn");
 
-        return (utp / (utp + ufn) - ptp / (ptp + pfn + 1e-10)) / 2d + (ufn / (ufn + utn) - pfn / (pfn + ptn + 1e-10)) / 2;
+        return (utp / (utp + ufp) - ptp / (ptp + pfp + 1e-10)) / 2d + (ufn / (ufn + utn) - pfn / (pfn + ptn + 1e-10)) / 2;
     }
 }
