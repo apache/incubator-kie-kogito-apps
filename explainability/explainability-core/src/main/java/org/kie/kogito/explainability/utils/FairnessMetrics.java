@@ -34,6 +34,8 @@ import org.kie.kogito.explainability.model.Value;
 
 public class FairnessMetrics {
 
+    private FairnessMetrics() {}
+
     /**
      * Calculate individual fairness in terms of consistency of predictions across similar inputs.
      *
@@ -56,10 +58,8 @@ public class FairnessMetrics {
                 Value originalValue = output.getValue();
                 for (PredictionOutput neighborOutput : neighborsOutputs) {
                     Output currentOutput = neighborOutput.getByName(output.getName()).orElse(null);
-                    if (currentOutput != null) {
-                        if (!originalValue.equals(currentOutput.getValue())) {
-                            consistency -= 1f / (neighbors.size() * predictionOutput.getOutputs().size() * samples.size());
-                        }
+                    if (currentOutput != null && !originalValue.equals(currentOutput.getValue())) {
+                        consistency -= 1f / (neighbors.size() * predictionOutput.getOutputs().size() * samples.size());
                     }
                 }
             }

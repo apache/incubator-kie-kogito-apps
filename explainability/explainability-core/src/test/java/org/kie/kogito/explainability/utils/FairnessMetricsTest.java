@@ -76,7 +76,7 @@ class FairnessMetricsTest {
         Predicate<PredictionInput> selector = predictionInput -> DataUtils.textify(predictionInput).contains("please");
         Output output = new Output("spam", Type.BOOLEAN, new Value(false), 1.0);
         double dir = FairnessMetrics.groupDisparateImpactRatio(selector, testInputs, model, output);
-        assertThat(dir).isGreaterThan(0);
+        assertThat(dir).isPositive();
     }
 
     @Test
