@@ -38,7 +38,7 @@ class DatasetTest {
     void testNotEmpty() {
         List<Prediction> predictions = new ArrayList<>();
         predictions.add(new SimplePrediction(new PredictionInput(List.of(TestUtils.getMockedNumericFeature())),
-                                             new PredictionOutput(List.of(new Output("name", Type.UNDEFINED)))));
+                new PredictionOutput(List.of(new Output("name", Type.UNDEFINED)))));
         Dataset dataset = new Dataset(predictions);
         assertThat(dataset.getData()).isNotEmpty();
         assertThat(dataset.getInputs()).isNotEmpty();
@@ -49,7 +49,7 @@ class DatasetTest {
     void testInputFilter() {
         List<Prediction> predictions = new ArrayList<>();
         predictions.add(new SimplePrediction(new PredictionInput(List.of(TestUtils.getMockedNumericFeature())),
-                                             new PredictionOutput(List.of(new Output("name", Type.UNDEFINED)))));
+                new PredictionOutput(List.of(new Output("name", Type.UNDEFINED)))));
         Dataset filteredDataset1 = new Dataset(predictions).filterByInput(pi -> pi.getFeatures().size() == 1);
         assertThat(filteredDataset1.getData()).isNotEmpty();
         assertThat(filteredDataset1.getInputs()).isNotEmpty();
@@ -65,7 +65,7 @@ class DatasetTest {
     void testOutFilter() {
         List<Prediction> predictions = new ArrayList<>();
         predictions.add(new SimplePrediction(new PredictionInput(List.of(TestUtils.getMockedNumericFeature())),
-                                             new PredictionOutput(List.of(new Output("name", Type.UNDEFINED)))));
+                new PredictionOutput(List.of(new Output("name", Type.UNDEFINED)))));
         Dataset filteredDataset1 = new Dataset(predictions).filterByOutput(po -> po.getOutputs().size() == 1);
         assertThat(filteredDataset1.getData()).isNotEmpty();
         assertThat(filteredDataset1.getInputs()).isNotEmpty();
@@ -76,6 +76,5 @@ class DatasetTest {
         assertThat(filteredDataset2.getInputs()).isEmpty();
         assertThat(filteredDataset2.getOutputs()).isEmpty();
     }
-
 
 }

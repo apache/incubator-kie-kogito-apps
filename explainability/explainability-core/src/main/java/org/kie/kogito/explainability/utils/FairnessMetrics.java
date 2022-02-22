@@ -45,7 +45,7 @@ public class FairnessMetrics {
      * @throws InterruptedException if timeout or other interruption issues occur during model prediction
      */
     public static double individualConsistency(BiFunction<PredictionInput, List<PredictionInput>, List<PredictionInput>> proximityFunction,
-                                               List<PredictionInput> samples, PredictionProvider predictionProvider) throws ExecutionException, InterruptedException {
+            List<PredictionInput> samples, PredictionProvider predictionProvider) throws ExecutionException, InterruptedException {
         double consistency = 1;
         for (PredictionInput input : samples) {
             List<PredictionOutput> predictionOutputs = predictionProvider.predictAsync(List.of(input)).get();
@@ -79,7 +79,7 @@ public class FairnessMetrics {
      * @throws InterruptedException if timeout or other interruption issues occur during model prediction
      */
     public static double groupStatisticalParityDifference(Predicate<PredictionInput> groupSelector, List<PredictionInput> samples,
-                                                   PredictionProvider model, Output favorableOutput)
+            PredictionProvider model, Output favorableOutput)
             throws ExecutionException, InterruptedException {
 
         double probabilityUnprivileged = getFavorableLabelProbability(groupSelector.negate(), samples, model, favorableOutput);
@@ -100,7 +100,7 @@ public class FairnessMetrics {
      * @throws InterruptedException if timeout or other interruption issues occur during model prediction
      */
     public static double groupDisparateImpactRatio(Predicate<PredictionInput> groupSelector, List<PredictionInput> samples,
-                                                   PredictionProvider model, Output favorableOutput)
+            PredictionProvider model, Output favorableOutput)
             throws ExecutionException, InterruptedException {
 
         double probabilityUnprivileged = getFavorableLabelProbability(groupSelector.negate(), samples, model, favorableOutput);
@@ -110,7 +110,7 @@ public class FairnessMetrics {
     }
 
     private static double getFavorableLabelProbability(Predicate<PredictionInput> groupSelector, List<PredictionInput> samples,
-                                                       PredictionProvider model, Output favorableOutput) throws ExecutionException, InterruptedException {
+            PredictionProvider model, Output favorableOutput) throws ExecutionException, InterruptedException {
         String outputName = favorableOutput.getName();
         Value outputValue = favorableOutput.getValue();
 
@@ -123,15 +123,27 @@ public class FairnessMetrics {
         return numFavorableSelected / numSelected;
     }
 
-    private static List<PredictionOutput> getSelectedPredictionOutputs(Predicate<PredictionInput> groupSelector, List<PredictionInput> samples, PredictionProvider model) throws InterruptedException, ExecutionException {
+    private static List<PredictionOutput> getSelectedPredictionOutputs(Predicate<PredictionInput> groupSelector, List<PredictionInput> samples, PredictionProvider model)
+            throws InterruptedException, ExecutionException {
         List<PredictionInput> selected = samples.stream().filter(groupSelector).collect(Collectors.toList());
 
         return model.predictAsync(selected).get();
     }
 
+    /**
+     * Calculate average odds difference.
+     *
+     * @param inputSelector selector for privileged group
+     * @param outputSelector selector for favorable label
+     * @param dataset dataset used to evaluate AOD
+     * @param model model to be evaluated fairness-wise
+     * @return average odds difference value
+     * @throws ExecutionException if any error occurs during model prediction
+     * @throws InterruptedException if timeout or other interruption issues occur during model prediction
+     */
     public static double groupAverageOddsDifference(Predicate<PredictionInput> inputSelector,
-                                                    Predicate<PredictionOutput> outputSelector, Dataset dataset,
-                                                    PredictionProvider model)
+            Predicate<PredictionOutput> outputSelector, Dataset dataset,
+            PredictionProvider model)
             throws ExecutionException, InterruptedException {
 
         Dataset privileged = dataset.filterByInput(inputSelector);
@@ -157,7 +169,7 @@ public class FairnessMetrics {
     }
 
     private static Map<String, Integer> count(Dataset dataset, List<PredictionOutput> predictionOutputs,
-                                              Predicate<PredictionOutput> outputSelector) {
+            Predicate<PredictionOutput> outputSelector) {
         assert predictionOutputs.size() == dataset.getData().size() : "dataset and predictions must have same size";
         int tp = 0;
         int tn = 0;
