@@ -147,13 +147,10 @@ public class FairnessMetrics {
             throws ExecutionException, InterruptedException {
 
         Dataset privileged = dataset.filterByInput(inputSelector);
+        Map<String, Integer> privilegedCounts = countMatchingOutputSelector(privileged, model.predictAsync(privileged.getInputs()).get(), outputSelector);
+
         Dataset unprivileged = dataset.filterByInput(inputSelector.negate());
-
-        List<PredictionInput> privilegedInputs = privileged.getInputs();
-        Map<String, Integer> privilegedCounts = countMatchingOutputSelector(privileged, model.predictAsync(privilegedInputs).get(), outputSelector);
-
-        List<PredictionInput> unprivilegedInputs = unprivileged.getInputs();
-        Map<String, Integer> unprivilegedCounts = countMatchingOutputSelector(unprivileged, model.predictAsync(unprivilegedInputs).get(), outputSelector);
+        Map<String, Integer> unprivilegedCounts = countMatchingOutputSelector(unprivileged, model.predictAsync(unprivileged.getInputs()).get(), outputSelector);
 
         double utp = unprivilegedCounts.get("tp");
         double utn = unprivilegedCounts.get("tn");
@@ -208,5 +205,38 @@ public class FairnessMetrics {
         map.put("fp", fp);
         map.put("fn", fn);
         return map;
+    }
+
+    /**
+     * Calculate average predictive value difference.
+     *
+     * @param inputSelector selector for privileged group
+     * @param outputSelector selector for favorable label
+     * @param dataset dataset used to evaluate AOD
+     * @param model model to be evaluated fairness-wise
+     * @return average predictive value difference
+     * @throws ExecutionException if any error occurs during model prediction
+     * @throws InterruptedException if timeout or other interruption issues occur during model prediction
+     */
+    public static double groupAveragePredictiveValueDifference(Predicate<PredictionInput> inputSelector,
+            Predicate<PredictionOutput> outputSelector, Dataset dataset,
+            PredictionProvider model)
+            throws ExecutionException, InterruptedException {
+
+        Dataset privileged = dataset.filterByInput(inputSelector);
+        Map<String, Integer> privilegedCounts = countMatchingOutputSelector(privileged, model.predictAsync(privileged.getInputs()).get(), outputSelector);
+
+        Dataset unprivileged = dataset.filterByInput(inputSelector.negate());
+        Map<String, Integer> unprivilegedCounts = countMatchingOutputSelector(unprivileged, model.predictAsync(unprivileged.getInputs()).get(), outputSelector);
+
+        double utp = unprivilegedCounts.get("tp");
+        double utn = unprivilegedCounts.get("tn");
+        double ufn = unprivilegedCounts.get("fn");
+
+        double ptp = privilegedCounts.get("tp");
+        double ptn = privilegedCounts.get("tn");
+        double pfn = privilegedCounts.get("fn");
+
+        return (utp / (utp + ufn) - ptp / (ptp + pfn + 1e-10)) / 2d + (ufn / (ufn + utn) - pfn / (pfn + ptn + 1e-10)) / 2;
     }
 }

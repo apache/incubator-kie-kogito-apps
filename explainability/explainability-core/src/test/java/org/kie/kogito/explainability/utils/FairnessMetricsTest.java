@@ -90,6 +90,17 @@ class FairnessMetricsTest {
         assertThat(aod).isBetween(-1d, 1d);
     }
 
+    @Test
+    void testGroupAPVDTextClassifier() throws ExecutionException, InterruptedException {
+        List<Prediction> predictions = getTestData();
+        Dataset dataset = new Dataset(predictions);
+        PredictionProvider model = TestUtils.getDummyTextClassifier();
+        Predicate<PredictionInput> inputSelector = predictionInput -> DataUtils.textify(predictionInput).contains("please");
+        Predicate<PredictionOutput> outputSelector = predictionOutput -> predictionOutput.getByName("spam").get().getValue().asNumber() == 0;
+        double apvd = FairnessMetrics.groupAveragePredictiveValueDifference(inputSelector, outputSelector, dataset, model);
+        assertThat(apvd).isBetween(-1d, 1d);
+    }
+
     private List<PredictionInput> getTestInputs() {
         List<PredictionInput> inputs = new ArrayList<>();
         Function<String, List<String>> tokenizer = s -> Arrays.asList(s.split(" ").clone());
