@@ -134,12 +134,6 @@ public class FairnessMetrics {
                                                     PredictionProvider model)
             throws ExecutionException, InterruptedException {
 
-        // split in two groups priv vs unpriv
-        // in unpriv count true favorable and false unfavorable
-        // in priv count true favorable and false unfavorable
-        // in unpriv count false favorable and true unfavorable
-        // in priv count false favorable and true unfavorable
-
         Dataset privileged = dataset.filterByInput(inputSelector);
         Dataset unprivileged = dataset.filterByInput(inputSelector.negate());
 
