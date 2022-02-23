@@ -130,7 +130,7 @@
                         </image>
                         <image>
                             <alias>kafka</alias>
-                            <name>wurstmeister/kafka:2.12-2.2.1</name>
+                            <name>${container.image.wurstmeister.kafka}</name>
 
                             <run>
                                 <dependsOn>
