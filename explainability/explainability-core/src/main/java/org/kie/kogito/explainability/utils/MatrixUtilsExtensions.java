@@ -26,6 +26,7 @@ import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.linear.SingularMatrixException;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
+import org.apache.commons.math3.util.Pair;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 
@@ -295,6 +296,81 @@ public class MatrixUtilsExtensions {
             }
         }
         return out;
+    }
+
+    // specific optimizations to minimize unneccesary allocation =======================================================
+
+    /**
+     * Compute (A^T B A)^T
+     * 
+     * @param A: Matrix
+     * @param B: Diagonal matrix, represented as a vector of its diagonal
+     * @return (A^T B A)^T
+     */
+    public static RealMatrix ATBA_T(RealMatrix A, RealVector B) {
+        RealMatrix out = MatrixUtils.createRealMatrix(A.getColumnDimension(), A.getColumnDimension());
+        for (int i = 0; i < A.getColumnDimension(); i++) {
+            for (int j = 0; j < A.getColumnDimension(); j++) {
+                double outVal = 0;
+                for (int k = 0; k < B.getDimension(); k++) {
+                    outVal += A.getEntry(k, j) * B.getEntry(k) * A.getEntry(k, i);
+                }
+                out.setEntry(i, j, outVal);
+            }
+        }
+        return out;
+    }
+
+    /**
+     * Compute A^T B C,
+     * 
+     * @param A: Matrix
+     * @param B: Diagonal matrix, represented as a vector of its diagonal
+     * @param C: Vector
+     * @return A^T B C
+     */
+    public static RealVector ATBC(RealMatrix A, RealVector B, RealVector C) {
+        RealVector out = MatrixUtils.createRealVector(new double[A.getColumnDimension()]);
+        for (int i = 0; i < A.getColumnDimension(); i++) {
+            double outVal = 0;
+            for (int k = 0; k < B.getDimension(); k++) {
+                outVal += A.getEntry(k, i) * B.getEntry(k) * C.getEntry(k);
+            }
+            out.setEntry(i, outVal);
+        }
+        return out;
+    }
+
+    /**
+     * When A + B are the same for both ATBA_T and ATBC, they can be combined into a single function to avoid
+     * iterating through A twice
+     * 
+     * @param A: Matrix
+     * @param B: Diagonal matrix, represented as a vector of its diagonal
+     * @param C: Vector
+     * @return Both (A^T B A)^T and A^T B C in a Pair
+     */
+    public static Pair<RealMatrix, RealVector> jointATBAT_ATBC(RealMatrix A, RealVector B, RealVector C) {
+        RealMatrix out1 = MatrixUtils.createRealMatrix(A.getColumnDimension(), A.getColumnDimension());
+        RealVector out2 = MatrixUtils.createRealVector(new double[A.getColumnDimension()]);
+
+        for (int i = 0; i < A.getColumnDimension(); i++) {
+            double outVal2 = 0;
+            for (int j = 0; j < A.getColumnDimension(); j++) {
+                double outVal1 = 0;
+                for (int k = 0; k < B.getDimension(); k++) {
+                    outVal1 += A.getEntry(k, j) * B.getEntry(k) * A.getEntry(k, i);
+                    if (j == 0) {
+                        outVal2 += A.getEntry(k, i) * B.getEntry(k) * C.getEntry(k);
+                    }
+                }
+                out1.setEntry(i, j, outVal1);
+                if (j == 0) {
+                    out2.setEntry(i, outVal2);
+                }
+            }
+        }
+        return new Pair<>(out1, out2);
     }
 
     // === REAL VECTOR STATISTICS =====================================
