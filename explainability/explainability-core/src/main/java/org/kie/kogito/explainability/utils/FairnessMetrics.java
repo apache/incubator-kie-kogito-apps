@@ -227,6 +227,11 @@ public class FairnessMetrics {
         Dataset privileged = dataset.filterByInput(inputSelector);
         Map<String, Integer> privilegedCounts = countMatchingOutputSelector(privileged, model.predictAsync(privileged.getInputs()).get(), outputSelector);
 
+        double ptp = privilegedCounts.get("tp");
+        double ptn = privilegedCounts.get("tn");
+        double pfp = privilegedCounts.get("fp");
+        double pfn = privilegedCounts.get("fn");
+
         Dataset unprivileged = dataset.filterByInput(inputSelector.negate());
         Map<String, Integer> unprivilegedCounts = countMatchingOutputSelector(unprivileged, model.predictAsync(unprivileged.getInputs()).get(), outputSelector);
 
@@ -234,11 +239,6 @@ public class FairnessMetrics {
         double utn = unprivilegedCounts.get("tn");
         double ufp = unprivilegedCounts.get("fp");
         double ufn = unprivilegedCounts.get("fn");
-
-        double ptp = privilegedCounts.get("tp");
-        double ptn = privilegedCounts.get("tn");
-        double pfp = privilegedCounts.get("fp");
-        double pfn = privilegedCounts.get("fn");
 
         return (utp / (utp + ufp) - ptp / (ptp + pfp + 1e-10)) / 2d + (ufn / (ufn + utn) - pfn / (pfn + ptn + 1e-10)) / 2;
     }
