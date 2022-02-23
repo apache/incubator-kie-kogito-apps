@@ -34,7 +34,8 @@ import org.kie.kogito.explainability.model.Value;
 
 public class FairnessMetrics {
 
-    private FairnessMetrics() {}
+    private FairnessMetrics() {
+    }
 
     /**
      * Calculate individual fairness in terms of consistency of predictions across similar inputs.
