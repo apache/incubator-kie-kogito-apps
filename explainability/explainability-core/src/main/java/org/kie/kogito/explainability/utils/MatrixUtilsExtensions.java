@@ -309,26 +309,26 @@ public class MatrixUtilsExtensions {
      * @return  (A^T B A)^T and A^T B C as first and second elements of a Pair
      */
     public static Pair<RealMatrix, RealVector> jointATBATandATBC(RealMatrix A, RealVector B, RealVector C) {
-        RealMatrix out1 = MatrixUtils.createRealMatrix(A.getColumnDimension(), A.getColumnDimension());
-        RealVector out2 = MatrixUtils.createRealVector(new double[A.getColumnDimension()]);
+        RealMatrix atbat = MatrixUtils.createRealMatrix(A.getColumnDimension(), A.getColumnDimension());
+        RealVector atbc = MatrixUtils.createRealVector(new double[A.getColumnDimension()]);
 
         for (int i = 0; i < A.getColumnDimension(); i++) {
-            double outVal2 = 0;
+            double atbcElement = 0;
             for (int j = 0; j < A.getColumnDimension(); j++) {
-                double outVal1 = 0;
+                double atbatElement = 0;
                 for (int k = 0; k < B.getDimension(); k++) {
-                    outVal1 += A.getEntry(k, j) * B.getEntry(k) * A.getEntry(k, i);
+                    atbatElement += A.getEntry(k, j) * B.getEntry(k) * A.getEntry(k, i);
                     if (j == 0) {
-                        outVal2 += A.getEntry(k, i) * B.getEntry(k) * C.getEntry(k);
+                        atbcElement += A.getEntry(k, i) * B.getEntry(k) * C.getEntry(k);
                     }
                 }
-                out1.setEntry(i, j, outVal1);
+                atbat.setEntry(i, j, atbatElement);
                 if (j == 0) {
-                    out2.setEntry(i, outVal2);
+                    atbc.setEntry(i, atbcElement);
                 }
             }
         }
-        return new Pair<>(out1, out2);
+        return new Pair<>(atbat, atbc);
     }
 
     // === REAL VECTOR STATISTICS =====================================
