@@ -75,14 +75,9 @@ public class WeightedLinearRegression {
             features = WeightedLinearRegression.adjustFeatureMatrix(features);
         }
 
-        Pair<RealMatrix, RealVector> jointXTWX_XTWY = MatrixUtilsExtensions.jointATBAT_ATBC(features, sampleWeights, observations);
-        RealMatrix xtWXInv = MatrixUtilsExtensions.safeInvert(jointXTWX_XTWY.getFirst());
-        RealVector xtWY = jointXTWX_XTWY.getSecond();
-
-        //        RealMatrix wDiag = MatrixUtils.createRealDiagonalMatrix(sampleWeights.toArray());
-        //        RealMatrix xtWXInv = MatrixUtilsExtensions.safeInvert(features.transpose().multiply(wDiag).multiply(features).transpose());
-        //        RealVector xtWY = features.transpose().multiply(wDiag).operate(observations);
-
+        Pair<RealMatrix, RealVector> jointXTWXandXTWY = MatrixUtilsExtensions.jointATBATandATBC(features, sampleWeights, observations);
+        RealMatrix xtWXInv = MatrixUtilsExtensions.safeInvert(jointXTWXandXTWY.getFirst());
+        RealVector xtWY = jointXTWXandXTWY.getSecond();
         RealVector coefficients = xtWXInv.operate(xtWY);
 
         ModelSquareSums mss = WeightedLinearRegression.getRSSandTSS(features, observations,
