@@ -306,7 +306,7 @@ public class MatrixUtilsExtensions {
      * @param A: Matrix
      * @param B: Diagonal matrix, represented as a vector of its diagonal
      * @param C: Vector
-     * @return  (A^T B A)^T and A^T B C as first and second elements of a Pair
+     * @return (A^T B A)^T and A^T B C as first and second elements of a Pair
      */
     public static Pair<RealMatrix, RealVector> jointATBATandATBC(RealMatrix A, RealVector B, RealVector C) {
         RealMatrix atbat = MatrixUtils.createRealMatrix(A.getColumnDimension(), A.getColumnDimension());
