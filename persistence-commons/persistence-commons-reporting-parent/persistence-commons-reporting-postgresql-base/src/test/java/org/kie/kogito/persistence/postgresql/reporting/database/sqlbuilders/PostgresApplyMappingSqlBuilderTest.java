@@ -41,9 +41,11 @@ class PostgresApplyMappingSqlBuilderTest extends BaseSqlBuilderImplTest {
         assertNotNull(sql);
         assertSequentialContent(sql,
                 "UPDATE sourceTableName ",
-                "SET id = id ",
+                "SET id = id, ",
+                "key = key ",
                 "WHERE ",
-                "partition = 'chunk';");
+                "partition = 'chunk' AND ",
+                "partition2 = 'chunk2");
     }
 
     @Override

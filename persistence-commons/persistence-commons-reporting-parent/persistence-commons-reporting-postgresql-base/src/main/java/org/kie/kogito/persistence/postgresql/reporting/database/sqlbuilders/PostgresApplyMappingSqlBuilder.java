@@ -49,11 +49,11 @@ public class PostgresApplyMappingSqlBuilder implements ApplyMappingSqlBuilder<Js
                 identityFields
                         .stream()
                         .map(PostgresApplyMappingSqlBuilder::buildIdentityFieldSql)
-                        .collect(Collectors.joining(", %n" + String.format("%n"))),
+                        .collect(Collectors.joining(", " + String.format("%n"))),
                 partitionFields
                         .stream()
                         .map(PostgresApplyMappingSqlBuilder::buildPartitionFieldSql)
-                        .collect(Collectors.joining(" AND %n" + String.format("%n"))));
+                        .collect(Collectors.joining(" AND " + String.format("%n"))));
 
         if (LOGGER.isInfoEnabled()) {
             LOGGER.info(String.format("Apply Mapping SQL:%n%s", sql));
