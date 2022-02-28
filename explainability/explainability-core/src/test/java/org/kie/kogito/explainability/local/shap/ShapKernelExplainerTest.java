@@ -348,6 +348,51 @@ class ShapKernelExplainerTest {
     }
 
     @Test
+    void testLargeBackground2() throws InterruptedException, TimeoutException, ExecutionException {
+        // establish background data and desired data to explain
+        double[][] largeBackground = new double[100][10];
+        for (int i = 0; i < 100; i++) {
+            for (int j = 0; j < 10; j++) {
+                largeBackground[i][j] = i / 100. + j;
+            }
+        }
+        double[][] toExplainLargeBackground = {
+                { 0, 1., -2., 3.5, -4.1, 5.5, -12., .8, .11, 15. }
+        };
+
+        double[][][] expected = {
+                { { -0.495, 0., -4.495, 0.005, -8.595, 0.005, -18.495,
+                        -6.695, -8.385, 5.505 } }
+        };
+
+        List<PredictionInput> background = createPIFromMatrix(largeBackground);
+        List<PredictionInput> toExplain = createPIFromMatrix(toExplainLargeBackground);
+
+        PredictionProvider model = TestUtils.getSumSkipModel(1);
+        ShapConfig skConfig = testConfig.withBackground(background).withNSamples(1000).build();
+
+        //initialize explainer
+        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
+        List<Prediction> predictions = new ArrayList<>();
+        for (int i = 0; i < predictionOutputs.size(); i++) {
+            predictions.add(new SimplePrediction(toExplain.get(i), predictionOutputs.get(i)));
+        }
+
+        // evaluate if the explanations match the expected value
+        ShapKernelExplainer ske = new ShapKernelExplainer(skConfig);
+        for (int i = 0; i < toExplain.size(); i++) {
+            Saliency[] explanationSaliencies = ske.explainAsync(predictions.get(i), model)
+                    .get(5, TimeUnit.SECONDS).getSaliencies();
+            RealMatrix[] explanationsAndConfs = saliencyToMatrix(explanationSaliencies);
+            RealMatrix explanations = explanationsAndConfs[0];
+
+            for (int j = 0; j < explanations.getRowDimension(); j++) {
+                assertArrayEquals(expected[i][j], explanations.getRow(j), 1e-2);
+            }
+        }
+    }
+
+    @Test
     void testParallel() throws InterruptedException, ExecutionException {
         // establish background data and desired data to explain
         double[][] largeBackground = new double[100][10];
@@ -623,7 +668,7 @@ class ShapKernelExplainerTest {
                 testConfig.copy().withBackground(bg).withRegularizer(ShapConfig.RegularizerType.BIC),
                 testConfig.copy().withBackground(bg).withRegularizer(10),
                 testConfig.copy().withBackground(bg).withRegularizer(ShapConfig.RegularizerType.NONE));
-        List<Integer> nsamples = List.of(2000, 5000, 10000);
+        List<Integer> nsamples = List.of(1000, 2000, 5000);
 
         for (Integer nsamp : nsamples) {
             for (ShapConfig.Builder sk : testConfigs) {
@@ -657,7 +702,7 @@ class ShapKernelExplainerTest {
         ShapConfig sk = testConfig.copy()
                 .withBackground(bg)
                 .withRegularizer(ShapConfig.RegularizerType.AIC)
-                .withNSamples(10000)
+                .withNSamples(5000)
                 .build();
 
         ShapKernelExplainer ske = new ShapKernelExplainer(sk);
@@ -671,5 +716,54 @@ class ShapKernelExplainerTest {
         assertTrue(Math.abs(predOut - actualOut) < 1e-6);
         double coefMSE = (data.getRowVector(100).ebeMultiply(modelWeights)).getDistance(explanations.getRowVector(0));
         assertTrue(coefMSE < .01);
+    }
+
+    @Test
+    void testExceedSubsetSamplerRange() throws ExecutionException, InterruptedException {
+        RealVector modelWeights = MatrixUtils.createRealMatrix(generateN(1, 50, "5021")).getRowVector(0);
+        PredictionProvider model = TestUtils.getLinearModel(modelWeights.toArray());
+        RealMatrix data = MatrixUtils.createRealMatrix(generateN(101, 50, "8629"));
+        List<PredictionInput> toExplain = createPIFromMatrix(data.getRowMatrix(100).getData());
+        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
+        RealVector predictionOutputVector = MatrixUtilsExtensions.vectorFromPredictionOutput(predictionOutputs.get(0));
+        Prediction p = new SimplePrediction(toExplain.get(0), predictionOutputs.get(0));
+        List<PredictionInput> bg = createPIFromMatrix(new double[100][50]);
+
+        ShapConfig sk = testConfig.copy()
+                .withBackground(bg)
+                .withRegularizer(ShapConfig.RegularizerType.AIC)
+                .withNSamples(2000)
+                .build();
+
+        ShapKernelExplainer ske = new ShapKernelExplainer(sk);
+        ShapResults shapResults = ske.explainAsync(p, model).get();
+        assertTrue(true);
+    }
+  
+    @Test
+    void testBatched() throws ExecutionException, InterruptedException {
+        RealVector modelWeights = MatrixUtils.createRealMatrix(generateN(1, 10, "5021")).getRowVector(0);
+        PredictionProvider model = TestUtils.getLinearModel(modelWeights.toArray());
+        RealMatrix data = MatrixUtils.createRealMatrix(generateN(101, 10, "8629"));
+        List<PredictionInput> toExplain = createPIFromMatrix(data.getRowMatrix(100).getData());
+        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
+        RealVector predictionOutputVector = MatrixUtilsExtensions.vectorFromPredictionOutput(predictionOutputs.get(0));
+        Prediction p = new SimplePrediction(toExplain.get(0), predictionOutputs.get(0));
+        List<PredictionInput> bg = createPIFromMatrix(new double[100][10]);
+
+        ShapConfig skNB = testConfig.copy()
+                .withBackground(bg)
+                .withBatchSize(1)
+                .build();
+        ShapConfig skB = testConfig.copy()
+                .withBackground(bg)
+                .withBatchSize(20)
+                .build();
+
+        ShapKernelExplainer skeNB = new ShapKernelExplainer(skNB);
+        ShapResults shapResultsNB = skeNB.explainAsync(p, model).get();
+        ShapKernelExplainer skeB = new ShapKernelExplainer(skB);
+        ShapResults shapResultsB = skeB.explainAsync(p, model).get();
+        assertEquals(shapResultsNB, shapResultsB);
     }
 }

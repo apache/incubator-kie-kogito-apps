@@ -33,7 +33,8 @@ public class DoubleEntity extends AbstractNumericEntity<Double> {
         super();
     }
 
-    private DoubleEntity(Double originalValue, String featureName, double minimum, double maximum, FeatureDistribution featureDistribution, boolean constrained) {
+    private DoubleEntity(Double originalValue, String featureName, double minimum, double maximum,
+            FeatureDistribution featureDistribution, boolean constrained) {
         super(originalValue, featureName, minimum, maximum, featureDistribution, constrained);
     }
 
@@ -61,8 +62,10 @@ public class DoubleEntity extends AbstractNumericEntity<Double> {
      * @param featureDistribution The feature's distribution (as {@link FeatureDistribution}), if available
      * @param constrained Whether this entity's value should be fixed or not
      */
-    public static DoubleEntity from(Feature originalFeature, double minimum, double maximum, FeatureDistribution featureDistribution, boolean constrained) {
-        return new DoubleEntity(originalFeature.getValue().asNumber(), originalFeature.getName(), minimum, maximum, featureDistribution, constrained);
+    public static DoubleEntity from(Feature originalFeature, double minimum, double maximum,
+            FeatureDistribution featureDistribution, boolean constrained) {
+        return new DoubleEntity(originalFeature.getValue().asNumber(), originalFeature.getName(), minimum, maximum,
+                featureDistribution, constrained);
     }
 
     /**
@@ -87,7 +90,8 @@ public class DoubleEntity extends AbstractNumericEntity<Double> {
      * @param maximum The end of the domain search space
      * @param featureDistribution The feature's distribution (as {@link FeatureDistribution}), if available
      */
-    public static DoubleEntity from(Feature originalFeature, double minimum, double maximum, FeatureDistribution featureDistribution) {
+    public static DoubleEntity from(Feature originalFeature, double minimum, double maximum,
+            FeatureDistribution featureDistribution) {
         return DoubleEntity.from(originalFeature, minimum, maximum, featureDistribution, false);
     }
 

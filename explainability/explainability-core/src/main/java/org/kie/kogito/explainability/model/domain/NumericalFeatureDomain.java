@@ -19,10 +19,10 @@ import java.util.Set;
 
 public class NumericalFeatureDomain implements FeatureDomain {
 
-    private final double lowerBound;
-    private final double upperBound;
+    protected final double lowerBound;
+    protected final double upperBound;
 
-    private NumericalFeatureDomain(double lowerBound, double upperBound) {
+    protected NumericalFeatureDomain(double lowerBound, double upperBound) {
         this.lowerBound = lowerBound;
         this.upperBound = upperBound;
     }
@@ -54,7 +54,7 @@ public class NumericalFeatureDomain implements FeatureDomain {
     }
 
     @Override
-    public Set<String> getCategories() {
+    public Set<?> getCategories() {
         return null;
     }
 }

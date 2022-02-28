@@ -27,17 +27,14 @@ import org.optaplanner.core.api.domain.variable.PlanningVariable;
  * Mapping between a categorical feature an OptaPlanner {@link PlanningEntity}
  */
 @PlanningEntity
-public class CategoricalEntity extends AbstractEntity<String> {
-
-    private Set<String> allowedCategories;
+public class CategoricalEntity extends AbstractCategoricalEntity<String> {
 
     public CategoricalEntity() {
         super();
     }
 
     private CategoricalEntity(String originalValue, String featureName, Set<String> allowedCategories, boolean constrained) {
-        super(originalValue, featureName, constrained);
-        this.allowedCategories = allowedCategories;
+        super(originalValue, featureName, allowedCategories, constrained);
     }
 
     /**
@@ -71,22 +68,6 @@ public class CategoricalEntity extends AbstractEntity<String> {
     }
 
     /**
-     * Calculates the distance between the current planning value and the reference value
-     * for this feature.
-     *
-     * @return Numerical distance
-     */
-    @Override
-    public double distance() {
-        return proposedValue.equals(originalValue) ? 0.0 : 1.0;
-    }
-
-    @Override
-    public double similarity() {
-        return 1.0 - distance();
-    }
-
-    /**
      * Returns the {@link CategoricalEntity} as a {@link Feature}
      *
      * @return {@link Feature}
@@ -104,4 +85,5 @@ public class CategoricalEntity extends AbstractEntity<String> {
     public void setProposedValue(String proposedValue) {
         this.proposedValue = proposedValue;
     }
+
 }

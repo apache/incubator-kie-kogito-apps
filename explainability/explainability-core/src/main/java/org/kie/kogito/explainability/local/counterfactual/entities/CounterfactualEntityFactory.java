@@ -15,10 +15,10 @@
  */
 package org.kie.kogito.explainability.local.counterfactual.entities;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBinaryEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedBooleanEntity;
@@ -28,32 +28,40 @@ import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCu
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDurationEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedIntegerEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedObjectEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTextEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTimeEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedURIEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedVectorEntity;
-import org.kie.kogito.explainability.model.DataDistribution;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.FeatureDistribution;
-import org.kie.kogito.explainability.model.PredictionFeatureDomain;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
+import org.kie.kogito.explainability.model.domain.BinaryFeatureDomain;
+import org.kie.kogito.explainability.model.domain.CategoricalFeatureDomain;
+import org.kie.kogito.explainability.model.domain.CurrencyFeatureDomain;
+import org.kie.kogito.explainability.model.domain.DurationFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
+import org.kie.kogito.explainability.model.domain.ObjectFeatureDomain;
+import org.kie.kogito.explainability.model.domain.URIFeatureDomain;
+import org.kie.kogito.explainability.utils.CompositeFeatureUtils;
 
 public class CounterfactualEntityFactory {
 
     private CounterfactualEntityFactory() {
     }
 
-    public static CounterfactualEntity from(Feature feature, Boolean isConstrained, FeatureDomain featureDomain) {
-        return CounterfactualEntityFactory.from(feature, isConstrained, featureDomain, null);
+    public static CounterfactualEntity from(Feature feature) {
+        return CounterfactualEntityFactory.from(feature, null);
     }
 
-    public static CounterfactualEntity from(Feature feature, Boolean isConstrained, FeatureDomain featureDomain,
-            FeatureDistribution featureDistribution) {
+    public static CounterfactualEntity from(Feature feature, FeatureDistribution featureDistribution) {
         CounterfactualEntity entity = null;
         validateFeature(feature);
-        if (feature.getType() == Type.NUMBER) {
+        final Type type = feature.getType();
+        final FeatureDomain featureDomain = feature.getDomain();
+        final boolean isConstrained = feature.isConstrained();
+        if (type == Type.NUMBER) {
             if (feature.getValue().getUnderlyingObject() instanceof Double) {
                 if (isConstrained) {
                     entity = FixedDoubleEntity.from(feature);
@@ -87,28 +95,33 @@ public class CounterfactualEntityFactory {
             if (isConstrained) {
                 entity = FixedBinaryEntity.from(feature);
             } else {
-                throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
+                entity = BinaryEntity.from(feature, ((BinaryFeatureDomain) featureDomain).getCategories(), isConstrained);
             }
 
         } else if (feature.getType() == Type.URI) {
             if (isConstrained) {
                 entity = FixedURIEntity.from(feature);
             } else {
-                throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
+                entity = URIEntity.from(feature, ((URIFeatureDomain) featureDomain).getCategories(), isConstrained);
             }
 
         } else if (feature.getType() == Type.TIME) {
             if (isConstrained) {
                 entity = FixedTimeEntity.from(feature);
             } else {
-                throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
+                final LocalTime lowerBound = LocalTime.MIN.plusSeconds(featureDomain.getLowerBound().longValue());
+                final LocalTime upperBound = LocalTime.MIN.plusSeconds(featureDomain.getUpperBound().longValue());
+                entity = TimeEntity.from(feature, lowerBound, upperBound, isConstrained);
             }
 
         } else if (feature.getType() == Type.DURATION) {
             if (isConstrained) {
                 entity = FixedDurationEntity.from(feature);
             } else {
-                throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
+                DurationFeatureDomain domain = (DurationFeatureDomain) featureDomain;
+                entity = DurationEntity.from(feature, Duration.of(domain.getLowerBound().longValue(), domain.getUnit()),
+                        Duration.of(domain.getUpperBound().longValue(), domain.getUnit()),
+                        featureDistribution, isConstrained);
             }
 
         } else if (feature.getType() == Type.VECTOR) {
@@ -129,14 +142,21 @@ public class CounterfactualEntityFactory {
             if (isConstrained) {
                 entity = FixedCurrencyEntity.from(feature);
             } else {
-                throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
+                entity = CurrencyEntity.from(feature, ((CurrencyFeatureDomain) featureDomain).getCategories(), isConstrained);
             }
 
         } else if (feature.getType() == Type.CATEGORICAL) {
             if (isConstrained) {
                 entity = FixedCategoricalEntity.from(feature);
             } else {
-                entity = CategoricalEntity.from(feature, featureDomain.getCategories(), isConstrained);
+                entity = CategoricalEntity.from(feature, ((CategoricalFeatureDomain) featureDomain).getCategories(),
+                        isConstrained);
+            }
+        } else if (feature.getType() == Type.UNDEFINED) {
+            if (isConstrained) {
+                entity = FixedObjectEntity.from(feature);
+            } else {
+                entity = ObjectEntity.from(feature, ((ObjectFeatureDomain) featureDomain).getCategories(), isConstrained);
             }
         } else {
             throw new IllegalArgumentException("Unsupported feature type: " + feature.getType());
@@ -146,7 +166,7 @@ public class CounterfactualEntityFactory {
 
     /**
      * Validation of features for counterfactual entity construction
-     * 
+     *
      * @param feature {@link Feature} to be validated
      */
     public static void validateFeature(Feature feature) {
@@ -159,20 +179,10 @@ public class CounterfactualEntityFactory {
         }
     }
 
-    public static List<CounterfactualEntity> createEntities(PredictionInput predictionInput,
-            PredictionFeatureDomain featureDomain, List<Boolean> constraints, DataDistribution dataDistribution) {
-        final List<FeatureDomain> domains = featureDomain.getFeatureDomains();
-        return IntStream.range(0, predictionInput.getFeatures().size())
-                .mapToObj(featureIndex -> {
-                    final Feature feature = predictionInput.getFeatures().get(featureIndex);
-                    final Boolean isConstrained = constraints.get(featureIndex);
-                    final FeatureDomain domain = domains.get(featureIndex);
-                    final FeatureDistribution featureDistribution = Optional
-                            .ofNullable(dataDistribution)
-                            .map(dd -> dd.asFeatureDistributions().get(featureIndex))
-                            .orElse(null);
-                    return CounterfactualEntityFactory
-                            .from(feature, isConstrained, domain, featureDistribution);
-                }).collect(Collectors.toList());
+    public static List<CounterfactualEntity> createEntities(PredictionInput predictionInput) {
+        final List<Feature> linearizedFeatures = CompositeFeatureUtils.flattenFeatures(predictionInput.getFeatures());
+        return linearizedFeatures.stream().map(
+                (Feature feature) -> CounterfactualEntityFactory.from(feature, feature.getDistribution()))
+                .collect(Collectors.toList());
     }
 }

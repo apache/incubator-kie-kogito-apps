@@ -20,12 +20,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CategoricalFeatureDomain implements FeatureDomain {
-
-    private final Set<String> categories;
+public class CategoricalFeatureDomain extends AbstractCategoricalFeatureDomain<String> {
 
     private CategoricalFeatureDomain(Set<String> categories) {
-        this.categories = categories;
+        super(categories);
     }
 
     /**
@@ -34,36 +32,15 @@ public class CategoricalFeatureDomain implements FeatureDomain {
      * @param categories A set with all the allowed category values
      * @return A {@link FeatureDomain}
      */
-    public static FeatureDomain create(Set<String> categories) {
+    public static FeatureDomain<String> create(Set<String> categories) {
         return new CategoricalFeatureDomain(categories);
     }
 
-    public static FeatureDomain create(List<String> categories) {
+    public static FeatureDomain<String> create(List<String> categories) {
         return new CategoricalFeatureDomain(new HashSet<>(categories));
     }
 
-    public static FeatureDomain create(String... categories) {
+    public static FeatureDomain<String> create(String... categories) {
         return new CategoricalFeatureDomain(new HashSet<>(Arrays.asList(categories)));
     }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public Double getLowerBound() {
-        return null;
-    }
-
-    @Override
-    public Double getUpperBound() {
-        return null;
-    }
-
-    @Override
-    public Set<String> getCategories() {
-        return this.categories;
-    }
-
 }

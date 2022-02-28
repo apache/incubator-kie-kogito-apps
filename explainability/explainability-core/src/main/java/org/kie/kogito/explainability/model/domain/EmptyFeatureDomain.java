@@ -17,9 +17,9 @@ package org.kie.kogito.explainability.model.domain;
 
 import java.util.Set;
 
-public class EmptyFeatureDomain implements FeatureDomain {
+public class EmptyFeatureDomain implements FeatureDomain<Object> {
 
-    public static FeatureDomain create() {
+    public static FeatureDomain<Object> create() {
         return new EmptyFeatureDomain();
     }
 
@@ -39,7 +39,7 @@ public class EmptyFeatureDomain implements FeatureDomain {
     }
 
     @Override
-    public Set<String> getCategories() {
+    public Set<Object> getCategories() {
         return null;
     }
 }
