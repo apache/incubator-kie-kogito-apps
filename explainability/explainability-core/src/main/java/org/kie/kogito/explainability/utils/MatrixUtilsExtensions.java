@@ -297,6 +297,32 @@ public class MatrixUtilsExtensions {
         return out;
     }
 
+    /**
+     * Perform a row-wise mean of a matrix, with $batchSize rows included per mean
+     *
+     * @param m the matrix to be row-mean of size n x m
+     * @param batchSize the number of rows to be included per mean
+     * @return RealMatrix with n//batchSize rows
+     *
+     */
+    public static RealMatrix batchRowMean(RealMatrix m, int batchSize) {
+        int mRows = m.getRowDimension();
+        if (mRows % batchSize != 0) {
+            throw new IllegalArgumentException(String.format(
+                    "# Rows of matrix A (%d) must be an exact product of batch size %d", mRows, batchSize));
+        }
+        RealMatrix result = MatrixUtils.createRealMatrix(mRows / batchSize, m.getColumnDimension());
+        for (int i = 0; i < m.getRowDimension(); i += batchSize) {
+            RealVector batch = m.getRowVector(i);
+            for (int j = i + 1; j < i + batchSize; j++) {
+                batch = batch.add(m.getRowVector(j));
+            }
+            batch.mapDivideToSelf(batchSize);
+            result.setRowVector(i / batchSize, batch);
+        }
+        return result;
+    }
+
     // === REAL VECTOR STATISTICS =====================================
     /**
      * Find the minimum positive value of a vector. Returns the max double if no values are positive.

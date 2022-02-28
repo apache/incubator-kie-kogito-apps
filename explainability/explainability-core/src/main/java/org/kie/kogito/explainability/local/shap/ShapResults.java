@@ -16,7 +16,10 @@
 
 package org.kie.kogito.explainability.local.shap;
 
+import java.util.List;
+
 import org.apache.commons.math3.linear.RealVector;
+import org.kie.kogito.explainability.model.FeatureImportance;
 import org.kie.kogito.explainability.model.Saliency;
 
 public class ShapResults {
@@ -34,5 +37,37 @@ public class ShapResults {
 
     public RealVector getFnull() {
         return fnull;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        ShapResults other = (ShapResults) o;
+        if (this.saliencies.length != other.getSaliencies().length) {
+            return false;
+        }
+        if (!this.fnull.equals(other.getFnull())) {
+            return false;
+        }
+        for (int i = 0; i < this.saliencies.length; i++) {
+            List<FeatureImportance> thisPFIs = this.saliencies[i].getPerFeatureImportance();
+            List<FeatureImportance> otherPFIs = other.getSaliencies()[i].getPerFeatureImportance();
+            if (thisPFIs.size() != otherPFIs.size()) {
+                return false;
+            }
+            for (int j = 0; j < thisPFIs.size(); j++) {
+                if (!thisPFIs.get(j).getFeature().equals(otherPFIs.get(j).getFeature())
+                        || Math.abs(thisPFIs.get(j).getScore() - otherPFIs.get(j).getScore()) > 1e-6
+                        || Math.abs(thisPFIs.get(j).getConfidence() - otherPFIs.get(j).getConfidence()) > 1e-6) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
