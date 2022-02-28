@@ -740,24 +740,4 @@ class ShapKernelExplainerTest {
         ShapResults shapResults = ske.explainAsync(p, model).get();
         assertTrue(true);
     }
-
-    @Disabled
-    void testHeapSpaceKiller() throws ExecutionException, InterruptedException {
-        RealVector modelWeights = MatrixUtils.createRealMatrix(generateN(1, 25, "5021")).getRowVector(0);
-        PredictionProvider model = TestUtils.getLinearModel(modelWeights.toArray());
-        RealMatrix data = MatrixUtils.createRealMatrix(generateN(101, 25, "8629"));
-        List<PredictionInput> toExplain = createPIFromMatrix(data.getRowMatrix(100).getData());
-        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
-        RealVector predictionOutputVector = MatrixUtilsExtensions.vectorFromPredictionOutput(predictionOutputs.get(0));
-        Prediction p = new SimplePrediction(toExplain.get(0), predictionOutputs.get(0));
-        List<PredictionInput> bg = createPIFromMatrix(data.getSubMatrix(0, 99, 0, 24).getData());
-
-        ShapConfig sc = testConfig.copy()
-                .withBackground(bg)
-                .withRegularizer(ShapConfig.RegularizerType.NONE)
-                .withNSamples(28000)
-                .build();
-        ShapKernelExplainer ske = new ShapKernelExplainer(sc);
-        ShapResults shapResults = ske.explainAsync(p, model).get();
-    }
 }
