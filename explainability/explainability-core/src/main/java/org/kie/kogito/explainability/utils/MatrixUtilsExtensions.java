@@ -322,6 +322,7 @@ public class MatrixUtilsExtensions {
             result.setRowVector(i / batchSize, batch);
         }
         return result;
+    }
 
     // specific optimizations to minimize unneccesary allocation =======================================================
     /**
