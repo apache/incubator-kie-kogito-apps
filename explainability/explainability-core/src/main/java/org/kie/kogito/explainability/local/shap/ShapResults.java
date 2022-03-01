@@ -16,7 +16,9 @@
 
 package org.kie.kogito.explainability.local.shap;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.apache.commons.math3.linear.RealVector;
 import org.kie.kogito.explainability.model.FeatureImportance;
@@ -69,5 +71,10 @@ public class ShapResults {
             }
         }
         return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(Arrays.hashCode(saliencies), fnull);
     }
 }
