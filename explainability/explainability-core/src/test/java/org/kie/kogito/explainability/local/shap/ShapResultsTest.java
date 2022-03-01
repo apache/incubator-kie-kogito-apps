@@ -30,6 +30,7 @@ class ShapResultsTest {
         return new ShapResults(saliencies, fnull);
     }
 
+    // test equals and hashing
     @Test
     void testEqualsSameObj() {
         ShapResults sr1 = buildShapResults(2, 2, 1, 1);
