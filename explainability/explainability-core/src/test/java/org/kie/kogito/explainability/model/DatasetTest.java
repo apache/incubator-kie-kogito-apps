@@ -23,6 +23,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.kie.kogito.explainability.TestUtils;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -106,9 +108,10 @@ class DatasetTest {
         return new Dataset(predictions);
     }
 
-    @Test
-    void testFilterByFeatureName() {
-        Random random = new Random();
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2 })
+    void testFilterByFeatureName(int seed) {
+        Random random = new Random(seed);
         final Dataset dataset = createDatasetFeatureFiltering(random);
 
         // Total dataset entries size
@@ -136,9 +139,10 @@ class DatasetTest {
         assertFalse(names.contains("f-3"));
     }
 
-    @Test
-    void testFilterByFeatureType() {
-        Random random = new Random();
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2 })
+    void testFilterByFeatureType(int seed) {
+        Random random = new Random(seed);
         final Dataset dataset = createDatasetFeatureFiltering(random);
 
         // Total dataset entries size
@@ -166,9 +170,10 @@ class DatasetTest {
         assertFalse(types.contains(Type.NUMBER));
     }
 
-    @Test
-    void testFilterByFeatureValue() {
-        Random random = new Random();
+    @ParameterizedTest
+    @ValueSource(ints = { 0, 1, 2 })
+    void testFilterByFeatureValue(int seed) {
+        Random random = new Random(seed);
         final Dataset dataset = createDatasetFeatureFiltering(random);
 
         // Total dataset entries size
