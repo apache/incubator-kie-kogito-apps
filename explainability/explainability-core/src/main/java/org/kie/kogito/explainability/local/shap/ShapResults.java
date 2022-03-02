@@ -63,9 +63,7 @@ public class ShapResults {
                 return false;
             }
             for (int j = 0; j < thisPFIs.size(); j++) {
-                if (!thisPFIs.get(j).getFeature().equals(otherPFIs.get(j).getFeature())
-                        || Math.abs(thisPFIs.get(j).getScore() - otherPFIs.get(j).getScore()) > 1e-6
-                        || Math.abs(thisPFIs.get(j).getConfidence() - otherPFIs.get(j).getConfidence()) > 1e-6) {
+                if (!thisPFIs.get(j).equals(otherPFIs.get(j))) {
                     return false;
                 }
             }
