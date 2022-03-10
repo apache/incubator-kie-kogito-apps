@@ -66,7 +66,7 @@ export class TaskFormGatewayApiImpl implements TaskFormGatewayApi {
   }
 
   getTaskFormSchema(userTask: UserTaskInstance): Promise<Record<string, any>> {
-    return new Promise<Record<string, any>>((resolve, reject) => {
+    return new Promise<Record<string, any>>(resolve => {
       const endpoint = getTaskSchemaEndPoint(userTask, this.getCurrentUser());
       axios
         .get(endpoint, {
@@ -76,18 +76,14 @@ export class TaskFormGatewayApiImpl implements TaskFormGatewayApi {
           }
         })
         .then(responseObj => {
-          if (responseObj.status == 200) {
-            resolve(responseObj.data);
-          } else {
-            reject(responseObj);
-          }
+          resolve(responseObj.data);
         })
-        .catch(error => reject(error));
+        .catch(() => resolve(null));
     });
   }
 
   getCustomForm(userTask: UserTaskInstance): Promise<CustomForm> {
-    return new Promise<CustomForm>((resolve, reject) => {
+    return new Promise<CustomForm>(resolve => {
       const endpoint = getCustomFormEndpoint(userTask);
 
       axios
@@ -98,13 +94,9 @@ export class TaskFormGatewayApiImpl implements TaskFormGatewayApi {
           }
         })
         .then(responseObj => {
-          if (responseObj.status == 200) {
-            resolve(responseObj.data);
-          } else {
-            reject(responseObj);
-          }
+          resolve(responseObj.data);
         })
-        .catch(err => reject(err));
+        .catch(() => resolve(null));
     });
   }
 }

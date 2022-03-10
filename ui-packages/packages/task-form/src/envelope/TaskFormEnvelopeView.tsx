@@ -92,23 +92,27 @@ export const TaskFormEnvelopeView = React.forwardRef<
       driver
         .getCustomForm()
         .then(customForm => {
-          setCustomForm(customForm);
+          if (customForm) {
+            setCustomForm(customForm);
+          }
           resolve();
         })
-        .catch(error => resolve());
+        .catch(() => resolve());
     });
 
     const schemaPromise: Promise<void> = new Promise<void>(resolve => {
       driver
         .getTaskFormSchema()
         .then(schema => {
-          setTaskFormSchema(schema);
+          if (schema) {
+            setTaskFormSchema(schema);
+          }
           resolve();
         })
-        .catch(error => resolve());
+        .catch(() => resolve());
     });
 
-    Promise.all([customFormPromise, schemaPromise]).then(values => {
+    Promise.all([customFormPromise, schemaPromise]).then(() => {
       setIsLoading(false);
     });
   }, [isEnvelopeConnectedToChannel]);
