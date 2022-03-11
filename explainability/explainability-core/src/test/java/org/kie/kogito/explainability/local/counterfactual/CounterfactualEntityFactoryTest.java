@@ -45,6 +45,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.CurrencyEntit
 import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.DurationEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.IntegerEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.LongEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.ObjectEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.TimeEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.URIEntity;
@@ -56,6 +57,7 @@ import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedCu
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedDurationEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedIntegerEntity;
+import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedLongEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedObjectEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTextEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.fixed.FixedTimeEntity;
@@ -112,7 +114,7 @@ class CounterfactualEntityFactoryTest {
         final Feature feature = FeatureFactory.newNumericalFeature("long-feature", value, domain);
         final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertNotNull(counterfactualEntity);
-        assertTrue(counterfactualEntity instanceof IntegerEntity);
+        assertTrue(counterfactualEntity instanceof LongEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().asNumber());
     }
 
@@ -122,7 +124,7 @@ class CounterfactualEntityFactoryTest {
         final Feature feature = FeatureFactory.newNumericalFeature("long-feature", value);
         final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
         assertNotNull(counterfactualEntity);
-        assertTrue(counterfactualEntity instanceof FixedIntegerEntity);
+        assertTrue(counterfactualEntity instanceof FixedLongEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().asNumber());
     }
 
