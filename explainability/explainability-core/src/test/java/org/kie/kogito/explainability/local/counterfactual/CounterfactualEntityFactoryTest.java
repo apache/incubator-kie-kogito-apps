@@ -80,6 +80,7 @@ import org.kie.kogito.explainability.model.domain.URIFeatureDomain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -100,6 +101,27 @@ class CounterfactualEntityFactoryTest {
         final int value = 5;
         final Feature feature = FeatureFactory.newNumericalFeature("int-feature", value);
         final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
+        assertTrue(counterfactualEntity instanceof FixedIntegerEntity);
+        assertEquals(value, counterfactualEntity.asFeature().getValue().asNumber());
+    }
+
+    @Test
+    void testLongFactory() {
+        final long value = 5;
+        final FeatureDomain domain = NumericalFeatureDomain.create(0.0, 10.0);
+        final Feature feature = FeatureFactory.newNumericalFeature("long-feature", value, domain);
+        final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
+        assertNotNull(counterfactualEntity);
+        assertTrue(counterfactualEntity instanceof IntegerEntity);
+        assertEquals(value, counterfactualEntity.asFeature().getValue().asNumber());
+    }
+
+    @Test
+    void testFixedLongFactory() {
+        final long value = 5;
+        final Feature feature = FeatureFactory.newNumericalFeature("long-feature", value);
+        final CounterfactualEntity counterfactualEntity = CounterfactualEntityFactory.from(feature);
+        assertNotNull(counterfactualEntity);
         assertTrue(counterfactualEntity instanceof FixedIntegerEntity);
         assertEquals(value, counterfactualEntity.asFeature().getValue().asNumber());
     }
