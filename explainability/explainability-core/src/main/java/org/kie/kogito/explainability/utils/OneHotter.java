@@ -16,16 +16,12 @@
 
 package org.kie.kogito.explainability.utils;
 
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -46,9 +42,9 @@ public class OneHotter {
                     "Feature name %s was not present in initialized dataset", f.getName()));
         }
         // if the name of a feature clashes with the ohe splitters, fix them
-        if (f.getName().contains(oheSplitter) || f.getName().contains(proxySplitter)){
+        if (f.getName().contains(oheSplitter) || f.getName().contains(proxySplitter)) {
             String randString = String.valueOf(alpha.charAt(rn.nextInt(26)));
-            oheSplitter = oheSplitter.substring(0, oheSplitter.length()-1) + "_" + randString + "_";
+            oheSplitter = oheSplitter.substring(0, oheSplitter.length() - 1) + "_" + randString + "_";
             proxySplitter = proxySplitter + "_" + randString;
         }
 
