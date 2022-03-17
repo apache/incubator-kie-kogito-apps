@@ -131,8 +131,8 @@ public class ShapResults {
             // add title to table
             String title = String.format(" Output %s ", this.saliencies[i].getOutput().getName());
             int spacerSize = Arrays.stream(out.toString().split("\n")).mapToInt(String::length).max().getAsInt() - title.length();
-            String lspace = "-".repeat((int) Math.floor(spacerSize / 2));
-            String rspace = "-".repeat((int) (spacerSize % 2 == 0 ? Math.floor(spacerSize / 2) : Math.ceil(spacerSize / 2)));
+            String lspace = "-".repeat((int) Math.floor(spacerSize / 2.));
+            String rspace = "-".repeat((int) (spacerSize % 2 == 0 ? Math.floor(spacerSize / 2.) : Math.ceil(spacerSize / 2.)));
             out.insert(startIdx, lspace + title.toUpperCase() + rspace + "\n");
 
             // add new line if this isn't the final table
