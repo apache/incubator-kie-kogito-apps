@@ -96,7 +96,7 @@ public class ShapResults {
             table[0] = new String[] { "", "Feature", "SHAP Value", "" };
 
             // add fnull to table
-            table[1] = new String[] { "", "FNull",  String.format(String.format("%%.%df", decimalPlaces), fnull.getEntry(i)), "" };
+            table[1] = new String[] { "", "FNull", String.format(String.format("%%.%df", decimalPlaces), fnull.getEntry(i)), "" };
 
             // iterate over features
             List<FeatureImportance> pfis = saliencies[i].getPerFeatureImportance();
