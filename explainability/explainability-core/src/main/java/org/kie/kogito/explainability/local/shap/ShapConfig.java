@@ -184,7 +184,7 @@ public class ShapConfig {
         /**
          * Add predictAsync batch size to the builder
          *
-         * @param batchSize: int, the number of batches of synthetic data per model predict call
+         * @param batchSize: int, the number of batches of synthetic data per model predict call 
          *
          * @return Builder
          */
