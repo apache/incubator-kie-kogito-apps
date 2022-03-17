@@ -96,7 +96,7 @@ public class ShapResults {
             table[0] = new String[] { "", "Feature", "SHAP Value", "" };
 
             // add fnull to table
-            table[1] = new String[] { "", "FNull", Double.toString(fnull.getEntry(i)), "" };
+            table[1] = new String[] { "", "FNull",  String.format(String.format("%%.%df", decimalPlaces), fnull.getEntry(i)), "" };
 
             // iterate over features
             List<FeatureImportance> pfis = saliencies[i].getPerFeatureImportance();
@@ -110,7 +110,7 @@ public class ShapResults {
             }
 
             // add prediction to table
-            table[pfis.size() + 2] = new String[] { "", "Prediction", this.saliencies[i].getOutput().getValue().toString(), "" };
+            table[pfis.size() + 2] = new String[] { "", "Prediction", String.format(String.format("%%.%df", decimalPlaces), this.saliencies[i].getOutput().getValue().asNumber()), "" };
             IntFunction<Integer> colSizer = colIdx -> MatrixUtilsExtensions.getColumn(table, colIdx).stream().mapToInt(String::length).max().getAsInt();
 
             // format table
