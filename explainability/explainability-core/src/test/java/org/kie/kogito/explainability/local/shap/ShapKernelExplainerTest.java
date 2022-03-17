@@ -808,4 +808,47 @@ class ShapKernelExplainerTest {
         assertEquals(1, shapResults.getSaliencies()[1].getPerFeatureImportance().get(1).getScore(), 1e-6);
     }
 
+    @Test
+    void testCategoricalCollisions() throws ExecutionException, InterruptedException {
+        List<Value> fruits = List.of(
+                new Value("avocado"),
+                new Value("banana"),
+                new Value("carrot"),
+                new Value("dragonfruit"),
+                new Value(""));
+        Random rn = new Random(101);
+
+        List<PredictionInput> data = new ArrayList<>();
+        for (int i = 0; i < 101; i++) {
+            List<Feature> fs = new ArrayList<>();
+            for (int j = 0; j < 8; j++) {
+                fs.add(new Feature(String.format("Fruit_OHE_%d", j), Type.CATEGORICAL, fruits.get(rn.nextInt(5))));
+            }
+            data.add(new PredictionInput(fs));
+        }
+
+        List<PredictionInput> nulldata = new ArrayList<>();
+        List<Feature> fs = new ArrayList<>();
+        for (int j = 0; j < 8; j++) {
+            fs.add(new Feature(String.format("Fruit_OHE_%d", j), Type.CATEGORICAL, fruits.get(4)));
+        }
+        nulldata.add(new PredictionInput(fs));
+        List<PredictionInput> bg = nulldata;
+        List<PredictionInput> toExplain = data.subList(100, 101);
+        PredictionProvider model = TestUtils.getCategoricalRegressor();
+        List<PredictionOutput> predictionOutputs = model.predictAsync(toExplain).get();
+        Prediction p = new SimplePrediction(toExplain.get(0), predictionOutputs.get(0));
+        ShapConfig sk = testConfig.copy()
+                .withBackground(bg)
+                .withNSamples(5000)
+                .build();
+        ShapKernelExplainer ske = new ShapKernelExplainer(sk);
+        ShapResults shapResults = ske.explainAsync(p, model).get();
+
+        assertEquals(25, shapResults.getSaliencies()[0].getPerFeatureImportance().get(0).getScore(), 1e-6);
+        assertEquals(61, shapResults.getSaliencies()[0].getPerFeatureImportance().get(1).getScore(), 1e-6);
+        assertEquals(1, shapResults.getSaliencies()[1].getPerFeatureImportance().get(0).getScore(), 1e-6);
+        assertEquals(1, shapResults.getSaliencies()[1].getPerFeatureImportance().get(1).getScore(), 1e-6);
+    }
+
 }

@@ -16,11 +16,16 @@
 
 package org.kie.kogito.explainability.utils;
 
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.PredictionInput;
@@ -28,9 +33,26 @@ import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
 public class OneHotter {
-    Map<String, LinkedHashSet<Value>> categoricals = new HashMap<>();
+    private String oheSplitter = "_OHE_";
+    private String proxySplitter = "_OHEPROXY";
+    private final Random rn = new Random();
+    private final String alpha = "abcdefghijklmnopqrstuvwxyz";
+    private Map<String, LinkedHashSet<Value>> categoricals = new HashMap<>();
 
-    private void addFeatureValue(Feature f) {
+    private void addFeatureValue(Feature f, boolean initialization) {
+        // check to see that no new features have been added since initialized
+        if (!initialization && !categoricals.containsKey(f.getName())) {
+            throw new IllegalArgumentException(String.format(
+                    "Feature name %s was not present in initialized dataset", f.getName()));
+        }
+        // if the name of a feature clashes with the ohe splitters, fix them
+        if (f.getName().contains(oheSplitter) || f.getName().contains(proxySplitter)){
+            String randString = String.valueOf(alpha.charAt(rn.nextInt(26)));
+            oheSplitter = oheSplitter.substring(0, oheSplitter.length()-1) + "_" + randString + "_";
+            proxySplitter = proxySplitter + "_" + randString;
+        }
+
+        // add feature to categoricals if new
         if (!categoricals.containsKey(f.getName())) {
             this.categoricals.put(f.getName(), new LinkedHashSet<>(List.of(f.getValue())));
         } else {
@@ -44,8 +66,27 @@ public class OneHotter {
         for (PredictionInput pi : pis) {
             for (Feature f : pi.getFeatures()) {
                 if (f.getType() == Type.CATEGORICAL) {
-                    addFeatureValue(f);
+                    addFeatureValue(f, true);
                 }
+            }
+        }
+    }
+
+    private void featureGenerator(Feature prototype, Value[] comparedVals, boolean proxy, List<Feature> encodedFeatures) {
+        for (int i = 0; i < comparedVals.length; i++) {
+            if (proxy && comparedVals[i].equals(prototype.getValue())) {
+                Feature newFeature = new Feature(
+                        prototype.getName() + this.proxySplitter,
+                        Type.NUMBER,
+                        new Value(i));
+                encodedFeatures.add(newFeature);
+                break;
+            } else if (!proxy) {
+                Feature newFeature = new Feature(
+                        prototype.getName() + this.oheSplitter + i + this.oheSplitter + comparedVals[i],
+                        Type.NUMBER,
+                        new Value(prototype.getValue().equals(comparedVals[i]) ? 1 : 0));
+                encodedFeatures.add(newFeature);
             }
         }
     }
@@ -59,25 +100,10 @@ public class OneHotter {
         for (Feature f : pi.getFeatures()) {
             if (categoricals.containsKey(f.getName()) && f.getType() == Type.CATEGORICAL) {
                 if (!categoricals.get(f.getName()).contains(f.getValue())) {
-                    addFeatureValue(f);
+                    addFeatureValue(f, false);
                 }
                 Value[] comparedVals = categoricals.get(f.getName()).toArray(new Value[0]);
-
-                for (int i = 0; i < comparedVals.length; i++) {
-                    if (proxy && comparedVals[i].equals(f.getValue())) {
-                        encodedFeatures.add(new Feature(
-                                f.getName() + "_OHEPROXY",
-                                Type.NUMBER,
-                                new Value(i)));
-                        break;
-                    } else if (!proxy) {
-                        encodedFeatures.add(new Feature(
-                                f.getName() + "_OHE_" + i + "_OHE_" + comparedVals[i],
-                                Type.NUMBER,
-                                new Value(f.getValue().equals(comparedVals[i]) ? 1 : 0)));
-
-                    }
-                }
+                featureGenerator(f, comparedVals, proxy, encodedFeatures);
             } else {
                 encodedFeatures.add(f);
             }
@@ -101,18 +127,18 @@ public class OneHotter {
         if (categoricals.isEmpty()) {
             return pi;
         }
-        String proxyIndicator = proxy ? "_OHEPROXY" : "_OHE_";
+        String proxyIndicator = proxy ? this.proxySplitter : this.oheSplitter;
         List<Feature> decodedFeatures = new ArrayList<>();
         for (Feature f : pi.getFeatures()) {
             if (f.getName().contains(proxyIndicator)) {
                 if (proxy) {
-                    String parentFeature = f.getName().split("_OHEPROXY")[0];
+                    String parentFeature = f.getName().split(this.proxySplitter)[0];
                     decodedFeatures.add(new Feature(
                             parentFeature,
                             Type.CATEGORICAL,
                             (Value) categoricals.get(parentFeature).toArray()[(int) f.getValue().asNumber()]));
                 } else if (f.getValue().asNumber() == 1) {
-                    String[] splitName = f.getName().split("_OHE_");
+                    String[] splitName = f.getName().split(this.oheSplitter);
                     String parentFeature = splitName[0];
                     int categoricalValue = Integer.parseInt(splitName[1]);
                     decodedFeatures.add(new Feature(
