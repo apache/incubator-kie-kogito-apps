@@ -15,12 +15,9 @@
  */
 package org.kie.kogito.index.postgresql;
 
-import org.junit.jupiter.api.Disabled;
-
 import io.quarkus.test.junit.NativeImageTest;
 
 @NativeImageTest
-@Disabled("see https://issues.redhat.com/browse/KOGITO-4983")
 public class NativeProcessDataIndexPostgreSqlIT extends ProcessDataIndexPostgreSqlIT {
 
 }
