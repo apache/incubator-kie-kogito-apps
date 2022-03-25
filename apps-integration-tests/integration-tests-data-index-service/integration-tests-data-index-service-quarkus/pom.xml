@@ -99,12 +99,40 @@
                   </includes>
                 </resource>
                 <resource>
-                  <directory>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources</directory>
+                  <directory>${project.parent.basedir}/integration-tests-data-index-service-quarkus/src/main/resources</directory>
                   <includes>
-                    <include>data_index_create.sql</include>
+                    <include>**/*.sql</include>
                   </includes>
                 </resource>
               </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.coderplus.maven.plugins</groupId>
+        <artifactId>copy-rename-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-postgresql-file</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <sourceFile>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources/data_index_create.sql</sourceFile>
+              <destinationFile>${project.basedir}/src/main/resources/data_index_postgresql_create.sql</destinationFile>
+            </configuration>
+          </execution>
+          <execution>
+            <id>rename-oracle-file</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <sourceFile>${project.root.dir}/data-index/data-index-storage/data-index-storage-oracle/src/main/resources/data_index_create.sql</sourceFile>
+              <destinationFile>${project.basedir}/src/main/resources/data_index_oracle_create.sql</destinationFile>
             </configuration>
           </execution>
         </executions>
@@ -140,5 +168,45 @@
       </plugin>
     </plugins>
   </build>
-
+  <profiles>
+    <profile>
+      <id>native</id>
+      <activation>
+        <property>
+          <name>native</name>
+        </property>
+      </activation>
+      <properties>
+        <quarkus.package.type>native</quarkus.package.type>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <configuration combine.self="override">
+              <useModulePath>false</useModulePath>
+              <includes>
+                <include>**/Native*IT.java</include>
+              </includes>
+              <excludes>
+                <exclude></exclude>
+              </excludes>
+              <systemPropertyVariables>
+                <container.image.infinispan>${container.image.infinispan}</container.image.infinispan>
+                <container.image.mongodb>mongo:${version.org.mongo-image}</container.image.mongodb>
+                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                <container.image.kafka>${container.image.kafka}</container.image.kafka>
+                <container.image.data-index-service-postgresql>${container.image.data-index-service-postgresql}</container.image.data-index-service-postgresql>
+                <container.image.data-index-service-oracle>${container.image.data-index-service-oracle}</container.image.data-index-service-oracle>
+                <container.image.data-index-service-inmemory>${container.image.data-index-service-inmemory}</container.image.data-index-service-inmemory>
+                <container.image.data-index-service-infinispan>${container.image.data-index-service-infinispan}</container.image.data-index-service-infinispan>
+                <container.image.data-index-service-mongodb>${container.image.data-index-service-mongodb}</container.image.data-index-service-mongodb>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
