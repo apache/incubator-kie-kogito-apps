@@ -104,30 +104,6 @@ describe('TaskFormGatewayApi tests', () => {
     expect(url).toEqual(`http://localhost:8080/travels/VisaApplication/schema`);
   });
 
-  it('getTaskFormSchema - HTTP Error', async () => {
-    const errorMessage = 'This is an error loading the form schema';
-
-    mockedAxios.get.mockResolvedValue({
-      status: 400,
-      data: errorMessage
-    });
-
-    expect(gatewayApi.getTaskFormSchema(task)).rejects.toEqual({
-      status: 400,
-      data: errorMessage
-    });
-  });
-
-  it('getTaskFormSchema - Promise reject', async () => {
-    const errorMessage = 'This is an error loading the form schema';
-
-    mockedAxios.get.mockImplementationOnce(() =>
-      Promise.reject(new Error(errorMessage))
-    );
-
-    expect(gatewayApi.getTaskFormSchema(task)).rejects.toThrow(errorMessage);
-  });
-
   it('doSubmit', async () => {
     const data = {
       name: 'Jon',

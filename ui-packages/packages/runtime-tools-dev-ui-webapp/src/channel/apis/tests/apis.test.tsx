@@ -476,7 +476,9 @@ describe('test utility of svg panel', () => {
         .catch(error => {
           result = error.message;
         });
-      expect(result).toEqual("Cannot read property 'serviceUrl' of undefined");
+      expect(result).toEqual(
+        "Cannot read properties of undefined (reading 'serviceUrl')"
+      );
     });
   });
 
