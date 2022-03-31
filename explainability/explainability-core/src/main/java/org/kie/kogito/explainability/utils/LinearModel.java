@@ -33,7 +33,7 @@ public class LinearModel {
     private static final double GOOD_LOSS_THRESHOLD = 1e-2;
     private static final int MAX_NO_EPOCHS = 50;
     private static final double INITIAL_LEARNING_RATE = 1e-1;
-    private static final double DECAY_RATE = 1e-4;
+    private static final double DECAY_RATE = 1e-5;
 
     private final double[] weights;
     private final boolean classification;
@@ -42,7 +42,10 @@ public class LinearModel {
     public LinearModel(int size, boolean classification, Random random) {
         this.bias = 0;
         this.classification = classification;
-        this.weights = random.doubles(size, -1, 1).toArray();
+        this.weights = new double[size];
+        for (int i = 0; i < size; i++) {
+            this.weights[i] = random.nextGaussian();
+        }
     }
 
     public double fit(Collection<Pair<double[], Double>> trainingSet) {
