@@ -50,7 +50,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Implementation of the SHAP kernel explainer as per
+ * Implementation of the SHAP kernel explainer as per 
  * https://proceedings.neurips.cc/paper/2017/file/8a20a8621978632d76c43dfd28b67767-Paper.pdf
  * see also https://github.com/slundberg/shap/blob/master/shap/explainers/_kernel.py
  */
