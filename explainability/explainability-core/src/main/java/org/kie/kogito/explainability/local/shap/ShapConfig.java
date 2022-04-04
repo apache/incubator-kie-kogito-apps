@@ -79,7 +79,7 @@ public class ShapConfig {
             Integer nRegularizationFeatures) {
         this.link = link;
         this.background = background;
-        this.onehotter = new OneHotter(background);
+        this.onehotter = new OneHotter(background, pc);
         this.backgroundMatrix = MatrixUtilsExtensions.matrixFromPredictionInput(onehotter.oneHotEncode(background, true));
         this.pc = pc;
         this.executor = executor;

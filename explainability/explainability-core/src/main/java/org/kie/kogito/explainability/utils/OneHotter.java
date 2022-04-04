@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Random;
 
 import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
@@ -31,7 +32,7 @@ import org.kie.kogito.explainability.model.Value;
 public class OneHotter {
     private String oheSplitter = "_OHE_";
     private String proxySplitter = "_OHEPROXY";
-    private final Random rn = new Random();
+    private final Random rn;
     private final String alpha = "abcdefghijklmnopqrstuvwxyz";
     private Map<String, LinkedHashSet<Value>> categoricals = new HashMap<>();
 
@@ -58,7 +59,8 @@ public class OneHotter {
         }
     }
 
-    public OneHotter(List<PredictionInput> pis) {
+    public OneHotter(List<PredictionInput> pis, PerturbationContext pc) {
+        this.rn = pc.getRandom();
         for (PredictionInput pi : pis) {
             for (Feature f : pi.getFeatures()) {
                 if (f.getType() == Type.CATEGORICAL) {

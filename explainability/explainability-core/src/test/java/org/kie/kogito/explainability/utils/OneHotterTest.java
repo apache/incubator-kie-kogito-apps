@@ -22,15 +22,17 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.PerturbationContext;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.model.Value;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class OneHotterTest {
     @Test
-    public void CollisionTest() {
+    void CollisionTest() {
         List<Value> fruits = List.of(
                 new Value("avocado_"),
                 new Value("banana"),
@@ -47,7 +49,62 @@ class OneHotterTest {
             }
             data.add(new PredictionInput(fs));
         }
-        OneHotter oh = new OneHotter(data);
+        PerturbationContext pc = new PerturbationContext(new Random(), 0);
+        OneHotter oh = new OneHotter(data, pc);
         assertTrue(true);
     }
+
+    @Test
+    void CollisionProxyTest() {
+        List<Value> fruits = List.of(
+                new Value("avocado_"),
+                new Value("banana"),
+                new Value("carrot"),
+                new Value("dragonfruit"),
+                new Value(""));
+        Random rn = new Random(101);
+
+        List<PredictionInput> data = new ArrayList<>();
+        for (int i = 0; i < 101; i++) {
+            List<Feature> fs = new ArrayList<>();
+            for (int j = 0; j < 8; j++) {
+                fs.add(new Feature(String.format("Fruit _OHEPROXY %d", j), Type.CATEGORICAL, fruits.get(rn.nextInt(5))));
+            }
+            data.add(new PredictionInput(fs));
+        }
+        PerturbationContext pc = new PerturbationContext(new Random(), 0);
+        OneHotter oh = new OneHotter(data, pc);
+        assertTrue(true);
+    }
+
+    @Test
+    void MixedFeatureTest() {
+        List<Value> fruits = List.of(
+                new Value("avocado_"),
+                new Value("banana"),
+                new Value("carrot"),
+                new Value("dragonfruit"),
+                new Value(""));
+        Random rn = new Random(101);
+
+        List<PredictionInput> data = new ArrayList<>();
+        for (int i = 0; i < 101; i++) {
+            List<Feature> fs = new ArrayList<>();
+            for (int j = 0; j < 8; j++) {
+                fs.add(new Feature(String.format("Fruit %d", j), Type.CATEGORICAL, fruits.get(rn.nextInt(5))));
+            }
+            fs.add(new Feature("Numeric", Type.NUMBER, new Value(i)));
+            data.add(new PredictionInput(fs));
+        }
+        PerturbationContext pc = new PerturbationContext(new Random(), 0);
+        OneHotter oh = new OneHotter(data, pc);
+        List<PredictionInput> encoded = oh.oneHotEncode(data, false);
+        List<PredictionInput> encodedProxy = oh.oneHotEncode(data, true);
+        List<PredictionInput> decoded = oh.oneHotDecode(encoded, false);
+        List<PredictionInput> decodedProxy = oh.oneHotDecode(encodedProxy, true);
+
+        assertEquals(decoded, data);
+        assertEquals(decodedProxy, data);
+    }
+
 }
