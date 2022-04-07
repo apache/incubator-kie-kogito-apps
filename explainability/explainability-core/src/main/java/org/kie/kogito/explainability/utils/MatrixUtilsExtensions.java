@@ -27,6 +27,7 @@ import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.linear.SingularMatrixException;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
 import org.apache.commons.math3.util.Pair;
+import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 
@@ -51,7 +52,7 @@ public class MatrixUtilsExtensions {
      */
     public static RealVector vectorFromPredictionInput(PredictionInput p) {
         return MatrixUtils.createRealVector(p.getFeatures().stream()
-                .mapToDouble(f -> f.getValue().asNumber())
+                .mapToDouble(f -> (double) f.getValue().getUnderlyingObject())
                 .toArray());
     }
 
@@ -65,7 +66,7 @@ public class MatrixUtilsExtensions {
         return MatrixUtils.createRealMatrix(
                 ps.stream()
                         .map(p -> p.getFeatures().stream()
-                                .mapToDouble(f -> f.getValue().asNumber())
+                                .mapToDouble(f -> (double) f.getValue().getUnderlyingObject())
                                 .toArray())
                         .toArray(double[][]::new));
     }
@@ -78,7 +79,7 @@ public class MatrixUtilsExtensions {
      */
     public static RealVector vectorFromPredictionOutput(PredictionOutput p) {
         return MatrixUtils.createRealVector(p.getOutputs().stream()
-                .mapToDouble(f -> f.getValue().asNumber())
+                .mapToDouble(f -> (double) f.getValue().getUnderlyingObject())
                 .toArray());
     }
 
@@ -89,12 +90,16 @@ public class MatrixUtilsExtensions {
      * @return double[][] array, the converted matrix
      */
     public static RealMatrix matrixFromPredictionOutput(List<PredictionOutput> ps) {
-        return MatrixUtils.createRealMatrix(
-                ps.stream()
-                        .map(p -> p.getOutputs().stream()
-                                .mapToDouble(o -> o.getValue().asNumber())
-                                .toArray())
-                        .toArray(double[][]::new));
+        int lenPS = ps.size();
+        int lenOS = ps.get(0).getOutputs().size();
+        RealMatrix output = MatrixUtils.createRealMatrix(lenPS, lenOS);
+        for (int i = 0; i < lenPS; i++) {
+            List<Output> os = ps.get(i).getOutputs();
+            for (int j = 0; j < lenOS; j++) {
+                output.setEntry(i, j, (double) os.get(j).getValue().getUnderlyingObject());
+            }
+        }
+        return output;
     }
 
     // === RealMAtrix Operations =======================================================================================

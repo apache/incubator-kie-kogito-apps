@@ -99,7 +99,7 @@ public class TestUtils {
                 List<Feature> features = predictionInput.getFeatures();
                 double result = 0;
                 for (int i = 0; i < features.size(); i++) {
-                    result += features.get(i).getValue().asNumber() * weights[i];
+                    result += (double) features.get(i).getValue().getUnderlyingObject() * weights[i];
                 }
                 PredictionOutput predictionOutput = new PredictionOutput(
                         List.of(new Output("linear-sum", Type.NUMBER, new Value(result), 1d)));
