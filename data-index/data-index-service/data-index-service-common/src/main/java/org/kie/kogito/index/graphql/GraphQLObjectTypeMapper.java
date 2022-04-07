@@ -86,6 +86,8 @@ public class GraphQLObjectTypeMapper implements Function<DomainDescriptor, Graph
                         break;
                     case "java.lang.String":
                     case "java.util.Date":
+                    case "java.time.LocalDateTime":
+                    case "kogito.Serializable":
                         type = Scalars.GraphQLString;
                         break;
                     case "java.lang.Boolean":
@@ -103,7 +105,15 @@ public class GraphQLObjectTypeMapper implements Function<DomainDescriptor, Graph
         String typeName = getTypeName(attribute.getTypeName());
         GraphQLType type = schema.getType(typeName);
         if (type == null) {
-            type = additionalTypes.computeIfAbsent(typeName, k -> new GraphQLObjectTypeMapper(schema, additionalTypes, allTypes).apply(allTypes.get(typeName)));
+            if (!additionalTypes.containsKey(typeName)) {
+                DomainDescriptor domain = allTypes.get(typeName);
+                if (domain != null) {
+                    type = new GraphQLObjectTypeMapper(schema, additionalTypes, allTypes).apply(domain);
+                    additionalTypes.put(typeName, type);
+                }
+            } else {
+                type = additionalTypes.get(typeName);
+            }
         }
         return (GraphQLOutputType) type;
     }
