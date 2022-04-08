@@ -107,7 +107,11 @@ public class GraphQLObjectTypeMapper implements Function<DomainDescriptor, Graph
                 DomainDescriptor domain = allTypes.get(typeName);
                 if (domain != null) {
                     type = new GraphQLObjectTypeMapper(schema, additionalTypes, allTypes).apply(domain);
-                    additionalTypes.put(typeName, type);
+                    if (type != null) {
+                        additionalTypes.put(typeName, type);
+                    } else {
+                        LOGGER.warn("GraphQL type mapping returned null for the typeName: {}", typeName);
+                    }
                 }
             } else {
                 type = additionalTypes.get(typeName);
