@@ -86,8 +86,6 @@ public class GraphQLObjectTypeMapper implements Function<DomainDescriptor, Graph
                         break;
                     case "java.lang.String":
                     case "java.util.Date":
-                    case "java.time.LocalDateTime":
-                    case "kogito.Serializable":
                         type = Scalars.GraphQLString;
                         break;
                     case "java.lang.Boolean":
