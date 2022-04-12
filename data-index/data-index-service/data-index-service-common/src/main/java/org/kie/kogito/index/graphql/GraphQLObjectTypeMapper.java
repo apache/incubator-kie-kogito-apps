@@ -94,7 +94,9 @@ public class GraphQLObjectTypeMapper implements Function<DomainDescriptor, Graph
                     default:
                         type = getGraphQLType(field, schema, additionalTypes, allTypes);
                 }
-                builder.field(newFieldDefinition().name(field.getName()).type(type));
+                if (type != null) {
+                    builder.field(newFieldDefinition().name(field.getName()).type(type));
+                }
             }
         });
     }
