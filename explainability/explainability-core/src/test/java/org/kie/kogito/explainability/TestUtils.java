@@ -64,7 +64,7 @@ public class TestUtils {
                 double result = 0;
                 for (int i = 0; i < features.size(); i++) {
                     if (skipFeatureIndex != i) {
-                        result += features.get(i).getValue().asNumber();
+                        result += (double) features.get(i).getValue().getUnderlyingObject();
                     }
                 }
                 PredictionOutput predictionOutput = new PredictionOutput(
@@ -82,7 +82,7 @@ public class TestUtils {
                 List<Feature> features = predictionInput.getFeatures();
                 double result = 0;
                 for (int i = 0; i < features.size(); i++) {
-                    result += features.get(i).getValue().asNumber() + ((rn.nextDouble() - .5) * noiseMagnitude);
+                    result += (double) features.get(i).getValue().getUnderlyingObject() + ((rn.nextDouble() - .5) * noiseMagnitude);
                 }
                 PredictionOutput predictionOutput = new PredictionOutput(
                         List.of(new Output("noisy-sum", Type.NUMBER, new Value(result), 1d)));
@@ -99,7 +99,7 @@ public class TestUtils {
                 List<Feature> features = predictionInput.getFeatures();
                 double result = 0;
                 for (int i = 0; i < features.size(); i++) {
-                    result += features.get(i).getValue().asNumber() * weights[i];
+                    result += (double) features.get(i).getValue().getUnderlyingObject() * weights[i];
                 }
                 PredictionOutput predictionOutput = new PredictionOutput(
                         List.of(new Output("linear-sum", Type.NUMBER, new Value(result), 1d)));
@@ -117,7 +117,7 @@ public class TestUtils {
                 double result = 0;
                 for (int i = 0; i < features.size(); i++) {
                     if (skipFeatureIndex != i) {
-                        result += features.get(i).getValue().asNumber();
+                        result += (double) features.get(i).getValue().getUnderlyingObject();
                     }
                 }
                 Output output0 = new Output("sum-but" + skipFeatureIndex, Type.NUMBER, new Value(result), 1d);

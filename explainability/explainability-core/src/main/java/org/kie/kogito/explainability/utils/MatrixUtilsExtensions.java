@@ -27,6 +27,8 @@ import org.apache.commons.math3.linear.RealVector;
 import org.apache.commons.math3.linear.SingularMatrixException;
 import org.apache.commons.math3.linear.SingularValueDecomposition;
 import org.apache.commons.math3.util.Pair;
+import org.kie.kogito.explainability.model.Feature;
+import org.kie.kogito.explainability.model.Output;
 import org.kie.kogito.explainability.model.PredictionInput;
 import org.kie.kogito.explainability.model.PredictionOutput;
 
@@ -42,59 +44,83 @@ public class MatrixUtilsExtensions {
         throw new IllegalStateException("Utility class");
     }
 
+    private static double parseNumeric(Object n) {
+        try {
+            return (double) n;
+        } catch (java.lang.ClassCastException ignored) {
+        }
+        ;
+        try {
+            return (double) (int) n;
+        } catch (java.lang.ClassCastException ignored) {
+        }
+        ;
+        return (double) n;
+    }
+
     // === Creation ops ================================================================================================
     /**
      * Convert a prediction input to a row vector array compatible with matrix ops
-     * 
+     *
      * @param p: the prediction inputs to convert into a double[][] row vector
      * @return double[][] array, the converted matrix
      */
     public static RealVector vectorFromPredictionInput(PredictionInput p) {
         return MatrixUtils.createRealVector(p.getFeatures().stream()
-                .mapToDouble(f -> f.getValue().asNumber())
+                .mapToDouble(f -> parseNumeric(f.getValue().getUnderlyingObject()))
                 .toArray());
     }
 
     /**
      * Convert a list of prediction inputs to an array compatible with matrix ops
-     * 
+     *
      * @param ps: the list of prediction inputs to convert into a double[][] array
      * @return double[][] array, the converted matrix
      */
     public static RealMatrix matrixFromPredictionInput(List<PredictionInput> ps) {
-        return MatrixUtils.createRealMatrix(
-                ps.stream()
-                        .map(p -> p.getFeatures().stream()
-                                .mapToDouble(f -> f.getValue().asNumber())
-                                .toArray())
-                        .toArray(double[][]::new));
+        int nrows = ps.size();
+        int ncols = ps.get(0).getFeatures().size();
+        RealMatrix result = MatrixUtils.createRealMatrix(nrows, ncols);
+
+        for (int i = 0; i < nrows; i++) {
+            List<Feature> fs = ps.get(i).getFeatures();
+            for (int j = 0; j < ncols; j++) {
+                result.setEntry(i, j, parseNumeric(fs.get(j).getValue().getUnderlyingObject()));
+            }
+        }
+        return result;
     }
 
     /**
      * Convert a prediction input to a row vector array compatible with matrix ops
-     * 
+     *
      * @param p: the prediction inputs to convert into a double[][] row vector
      * @return double[][] array, the converted matrix
      */
     public static RealVector vectorFromPredictionOutput(PredictionOutput p) {
         return MatrixUtils.createRealVector(p.getOutputs().stream()
-                .mapToDouble(f -> f.getValue().asNumber())
+                .mapToDouble(f -> parseNumeric(f.getValue().getUnderlyingObject()))
                 .toArray());
     }
 
     /**
      * Convert a list of prediction outputs to an array compatible with matrix ops
-     * 
+     *
      * @param ps: the list of prediction outputs to convert into a double[][] array
      * @return double[][] array, the converted matrix
      */
     public static RealMatrix matrixFromPredictionOutput(List<PredictionOutput> ps) {
-        return MatrixUtils.createRealMatrix(
-                ps.stream()
-                        .map(p -> p.getOutputs().stream()
-                                .mapToDouble(o -> o.getValue().asNumber())
-                                .toArray())
-                        .toArray(double[][]::new));
+        int nrows = ps.size();
+        int ncols = ps.get(0).getOutputs().size();
+        RealMatrix result = MatrixUtils.createRealMatrix(nrows, ncols);
+
+        for (int i = 0; i < nrows; i++) {
+            List<Output> os = ps.get(i).getOutputs();
+            for (int j = 0; j < ncols; j++) {
+                result.setEntry(i, j, parseNumeric(os.get(j).getValue().getUnderlyingObject()));
+            }
+        }
+        return result;
     }
 
     // === RealMAtrix Operations =======================================================================================

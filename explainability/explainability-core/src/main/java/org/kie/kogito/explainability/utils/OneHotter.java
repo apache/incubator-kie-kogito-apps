@@ -76,14 +76,14 @@ public class OneHotter {
                 Feature newFeature = new Feature(
                         prototype.getName() + this.proxySplitter,
                         Type.NUMBER,
-                        new Value(i));
+                        new Value((double) i));
                 encodedFeatures.add(newFeature);
                 break;
             } else if (!proxy) {
                 Feature newFeature = new Feature(
                         prototype.getName() + this.oheSplitter + i + this.oheSplitter + comparedVals[i],
                         Type.NUMBER,
-                        new Value(prototype.getValue().equals(comparedVals[i]) ? 1 : 0));
+                        new Value(prototype.getValue().equals(comparedVals[i]) ? 1. : 0.));
                 encodedFeatures.add(newFeature);
             }
         }
@@ -134,7 +134,7 @@ public class OneHotter {
                     decodedFeatures.add(new Feature(
                             parentFeature,
                             Type.CATEGORICAL,
-                            (Value) categoricals.get(parentFeature).toArray()[(int) f.getValue().asNumber()]));
+                            (Value) categoricals.get(parentFeature).toArray()[(int) (double) f.getValue().getUnderlyingObject()]));
                 } else if (f.getValue().asNumber() == 1) {
                     String[] splitName = f.getName().split(this.oheSplitter);
                     String parentFeature = splitName[0];
