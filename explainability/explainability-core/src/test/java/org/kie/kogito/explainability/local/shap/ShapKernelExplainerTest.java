@@ -105,7 +105,7 @@ class ShapKernelExplainerTest {
             { { 0., 0., -1. }, { 0., 0., -2 } },
     };
 
-    // multi variance, one output logit test case matrices ===============
+    // multi variance, one output logit test case matrices =============== 
     double[][] toExplainLogit = {
             { 0.1, 0.12, 0.14, -0.08, 0.16 },
             { 0.22, 0.24, 0.26, -0.1, 0.38 },
