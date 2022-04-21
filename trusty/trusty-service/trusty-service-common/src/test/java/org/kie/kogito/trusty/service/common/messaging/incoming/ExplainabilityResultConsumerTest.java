@@ -42,7 +42,7 @@ import org.kie.kogito.trusty.service.common.handlers.ExplainerServiceHandlerRegi
 import org.kie.kogito.trusty.service.common.handlers.LIMEExplainerServiceHandler;
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 import org.kie.kogito.trusty.storage.common.TrustyStorageService;
-import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
+import org.apache.commons.lang3.builder.CompareToBuilder;
 
 import io.cloudevents.CloudEvent;
 import io.smallrye.context.SmallRyeManagedExecutor;
