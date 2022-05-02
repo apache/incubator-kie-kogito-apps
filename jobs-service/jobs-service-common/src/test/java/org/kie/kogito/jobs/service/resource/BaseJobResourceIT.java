@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.api.Job;
@@ -32,6 +31,7 @@ import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
 import org.kie.kogito.jobs.service.scheduler.impl.VertxTimerServiceScheduler;
 import org.kie.kogito.jobs.service.utils.DateUtil;
+import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -55,7 +55,7 @@ public abstract class BaseJobResourceIT {
     public static final String NODE_INSTANCE_ID = "nodeInstanceId";
     public static final int PRIORITY = 1;
 
-    @ConfigProperty(name = "quarkus.http.test-port")
+    @QuarkusTestProperty(name = "quarkus.http.test-port")
     private int port;
 
     @Inject
