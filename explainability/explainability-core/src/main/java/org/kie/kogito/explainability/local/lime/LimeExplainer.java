@@ -275,6 +275,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             // highest weights
             LinearModel linearModel = new LinearModel(linearizedTargetInputFeatures.size(), limeInputs.isClassification(), perturbationContext.getRandom());
             double loss = linearModel.fit(trainingSet, sampleWeights);
+            LOGGER.trace("Feature selection loss: {}", loss);
             double[] weights = linearModel.getWeights();
             List<FeatureImportance> fis = new ArrayList<>();
             for (int i = 0; i < weights.length; i++) {
@@ -284,10 +285,10 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
             selectedFeatures = topFeatures.stream().map(FeatureImportance::getFeature).collect(Collectors.toList());
         } else {
             // forward selection
-            int s = 1;
+            int s = 0;
             List<Feature> candidates = new ArrayList<>(linearizedTargetInputFeatures);
             List<Feature> selected = new ArrayList<>();
-            while (s < limeConfig.getNoOfFeatures()) {
+            while (s < executionConfig.getNoOfFeatures()) {
                 // for each feature:
                 Map<Feature, Double> scores = new HashMap<>();
                 for (Feature candidateFeature : candidates) {
@@ -320,7 +321,7 @@ public class LimeExplainer implements LocalExplainer<Map<String, Saliency>> {
                 Feature selectedFeature = sortedEntries.get(0).getKey();
 
                 // 5. remove it from the candidates
-                candidates.removeIf(f -> f.getName().equals(selectedFeature.getName()));
+                candidates.removeIf(f -> f.equals(selectedFeature));
 
                 // 6. add it to the selected
                 selected.add(selectedFeature);
