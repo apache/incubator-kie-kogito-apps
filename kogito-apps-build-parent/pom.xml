@@ -201,6 +201,8 @@
                 <skip.springboot>true</skip.springboot>
                 <skip.ui.deps>true</skip.ui.deps>
                 <skip.ui.build>true</skip.ui.build>
+                <skip.ui.test>true</skip.ui.test>
+                <skip.ui.it>true</skip.ui.it>
                 <failsafe.include>**/Native*IT.java</failsafe.include>
                 <failsafe.exclude></failsafe.exclude>
                 <quarkus.native.native-image-xmx>8g</quarkus.native.native-image-xmx>
@@ -233,6 +235,8 @@
             <properties>
                 <skip.ui.deps>true</skip.ui.deps>
                 <skip.ui.build>true</skip.ui.build>
+                <skip.ui.test>true</skip.ui.test>
+                <skip.ui.it>true</skip.ui.it>
             </properties>
         </profile>
         <profile>

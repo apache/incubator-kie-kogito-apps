@@ -15,6 +15,9 @@
   <name>Kogito Apps :: UI Packages</name>
 
   <properties>
+    <skip.ui.test>${skipTests}</skip.ui.test>
+    <skip.ui.it>${skipITs}</skip.ui.it>
+
     <sonar.sources>${project.basedir}/packages</sonar.sources>
     <sonar.inclusions>packages/*/src/**</sonar.inclusions>
     <sonar.exclusions>**/__mocks__/**,**/mocks/**,**/tests/utils/**,**/*.stories.tsx,**/graphql/types.tsx,**/graphql/graphql.schema.json,**/index.tsx,*.js</sonar.exclusions>
@@ -200,7 +203,7 @@
             </goals>
             <phase>test</phase>
             <configuration>
-              <skip>${skipTests}</skip>
+              <skip>${skip.ui.test}</skip>
               <arguments>run test</arguments>
             </configuration>
           </execution>
@@ -211,7 +214,7 @@
             </goals>
             <phase>integration-test</phase>
             <configuration>
-              <skip>${skipITs}</skip>
+              <skip>${skip.ui.it}</skip>
               <arguments>run test:it</arguments>
             </configuration>
           </execution>
