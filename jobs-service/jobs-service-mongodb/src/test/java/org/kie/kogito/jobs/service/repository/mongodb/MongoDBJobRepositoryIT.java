@@ -21,10 +21,10 @@ import java.time.Duration;
 import javax.inject.Inject;
 
 import org.bson.Document;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseJobRepositoryTest;
-import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
 import io.quarkus.mongodb.reactive.ReactiveMongoClient;
@@ -44,7 +44,7 @@ public class MongoDBJobRepositoryIT extends BaseJobRepositoryTest {
     @Inject
     ReactiveMongoClient client;
 
-    @QuarkusTestProperty(name = DATABASE_PROPERTY)
+    @ConfigProperty(name = DATABASE_PROPERTY)
     String database;
 
     @BeforeEach
