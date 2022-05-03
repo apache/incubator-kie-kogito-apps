@@ -24,6 +24,7 @@ import java.util.function.Consumer;
 
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,6 @@ import org.kie.kogito.explainability.ExplanationService;
 import org.kie.kogito.explainability.api.BaseExplainabilityRequest;
 import org.kie.kogito.explainability.api.BaseExplainabilityResult;
 import org.kie.kogito.explainability.api.ModelIdentifier;
-import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 import org.kie.kogito.test.quarkus.kafka.KafkaTestClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 import org.slf4j.Logger;
@@ -65,7 +65,7 @@ abstract class BaseExplainabilityMessagingHandlerIT {
     @InjectMock
     protected ExplanationService explanationService;
 
-    @QuarkusTestProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
     protected String kafkaBootstrapServers;
 
     @Inject

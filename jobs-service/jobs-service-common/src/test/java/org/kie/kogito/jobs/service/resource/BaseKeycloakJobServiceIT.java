@@ -19,6 +19,7 @@ import java.io.IOException;
 
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.AccessTokenResponse;
@@ -27,7 +28,6 @@ import org.kie.kogito.jobs.api.JobBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
-import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 import org.kie.kogito.testcontainers.KogitoKeycloakContainer;
 import org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource;
 
@@ -48,7 +48,7 @@ public abstract class BaseKeycloakJobServiceIT {
     public static final int UNAUTHORIZED_CODE = 403;
     public static final int FORBIDDEN_CODE = 401;
 
-    @QuarkusTestProperty(name = KeycloakQuarkusTestResource.KOGITO_KEYCLOAK_PROPERTY)
+    @ConfigProperty(name = KeycloakQuarkusTestResource.KOGITO_KEYCLOAK_PROPERTY)
     private String keycloakURL;
 
     @Inject

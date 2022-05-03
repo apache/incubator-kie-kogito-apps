@@ -15,9 +15,9 @@
  */
 package org.kie.kogito.index.service;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.AccessTokenResponse;
-import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 import org.kie.kogito.testcontainers.KogitoKeycloakContainer;
 import org.kie.kogito.testcontainers.quarkus.KeycloakQuarkusTestResource;
 
@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractKeycloakIntegrationIndexingServiceIT {
 
-    @QuarkusTestProperty(name = KeycloakQuarkusTestResource.KOGITO_KEYCLOAK_PROPERTY, defaultValue = "")
+    @ConfigProperty(name = KeycloakQuarkusTestResource.KOGITO_KEYCLOAK_PROPERTY, defaultValue = "")
     public String keycloakURL;
 
     @Test

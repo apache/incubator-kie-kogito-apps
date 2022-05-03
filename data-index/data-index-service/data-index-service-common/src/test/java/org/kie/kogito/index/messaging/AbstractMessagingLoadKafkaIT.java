@@ -25,6 +25,7 @@ import java.util.stream.Stream;
 
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -32,7 +33,6 @@ import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
-import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 import org.kie.kogito.test.quarkus.kafka.KafkaTestClient;
 import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 
@@ -56,10 +56,10 @@ import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
 
 public abstract class AbstractMessagingLoadKafkaIT {
 
-    @QuarkusTestProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
+    @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
     String kafkaBootstrapServers;
 
-    @QuarkusTestProperty(name = "kogito.data-index.domain-indexing", defaultValue = "true")
+    @ConfigProperty(name = "kogito.data-index.domain-indexing", defaultValue = "true")
     Boolean indexDomain;
 
     List<KafkaTestClient> kafkaClients;

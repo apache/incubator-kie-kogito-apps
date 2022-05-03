@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,6 @@ import org.kie.kogito.jobs.api.URIBuilder;
 import org.kie.kogito.jobs.api.event.CancelJobRequestEvent;
 import org.kie.kogito.jobs.api.event.CreateProcessInstanceJobRequestEvent;
 import org.kie.kogito.jobs.api.event.serialization.JobCloudEventSerializer;
-import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
@@ -72,7 +72,7 @@ public abstract class BaseMessagingApiIT {
     private static final String CALLBACK_RESOURCE_PATH = "/test/callback/management/jobs";
 
     @Inject
-    @QuarkusTestProperty(name = "quarkus.http.test-port")
+    @ConfigProperty(name = "quarkus.http.test-port")
     public int port;
 
     @Inject
