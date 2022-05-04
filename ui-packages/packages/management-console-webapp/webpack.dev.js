@@ -10,7 +10,7 @@ module.exports = merge(common, {
   mode: 'development',
   devtool: 'source-map',
   devServer: {
-    static:{
+    static: {
       directory:'./dist'
     },
     host: HOST,
