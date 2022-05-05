@@ -1,14 +1,43 @@
 # This workflow will build a Java project with Maven
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
 name: Jenkins Tests
+
 on:
   pull_request:
     paths: 
     - '.ci/jenkins/**'
 
 jobs:
+  jenkinsfile-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout 
+      uses: actions/checkout@v2
+      with:
+        path: main
+
+    - name: Checkout shared libraries
+      uses: actions/checkout@v2
+      with:
+        repository: kiegroup/jenkins-pipeline-shared-libraries
+        path: shared-libs
+
+    - name: Set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Setup pipeline env
+      run: cd $GITHUB_WORKSPACE/main/.ci/jenkins/tests && ./setup_pipeline_env.sh
+      
+    - name: Test pipelines
+      run: cd $GITHUB_WORKSPACE/main/.ci/jenkins/tests && mvn -B clean test
+
   dsl-tests:
     runs-on: ubuntu-latest
+
     steps:
     - name: Checkout 
       uses: actions/checkout@v2
@@ -17,6 +46,6 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 11
-
+      
     - name: Test DSL
-      run: cd .ci/jenkins/dsl && ./test.sh -b ${{ github.head_ref }} -o ${{ github.event.pull_request.user.login }} -t ${{ github.base_ref }} -a ${{ github.event.pull_request.base.user.login }}
+      run: .ci/jenkins/dsl/test.sh -h ${{ github.head_ref }} -r ${{ github.event.pull_request.head.repo.full_name }} -b ${{ github.base_ref }} -t ${{ github.event.pull_request.base.repo.full_name }} .ci/jenkins/dsl
