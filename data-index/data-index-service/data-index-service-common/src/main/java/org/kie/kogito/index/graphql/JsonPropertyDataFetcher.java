@@ -15,10 +15,14 @@
  */
 package org.kie.kogito.index.graphql;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
@@ -41,7 +45,22 @@ public class JsonPropertyDataFetcher implements DataFetcher {
                 switch (value.getNodeType()) {
                     case OBJECT:
                     case POJO:
+                        return value;
                     case ARRAY:
+                        if (!value.isNull() && !value.isEmpty()) {
+                            ObjectMapper mapper = new ObjectMapper();
+                            switch (value.get(0).getNodeType()) {
+                                case STRING:
+                                    return mapper.readerFor(new TypeReference<List<String>>() {
+                                    }).readValue(value);
+                                case NUMBER:
+                                    return mapper.readerFor(new TypeReference<List<Number>>() {
+                                    }).readValue(value);
+                                case BOOLEAN:
+                                    return mapper.readerFor(new TypeReference<List<Boolean>>() {
+                                    }).readValue(value);
+                            }
+                        }
                         return value;
                     case NUMBER:
                         return value.numberValue();
