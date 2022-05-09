@@ -1,5 +1,4 @@
 import React from 'react';
-//import { withKnobs, text } from '@storybook/addon-knobs';
 import PageNotFound from './PageNotFound';
 
 export default {
