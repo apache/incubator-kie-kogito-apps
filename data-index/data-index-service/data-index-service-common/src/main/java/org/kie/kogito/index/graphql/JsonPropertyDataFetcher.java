@@ -30,6 +30,13 @@ import graphql.schema.DataFetchingEnvironment;
 public class JsonPropertyDataFetcher implements DataFetcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonPropertyDataFetcher.class);
+    private ObjectMapper mapper = new ObjectMapper();
+    private TypeReference stringListTypeRef = new TypeReference<List<String>>() {
+    };
+    private TypeReference numberListTypeRef = new TypeReference<List<Number>>() {
+    };
+    private TypeReference booleanListTypeRef = new TypeReference<List<Boolean>>() {
+    };
 
     @Override
     public Object get(DataFetchingEnvironment environment) {
@@ -48,17 +55,13 @@ public class JsonPropertyDataFetcher implements DataFetcher {
                         return value;
                     case ARRAY:
                         if (!value.isNull() && !value.isEmpty()) {
-                            ObjectMapper mapper = new ObjectMapper();
                             switch (value.get(0).getNodeType()) {
                                 case STRING:
-                                    return mapper.readerFor(new TypeReference<List<String>>() {
-                                    }).readValue(value);
+                                    return mapper.readerFor(stringListTypeRef).readValue(value);
                                 case NUMBER:
-                                    return mapper.readerFor(new TypeReference<List<Number>>() {
-                                    }).readValue(value);
+                                    return mapper.readerFor(numberListTypeRef).readValue(value);
                                 case BOOLEAN:
-                                    return mapper.readerFor(new TypeReference<List<Boolean>>() {
-                                    }).readValue(value);
+                                    return mapper.readerFor(booleanListTypeRef).readValue(value);
                             }
                         }
                         return value;
