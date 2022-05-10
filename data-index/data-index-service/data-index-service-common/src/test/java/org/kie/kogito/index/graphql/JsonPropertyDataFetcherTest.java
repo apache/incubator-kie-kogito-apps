@@ -48,21 +48,6 @@ public class JsonPropertyDataFetcherTest {
 
     @Test
     public void testArraysTypesDataFetcher() {
-        // {"addressArray": [
-        //      {"city":"city1",
-        //       "amount":9,
-        //       "approved":true,
-        //       "zipCode":"zipCode1"
-        //       },
-        //       {"city":"city2",
-        //       "amount":97,
-        //       "approved":false,
-        //       "zipCode":"zipCode2"}
-        //       ],
-        //   "stringArray":["st1","st2"],
-        //   "numberArray":[8,98.6],
-        //   "booleanArray":[true,false]
-        //   }
         JsonNode arraysJson = getArraysNodeJson();
         assertThat(((ArrayNode) jsonPropertyDataFetcher.get(getMockEnv("addressArray", arraysJson))).size()).isEqualTo(2);
         List stringArray = ((List) jsonPropertyDataFetcher.get(getMockEnv("stringArray", arraysJson)));
@@ -98,6 +83,21 @@ public class JsonPropertyDataFetcherTest {
     }
 
     private JsonNode getArraysNodeJson() {
+        // {"addressArray": [
+        //      {"city":"city1",
+        //       "amount":9,
+        //       "approved":true,
+        //       "zipCode":"zipCode1"
+        //       },
+        //       {"city":"city2",
+        //       "amount":97,
+        //       "approved":false,
+        //       "zipCode":"zipCode2"}
+        //       ],
+        //   "stringArray":["st1","st2"],
+        //   "numberArray":[8,98.6],
+        //   "booleanArray":[true,false]
+        //   }
         ObjectNode objectNode = objectMapper.createObjectNode();
         ArrayNode addressesArrayNode = objectMapper.createArrayNode();
         addressesArrayNode.add(createTestObjectNodeJson("city1", 9, true, "zipCode1"));

@@ -81,7 +81,7 @@ public abstract class AbstractInputObjectTypeMapper implements Function<GraphQLO
             if ("String".equals(baseType)) {
                 return "StringArray";
             }
-            return ((GraphQLNamedType) graphQLOutputType.getChildren().get(0)).getName();
+            return baseType;
         } else {
             return ((GraphQLNamedType) graphQLOutputType).getName();
         }

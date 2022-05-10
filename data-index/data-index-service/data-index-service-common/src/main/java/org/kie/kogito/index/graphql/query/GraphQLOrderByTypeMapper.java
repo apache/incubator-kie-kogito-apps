@@ -61,7 +61,7 @@ public class GraphQLOrderByTypeMapper extends AbstractInputObjectTypeMapper {
                         break;
                     default:
                         String typeName;
-                        String name = resolveBaseTypeName(field.getType());
+                        String name = ((GraphQLNamedType) field.getType()).getName();
                         switch (name) {
                             case "Int":
                             case "Long":

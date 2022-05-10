@@ -30,12 +30,12 @@ import graphql.schema.DataFetchingEnvironment;
 public class JsonPropertyDataFetcher implements DataFetcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonPropertyDataFetcher.class);
-    private ObjectMapper mapper = new ObjectMapper();
-    private TypeReference stringListTypeRef = new TypeReference<List<String>>() {
+    private static ObjectMapper mapper = new ObjectMapper();
+    private static TypeReference stringListTypeRef = new TypeReference<List<String>>() {
     };
-    private TypeReference numberListTypeRef = new TypeReference<List<Number>>() {
+    private static TypeReference numberListTypeRef = new TypeReference<List<Number>>() {
     };
-    private TypeReference booleanListTypeRef = new TypeReference<List<Boolean>>() {
+    private static TypeReference booleanListTypeRef = new TypeReference<List<Boolean>>() {
     };
 
     @Override
