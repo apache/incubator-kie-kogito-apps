@@ -15,7 +15,8 @@
     "test": "lerna run test:coverage --stream --",
     "test:it": "lerna run test:it --stream --concurrency=1 --no-bail --",
     "locktt": "locktt",
-    "test:e2e:trusty": "lerna run --scope @kogito-apps/trusty test:e2e:trusty --"
+    "test:e2e:trusty": "lerna run --scope @kogito-apps/trusty test:e2e:trusty --",
+    "format:all": "lerna run format --stream --"
   },
   "husky": {
     "hooks": {
@@ -132,14 +133,14 @@
     "uuid": "^3.3.3",
     "waait": "^1.0.5",
     "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7",
-    "webpack-dev-server": "^3.8.0",
+    "webpack-cli": "^4.3.0",
+    "webpack-dev-server": "^4.8.0",
     "webpack-merge": "^4.2.2",
     "webpack-node-externals": "^3.0.0",
     "yarn": "1.22.10"
   },
   "resolutions": {
     "@types/express-serve-static-core": "^4.17.21",
-    "axios": "0.21.1"
+    "axios": "0.21.2"
   }
 }
