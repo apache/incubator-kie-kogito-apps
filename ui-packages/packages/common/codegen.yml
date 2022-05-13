@@ -4,7 +4,10 @@ documents: './src/graphql/queries.tsx'
 generates:
   ./src/graphql/types.tsx:
     plugins:
-      - add: '/* tslint:disable */'
+      - add:
+          content: '/* tslint-disable */'
+      - add:
+          content: /* eslint-disable  @typescript-eslint/no-namespace */
       - add:
           content:
           - ''
