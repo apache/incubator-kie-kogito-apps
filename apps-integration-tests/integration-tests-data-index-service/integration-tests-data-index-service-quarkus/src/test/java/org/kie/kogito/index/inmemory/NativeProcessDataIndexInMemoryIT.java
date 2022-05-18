@@ -15,9 +15,9 @@
  */
 package org.kie.kogito.index.inmemory;
 
-import io.quarkus.test.junit.NativeImageTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 
-@NativeImageTest
+@QuarkusIntegrationTest
 public class NativeProcessDataIndexInMemoryIT extends ProcessDataIndexInMemoryIT {
 
 }

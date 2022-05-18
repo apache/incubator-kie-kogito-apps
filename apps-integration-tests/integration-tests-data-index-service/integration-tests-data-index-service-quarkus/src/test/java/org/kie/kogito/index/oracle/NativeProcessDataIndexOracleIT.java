@@ -15,9 +15,9 @@
  */
 package org.kie.kogito.index.oracle;
 
-import io.quarkus.test.junit.NativeImageTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 
-@NativeImageTest
+@QuarkusIntegrationTest
 public class NativeProcessDataIndexOracleIT extends ProcessDataIndexOracleIT {
 
 }

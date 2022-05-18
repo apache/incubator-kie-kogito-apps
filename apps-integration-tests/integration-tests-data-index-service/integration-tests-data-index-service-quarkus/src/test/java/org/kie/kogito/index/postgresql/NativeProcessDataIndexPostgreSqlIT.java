@@ -15,9 +15,9 @@
  */
 package org.kie.kogito.index.postgresql;
 
-import io.quarkus.test.junit.NativeImageTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 
-@NativeImageTest
+@QuarkusIntegrationTest
 public class NativeProcessDataIndexPostgreSqlIT extends ProcessDataIndexPostgreSqlIT {
 
 }

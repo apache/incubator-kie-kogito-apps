@@ -15,10 +15,10 @@
  */
 package org.kie.kogito.index.oracle;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.index.AbstractProcessDataIndexIT;
 import org.kie.kogito.index.quarkus.DataIndexOracleQuarkusTestResource;
 import org.kie.kogito.index.quarkus.OracleTestProfile;
+import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
@@ -27,7 +27,7 @@ import io.quarkus.test.junit.TestProfile;
 @TestProfile(OracleTestProfile.class)
 public class ProcessDataIndexOracleIT extends AbstractProcessDataIndexIT {
 
-    @ConfigProperty(name = DataIndexOracleQuarkusTestResource.KOGITO_DATA_INDEX_SERVICE_URL)
+    @QuarkusTestProperty(name = DataIndexOracleQuarkusTestResource.KOGITO_DATA_INDEX_SERVICE_URL)
     String dataIndex;
 
     @Override
