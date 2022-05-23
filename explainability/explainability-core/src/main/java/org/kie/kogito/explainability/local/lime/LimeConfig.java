@@ -43,7 +43,7 @@ public class LimeConfig {
     private static final boolean DEFAULT_NORMALIZE_WEIGHTS = false;
     private static final boolean DEFAULT_HIGH_SCORE_ZONES = true;
     private static final int DEFAULT_BOOSTRAP_INPUTS = 50;
-    private static final boolean DEFAULT_FEATURE_SELECTION = false;
+    private static final boolean DEFAULT_FEATURE_SELECTION = true;
     private static final int DEFAULT_NO_OF_FEATURES = 6;
 
     private double separableDatasetRatio = DEFAULT_SEPARABLE_DATASET_RATIO;
