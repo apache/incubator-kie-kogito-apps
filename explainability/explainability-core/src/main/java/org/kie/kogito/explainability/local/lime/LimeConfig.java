@@ -296,7 +296,9 @@ public class LimeConfig {
                 .withProximityFilteredDatasetMinimum(proximityFilteredDatasetMinimum)
                 .withProximityKernelWidth(proximityKernelWidth)
                 .withEncodingParams(encodingParams)
-                .withNormalizeWeights(normalizeWeights);
+                .withNormalizeWeights(normalizeWeights)
+                .withFeatureSelection(featureSelection)
+                .withNoOfFeatures(noOfFeatures);
     }
 
     @Override
