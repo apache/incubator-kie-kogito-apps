@@ -200,7 +200,11 @@ const server = new ApolloServer({
   playground: true
 });
 
-server.applyMiddleware({ app });
+(async () => {
+  await server.start();
+  server.applyMiddleware({ app });
+})();
+
 
 module.exports = {
   getApp: () => app,
