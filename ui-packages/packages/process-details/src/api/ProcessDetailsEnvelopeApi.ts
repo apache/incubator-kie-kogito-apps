@@ -30,4 +30,5 @@ export interface Association {
 
 export interface ProcessDetailsInitArgs {
   processInstance: ProcessInstance;
+  omittedProcessTimelineEvents?: string[];
 }

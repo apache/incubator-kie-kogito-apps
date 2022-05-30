@@ -16,6 +16,7 @@
 
 import React, { useContext } from 'react';
 import { User } from '@kogito-apps/consoles-common';
+import { CustomLabels } from '../../api/CustomLabels';
 
 export interface DevUIAppContext {
   isProcessEnabled: boolean;
@@ -26,6 +27,9 @@ export interface DevUIAppContext {
   onUserChange(listener: UserChangeListener): UnSubscribeHandler;
   getDevUIUrl(): string;
   getOpenApiPath(): string;
+  availablePages?: string[];
+  customLabels: CustomLabels;
+  omittedProcessTimelineEvents: string[];
 }
 
 export interface UserChangeListener {
@@ -37,21 +41,36 @@ export interface UnSubscribeHandler {
 }
 
 export class DevUIAppContextImpl implements DevUIAppContext {
-  private users: User[];
+  private readonly users?: User[];
   private currentUser: User;
   private readonly userListeners: UserChangeListener[] = [];
   private readonly devUIUrl: string;
   private readonly openApiPath: string;
   readonly isProcessEnabled: boolean;
   readonly isTracingEnabled: boolean;
+  public readonly availablePages: string[];
+  public readonly customLabels: CustomLabels;
+  public readonly omittedProcessTimelineEvents: string[];
 
-  constructor(users, url, path, isProcessEnabled, isTracingEnabled) {
+  constructor(
+    users,
+    url,
+    path,
+    isProcessEnabled,
+    isTracingEnabled,
+    availablePages,
+    customLabels,
+    omittedProcessTimelineEvents
+  ) {
     this.users = users;
     this.devUIUrl = url;
     this.openApiPath = path;
     this.isProcessEnabled = isProcessEnabled;
     this.isTracingEnabled = isTracingEnabled;
-    if (users.length > 0) {
+    this.availablePages = availablePages;
+    this.customLabels = customLabels;
+    this.omittedProcessTimelineEvents = omittedProcessTimelineEvents;
+    if (users?.length > 0) {
       this.currentUser = users[0];
     }
   }

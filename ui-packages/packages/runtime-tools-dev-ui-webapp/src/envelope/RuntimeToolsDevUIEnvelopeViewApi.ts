@@ -15,6 +15,7 @@
  */
 
 import { User } from '../api';
+import { CustomLabels } from '../api/CustomLabels';
 
 export interface RuntimeToolsDevUIEnvelopeViewApi {
   setDataIndexUrl: (dataIndexUrl: string) => void;
@@ -25,4 +26,9 @@ export interface RuntimeToolsDevUIEnvelopeViewApi {
   setOpenApiPath: (path: string) => void;
   setProcessEnabled: (isProcessEnabled: boolean) => void;
   setTracingEnabled: (isTracingEnabled: boolean) => void;
+  setAvailablePages: (availablePages: string[]) => void;
+  setCustomLabels: (customLabels: CustomLabels) => void;
+  setOmittedProcessTimelineEvents: (
+    omittedProcessTimelineEvents: string[]
+  ) => void;
 }

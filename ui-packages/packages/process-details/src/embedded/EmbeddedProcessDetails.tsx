@@ -32,6 +32,7 @@ export interface Props {
   targetOrigin: string;
   driver: ProcessDetailsDriver;
   processInstance: ProcessInstance;
+  omittedProcessTimelineEvents?: string[];
 }
 
 export const EmbeddedProcessDetails = React.forwardRef<
@@ -65,7 +66,8 @@ export const EmbeddedProcessDetails = React.forwardRef<
           envelopeServerId: envelopeServer.id
         },
         {
-          processInstance: props.processInstance
+          processInstance: props.processInstance,
+          omittedProcessTimelineEvents: props.omittedProcessTimelineEvents
         }
       );
     },

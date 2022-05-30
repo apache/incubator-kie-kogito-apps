@@ -33,6 +33,7 @@ import { StaticContext, useHistory } from 'react-router';
 import * as H from 'history';
 import '../../styles.css';
 import { ProcessInstance } from 'packages/management-console-shared';
+import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 
 interface MatchProps {
   instanceID: string;
@@ -49,6 +50,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   });
 
   const gatewayApi: ProcessDetailsGatewayApi = useProcessDetailsGatewayApi();
+  const apiContext = useDevUIAppContext();
 
   const history = useHistory();
   const processId = props.match.params.instanceID;
@@ -117,7 +119,12 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
           {processInstance &&
           Object.keys(processInstance).length > 0 &&
           !fetchError ? (
-            <ProcessDetailsContainer processInstance={processInstance} />
+            <ProcessDetailsContainer
+              processInstance={processInstance}
+              omittedProcessTimelineEvents={
+                apiContext.omittedProcessTimelineEvents
+              }
+            />
           ) : (
             <>
               {fetchError.length > 0 && (
@@ -142,7 +149,10 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
 
   return (
     <>
-      <PageSectionHeader titleText="Process Details" ouiaId={ouiaId} />
+      <PageSectionHeader
+        titleText={`${apiContext.customLabels.singularProcessLabel} Details`}
+        ouiaId={ouiaId}
+      />
       <PageSection
         {...componentOuiaProps(
           ouiaId,

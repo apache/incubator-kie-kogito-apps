@@ -31,6 +31,12 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
   const [openApiPath, setOpenApiPath] = React.useState<string>('');
   const [isProcessEnabled, setProcessEnabled] = React.useState(false);
   const [isTracingEnabled, setTracingEnabled] = React.useState(false);
+  const [availablePages, setAvailablePages] = React.useState<string[]>([]);
+  const [customLabels, setCustomLabels] = React.useState(undefined);
+  const [
+    omittedProcessTimelineEvents,
+    setOmittedProcessTimelineEvents
+  ] = React.useState<string[]>([]);
 
   useImperativeHandle(
     forwardingRef,
@@ -59,6 +65,15 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
         },
         setTracingEnabled: isTracingEnabled => {
           setTracingEnabled(isTracingEnabled);
+        },
+        setAvailablePages: availablePages => {
+          setAvailablePages(availablePages);
+        },
+        setCustomLabels: customLabels => {
+          setCustomLabels(customLabels);
+        },
+        setOmittedProcessTimelineEvents: omittedProcessTimelineEvents => {
+          setOmittedProcessTimelineEvents(omittedProcessTimelineEvents);
         }
       };
     },
@@ -76,6 +91,9 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
           devUIUrl={devUIUrl}
           isProcessEnabled={isProcessEnabled}
           isTracingEnabled={isTracingEnabled}
+          availablePages={availablePages}
+          customLabels={customLabels}
+          omittedProcessTimelineEvents={omittedProcessTimelineEvents}
         />
       )}
     </>

@@ -43,14 +43,14 @@ const ProcessDiagram: React.FC<IOwnProps & OUIAProps> = ({
       <Card {...componentOuiaProps(ouiaId, 'process-diagram', ouiaSafe)}>
         <CardHeader>
           <Title headingLevel="h3" size="xl">
-            Process Diagram
+            Diagram
           </Title>
         </CardHeader>
         <CardBody>
           <ReactSvgPanZoomLoader
             src={svg.props.src}
-            width={1000}
-            height={400}
+            width={700}
+            height={1000}
             proxy={
               <>
                 <SvgLoaderSelectElement />
@@ -58,12 +58,12 @@ const ProcessDiagram: React.FC<IOwnProps & OUIAProps> = ({
             }
             render={() => (
               <UncontrolledReactSVGPanZoom
-                width={1000}
-                height={400}
+                width={700}
+                height={1000}
                 detectAutoPan={false}
                 background="#fff"
               >
-                <svg width={1000} height={400}>
+                <svg width={700} height={1000}>
                   {svg}
                 </svg>
               </UncontrolledReactSVGPanZoom>

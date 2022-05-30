@@ -17,14 +17,14 @@
 import * as React from 'react';
 import { useImperativeHandle, useState } from 'react';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
-import { ProcessDetailsChannelApi } from '../api';
+import { ProcessDetailsChannelApi, ProcessDetailsInitArgs } from '../api';
 import ProcessDetails from './components/ProcessDetails/ProcessDetails';
 import ProcessDetailsEnvelopeViewDriver from './ProcessDetailsEnvelopeViewDriver';
 import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import '@patternfly/patternfly/patternfly.css';
 
 export interface ProcessDetailsEnvelopeViewApi {
-  initialize: (processInstance?: ProcessInstance) => void;
+  initialize: (initArgs: ProcessDetailsInitArgs) => void;
 }
 
 interface Props {
@@ -39,14 +39,20 @@ export const ProcessDetailsEnvelopeView = React.forwardRef<
     isEnvelopeConnectedToChannel,
     setEnvelopeConnectedToChannel
   ] = useState<boolean>(false);
-  const [processDetails, setProcessDetails] = useState<ProcessInstance>(
+  const [processInstance, setProcessInstance] = useState<ProcessInstance>(
     {} as ProcessInstance
   );
+  const [
+    omittedProcessTimelineEvents,
+    setOmittedProcessTimelineEvents
+  ] = useState<string[]>([]);
+
   useImperativeHandle(
     forwardedRef,
     () => ({
-      initialize: processInstance => {
-        setProcessDetails(processInstance);
+      initialize: initArgs => {
+        setProcessInstance(initArgs.processInstance);
+        setOmittedProcessTimelineEvents(initArgs.omittedProcessTimelineEvents);
         setEnvelopeConnectedToChannel(true);
       }
     }),
@@ -58,7 +64,8 @@ export const ProcessDetailsEnvelopeView = React.forwardRef<
       <ProcessDetails
         isEnvelopeConnectedToChannel={isEnvelopeConnectedToChannel}
         driver={new ProcessDetailsEnvelopeViewDriver(props.channelApi)}
-        processDetails={processDetails}
+        processDetails={processInstance}
+        omittedProcessTimelineEvents={omittedProcessTimelineEvents}
       />
     </React.Fragment>
   );

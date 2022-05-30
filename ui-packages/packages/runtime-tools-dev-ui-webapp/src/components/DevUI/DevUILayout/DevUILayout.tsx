@@ -31,6 +31,7 @@ import FormDetailsContextProvider from '../../../channel/FormDetails/FormDetails
 import DevUIAppContextProvider from '../../contexts/DevUIAppContextProvider';
 import ProcessDefinitionListContextProvider from '../../../channel/ProcessDefinitionList/ProcessDefinitionListContextProvider';
 import ProcessFormContextProvider from '../../../channel/ProcessForm/ProcessFormContextProvider';
+import { CustomLabels } from '../../../api/CustomLabels';
 
 interface IOwnProps {
   apolloClient: ApolloClient<any>;
@@ -40,6 +41,9 @@ interface IOwnProps {
   children: React.ReactElement;
   devUIUrl: string;
   openApiPath: string;
+  availablePages: string[];
+  customLabels: CustomLabels;
+  omittedProcessTimelineEvents: string[];
 }
 
 const DevUILayout: React.FC<IOwnProps> = ({
@@ -49,6 +53,9 @@ const DevUILayout: React.FC<IOwnProps> = ({
   users,
   devUIUrl,
   openApiPath,
+  availablePages,
+  customLabels,
+  omittedProcessTimelineEvents,
   children
 }) => {
   const renderPage = routeProps => {
@@ -71,6 +78,9 @@ const DevUILayout: React.FC<IOwnProps> = ({
         openApiPath={openApiPath}
         isProcessEnabled={isProcessEnabled}
         isTracingEnabled={isTracingEnabled}
+        availablePages={availablePages}
+        customLabels={customLabels}
+        omittedProcessTimelineEvents={omittedProcessTimelineEvents}
       >
         <TaskConsoleContextsProvider apolloClient={apolloClient}>
           <TaskFormContextProvider>

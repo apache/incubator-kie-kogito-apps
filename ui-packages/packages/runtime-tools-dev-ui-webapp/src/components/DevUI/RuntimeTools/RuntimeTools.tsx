@@ -23,6 +23,8 @@ import ApolloClient from 'apollo-client';
 import DevUIRoutes from '../DevUIRoutes/DevUIRoutes';
 import DevUILayout from '../DevUILayout/DevUILayout';
 import ReactDOM from 'react-dom';
+import { CustomLabels } from '../../../api/CustomLabels';
+
 interface IOwnProps {
   isProcessEnabled: boolean;
   isTracingEnabled: boolean;
@@ -32,6 +34,9 @@ interface IOwnProps {
   navigate: string;
   devUIUrl: string;
   openApiPath: string;
+  availablePages: string[];
+  customLabels: CustomLabels;
+  omittedProcessTimelineEvents: string[];
 }
 
 const RuntimeTools: React.FC<IOwnProps> = ({
@@ -42,7 +47,10 @@ const RuntimeTools: React.FC<IOwnProps> = ({
   devUIUrl,
   openApiPath,
   isProcessEnabled,
-  isTracingEnabled
+  isTracingEnabled,
+  availablePages,
+  customLabels,
+  omittedProcessTimelineEvents
 }) => {
   const httpLink = new HttpLink({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -61,6 +69,9 @@ const RuntimeTools: React.FC<IOwnProps> = ({
           openApiPath={openApiPath}
           isProcessEnabled={isProcessEnabled}
           isTracingEnabled={isTracingEnabled}
+          availablePages={availablePages}
+          customLabels={customLabels}
+          omittedProcessTimelineEvents={omittedProcessTimelineEvents}
         >
           <ServerUnavailablePage
             displayName={'Runtime Dev UI'}
@@ -86,6 +97,9 @@ const RuntimeTools: React.FC<IOwnProps> = ({
       openApiPath={openApiPath}
       isProcessEnabled={isProcessEnabled}
       isTracingEnabled={isTracingEnabled}
+      availablePages={availablePages}
+      customLabels={customLabels}
+      omittedProcessTimelineEvents={omittedProcessTimelineEvents}
     >
       <DevUIRoutes navigate={navigate} trustyServiceUrl={trustyServiceUrl} />
     </DevUILayout>

@@ -65,6 +65,7 @@ interface ProcessDetailsProps {
   isEnvelopeConnectedToChannel: boolean;
   driver: ProcessDetailsDriver;
   processDetails: ProcessInstance;
+  omittedProcessTimelineEvents: string[];
 }
 
 type svgResponse = SvgSuccessResponse | SvgErrorResponse;
@@ -72,7 +73,8 @@ type svgResponse = SvgSuccessResponse | SvgErrorResponse;
 const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   isEnvelopeConnectedToChannel,
   driver,
-  processDetails
+  processDetails,
+  omittedProcessTimelineEvents
 }) => {
   const [data, setData] = useState<ProcessInstance>({} as ProcessInstance);
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -295,7 +297,12 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   const renderProcessTimeline = (): JSX.Element => {
     return (
       <FlexItem>
-        <ProcessDetailsTimelinePanel data={data} jobs={jobs} driver={driver} />
+        <ProcessDetailsTimelinePanel
+          data={data}
+          jobs={jobs}
+          driver={driver}
+          omittedProcessTimelineEvents={omittedProcessTimelineEvents}
+        />
       </FlexItem>
     );
   };

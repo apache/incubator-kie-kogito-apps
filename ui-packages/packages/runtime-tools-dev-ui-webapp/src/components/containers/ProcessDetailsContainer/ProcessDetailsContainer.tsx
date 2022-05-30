@@ -24,10 +24,16 @@ import { useHistory } from 'react-router-dom';
 
 interface ProcessDetailsContainerProps {
   processInstance: ProcessInstance;
+  omittedProcessTimelineEvents: string[];
 }
 
 const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
-  OUIAProps> = ({ processInstance, ouiaId, ouiaSafe }) => {
+  OUIAProps> = ({
+  processInstance,
+  omittedProcessTimelineEvents,
+  ouiaId,
+  ouiaSafe
+}) => {
   const history = useHistory();
   const gatewayApi: ProcessDetailsGatewayApi = useProcessDetailsGatewayApi();
   useEffect(() => {
@@ -49,6 +55,7 @@ const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
       driver={gatewayApi}
       targetOrigin={'*'}
       processInstance={processInstance}
+      omittedProcessTimelineEvents={omittedProcessTimelineEvents}
     />
   );
 };
