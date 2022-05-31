@@ -37,74 +37,67 @@ const DevUINav: React.FC<IOwnProps> = ({ pathname }) => {
       <NavList>
         {isProcessEnabled && (
           <>
-            {!availablePages ||
-              (availablePages.includes('Processes') && (
-                <NavItem
-                  key={'processes-nav'}
-                  isActive={pathname === '/Processes'}
+            {(!availablePages || availablePages.includes('Processes')) && (
+              <NavItem
+                key={'processes-nav'}
+                isActive={pathname === '/Processes'}
+              >
+                <Link
+                  to="/Processes"
+                  {...ouiaAttribute(
+                    'data-ouia-navigation-name',
+                    'processes-nav'
+                  )}
                 >
-                  <Link
-                    to="/Processes"
-                    {...ouiaAttribute(
-                      'data-ouia-navigation-name',
-                      'processes-nav'
-                    )}
-                  >
-                    {customLabels.pluralProcessLabel}
-                  </Link>
-                </NavItem>
-              ))}
-            {!availablePages ||
-              (availablePages.includes('Jobs') && (
-                <NavItem
-                  key={'jobs-management-nav'}
-                  isActive={pathname === '/JobsManagement'}
+                  {customLabels.pluralProcessLabel}
+                </Link>
+              </NavItem>
+            )}
+            {(!availablePages || availablePages.includes('Jobs')) && (
+              <NavItem
+                key={'jobs-management-nav'}
+                isActive={pathname === '/JobsManagement'}
+              >
+                <Link
+                  to="/JobsManagement"
+                  {...ouiaAttribute(
+                    'data-ouia-navigation-name',
+                    'jobs-management-nav'
+                  )}
                 >
-                  <Link
-                    to="/JobsManagement"
-                    {...ouiaAttribute(
-                      'data-ouia-navigation-name',
-                      'jobs-management-nav'
-                    )}
-                  >
-                    Jobs
-                  </Link>
-                </NavItem>
-              ))}
-            {!availablePages ||
-              (availablePages.includes('Tasks') && (
-                <NavItem
-                  key={'task-inbox-nav'}
-                  isActive={pathname === '/TaskInbox'}
+                  Jobs
+                </Link>
+              </NavItem>
+            )}
+            {(!availablePages || availablePages.includes('Tasks')) && (
+              <NavItem
+                key={'task-inbox-nav'}
+                isActive={pathname === '/TaskInbox'}
+              >
+                <Link
+                  to="/TaskInbox"
+                  {...ouiaAttribute(
+                    'data-ouia-navigation-name',
+                    'task-inbox-nav'
+                  )}
                 >
-                  <Link
-                    to="/TaskInbox"
-                    {...ouiaAttribute(
-                      'data-ouia-navigation-name',
-                      'task-inbox-nav'
-                    )}
-                  >
-                    Tasks
-                  </Link>
-                </NavItem>
-              ))}
-            {!availablePages ||
-              (availablePages.includes('Forms') && (
-                <NavItem
-                  key={'forms-list-nav'}
-                  isActive={pathname === '/Forms'}
+                  Tasks
+                </Link>
+              </NavItem>
+            )}
+            {(!availablePages || availablePages.includes('Forms')) && (
+              <NavItem key={'forms-list-nav'} isActive={pathname === '/Forms'}>
+                <Link
+                  to="/Forms"
+                  {...ouiaAttribute(
+                    'data-ouia-navigation-name',
+                    'forms-list-nav'
+                  )}
                 >
-                  <Link
-                    to="/Forms"
-                    {...ouiaAttribute(
-                      'data-ouia-navigation-name',
-                      'forms-list-nav'
-                    )}
-                  >
-                    Forms
-                  </Link>
-                </NavItem>
-              ))}
+                  Forms
+                </Link>
+              </NavItem>
+            )}
           </>
         )}
         {isTracingEnabled && (

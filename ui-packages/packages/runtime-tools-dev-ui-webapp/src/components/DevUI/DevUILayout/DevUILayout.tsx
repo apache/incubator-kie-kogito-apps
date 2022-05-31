@@ -41,9 +41,9 @@ interface IOwnProps {
   children: React.ReactElement;
   devUIUrl: string;
   openApiPath: string;
-  availablePages: string[];
+  availablePages?: string[];
   customLabels: CustomLabels;
-  omittedProcessTimelineEvents: string[];
+  omittedProcessTimelineEvents?: string[];
 }
 
 const DevUILayout: React.FC<IOwnProps> = ({

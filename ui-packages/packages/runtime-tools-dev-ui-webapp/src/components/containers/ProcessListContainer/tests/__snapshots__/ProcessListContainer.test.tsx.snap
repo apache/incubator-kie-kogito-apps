@@ -1,46 +1,99 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ProcessListContainer tests Snapshot 1`] = `
-<ProcessListContainer
-  initialState={Object {}}
->
-  <ForwardRef
-    data-ouia-component-type="process-list-container"
-    data-ouia-safe={true}
-    driver={
-      ProcessListGatewayApiImpl {
-        "_ProcessListState": Object {
-          "filters": Object {
-            "businessKey": Array [],
-            "status": Array [],
-          },
-          "sortBy": Object {},
-        },
-        "applyFilter": [Function],
-        "applySorting": [Function],
-        "handleProcessAbort": [Function],
-        "handleProcessMultipleAction": [Function],
-        "handleProcessRetry": [Function],
-        "handleProcessSkip": [Function],
-        "initialLoad": [Function],
-        "listeners": Array [
-          Object {
-            "onOpen": [Function],
-          },
-        ],
-        "openProcess": [Function],
-        "queries": Object {
-          "getChildProcessInstances": [MockFunction],
-          "getProcessInstances": [MockFunction],
-        },
-      }
+<DevUIAppContextProvider
+  customLabels={
+    Object {
+      "pluralProcessLabel": "Workflows",
+      "singularProcessLabel": "Workflow",
     }
-    initialState={Object {}}
-    targetOrigin="*"
-  >
-    <ForwardRef>
-      <div />
-    </ForwardRef>
-  </ForwardRef>
-</ProcessListContainer>
+  }
+  devUIUrl="http://devUIUrl"
+  isProcessEnabled={true}
+  isTracingEnabled={true}
+  openApiPath="http://openApiPath"
+  users={Array []}
+>
+  <MemoryRouter>
+    <Router
+      history={
+        Object {
+          "action": "POP",
+          "block": [Function],
+          "canGo": [Function],
+          "createHref": [Function],
+          "entries": Array [
+            Object {
+              "hash": "",
+              "key": "z9kdfs",
+              "pathname": "/",
+              "search": "",
+              "state": undefined,
+            },
+          ],
+          "go": [Function],
+          "goBack": [Function],
+          "goForward": [Function],
+          "index": 0,
+          "length": 1,
+          "listen": [Function],
+          "location": Object {
+            "hash": "",
+            "key": "z9kdfs",
+            "pathname": "/",
+            "search": "",
+            "state": undefined,
+          },
+          "push": [Function],
+          "replace": [Function],
+        }
+      }
+    >
+      <ProcessListContainer
+        initialState={Object {}}
+      >
+        <ForwardRef
+          data-ouia-component-type="process-list-container"
+          data-ouia-safe={true}
+          driver={
+            ProcessListGatewayApiImpl {
+              "_ProcessListState": Object {
+                "filters": Object {
+                  "businessKey": Array [],
+                  "status": Array [],
+                },
+                "sortBy": Object {},
+              },
+              "applyFilter": [Function],
+              "applySorting": [Function],
+              "handleProcessAbort": [Function],
+              "handleProcessMultipleAction": [Function],
+              "handleProcessRetry": [Function],
+              "handleProcessSkip": [Function],
+              "initialLoad": [Function],
+              "listeners": Array [
+                Object {
+                  "onOpen": [Function],
+                },
+              ],
+              "openProcess": [Function],
+              "queries": Object {
+                "getChildProcessInstances": [MockFunction],
+                "getProcessInstances": [MockFunction],
+              },
+            }
+          }
+          initialState={Object {}}
+          pluralProcessLabel="Workflows"
+          singularProcessLabel="Workflow"
+          targetOrigin="*"
+        >
+          <ForwardRef>
+            <div />
+          </ForwardRef>
+        </ForwardRef>
+      </ProcessListContainer>
+    </Router>
+  </MemoryRouter>
+</DevUIAppContextProvider>
 `;

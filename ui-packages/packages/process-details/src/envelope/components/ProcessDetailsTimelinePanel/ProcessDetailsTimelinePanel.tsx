@@ -68,7 +68,7 @@ export interface IOwnProps {
   >;
   driver: ProcessDetailsDriver;
   jobs: Job[];
-  omittedProcessTimelineEvents: string[];
+  omittedProcessTimelineEvents?: string[];
 }
 enum TitleType {
   SUCCESS = 'success',
@@ -432,7 +432,7 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
           {data.nodes &&
             data.nodes
               .filter(
-                content => !omittedProcessTimelineEvents.includes(content.name)
+                content => !omittedProcessTimelineEvents?.includes(content.name)
               )
               .map((content, idx) => {
                 return (
