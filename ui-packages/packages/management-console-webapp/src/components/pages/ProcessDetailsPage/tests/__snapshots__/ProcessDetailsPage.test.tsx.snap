@@ -271,12 +271,6 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
             "milestones": Array [
               Object {
                 "__typename": "Milestone",
-                "id": "27107f38-d888-4edf-9a4f-11b9e6d75i86",
-                "name": "Manager decision",
-                "status": "COMPLETED",
-              },
-              Object {
-                "__typename": "Milestone",
                 "id": "27107f38-d888-4edf-9a4f-11b9e6d75m36",
                 "name": "Milestone 1: Order placed",
                 "status": "ACTIVE",
@@ -286,6 +280,12 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
                 "id": "27107f38-d888-4edf-9a4f-11b9e6d75m66",
                 "name": "Milestone 2: Order shipped",
                 "status": "AVAILABLE",
+              },
+              Object {
+                "__typename": "Milestone",
+                "id": "27107f38-d888-4edf-9a4f-11b9e6d75i86",
+                "name": "Manager decision",
+                "status": "COMPLETED",
               },
             ],
             "nodes": Array [
@@ -391,12 +391,6 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
                       "milestones": Array [
                         Object {
                           "__typename": "Milestone",
-                          "id": "27107f38-d888-4edf-9a4f-11b9e6d75i86",
-                          "name": "Manager decision",
-                          "status": "COMPLETED",
-                        },
-                        Object {
-                          "__typename": "Milestone",
                           "id": "27107f38-d888-4edf-9a4f-11b9e6d75m36",
                           "name": "Milestone 1: Order placed",
                           "status": "ACTIVE",
@@ -406,6 +400,12 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
                           "id": "27107f38-d888-4edf-9a4f-11b9e6d75m66",
                           "name": "Milestone 2: Order shipped",
                           "status": "AVAILABLE",
+                        },
+                        Object {
+                          "__typename": "Milestone",
+                          "id": "27107f38-d888-4edf-9a4f-11b9e6d75i86",
+                          "name": "Manager decision",
+                          "status": "COMPLETED",
                         },
                       ],
                       "nodes": Array [
@@ -476,12 +476,6 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
               "milestones": Array [
                 Object {
                   "__typename": "Milestone",
-                  "id": "27107f38-d888-4edf-9a4f-11b9e6d75i86",
-                  "name": "Manager decision",
-                  "status": "COMPLETED",
-                },
-                Object {
-                  "__typename": "Milestone",
                   "id": "27107f38-d888-4edf-9a4f-11b9e6d75m36",
                   "name": "Milestone 1: Order placed",
                   "status": "ACTIVE",
@@ -491,6 +485,12 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
                   "id": "27107f38-d888-4edf-9a4f-11b9e6d75m66",
                   "name": "Milestone 2: Order shipped",
                   "status": "AVAILABLE",
+                },
+                Object {
+                  "__typename": "Milestone",
+                  "id": "27107f38-d888-4edf-9a4f-11b9e6d75i86",
+                  "name": "Manager decision",
+                  "status": "COMPLETED",
                 },
               ],
               "nodes": Array [

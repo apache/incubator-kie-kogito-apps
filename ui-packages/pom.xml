@@ -201,7 +201,7 @@
             <phase>test</phase>
             <configuration>
               <skip>${skip.ui.test}</skip>
-              <arguments>run test -u</arguments>
+              <arguments>run test</arguments>
             </configuration>
           </execution>
           <execution>

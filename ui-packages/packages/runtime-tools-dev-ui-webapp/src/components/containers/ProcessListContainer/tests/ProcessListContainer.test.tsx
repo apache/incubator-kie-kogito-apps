@@ -51,9 +51,7 @@ describe('ProcessListContainer tests', () => {
           pluralProcessLabel: 'Workflows'
         }}
       >
-        <MemoryRouter>
-          <ProcessListContainer {...props} />
-        </MemoryRouter>
+        <ProcessListContainer {...props} />
       </DevUIAppContextProvider>
     );
 
