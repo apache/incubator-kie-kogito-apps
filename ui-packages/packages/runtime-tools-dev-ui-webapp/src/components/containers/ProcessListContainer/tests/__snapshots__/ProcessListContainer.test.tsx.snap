@@ -25,7 +25,7 @@ exports[`ProcessListContainer tests Snapshot 1`] = `
           "entries": Array [
             Object {
               "hash": "",
-              "key": "z9kdfs",
+              "key": "zpqphm",
               "pathname": "/",
               "search": "",
               "state": undefined,
@@ -39,7 +39,7 @@ exports[`ProcessListContainer tests Snapshot 1`] = `
           "listen": [Function],
           "location": Object {
             "hash": "",
-            "key": "z9kdfs",
+            "key": "zpqphm",
             "pathname": "/",
             "search": "",
             "state": undefined,

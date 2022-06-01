@@ -341,8 +341,6 @@ export const getProcessDefinitionList = (
   openApiPath: string
 ): Promise<ProcessDefinition[]> => {
   return new Promise((resolve, reject) => {
-    console.error(devUIUrl);
-    console.error(openApiPath);
     SwaggerParser.parse(`${devUIUrl}/${openApiPath}`)
       .then(response => {
         const processDefinitionObjs = [];
