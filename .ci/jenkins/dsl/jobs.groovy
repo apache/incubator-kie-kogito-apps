@@ -62,6 +62,10 @@ KogitoJobUtils.createVersionUpdateToolsJob(this, 'kogito-apps', 'Optaplanner', [
   properties: [ 'version.org.optaplanner' ],
 ])
 
+if (Utils.isMainBranch(this)) {
+    setupOptaplannerJob('main')
+}
+
 /////////////////////////////////////////////////////////////////
 // Methods
 /////////////////////////////////////////////////////////////////
@@ -102,6 +106,23 @@ void setupMandrelJob() {
     jobParams.env.putAll([
         JENKINS_EMAIL_CREDS_ID: "${JENKINS_EMAIL_CREDS_ID}",
         NOTIFICATION_JOB_NAME: 'Mandrel check',
+    ])
+    KogitoJobTemplate.createPipelineJob(this, jobParams)?.with {
+        parameters {
+            stringParam('BUILD_BRANCH_NAME', "${GIT_BRANCH}", 'Set the Git branch to checkout')
+            stringParam('GIT_AUTHOR', "${GIT_AUTHOR_NAME}", 'Set the Git author to checkout')
+        }
+    }
+}
+
+void setupOptaplannerJob(String optaplannerBranch) {
+    def jobParams = KogitoJobUtils.getBasicJobParams(this, 'kogito-apps-optaplanner-snapshot', Folder.NIGHTLY_ECOSYSTEM, "${jenkins_path}/Jenkinsfile.optaplanner", 'Kogito Apps Testing against Optaplanner snapshot')
+    jobParams.triggers = [ cron : 'H 6 * * *' ]
+    jobParams.env.putAll([
+        JENKINS_EMAIL_CREDS_ID: "${JENKINS_EMAIL_CREDS_ID}",
+        NOTIFICATION_JOB_NAME: 'Optaplanner snapshot check',
+        OPTAPLANNER_BRANCH: optaplannerBranch,
+
     ])
     KogitoJobTemplate.createPipelineJob(this, jobParams)?.with {
         parameters {
