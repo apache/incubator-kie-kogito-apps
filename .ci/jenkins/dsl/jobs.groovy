@@ -56,6 +56,12 @@ setupMandrelJob()
 setupDeployJob(Folder.RELEASE)
 setupPromoteJob(Folder.RELEASE)
 
+// Update Optaplanner tools job
+KogitoJobUtils.createVersionUpdateToolsJob(this, 'kogito-apps', 'Optaplanner', [
+  modules: [ 'kogito-apps-build-parent' ],
+  properties: [ 'version.org.optaplanner' ],
+])
+
 /////////////////////////////////////////////////////////////////
 // Methods
 /////////////////////////////////////////////////////////////////
@@ -158,7 +164,6 @@ void setupDeployJob(Folder jobFolder) {
 
             booleanParam('CREATE_PR', false, 'Should we create a PR with the changes ?')
             stringParam('PROJECT_VERSION', '', 'Optional if not RELEASE. If RELEASE, cannot be empty.')
-            stringParam('OPTAPLANNER_VERSION', '', 'Optional if not RELEASE. If RELEASE, cannot be empty.')
 
             booleanParam('SEND_NOTIFICATION', false, 'In case you want the pipeline to send a notification on CI channel for this run.')
         }
@@ -195,7 +200,6 @@ void setupPromoteJob(Folder jobFolder) {
 
             // Release information which can override `deployment.properties`
             stringParam('PROJECT_VERSION', '', 'Override `deployment.properties`. Optional if not RELEASE. If RELEASE, cannot be empty.')
-            stringParam('OPTAPLANNER_VERSION', '', 'Override `deployment.properties`. Optional if not RELEASE. If RELEASE, cannot be empty.')
             stringParam('GIT_TAG', '', 'Git tag to set, if different from PROJECT_VERSION')
 
             booleanParam('SEND_NOTIFICATION', false, 'In case you want the pipeline to send a notification on CI channel for this run.')
