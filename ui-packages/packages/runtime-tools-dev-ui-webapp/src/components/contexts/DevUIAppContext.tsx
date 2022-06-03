@@ -17,6 +17,7 @@
 import React, { useContext } from 'react';
 import { User } from '@kogito-apps/consoles-common';
 import { CustomLabels } from '../../api/CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 export interface DevUIAppContext {
   isProcessEnabled: boolean;
@@ -30,6 +31,7 @@ export interface DevUIAppContext {
   availablePages?: string[];
   customLabels: CustomLabels;
   omittedProcessTimelineEvents: string[];
+  diagramPreviewSize?: DiagramPreviewSize;
 }
 
 export interface UserChangeListener {
@@ -51,6 +53,7 @@ export class DevUIAppContextImpl implements DevUIAppContext {
   public readonly availablePages: string[];
   public readonly customLabels: CustomLabels;
   public readonly omittedProcessTimelineEvents: string[];
+  public readonly diagramPreviewSize?: DiagramPreviewSize;
 
   constructor(
     users,
@@ -60,7 +63,8 @@ export class DevUIAppContextImpl implements DevUIAppContext {
     isTracingEnabled,
     availablePages,
     customLabels,
-    omittedProcessTimelineEvents
+    omittedProcessTimelineEvents,
+    diagramPreviewSize
   ) {
     this.users = users;
     this.devUIUrl = url;
@@ -70,6 +74,7 @@ export class DevUIAppContextImpl implements DevUIAppContext {
     this.availablePages = availablePages;
     this.customLabels = customLabels;
     this.omittedProcessTimelineEvents = omittedProcessTimelineEvents;
+    this.diagramPreviewSize = diagramPreviewSize;
     if (users?.length > 0) {
       this.currentUser = users[0];
     }

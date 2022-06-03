@@ -15,6 +15,7 @@
  */
 
 import { CustomLabels } from './CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 export interface RuntimeToolsDevUIEnvelopeApi {
   runtimeToolsDevUI_initRequest(
@@ -45,4 +46,5 @@ export interface RuntimeToolsDevUIInitArgs {
   availablePages?: string[];
   customLabels: CustomLabels;
   omittedProcessTimelineEvents?: string[];
+  diagramPreviewSize: DiagramPreviewSize;
 }

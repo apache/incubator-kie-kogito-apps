@@ -76,6 +76,8 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
       this.args
         .view()
         .setOmittedProcessTimelineEvents(initArgs.omittedProcessTimelineEvents);
+    this.args.view().setDiagramPreviewSize &&
+      this.args.view().setDiagramPreviewSize(initArgs.diagramPreviewSize);
 
     // Ensure these are set last. This is a workaround to ensure views are corrected configured with other properties
     // from the DevUIAppContext before they are rendered. i.e. use of DevUIAppContext is not responsive to updates.

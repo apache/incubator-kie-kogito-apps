@@ -20,6 +20,7 @@ import RuntimeToolsDevUIAppContext, {
   DevUIAppContextImpl
 } from './DevUIAppContext';
 import { CustomLabels } from '../../api/CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 interface IOwnProps {
   users: User[];
@@ -30,6 +31,7 @@ interface IOwnProps {
   availablePages: string[];
   customLabels: CustomLabels;
   omittedProcessTimelineEvents: string[];
+  diagramPreviewSize: DiagramPreviewSize;
 }
 
 const DevUIAppContextProvider: React.FC<IOwnProps> = ({
@@ -41,6 +43,7 @@ const DevUIAppContextProvider: React.FC<IOwnProps> = ({
   availablePages,
   customLabels,
   omittedProcessTimelineEvents,
+  diagramPreviewSize,
   children
 }) => {
   return (
@@ -54,7 +57,8 @@ const DevUIAppContextProvider: React.FC<IOwnProps> = ({
           isTracingEnabled,
           availablePages,
           customLabels,
-          omittedProcessTimelineEvents
+          omittedProcessTimelineEvents,
+          diagramPreviewSize
         )
       }
     >

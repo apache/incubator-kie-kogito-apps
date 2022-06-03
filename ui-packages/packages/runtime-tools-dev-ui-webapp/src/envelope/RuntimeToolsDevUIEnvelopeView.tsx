@@ -37,6 +37,7 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
     omittedProcessTimelineEvents,
     setOmittedProcessTimelineEvents
   ] = React.useState<string[]>([]);
+  const [diagramPreviewSize, setDiagramPreviewSize] = React.useState(undefined);
 
   useImperativeHandle(
     forwardingRef,
@@ -74,6 +75,9 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
         },
         setOmittedProcessTimelineEvents: omittedProcessTimelineEvents => {
           setOmittedProcessTimelineEvents(omittedProcessTimelineEvents);
+        },
+        setDiagramPreviewSize: diagramPreviewSize => {
+          setDiagramPreviewSize(diagramPreviewSize);
         }
       };
     },
@@ -94,6 +98,7 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
           availablePages={availablePages}
           customLabels={customLabels}
           omittedProcessTimelineEvents={omittedProcessTimelineEvents}
+          diagramPreviewSize={diagramPreviewSize}
         />
       )}
     </>

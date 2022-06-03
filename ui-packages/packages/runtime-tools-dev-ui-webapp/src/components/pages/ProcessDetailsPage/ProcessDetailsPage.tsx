@@ -50,7 +50,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   });
 
   const gatewayApi: ProcessDetailsGatewayApi = useProcessDetailsGatewayApi();
-  const apiContext = useDevUIAppContext();
+  const appContext = useDevUIAppContext();
 
   const history = useHistory();
   const processId = props.match.params.instanceID;
@@ -122,8 +122,9 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
             <ProcessDetailsContainer
               processInstance={processInstance}
               omittedProcessTimelineEvents={
-                apiContext.omittedProcessTimelineEvents
+                appContext.omittedProcessTimelineEvents
               }
+              diagramPreviewSize={appContext.diagramPreviewSize}
             />
           ) : (
             <>
@@ -150,7 +151,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   return (
     <>
       <PageSectionHeader
-        titleText={`${apiContext.customLabels.singularProcessLabel} Details`}
+        titleText={`${appContext.customLabels.singularProcessLabel} Details`}
         ouiaId={ouiaId}
       />
       <PageSection

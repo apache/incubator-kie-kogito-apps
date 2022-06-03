@@ -23,6 +23,7 @@ import {
 } from '../api';
 import { RuntimeToolsDevUIChannelApiImpl } from '../standalone/RuntimeToolsDevUIChannelApiImpl';
 import { CustomLabels } from '../api/CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 export interface StandaloneDevUIApi {
   close: () => void;
@@ -41,6 +42,7 @@ export interface Consoles {
     availablePages?: string[];
     customLabels?: CustomLabels;
     omittedProcessTimelineEvents?: string[];
+    diagramPreviewSize?: DiagramPreviewSize;
   }) => StandaloneDevUIApi;
 }
 
@@ -55,6 +57,7 @@ const createEnvelopeServer = (
   devUIUrl: string,
   openApiPath: string,
   customLabels: CustomLabels,
+  diagramPreviewSize?: DiagramPreviewSize,
   origin?: string,
   availablePages?: string[],
   omittedProcessTimelineEvents?: string[]
@@ -84,7 +87,8 @@ const createEnvelopeServer = (
           openApiPath,
           customLabels,
           availablePages,
-          omittedProcessTimelineEvents
+          omittedProcessTimelineEvents,
+          diagramPreviewSize
         }
       );
     }
@@ -128,6 +132,7 @@ export function open(args: {
   availablePages?: string[];
   customLabels?: CustomLabels;
   omittedProcessTimelineEvents?: string[];
+  diagramPreviewSize?: DiagramPreviewSize;
 }): StandaloneDevUIApi {
   const iframe = document.createElement('iframe');
   iframe.srcdoc = devUIEnvelopeIndex; // index coming from webapp
@@ -150,6 +155,7 @@ export function open(args: {
       singularProcessLabel: 'Process',
       pluralProcessLabel: 'Processes'
     },
+    args.diagramPreviewSize,
     args.origin,
     args.availablePages,
     args.omittedProcessTimelineEvents ?? []

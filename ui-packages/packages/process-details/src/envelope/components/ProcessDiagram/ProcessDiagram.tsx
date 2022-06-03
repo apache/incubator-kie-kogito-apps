@@ -31,10 +31,14 @@ interface SvgProp {
 }
 interface IOwnProps {
   svg: SvgProp;
+  width?: number;
+  height?: number;
 }
 
 const ProcessDiagram: React.FC<IOwnProps & OUIAProps> = ({
   svg,
+  width,
+  height,
   ouiaId,
   ouiaSafe
 }) => {
@@ -49,8 +53,8 @@ const ProcessDiagram: React.FC<IOwnProps & OUIAProps> = ({
         <CardBody>
           <ReactSvgPanZoomLoader
             src={svg.props.src}
-            width={700}
-            height={1000}
+            width={width ?? 1000}
+            height={height ?? 400}
             proxy={
               <>
                 <SvgLoaderSelectElement />
@@ -58,12 +62,12 @@ const ProcessDiagram: React.FC<IOwnProps & OUIAProps> = ({
             }
             render={() => (
               <UncontrolledReactSVGPanZoom
-                width={700}
-                height={1000}
+                width={width ?? 1000}
+                height={height ?? 400}
                 detectAutoPan={false}
                 background="#fff"
               >
-                <svg width={700} height={1000}>
+                <svg width={width ?? 1000} height={height ?? 400}>
                   {svg}
                 </svg>
               </UncontrolledReactSVGPanZoom>

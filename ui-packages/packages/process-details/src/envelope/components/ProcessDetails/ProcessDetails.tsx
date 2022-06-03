@@ -49,7 +49,7 @@ import {
   SvgSuccessResponse,
   SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
-import { ProcessDetailsDriver } from '../../../api';
+import { DiagramPreviewSize, ProcessDetailsDriver } from '../../../api';
 import ProcessDiagram from '../ProcessDiagram/ProcessDiagram';
 import JobsPanel from '../JobsPanel/JobsPanel';
 import ProcessDetailsErrorModal from '../ProcessDetailsErrorModal/ProcessDetailsErrorModal';
@@ -66,6 +66,7 @@ interface ProcessDetailsProps {
   driver: ProcessDetailsDriver;
   processDetails: ProcessInstance;
   omittedProcessTimelineEvents: string[];
+  diagramPreviewSize?: DiagramPreviewSize;
 }
 
 type svgResponse = SvgSuccessResponse | SvgErrorResponse;
@@ -74,7 +75,8 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   isEnvelopeConnectedToChannel,
   driver,
   processDetails,
-  omittedProcessTimelineEvents
+  omittedProcessTimelineEvents,
+  diagramPreviewSize
 }) => {
   const [data, setData] = useState<ProcessInstance>({} as ProcessInstance);
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -286,7 +288,11 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
           {svg !== null && svg.props.src && (
             <Card>
               {' '}
-              <ProcessDiagram svg={svg} />{' '}
+              <ProcessDiagram
+                svg={svg}
+                width={diagramPreviewSize?.width}
+                height={diagramPreviewSize?.height}
+              />{' '}
             </Card>
           )}
         </FlexItem>

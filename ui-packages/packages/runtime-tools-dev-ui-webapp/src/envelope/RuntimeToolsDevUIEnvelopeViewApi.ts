@@ -16,6 +16,7 @@
 
 import { User } from '../api';
 import { CustomLabels } from '../api/CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 export interface RuntimeToolsDevUIEnvelopeViewApi {
   setDataIndexUrl: (dataIndexUrl: string) => void;
@@ -31,4 +32,5 @@ export interface RuntimeToolsDevUIEnvelopeViewApi {
   setOmittedProcessTimelineEvents: (
     omittedProcessTimelineEvents: string[]
   ) => void;
+  setDiagramPreviewSize: (diagramPreviewSize: DiagramPreviewSize) => void;
 }

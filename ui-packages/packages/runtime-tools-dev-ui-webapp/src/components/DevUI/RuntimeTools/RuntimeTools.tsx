@@ -24,6 +24,7 @@ import DevUIRoutes from '../DevUIRoutes/DevUIRoutes';
 import DevUILayout from '../DevUILayout/DevUILayout';
 import ReactDOM from 'react-dom';
 import { CustomLabels } from '../../../api/CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 interface IOwnProps {
   isProcessEnabled: boolean;
@@ -37,6 +38,7 @@ interface IOwnProps {
   availablePages: string[];
   customLabels: CustomLabels;
   omittedProcessTimelineEvents: string[];
+  diagramPreviewSize?: DiagramPreviewSize;
 }
 
 const RuntimeTools: React.FC<IOwnProps> = ({
@@ -50,7 +52,8 @@ const RuntimeTools: React.FC<IOwnProps> = ({
   isTracingEnabled,
   availablePages,
   customLabels,
-  omittedProcessTimelineEvents
+  omittedProcessTimelineEvents,
+  diagramPreviewSize
 }) => {
   const httpLink = new HttpLink({
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -72,6 +75,7 @@ const RuntimeTools: React.FC<IOwnProps> = ({
           availablePages={availablePages}
           customLabels={customLabels}
           omittedProcessTimelineEvents={omittedProcessTimelineEvents}
+          diagramPreviewSize={diagramPreviewSize}
         >
           <ServerUnavailablePage
             displayName={'Runtime Dev UI'}

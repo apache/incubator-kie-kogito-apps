@@ -32,6 +32,7 @@ import DevUIAppContextProvider from '../../contexts/DevUIAppContextProvider';
 import ProcessDefinitionListContextProvider from '../../../channel/ProcessDefinitionList/ProcessDefinitionListContextProvider';
 import ProcessFormContextProvider from '../../../channel/ProcessForm/ProcessFormContextProvider';
 import { CustomLabels } from '../../../api/CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 interface IOwnProps {
   apolloClient: ApolloClient<any>;
@@ -44,6 +45,7 @@ interface IOwnProps {
   availablePages?: string[];
   customLabels: CustomLabels;
   omittedProcessTimelineEvents?: string[];
+  diagramPreviewSize?: DiagramPreviewSize;
 }
 
 const DevUILayout: React.FC<IOwnProps> = ({
@@ -56,6 +58,7 @@ const DevUILayout: React.FC<IOwnProps> = ({
   availablePages,
   customLabels,
   omittedProcessTimelineEvents,
+  diagramPreviewSize,
   children
 }) => {
   const renderPage = routeProps => {
@@ -81,6 +84,7 @@ const DevUILayout: React.FC<IOwnProps> = ({
         availablePages={availablePages}
         customLabels={customLabels}
         omittedProcessTimelineEvents={omittedProcessTimelineEvents}
+        diagramPreviewSize={diagramPreviewSize}
       >
         <TaskConsoleContextsProvider apolloClient={apolloClient}>
           <TaskFormContextProvider>
