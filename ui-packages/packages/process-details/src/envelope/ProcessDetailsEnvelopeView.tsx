@@ -17,7 +17,11 @@
 import * as React from 'react';
 import { useImperativeHandle, useState } from 'react';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
-import { ProcessDetailsChannelApi, ProcessDetailsInitArgs } from '../api';
+import {
+  DiagramPreviewSize,
+  ProcessDetailsChannelApi,
+  ProcessDetailsInitArgs
+} from '../api';
 import ProcessDetails from './components/ProcessDetails/ProcessDetails';
 import ProcessDetailsEnvelopeViewDriver from './ProcessDetailsEnvelopeViewDriver';
 import { ProcessInstance } from '@kogito-apps/management-console-shared';
@@ -46,6 +50,9 @@ export const ProcessDetailsEnvelopeView = React.forwardRef<
     omittedProcessTimelineEvents,
     setOmittedProcessTimelineEvents
   ] = useState<string[]>([]);
+  const [diagramPreviewSize, setDiagramPreviewSize] = useState<
+    DiagramPreviewSize
+  >();
 
   useImperativeHandle(
     forwardedRef,
@@ -53,6 +60,7 @@ export const ProcessDetailsEnvelopeView = React.forwardRef<
       initialize: initArgs => {
         setProcessInstance(initArgs.processInstance);
         setOmittedProcessTimelineEvents(initArgs.omittedProcessTimelineEvents);
+        setDiagramPreviewSize(initArgs.diagramPreviewSize);
         setEnvelopeConnectedToChannel(true);
       }
     }),
@@ -66,6 +74,7 @@ export const ProcessDetailsEnvelopeView = React.forwardRef<
         driver={new ProcessDetailsEnvelopeViewDriver(props.channelApi)}
         processDetails={processInstance}
         omittedProcessTimelineEvents={omittedProcessTimelineEvents}
+        diagramPreviewSize={diagramPreviewSize}
       />
     </React.Fragment>
   );

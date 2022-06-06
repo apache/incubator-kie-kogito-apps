@@ -104,6 +104,7 @@ const RuntimeTools: React.FC<IOwnProps> = ({
       availablePages={availablePages}
       customLabels={customLabels}
       omittedProcessTimelineEvents={omittedProcessTimelineEvents}
+      diagramPreviewSize={diagramPreviewSize}
     >
       <DevUIRoutes navigate={navigate} trustyServiceUrl={trustyServiceUrl} />
     </DevUILayout>

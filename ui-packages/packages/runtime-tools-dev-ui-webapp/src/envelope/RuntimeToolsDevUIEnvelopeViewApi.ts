@@ -32,5 +32,5 @@ export interface RuntimeToolsDevUIEnvelopeViewApi {
   setOmittedProcessTimelineEvents: (
     omittedProcessTimelineEvents: string[]
   ) => void;
-  setDiagramPreviewSize: (diagramPreviewSize: DiagramPreviewSize) => void;
+  setDiagramPreviewSize: (diagramPreviewSize?: DiagramPreviewSize) => void;
 }

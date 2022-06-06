@@ -19,6 +19,7 @@ import '@patternfly/patternfly/patternfly.css';
 import { RuntimeToolsDevUIEnvelopeViewApi } from './RuntimeToolsDevUIEnvelopeViewApi';
 import RuntimeTools from '../components/DevUI/RuntimeTools/RuntimeTools';
 import { User } from '@kogito-apps/consoles-common';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
   RuntimeToolsDevUIEnvelopeViewApi
@@ -37,7 +38,9 @@ export const RuntimeToolsDevUIEnvelopeView = React.forwardRef<
     omittedProcessTimelineEvents,
     setOmittedProcessTimelineEvents
   ] = React.useState<string[]>([]);
-  const [diagramPreviewSize, setDiagramPreviewSize] = React.useState(undefined);
+  const [diagramPreviewSize, setDiagramPreviewSize] = React.useState<
+    DiagramPreviewSize
+  >();
 
   useImperativeHandle(
     forwardingRef,

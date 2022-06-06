@@ -46,5 +46,5 @@ export interface RuntimeToolsDevUIInitArgs {
   availablePages?: string[];
   customLabels: CustomLabels;
   omittedProcessTimelineEvents?: string[];
-  diagramPreviewSize: DiagramPreviewSize;
+  diagramPreviewSize?: DiagramPreviewSize;
 }
