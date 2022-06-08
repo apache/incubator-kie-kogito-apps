@@ -21,7 +21,7 @@ import io.quarkus.deployment.builditem.FeatureBuildItem;
 
 class ServerlessWorkflowQuarkusExtensionProcessor {
 
-    private static final String FEATURE = "runtime-tools-quarkus-extension";
+    private static final String FEATURE = "swf-quarkus-extension";
 
     @BuildStep
     FeatureBuildItem feature() {
