@@ -23,6 +23,8 @@ import org.kie.kogito.explainability.local.counterfactual.entities.CategoricalEn
 import org.kie.kogito.explainability.local.counterfactual.entities.DoubleEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.IntegerEntity;
 import org.kie.kogito.explainability.local.counterfactual.entities.LongEntity;
+import org.kie.kogito.explainability.local.counterfactual.score.CounterfactualScoreCalculator;
+import org.kie.kogito.explainability.local.counterfactual.score.DefaultCounterfactualScoreCalculator;
 import org.optaplanner.core.config.localsearch.LocalSearchPhaseConfig;
 import org.optaplanner.core.config.localsearch.decider.acceptor.LocalSearchAcceptorConfig;
 import org.optaplanner.core.config.localsearch.decider.forager.LocalSearchForagerConfig;
@@ -50,6 +52,8 @@ public class SolverConfigBuilder {
         private int tabuSize = DEFAULT_TABU_SIZE;
         private int acceptedCount = DEFAULT_ACCEPTED_COUNT;
 
+        private Class<? extends CounterfactualScoreCalculator> scoreCalculator = DefaultCounterfactualScoreCalculator.class;
+
         private Builder() {
         }
 
@@ -61,7 +65,7 @@ public class SolverConfigBuilder {
             solverConfig.setSolutionClass(CounterfactualSolution.class);
 
             ScoreDirectorFactoryConfig scoreDirectorFactoryConfig = new ScoreDirectorFactoryConfig();
-            scoreDirectorFactoryConfig.setEasyScoreCalculatorClass(CounterFactualScoreCalculator.class);
+            scoreDirectorFactoryConfig.setEasyScoreCalculatorClass(scoreCalculator);
             solverConfig.setScoreDirectorFactoryConfig(scoreDirectorFactoryConfig);
 
             solverConfig.setTerminationConfig(terminationConfig);
@@ -96,6 +100,11 @@ public class SolverConfigBuilder {
 
         public Builder withTerminationConfig(TerminationConfig terminationConfig) {
             this.terminationConfig = terminationConfig;
+            return this;
+        }
+
+        public Builder withScoreCalculator(Class<? extends CounterfactualScoreCalculator> scoreCalculator) {
+            this.scoreCalculator = scoreCalculator;
             return this;
         }
     }

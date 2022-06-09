@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.explainability.local.counterfactual;
+package org.kie.kogito.explainability.local.counterfactual.score;
 
 import java.math.BigDecimal;
 import java.time.Duration;
@@ -28,6 +28,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 import org.kie.kogito.explainability.Config;
+import org.kie.kogito.explainability.local.counterfactual.CounterfactualSolution;
 import org.kie.kogito.explainability.local.counterfactual.entities.CounterfactualEntity;
 import org.kie.kogito.explainability.model.Feature;
 import org.kie.kogito.explainability.model.Output;
@@ -36,7 +37,6 @@ import org.kie.kogito.explainability.model.PredictionOutput;
 import org.kie.kogito.explainability.model.Type;
 import org.kie.kogito.explainability.utils.CompositeFeatureUtils;
 import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
-import org.optaplanner.core.api.score.calculator.EasyScoreCalculator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,12 +47,12 @@ import org.slf4j.LoggerFactory;
  * The second hard level penalizes solutions which change constrained {@link CounterfactualEntity}.
  * The soft level penalizes solutions according to their distance from the original prediction inputs.
  */
-public class CounterFactualScoreCalculator implements EasyScoreCalculator<CounterfactualSolution, BendableBigDecimalScore> {
+public class DefaultCounterfactualScoreCalculator implements CounterfactualScoreCalculator {
 
     private static final double DEFAULT_DISTANCE = 1.0;
 
     private static final Logger logger =
-            LoggerFactory.getLogger(CounterFactualScoreCalculator.class);
+            LoggerFactory.getLogger(DefaultCounterfactualScoreCalculator.class);
 
     public static Double outputDistance(Output prediction, Output goal) throws IllegalArgumentException {
         return outputDistance(prediction, goal, 0.0);
@@ -214,7 +214,7 @@ public class CounterFactualScoreCalculator implements EasyScoreCalculator<Counte
                 final Output output = outputs.get(i);
                 final Output goalOutput = goal.get(i);
                 final double d =
-                        CounterFactualScoreCalculator.outputDistance(output, goalOutput, solution.getGoalThreshold());
+                        DefaultCounterfactualScoreCalculator.outputDistance(output, goalOutput, solution.getGoalThreshold());
                 outputDistance += d * d;
 
                 if (output.getScore() < goalOutput.getScore()) {
