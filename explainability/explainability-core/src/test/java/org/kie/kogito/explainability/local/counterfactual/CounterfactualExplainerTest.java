@@ -58,6 +58,7 @@ import org.kie.kogito.explainability.model.domain.CategoricalFeatureDomain;
 import org.kie.kogito.explainability.model.domain.EmptyFeatureDomain;
 import org.kie.kogito.explainability.model.domain.FeatureDomain;
 import org.kie.kogito.explainability.model.domain.NumericalFeatureDomain;
+import org.kie.kogito.explainability.model.domain.ObjectFeatureDomain;
 import org.kie.kogito.explainability.utils.DataUtils;
 import org.mockito.ArgumentCaptor;
 import org.optaplanner.core.api.score.buildin.bendablebigdecimal.BendableBigDecimalScore;
@@ -69,6 +70,7 @@ import org.optaplanner.core.config.solver.termination.TerminationConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -906,6 +908,38 @@ class CounterfactualExplainerTest {
                 intermediateResultsConsumer)
                 .get(Config.INSTANCE.getAsyncTimeout(),
                         Config.INSTANCE.getAsyncTimeUnit());
+    }
+
+    @Test
+    void enumTest() throws ExecutionException, InterruptedException, TimeoutException {
+        List<Feature> fs = new ArrayList<>();
+        FeatureDomain<Object> ofd = ObjectFeatureDomain.create(List.of(Type.CURRENCY, Type.NUMBER));
+        for (int i = 0; i < 5; i++) {
+            if (i < 3) {
+                fs.add(new Feature(Integer.toString(i), Type.CATEGORICAL, new Value(Type.CURRENCY), false, ofd));
+            } else {
+                fs.add(new Feature(Integer.toString(i), Type.CATEGORICAL, new Value(Type.NUMBER), false, ofd));
+            }
+        }
+        PredictionInput pi = new PredictionInput(fs);
+        PredictionProvider model = inputs -> supplyAsync(() -> {
+            List<PredictionOutput> predictionOutputs = new LinkedList<>();
+            for (PredictionInput predictionInput : inputs) {
+                int result = 0;
+                List<Feature> features = predictionInput.getFeatures();
+                for (int i = 0; i < features.size(); i++) {
+                    result += features.get(i).getValue().getUnderlyingObject().equals(Type.NUMBER) ? 1 : 0;
+                }
+                predictionOutputs.add(new PredictionOutput(List.of(new Output("numNumbers", Type.NUMBER, new Value(result), 1.0))));
+            }
+            return predictionOutputs;
+        });
+
+        List<Output> goal = new ArrayList<>();
+        goal.add(new Output("numNumbers", Type.NUMBER, new Value(5.), 0.0d));
+        CounterfactualResult result = runCounterfactualSearch(0L, goal, pi.getFeatures(), model, .1);
+
+        assertTrue(result.isValid());
     }
 
 }

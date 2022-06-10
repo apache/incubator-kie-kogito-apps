@@ -158,8 +158,18 @@ public class CounterfactualEntityFactory {
             if (isConstrained) {
                 entity = FixedCategoricalEntity.from(feature);
             } else {
-                entity = CategoricalEntity.from(feature, ((CategoricalFeatureDomain) featureDomain).getCategories(),
-                        isConstrained);
+                if (featureDomain instanceof BinaryFeatureDomain) {
+                    entity = BinaryEntity.from(feature, ((BinaryFeatureDomain) featureDomain).getCategories());
+                } else if (featureDomain instanceof CurrencyFeatureDomain) {
+                    entity = CurrencyEntity.from(feature, ((CurrencyFeatureDomain) featureDomain).getCategories());
+                } else if (featureDomain instanceof ObjectFeatureDomain) {
+                    entity = ObjectEntity.from(feature, ((ObjectFeatureDomain) featureDomain).getCategories());
+                } else if (featureDomain instanceof URIFeatureDomain) {
+                    entity = URIEntity.from(feature, ((URIFeatureDomain) featureDomain).getCategories());
+                } else {
+                    entity = CategoricalEntity.from(feature, ((CategoricalFeatureDomain) featureDomain).getCategories());
+                }
+
             }
         } else if (feature.getType() == Type.UNDEFINED) {
             if (isConstrained) {
