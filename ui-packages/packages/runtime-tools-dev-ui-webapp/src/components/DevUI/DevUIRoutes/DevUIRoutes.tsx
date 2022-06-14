@@ -26,6 +26,7 @@ import FormDetailPage from '../../pages/FormDetailsPage/FormDetailsPage';
 import { TrustyApp } from '@kogito-apps/trusty';
 import ProcessFormPage from '../../pages/ProcessFormPage/ProcessFormPage';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
+import MonitoringPage from '../../pages/MonitoringPage/MonitoringPage';
 
 interface IOwnProps {
   trustyServiceUrl: string;
@@ -154,6 +155,14 @@ const DevUIRoutes: React.FC<IOwnProps> = ({ trustyServiceUrl, navigate }) => {
                 useHrefLinks: false
               }}
             />
+          </Route>
+        )
+      },
+      {
+        enabled: () => isProcessEnabled,
+        node: (
+          <Route key="9" path="/Monitoring">
+            <MonitoringPage />
           </Route>
         )
       },
