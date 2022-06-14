@@ -45,7 +45,7 @@
         <container.image.integration-tests-trusty-service-quarkus>org.kie.kogito/integration-tests-trusty-service-quarkus:${project.version}</container.image.integration-tests-trusty-service-quarkus>
 
         <!-- OptaPlanner version -->
-        <version.org.optaplanner>8.23.0-SNAPSHOT</version.org.optaplanner>
+        <version.org.optaplanner>8.22.1.Final</version.org.optaplanner>
 
         <version.com.vladmihalcea.hibernate-types-55>2.12.1</version.com.vladmihalcea.hibernate-types-55>
         <version.org.apache.opennlp>1.9.2</version.org.apache.opennlp>
@@ -56,24 +56,6 @@
         <version.io.zonky.test>1.3.1</version.io.zonky.test>
         <version.com.graphql-java-extended-scalars>17.0</version.com.graphql-java-extended-scalars>
     </properties>
-
-    <repositories>
-        <!-- Bootstrap repository to locate the parent pom when the parent pom has not been build locally. -->
-        <repository>
-            <id>jboss-public-repository-group</id>
-            <name>JBoss Public Repository Group</name>
-            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
-            <layout>default</layout>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </repository>
-    </repositories>
 
     <build>
         <pluginManagement>

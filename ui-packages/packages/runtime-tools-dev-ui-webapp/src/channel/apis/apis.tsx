@@ -341,11 +341,11 @@ export const getProcessDefinitionList = (
   openApiPath: string
 ): Promise<ProcessDefinition[]> => {
   return new Promise((resolve, reject) => {
-    SwaggerParser.parse(`${devUIUrl}${openApiPath}`)
+    SwaggerParser.parse(`${devUIUrl}/${openApiPath}`)
       .then(response => {
         const processDefinitionObjs = [];
         const paths = response.paths;
-        const regexPattern = /^\/[A-Za-z]+\/schema/;
+        const regexPattern = /^\/[A-Za-z_]+\/schema/;
         Object.getOwnPropertyNames(paths)
           .filter(path => regexPattern.test(path.toString()))
           .forEach(url => {
@@ -395,7 +395,7 @@ export const startProcessInstance = (
       businessKey.length > 0 ? `?businessKey=${businessKey}` : ''
     }`;
     axios
-      .post(requestURL, JSON.stringify(formData), {
+      .post(requestURL, formData, {
         headers: {
           'Content-Type': 'application/json'
         }
