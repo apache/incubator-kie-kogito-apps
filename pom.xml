@@ -1,96 +1,99 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://maven.apache.org/POM/4.0.0"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.kie.kogito</groupId>
-		<artifactId>kogito-build-parent</artifactId>
-		<version>2.0.0-SNAPSHOT</version>
-		<relativePath/>
-	</parent>
-	<artifactId>kogito-apps</artifactId>
-	<packaging>pom</packaging>
-	<name>Kogito Apps</name>
-	<description>Kogito Apps</description>
-	<repositories>
-		<!-- Bootstrap repository to locate the parent pom when the parent pom has not been build locally. -->
-		<repository>
-			<id>jboss-public-repository-group</id>
-			<name>JBoss Public Repository Group</name>
-			<url>https://repository.jboss.org/nexus/content/groups/public/</url>
-			<layout>default</layout>
-			<releases>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>daily</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
-	<profiles>
-		<profile>
-			<id>default</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<modules>
-				<module>kogito-apps-bom</module>
-				<module>kogito-apps-build-parent</module>
-				<module>persistence-commons</module>
-				<module>jobs-service</module>
-				<module>data-index</module>
-				<module>ui-packages</module>
-				<module>security-commons</module>
-				<module>management-console</module>
-				<module>trusty-ui</module>
-				<module>task-console</module>
-				<module>explainability</module>
-				<module>trusty</module>
-				<module>task-assigning</module>
-				<module>jitexecutor</module>
-				<module>apps-integration-tests</module>
-				<module>runtime-tools-quarkus-extension-parent</module>
-				<module>swf-quarkus-extension-parent</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>optaplanner-downstream</id>
-			<activation>
-				<property>
-					<name>optaplanner</name>
-				</property>
-			</activation>
-			<modules>
-				<module>kogito-apps-bom</module>
-				<module>kogito-apps-build-parent</module>
-				<module>explainability</module>
-				<module>task-assigning</module>
-				<module>trusty</module>
-				<module>apps-integration-tests</module>
-				<!-- Used by task assigning integration tests -->
-				<module>persistence-commons</module>
-				<module>data-index</module>
-				<!-- Used by task assigning integration tests -->
-			</modules>
-		</profile>
-		<!--need to remove comment after merging/rebasing KOGITO-7321(Cristiano's PR) -->
-		<profile>
-			<id>productized</id>
-				<activation>
-					<property>
-						<name>productized</name>
-					</property>
-				</activation>
-			<modules>
-				<module>kogito-apps-bom</module>
-				<module>kogito-apps-build-parent</module>
-				<module>ui-packages</module>
-			<module>swf-quarkus-extension-parent</module>
-			</modules>
-		</profile>
-	</profiles>
-	</project>
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.kie.kogito</groupId>
+    <artifactId>kogito-build-parent</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <relativePath/>
+  </parent>
+  <artifactId>kogito-apps</artifactId>
+  <packaging>pom</packaging>
+
+  <name>Kogito Apps</name>
+  <description>Kogito Apps</description>
+
+  <repositories>
+    <!-- Bootstrap repository to locate the parent pom when the parent pom has not been build locally. -->
+    <repository>
+        <id>jboss-public-repository-group</id>
+        <name>JBoss Public Repository Group</name>
+        <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        <layout>default</layout>
+        <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>daily</updatePolicy>
+        </snapshots>
+    </repository>
+  </repositories>
+
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>kogito-apps-bom</module>
+        <module>kogito-apps-build-parent</module>
+        <module>persistence-commons</module>
+        <module>jobs-service</module>
+        <module>data-index</module>
+        <module>ui-packages</module>
+        <module>security-commons</module>
+        <module>management-console</module>
+        <module>trusty-ui</module>
+        <module>task-console</module>
+        <module>explainability</module>
+        <module>trusty</module>
+        <module>task-assigning</module>
+        <module>jitexecutor</module>
+        <module>apps-integration-tests</module>
+        <module>runtime-tools-quarkus-extension-parent</module>
+        <module>swf-quarkus-extension-parent</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>optaplanner-downstream</id>
+      <activation>
+        <property>
+          <name>optaplanner</name>
+        </property>
+      </activation>
+      <modules>
+        <module>kogito-apps-bom</module>
+        <module>kogito-apps-build-parent</module>
+        <module>explainability</module>
+        <module>task-assigning</module>
+        <module>trusty</module>
+        <module>apps-integration-tests</module>
+        <!-- Used by task assigning integration tests -->
+        <module>persistence-commons</module>
+        <module>data-index</module>
+        <!-- Used by task assigning integration tests -->
+      </modules>
+    </profile>
+	<!--need to remove comment after merging/rebasing KOGITO-7321(Cristiano's PR) -->
+	<profile>
+	 <id>productized</id>
+	 <activation>
+	   <property>
+		 <name>productized</name>
+		</property>
+	 </activation>
+	 <modules>
+	  <module>kogito-apps-bom</module>
+	  <module>kogito-apps-build-parent</module>
+	  <module>ui-packages</module>
+	  <module>swf-quarkus-extension-parent</module>
+	 </modules>
+	</profile>
+  </profiles>
+</project>
