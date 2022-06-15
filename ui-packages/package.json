@@ -16,7 +16,9 @@
     "test:it": "lerna run test:it --stream --concurrency=1 --no-bail --",
     "locktt": "locktt",
     "test:e2e:trusty": "lerna run --scope @kogito-apps/trusty test:e2e:trusty --",
-    "format:all": "lerna run format --stream --"
+    "format:all": "lerna run format --stream --",
+    "build:prod:swf":"lerna run --ignore={@kogito-apps/common,@kogito-apps/task-console-webapp,@kogito-apps/management-console,@kogito-apps/management-console-webapp,@kogito-apps/cypress-ouia} build:prod --stream --",
+    "test:swf":"lerna run --ignore={@kogito-apps/common,@kogito-apps/task-console-webapp,@kogito-apps/management-console,@kogito-apps/management-console-webapp,@kogito-apps/cypress-ouia} test --stream --"
   },
   "husky": {
     "hooks": {
