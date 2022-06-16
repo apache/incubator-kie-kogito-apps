@@ -44,9 +44,34 @@
       packages/process-definition-list/coverage/lcov.info
     </sonar.javascript.lcov.reportPaths>
   </properties>
+
   <profiles>
-   <profile>
-    <build>
+  <profile>
+    <id>complete-build</id>
+    <activation>
+      <activeByDefault>true</activeByDefault>
+    </activation>
+    <properties>
+     <yarn.build.script>yarn run build:prod</yarn.build.script>
+     <yarn.test.script>yarn run test</yarn.test.script>
+    </properties>
+  </profile>
+  <profile>
+    <id>productized</id>
+    <activation>
+     <property>
+      <name>productized</name>
+     </property>
+    </activation>
+    <properties>
+     <yarn.build.script>yarn run build:prod:swf</yarn.build.script>
+     <yarn.test.script>yarn run test:swf</yarn.test.script>
+     <skip.ui.it>true</skip.ui.it>
+    </properties>
+  </profile>
+  </profiles>
+  
+  <build>
     <plugins>
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
@@ -189,7 +214,7 @@
             </goals>
             <configuration>
               <skip>${skip.ui.build}</skip>
-              <arguments>run build:prod</arguments>
+              <arguments>${yarn.build.script}</arguments>
               <environmentVariables>
                 <KOGITO_APP_VERSION>${project.version}</KOGITO_APP_VERSION>
               </environmentVariables>
@@ -203,7 +228,7 @@
             <phase>test</phase>
             <configuration>
               <skip>${skip.ui.test}</skip>
-              <arguments>run test</arguments>
+              <arguments>${yarn.test.script}</arguments>
             </configuration>
           </execution>
           <execution>
@@ -221,166 +246,4 @@
       </plugin>
     </plugins>
   </build>
-   </profile>
-   <profile>
-    <id>productized</id>
-	 <activation>
-	   <property>
-		 <name>productized</name>
-		</property>
-	 </activation>
-    <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-clean-plugin</artifactId>
-        <configuration>
-          <filesets>
-            <fileset>
-              <directory>node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/trusty/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/components-common/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/consoles-common/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/process-list/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/process-details/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/runtime-tools-dev-ui-webapp/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/task-inbox/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/task-form/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/task-details/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/forms-list/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/form-displayer/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/form-details/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/process-form/node_modules</directory>
-            </fileset>
-            <fileset>
-              <directory>packages/process-definition-list/node_modules</directory>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
-      <!-- frontend related plugins-->
-      <!--
-        Installs node and yarn in the webapp's node and node_modules folders.
-        Run 'mvn package':
-          * the first time you have checked out the source.
-          * whenever the dependencies have been changed in package.json (delete the webapp's node_modules folder first!)
-        If you want to skip installation of the packages, turn the profile off by setting property `-Dskip.ui.deps`.
-      -->
-      <plugin>
-        <groupId>com.github.eirslett</groupId>
-        <artifactId>frontend-maven-plugin</artifactId>
-        <configuration>
-          <workingDirectory>${path.to.root}</workingDirectory>
-        </configuration>
-        <executions>
-          <execution>
-            <id>install-node-and-npm</id>
-            <goals>
-              <goal>install-node-and-npm</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.ui.deps}</skip>
-              <nodeVersion>${version.node}</nodeVersion>
-              <npmVersion>${version.npm}</npmVersion>
-            </configuration>
-          </execution>
-          <execution>
-            <id>install-node-and-yarn</id>
-            <goals>
-              <goal>install-node-and-yarn</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.ui.deps}</skip>
-              <nodeVersion>${version.node}</nodeVersion>
-              <yarnVersion>${version.yarn}</yarnVersion>
-            </configuration>
-          </execution>
-          <execution>
-            <id>npm install lock-treatment-tool</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.ui.deps}</skip>
-              <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-              <arguments>install lock-treatment-tool --global-style --no-package-lock --no-save</arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>lock-treatment-tool execution</id>
-            <goals>
-              <goal>npm</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.ui.deps}</skip>
-              <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-              <arguments>run locktt -- --skipIntegrity</arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>yarn install</id>
-            <goals>
-              <goal>yarn</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.ui.deps}</skip>
-              <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
-              <arguments>install --fetch-retry-mintimeout=100000 --fetch-retries=10</arguments>
-            </configuration>
-          </execution>
-          <execution>
-            <id>yarn build:swf</id>
-            <goals>
-              <goal>yarn</goal>
-            </goals>
-            <configuration>
-              <skip>${skip.ui.build}</skip>
-              <arguments>run build:prod</arguments>
-              <environmentVariables>
-                <KOGITO_APP_VERSION>${project.version}</KOGITO_APP_VERSION>
-              </environmentVariables>
-            </configuration>
-          </execution>
-          <execution>
-            <id>yarn test</id>
-            <goals>
-              <goal>yarn</goal>
-            </goals>
-            <phase>test</phase>
-            <configuration>
-              <skip>${skip.ui.test}</skip>
-              <arguments>run test:swf</arguments>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
-   </profile>
-  </profiles>
 </project>
