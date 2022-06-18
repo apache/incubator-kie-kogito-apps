@@ -96,5 +96,20 @@
         <!-- Used by task assigning integration tests -->
       </modules>
     </profile>
+	<!--need to remove comment after merging/rebasing KOGITO-7321(Cristiano's PR) -->
+	<profile>
+	 <id>productized</id>
+	 <activation>
+	   <property>
+		 <name>productized</name>
+		</property>
+	 </activation>
+	 <modules>
+	  <module>kogito-apps-bom</module>
+	  <module>kogito-apps-build-parent</module>
+	  <module>ui-packages</module>
+	  <module>swf-quarkus-extension-parent</module>
+	 </modules>
+	</profile>
   </profiles>
 </project>
