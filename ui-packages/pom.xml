@@ -46,7 +46,7 @@
   </properties>
 
   <profiles>
-  <profile>
+   <profile>
     <id>complete-build</id>
     <activation>
       <activeByDefault>true</activeByDefault>
@@ -55,8 +55,8 @@
      <yarn.build.script>yarn run build:prod</yarn.build.script>
      <yarn.test.script>yarn run test</yarn.test.script>
     </properties>
-  </profile>
-  <profile>
+   </profile>
+   <profile>
     <id>productized</id>
     <activation>
      <property>
@@ -68,7 +68,7 @@
      <yarn.test.script>yarn run test:swf</yarn.test.script>
      <skip.ui.it>true</skip.ui.it>
     </properties>
-  </profile>
+   </profile>
   </profiles>
   
   <build>
