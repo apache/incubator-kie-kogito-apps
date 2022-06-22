@@ -406,3 +406,28 @@ export const startProcessInstance = (
       .catch(error => reject(error));
   });
 };
+
+export const startWorkflowInstance = (
+  formData: any,
+  devUIUrl: string
+): Promise<string> => {
+  const kogitoBusinessKey = Math.floor(Math.random() * 100000) + '';
+  return new Promise((resolve, reject) => {
+    axios
+      .post(devUIUrl, formData.data, {
+        headers: {
+          'ce-specversion': '1.0',
+          'ce-source': '/from/sw-service',
+          'ce-type': formData.type,
+          'ce-kogitobusinesskey': kogitoBusinessKey,
+          'ce-id': 'xyzabcdefgh'
+        }
+      })
+      .then(response => {
+        resolve(kogitoBusinessKey);
+      })
+      .catch(error => {
+        reject(error);
+      });
+  });
+};
