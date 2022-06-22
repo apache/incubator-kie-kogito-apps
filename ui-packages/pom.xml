@@ -52,8 +52,8 @@
       <activeByDefault>true</activeByDefault>
     </activation>
     <properties>
-     <yarn.build.script>yarn run build:prod</yarn.build.script>
-     <yarn.test.script>yarn run test</yarn.test.script>
+     <yarn.build.script>run build:prod</yarn.build.script>
+     <yarn.test.script>run test</yarn.test.script>
     </properties>
    </profile>
    <profile>
