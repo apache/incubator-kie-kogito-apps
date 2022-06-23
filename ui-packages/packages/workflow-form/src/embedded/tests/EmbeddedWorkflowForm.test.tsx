@@ -22,6 +22,17 @@ import {
 } from '../EmbeddedWorkflowForm';
 import { MockedWorkflowFormDriver } from './mocks/Mocks';
 
+const MockedComponent = (): React.ReactElement => {
+  return <></>;
+};
+jest.mock('@patternfly/react-code-editor', () =>
+  Object.assign(jest.requireActual('@patternfly/react-code-editor'), {
+    CodeEditor: () => {
+      return <MockedComponent />;
+    }
+  })
+);
+
 describe('EmbeddedWorkflowForm tests', () => {
   it('Snapshot', () => {
     const props: EmbeddedWorkflowFormProps = {

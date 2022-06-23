@@ -27,11 +27,14 @@ import { PageTitle } from '@kogito-apps/consoles-common';
 import { FormNotification, Notification } from '@kogito-apps/components-common';
 import { useHistory } from 'react-router-dom';
 import { WorkflowDefinition } from '@kogito-apps/workflow-form';
+import InlineEdit from '../ProcessFormPage/components/InlineEdit/InlineEdit';
+import { useWorkflowFormGatewayApi } from '../../../channel/WorkflowForm/WorkflowFormContext';
 
 const WorkflowFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const [notification, setNotification] = useState<Notification>();
 
   const history = useHistory();
+  const gatewayApi = useWorkflowFormGatewayApi();
 
   const workflowDefinition: WorkflowDefinition =
     history.location.state['workflowDefinition'];
@@ -69,12 +72,12 @@ const WorkflowFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   };
 
   const onSubmitSuccess = (id: string): void => {
-    const message = `The workflow with id: ${id} has started successfully.`;
+    const message = `A cloud event with business key ${id} was triggered successfully.`;
     showNotification('success', message);
   };
 
   const onSubmitError = (details?: string) => {
-    const message = 'Failed to trigger event.';
+    const message = 'Failed to trigger cloud event.';
     showNotification('error', message, details);
   };
 
@@ -88,7 +91,15 @@ const WorkflowFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
         )}
         variant="light"
       >
-        <PageTitle title={`Trigger cloud event`} />
+        <PageTitle
+          title={`Trigger cloud event`}
+          extra={
+            <InlineEdit
+              setBusinessKey={bk => gatewayApi.setBusinessKey(bk)}
+              getBusinessKey={() => gatewayApi.getBusinessKey()}
+            />
+          }
+        />
         {notification && (
           <div>
             <FormNotification notification={notification} />

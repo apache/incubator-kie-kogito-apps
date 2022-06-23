@@ -41,6 +41,7 @@ describe('WorkflowFormListGatewayApi tests', () => {
     await gatewayApi.startWorkflow(workflowDefinitionData);
     expect(startWorkflowInstance).toHaveBeenCalledWith(
       workflowDefinitionData,
+      '',
       'baseUrl'
     );
   });

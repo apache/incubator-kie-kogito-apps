@@ -19,6 +19,7 @@ import { mount } from 'enzyme';
 import WorkflowFormPage from '../WorkflowFormPage';
 import { BrowserRouter } from 'react-router-dom';
 
+jest.mock('../../ProcessFormPage/components/InlineEdit/InlineEdit');
 jest.mock('../../../containers/WorkflowFormContainer/WorkflowFormContainer');
 
 jest.mock('react-router-dom', () => ({

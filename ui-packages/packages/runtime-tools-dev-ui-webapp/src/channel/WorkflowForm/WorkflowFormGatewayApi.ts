@@ -18,16 +18,28 @@ import { startWorkflowInstance } from '../apis';
 
 export interface WorkflowFormGatewayApi {
   startWorkflow(formData: any): Promise<string>;
+  setBusinessKey(bk: string): void;
+  getBusinessKey(): string;
 }
 
 export class WorkflowFormGatewayApiImpl implements WorkflowFormGatewayApi {
+  private businessKey: string;
   private readonly baseUrl: string;
 
   constructor(baseUrl: string) {
+    this.businessKey = '';
     this.baseUrl = baseUrl;
   }
 
+  setBusinessKey(bk: string): void {
+    this.businessKey = bk;
+  }
+
+  getBusinessKey(): string {
+    return this.businessKey;
+  }
+
   startWorkflow(formData: any): Promise<string> {
-    return startWorkflowInstance(formData, this.baseUrl);
+    return startWorkflowInstance(formData, this.businessKey, this.baseUrl);
   }
 }

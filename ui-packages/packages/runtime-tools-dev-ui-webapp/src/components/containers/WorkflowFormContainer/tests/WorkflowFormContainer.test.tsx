@@ -20,6 +20,17 @@ import WorkflowFormContainer from '../WorkflowFormContainer';
 import * as FormDetailsContext from '../../../../channel/FormDetails/FormDetailsContext';
 import { FormDetailsGatewayApiImpl } from '../../../../channel/FormDetails/FormDetailsGatewayApi';
 
+const MockedComponent = (): React.ReactElement => {
+  return <></>;
+};
+jest.mock('@patternfly/react-code-editor', () =>
+  Object.assign(jest.requireActual('@patternfly/react-code-editor'), {
+    CodeEditor: () => {
+      return <MockedComponent />;
+    }
+  })
+);
+
 jest
   .spyOn(FormDetailsContext, 'useFormDetailsGatewayApi')
   .mockImplementation(() => new FormDetailsGatewayApiImpl());

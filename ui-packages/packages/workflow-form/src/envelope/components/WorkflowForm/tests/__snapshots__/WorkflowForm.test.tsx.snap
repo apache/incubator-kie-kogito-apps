@@ -138,50 +138,20 @@ exports[`WorkflowForm Test Workflow Form rendering 1`] = `
             <div
               className="pf-c-form__group-control"
             >
-              <TextInput
-                id="formData"
-                isRequired={true}
-                name="formData"
+              <CodeEditor
+                code=""
+                height="400px"
+                isCopyEnabled={false}
+                isDarkTheme={false}
+                isLanguageLabelVisible={false}
+                isLineNumbersVisible={true}
+                isMinimapVisible={true}
+                isReadOnly={false}
+                language="json"
                 onChange={[Function]}
-                type="text"
-                value=""
               >
-                <TextInputBase
-                  aria-label={null}
-                  className=""
-                  id="formData"
-                  innerRef={null}
-                  isDisabled={false}
-                  isLeftTruncated={false}
-                  isReadOnly={false}
-                  isRequired={true}
-                  name="formData"
-                  onChange={[Function]}
-                  ouiaSafe={true}
-                  type="text"
-                  validated="default"
-                  value=""
-                >
-                  <input
-                    aria-invalid={false}
-                    aria-label={null}
-                    className="pf-c-form-control"
-                    data-ouia-component-id="OUIA-Generated-TextInputBase-2"
-                    data-ouia-component-type="PF4/TextInput"
-                    data-ouia-safe={true}
-                    disabled={false}
-                    id="formData"
-                    name="formData"
-                    onBlur={[Function]}
-                    onChange={[Function]}
-                    onFocus={[Function]}
-                    readOnly={false}
-                    required={true}
-                    type="text"
-                    value=""
-                  />
-                </TextInputBase>
-              </TextInput>
+                <MockedComponent />
+              </CodeEditor>
             </div>
           </div>
         </FormGroup>
@@ -217,6 +187,31 @@ exports[`WorkflowForm Test Workflow Form rendering 1`] = `
                       type="button"
                     >
                       Send
+                    </button>
+                  </ButtonBase>
+                </Button>
+                <Button
+                  onClick={[Function]}
+                  variant="secondary"
+                >
+                  <ButtonBase
+                    innerRef={null}
+                    onClick={[Function]}
+                    variant="secondary"
+                  >
+                    <button
+                      aria-disabled={false}
+                      aria-label={null}
+                      className="pf-c-button pf-m-secondary"
+                      data-ouia-component-id="OUIA-Generated-Button-secondary-1"
+                      data-ouia-component-type="PF4/Button"
+                      data-ouia-safe={true}
+                      disabled={false}
+                      onClick={[Function]}
+                      role={null}
+                      type="button"
+                    >
+                      Reset
                     </button>
                   </ButtonBase>
                 </Button>

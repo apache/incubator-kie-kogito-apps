@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { WorkflowDefinition, WorkflowFormDriver } from '../../../api';
 import {
@@ -24,6 +24,7 @@ import {
   ActionGroup,
   Button
 } from '@patternfly/react-core';
+import { CodeEditor, Language } from '@patternfly/react-code-editor';
 
 export interface WorkflowFormProps {
   workflowDefinition: WorkflowDefinition;
@@ -39,12 +40,17 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
   const [type, setType] = useState<string>('');
   const [data, setData] = useState<string>('');
 
-  const onSubmit = () => {
+  const onSubmit = useCallback(() => {
     driver.startWorkflow({
       type,
       data
     });
-  };
+  }, [driver, type, data]);
+
+  const resetForm = useCallback(() => {
+    setType('');
+    setData('');
+  }, []);
 
   return (
     <div {...componentOuiaProps(ouiaId, 'workflow-form', ouiaSafe)}>
@@ -60,18 +66,25 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
           />
         </FormGroup>
         <FormGroup label="Data" isRequired fieldId="formData">
-          <TextInput
-            value={data}
-            isRequired
-            type="text"
-            id="formData"
-            name="formData"
+          <CodeEditor
+            isDarkTheme={false}
+            isLineNumbersVisible={true}
+            isReadOnly={false}
+            isCopyEnabled={false}
+            isMinimapVisible={true}
+            isLanguageLabelVisible={false}
+            code={data}
+            language={Language.json}
+            height="400px"
             onChange={setData}
           />
         </FormGroup>
         <ActionGroup>
           <Button variant="primary" onClick={onSubmit}>
             Send
+          </Button>
+          <Button variant="secondary" onClick={resetForm}>
+            Reset
           </Button>
         </ActionGroup>
       </Form>

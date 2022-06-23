@@ -1,7 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`inline edit tests snapshot 1`] = `
-<InlineEdit>
+<InlineEdit
+  getBusinessKey={[Function]}
+  setBusinessKey={[MockFunction]}
+>
   <div
     className="pf-c-inline-edit false"
     data-ouia-component-type="inline-edit"

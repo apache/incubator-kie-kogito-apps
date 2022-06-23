@@ -22,6 +22,17 @@ import { WorkflowFormDriver } from '../../../../api';
 import { mount } from 'enzyme';
 import { MockedWorkflowFormDriver } from '../../../../embedded/tests/mocks/Mocks';
 
+const MockedComponent = (): React.ReactElement => {
+  return <></>;
+};
+jest.mock('@patternfly/react-code-editor', () =>
+  Object.assign(jest.requireActual('@patternfly/react-code-editor'), {
+    CodeEditor: () => {
+      return <MockedComponent />;
+    }
+  })
+);
+
 let props: WorkflowFormProps;
 let startWorkflowSpy;
 const getWorkflowFormDriver = (): WorkflowFormDriver => {
@@ -70,7 +81,7 @@ describe('WorkflowForm Test', () => {
 
     await act(async () => {
       workflowForm
-        .find('Button')
+        .find('Button[variant="primary"]')
         .props()
         .onClick(formData);
       wait();

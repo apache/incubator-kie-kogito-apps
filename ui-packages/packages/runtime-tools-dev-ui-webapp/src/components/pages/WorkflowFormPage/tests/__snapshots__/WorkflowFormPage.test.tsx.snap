@@ -15,6 +15,12 @@ exports[`WorkflowFormPage tests Snapshot 1`] = `
       data-ouia-safe={true}
     >
       <PageTitle
+        extra={
+          <MockedComponent
+            getBusinessKey={[Function]}
+            setBusinessKey={[Function]}
+          />
+        }
         title="Trigger cloud event"
       >
         <Flex
@@ -49,6 +55,22 @@ exports[`WorkflowFormPage tests Snapshot 1`] = `
                     Trigger cloud event
                   </h1>
                 </Title>
+              </div>
+            </FlexItem>
+            <FlexItem
+              spacer={
+                Object {
+                  "default": "spacerSm",
+                }
+              }
+            >
+              <div
+                className="pf-m-spacer-sm"
+              >
+                <MockedComponent
+                  getBusinessKey={[Function]}
+                  setBusinessKey={[Function]}
+                />
               </div>
             </FlexItem>
           </div>

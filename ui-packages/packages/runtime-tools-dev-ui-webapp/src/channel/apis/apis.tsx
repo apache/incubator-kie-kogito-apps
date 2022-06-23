@@ -409,9 +409,13 @@ export const startProcessInstance = (
 
 export const startWorkflowInstance = (
   formData: any,
+  businessKey: string,
   devUIUrl: string
 ): Promise<string> => {
-  const kogitoBusinessKey = Math.floor(Math.random() * 100000) + '';
+  const kogitoBusinessKey =
+    businessKey.length > 0
+      ? businessKey
+      : Math.floor(Math.random() * 100000) + '';
   return new Promise((resolve, reject) => {
     axios
       .post(devUIUrl, formData.data, {

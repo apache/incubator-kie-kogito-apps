@@ -13,32 +13,38 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React, { useEffect, useState } from 'react';
 import { Button, TextInput } from '@patternfly/react-core';
 import { PencilAltIcon, CheckIcon, TimesIcon } from '@patternfly/react-icons';
-import { useProcessFormGatewayApi } from '../../../../../channel/ProcessForm/ProcessFormContext';
-import { ProcessFormGatewayApi } from '../../../../../channel/ProcessForm/ProcessFormGatewayApi';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 
-const InlineEdit: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
+interface InlineEditProps {
+  setBusinessKey: (businessKey: string) => void;
+  getBusinessKey: () => string;
+}
+
+const InlineEdit: React.FC<InlineEditProps & OUIAProps> = ({
+  setBusinessKey,
+  getBusinessKey,
+  ouiaId,
+  ouiaSafe
+}) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
 
-  const gatewayApi: ProcessFormGatewayApi = useProcessFormGatewayApi();
-  const businessKeyValue: string = gatewayApi.getBusinessKey();
-
   useEffect(() => {
-    if (businessKeyValue.length === 0) {
+    if (getBusinessKey().length === 0) {
       setInputValue('');
     }
-  }, [businessKeyValue]);
+  }, [getBusinessKey]);
 
   const toggleEditableMode = (): void => {
     setIsEditable(!isEditable);
   };
   const confirmBusinessKey = (isConfirmed: boolean): void => {
     if (isConfirmed) {
-      gatewayApi.setBusinessKey(inputValue);
+      setBusinessKey(inputValue);
       toggleEditableMode();
     } else {
       toggleEditableMode();
@@ -56,8 +62,8 @@ const InlineEdit: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
           className="pf-c-inline-edit__value"
           id="single-editable-example-label"
         >
-          {gatewayApi.getBusinessKey().length > 0 ? (
-            gatewayApi.getBusinessKey()
+          {getBusinessKey().length > 0 ? (
+            getBusinessKey()
           ) : (
             <span className="pf-u-disabled-color-100">Business key</span>
           )}
