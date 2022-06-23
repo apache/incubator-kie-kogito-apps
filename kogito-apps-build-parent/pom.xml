@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.kie.kogito</groupId>
         <artifactId>kogito-apps</artifactId>
-        <version>1.23.0.Final</version>
+        <version>1.23.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -45,7 +45,7 @@
         <container.image.integration-tests-trusty-service-quarkus>org.kie.kogito/integration-tests-trusty-service-quarkus:${project.version}</container.image.integration-tests-trusty-service-quarkus>
 
         <!-- OptaPlanner version -->
-        <version.org.optaplanner>8.23.0.Final</version.org.optaplanner>
+        <version.org.optaplanner>8.23.1-SNAPSHOT</version.org.optaplanner>
 
         <version.com.vladmihalcea.hibernate-types-55>2.12.1</version.com.vladmihalcea.hibernate-types-55>
         <version.org.apache.opennlp>1.9.2</version.org.apache.opennlp>
