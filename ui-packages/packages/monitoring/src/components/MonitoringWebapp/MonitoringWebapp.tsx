@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 import React from 'react';
 
+const DATA_INDEX_URL_PARAM = 'dataIndexUrl';
+
 interface DashbuilderComponentProps {
   dataIndexUrl?: string;
 }
@@ -26,10 +28,16 @@ The following query parameters are supported:
 dataIndexUrl: the URL to the data index. It must not end with a slash (e.g. http://localhost:8180)
 refresh: The refresh in seconds. Use -1 for no refresh.
 */
-const MonitoringWebapp: React.FC<DashbuilderComponentProps> = () => {
+const MonitoringWebapp: React.FC<DashbuilderComponentProps> = ({
+  dataIndexUrl
+}) => {
+  const queryParams = new URLSearchParams();
+  if (dataIndexUrl) {
+    queryParams.set(DATA_INDEX_URL_PARAM, dataIndexUrl);
+  }
   return (
     <iframe
-      src="resources/webapp/monitoring-webapp/index.html"
+      src={`resources/webapp/monitoring-webapp/index.html?${queryParams.toString()}`}
       style={{ width: '100%', height: '100%', padding: '10px' }}
     />
   );

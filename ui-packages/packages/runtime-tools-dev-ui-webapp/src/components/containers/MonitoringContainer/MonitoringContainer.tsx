@@ -25,7 +25,11 @@ import {
   KogitoEmptyStateType
 } from '@kogito-apps/components-common';
 
-const MonitoringContainer: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
+interface Props {
+  dataIndexUrl?: string;
+}
+
+const MonitoringContainer: React.FC<OUIAProps & Props> = ({ dataIndexUrl }) => {
   const gatewayApi: ProcessListGatewayApi = useProcessListGatewayApi();
   const [hasWorkflow, setHasWorkflow] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -56,7 +60,9 @@ const MonitoringContainer: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   return (
     <>
       {hasWorkflow ? (
-        <MonitoringView />
+        <MonitoringView
+          dataIndexUrl={dataIndexUrl ? new URL(dataIndexUrl).origin : undefined}
+        />
       ) : (
         <KogitoEmptyState
           title={loading ? 'Loading' : 'No Data'}

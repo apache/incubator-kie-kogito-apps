@@ -62,24 +62,24 @@ datasets:
 pages:
   - rows:
       - columns:
-          - span: '11'
+          - span: "11"
             components:
-              - html: 'Filter'
+              - html: "Filter"
                 properties:
                   font-weight: bolder
               - properties:
-                  width: '150px'
-                  margin-bottom: '20px'
+                  width: "150px"
+                  margin-bottom: "20px"
                 settings:
                   type: SELECTOR
                   refresh:
-                    interval: '${refresh}'
+                    interval: "${refresh}"
                   general:
-                    visible: 'true'
-                    text: 'Filter'
+                    visible: "true"
+                    text: "Filter"
                   filter:
-                    enabled: 'true'
-                    notification: 'true'
+                    enabled: "true"
+                    notification: "true"
                   dataSetLookup:
                     uuid: workflows
                     group:
@@ -92,52 +92,52 @@ pages:
           margin-left: 30px
           text-align: center
         columns:
-          - span: '2'
+          - span: "2"
             components:
               - settings:
                   type: METRIC
                   filter:
-                    enabled: 'true'
-                    listening: 'true'
+                    enabled: "true"
+                    listening: "true"
                   refresh:
-                    interval: '${refresh}'
+                    interval: "${refresh}"
                   general:
                     title: Workflows
-                    visible: 'true'
+                    visible: "true"
                   html:
                     html: ${cardTemplate}
                   chart:
-                    height: '${cardsHeight}'
+                    height: "${cardsHeight}"
                   columns:
                     - id: Total
-                      pattern: '#'
+                      pattern: "#"
                   dataSetLookup:
                     uuid: workflows
                     group:
                       - groupFunctions:
                           - source: Total
                             function: COUNT
-          - span: '2'
+          - span: "2"
             properties:
               color: blue
             components:
               - settings:
                   type: METRIC
                   filter:
-                    enabled: 'true'
-                    listening: 'true'
+                    enabled: "true"
+                    listening: "true"
                   refresh:
-                    interval: '${refresh}'
+                    interval: "${refresh}"
                   general:
                     title: Completed
-                    visible: 'true'
+                    visible: "true"
                   html:
                     html: ${cardTemplate}
                   chart:
-                    height: '${cardsHeight}'
+                    height: "${cardsHeight}"
                   columns:
                     - id: Total
-                      pattern: '#'
+                      pattern: "#"
                   dataSetLookup:
                     uuid: workflows
                     filter:
@@ -149,27 +149,27 @@ pages:
                       - groupFunctions:
                           - source: Total
                             function: COUNT
-          - span: '2'
+          - span: "2"
             properties:
               color: green
             components:
               - settings:
                   type: METRIC
                   filter:
-                    enabled: 'true'
-                    listening: 'true'
+                    enabled: "true"
+                    listening: "true"
                   refresh:
-                    interval: '${refresh}'
+                    interval: "${refresh}"
                   general:
                     title: Active
-                    visible: 'true'
+                    visible: "true"
                   html:
                     html: ${cardTemplate}
                   chart:
-                    height: '${cardsHeight}'
+                    height: "${cardsHeight}"
                   columns:
                     - id: Total
-                      pattern: '#'
+                      pattern: "#"
                   dataSetLookup:
                     uuid: workflows
                     filter:
@@ -181,27 +181,27 @@ pages:
                       - groupFunctions:
                           - source: Total
                             function: COUNT
-          - span: '2'
+          - span: "2"
             properties:
               color: orange
             components:
               - settings:
                   type: METRIC
                   filter:
-                    enabled: 'true'
-                    listening: 'true'
+                    enabled: "true"
+                    listening: "true"
                   refresh:
-                    interval: '${refresh}'
+                    interval: "${refresh}"
                   general:
                     title: Pending
-                    visible: 'true'
+                    visible: "true"
                   html:
                     html: ${cardTemplate}
                   chart:
-                    height: '${cardsHeight}'
+                    height: "${cardsHeight}"
                   columns:
                     - id: Total
-                      pattern: '#'
+                      pattern: "#"
                   dataSetLookup:
                     uuid: workflows
                     filter:
@@ -213,27 +213,27 @@ pages:
                       - functions:
                           - source: Total
                             function: COUNT
-          - span: '2'
+          - span: "2"
             properties:
               color: orange
             components:
               - settings:
                   type: METRIC
                   filter:
-                    enabled: 'true'
-                    listening: 'true'
+                    enabled: "true"
+                    listening: "true"
                   refresh:
-                    interval: '${refresh}'
+                    interval: "${refresh}"
                   general:
                     title: Aborted
-                    visible: 'true'
+                    visible: "true"
                   html:
                     html: ${cardTemplate}
                   chart:
-                    height: '${cardsHeight}'
+                    height: "${cardsHeight}"
                   columns:
                     - id: Total
-                      pattern: '#'
+                      pattern: "#"
                   dataSetLookup:
                     uuid: workflows
                     filter:
@@ -245,27 +245,27 @@ pages:
                       - functions:
                           - source: Total
                             function: COUNT
-          - span: '2'
+          - span: "2"
             properties:
               color: red
             components:
               - settings:
                   type: METRIC
                   filter:
-                    enabled: 'true'
-                    listening: 'true'
+                    enabled: "true"
+                    listening: "true"
                   refresh:
-                    interval: '${refresh}'
+                    interval: "${refresh}"
                   general:
                     title: Error
-                    visible: 'true'
+                    visible: "true"
                   html:
                     html: ${cardTemplate}
                   chart:
-                    height: '${cardsHeight}'
+                    height: "${cardsHeight}"
                   columns:
                     - id: Total
-                      pattern: '#'
+                      pattern: "#"
                   dataSetLookup:
                     dataSetUuid: workflows
                     filter:
@@ -279,33 +279,33 @@ pages:
                             function: COUNT
       - columns:
           - components:
-              - html: '<hr />'
+              - html: "<hr />"
       - columns:
           - components:
               - settings:
                   component: echarts
                   echarts:
                     series:
-                      type: 'bar'
+                      type: "bar"
                     title:
                       text: Functions and States Average Duration
                     xAxis:
                       axisLabel:
-                        interval: '0'
+                        interval: "0"
                     yAxis:
                       name: Time (ms)
                       nameLocation: middle
-                      nameGap: '35'
+                      nameGap: "35"
                       nameTextStyle:
                         fontStyle: italic
                   external:
-                    width: '${chartsWidth}'
-                    height: '${chartsHeight}'
+                    width: "${chartsWidth}"
+                    height: "${chartsHeight}"
                   filter:
-                    enabled: 'true'
-                    listening: 'true'
+                    enabled: "true"
+                    listening: "true"
                   refresh:
-                    interval: '${refresh}'
+                    interval: "${refresh}"
                   dataSetLookup:
                     dataSetUuid: nodes
                     filter:
@@ -341,12 +341,16 @@ pages:
                     width: 100%
                     height: 500px
                   refresh:
-                    interval: '${refresh}'
+                    interval: "${refresh}"
                   filter:
-                    enabled: 'true'
-                    listening: 'true'
+                    enabled: "true"
+                    listening: "true"
                   lookup:
                     uuid: workflows
+
+                    sort:
+                      - column: lastUpdate
+                        order: DESCENDING
                     group:
                       - columnsGroup:
                           source: workflowId

@@ -110,19 +110,23 @@ const DevUINav: React.FC<IOwnProps> = ({ pathname }) => {
             </Link>
           </NavItem>
         )}
-        {isProcessEnabled && (
-          <NavItem
-            key={'monitoring-nav'}
-            isActive={pathname.startsWith('/Monitoring')}
-          >
-            <Link
-              to="/Monitoring"
-              {...ouiaAttribute('data-ouia-navigation-name', 'monitoring-nav')}
+        {isProcessEnabled &&
+          (!availablePages || availablePages.includes('Monitoring')) && (
+            <NavItem
+              key={'monitoring-nav'}
+              isActive={pathname.startsWith('/Monitoring')}
             >
-              Monitoring
-            </Link>
-          </NavItem>
-        )}
+              <Link
+                to="/Monitoring"
+                {...ouiaAttribute(
+                  'data-ouia-navigation-name',
+                  'monitoring-nav'
+                )}
+              >
+                Monitoring
+              </Link>
+            </NavItem>
+          )}
       </NavList>
     </Nav>
   );

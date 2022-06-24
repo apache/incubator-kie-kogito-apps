@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,14 @@ import { PageSectionHeader } from '@kogito-apps/consoles-common';
 import MonitoringContainer from '../../containers/MonitoringContainer/MonitoringContainer';
 import '../../styles.css';
 
-const MonitoringPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
+interface Props {
+  dataIndexUrl?: string;
+}
+const MonitoringPage: React.FC<OUIAProps & Props> = ({
+  ouiaId,
+  ouiaSafe,
+  dataIndexUrl
+}) => {
   useEffect(() => {
     return ouiaPageTypeAndObjectId('monitoring');
   });
@@ -37,7 +44,7 @@ const MonitoringPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
         {...componentOuiaProps(ouiaId, 'monitoring-page-section', ouiaSafe)}
       >
         <Card className="Dev-ui__card-size">
-          <MonitoringContainer />
+          <MonitoringContainer dataIndexUrl={dataIndexUrl} />
         </Card>
       </PageSection>
     </React.Fragment>
