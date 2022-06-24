@@ -14,8 +14,8 @@
 
   "scripts": {
     "copy:dashbuilder": "copyfiles -u 6 \"../../node_modules/@dashbuilder-js/dashbuilder-client/dist/**/*\" ./dist/ && copyfiles -u 1 src/* ./dist/",
-    "build": "rimraf dist && pnpm copy:dashbuilder",
-    "build:prod": "pnpm build"
+    "build": "rimraf dist && yarn run copy:dashbuilder",
+    "build:prod": "yarn run build"
   },
  
   "babel": {
