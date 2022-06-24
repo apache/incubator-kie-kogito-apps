@@ -132,6 +132,7 @@ export interface ProcessInstance {
   isSelected?: boolean;
   errorMessage?: string;
   isOpen?: boolean;
+  diagram?: string;
 }
 
 export interface ProcessInstanceFilter {
