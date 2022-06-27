@@ -27,7 +27,8 @@ export const MockedApiRequests = jest.fn<
   Pick<WorkflowFormChannelApi, RequestPropertyNames<WorkflowFormChannelApi>>,
   []
 >(() => ({
-  workflowForm__startWorkflow: jest.fn()
+  workflowForm__startWorkflow: jest.fn(),
+  workflowForm__resetBusinessKey: jest.fn()
 }));
 
 export const MockedApiNotifications = jest.fn<

@@ -6,6 +6,7 @@ exports[`WorkflowFormEnvelopeView tests Snapshot 1`] = `
     Object {
       "notifications": Object {},
       "requests": Object {
+        "workflowForm__resetBusinessKey": [MockFunction],
         "workflowForm__startWorkflow": [MockFunction],
       },
       "subscribe": [MockFunction],
@@ -19,6 +20,7 @@ exports[`WorkflowFormEnvelopeView tests Snapshot 1`] = `
         "channelApi": Object {
           "notifications": Object {},
           "requests": Object {
+            "workflowForm__resetBusinessKey": [MockFunction],
             "workflowForm__startWorkflow": [MockFunction],
           },
           "subscribe": [MockFunction],

@@ -19,4 +19,5 @@
  */
 export interface WorkflowFormDriver {
   startWorkflow(formData: any): Promise<void>;
+  resetBusinessKey(): Promise<void>;
 }

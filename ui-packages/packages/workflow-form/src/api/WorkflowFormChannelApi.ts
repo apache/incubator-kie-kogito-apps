@@ -16,4 +16,5 @@
 
 export interface WorkflowFormChannelApi {
   workflowForm__startWorkflow(formData: any): Promise<void>;
+  workflowForm__resetBusinessKey(): Promise<void>;
 }

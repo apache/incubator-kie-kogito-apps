@@ -17,5 +17,6 @@
 import { WorkflowFormDriver } from '../../../api';
 
 export const MockedWorkflowFormDriver = jest.fn<WorkflowFormDriver, []>(() => ({
-  startWorkflow: jest.fn()
+  startWorkflow: jest.fn(),
+  resetBusinessKey: jest.fn()
 }));

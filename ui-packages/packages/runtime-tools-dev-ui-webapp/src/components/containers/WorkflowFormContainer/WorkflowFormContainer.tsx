@@ -27,12 +27,14 @@ interface WorkflowFormContainerProps {
   workflowDefinitionData: WorkflowDefinition;
   onSubmitSuccess: (id: string) => void;
   onSubmitError: (details?: string) => void;
+  onResetForm: () => void;
 }
 const WorkflowFormContainer: React.FC<WorkflowFormContainerProps &
   OUIAProps> = ({
   workflowDefinitionData,
   onSubmitSuccess,
   onSubmitError,
+  onResetForm,
   ouiaId,
   ouiaSafe
 }) => {
@@ -58,6 +60,9 @@ const WorkflowFormContainer: React.FC<WorkflowFormContainerProps &
                 'Unknown error. More details in the developer tools console.';
               onSubmitError(message);
             });
+        },
+        async resetBusinessKey() {
+          onResetForm();
         }
       }}
       targetOrigin={'*'}

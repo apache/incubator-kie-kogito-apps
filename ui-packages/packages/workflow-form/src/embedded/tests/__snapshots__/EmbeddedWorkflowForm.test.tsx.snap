@@ -4,6 +4,7 @@ exports[`EmbeddedWorkflowForm tests Snapshot 1`] = `
 <ForwardRef
   driver={
     Object {
+      "resetBusinessKey": [MockFunction],
       "startWorkflow": [MockFunction],
     }
   }

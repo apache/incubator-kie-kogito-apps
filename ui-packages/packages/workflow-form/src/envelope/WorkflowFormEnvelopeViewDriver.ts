@@ -28,4 +28,8 @@ export class WorkflowFormEnvelopeViewDriver implements WorkflowFormDriver {
   startWorkflow(formData: any): Promise<void> {
     return this.channelApi.requests.workflowForm__startWorkflow(formData);
   }
+
+  resetBusinessKey(): Promise<void> {
+    return this.channelApi.requests.workflowForm__resetBusinessKey();
+  }
 }

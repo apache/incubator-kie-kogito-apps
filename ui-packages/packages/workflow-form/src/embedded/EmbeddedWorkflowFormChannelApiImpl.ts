@@ -23,4 +23,8 @@ export class EmbeddedWorkflowFormChannelApiImpl
   workflowForm__startWorkflow(formData: any): Promise<void> {
     return this.driver.startWorkflow(formData);
   }
+
+  workflowForm__resetBusinessKey(): Promise<void> {
+    return this.driver.resetBusinessKey();
+  }
 }

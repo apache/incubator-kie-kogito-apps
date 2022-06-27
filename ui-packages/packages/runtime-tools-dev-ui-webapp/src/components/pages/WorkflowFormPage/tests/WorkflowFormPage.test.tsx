@@ -18,8 +18,9 @@ import React from 'react';
 import { mount } from 'enzyme';
 import WorkflowFormPage from '../WorkflowFormPage';
 import { BrowserRouter } from 'react-router-dom';
+import { WorkflowFormGatewayApiImpl } from '../../../../channel/WorkflowForm/WorkflowFormGatewayApi';
+import * as WorkflowFormContext from '../../../../channel/WorkflowForm/WorkflowFormContext';
 
-jest.mock('../../ProcessFormPage/components/InlineEdit/InlineEdit');
 jest.mock('../../../containers/WorkflowFormContainer/WorkflowFormContainer');
 
 jest.mock('react-router-dom', () => ({
@@ -35,6 +36,10 @@ jest.mock('react-router-dom', () => ({
     }
   })
 }));
+
+jest
+  .spyOn(WorkflowFormContext, 'useWorkflowFormGatewayApi')
+  .mockImplementation(() => new WorkflowFormGatewayApiImpl('baseUrl'));
 
 describe('WorkflowFormPage tests', () => {
   it('Snapshot', () => {

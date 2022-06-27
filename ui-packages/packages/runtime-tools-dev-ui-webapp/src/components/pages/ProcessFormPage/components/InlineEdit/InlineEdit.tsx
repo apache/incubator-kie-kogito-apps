@@ -14,30 +14,35 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useImperativeHandle, useState } from 'react';
 import { Button, TextInput } from '@patternfly/react-core';
 import { PencilAltIcon, CheckIcon, TimesIcon } from '@patternfly/react-icons';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+
+export interface InlineEditApi {
+  reset: () => void;
+}
 
 interface InlineEditProps {
   setBusinessKey: (businessKey: string) => void;
   getBusinessKey: () => string;
 }
 
-const InlineEdit: React.FC<InlineEditProps & OUIAProps> = ({
-  setBusinessKey,
-  getBusinessKey,
-  ouiaId,
-  ouiaSafe
-}) => {
+export const InlineEdit = React.forwardRef<
+  InlineEditApi,
+  InlineEditProps & OUIAProps
+>(({ setBusinessKey, getBusinessKey, ouiaId, ouiaSafe }, forwardedRef) => {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
+  const [currentBusinessKey, setCurrentBusinessKey] = useState<string>(
+    getBusinessKey()
+  );
 
   useEffect(() => {
-    if (getBusinessKey().length === 0) {
+    if (currentBusinessKey.length === 0) {
       setInputValue('');
     }
-  }, [getBusinessKey]);
+  }, [currentBusinessKey]);
 
   const toggleEditableMode = (): void => {
     setIsEditable(!isEditable);
@@ -45,11 +50,22 @@ const InlineEdit: React.FC<InlineEditProps & OUIAProps> = ({
   const confirmBusinessKey = (isConfirmed: boolean): void => {
     if (isConfirmed) {
       setBusinessKey(inputValue);
-      toggleEditableMode();
-    } else {
-      toggleEditableMode();
+      setCurrentBusinessKey(inputValue);
     }
+
+    toggleEditableMode();
   };
+
+  useImperativeHandle(
+    forwardedRef,
+    () => ({
+      reset: () => {
+        setInputValue('');
+        setCurrentBusinessKey('');
+      }
+    }),
+    []
+  );
 
   return (
     <div
@@ -62,8 +78,8 @@ const InlineEdit: React.FC<InlineEditProps & OUIAProps> = ({
           className="pf-c-inline-edit__value"
           id="single-editable-example-label"
         >
-          {getBusinessKey().length > 0 ? (
-            getBusinessKey()
+          {currentBusinessKey.length > 0 ? (
+            currentBusinessKey
           ) : (
             <span className="pf-u-disabled-color-100">Business key</span>
           )}
@@ -100,6 +116,6 @@ const InlineEdit: React.FC<InlineEditProps & OUIAProps> = ({
       </div>
     </div>
   );
-};
+});
 
 export default InlineEdit;

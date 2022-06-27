@@ -22,8 +22,10 @@ import {
   FormGroup,
   TextInput,
   ActionGroup,
-  Button
+  Button,
+  Popover
 } from '@patternfly/react-core';
+import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 import { CodeEditor, Language } from '@patternfly/react-code-editor';
 
 export interface WorkflowFormProps {
@@ -48,6 +50,7 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
   }, [driver, type, data]);
 
   const resetForm = useCallback(() => {
+    driver.resetBusinessKey();
     setType('');
     setData('');
   }, []);
@@ -55,7 +58,26 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
   return (
     <div {...componentOuiaProps(ouiaId, 'workflow-form', ouiaSafe)}>
       <Form isHorizontal>
-        <FormGroup label="Type" isRequired fieldId="formType">
+        <FormGroup
+          label="Type"
+          isRequired
+          fieldId="formType"
+          labelIcon={
+            <Popover
+              id="workflow-form-type-help"
+              bodyContent={<div>The type of the cloud event.</div>}
+            >
+              <button
+                type="button"
+                aria-label="More info for type field"
+                onClick={e => e.preventDefault()}
+                className="pf-c-form__group-label-help"
+              >
+                <HelpIcon noVerticalAlign />
+              </button>
+            </Popover>
+          }
+        >
           <TextInput
             value={type}
             isRequired
@@ -65,7 +87,28 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
             onChange={setType}
           />
         </FormGroup>
-        <FormGroup label="Data" isRequired fieldId="formData">
+        <FormGroup
+          label="Data"
+          isRequired
+          fieldId="formData"
+          labelIcon={
+            <Popover
+              id="workflow-form-data-help"
+              bodyContent={
+                <div>A JSON containing the data of the cloud event.</div>
+              }
+            >
+              <button
+                type="button"
+                aria-label="More info for data field"
+                onClick={e => e.preventDefault()}
+                className="pf-c-form__group-label-help"
+              >
+                <HelpIcon noVerticalAlign />
+              </button>
+            </Popover>
+          }
+        >
           <CodeEditor
             isDarkTheme={false}
             isLineNumbersVisible={true}

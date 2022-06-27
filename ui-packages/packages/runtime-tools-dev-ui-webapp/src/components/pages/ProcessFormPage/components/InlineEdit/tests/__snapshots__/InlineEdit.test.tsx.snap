@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`inline edit tests snapshot 1`] = `
-<InlineEdit
+<ForwardRef
   getBusinessKey={[Function]}
   setBusinessKey={[MockFunction]}
 >
@@ -235,5 +235,5 @@ exports[`inline edit tests snapshot 1`] = `
       </div>
     </div>
   </div>
-</InlineEdit>
+</ForwardRef>
 `;

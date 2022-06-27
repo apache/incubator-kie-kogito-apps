@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Card, CardBody, PageSection } from '@patternfly/react-core';
 import {
   OUIAProps,
@@ -27,21 +27,21 @@ import { PageTitle } from '@kogito-apps/consoles-common';
 import { FormNotification, Notification } from '@kogito-apps/components-common';
 import { useHistory } from 'react-router-dom';
 import { WorkflowDefinition } from '@kogito-apps/workflow-form';
-import InlineEdit from '../ProcessFormPage/components/InlineEdit/InlineEdit';
+import {
+  InlineEdit,
+  InlineEditApi
+} from '../ProcessFormPage/components/InlineEdit/InlineEdit';
 import { useWorkflowFormGatewayApi } from '../../../channel/WorkflowForm/WorkflowFormContext';
 
 const WorkflowFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const [notification, setNotification] = useState<Notification>();
+  const inlineEditRef = useRef<InlineEditApi>();
 
   const history = useHistory();
   const gatewayApi = useWorkflowFormGatewayApi();
 
   const workflowDefinition: WorkflowDefinition =
     history.location.state['workflowDefinition'];
-
-  useEffect(() => {
-    return ouiaPageTypeAndObjectId('workflow-form');
-  });
 
   const goToWorkflowList = () => {
     history.push('/Processes');
@@ -81,6 +81,20 @@ const WorkflowFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
     showNotification('error', message, details);
   };
 
+  const onResetForm = () => {
+    gatewayApi.setBusinessKey('');
+    inlineEditRef.current!.reset();
+  };
+
+  const getBusinessKey = () => {
+    return gatewayApi.getBusinessKey();
+  };
+
+  useEffect(() => {
+    onResetForm();
+    return ouiaPageTypeAndObjectId('workflow-form');
+  }, [onResetForm]);
+
   return (
     <React.Fragment>
       <PageSection
@@ -95,8 +109,9 @@ const WorkflowFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
           title={`Trigger cloud event`}
           extra={
             <InlineEdit
+              ref={inlineEditRef}
               setBusinessKey={bk => gatewayApi.setBusinessKey(bk)}
-              getBusinessKey={() => gatewayApi.getBusinessKey()}
+              getBusinessKey={getBusinessKey}
             />
           }
         />
@@ -119,6 +134,7 @@ const WorkflowFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
               workflowDefinitionData={workflowDefinition}
               onSubmitSuccess={onSubmitSuccess}
               onSubmitError={onSubmitError}
+              onResetForm={onResetForm}
             />
           </CardBody>
         </Card>
