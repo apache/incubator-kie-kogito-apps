@@ -93,7 +93,7 @@ const WorkflowFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   useEffect(() => {
     onResetForm();
     return ouiaPageTypeAndObjectId('workflow-form');
-  }, [onResetForm]);
+  }, []);
 
   return (
     <React.Fragment>
