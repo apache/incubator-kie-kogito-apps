@@ -38,16 +38,16 @@ datasets:
         type: number
   - uuid: workflows
     expression: >-
-      $.data.ProcessInstances.[ id, processId, processName, serviceUrl, state, $fromMillis($toMillis(start)), $fromMillis($toMillis(lastUpdate)), end ? $toMillis(end) - $toMillis(start) : -1, error ? error.message : ""]
-    url: ${dataIndexUrl}/graphql/?query=%7B%0A%20%20ProcessInstances%20%7B%0A%20%20%20%20id%0A%20%20%20%20processId%0A%20%20%20%20processName%0A%20%20%20%20serviceUrl%0A%20%20%20%20state%0A%20%20%20%20start%0A%20%20%20%20end%0A%20%20%20%20lastUpdate%0A%20%20%20%20error%20%7B%20%20%20%20%20%20%0A%20%20%20%20%20%20message%0A%20%20%20%20%7D%0A%20%20%7D%0A%7D%0A
+      $.data.ProcessInstances.[ id, businessKey ? businessKey : "", processId, processName, state, $fromMillis($toMillis(start)), $fromMillis($toMillis(lastUpdate)), end ? $toMillis(end) - $toMillis(start) : -1, error ? error.message : ""]
+    url: ${dataIndexUrl}/graphql/?query=%7BProcessInstances%7Bid%20processId%20businessKey%20processName%20serviceUrl%20state%20start%20end%20lastUpdate%20error%20%7Bmessage%7D%7D%7D%0A
     columns:
       - id: id
+        type: LABEL
+      - id: businessKey
         type: LABEL
       - id: workflowId
         type: LABEL
       - id: workflowName
-        type: LABEL
-      - id: serviceUrl
         type: LABEL
       - id: state
         type: LABEL
@@ -347,7 +347,6 @@ pages:
                     listening: "true"
                   lookup:
                     uuid: workflows
-
                     sort:
                       - column: lastUpdate
                         order: DESCENDING
@@ -357,6 +356,8 @@ pages:
                         functions:
                           - source: id
                             column: Instance ID
+                          - source: businessKey
+                            column: Business Key
                           - source: workflowId
                             column: ID
                           - source: workflowName

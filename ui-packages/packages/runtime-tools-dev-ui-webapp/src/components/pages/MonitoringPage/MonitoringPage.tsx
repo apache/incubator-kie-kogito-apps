@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { ReactText, useEffect, useState } from 'react';
+import React, { ReactText, useCallback, useEffect, useState } from 'react';
 import {
   Card,
   PageSection,
@@ -45,7 +45,8 @@ import {
 import '../../styles.css';
 import {
   ProcessInstance,
-  ProcessInstanceState
+  ProcessInstanceState,
+  OrderBy
 } from '@kogito-apps/management-console-shared';
 import { Dashboard } from '@kogito-apps/monitoring';
 
@@ -66,34 +67,49 @@ const MonitoringPage: React.FC<OUIAProps & Props> = ({
   const [selectedWorkflow, setSelectedWorkflow] = useState<ProcessInstance>();
   const [activeTabKey, setActiveTabKey] = useState<ReactText>(0);
 
+  const initialLoad = () =>
+    gatewayApi.initialLoad(
+      {
+        status: [
+          ProcessInstanceState.Aborted,
+          ProcessInstanceState.Active,
+          ProcessInstanceState.Completed,
+          ProcessInstanceState.Error,
+          ProcessInstanceState.Suspended
+        ],
+        businessKey: []
+      },
+      { start: OrderBy.DESC }
+    );
+
+  const loadWorkflowList = useCallback(() => {
+    gatewayApi.query(0, 1000).then(list => {
+      setSelectedWorkflow(list[0]);
+      setWorkflowList(list);
+    });
+  }, [workflowList, selectedWorkflow]);
+
   useEffect(() => {
     const intervaId = setInterval(() => {
       if (!hasWorkflow) {
-        gatewayApi.initialLoad(
-          {
-            status: [
-              ProcessInstanceState.Aborted,
-              ProcessInstanceState.Active,
-              ProcessInstanceState.Completed,
-              ProcessInstanceState.Error,
-              ProcessInstanceState.Suspended
-            ],
-            businessKey: []
-          },
-          {}
-        );
-        gatewayApi.query(0, 1000).then(list => {
+        initialLoad();
+        gatewayApi.query(0, 1).then(list => {
           if (list.length > 0) {
             setHasWorkflow(true);
-            setSelectedWorkflow(list[0]);
+            loadWorkflowList();
           }
           setLoading(false);
-          setWorkflowList(list);
         });
       }
     }, 500);
     return () => clearInterval(intervaId);
   }, [hasWorkflow, loading]);
+
+  useEffect(() => {
+    if (dashboard === Dashboard.DETAILS) {
+      loadWorkflowList();
+    }
+  }, [dashboard]);
 
   useEffect(() => {
     return ouiaPageTypeAndObjectId('monitoring');
@@ -111,6 +127,7 @@ const MonitoringPage: React.FC<OUIAProps & Props> = ({
               const dashboard =
                 tabIndex === 0 ? Dashboard.MONITORING : Dashboard.DETAILS;
               setDashboard(dashboard);
+              loadWorkflowList();
             }}
             isBox
             variant="light300"
@@ -126,24 +143,24 @@ const MonitoringPage: React.FC<OUIAProps & Props> = ({
             <Tab
               id="monitoring-workflow-tab"
               eventKey={1}
-              title={<TabTitleText>Workflow</TabTitleText>}
+              title={<TabTitleText>Workflows</TabTitleText>}
             ></Tab>
           </Tabs>
           <PageSection
             {...componentOuiaProps(ouiaId, 'monitoring-page-section', ouiaSafe)}
           >
             <Card className="Dev-ui__card-size">
-              <Toolbar>
-                <ToolbarContent>
-                  <ToolbarGroup>
-                    {dashboard === Dashboard.DETAILS && (
+              {dashboard === Dashboard.DETAILS && (
+                <Toolbar>
+                  <ToolbarContent>
+                    <ToolbarGroup>
                       <ToolbarItem>
                         <Select
                           aria-labelledby={'workfflow-id-select'}
                           variant={SelectVariant.single}
-                          onSelect={(event, i) => {
+                          onSelect={(event, v) => {
                             setSelectedWorkflow(
-                              workflowList.find(p => p.id === i)
+                              workflowList.find(p => p.id === v)
                             );
                             setOpenProcessSelect(false);
                           }}
@@ -153,16 +170,21 @@ const MonitoringPage: React.FC<OUIAProps & Props> = ({
                           isOpen={openProcessSelect}
                           placeholderText="Select Workflow"
                           hasInlineFilter
+                          maxHeight={'300px'}
                         >
                           {workflowList.map((p, i) => (
-                            <SelectOption key={i} value={p.id} />
+                            <SelectOption
+                              key={i}
+                              value={p.id}
+                              description={p.processId}
+                            />
                           ))}
                         </Select>
                       </ToolbarItem>
-                    )}
-                  </ToolbarGroup>
-                </ToolbarContent>
-              </Toolbar>
+                    </ToolbarGroup>
+                  </ToolbarContent>
+                </Toolbar>
+              )}
               <MonitoringContainer
                 dataIndexUrl={dataIndexUrl}
                 workflow={selectedWorkflow ? selectedWorkflow.id : undefined}

@@ -8,43 +8,50 @@ properties:
   cardsHeight: 20
   cardsWidth: 90%
 
-  workflowId: c131cad4-f96b-45bb-9e57-7184e7df959f
+  workflowId: 6164b616-45d6-4ad9-8d46-8ede7b6957fd
 
   # cards template
   cardTemplate: >-
     >-
                           <div id="${this}" class="card-pf card-pf-aggregate-status" style="background-color: ${bgColor}; width: ${cardsWidth}; height: ${cardsHeight};">
-                            <h2 style="font-weight: 600; font-size: large" id="${this}Value">${value} ms</h2>
-                            <p style="font-weight: 400" id="${this}Title"><em class="fa fa-clock-o"></em> ${title}</p>
+                            <h2 style="font-weight: 600; font-size: large" id="${this}Value">${value}</h2>
+                            <p style="font-weight: 400" id="${this}Title"><em id="${this}Icon" class=""></em> ${title}</p>
                           </div>
 datasets:
   - uuid: nodes
     expression: >-
       $.data.ProcessInstances.(
           $start := $min(nodes.($toMillis(enter)));
-          $end := $max(nodes.($toMillis(exit)))  - $start;
+          $end := $max(nodes.(exit ? $toMillis(exit) : -1)) - $start;
           $map(nodes, function($n) {
               [
                   processId, 
-                  id, 
+                  state, 
+                  id,
+                  start,
                   0,
                   $end , 
                   $end / 2, 
                   $n.type, 
-                  $n.name, 
+                  $n.name,
+                  $n.nodeId, 
+                  $toMillis($n.enter),
                   $toMillis($n.enter) - $start, 
                   $n.exit ? $toMillis($n.exit) - $start  : -1,
-                  $n.exit ? $toMillis($n.exit) - $toMillis($n.enter) : -1,
-                  $toMillis($n.enter) -  $start
+                  $n.exit ? $toMillis($n.exit) - $toMillis($n.enter) : -1
               ]
           });
       )
-    url: ${dataIndexUrl}/graphql/?query=%7BProcessInstances(where%3A%7Bid%3A%7Bin%3A%20%5B"${workflowId}"%5D%7D%7D)%7BprocessId%20id%20start%20lastUpdate%20nodes%20%7Bid%20name%20type%20enter%20exit%7D%7D%7D
+    url: ${dataIndexUrl}/graphql/?query=%7BProcessInstances(where%3A%7Bid%3A%7Bin%3A%20%5B"${workflowId}"%5D%7D%7D)%7BprocessId%20state%20id%20start%20lastUpdate%20nodes%20%7Bid%20nodeId%20name%20type%20enter%20exit%7D%7D%7D%0A
     columns:
       - id: workflowId
         type: label
+      - id: state
+        type: label
       - id: id
         type: label
+      - id: workflowStartDate
+        type: date
       - id: start
         type: label
       - id: end
@@ -55,32 +62,49 @@ datasets:
         type: label
       - id: name
         type: label
+      - id: nodeId
+        type: number
+      - id: nodeStartMillis
+        type: number
       - id: nodeStart
         type: label
       - id: nodeEnd
         type: number
       - id: duration
         type: label
-      - id: enter
-        type: date
 pages:
   - rows:
       - columns:
           - components:
-              - html: "<strong>${workflowId}</strong> "
-                properties:
-                  font-size: large
-                  margin-bottom: 10px
+              - settings:
+                  type: METRIC
+                  general:
+                    title: State
+                    visible: "true"
+                  html:
+                    html: >-
+                        <strong style="font-size: x-large; margin-bottom: 10px">${value} <small style="font-size: small">${workflowId}</small></strong>
+                  columns:
+                    - id: end
+                      pattern: "#"
+                  dataSetLookup:
+                    uuid: nodes                   
+                    group:
+                      - groupFunctions:
+                          - source: workflowId
       - columns:
-          - span: '6'
+          - span: "4"
             components:
               - settings:
                   type: METRIC
                   general:
-                    title: Total Duration
+                    title: Start
                     visible: "true"
                   html:
                     html: ${cardTemplate}
+                    javascript: >-                      
+                        document.getElementById(${this}.id + "Icon").className = "fa fa-calendar";
+                      
                   chart:
                     height: "${cardsHeight}"
                   columns:
@@ -89,58 +113,64 @@ pages:
                   dataSetLookup:
                     uuid: nodes
                     filter:
-                      - column: name
-                        function: NOT_IN
-                        args:
-                          - EmbeddedStart
-                          - EmbeddedEnd
-                          - Script
-                      - column: type
-                        function: NOT_IN
-                        args:
-                          - Join
-                      - column: nodeEnd
-                        function: NOT_IN
-                        args:
-                          - -1
+                    group:
+                      - groupFunctions:
+                          - source: workflowStartDate
+          - span: "4"
+            components:
+              - settings:
+                  type: METRIC
+                  general:
+                    title: State
+                    visible: "true"
+                  html:
+                    html: ${cardTemplate}
+                    javascript: >-
+                      if ( "${value}" === "ERROR") {
+                        ${this}.style.color = 'red';
+                        document.getElementById(${this}.id + "Icon").className = "pficon-error-circle-o";
+                      }
+                      else if ( "${value}" === "COMPLETED") {
+                        ${this}.style.color = 'blue';
+                        document.getElementById(${this}.id + "Icon").className = "fa fa-check";
+                      } else if ( "${value}" === "ACTIVE") {
+                        ${this}.style.color = 'green';
+                        document.getElementById(${this}.id + "Icon").className = "pficon pficon-on-running";
+                      } else {
+                        document.getElementById(${this}.id + "Icon").className = "";
+                      }
+                  chart:
+                    height: "${cardsHeight}"
+                  columns:
+                    - id: end
+                      pattern: "#"
+                  dataSetLookup:
+                    uuid: nodes                  
+                    group:
+                      - groupFunctions:
+                          - source: state
+          - span: "4"
+            components:
+              - settings:
+                  type: METRIC
+                  general:
+                    title: Duration (ms)
+                    visible: "true"
+                  html:
+                    html: ${cardTemplate}
+                    javascript: >-                      
+                        document.getElementById(${this}.id + "Icon").className = "fa fa-clock-o";
+                  chart:
+                    height: "${cardsHeight}"
+                  columns:
+                    - id: end
+                      pattern: "#"
+                  dataSetLookup:
+                    uuid: nodes
+                    filter:                                              
                     group:
                       - groupFunctions:
                           - source: end
-          - span: '6'
-            components:
-              - settings:
-                  type: METRIC
-                  general:
-                    title: Average
-                    visible: "true"
-                  html:
-                    html: ${cardTemplate}
-                  chart:
-                    height: "${cardsHeight}"
-                  columns:
-                    - id: end
-                      pattern: "#"
-                  dataSetLookup:
-                    uuid: nodes
-                    filter:
-                      - column: name
-                        function: NOT_IN
-                        args:
-                          - EmbeddedStart
-                          - EmbeddedEnd
-                          - Script
-                      - column: type
-                        function: NOT_IN
-                        args:
-                          - Join
-                      - column: nodeEnd
-                        function: NOT_IN
-                        args:
-                          - -1
-                    group:
-                      - groupFunctions:
-                          - source: nodeEnd
-                            function: AVERAGE
       - columns:
           - components:
               - settings:
@@ -225,5 +255,7 @@ pages:
                         args:
                           - -1
                     sort:
-                      - column: nodeStart
+                      - column: nodeStartMillis
+                        order: DESCENDING
+                      - column: nodeId
                         order: DESCENDING
