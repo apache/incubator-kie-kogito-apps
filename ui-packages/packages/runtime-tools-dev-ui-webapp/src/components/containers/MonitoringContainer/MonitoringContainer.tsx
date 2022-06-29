@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,63 +14,27 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react';
-import { OUIAProps } from '@kogito-apps/ouia-tools';
-import { MonitoringView } from '@kogito-apps/monitoring';
-import { ProcessListGatewayApi } from '../../../channel/ProcessList';
-import { useProcessListGatewayApi } from '../../../channel/ProcessList/ProcessListContext';
-import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
-import {
-  KogitoEmptyState,
-  KogitoEmptyStateType
-} from '@kogito-apps/components-common';
+import React from 'react';
+import { Dashboard, MonitoringView } from '@kogito-apps/monitoring';
 
 interface Props {
   dataIndexUrl?: string;
+  dashboard?: Dashboard;
+  workflow?: string;
 }
 
-const MonitoringContainer: React.FC<OUIAProps & Props> = ({ dataIndexUrl }) => {
-  const gatewayApi: ProcessListGatewayApi = useProcessListGatewayApi();
-  const [hasWorkflow, setHasWorkflow] = useState(false);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    const intervaId = setInterval(() => {
-      if (!hasWorkflow) {
-        gatewayApi.initialLoad(
-          {
-            status: [
-              ProcessInstanceState.Aborted,
-              ProcessInstanceState.Active,
-              ProcessInstanceState.Completed,
-              ProcessInstanceState.Error,
-              ProcessInstanceState.Suspended
-            ],
-            businessKey: []
-          },
-          {}
-        );
-        gatewayApi.query(0, 1).then(list => {
-          setHasWorkflow(list.length > 0);
-          setLoading(false);
-        });
-      }
-    }, 500);
-    return () => clearInterval(intervaId);
-  }, [hasWorkflow, loading]);
+const MonitoringContainer: React.FC<Props> = ({
+  workflow,
+  dashboard,
+  dataIndexUrl
+}) => {
+  const _dashboard = dashboard || Dashboard.MONITORING;
   return (
-    <>
-      {hasWorkflow ? (
-        <MonitoringView
-          dataIndexUrl={dataIndexUrl ? new URL(dataIndexUrl).origin : undefined}
-        />
-      ) : (
-        <KogitoEmptyState
-          title={loading ? 'Loading' : 'No Data'}
-          body={loading ? 'Loading Data' : 'No workflows were started'}
-          type={KogitoEmptyStateType.Info}
-        />
-      )}
-    </>
+    <MonitoringView
+      dashboard={_dashboard}
+      workflow={workflow}
+      dataIndexUrl={dataIndexUrl ? new URL(dataIndexUrl).origin : undefined}
+    />
   );
 };
 

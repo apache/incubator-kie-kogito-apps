@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-export * from './MonitoringView';
-export * from './Dashboard';
+export enum Dashboard {
+  MONITORING = 'MonitoringReport.dash.yml',
+  DETAILS = 'WorkflowDetails.dash.yml'
+}

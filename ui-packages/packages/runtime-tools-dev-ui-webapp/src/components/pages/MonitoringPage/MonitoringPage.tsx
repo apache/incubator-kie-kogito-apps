@@ -14,16 +14,40 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react';
-import { Card, PageSection } from '@patternfly/react-core';
+import React, { ReactText, useEffect, useState } from 'react';
+import {
+  Card,
+  PageSection,
+  Tab,
+  Tabs,
+  TabTitleText,
+  Select,
+  SelectOption,
+  SelectVariant,
+  Toolbar,
+  ToolbarContent,
+  ToolbarGroup,
+  ToolbarItem
+} from '@patternfly/react-core';
 import {
   OUIAProps,
   ouiaPageTypeAndObjectId,
   componentOuiaProps
 } from '@kogito-apps/ouia-tools';
 import { PageSectionHeader } from '@kogito-apps/consoles-common';
+import { ProcessListGatewayApi } from '../../../channel/ProcessList';
+import { useProcessListGatewayApi } from '../../../channel/ProcessList/ProcessListContext';
 import MonitoringContainer from '../../containers/MonitoringContainer/MonitoringContainer';
+import {
+  KogitoEmptyState,
+  KogitoEmptyStateType
+} from '@kogito-apps/components-common';
 import '../../styles.css';
+import {
+  ProcessInstance,
+  ProcessInstanceState
+} from '@kogito-apps/management-console-shared';
+import { Dashboard } from '@kogito-apps/monitoring';
 
 interface Props {
   dataIndexUrl?: string;
@@ -33,6 +57,44 @@ const MonitoringPage: React.FC<OUIAProps & Props> = ({
   ouiaSafe,
   dataIndexUrl
 }) => {
+  const gatewayApi: ProcessListGatewayApi = useProcessListGatewayApi();
+  const [hasWorkflow, setHasWorkflow] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [openProcessSelect, setOpenProcessSelect] = useState(false);
+  const [dashboard, setDashboard] = useState(Dashboard.MONITORING);
+  const [workflowList, setWorkflowList] = useState<ProcessInstance[]>([]);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<ProcessInstance>();
+  const [activeTabKey, setActiveTabKey] = useState<ReactText>(0);
+
+  useEffect(() => {
+    const intervaId = setInterval(() => {
+      if (!hasWorkflow) {
+        gatewayApi.initialLoad(
+          {
+            status: [
+              ProcessInstanceState.Aborted,
+              ProcessInstanceState.Active,
+              ProcessInstanceState.Completed,
+              ProcessInstanceState.Error,
+              ProcessInstanceState.Suspended
+            ],
+            businessKey: []
+          },
+          {}
+        );
+        gatewayApi.query(0, 1000).then(list => {
+          if (list.length > 0) {
+            setHasWorkflow(true);
+            setSelectedWorkflow(list[0]);
+          }
+          setLoading(false);
+          setWorkflowList(list);
+        });
+      }
+    }, 500);
+    return () => clearInterval(intervaId);
+  }, [hasWorkflow, loading]);
+
   useEffect(() => {
     return ouiaPageTypeAndObjectId('monitoring');
   });
@@ -40,13 +102,82 @@ const MonitoringPage: React.FC<OUIAProps & Props> = ({
   return (
     <React.Fragment>
       <PageSectionHeader titleText="Monitoring" ouiaId={ouiaId} />
-      <PageSection
-        {...componentOuiaProps(ouiaId, 'monitoring-page-section', ouiaSafe)}
-      >
-        <Card className="Dev-ui__card-size">
-          <MonitoringContainer dataIndexUrl={dataIndexUrl} />
-        </Card>
-      </PageSection>
+      {hasWorkflow ? (
+        <>
+          <Tabs
+            activeKey={activeTabKey}
+            onSelect={(event, tabIndex) => {
+              setActiveTabKey(tabIndex);
+              const dashboard =
+                tabIndex === 0 ? Dashboard.MONITORING : Dashboard.DETAILS;
+              setDashboard(dashboard);
+            }}
+            isBox
+            variant="light300"
+            style={{
+              background: 'white'
+            }}
+          >
+            <Tab
+              id="monitoring-report-tab"
+              eventKey={0}
+              title={<TabTitleText>Summary</TabTitleText>}
+            ></Tab>
+            <Tab
+              id="monitoring-workflow-tab"
+              eventKey={1}
+              title={<TabTitleText>Workflow</TabTitleText>}
+            ></Tab>
+          </Tabs>
+          <PageSection
+            {...componentOuiaProps(ouiaId, 'monitoring-page-section', ouiaSafe)}
+          >
+            <Card className="Dev-ui__card-size">
+              <Toolbar>
+                <ToolbarContent>
+                  <ToolbarGroup>
+                    {dashboard === Dashboard.DETAILS && (
+                      <ToolbarItem>
+                        <Select
+                          aria-labelledby={'workfflow-id-select'}
+                          variant={SelectVariant.single}
+                          onSelect={(event, i) => {
+                            setSelectedWorkflow(
+                              workflowList.find(p => p.id === i)
+                            );
+                            setOpenProcessSelect(false);
+                          }}
+                          onToggle={() =>
+                            setOpenProcessSelect(!openProcessSelect)
+                          }
+                          isOpen={openProcessSelect}
+                          placeholderText="Select Workflow"
+                          hasInlineFilter
+                        >
+                          {workflowList.map((p, i) => (
+                            <SelectOption key={i} value={p.id} />
+                          ))}
+                        </Select>
+                      </ToolbarItem>
+                    )}
+                  </ToolbarGroup>
+                </ToolbarContent>
+              </Toolbar>
+              <MonitoringContainer
+                dataIndexUrl={dataIndexUrl}
+                workflow={selectedWorkflow ? selectedWorkflow.id : undefined}
+                dashboard={dashboard}
+              />
+            </Card>
+          </PageSection>
+        </>
+      ) : (
+        <KogitoEmptyState
+          title={loading ? 'Loading' : 'No Data'}
+          body={loading ? 'Loading Data' : 'No workflows were started'}
+          type={KogitoEmptyStateType.Info}
+        />
+      )}
     </React.Fragment>
   );
 };

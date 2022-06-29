@@ -13,5 +13,5 @@ dashbuilder = {
 	hideNavBar: true
 */
   hideNavBar: true,
-  dashboards: ["MonitoringReport.dash.yml"],
+  dashboards: ["MonitoringReport.dash.yml", "WorkflowDetails.dash.yml"],
 };

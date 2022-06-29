@@ -1,0 +1,229 @@
+properties:
+  dataIndexUrl: http://localhost:8180
+
+  # charts size
+  chartsWidth: 95%
+  chartsHeight: 450px
+
+  cardsHeight: 20
+  cardsWidth: 90%
+
+  workflowId: c131cad4-f96b-45bb-9e57-7184e7df959f
+
+  # cards template
+  cardTemplate: >-
+    >-
+                          <div id="${this}" class="card-pf card-pf-aggregate-status" style="background-color: ${bgColor}; width: ${cardsWidth}; height: ${cardsHeight};">
+                            <h2 style="font-weight: 600; font-size: large" id="${this}Value">${value} ms</h2>
+                            <p style="font-weight: 400" id="${this}Title"><em class="fa fa-clock-o"></em> ${title}</p>
+                          </div>
+datasets:
+  - uuid: nodes
+    expression: >-
+      $.data.ProcessInstances.(
+          $start := $min(nodes.($toMillis(enter)));
+          $end := $max(nodes.($toMillis(exit)))  - $start;
+          $map(nodes, function($n) {
+              [
+                  processId, 
+                  id, 
+                  0,
+                  $end , 
+                  $end / 2, 
+                  $n.type, 
+                  $n.name, 
+                  $toMillis($n.enter) - $start, 
+                  $n.exit ? $toMillis($n.exit) - $start  : -1,
+                  $n.exit ? $toMillis($n.exit) - $toMillis($n.enter) : -1,
+                  $toMillis($n.enter) -  $start
+              ]
+          });
+      )
+    url: ${dataIndexUrl}/graphql/?query=%7BProcessInstances(where%3A%7Bid%3A%7Bin%3A%20%5B"${workflowId}"%5D%7D%7D)%7BprocessId%20id%20start%20lastUpdate%20nodes%20%7Bid%20name%20type%20enter%20exit%7D%7D%7D
+    columns:
+      - id: workflowId
+        type: label
+      - id: id
+        type: label
+      - id: start
+        type: label
+      - id: end
+        type: number
+      - id: middle
+        type: label
+      - id: type
+        type: label
+      - id: name
+        type: label
+      - id: nodeStart
+        type: label
+      - id: nodeEnd
+        type: number
+      - id: duration
+        type: label
+      - id: enter
+        type: date
+pages:
+  - rows:
+      - columns:
+          - components:
+              - html: "<strong>${workflowId}</strong> "
+                properties:
+                  font-size: large
+                  margin-bottom: 10px
+      - columns:
+          - span: '6'
+            components:
+              - settings:
+                  type: METRIC
+                  general:
+                    title: Total Duration
+                    visible: "true"
+                  html:
+                    html: ${cardTemplate}
+                  chart:
+                    height: "${cardsHeight}"
+                  columns:
+                    - id: end
+                      pattern: "#"
+                  dataSetLookup:
+                    uuid: nodes
+                    filter:
+                      - column: name
+                        function: NOT_IN
+                        args:
+                          - EmbeddedStart
+                          - EmbeddedEnd
+                          - Script
+                      - column: type
+                        function: NOT_IN
+                        args:
+                          - Join
+                      - column: nodeEnd
+                        function: NOT_IN
+                        args:
+                          - -1
+                    group:
+                      - groupFunctions:
+                          - source: end
+          - span: '6'
+            components:
+              - settings:
+                  type: METRIC
+                  general:
+                    title: Average
+                    visible: "true"
+                  html:
+                    html: ${cardTemplate}
+                  chart:
+                    height: "${cardsHeight}"
+                  columns:
+                    - id: end
+                      pattern: "#"
+                  dataSetLookup:
+                    uuid: nodes
+                    filter:
+                      - column: name
+                        function: NOT_IN
+                        args:
+                          - EmbeddedStart
+                          - EmbeddedEnd
+                          - Script
+                      - column: type
+                        function: NOT_IN
+                        args:
+                          - Join
+                      - column: nodeEnd
+                        function: NOT_IN
+                        args:
+                          - -1
+                    group:
+                      - groupFunctions:
+                          - source: nodeEnd
+                            function: AVERAGE
+      - columns:
+          - components:
+              - settings:
+                  component: echarts
+                  echarts:
+                    option: >-
+                      {
+                          "xAxis":{
+                            "position": "top"
+                          },
+                          "series":[
+                              {
+                                  "itemStyle": {
+                                      "color": "#b8f2c5",
+                                      "opacity": "0.5"
+                                  },                                  
+                                  "emphasis" : {
+                                    "disabled": "true"
+                                  },
+                                  "tooltip": {
+                                    "formatter": "{b}"                                    
+                                  },
+                                  "type":"boxplot",
+                                  "name": "Duration",
+                                  "encode":{
+                                      "x": ["start", "nodeStart", "middle", "nodeEnd", "end"],
+                                      "y": "name"
+
+                                  }
+                              },
+                              {
+                                  "name": "detail",
+                                  "type": "scatter",                                  
+                                  "symbolSize": "0",
+                                  "tooltip": {
+                                    "trigger": "none"                                    
+                                  },
+                                  "label": {
+                                    "show": "true",
+                                    "position": "right",
+                                    "align": "left",
+                                    "verticalAlign": "middle",                                    
+                                    "fontSize": "15",
+                                    "formatter": "{@duration} ms",
+                                    "fontWeight": "bolder"
+                                  },
+                                  "emphasis" : {
+                                    "disabled": "true"
+                                  },
+                                  "itemStyle": {
+                                    "color": "#d00000"
+                                  },
+                                  "encode": {
+                                    "x": "nodeStart",
+                                    "y": "name",
+                                    "label": "Duration",
+                                    "itemName": "Duration"
+                                  }
+                                }
+                          ]
+                      }
+                    yAxis:
+                      type: "category"
+                  external:
+                    width: "${chartsWidth}"
+                    height: "${chartsHeight}"
+                  dataSetLookup:
+                    dataSetUuid: nodes
+                    filter:
+                      - column: name
+                        function: NOT_IN
+                        args:
+                          - EmbeddedStart
+                          - EmbeddedEnd
+                          - Script
+                      - column: type
+                        function: NOT_IN
+                        args:
+                          - Join
+                      - column: nodeEnd
+                        function: NOT_IN
+                        args:
+                          - -1
+                    sort:
+                      - column: nodeStart
+                        order: DESCENDING

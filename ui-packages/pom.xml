@@ -134,6 +134,12 @@
             <fileset>
               <directory>packages/process-definition-list/node_modules</directory>
             </fileset>
+            <fileset>
+              <directory>packages/monitoring-webapp/node_modules</directory>
+            </fileset>
+            <fileset>
+              <directory>packages/monitoring/node_modules</directory>
+            </fileset>
           </filesets>
         </configuration>
       </plugin>
