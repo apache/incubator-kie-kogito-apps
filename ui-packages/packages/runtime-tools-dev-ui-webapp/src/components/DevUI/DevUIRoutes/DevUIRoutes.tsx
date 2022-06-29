@@ -27,6 +27,7 @@ import { TrustyApp } from '@kogito-apps/trusty';
 import ProcessFormPage from '../../pages/ProcessFormPage/ProcessFormPage';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 import MonitoringPage from '../../pages/MonitoringPage/MonitoringPage';
+import WorkflowFormPage from '../../pages/WorkflowFormPage/WorkflowFormPage';
 
 interface IOwnProps {
   trustyServiceUrl: string;
@@ -131,6 +132,17 @@ const DevUIRoutes: React.FC<IOwnProps> = ({
             exact
             path="/ProcessDefinition/Form/:processName"
             component={ProcessFormPage}
+          />
+        )
+      },
+      {
+        enabled: () => isProcessEnabled,
+        node: (
+          <Route
+            key="8"
+            exact
+            path="/WorkflowDefinition/Form/:workflowName"
+            component={WorkflowFormPage}
           />
         )
       },
