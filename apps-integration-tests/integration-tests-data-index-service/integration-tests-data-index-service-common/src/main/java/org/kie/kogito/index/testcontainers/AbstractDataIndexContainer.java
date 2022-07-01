@@ -50,6 +50,7 @@ public abstract class AbstractDataIndexContainer extends KogitoGenericContainer<
 
     @Override
     public int getMappedPort() {
+        System.out.println(".......................AbstractDataIndexContainer getMappedPort:" + PORT);
         return getMappedPort(PORT);
     }
 

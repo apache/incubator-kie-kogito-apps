@@ -70,6 +70,7 @@ public abstract class AbstractProcessDataIndexIT {
     }
 
     public RequestSpecification dataIndexSpec() {
+        System.out.println(".......................AbstractProcessDataindexIT getDataIndexURL():" + getDataIndexURL());
         if (spec == null) {
             spec = new RequestSpecBuilder().setBaseUri(getDataIndexURL()).build();
         }

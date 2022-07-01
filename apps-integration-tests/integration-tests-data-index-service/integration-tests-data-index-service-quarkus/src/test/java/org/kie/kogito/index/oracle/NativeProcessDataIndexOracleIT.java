@@ -15,9 +15,12 @@
  */
 package org.kie.kogito.index.oracle;
 
+import org.junit.jupiter.api.Disabled;
+
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
+@Disabled
 public class NativeProcessDataIndexOracleIT extends ProcessDataIndexOracleIT {
 
 }

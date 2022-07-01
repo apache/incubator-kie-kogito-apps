@@ -75,6 +75,7 @@ public class DataIndexInfinispanResource implements TestResource {
 
     @Override
     public int getMappedPort() {
+        System.out.println(".......................DataIndexInfinispanResource getMappedPort:" + dataIndex.getMappedPort());
         return dataIndex.getMappedPort();
     }
 
