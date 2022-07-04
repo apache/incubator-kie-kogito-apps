@@ -15,13 +15,15 @@
  */
 
 import { ApolloClient } from 'apollo-client';
-import { GraphQL } from '@kogito-apps/consoles-common';
+// import { GraphQL } from '@kogito-apps/consoles-common';
 import {
   ProcessInstance,
   Job,
   JobCancel,
   TriggerableNode,
-  NodeInstance
+  NodeInstance,
+  SvgSuccessResponse,
+  SvgErrorResponse
 } from '@kogito-apps/management-console-shared';
 import {
   handleProcessAbort,
@@ -32,7 +34,11 @@ import {
   handleNodeTrigger,
   handleProcessVariableUpdate,
   handleNodeInstanceCancel,
-  handleNodeInstanceRetrigger
+  handleNodeInstanceRetrigger,
+  getProcessDetails,
+  getJobs,
+  getSVG,
+  getTriggerableNodes
 } from '@kogito-apps/runtime-gateway-api';
 
 export interface ProcessDetailsQueries {
@@ -75,38 +81,11 @@ export class GraphQLProcessDetailsQueries implements ProcessDetailsQueries {
   }
 
   async getProcessDetails(id: string): Promise<ProcessInstance> {
-    try {
-      const response = await this.client.query({
-        query: GraphQL.GetProcessInstanceByIdDocument,
-        variables: {
-          id
-        },
-        fetchPolicy: 'network-only'
-      });
-      const emptyResponse = {} as ProcessInstance;
-      if (response && response.data.ProcessInstances.length > 0) {
-        return Promise.resolve(response.data.ProcessInstances[0]);
-      } else {
-        return Promise.resolve(emptyResponse);
-      }
-    } catch (error) {
-      return Promise.reject(error);
-    }
+    return Promise.resolve(getProcessDetails(id, this.client));
   }
 
   async getJobs(id: string): Promise<Job[]> {
-    try {
-      const response = await this.client.query({
-        query: GraphQL.GetJobsByProcessInstanceIdDocument,
-        variables: {
-          processInstanceId: id
-        },
-        fetchPolicy: 'network-only'
-      });
-      return Promise.resolve(response.data.Jobs);
-    } catch (error) {
-      return Promise.reject(error);
-    }
+    return Promise.resolve(getJobs(id, this.client));
   }
 
   async handleProcessSkip(processInstance: ProcessInstance): Promise<void> {
@@ -121,21 +100,10 @@ export class GraphQLProcessDetailsQueries implements ProcessDetailsQueries {
     return handleProcessRetry(processInstance, this.client);
   }
 
-  async getSVG(processInstance: ProcessInstance): Promise<any> {
-    return this.client
-      .query({
-        query: GraphQL.GetProcessInstanceSvgDocument,
-        variables: {
-          processsId: processInstance.id
-        },
-        fetchPolicy: 'network-only'
-      })
-      .then(value => {
-        return { svg: value.data.ProcessInstances[0].diagram };
-      })
-      .catch(reason => {
-        return { error: reason.message };
-      });
+  async getSVG(
+    processInstance: ProcessInstance
+  ): Promise<SvgSuccessResponse | SvgErrorResponse> {
+    return Promise.resolve(getSVG(processInstance, this.client));
   }
 
   async jobCancel(job: Job): Promise<JobCancel> {
@@ -160,20 +128,7 @@ export class GraphQLProcessDetailsQueries implements ProcessDetailsQueries {
   async getTriggerableNodes(
     processInstance: ProcessInstance
   ): Promise<TriggerableNode[]> {
-    return new Promise((resolve, reject) => {
-      this.client
-        .query({
-          query: GraphQL.GetProcessInstanceNodeDefinitionsDocument,
-          variables: {
-            processsId: processInstance.id
-          },
-          fetchPolicy: 'no-cache'
-        })
-        .then(value => {
-          resolve(value.data.ProcessInstances[0].nodeDefinitions);
-        })
-        .catch(reason => reject(reason));
-    });
+    return Promise.resolve(getTriggerableNodes(processInstance, this.client));
   }
 
   async handleNodeTrigger(

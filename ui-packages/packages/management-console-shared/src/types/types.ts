@@ -133,6 +133,7 @@ export interface ProcessInstance {
   errorMessage?: string;
   isOpen?: boolean;
   diagram?: string;
+  nodeDefinitions?: TriggerableNode[];
 }
 
 export interface ProcessInstanceFilter {

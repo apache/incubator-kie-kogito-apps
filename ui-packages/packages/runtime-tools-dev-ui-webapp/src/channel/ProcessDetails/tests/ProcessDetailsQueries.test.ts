@@ -238,12 +238,12 @@ describe('ProcessDetailsQueries tests', () => {
   });
 
   it('test getProcessDetails method with success response', async () => {
-    client.query.mockReturnValueOnce(mGraphQLResponseProcess);
+    client.query.mockResolvedValue(mGraphQLResponseProcess);
     const response = await Queries.getProcessDetails(id);
     expect(response).toEqual(mGraphQLResponseProcess.data.ProcessInstances[0]);
   });
   it('test getJobs method with success response', async () => {
-    client.query.mockReturnValueOnce(mGraphQLResponse);
+    client.query.mockResolvedValue(mGraphQLResponse);
     const response = await Queries.getJobs(id);
     expect(response).toEqual(mGraphQLResponse.data.Jobs);
   });

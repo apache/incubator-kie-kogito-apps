@@ -28,14 +28,19 @@ import {
   handleNodeInstanceCancel,
   handleProcessAbort,
   handleProcessSkip,
-  handleProcessRetry
+  handleProcessRetry,
+  getProcessDetails,
+  getJobs,
+  getSVG
 } from '../apis';
 import {
   BulkProcessInstanceActionResponse,
   OperationType,
   ProcessInstanceState,
   NodeInstance,
-  ProcessInstance
+  ProcessInstance,
+  MilestoneStatus,
+  JobStatus
 } from '@kogito-apps/management-console-shared';
 import { act } from 'react-dom/test-utils';
 import reactApollo from 'react-apollo';
@@ -698,7 +703,7 @@ describe('retrieve list of triggerable nodes test', () => {
       .catch(error => {
         result = error.message;
       });
-    expect(result).toEqual('403 error');
+    expect(result.message).toEqual('403 error');
   });
 });
 
@@ -848,5 +853,324 @@ describe('handle node instance cancel', () => {
         result = 'error';
       });
     expect(result).toEqual('error');
+  });
+});
+
+const mGraphQLResponseProcess = {
+  data: {
+    ProcessInstances: [
+      {
+        id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
+        processId: 'hotelBooking',
+        processName: 'HotelBooking',
+        businessKey: 'T1234HotelBooking01',
+        parentProcessInstanceId: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
+        parentProcessInstance: {
+          id: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
+          processName: 'travels',
+          businessKey: 'T1234'
+        },
+        roles: [],
+        variables:
+          '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
+        state: ProcessInstanceState.Completed,
+        start: new Date('2019-10-22T03:40:44.089Z'),
+        lastUpdate: new Date('Thu, 22 Apr 2021 14:53:04 GMT'),
+        end: new Date('2019-10-22T05:40:44.089Z'),
+        addons: [],
+        endpoint: 'http://localhost:4000',
+        serviceUrl: null,
+        error: {
+          nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-34578e904e6b',
+          message: 'some thing went wrong',
+          __typename: 'ProcessInstanceError'
+        },
+        childProcessInstances: [],
+        nodes: [
+          {
+            id: '27107f38-d888-4edf-9a4f-11b9e6d751b6',
+            nodeId: '1',
+            name: 'End Event 1',
+            enter: new Date('2019-10-22T03:37:30.798Z'),
+            exit: new Date('2019-10-22T03:37:30.798Z'),
+            type: 'EndNode',
+            definitionId: 'EndEvent_1',
+            __typename: 'NodeInstance'
+          },
+          {
+            id: '41b3f49e-beb3-4b5f-8130-efd28f82b971',
+            nodeId: '2',
+            name: 'Book hotel',
+            enter: new Date('2019-10-22T03:37:30.795Z'),
+            exit: new Date('2019-10-22T03:37:30.798Z'),
+            type: 'WorkItemNode',
+            definitionId: 'ServiceTask_1',
+            __typename: 'NodeInstance'
+          },
+          {
+            id: '4165a571-2c79-4fd0-921e-c6d5e7851b67',
+            nodeId: '2',
+            name: 'StartProcess',
+            enter: new Date('2019-10-22T03:37:30.793Z'),
+            exit: new Date('2019-10-22T03:37:30.795Z'),
+            type: 'StartNode',
+            definitionId: 'StartEvent_1',
+            __typename: 'NodeInstance'
+          }
+        ],
+        milestones: [
+          {
+            id: '27107f38-d888-4edf-9a4f-11b9e6d75i86',
+            name: 'Manager decision',
+            status: MilestoneStatus.Completed,
+            __typename: 'Milestone'
+          },
+          {
+            id: '27107f38-d888-4edf-9a4f-11b9e6d75m36',
+            name: 'Milestone 1: Order placed',
+            status: MilestoneStatus.Active,
+            __typename: 'Milestone'
+          },
+          {
+            id: '27107f38-d888-4edf-9a4f-11b9e6d75m66',
+            name: 'Milestone 2: Order shipped',
+            status: MilestoneStatus.Available,
+            __typename: 'Milestone'
+          }
+        ],
+        nodeDefinitions: [
+          {
+            id: '27107f38-123-4edf-9a4f-11b9e6d75i86',
+            name: 'ndoe one',
+            type: 'human task',
+            uniqueId: '27107f38-123-4edf-9a4f-11b9e6d75i86',
+            nodeDefinitionId: 'nodeDefinitionId-test'
+          }
+        ]
+      }
+    ]
+  }
+};
+const mGraphQLResponse = {
+  data: {
+    Jobs: [
+      {
+        callbackEndpoint:
+          'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
+        endpoint: 'http://localhost:4000/jobs',
+        executionCounter: 0,
+        expirationTime: new Date('2020-08-29T04:35:54.631Z'),
+        id: 'eff4ee-11qw23-6675-pokau97-qwedjut45a0fa_0',
+        lastUpdate: new Date('2020-06-29T03:35:54.635Z'),
+        priority: 0,
+        processId: 'travels',
+        processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
+        repeatInterval: null,
+        repeatLimit: null,
+        retries: 2,
+        rootProcessId: '',
+        scheduledId: null,
+        status: JobStatus.Scheduled
+      }
+    ]
+  }
+};
+
+describe('process details tests', () => {
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
+  };
+
+  const id = '8035b580-6ae4-4aa8-9ec0-e18e19809e0b';
+
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
+    });
+  });
+
+  it('test getProcessDetails method with success response', () => {
+    client.query.mockResolvedValue(mGraphQLResponseProcess);
+    getProcessDetails(id, client)
+      .then(value => {
+        expect(value).toEqual(mGraphQLResponseProcess.data.ProcessInstances[0]);
+      })
+      .catch(error => {});
+  });
+  it('test getTriggerableNodes method with success response', () => {
+    client.query.mockResolvedValue(
+      mGraphQLResponseProcess.data.ProcessInstances[0]
+    );
+    getTriggerableNodes(processInstance, client)
+      .then(value => {
+        expect(value).toEqual(
+          mGraphQLResponseProcess.data.ProcessInstances[0].nodeDefinitions
+        );
+      })
+      .catch(error => {});
+  });
+  it('test getJobs method with success response', () => {
+    client.query.mockResolvedValue(mGraphQLResponse);
+    getJobs(id, client).then(value => {
+      expect(value).toEqual(mGraphQLResponse.data.Jobs);
+    });
+  });
+});
+
+// describe('get node definitions tests', () => {
+//   let client;
+//   let useApolloClient;
+//   const mockUseApolloClient = () => {
+//     act(() => {
+//       client = useApolloClient();
+//     });
+//   };
+//
+//   beforeEach(() => {
+//     act(() => {
+//       useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+//       mockUseApolloClient();
+//     });
+//   });
+// });
+
+describe('get svg tests', () => {
+  const data: any = {
+    id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
+    processId: 'hotelBooking',
+    processName: 'HotelBooking',
+    businessKey: 'T1234HotelBooking01',
+    parentProcessInstanceId: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
+    parentProcessInstance: {
+      id: 'e4448857-fa0c-403b-ad69-f0a353458b9d',
+      processName: 'travels',
+      businessKey: 'T1234'
+    },
+    roles: [],
+    variables:
+      '{"trip":{"begin":"2019-10-22T22:00:00Z[UTC]","city":"Bangalore","country":"India","end":"2019-10-30T22:00:00Z[UTC]","visaRequired":false},"hotel":{"address":{"city":"Bangalore","country":"India","street":"street","zipCode":"12345"},"bookingNumber":"XX-012345","name":"Perfect hotel","phone":"09876543"},"traveller":{"address":{"city":"Bangalore","country":"US","street":"Bangalore","zipCode":"560093"},"email":"ajaganat@redhat.com","firstName":"Ajay","lastName":"Jaganathan","nationality":"US"}}',
+    state: ProcessInstanceState.Completed,
+    start: new Date('2019-10-22T03:40:44.089Z'),
+    lastUpdate: new Date('Thu, 22 Apr 2021 14:53:04 GMT'),
+    end: new Date('2019-10-22T05:40:44.089Z'),
+    addons: [],
+    endpoint: 'http://localhost:4000',
+    serviceUrl: 'http://localhost:4000',
+    error: {
+      nodeDefinitionId: 'a1e139d5-4e77-48c9-84ae-34578e904e6b',
+      message: 'some thing went wrong',
+      __typename: 'ProcessInstanceError'
+    },
+    childProcessInstances: [],
+    nodes: [
+      {
+        id: '27107f38-d888-4edf-9a4f-11b9e6d751b6',
+        nodeId: '1',
+        name: 'End Event 1',
+        enter: new Date('2019-10-22T03:37:30.798Z'),
+        exit: new Date('2019-10-22T03:37:30.798Z'),
+        type: 'EndNode',
+        definitionId: 'EndEvent_1',
+        __typename: 'NodeInstance'
+      },
+      {
+        id: '41b3f49e-beb3-4b5f-8130-efd28f82b971',
+        nodeId: '2',
+        name: 'Book hotel',
+        enter: new Date('2019-10-22T03:37:30.795Z'),
+        exit: new Date('2019-10-22T03:37:30.798Z'),
+        type: 'WorkItemNode',
+        definitionId: 'ServiceTask_1',
+        __typename: 'NodeInstance'
+      },
+      {
+        id: '4165a571-2c79-4fd0-921e-c6d5e7851b67',
+        nodeId: '2',
+        name: 'StartProcess',
+        enter: new Date('2019-10-22T03:37:30.793Z'),
+        exit: new Date('2019-10-22T03:37:30.795Z'),
+        type: 'StartNode',
+        definitionId: 'StartEvent_1',
+        __typename: 'NodeInstance'
+      }
+    ],
+    milestones: [
+      {
+        id: '27107f38-d888-4edf-9a4f-11b9e6d75i86',
+        name: 'Manager decision',
+        status: MilestoneStatus.Completed,
+        __typename: 'Milestone'
+      },
+      {
+        id: '27107f38-d888-4edf-9a4f-11b9e6d75m36',
+        name: 'Milestone 1: Order placed',
+        status: MilestoneStatus.Active,
+        __typename: 'Milestone'
+      },
+      {
+        id: '27107f38-d888-4edf-9a4f-11b9e6d75m66',
+        name: 'Milestone 2: Order shipped',
+        status: MilestoneStatus.Available,
+        __typename: 'Milestone'
+      }
+    ]
+  };
+
+  const svgResponse = {
+    ProcessInstances: [
+      {
+        diagram:
+          '<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="800" height="300" viewBox="0 0 1748 632"></g></g></svg>'
+      }
+    ]
+  };
+
+  let client;
+  let useApolloClient;
+  const mockUseApolloClient = () => {
+    act(() => {
+      client = useApolloClient();
+    });
+  };
+
+  beforeEach(() => {
+    act(() => {
+      useApolloClient = jest.spyOn(reactApollo, 'useApolloClient');
+      mockUseApolloClient();
+    });
+  });
+
+  it('handle api to get svg', async () => {
+    client.query.mockResolvedValue({
+      data: svgResponse,
+      status: 200,
+      statusText: 'OK'
+    });
+    getSVG(data, client).then(value => {
+      expect(value.svg).toEqual(svgResponse.ProcessInstances[0].diagram);
+    });
+  });
+
+  it('handle error api to get svg', async () => {
+    let result = null;
+    const errorResponse404 = {
+      message: {
+        response: { status: 404 }
+      }
+    };
+    client.query.mockRejectedValue(errorResponse404);
+    getSVG(data, client)
+      .then(value => {
+        result = value;
+      })
+      .catch(reason => {
+        expect(errorResponse404.message).toEqual(reason.error);
+      });
+    expect(null).toEqual(result);
   });
 });

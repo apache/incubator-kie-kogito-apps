@@ -229,25 +229,6 @@ export const handleProcessMultipleAction = async (
     resolve({ successProcessInstances, failedProcessInstances });
   });
 };
-export const getTriggerableNodes = async (
-  processInstance: ProcessInstance,
-  client: ApolloClient<any>
-): Promise<TriggerableNode[]> => {
-  return new Promise((resolve, reject) => {
-    client
-      .query({
-        query: GraphQL.GetProcessInstanceNodeDefinitionsDocument,
-        variables: {
-          processsId: processInstance.id
-        },
-        fetchPolicy: 'no-cache'
-      })
-      .then(value => {
-        resolve(value.data.ProcessInstances[0].nodeDefinitions);
-      })
-      .catch(reason => reject(reason));
-  });
-};
 
 export const handleNodeTrigger = async (
   processInstance: ProcessInstance,
@@ -336,4 +317,85 @@ export const handleNodeInstanceRetrigger = (
       })
       .catch(reason => reject(JSON.stringify(reason.message)));
   });
+};
+
+export const getSVG = (
+  processInstance: ProcessInstance,
+  client: ApolloClient<any>
+): Promise<any> => {
+  return client
+    .query({
+      query: GraphQL.GetProcessInstanceSvgDocument,
+      variables: {
+        processsId: processInstance.id
+      },
+      fetchPolicy: 'network-only'
+    })
+    .then(value => {
+      return { svg: value.data.ProcessInstances[0].diagram };
+    })
+    .catch(reason => {
+      return { error: reason.message };
+    });
+};
+
+export const getProcessDetails = (
+  id: string,
+  client: ApolloClient<any>
+): Promise<any> => {
+  return client
+    .query({
+      query: GraphQL.GetProcessInstanceByIdDocument,
+      variables: {
+        id
+      },
+      fetchPolicy: 'network-only'
+    })
+    .then(value => {
+      return value.data.ProcessInstances[0];
+    })
+    .catch(error => {
+      const emptyResponse = {} as ProcessInstance;
+      return emptyResponse;
+    });
+};
+
+export const getJobs = (
+  id: string,
+  client: ApolloClient<any>
+): Promise<any> => {
+  return client
+    .query({
+      query: GraphQL.GetJobsByProcessInstanceIdDocument,
+      variables: {
+        processInstanceId: id
+      },
+      fetchPolicy: 'network-only'
+    })
+    .then(value => {
+      return value.data.Jobs;
+    })
+    .catch(error => {
+      return error;
+    });
+};
+
+export const getTriggerableNodes = (
+  processInstance: ProcessInstance,
+  client: ApolloClient<any>
+): Promise<any> => {
+  return client
+    .query({
+      query: GraphQL.GetProcessInstanceNodeDefinitionsDocument,
+      variables: {
+        processsId: processInstance.id
+      },
+      fetchPolicy: 'no-cache'
+    })
+    .then(value => {
+      return value.data.ProcessInstances[0].nodeDefinitions;
+    })
+    .catch(reason => {
+      return reason;
+    });
 };
