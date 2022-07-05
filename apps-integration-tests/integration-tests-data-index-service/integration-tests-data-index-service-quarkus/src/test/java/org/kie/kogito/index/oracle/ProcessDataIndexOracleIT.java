@@ -20,10 +20,10 @@ import org.kie.kogito.index.quarkus.DataIndexOracleQuarkusTestResource;
 import org.kie.kogito.index.quarkus.OracleTestProfile;
 import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.quarkus.test.junit.TestProfile;
 
-@QuarkusTest
+@QuarkusIntegrationTest
 @TestProfile(OracleTestProfile.class)
 public class ProcessDataIndexOracleIT extends AbstractProcessDataIndexIT {
 
