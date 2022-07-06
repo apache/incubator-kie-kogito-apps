@@ -15,13 +15,14 @@
  */
 package org.kie.kogito.it.jobs;
 
+import org.kie.kogito.test.resources.JobServiceKafkaQuarkusTestResource;
+import org.kie.kogito.test.resources.KogitoServiceRandomPortQuarkusTestResource;
+
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
-import org.kie.kogito.test.resources.KogitoServiceRandomPortQuarkusTestResource;
-import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 
 @QuarkusIntegrationTest
 @QuarkusTestResource(KogitoServiceRandomPortQuarkusTestResource.class)
-@QuarkusTestResource(KafkaQuarkusTestResource.class)
+@QuarkusTestResource(JobServiceKafkaQuarkusTestResource.class)
 class ProcessAsyncIT extends BaseProcessAsyncIT {
 }
