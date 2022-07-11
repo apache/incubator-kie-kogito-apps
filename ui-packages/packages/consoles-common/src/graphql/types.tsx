@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ *       http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -1388,7 +1388,7 @@ export namespace GraphQL {
   };
 
   export type AbortProcessInstanceMutationVariables = Exact<{
-    processsId?: InputMaybe<Scalars['String']>;
+    processId?: InputMaybe<Scalars['String']>;
   }>;
 
   export type AbortProcessInstanceMutation = {
@@ -1397,7 +1397,7 @@ export namespace GraphQL {
   };
 
   export type SkipProcessInstanceMutationVariables = Exact<{
-    processsId?: InputMaybe<Scalars['String']>;
+    processId?: InputMaybe<Scalars['String']>;
   }>;
 
   export type SkipProcessInstanceMutation = {
@@ -1406,7 +1406,7 @@ export namespace GraphQL {
   };
 
   export type RetryProcessInstanceMutationVariables = Exact<{
-    processsId?: InputMaybe<Scalars['String']>;
+    processId?: InputMaybe<Scalars['String']>;
   }>;
 
   export type RetryProcessInstanceMutation = {
@@ -1415,7 +1415,7 @@ export namespace GraphQL {
   };
 
   export type GetProcessInstanceSvgQueryVariables = Exact<{
-    processsId?: InputMaybe<Scalars['String']>;
+    processId?: InputMaybe<Scalars['String']>;
   }>;
 
   export type GetProcessInstanceSvgQuery = {
@@ -1434,7 +1434,7 @@ export namespace GraphQL {
   };
 
   export type GetProcessInstanceNodeDefinitionsQueryVariables = Exact<{
-    processsId?: InputMaybe<Scalars['String']>;
+    processId?: InputMaybe<Scalars['String']>;
   }>;
 
   export type GetProcessInstanceNodeDefinitionsQuery = {
@@ -1463,7 +1463,7 @@ export namespace GraphQL {
   };
 
   export type HandleNodeTriggerMutationVariables = Exact<{
-    processsId?: InputMaybe<Scalars['String']>;
+    processId?: InputMaybe<Scalars['String']>;
     nodeId?: InputMaybe<Scalars['String']>;
   }>;
 
@@ -1473,7 +1473,7 @@ export namespace GraphQL {
   };
 
   export type HandleNodeInstanceCancelMutationVariables = Exact<{
-    processsId?: InputMaybe<Scalars['String']>;
+    processId?: InputMaybe<Scalars['String']>;
     nodeInstanceId?: InputMaybe<Scalars['String']>;
   }>;
 
@@ -1483,7 +1483,7 @@ export namespace GraphQL {
   };
 
   export type HandleNodeInstanceRetriggerMutationVariables = Exact<{
-    processsId?: InputMaybe<Scalars['String']>;
+    processId?: InputMaybe<Scalars['String']>;
     nodeInstanceId?: InputMaybe<Scalars['String']>;
   }>;
 
@@ -1493,7 +1493,7 @@ export namespace GraphQL {
   };
 
   export type HandleProcessVariableUpdateMutationVariables = Exact<{
-    processsId?: InputMaybe<Scalars['String']>;
+    processId?: InputMaybe<Scalars['String']>;
     processInstanceVariables?: InputMaybe<Scalars['String']>;
   }>;
 
@@ -2557,8 +2557,8 @@ export namespace GraphQL {
     GetJobsWithFiltersQueryVariables
   >;
   export const AbortProcessInstanceDocument = gql`
-    mutation abortProcessInstance($processsId: String) {
-      ProcessInstanceAbort(id: $processsId)
+    mutation abortProcessInstance($processId: String) {
+      ProcessInstanceAbort(id: $processId)
     }
   `;
   export type AbortProcessInstanceMutationFn = ApolloReactCommon.MutationFunction<
@@ -2579,7 +2579,7 @@ export namespace GraphQL {
    * @example
    * const [abortProcessInstanceMutation, { data, loading, error }] = useAbortProcessInstanceMutation({
    *   variables: {
-   *      processsId: // value for 'processsId'
+   *      processId: // value for 'processId'
    *   },
    * });
    */
@@ -2606,8 +2606,8 @@ export namespace GraphQL {
     AbortProcessInstanceMutationVariables
   >;
   export const SkipProcessInstanceDocument = gql`
-    mutation skipProcessInstance($processsId: String) {
-      ProcessInstanceSkip(id: $processsId)
+    mutation skipProcessInstance($processId: String) {
+      ProcessInstanceSkip(id: $processId)
     }
   `;
   export type SkipProcessInstanceMutationFn = ApolloReactCommon.MutationFunction<
@@ -2628,7 +2628,7 @@ export namespace GraphQL {
    * @example
    * const [skipProcessInstanceMutation, { data, loading, error }] = useSkipProcessInstanceMutation({
    *   variables: {
-   *      processsId: // value for 'processsId'
+   *      processId: // value for 'processId'
    *   },
    * });
    */
@@ -2655,8 +2655,8 @@ export namespace GraphQL {
     SkipProcessInstanceMutationVariables
   >;
   export const RetryProcessInstanceDocument = gql`
-    mutation retryProcessInstance($processsId: String) {
-      ProcessInstanceRetry(id: $processsId)
+    mutation retryProcessInstance($processId: String) {
+      ProcessInstanceRetry(id: $processId)
     }
   `;
   export type RetryProcessInstanceMutationFn = ApolloReactCommon.MutationFunction<
@@ -2677,7 +2677,7 @@ export namespace GraphQL {
    * @example
    * const [retryProcessInstanceMutation, { data, loading, error }] = useRetryProcessInstanceMutation({
    *   variables: {
-   *      processsId: // value for 'processsId'
+   *      processId: // value for 'processId'
    *   },
    * });
    */
@@ -2704,8 +2704,8 @@ export namespace GraphQL {
     RetryProcessInstanceMutationVariables
   >;
   export const GetProcessInstanceSvgDocument = gql`
-    query getProcessInstanceSVG($processsId: String) {
-      ProcessInstances(where: { id: { equal: $processsId } }) {
+    query getProcessInstanceSVG($processId: String) {
+      ProcessInstances(where: { id: { equal: $processId } }) {
         diagram
       }
     }
@@ -2723,7 +2723,7 @@ export namespace GraphQL {
    * @example
    * const { data, loading, error } = useGetProcessInstanceSvgQuery({
    *   variables: {
-   *      processsId: // value for 'processsId'
+   *      processId: // value for 'processId'
    *   },
    * });
    */
@@ -2762,8 +2762,8 @@ export namespace GraphQL {
     GetProcessInstanceSvgQueryVariables
   >;
   export const GetProcessInstanceNodeDefinitionsDocument = gql`
-    query getProcessInstanceNodeDefinitions($processsId: String) {
-      ProcessInstances(where: { id: { equal: $processsId } }) {
+    query getProcessInstanceNodeDefinitions($processId: String) {
+      ProcessInstances(where: { id: { equal: $processId } }) {
         nodeDefinitions {
           id
           name
@@ -2787,7 +2787,7 @@ export namespace GraphQL {
    * @example
    * const { data, loading, error } = useGetProcessInstanceNodeDefinitionsQuery({
    *   variables: {
-   *      processsId: // value for 'processsId'
+   *      processId: // value for 'processId'
    *   },
    * });
    */
@@ -2826,8 +2826,8 @@ export namespace GraphQL {
     GetProcessInstanceNodeDefinitionsQueryVariables
   >;
   export const HandleNodeTriggerDocument = gql`
-    mutation handleNodeTrigger($processsId: String, $nodeId: String) {
-      NodeInstanceTrigger(id: $processsId, nodeId: $nodeId)
+    mutation handleNodeTrigger($processId: String, $nodeId: String) {
+      NodeInstanceTrigger(id: $processId, nodeId: $nodeId)
     }
   `;
   export type HandleNodeTriggerMutationFn = ApolloReactCommon.MutationFunction<
@@ -2848,7 +2848,7 @@ export namespace GraphQL {
    * @example
    * const [handleNodeTriggerMutation, { data, loading, error }] = useHandleNodeTriggerMutation({
    *   variables: {
-   *      processsId: // value for 'processsId'
+   *      processId: // value for 'processId'
    *      nodeId: // value for 'nodeId'
    *   },
    * });
@@ -2877,10 +2877,10 @@ export namespace GraphQL {
   >;
   export const HandleNodeInstanceCancelDocument = gql`
     mutation handleNodeInstanceCancel(
-      $processsId: String
+      $processId: String
       $nodeInstanceId: String
     ) {
-      NodeInstanceCancel(id: $processsId, nodeInstanceId: $nodeInstanceId)
+      NodeInstanceCancel(id: $processId, nodeInstanceId: $nodeInstanceId)
     }
   `;
   export type HandleNodeInstanceCancelMutationFn = ApolloReactCommon.MutationFunction<
@@ -2901,7 +2901,7 @@ export namespace GraphQL {
    * @example
    * const [handleNodeInstanceCancelMutation, { data, loading, error }] = useHandleNodeInstanceCancelMutation({
    *   variables: {
-   *      processsId: // value for 'processsId'
+   *      processId: // value for 'processId'
    *      nodeInstanceId: // value for 'nodeInstanceId'
    *   },
    * });
@@ -2930,10 +2930,10 @@ export namespace GraphQL {
   >;
   export const HandleNodeInstanceRetriggerDocument = gql`
     mutation handleNodeInstanceRetrigger(
-      $processsId: String
+      $processId: String
       $nodeInstanceId: String
     ) {
-      NodeInstanceRetrigger(id: $processsId, nodeInstanceId: $nodeInstanceId)
+      NodeInstanceRetrigger(id: $processId, nodeInstanceId: $nodeInstanceId)
     }
   `;
   export type HandleNodeInstanceRetriggerMutationFn = ApolloReactCommon.MutationFunction<
@@ -2954,7 +2954,7 @@ export namespace GraphQL {
    * @example
    * const [handleNodeInstanceRetriggerMutation, { data, loading, error }] = useHandleNodeInstanceRetriggerMutation({
    *   variables: {
-   *      processsId: // value for 'processsId'
+   *      processId: // value for 'processId'
    *      nodeInstanceId: // value for 'nodeInstanceId'
    *   },
    * });
@@ -2983,11 +2983,11 @@ export namespace GraphQL {
   >;
   export const HandleProcessVariableUpdateDocument = gql`
     mutation handleProcessVariableUpdate(
-      $processsId: String
+      $processId: String
       $processInstanceVariables: String
     ) {
       ProcessInstanceUpdateVariables(
-        id: $processsId
+        id: $processId
         variables: $processInstanceVariables
       )
     }
@@ -3010,7 +3010,7 @@ export namespace GraphQL {
    * @example
    * const [handleProcessVariableUpdateMutation, { data, loading, error }] = useHandleProcessVariableUpdateMutation({
    *   variables: {
-   *      processsId: // value for 'processsId'
+   *      processId: // value for 'processId'
    *      processInstanceVariables: // value for 'processInstanceVariables'
    *   },
    * });

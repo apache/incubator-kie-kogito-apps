@@ -15,7 +15,7 @@
  */
 
 import { GraphQL } from '@kogito-apps/consoles-common';
-import wait from 'waait';
+// import wait from 'waait';
 import {
   handleJobReschedule,
   handleProcessMultipleAction,
@@ -158,9 +158,27 @@ describe('bulk cancel tests', () => {
       expirationTime: '2020-08-27T04:35:54.631Z',
       endpoint: 'http://localhost:4000/jobs',
       errorMessage: ''
+    },
+    {
+      id: 'dad3aa88-5c1e-4858-a919-6123c675a0fa_01',
+      processId: 'travels1',
+      processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b1',
+      rootProcessId: '',
+      status: GraphQL.JobStatus.Scheduled,
+      priority: 0,
+      callbackEndpoint:
+        'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
+      repeatInterval: null,
+      repeatLimit: null,
+      scheduledId: null,
+      retries: 0,
+      lastUpdate: '2020-08-27T03:35:54.635Z',
+      expirationTime: '2020-08-27T04:35:54.631Z',
+      endpoint: 'http://localhost:4000/jobs',
+      errorMessage: ''
     }
   ];
-  it('bulk cancel success', async () => {
+  it('bulk cancel success and failed', async () => {
     const expectedResults = {
       successJobs: [
         {
@@ -168,7 +186,7 @@ describe('bulk cancel tests', () => {
           processId: 'travels',
           processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
           rootProcessId: '',
-          status: 'SCHEDULED',
+          status: GraphQL.JobStatus.Scheduled,
           priority: 0,
           callbackEndpoint:
             'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
@@ -182,23 +200,13 @@ describe('bulk cancel tests', () => {
           errorMessage: ''
         }
       ],
-      failedJobs: []
-    };
-    client.mutate.mockResolvedValue({});
-    const result = await performMultipleCancel(bulkJobs, client);
-    await wait(0);
-    expect(result).toEqual(expectedResults);
-  });
-  it('bulk cancel failure', async () => {
-    const expectedResults = {
-      successJobs: [],
       failedJobs: [
         {
-          id: 'dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
-          processId: 'travels',
-          processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
+          id: 'dad3aa88-5c1e-4858-a919-6123c675a0fa_01',
+          processId: 'travels1',
+          processInstanceId: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b1',
           rootProcessId: '',
-          status: 'SCHEDULED',
+          status: GraphQL.JobStatus.Scheduled,
           priority: 0,
           callbackEndpoint:
             'http://localhost:8080/management/jobs/travels/instances/5c56eeff-4cbf-3313-a325-4c895e0afced/timers/dad3aa88-5c1e-4858-a919-6123c675a0fa_0',
@@ -208,16 +216,18 @@ describe('bulk cancel tests', () => {
           retries: 0,
           lastUpdate: '2020-08-27T03:35:54.635Z',
           expirationTime: '2020-08-27T04:35:54.631Z',
-          endpoint: 'http://localhost:4000/jobs',
-          errorMessage: undefined
+          endpoint: 'http://localhost:4000/jobs'
         }
       ]
     };
 
-    client.mutate.mockRejectedValue({});
+    client.mutate.mockResolvedValueOnce(expectedResults.successJobs[0]);
+    client.mutate.mockRejectedValueOnce(expectedResults.failedJobs[0]);
     const result = await performMultipleCancel(bulkJobs, client);
-    await wait(0);
-    expect(result).toEqual(expectedResults);
+
+    expect(result[0].successJob).toEqual(expectedResults.successJobs[0]);
+    expect(result[0].failedJob).toBeUndefined();
+    expect(result[1].failedJob).toEqual(expectedResults.failedJobs[0]);
   });
 });
 
@@ -330,13 +340,6 @@ describe('job cancel tests', () => {
     const scheduleDate = new Date('2020-08-27T03:35:50.147Z');
     const modalTitle = 'success';
     const modalContent = `Reschedule of job: ${job.id} is successful`;
-    // const result = await handleJobReschedule(
-    //   job,
-    //   repeatInterval,
-    //   repeatLimit,
-    //   scheduleDate,
-    //     client
-    // );
     await handleJobReschedule(
       job,
       repeatInterval,

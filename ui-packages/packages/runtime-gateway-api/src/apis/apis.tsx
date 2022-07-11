@@ -29,27 +29,34 @@ import { ApolloClient } from 'apollo-client';
 export const performMultipleCancel = async (
   jobsToBeActioned: (GraphQL.Job & { errorMessage?: string })[],
   client: ApolloClient<any>
-) => {
-  const successJobs = [];
-  const failedJobs = [];
+): Promise<any> => {
+  const multipleCancel: Promise<any>[] = [];
   for (const job of jobsToBeActioned) {
-    client
-      .mutate({
-        mutation: GraphQL.JobCancelDocument,
-        variables: {
-          jobId: job.id
-        },
-        fetchPolicy: 'no-cache'
+    multipleCancel.push(
+      new Promise((resolve, reject) => {
+        client
+          .mutate({
+            mutation: GraphQL.JobCancelDocument,
+            variables: {
+              jobId: job.id
+            },
+            fetchPolicy: 'no-cache'
+          })
+          .then(value => {
+            resolve({ successJob: job });
+          })
+          .catch(reason => {
+            job.errorMessage = JSON.stringify(reason.message);
+            reject({ failedJob: job });
+          });
       })
-      .then(value => {
-        successJobs.push(job);
-      })
-      .catch(reason => {
-        job.errorMessage = JSON.stringify(reason.message);
-        failedJobs.push(job);
-      });
+    );
   }
-  return { successJobs, failedJobs };
+  return Promise.all(multipleCancel.map(mc => mc.catch(error => error))).then(
+    result => {
+      return Promise.resolve(result);
+    }
+  );
 };
 
 //Rest Api to Cancel a Job
@@ -137,7 +144,7 @@ export const handleProcessSkip = async (
       .mutate({
         mutation: GraphQL.AbortProcessInstanceDocument,
         variables: {
-          processsId: processInstance.id
+          processId: processInstance.id
         },
         fetchPolicy: 'no-cache'
       })
@@ -158,7 +165,7 @@ export const handleProcessRetry = async (
       .mutate({
         mutation: GraphQL.RetryProcessInstanceDocument,
         variables: {
-          processsId: processInstance.id
+          processId: processInstance.id
         },
         fetchPolicy: 'no-cache'
       })
@@ -170,7 +177,7 @@ export const handleProcessRetry = async (
 };
 
 // Rest Api to abort a process
-export const handleProcessAbort = (
+export const handleProcessAbort = async (
   processInstance: ProcessInstance,
   client: ApolloClient<any>
 ): Promise<void> => {
@@ -179,7 +186,7 @@ export const handleProcessAbort = (
       .mutate({
         mutation: GraphQL.AbortProcessInstanceDocument,
         variables: {
-          processsId: processInstance.id
+          processId: processInstance.id
         },
         fetchPolicy: 'no-cache'
       })
@@ -240,7 +247,7 @@ export const handleNodeTrigger = async (
       .mutate({
         mutation: GraphQL.HandleNodeTriggerDocument,
         variables: {
-          processsId: processInstance.id,
+          processId: processInstance.id,
           nodeId: node.nodeDefinitionId
         },
         fetchPolicy: 'no-cache'
@@ -253,7 +260,7 @@ export const handleNodeTrigger = async (
 };
 
 // function containing Api call to update process variables
-export const handleProcessVariableUpdate = (
+export const handleProcessVariableUpdate = async (
   processInstance: ProcessInstance,
   updatedJson: Record<string, unknown>,
   client: ApolloClient<any>
@@ -263,7 +270,7 @@ export const handleProcessVariableUpdate = (
       .mutate({
         mutation: GraphQL.HandleProcessVariableUpdateDocument,
         variables: {
-          processsId: processInstance.id,
+          processId: processInstance.id,
           processInstanceVariables: JSON.stringify(updatedJson)
         },
         fetchPolicy: 'no-cache'
@@ -285,7 +292,7 @@ export const handleNodeInstanceCancel = async (
       .mutate({
         mutation: GraphQL.HandleNodeInstanceCancelDocument,
         variables: {
-          processsId: processInstance.id,
+          processId: processInstance.id,
           nodeInstanceId: node.id
         },
         fetchPolicy: 'no-cache'
@@ -297,7 +304,7 @@ export const handleNodeInstanceCancel = async (
   });
 };
 
-export const handleNodeInstanceRetrigger = (
+export const handleNodeInstanceRetrigger = async (
   processInstance: Pick<ProcessInstance, 'id' | 'serviceUrl' | 'processId'>,
   node: Pick<NodeInstance, 'id'>,
   client: ApolloClient<any>
@@ -307,7 +314,7 @@ export const handleNodeInstanceRetrigger = (
       .mutate({
         mutation: GraphQL.HandleNodeInstanceRetriggerDocument,
         variables: {
-          processsId: processInstance.id,
+          processId: processInstance.id,
           nodeInstanceId: node.id
         },
         fetchPolicy: 'no-cache'
@@ -319,7 +326,7 @@ export const handleNodeInstanceRetrigger = (
   });
 };
 
-export const getSVG = (
+export const getSVG = async (
   processInstance: ProcessInstance,
   client: ApolloClient<any>
 ): Promise<any> => {
@@ -327,7 +334,7 @@ export const getSVG = (
     .query({
       query: GraphQL.GetProcessInstanceSvgDocument,
       variables: {
-        processsId: processInstance.id
+        processId: processInstance.id
       },
       fetchPolicy: 'network-only'
     })
@@ -339,7 +346,7 @@ export const getSVG = (
     });
 };
 
-export const getProcessDetails = (
+export const getProcessDetails = async (
   id: string,
   client: ApolloClient<any>
 ): Promise<any> => {
@@ -360,7 +367,7 @@ export const getProcessDetails = (
     });
 };
 
-export const getJobs = (
+export const getJobs = async (
   id: string,
   client: ApolloClient<any>
 ): Promise<any> => {
@@ -380,7 +387,7 @@ export const getJobs = (
     });
 };
 
-export const getTriggerableNodes = (
+export const getTriggerableNodes = async (
   processInstance: ProcessInstance,
   client: ApolloClient<any>
 ): Promise<any> => {
@@ -388,7 +395,7 @@ export const getTriggerableNodes = (
     .query({
       query: GraphQL.GetProcessInstanceNodeDefinitionsDocument,
       variables: {
-        processsId: processInstance.id
+        processId: processInstance.id
       },
       fetchPolicy: 'no-cache'
     })
