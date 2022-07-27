@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.jobs.service.messaging;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
@@ -25,6 +26,7 @@ import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.jobs.api.event.CancelJobRequestEvent;
 import org.kie.kogito.jobs.api.event.CreateProcessInstanceJobRequestEvent;
 import org.kie.kogito.jobs.api.event.JobCloudEvent;
+import org.kie.kogito.jobs.api.event.serialization.JobCloudEventDeserializer;
 import org.kie.kogito.jobs.service.exception.JobServiceException;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
@@ -34,6 +36,9 @@ import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.cloudevents.CloudEvent;
 import io.smallrye.mutiny.Uni;
 
 import static org.kie.kogito.jobs.api.event.CancelJobRequestEvent.CANCEL_JOB_REQUEST;
@@ -52,11 +57,21 @@ public class ReactiveMessagingEventConsumer {
     @Inject
     ReactiveJobRepository jobRepository;
 
+    @Inject
+    ObjectMapper objectMapper;
+
+    JobCloudEventDeserializer deserializer;
+
+    @PostConstruct
+    void init() {
+        this.deserializer = new JobCloudEventDeserializer(objectMapper);
+    }
+
     @Incoming(KOGITO_JOB_SERVICE_JOB_REQUEST_EVENTS)
     @Acknowledgment(Acknowledgment.Strategy.MANUAL)
     @Retry(delay = 500, maxRetries = 4)
-    public Uni<Void> onKogitoServiceRequest(Message<JobCloudEvent<?>> message) {
-        JobCloudEvent<?> jobCloudEvent = message.getPayload();
+    public Uni<Void> onKogitoServiceRequest(Message<CloudEvent> message) {
+        final JobCloudEvent<?> jobCloudEvent = deserializer.deserialize(message.getPayload());
         switch (jobCloudEvent.getType()) {
             case CREATE_PROCESS_INSTANCE_JOB_REQUEST:
                 return handleEvent(message, (CreateProcessInstanceJobRequestEvent) jobCloudEvent);
@@ -68,7 +83,7 @@ public class ReactiveMessagingEventConsumer {
         }
     }
 
-    private Uni<Void> handleEvent(Message<JobCloudEvent<?>> message, CreateProcessInstanceJobRequestEvent event) {
+    private Uni<Void> handleEvent(Message<?> message, CreateProcessInstanceJobRequestEvent event) {
         return Uni.createFrom().completionStage(jobRepository.get(event.getData().getId()))
                 .flatMap(existingJob -> {
                     if (existingJob == null || existingJob.getStatus() == JobStatus.SCHEDULED) {
@@ -95,7 +110,7 @@ public class ReactiveMessagingEventConsumer {
                 });
     }
 
-    private Uni<Void> handleEvent(Message<JobCloudEvent<?>> message, CancelJobRequestEvent event) {
+    private Uni<Void> handleEvent(Message<?> message, CancelJobRequestEvent event) {
         return Uni.createFrom().completionStage(scheduler.cancel(event.getData().getId()))
                 .onItemOrFailure().transformToUni((cancelledJob, throwable) -> {
                     if (throwable != null) {
