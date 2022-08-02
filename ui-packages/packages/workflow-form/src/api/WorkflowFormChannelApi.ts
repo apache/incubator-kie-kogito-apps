@@ -17,4 +17,6 @@
 export interface WorkflowFormChannelApi {
   workflowForm__startWorkflow(formData: any): Promise<void>;
   workflowForm__resetBusinessKey(): Promise<void>;
+  workflowForm__getCustomWorkflowSchema(): Promise<Record<string, any>>;
+  workflowForm__startWorkflowRest(data: Record<string, any>, endpoint: string): Promise<void>;
 }
