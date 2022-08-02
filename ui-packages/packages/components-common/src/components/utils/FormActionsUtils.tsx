@@ -46,7 +46,7 @@ export const convertActionsToButton = (
   const isPrimary = (label: string): boolean => {
     // Assuming that Complete will be the default act
     return (
-      label.toLowerCase() === 'complete' || (actions && actions.length === 1)
+      label.toLowerCase() === 'complete' || label.toLowerCase()=== 'start' || (actions && actions.length === 1)
     );
   };
 
