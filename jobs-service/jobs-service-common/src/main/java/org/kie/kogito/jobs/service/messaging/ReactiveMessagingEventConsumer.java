@@ -15,13 +15,6 @@
  */
 package org.kie.kogito.jobs.service.messaging;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
-import org.eclipse.microprofile.faulttolerance.Retry;
-import org.eclipse.microprofile.reactive.messaging.Acknowledgment;
-import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.jobs.api.event.CancelJobRequestEvent;
 import org.kie.kogito.jobs.api.event.CreateProcessInstanceJobRequestEvent;
@@ -44,33 +37,35 @@ import io.smallrye.mutiny.Uni;
 import static org.kie.kogito.jobs.api.event.CancelJobRequestEvent.CANCEL_JOB_REQUEST;
 import static org.kie.kogito.jobs.api.event.CreateProcessInstanceJobRequestEvent.CREATE_PROCESS_INSTANCE_JOB_REQUEST;
 
-@ApplicationScoped
-public class ReactiveMessagingEventConsumer {
+public abstract class ReactiveMessagingEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveMessagingEventConsumer.class);
 
-    private static final String KOGITO_JOB_SERVICE_JOB_REQUEST_EVENTS = "kogito-job-service-job-request-events";
+    protected TimerDelegateJobScheduler scheduler;
 
-    @Inject
-    TimerDelegateJobScheduler scheduler;
+    protected ReactiveJobRepository jobRepository;
 
-    @Inject
-    ReactiveJobRepository jobRepository;
+    protected ObjectMapper objectMapper;
 
-    @Inject
-    ObjectMapper objectMapper;
+    protected JobCloudEventDeserializer deserializer;
 
-    JobCloudEventDeserializer deserializer;
+    protected ReactiveMessagingEventConsumer() {
+        this.scheduler = null;
+        this.jobRepository = null;
+        this.objectMapper = null;
+        this.deserializer = null;
+    }
 
-    @PostConstruct
-    void init() {
+    protected ReactiveMessagingEventConsumer(TimerDelegateJobScheduler scheduler,
+            ReactiveJobRepository jobRepository,
+            ObjectMapper objectMapper) {
+        this.scheduler = scheduler;
+        this.jobRepository = jobRepository;
+        this.objectMapper = objectMapper;
         this.deserializer = new JobCloudEventDeserializer(objectMapper);
     }
 
-    @Incoming(KOGITO_JOB_SERVICE_JOB_REQUEST_EVENTS)
-    @Acknowledgment(Acknowledgment.Strategy.MANUAL)
-    @Retry(delay = 500, maxRetries = 4)
-    public Uni<Void> onKogitoServiceRequest(Message<CloudEvent> message) {
+    protected Uni<Void> onKogitoServiceRequest(Message<CloudEvent> message) {
         final JobCloudEvent<?> jobCloudEvent = deserializer.deserialize(message.getPayload());
         switch (jobCloudEvent.getType()) {
             case CREATE_PROCESS_INSTANCE_JOB_REQUEST:
@@ -83,7 +78,7 @@ public class ReactiveMessagingEventConsumer {
         }
     }
 
-    private Uni<Void> handleEvent(Message<?> message, CreateProcessInstanceJobRequestEvent event) {
+    protected Uni<Void> handleEvent(Message<?> message, CreateProcessInstanceJobRequestEvent event) {
         return Uni.createFrom().completionStage(jobRepository.get(event.getData().getId()))
                 .flatMap(existingJob -> {
                     if (existingJob == null || existingJob.getStatus() == JobStatus.SCHEDULED) {
@@ -110,7 +105,7 @@ public class ReactiveMessagingEventConsumer {
                 });
     }
 
-    private Uni<Void> handleEvent(Message<?> message, CancelJobRequestEvent event) {
+    protected Uni<Void> handleEvent(Message<?> message, CancelJobRequestEvent event) {
         return Uni.createFrom().completionStage(scheduler.cancel(event.getData().getId()))
                 .onItemOrFailure().transformToUni((cancelledJob, throwable) -> {
                     if (throwable != null) {

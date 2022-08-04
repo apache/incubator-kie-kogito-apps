@@ -56,7 +56,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class ReactiveMessagingEventConsumerTest {
+abstract class ReactiveMessagingEventConsumerTest<T extends ReactiveMessagingEventConsumer> {
 
     private static final String JOB_ID = "JOB_ID";
     private static final String INTERNAL_ERROR = "Internal error";
@@ -75,7 +75,7 @@ class ReactiveMessagingEventConsumerTest {
     @Mock
     private Message<CloudEvent> message;
 
-    private ReactiveMessagingEventConsumer eventConsumer;
+    private T eventConsumer;
 
     @Captor
     private ArgumentCaptor<Throwable> errorCaptor;
@@ -90,12 +90,12 @@ class ReactiveMessagingEventConsumerTest {
         lenient().doReturn(ackCompletionState).when(message).ack();
         CompletionStage<Void> nackCompletionStage = CompletableFuture.completedFuture(null);
         lenient().doReturn(nackCompletionStage).when(message).nack(any());
-        eventConsumer = new ReactiveMessagingEventConsumer();
-        eventConsumer.scheduler = scheduler;
-        eventConsumer.jobRepository = jobRepository;
-        eventConsumer.objectMapper = objectMapper;
-        eventConsumer.init();
+        eventConsumer = createEventConsumer(scheduler, jobRepository, objectMapper);
     }
+
+    protected abstract T createEventConsumer(TimerDelegateJobScheduler scheduler,
+            ReactiveJobRepository jobRepository,
+            ObjectMapper objectMapper);
 
     @Test
     void onCreateProcessInstanceJobWithNonExistingJobSuccessful() throws Exception {
