@@ -37,7 +37,6 @@ import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.jobs.service.stream.JobStreams;
 
 import io.smallrye.mutiny.Multi;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -100,8 +99,8 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
                         .collect(toList())))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)
-                .emitOn(Infrastructure.getDefaultExecutor()) // TODO Workaround for Quarkus Reactive Client issue with GZip: https://github.com/quarkusio/quarkus/issues/8152
-                .subscribeAsCompletionStage();
+                .convert()
+                .toCompletableFuture();
     }
 
     @Override
@@ -109,16 +108,16 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
         return client.preparedQuery("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + " WHERE id = $1").execute(Tuple.of(id))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)
-                .emitOn(Infrastructure.getDefaultExecutor()) // TODO Workaround for Quarkus Reactive Client issue with GZip: https://github.com/quarkusio/quarkus/issues/8152
-                .subscribeAsCompletionStage();
+                .convert()
+                .toCompletableFuture();
     }
 
     @Override
     public CompletionStage<Boolean> exists(String id) {
         return client.preparedQuery("SELECT id FROM " + JOB_DETAILS_TABLE + " WHERE id = $1").execute(Tuple.of(id))
                 .onItem().transform(rowSet -> rowSet.rowCount() > 0)
-                .emitOn(Infrastructure.getDefaultExecutor()) // TODO Workaround for Quarkus Reactive Client issue with GZip: https://github.com/quarkusio/quarkus/issues/8152
-                .subscribeAsCompletionStage();
+                .convert()
+                .toCompletableFuture();
     }
 
     @Override
@@ -126,8 +125,18 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
         return client.preparedQuery("DELETE FROM " + JOB_DETAILS_TABLE + " WHERE id = $1 RETURNING " + JOB_DETAILS_COLUMNS).execute(Tuple.of(id))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)
-                .emitOn(Infrastructure.getDefaultExecutor()) // TODO Workaround for Quarkus Reactive Client issue with GZip: https://github.com/quarkusio/quarkus/issues/8152
-                .subscribeAsCompletionStage();
+                .convert()
+                .toCompletableFuture();
+    }
+
+    @Override
+    public PublisherBuilder<JobDetails> findByStatus(JobStatus... status) {
+        String statusQuery = createStatusQuery(status);
+        String query = " WHERE " + statusQuery;
+        return ReactiveStreams.fromPublisher(
+                client.query("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC").execute()
+                        .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
+                        .onItem().transform(this::from));
     }
 
     @Override
@@ -135,8 +144,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
         return ReactiveStreams.fromPublisher(
                 client.query("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE).execute()
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
-                        .onItem().transform(this::from)
-                        .emitOn(Infrastructure.getDefaultExecutor())); // TODO Workaround for Quarkus Reactive Client issue with GZip: https://github.com/quarkusio/quarkus/issues/8152
+                        .onItem().transform(this::from));
     }
 
     @Override
@@ -148,8 +156,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
         return ReactiveStreams.fromPublisher(
                 client.query("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC").execute()
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
-                        .onItem().transform(this::from)
-                        .emitOn(Infrastructure.getDefaultExecutor())); // TODO Workaround for Quarkus Reactive Client issue with GZip: https://github.com/quarkusio/quarkus/issues/8152
+                        .onItem().transform(this::from));
     }
 
     static String createStatusQuery(JobStatus... status) {

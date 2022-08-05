@@ -38,6 +38,7 @@ import org.mockito.ArgumentCaptor;
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.groups.MultiOnItem;
+import io.smallrye.mutiny.groups.UniConvert;
 import io.smallrye.mutiny.groups.UniOnItem;
 import io.vertx.core.json.JsonObject;
 import io.vertx.mutiny.pgclient.PgPool;
@@ -95,7 +96,9 @@ class PostgreSqlJobRepositoryTest {
         when(multi.emitOn(any(Executor.class))).thenReturn(multi);
 
         completableFuture = mock(CompletableFuture.class);
-        when(uni.subscribeAsCompletionStage()).thenReturn(completableFuture);
+        UniConvert convert = mock(UniConvert.class);
+        when(uni.convert()).thenReturn(convert);
+        when(convert.toCompletableFuture()).thenReturn(completableFuture);
 
         TriggerMarshaller triggerMarshaller = mock(TriggerMarshaller.class);
         when(triggerMarshaller.marshall(any(Trigger.class))).thenReturn(new JsonObject().put("triggerMarshaller", "test"));
