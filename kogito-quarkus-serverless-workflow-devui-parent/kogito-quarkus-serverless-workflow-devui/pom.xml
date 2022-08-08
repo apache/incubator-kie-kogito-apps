@@ -1,26 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>org.kie.kogito</groupId>
-    <artifactId>kogito-quarkus-serverless-workflow-devui-parent</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>kogito-quarkus-serverless-workflow-devui</artifactId>
-  <name>Kogito Apps :: Serverless Workflow Quarkus Dev UI Extension :: Extension</name>
-  <description>Runtime development tools for Serverless Workflows</description>
-  <dependencies>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>kogito-quarkus-serverless-workflow-devui-parent</artifactId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>kogito-quarkus-serverless-workflow-devui</artifactId>
+    <name>Kogito Apps :: Serverless Workflow Quarkus Dev UI Extension :: Extension</name>
+    <description>Runtime development tools for Serverless Workflows</description>
 
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-core</artifactId>
-    </dependency>
+    <properties>
+        <drools.version>8.26.0-SNAPSHOT</drools.version>
+    </properties>
 
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy</artifactId>
-    </dependency>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>efesto-quarkus</artifactId>
+                <version>${drools.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.kie</groupId>
+            <artifactId>efesto-quarkus</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy</artifactId>
+        </dependency>
 
     <dependency>
       <groupId>io.quarkus</groupId>
