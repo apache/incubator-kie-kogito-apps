@@ -15,6 +15,7 @@
  */
 package org.kie.kogito.jobs.service.repository.impl;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
@@ -28,10 +29,16 @@ class InMemoryJobRepositoryTest extends BaseJobRepositoryTest {
 
     @InjectMocks
     private InMemoryJobRepository tested;
+    private static Vertx vertx;
+
+    @BeforeAll
+    static void init() {
+        vertx = Vertx.vertx();
+    }
 
     @BeforeEach
     public void setUp() throws Exception {
-        tested = new InMemoryJobRepository(Vertx.vertx(), mockJobStreams());
+        tested = new InMemoryJobRepository(vertx, mockJobStreams());
         super.setUp();
     }
 

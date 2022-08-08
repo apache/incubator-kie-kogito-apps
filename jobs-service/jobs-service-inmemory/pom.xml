@@ -16,7 +16,7 @@
     <dependencies>
         <dependency>
             <groupId>org.kie.kogito</groupId>
-            <artifactId>jobs-service-postgresql</artifactId>
+            <artifactId>jobs-service-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.kie.kogito</groupId>
@@ -24,9 +24,8 @@
         </dependency>
         <dependency>
             <groupId>org.kie.kogito</groupId>
-            <artifactId>jobs-service-common</artifactId>
+            <artifactId>jobs-service-postgresql</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.kie.kogito</groupId>
             <artifactId>jobs-service-common</artifactId>

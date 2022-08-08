@@ -23,8 +23,6 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
-import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.api.URIBuilder;
 import org.kie.kogito.jobs.service.converters.HttpConverters;
 import org.kie.kogito.jobs.service.model.HTTPRequestCallback;
@@ -73,7 +71,6 @@ public class HttpJobExecutor implements JobExecutor {
                 uri.getPath());
         Optional.ofNullable(request.getQueryParams())
                 .ifPresent(params -> clientRequest.queryParams().addAll(params));
-
         return clientRequest.send();
     }
 
@@ -83,27 +80,27 @@ public class HttpJobExecutor implements JobExecutor {
                 .orElse(null);
     }
 
-    private <T extends JobExecutionResponse> PublisherBuilder<T> handleResponse(T response) {
+    private <T extends JobExecutionResponse> Uni<T> handleResponse(T response) {
         LOGGER.debug("handle response {}", response);
-        return ReactiveStreams.of(response)
-                .map(JobExecutionResponse::getCode)
+        return Uni.createFrom().item(response)
+                .onItem().transform(JobExecutionResponse::getCode)
                 .flatMap(code -> code.equals("200")
                         ? handleSuccess(response)
                         : handleError(response));
     }
 
-    private <T extends JobExecutionResponse> PublisherBuilder<T> handleError(T response) {
+    private <T extends JobExecutionResponse> Uni<T> handleError(T response) {
         LOGGER.info("handle error {}", response);
-        return ReactiveStreams.of(response)
-                .peek(jobStreams::publishJobError)
-                .peek(r -> LOGGER.debug("Error executing job {}.", r));
+        return Uni.createFrom().item(response)
+                .onItem().invoke(jobStreams::publishJobError)
+                .onItem().invoke(r -> LOGGER.debug("Error executing job {}.", r));
     }
 
-    private <T extends JobExecutionResponse> PublisherBuilder<T> handleSuccess(T response) {
+    private <T extends JobExecutionResponse> Uni<T> handleSuccess(T response) {
         LOGGER.info("handle success {}", response);
-        return ReactiveStreams.of(response)
-                .peek(jobStreams::publishJobSuccess)
-                .peek(r -> LOGGER.debug("Success executing job {}.", r));
+        return Uni.createFrom().item(response)
+                .onItem().invoke(jobStreams::publishJobSuccess)
+                .onItem().invoke(r -> LOGGER.debug("Success executing job {}.", r));
     }
 
     @Override
@@ -130,26 +127,24 @@ public class HttpJobExecutor implements JobExecutor {
                             .addQueryParam("limit", limit)
                             .build();
 
-                    return ReactiveStreams.fromPublisher(executeCallback(callback).convert().toPublisher())
-                            .map(response -> JobExecutionResponse.builder()
+                    return executeCallback(callback)
+                            .onItem().transform(response -> JobExecutionResponse.builder()
                                     .message(response.statusMessage())
                                     .code(getResponseCode(response))
                                     .now()
                                     .jobId(job.getId())
                                     .build())
                             .flatMap(this::handleResponse)
-                            .findFirst()
-                            .run()
-                            .thenApply(response -> response.map(r -> job).orElse(null))
-                            .exceptionally(ex -> {
+                            .onItem().transform(response -> response != null ? job : null)
+                            .onItemOrFailure().invoke((r, ex) -> {
                                 LOGGER.error("Generic error executing job {}", job, ex);
                                 jobStreams.publishJobError(JobExecutionResponse.builder()
                                         .message(ex.getMessage())
                                         .now()
                                         .jobId(job.getId())
                                         .build());
-                                return job;
-                            });
+                            })
+                            .convert().toCompletionStage();
                 });
     }
 
