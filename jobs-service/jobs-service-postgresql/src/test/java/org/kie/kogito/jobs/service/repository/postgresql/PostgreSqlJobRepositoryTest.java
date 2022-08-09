@@ -139,11 +139,11 @@ class PostgreSqlJobRepositoryTest {
         verify(query, times(1)).execute(parameterCaptor.capture());
 
         String query = "INSERT INTO job_details (id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "payload, type, priority, recipient, trigger) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) " +
+                "payload, type, priority, recipient, trigger, fire_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) " +
                 "ON CONFLICT (id) DO UPDATE SET correlation_id = $2, status = $3, last_update = $4, retries = $5, " +
                 "execution_counter = $6, scheduled_id = $7, payload = $8, type = $9, priority = $10, " +
-                "recipient = $11, trigger = $12 RETURNING id, correlation_id, status, last_update, retries, " +
-                "execution_counter, scheduled_id, payload, type, priority, recipient, trigger";
+                "recipient = $11, trigger = $12, fire_time = $13 RETURNING id, correlation_id, status, last_update, retries, " +
+                "execution_counter, scheduled_id, payload, type, priority, recipient, trigger, fire_time";
 
         Tuple parameter = Tuple.tuple(Stream.of(
                 job.getId(),
@@ -186,7 +186,7 @@ class PostgreSqlJobRepositoryTest {
         verify(query, times(1)).execute(parameterCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "payload, type, priority, recipient, trigger FROM job_details WHERE id = $1";
+                "payload, type, priority, recipient, trigger, fire_time FROM job_details WHERE id = $1";
         String parameter = "test";
 
         assertEquals(query, queryCaptor.getValue());
@@ -222,7 +222,7 @@ class PostgreSqlJobRepositoryTest {
 
         String query = "DELETE FROM job_details WHERE id = $1 " +
                 "RETURNING id, correlation_id, status, last_update, retries, " +
-                "execution_counter, scheduled_id, payload, type, priority, recipient, trigger";
+                "execution_counter, scheduled_id, payload, type, priority, recipient, trigger, fire_time";
         String parameter = "test";
 
         assertEquals(query, queryCaptor.getValue());
@@ -235,10 +235,10 @@ class PostgreSqlJobRepositoryTest {
         assertNotNull(result);
 
         ArgumentCaptor<String> queryCaptor = ArgumentCaptor.forClass(String.class);
-        verify(client, times(1)).query(queryCaptor.capture());
+        verify(client, times(1)).preparedQuery(queryCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, " +
-                "execution_counter, scheduled_id, payload, type, priority, recipient, trigger FROM job_details";
+                "execution_counter, scheduled_id, payload, type, priority, recipient, trigger, fire_time FROM job_details LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());
     }
@@ -252,12 +252,12 @@ class PostgreSqlJobRepositoryTest {
         assertNotNull(result);
 
         ArgumentCaptor<String> queryCaptor = ArgumentCaptor.forClass(String.class);
-        verify(client, times(1)).query(queryCaptor.capture());
+        verify(client, times(1)).preparedQuery(queryCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "payload, type, priority, recipient, trigger FROM job_details " +
-                "WHERE status IN ('SCHEDULED', 'RETRY') AND (trigger->>'nextFireTime')::INT8 > " + from.toInstant().toEpochMilli() +
-                " AND (trigger->>'nextFireTime')::INT8 < " + to.toInstant().toEpochMilli() + " ORDER BY priority DESC";
+                "payload, type, priority, recipient, trigger, fire_time FROM job_details " +
+                "WHERE status IN ('SCHEDULED', 'RETRY') AND fire_time > " + from.toInstant().toEpochMilli() +
+                " AND fire_time < " + to.toInstant().toEpochMilli() + " ORDER BY priority DESC LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());
     }
@@ -271,12 +271,12 @@ class PostgreSqlJobRepositoryTest {
         assertNotNull(result);
 
         ArgumentCaptor<String> queryCaptor = ArgumentCaptor.forClass(String.class);
-        verify(client, times(1)).query(queryCaptor.capture());
+        verify(client, times(1)).preparedQuery(queryCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "payload, type, priority, recipient, trigger FROM job_details " +
-                "WHERE status IN ('SCHEDULED') AND (trigger->>'nextFireTime')::INT8 > " + from.toInstant().toEpochMilli() +
-                " AND (trigger->>'nextFireTime')::INT8 < " + to.toInstant().toEpochMilli() + " ORDER BY priority DESC";
+                "payload, type, priority, recipient, trigger, fire_time FROM job_details " +
+                "WHERE status IN ('SCHEDULED') AND fire_time > " + from.toInstant().toEpochMilli() +
+                " AND fire_time < " + to.toInstant().toEpochMilli() + " ORDER BY priority DESC LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());
     }
@@ -293,8 +293,8 @@ class PostgreSqlJobRepositoryTest {
         ZonedDateTime to = ZonedDateTime.now();
 
         String timeQuery = PostgreSqlJobRepository.createTimeQuery(from, to);
-        assertEquals("(trigger->>'nextFireTime')::INT8 > " + from.toInstant().toEpochMilli()
-                + " AND (trigger->>'nextFireTime')::INT8 < " + to.toInstant().toEpochMilli(),
+        assertEquals("fire_time > " + from.toInstant().toEpochMilli()
+                + " AND fire_time < " + to.toInstant().toEpochMilli(),
                 timeQuery);
     }
 

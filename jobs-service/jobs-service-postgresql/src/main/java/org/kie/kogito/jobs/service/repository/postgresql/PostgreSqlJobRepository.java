@@ -51,6 +51,8 @@ import static org.kie.kogito.jobs.service.utils.DateUtil.DEFAULT_ZONE;
 @ApplicationScoped
 public class PostgreSqlJobRepository extends BaseReactiveJobRepository implements ReactiveJobRepository {
 
+    public static final Integer MAX_ITEMS_QUERY = 10000;
+
     private static final String JOB_DETAILS_TABLE = "job_details";
 
     private static final String JOB_DETAILS_COLUMNS = "id, correlation_id, status, last_update, retries, " +
@@ -82,7 +84,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
                 "ON CONFLICT (id) DO " +
                 "UPDATE SET correlation_id = $2, status = $3, last_update = $4, retries = $5, " +
                 "execution_counter = $6, scheduled_id = $7, payload = $8, type = $9, priority = $10, " +
-                "recipient = $11, trigger = $12 , fire_time = $13" +
+                "recipient = $11, trigger = $12, fire_time = $13 " +
                 "RETURNING " + JOB_DETAILS_COLUMNS)
                 .execute(Tuple.tuple(Stream.of(
                         job.getId(),
@@ -136,7 +138,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
         String statusQuery = createStatusQuery(status);
         String query = " WHERE " + statusQuery;
         return ReactiveStreams.fromPublisher(
-                client.query("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC").execute()
+                client.preparedQuery("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC LIMIT $1").execute(Tuple.of(MAX_ITEMS_QUERY))
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
                         .onItem().transform(this::from));
     }
@@ -144,7 +146,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
     @Override
     public PublisherBuilder<JobDetails> findAll() {
         return ReactiveStreams.fromPublisher(
-                client.query("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE).execute()
+                client.preparedQuery("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + " LIMIT $1").execute(Tuple.of(MAX_ITEMS_QUERY))
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
                         .onItem().transform(this::from));
     }
@@ -156,7 +158,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
         String query = " WHERE " + statusQuery + " AND " + timeQuery;
 
         return ReactiveStreams.fromPublisher(
-                client.query("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC LIMIT 100").execute()
+                client.preparedQuery("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC LIMIT $1").execute(Tuple.of(MAX_ITEMS_QUERY))
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
                         .onItem().transform(this::from));
     }
