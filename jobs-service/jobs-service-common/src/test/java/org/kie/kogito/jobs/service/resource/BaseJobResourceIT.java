@@ -317,7 +317,12 @@ public abstract class BaseJobResourceIT {
                         .id(UUID.randomUUID().toString())
                         .expirationTime(DateUtil.now().minusMinutes(10))
                         .callbackEndpoint(getCallbackEndpoint())
-                        .priority(1)
+                        .processId(PROCESS_ID)
+                        .processInstanceId(PROCESS_INSTANCE_ID)
+                        .rootProcessId(ROOT_PROCESS_ID)
+                        .rootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
+                        .nodeInstanceId(NODE_INSTANCE_ID)
+                        .priority(PRIORITY)
                         .build();
         return create(jobToJson(job));
     }

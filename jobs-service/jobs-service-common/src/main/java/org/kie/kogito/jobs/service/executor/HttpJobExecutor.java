@@ -138,13 +138,13 @@ public class HttpJobExecutor implements JobExecutor {
                             .onFailure().transform(ex -> new JobExecutionException(job, ex.getMessage()));
                 })
                 .onFailure(JobExecutionException.class).invoke(ex -> {
-                        JobDetails job = ((JobExecutionException) ex).getJob();
-                        LOGGER.error("Generic error executing job {}", job, ex);
-                        jobStreams.publishJobError(JobExecutionResponse.builder()
-                                .message(ex.getMessage())
-                                .now()
-                                .jobId(job.getId())
-                                .build());
+                    JobDetails job = ((JobExecutionException) ex).getJob();
+                    LOGGER.error("Generic error executing job {}", job, ex);
+                    jobStreams.publishJobError(JobExecutionResponse.builder()
+                            .message(ex.getMessage())
+                            .now()
+                            .jobId(job.getId())
+                            .build());
                 })
                 .convert().toCompletionStage();
     }
