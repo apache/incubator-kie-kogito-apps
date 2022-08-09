@@ -25,6 +25,7 @@ import javax.inject.Inject;
 
 import org.kie.kogito.jobs.api.URIBuilder;
 import org.kie.kogito.jobs.service.converters.HttpConverters;
+import org.kie.kogito.jobs.service.exception.JobExecutionException;
 import org.kie.kogito.jobs.service.model.HTTPRequestCallback;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
@@ -105,28 +106,26 @@ public class HttpJobExecutor implements JobExecutor {
 
     @Override
     public CompletionStage<JobDetails> execute(CompletionStage<JobDetails> futureJob) {
-        return futureJob
-                .thenCompose(job -> {
+        return Uni.createFrom().completionStage(futureJob)
+                .chain(job -> {
                     //Using just POST method for now
-                    String callbackEndpoint =
+                    final String callbackEndpoint =
                             Optional.ofNullable(job.getRecipient())
                                     .filter(HTTPRecipient.class::isInstance)
                                     .map(HTTPRecipient.class::cast)
                                     .map(HTTPRecipient::getEndpoint)
-                                    .orElse("");
-                    String limit = Optional.ofNullable(job.getTrigger())
+                                    .orElseThrow(() -> new JobExecutionException(job, "Callback Endpoint is null for job " + job));
+                    final String limit = Optional.ofNullable(job.getTrigger())
                             .filter(IntervalTrigger.class::isInstance)
                             .map(interval -> getRepeatableJobCountDown(job))
                             .map(String::valueOf)
                             .orElse(null);
-
                     final HTTPRequestCallback callback = HTTPRequestCallback.builder()
                             .url(callbackEndpoint)
                             .method(HTTPRequestCallback.HTTPMethod.POST)
                             //in case of repeatable jobs add the limit parameter
                             .addQueryParam("limit", limit)
                             .build();
-
                     return executeCallback(callback)
                             .onItem().transform(response -> JobExecutionResponse.builder()
                                     .message(response.statusMessage())
@@ -134,18 +133,20 @@ public class HttpJobExecutor implements JobExecutor {
                                     .now()
                                     .jobId(job.getId())
                                     .build())
-                            .flatMap(this::handleResponse)
-                            .onItem().transform(response -> response != null ? job : null)
-                            .onItemOrFailure().invoke((r, ex) -> {
-                                LOGGER.error("Generic error executing job {}", job, ex);
-                                jobStreams.publishJobError(JobExecutionResponse.builder()
-                                        .message(ex.getMessage())
-                                        .now()
-                                        .jobId(job.getId())
-                                        .build());
-                            })
-                            .convert().toCompletionStage();
-                });
+                            .chain(this::handleResponse)
+                            .onItem().transform(response -> job)
+                            .onFailure().transform(ex -> new JobExecutionException(job, ex.getMessage()));
+                })
+                .onFailure(JobExecutionException.class).invoke(ex -> {
+                        JobDetails job = ((JobExecutionException) ex).getJob();
+                        LOGGER.error("Generic error executing job {}", job, ex);
+                        jobStreams.publishJobError(JobExecutionResponse.builder()
+                                .message(ex.getMessage())
+                                .now()
+                                .jobId(job.getId())
+                                .build());
+                })
+                .convert().toCompletionStage();
     }
 
     private int getRepeatableJobCountDown(JobDetails job) {

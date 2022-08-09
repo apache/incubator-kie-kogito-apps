@@ -18,6 +18,7 @@ package org.kie.kogito.jobs.service.repository.postgresql;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
@@ -53,7 +54,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
     private static final String JOB_DETAILS_TABLE = "job_details";
 
     private static final String JOB_DETAILS_COLUMNS = "id, correlation_id, status, last_update, retries, " +
-            "execution_counter, scheduled_id, payload, type, priority, recipient, trigger";
+            "execution_counter, scheduled_id, payload, type, priority, recipient, trigger, fire_time";
 
     private PgPool client;
 
@@ -77,11 +78,11 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
     @Override
     public CompletionStage<JobDetails> doSave(JobDetails job) {
         return client.preparedQuery("INSERT INTO " + JOB_DETAILS_TABLE + " (" + JOB_DETAILS_COLUMNS +
-                ") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) " +
+                ") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) " +
                 "ON CONFLICT (id) DO " +
                 "UPDATE SET correlation_id = $2, status = $3, last_update = $4, retries = $5, " +
                 "execution_counter = $6, scheduled_id = $7, payload = $8, type = $9, priority = $10, " +
-                "recipient = $11, trigger = $12 " +
+                "recipient = $11, trigger = $12 , fire_time = $13" +
                 "RETURNING " + JOB_DETAILS_COLUMNS)
                 .execute(Tuple.tuple(Stream.of(
                         job.getId(),
@@ -95,7 +96,8 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
                         Optional.ofNullable(job.getType()).map(Enum::name).orElse(null),
                         job.getPriority(),
                         recipientMarshaller.marshall(job.getRecipient()),
-                        triggerMarshaller.marshall(job.getTrigger()))
+                        triggerMarshaller.marshall(job.getTrigger()),
+                        Optional.ofNullable(job.getTrigger().hasNextFireTime()).map(Date::getTime).orElse(null))
                         .collect(toList())))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)
@@ -154,7 +156,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
         String query = " WHERE " + statusQuery + " AND " + timeQuery;
 
         return ReactiveStreams.fromPublisher(
-                client.query("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC").execute()
+                client.query("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC LIMIT 100").execute()
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
                         .onItem().transform(this::from));
     }
@@ -165,8 +167,8 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
     }
 
     static String createTimeQuery(ZonedDateTime from, ZonedDateTime to) {
-        String fromQuery = "(trigger->>'nextFireTime')::INT8 > " + from.toInstant().toEpochMilli();
-        String toQuery = "(trigger->>'nextFireTime')::INT8 < " + to.toInstant().toEpochMilli();
+        String fromQuery = "fire_time > " + from.toInstant().toEpochMilli();
+        String toQuery = "fire_time < " + to.toInstant().toEpochMilli();
         return fromQuery + " AND " + toQuery;
     }
 
