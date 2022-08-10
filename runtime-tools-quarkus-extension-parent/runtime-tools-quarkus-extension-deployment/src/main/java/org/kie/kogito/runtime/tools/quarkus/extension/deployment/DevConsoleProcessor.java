@@ -21,7 +21,10 @@ import java.util.Optional;
 
 import org.kie.kogito.quarkus.addons.common.deployment.TrustyServiceAvailableBuildItem;
 import org.kie.kogito.quarkus.common.deployment.KogitoDataIndexServiceAvailableBuildItem;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.config.DevConsoleBuildTimeConfig;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.user.UserInfoSupplier;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.quarkus.deployment.IsDevelopment;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -34,7 +37,6 @@ import io.quarkus.deployment.builditem.ShutdownContextBuildItem;
 import io.quarkus.deployment.builditem.SystemPropertyBuildItem;
 import io.quarkus.deployment.pkg.builditem.CurateOutcomeBuildItem;
 import io.quarkus.deployment.util.WebJarUtil;
-import io.quarkus.devconsole.spi.DevConsoleRuntimeTemplateInfoBuildItem;
 import io.quarkus.devconsole.spi.DevConsoleTemplateInfoBuildItem;
 import io.quarkus.maven.dependency.ResolvedDependency;
 import io.quarkus.vertx.http.deployment.RouteBuildItem;
@@ -47,18 +49,22 @@ public class DevConsoleProcessor {
     private static final String DATA_INDEX_CLIENT_KEY = "quarkus.rest-client.\"" + DATA_INDEX_CONFIG_KEY + "\".url";
     private static final String STATIC_RESOURCES_PATH = "dev-static/";
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DevConsoleProcessor.class);
+
+    @SuppressWarnings("unused")
     @BuildStep(onlyIf = IsDevelopment.class)
-    public DevConsoleRuntimeTemplateInfoBuildItem collectUsersInfo() {
-        return new DevConsoleRuntimeTemplateInfoBuildItem("userInfo",
-                new UserInfoSupplier());
+    public void collectUsersInfo(final BuildProducer<DevConsoleTemplateInfoBuildItem> devConsoleTemplateInfoBuildItemBuildProducer,
+            final DevConsoleBuildTimeConfig devConsoleBuildTimeConfig) {
+        devConsoleTemplateInfoBuildItemBuildProducer.produce(new DevConsoleTemplateInfoBuildItem("userInfo",
+                new UserInfoSupplier(devConsoleBuildTimeConfig.userConfigByUser).get()));
     }
 
     @BuildStep(onlyIf = IsDevelopment.class)
     public void setUpDataIndexServiceURL(
-            final DevConsoleBuildTimeConfig config,
+            final DevConsoleBuildTimeConfig devConsoleBuildTimeConfig,
             final BuildProducer<SystemPropertyBuildItem> systemProperties) throws IOException {
 
-        systemProperties.produce(new SystemPropertyBuildItem(DATA_INDEX_CLIENT_KEY, config.dataIndexUrl));
+        systemProperties.produce(new SystemPropertyBuildItem(DATA_INDEX_CLIENT_KEY, devConsoleBuildTimeConfig.dataIndexConfig.url));
     }
 
     @BuildStep(onlyIf = IsDevelopment.class)
