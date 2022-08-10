@@ -100,6 +100,17 @@ public abstract class BaseJobResourceIT {
         assertEquals(job, response);
     }
 
+    @Test
+    void createWithMissingAttributes() throws Exception {
+        final Job job = JobBuilder
+                .builder()
+                .id("1")
+                .callbackEndpoint(getCallbackEndpoint())
+                .build();
+        create(jobToJson(job))
+                .statusCode(500);
+    }
+
     private String getCallbackEndpoint() {
         return String.format(CALLBACK_ENDPOINT, port);
     }
