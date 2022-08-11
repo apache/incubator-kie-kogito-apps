@@ -18,6 +18,9 @@ package org.kie.kogito.jobs.service.stream;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import javax.enterprise.event.Observes;
 
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Message;
@@ -25,6 +28,7 @@ import org.kie.kogito.jobs.service.events.JobDataEvent;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.resource.JobResource;
+import org.kie.kogito.jobs.service.runtime.RuntimeMessagingChangeEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +42,7 @@ public abstract class AbstractJobStreams {
 
     protected ObjectMapper objectMapper;
 
-    protected boolean enabled;
+    protected AtomicBoolean enabled;
 
     protected Emitter<String> emitter;
 
@@ -49,13 +53,13 @@ public abstract class AbstractJobStreams {
 
     protected AbstractJobStreams(ObjectMapper objectMapper, boolean enabled, Emitter<String> emitter, String url) {
         this.objectMapper = objectMapper;
-        this.enabled = enabled;
+        this.enabled = new AtomicBoolean(enabled);
         this.emitter = emitter;
         this.url = url;
     }
 
     protected void jobStatusChange(JobDetails job) {
-        if (enabled) {
+        if (enabled.get()) {
             try {
                 JobDataEvent event = JobDataEvent
                         .builder()
@@ -66,6 +70,7 @@ public abstract class AbstractJobStreams {
                 emitter.send(decorate(ContextAwareMessage.of(json)
                         .withAck(() -> onAck(job))
                         .withNack(reason -> onNack(reason, job))));
+                LOGGER.info("Sent event {} to kakfa", json);
             } catch (Exception e) {
                 String msg = String.format("An unexpected error was produced while processing a Job status change for the job: %s", job);
                 LOGGER.error(msg, e);
@@ -86,5 +91,9 @@ public abstract class AbstractJobStreams {
 
     protected Message<String> decorate(Message<String> message) {
         return message;
+    }
+
+    protected void onMessagingStatusChange(@Observes RuntimeMessagingChangeEvent event) {
+        this.enabled.set(event.isEnabled());
     }
 }
