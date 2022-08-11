@@ -22,6 +22,7 @@ import java.util.concurrent.CompletionStage;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 
 import org.kie.kogito.jobs.api.URIBuilder;
 import org.kie.kogito.jobs.service.converters.HttpConverters;
@@ -75,17 +76,12 @@ public class HttpJobExecutor implements JobExecutor {
         return clientRequest.send();
     }
 
-    private String getResponseCode(HttpResponse<Buffer> response) {
-        return Optional.ofNullable(response.statusCode())
-                .map(String::valueOf)
-                .orElse(null);
-    }
-
     private <T extends JobExecutionResponse> Uni<T> handleResponse(T response) {
         LOGGER.debug("handle response {}", response);
         return Uni.createFrom().item(response)
                 .onItem().transform(JobExecutionResponse::getCode)
-                .flatMap(code -> code.equals("200")
+                .onItem().transform(Integer::valueOf)
+                .chain(code -> Response.Status.Family.SUCCESSFUL.equals(Response.Status.Family.familyOf(code))
                         ? handleSuccess(response)
                         : handleError(response));
     }
@@ -109,27 +105,13 @@ public class HttpJobExecutor implements JobExecutor {
         return Uni.createFrom().completionStage(futureJob)
                 .chain(job -> {
                     //Using just POST method for now
-                    final String callbackEndpoint =
-                            Optional.ofNullable(job.getRecipient())
-                                    .filter(HTTPRecipient.class::isInstance)
-                                    .map(HTTPRecipient.class::cast)
-                                    .map(HTTPRecipient::getEndpoint)
-                                    .orElseThrow(() -> new JobExecutionException(job, "Callback Endpoint is null for job " + job));
-                    final String limit = Optional.ofNullable(job.getTrigger())
-                            .filter(IntervalTrigger.class::isInstance)
-                            .map(interval -> getRepeatableJobCountDown(job))
-                            .map(String::valueOf)
-                            .orElse(null);
-                    final HTTPRequestCallback callback = HTTPRequestCallback.builder()
-                            .url(callbackEndpoint)
-                            .method(HTTPRequestCallback.HTTPMethod.POST)
-                            //in case of repeatable jobs add the limit parameter
-                            .addQueryParam("limit", limit)
-                            .build();
+                    final String callbackEndpoint = getCallbackEndpoint(job);
+                    final String limit = getLimit(job);
+                    final HTTPRequestCallback callback = buildCallbackRequest(callbackEndpoint, limit);
                     return executeCallback(callback)
                             .onItem().transform(response -> JobExecutionResponse.builder()
                                     .message(response.statusMessage())
-                                    .code(getResponseCode(response))
+                                    .code(String.valueOf(response.statusCode()))
                                     .now()
                                     .jobId(job.getId())
                                     .build())
@@ -147,6 +129,31 @@ public class HttpJobExecutor implements JobExecutor {
                             .build());
                 })
                 .convert().toCompletionStage();
+    }
+
+    private HTTPRequestCallback buildCallbackRequest(String callbackEndpoint, String limit) {
+        return HTTPRequestCallback.builder()
+                .url(callbackEndpoint)
+                .method(HTTPRequestCallback.HTTPMethod.POST)
+                //in case of repeatable jobs add the limit parameter
+                .addQueryParam("limit", limit)
+                .build();
+    }
+
+    private String getLimit(JobDetails job) {
+        return Optional.ofNullable(job.getTrigger())
+                .filter(IntervalTrigger.class::isInstance)
+                .map(interval -> getRepeatableJobCountDown(job))
+                .map(String::valueOf)
+                .orElse(null);
+    }
+
+    private String getCallbackEndpoint(JobDetails job) {
+        return Optional.ofNullable(job.getRecipient())
+                .filter(HTTPRecipient.class::isInstance)
+                .map(HTTPRecipient.class::cast)
+                .map(HTTPRecipient::getEndpoint)
+                .orElseThrow(() -> new IllegalArgumentException("Callback Endpoint is null for job " + job));
     }
 
     private int getRepeatableJobCountDown(JobDetails job) {

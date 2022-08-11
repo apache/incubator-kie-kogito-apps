@@ -16,16 +16,13 @@
     <dependencies>
         <dependency>
             <groupId>org.kie.kogito</groupId>
-            <artifactId>jobs-service-common</artifactId>
+            <artifactId>jobs-service-postgresql</artifactId>
         </dependency>
         <dependency>
             <groupId>org.kie.kogito</groupId>
             <artifactId>quarkus-postgresql-inmemory</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.kie.kogito</groupId>
-            <artifactId>jobs-service-postgresql</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>org.kie.kogito</groupId>
             <artifactId>jobs-service-common</artifactId>

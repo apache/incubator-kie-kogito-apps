@@ -38,7 +38,7 @@ class JobDetailsValidatorTest {
                 .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
                 .trigger(new PointInTimeTrigger())
                 .build();
-        assertThat(JobDetailsValidator.validate(job)).isEqualTo(job);
+        assertThat(JobDetailsValidator.validateToCreate(job)).isEqualTo(job);
     }
 
     @Test
@@ -49,7 +49,7 @@ class JobDetailsValidatorTest {
                 .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
                 .trigger(new PointInTimeTrigger())
                 .build();
-        assertThatThrownBy(() -> JobDetailsValidator.validate(job)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -59,7 +59,7 @@ class JobDetailsValidatorTest {
                 .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
                 .trigger(new PointInTimeTrigger())
                 .build();
-        assertThatThrownBy(() -> JobDetailsValidator.validate(job)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -70,7 +70,7 @@ class JobDetailsValidatorTest {
                 .payload("{\"name\":\"Arthur\"}")
                 .trigger(new PointInTimeTrigger())
                 .build();
-        assertThatThrownBy(() -> JobDetailsValidator.validate(job)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -82,7 +82,7 @@ class JobDetailsValidatorTest {
                 .recipient(new Recipient.HTTPRecipient(null))
                 .trigger(new PointInTimeTrigger())
                 .build();
-        assertThatThrownBy(() -> JobDetailsValidator.validate(job)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -93,7 +93,7 @@ class JobDetailsValidatorTest {
                 .payload("{\"name\":\"Arthur\"}")
                 .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
                 .build();
-        assertThatThrownBy(() -> JobDetailsValidator.validate(job)).isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test

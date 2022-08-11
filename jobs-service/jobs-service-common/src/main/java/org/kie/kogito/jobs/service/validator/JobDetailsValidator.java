@@ -23,11 +23,10 @@ import org.kie.kogito.jobs.service.model.job.Recipient;
 
 public class JobDetailsValidator {
 
-    public static JobDetails validate(JobDetails job) {
+    public static JobDetails validateToCreate(JobDetails job) {
         if (Objects.isNull(job.getPayload())
                 || StringUtils.isEmpty(job.getId())
                 || StringUtils.isEmpty(job.getCorrelationId())
-                || Objects.isNull(job.getRecipient())
                 || Objects.isNull(job.getTrigger())
                 || Objects.isNull(job.getRecipient())
                 || (job.getRecipient() instanceof Recipient.HTTPRecipient && StringUtils.isBlank(((Recipient.HTTPRecipient) job.getRecipient()).getEndpoint()))) {

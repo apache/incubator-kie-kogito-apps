@@ -61,7 +61,7 @@ public class JobResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Uni<ScheduledJob> create(Job job) {
         LOGGER.debug("REST create {}", job);
-        JobDetails jobDetails = JobDetailsValidator.validate(ScheduledJobAdapter.to(ScheduledJob.builder().job(job).build()));
+        JobDetails jobDetails = JobDetailsValidator.validateToCreate(ScheduledJobAdapter.to(ScheduledJob.builder().job(job).build()));
         return Uni.createFrom().publisher(scheduler.schedule(jobDetails))
                 .onItem().ifNull().failWith(new RuntimeException("Failed to schedule job " + job))
                 .onItem().transform(ScheduledJobAdapter::of);
