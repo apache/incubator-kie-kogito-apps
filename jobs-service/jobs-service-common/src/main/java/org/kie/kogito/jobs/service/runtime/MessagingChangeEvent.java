@@ -15,11 +15,11 @@
  */
 package org.kie.kogito.jobs.service.runtime;
 
-public class RuntimeMessagingChangeEvent {
+public class MessagingChangeEvent {
 
     private final boolean enabled;
 
-    public RuntimeMessagingChangeEvent(boolean enabled) {
+    public MessagingChangeEvent(boolean enabled) {
         this.enabled = enabled;
     }
 

@@ -28,7 +28,7 @@ import org.kie.kogito.jobs.service.events.JobDataEvent;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.resource.JobResource;
-import org.kie.kogito.jobs.service.runtime.RuntimeMessagingChangeEvent;
+import org.kie.kogito.jobs.service.runtime.MessagingChangeEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -93,7 +93,7 @@ public abstract class AbstractJobStreams {
         return message;
     }
 
-    protected void onMessagingStatusChange(@Observes RuntimeMessagingChangeEvent event) {
+    protected void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
         this.enabled.set(event.isEnabled());
     }
 }
