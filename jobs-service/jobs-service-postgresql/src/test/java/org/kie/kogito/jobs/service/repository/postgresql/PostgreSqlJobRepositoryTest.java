@@ -256,8 +256,7 @@ class PostgreSqlJobRepositoryTest {
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
                 "payload, type, priority, recipient, trigger, fire_time FROM job_details " +
-                "WHERE status IN ('SCHEDULED', 'RETRY') AND fire_time > " + from.toInstant().toEpochMilli() +
-                " AND fire_time < " + to.toInstant().toEpochMilli() + " ORDER BY priority DESC LIMIT $1";
+                "WHERE status IN ('SCHEDULED', 'RETRY') AND fire_time BETWEEN $2 AND $3 ORDER BY priority DESC LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());
     }
@@ -275,8 +274,7 @@ class PostgreSqlJobRepositoryTest {
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
                 "payload, type, priority, recipient, trigger, fire_time FROM job_details " +
-                "WHERE status IN ('SCHEDULED') AND fire_time > " + from.toInstant().toEpochMilli() +
-                " AND fire_time < " + to.toInstant().toEpochMilli() + " ORDER BY priority DESC LIMIT $1";
+                "WHERE status IN ('SCHEDULED') AND fire_time BETWEEN $2 AND $3 ORDER BY priority DESC LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());
     }
@@ -289,13 +287,8 @@ class PostgreSqlJobRepositoryTest {
 
     @Test
     void createTimeQuery() {
-        ZonedDateTime from = ZonedDateTime.now();
-        ZonedDateTime to = ZonedDateTime.now();
-
-        String timeQuery = PostgreSqlJobRepository.createTimeQuery(from, to);
-        assertEquals("fire_time > " + from.toInstant().toEpochMilli()
-                + " AND fire_time < " + to.toInstant().toEpochMilli(),
-                timeQuery);
+        String timeQuery = PostgreSqlJobRepository.createTimeQuery("$1", "$2");
+        assertEquals("fire_time BETWEEN $1 AND $2", timeQuery);
     }
 
     @Test

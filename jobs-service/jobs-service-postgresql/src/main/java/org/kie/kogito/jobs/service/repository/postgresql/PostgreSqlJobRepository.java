@@ -18,7 +18,6 @@ package org.kie.kogito.jobs.service.repository.postgresql;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
@@ -36,6 +35,8 @@ import org.kie.kogito.jobs.service.repository.impl.BaseReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.jobs.service.stream.JobStreams;
+import org.kie.kogito.jobs.service.utils.DateUtil;
+import org.kie.kogito.timer.Trigger;
 
 import io.smallrye.mutiny.Multi;
 import io.vertx.core.Vertx;
@@ -99,7 +100,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
                         job.getPriority(),
                         recipientMarshaller.marshall(job.getRecipient()),
                         triggerMarshaller.marshall(job.getTrigger()),
-                        Optional.ofNullable(job.getTrigger().hasNextFireTime()).map(Date::getTime).orElse(null))
+                        Optional.ofNullable(job.getTrigger()).map(Trigger::hasNextFireTime).map(DateUtil::dateToOffsetDateTime).orElse(null))
                         .collect(toList())))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)
@@ -154,11 +155,12 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
     @Override
     public PublisherBuilder<JobDetails> findByStatusBetweenDatesOrderByPriority(ZonedDateTime from, ZonedDateTime to, JobStatus... status) {
         String statusQuery = createStatusQuery(status);
-        String timeQuery = createTimeQuery(from, to);
+        String timeQuery = createTimeQuery("$2", "$3");
         String query = " WHERE " + statusQuery + " AND " + timeQuery;
 
         return ReactiveStreams.fromPublisher(
-                client.preparedQuery("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC LIMIT $1").execute(Tuple.of(MAX_ITEMS_QUERY))
+                client.preparedQuery("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC LIMIT $1")
+                        .execute(Tuple.of(MAX_ITEMS_QUERY, from.toOffsetDateTime(), to.toOffsetDateTime()))
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
                         .onItem().transform(this::from));
     }
@@ -168,10 +170,8 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
                 .collect(Collectors.joining("', '", "status IN ('", "')"));
     }
 
-    static String createTimeQuery(ZonedDateTime from, ZonedDateTime to) {
-        String fromQuery = "fire_time > " + from.toInstant().toEpochMilli();
-        String toQuery = "fire_time < " + to.toInstant().toEpochMilli();
-        return fromQuery + " AND " + toQuery;
+    static String createTimeQuery(String indexFrom, String indexTo) {
+        return String.format("fire_time BETWEEN %s AND %s", indexFrom, indexTo);
     }
 
     JobDetails from(Row row) {
