@@ -21,7 +21,7 @@ import java.util.Optional;
 
 import org.kie.kogito.quarkus.addons.common.deployment.TrustyServiceAvailableBuildItem;
 import org.kie.kogito.quarkus.common.deployment.KogitoDataIndexServiceAvailableBuildItem;
-import org.kie.kogito.runtime.tools.quarkus.extension.runtime.config.DevConsoleBuildTimeConfig;
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.config.DevConsoleRuntimeConfig;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.user.UserInfoSupplier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,17 +54,17 @@ public class DevConsoleProcessor {
     @SuppressWarnings("unused")
     @BuildStep(onlyIf = IsDevelopment.class)
     public void collectUsersInfo(final BuildProducer<DevConsoleTemplateInfoBuildItem> devConsoleTemplateInfoBuildItemBuildProducer,
-            final DevConsoleBuildTimeConfig devConsoleBuildTimeConfig) {
+            final DevConsoleRuntimeConfig devConsoleRuntimeConfig) {
         devConsoleTemplateInfoBuildItemBuildProducer.produce(new DevConsoleTemplateInfoBuildItem("userInfo",
-                new UserInfoSupplier(devConsoleBuildTimeConfig.userConfigByUser).get()));
+                new UserInfoSupplier(devConsoleRuntimeConfig.userConfigByUser).get()));
     }
 
     @BuildStep(onlyIf = IsDevelopment.class)
     public void setUpDataIndexServiceURL(
-            final DevConsoleBuildTimeConfig devConsoleBuildTimeConfig,
+            final DevConsoleRuntimeConfig devConsoleRuntimeConfig,
             final BuildProducer<SystemPropertyBuildItem> systemProperties) throws IOException {
 
-        systemProperties.produce(new SystemPropertyBuildItem(DATA_INDEX_CLIENT_KEY, devConsoleBuildTimeConfig.dataIndexConfig.url));
+        systemProperties.produce(new SystemPropertyBuildItem(DATA_INDEX_CLIENT_KEY, devConsoleRuntimeConfig.dataIndexConfig.url));
     }
 
     @BuildStep(onlyIf = IsDevelopment.class)

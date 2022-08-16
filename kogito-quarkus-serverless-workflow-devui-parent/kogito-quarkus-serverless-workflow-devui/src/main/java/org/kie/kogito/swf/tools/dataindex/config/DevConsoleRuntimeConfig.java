@@ -14,26 +14,18 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.runtime.tools.quarkus.extension.runtime.config;
-
-import java.util.Map;
+package org.kie.kogito.swf.tools.dataindex.config;
 
 import io.quarkus.runtime.annotations.ConfigItem;
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 
 @ConfigRoot(name = "", prefix = "kogito", phase = ConfigPhase.BUILD_AND_RUN_TIME_FIXED)
-public class DevConsoleBuildTimeConfig {
+public class DevConsoleRuntimeConfig {
 
     /**
-     * Configuration for Runtime Tools DevConsole services. It should keep data-index url to initialize DataIndexClient accordingly
+     * Configuration for Serverless Workflow DevConsole services. It should keep data-index url to initialize DataIndexClient accordingly
      */
-    @ConfigItem(name = "data-index")
-    public DataIndexConfig dataIndexConfig;
-
-    /**
-     * Mocked users data for the task inbox screen.
-     */
-    @ConfigItem(name = "users")
-    public Map<String, UserConfig> userConfigByUser;
+    @ConfigItem(name = "data-index.url", defaultValue = "http://localhost:8180")
+    public String dataIndexUrl;
 }
