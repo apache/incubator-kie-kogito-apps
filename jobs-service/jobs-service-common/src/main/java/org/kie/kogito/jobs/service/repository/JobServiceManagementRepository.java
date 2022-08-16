@@ -15,21 +15,17 @@
  */
 package org.kie.kogito.jobs.service.repository;
 
-import java.time.ZonedDateTime;
-import java.util.concurrent.CompletionStage;
+import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 
 import io.smallrye.mutiny.Uni;
-import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
-import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
-import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
 
 public interface JobServiceManagementRepository {
 
     Uni<JobServiceManagementInfo> updateKeepAlive(JobServiceManagementInfo info);
-    Uni<JobServiceManagementInfo> removeToken(JobServiceManagementInfo info);
-    Uni<JobServiceManagementInfo> tryUpdateMaster(String id);
 
+    Uni<JobServiceManagementInfo> removeToken(JobServiceManagementInfo info);
+
+    Uni<JobServiceManagementInfo> tryUpdateMaster(String id);
 
     Uni<JobServiceManagementInfo> release(JobServiceManagementInfo info);
 

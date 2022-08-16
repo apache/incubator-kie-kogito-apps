@@ -15,28 +15,31 @@
  */
 package org.kie.kogito.jobs.service.runtime;
 
+import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
-import io.quarkus.runtime.ShutdownEvent;
-import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.core.TimeoutStream;
-import io.vertx.mutiny.core.Vertx;
 import org.eclipse.microprofile.reactive.messaging.spi.Connector;
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
-import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
-import org.kie.kogito.jobs.service.stream.KafkaJobStreams;
-
-import io.quarkus.runtime.StartupEvent;
-import io.smallrye.reactive.messaging.kafka.KafkaConnector;
+import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.quarkus.runtime.ShutdownEvent;
+import io.quarkus.runtime.StartupEvent;
+import io.smallrye.mutiny.Uni;
+import io.smallrye.reactive.messaging.kafka.KafkaConnector;
+import io.vertx.mutiny.core.TimeoutStream;
+import io.vertx.mutiny.core.Vertx;
 
 @ApplicationScoped
 public class JobServiceInstanceManager {
@@ -48,28 +51,37 @@ public class JobServiceInstanceManager {
     KafkaConnector kafkaConnector;
 
     @Inject
-    Event<MessagingChangeEvent> disableMessagingEventEvent;
+    Event<MessagingChangeEvent> messagingChangeEventEvent;
 
     @Inject
     Vertx vertx;
 
-    @Inject
-    JobServiceManagementRepository repository;
+    //    @Inject
+    //    JobServiceManagementRepository repository;
 
-    private JobServiceManagementInfo currenInfo;
+    private AtomicReference<JobServiceManagementInfo> currentInfo = new AtomicReference<>();
 
     private Optional<TimeoutStream> checkMaster = Optional.empty();
+    private Optional<TimeoutStream> heartbeat = Optional.empty();
 
-    private AtomicBoolean mater = new AtomicBoolean(false);
+    private AtomicBoolean master = new AtomicBoolean(false);
 
     void startup(@Observes StartupEvent startupEvent) {
+        //started
         checkMaster = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(5)))
                 .map(s -> s.handler(id -> checkMasterInstance()));
-        currenInfo = buildInfo();
+        //paused
+        heartbeat = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(3)).handler(t -> keepAlive(currentInfo.get())).pause());
+        buildInfo();
 
         if (isMaster()) {
             return;
         }
+
+        disableCommunication();
+    }
+
+    private void disableCommunication() {
         //kafkaConnector.terminate(new Object());
 
         //disable consuming events
@@ -77,26 +89,42 @@ public class JobServiceInstanceManager {
         //kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).unwrap().close());
 
         //disable producing events
-        disableMessagingEventEvent.fire(new MessagingChangeEvent(false));
+        messagingChangeEventEvent.fire(new MessagingChangeEvent(false));
         //kafkaConnector.getProducerChannels().stream().forEach(c -> kafkaConnector.getProducer(c).unwrap().close());
     }
 
-    void onShutdown(@Observes ShutdownEvent shutdownEvent){
+    private void enableCommunication() {
+        //kafkaConnector.terminate(new Object());
+
+        //disable consuming events
+        kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).resume());
+        //kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).unwrap().close());
+
+        //disable producing events
+        messagingChangeEventEvent.fire(new MessagingChangeEvent(true));
+        //kafkaConnector.getProducerChannels().stream().forEach(c -> kafkaConnector.getProducer(c).unwrap().close());
+    }
+
+    Uni<JobServiceManagementInfo> onShutdown(@Observes ShutdownEvent shutdownEvent) {
         LOGGER.info("Shutting down master instance check");
         checkMaster.ifPresent(TimeoutStream::cancel);
+        heartbeat.ifPresent(TimeoutStream::cancel);
+        return release(currentInfo.get());
     }
 
     public boolean isMaster() {
-        return mater.get();
+        return master.get();
     }
 
-    public void checkMasterInstance(){
+    public void checkMasterInstance() {
         LOGGER.info("Checking Master");
 
-        tryBecomeMaster(currenInfo);
+        tryBecomeMaster(currentInfo.get());
     }
 
-    Uni<JobServiceManagementInfo> tryBecomeMaster(JobServiceManagementInfo info){
+    Uni<JobServiceManagementInfo> tryBecomeMaster(JobServiceManagementInfo info) {
+        LOGGER.info("Try to become Master");
+
         //transaction
 
         //select lastKeepAlive > 5s || null || token == null
@@ -105,18 +133,45 @@ public class JobServiceInstanceManager {
         //set master true
 
         //if not set master false
-        return Uni.createFrom().nullItem();
+
+        JobServiceManagementInfo current = this.currentInfo.get();
+
+        //expired
+        if (!Objects.equals(current.getToken(), info.getToken()) || current.getLastKeepAlive().isBefore(ZonedDateTime.now().minusSeconds(6))) {
+            //old instance is not active
+            currentInfo.set(info);
+            master.set(true);
+            LOGGER.info("Master Ok {}", currentInfo.get());
+            enableCommunication();
+            this.heartbeat.ifPresent(s -> s.resume());
+            this.checkMaster.ifPresent(s -> s.pause());
+        } else {
+            LOGGER.info("Not Master");
+            master.set(false);
+            disableCommunication();
+            this.checkMaster.ifPresent(s -> s.resume());
+            this.heartbeat.ifPresent(s -> s.pause());
+        }
+        return Uni.createFrom().item(currentInfo.get());
     }
 
-    Uni<JobServiceManagementInfo> release(JobServiceManagementInfo info){
+    Uni<JobServiceManagementInfo> release(JobServiceManagementInfo info) {
+        LOGGER.info("Release Master");
+
         //set token to null
         //set keepalive to null
 
         //set master false
-        return Uni.createFrom().nullItem();
+
+        currentInfo.set(new JobServiceManagementInfo(null, null));
+        master.set(false);
+
+        return Uni.createFrom().item(currentInfo.get());
     }
 
-    Uni<JobServiceManagementInfo> keepAlive(JobServiceManagementInfo info){
+    Uni<JobServiceManagementInfo> keepAlive(JobServiceManagementInfo info) {
+        LOGGER.info("Heartbeat Master");
+
         //transaction
 
         //if master true
@@ -125,12 +180,21 @@ public class JobServiceInstanceManager {
         //stop keepalive, start become master
 
         //if fails (locked) try again
-        return Uni.createFrom().nullItem();
+
+        if (isMaster()) {
+            JobServiceManagementInfo current = currentInfo.getAndUpdate(i -> {
+                if (Objects.equals(i.getToken(), info.getToken())) {
+                    i.setLastKeepAlive(ZonedDateTime.now());
+                }
+                return i;
+            });
+            return Uni.createFrom().item(current);
+        }
+        return Uni.createFrom().item(currentInfo.get());
     }
 
-    private JobServiceManagementInfo buildInfo(){
-
-
-
+    private JobServiceManagementInfo buildInfo() {
+        currentInfo.set(new JobServiceManagementInfo(DateUtil.now(), UUID.randomUUID()));
+        return currentInfo.get();
     }
 }

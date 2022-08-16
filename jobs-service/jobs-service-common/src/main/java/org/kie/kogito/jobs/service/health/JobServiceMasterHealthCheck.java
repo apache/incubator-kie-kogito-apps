@@ -16,14 +16,16 @@
 
 package org.kie.kogito.jobs.service.health;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import javax.enterprise.event.Observes;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 import org.eclipse.microprofile.health.Readiness;
-import org.kie.kogito.jobs.service.runtime.JobServiceInstanceManager;
+import org.kie.kogito.jobs.service.runtime.MessagingChangeEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,13 +35,16 @@ public class JobServiceMasterHealthCheck implements HealthCheck {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceMasterHealthCheck.class);
 
-    @Inject
-    private JobServiceInstanceManager manager;
+    private AtomicBoolean enabled = new AtomicBoolean(false);
+
+    protected void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
+        this.enabled.set(event.isEnabled());
+    }
 
     @Override
     public HealthCheckResponse call() {
         final HealthCheckResponseBuilder responseBuilder = HealthCheckResponse.named("Master Instance");
-        if (manager.isMaster()) {
+        if (enabled.get()) {
             return responseBuilder.up().build();
         }
         return responseBuilder.down().build();

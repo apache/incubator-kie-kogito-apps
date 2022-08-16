@@ -40,26 +40,28 @@ public abstract class AbstractJobStreams {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJobStreams.class);
 
-    protected ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
-    protected AtomicBoolean enabled;
+    private final AtomicBoolean enabledAtStartup = new AtomicBoolean();;
 
-    protected Emitter<String> emitter;
+    private final AtomicBoolean enabledAtRuntime = new AtomicBoolean();
 
-    protected String url;
+    private Emitter<String> emitter;
+
+    private String url;
 
     protected AbstractJobStreams() {
     }
 
     protected AbstractJobStreams(ObjectMapper objectMapper, boolean enabled, Emitter<String> emitter, String url) {
         this.objectMapper = objectMapper;
-        this.enabled = new AtomicBoolean(enabled);
+        enabledAtStartup.set(enabled);
         this.emitter = emitter;
         this.url = url;
     }
 
     protected void jobStatusChange(JobDetails job) {
-        if (enabled.get()) {
+        if (enabledAtRuntime.get() && enabledAtStartup.get()) {
             try {
                 JobDataEvent event = JobDataEvent
                         .builder()
@@ -94,6 +96,6 @@ public abstract class AbstractJobStreams {
     }
 
     protected void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
-        this.enabled.set(event.isEnabled());
+        this.enabledAtRuntime.set(event.isEnabled());
     }
 }

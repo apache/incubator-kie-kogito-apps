@@ -27,5 +27,36 @@ public class JobServiceManagementInfo {
     private String instanceName;
     private String instanceIp;
 
+    public JobServiceManagementInfo(ZonedDateTime lastKeepAlive, UUID token) {
+        this.lastKeepAlive = lastKeepAlive;
+        this.token = token;
+    }
 
+    public UUID getId() {
+        return id;
+    }
+
+    public ZonedDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public ZonedDateTime getLastKeepAlive() {
+        return lastKeepAlive;
+    }
+
+    public UUID getToken() {
+        return token;
+    }
+
+    public String getInstanceName() {
+        return instanceName;
+    }
+
+    public String getInstanceIp() {
+        return instanceIp;
+    }
+
+    public void setLastKeepAlive(ZonedDateTime lastKeepAlive) {
+        this.lastKeepAlive = lastKeepAlive;
+    }
 }

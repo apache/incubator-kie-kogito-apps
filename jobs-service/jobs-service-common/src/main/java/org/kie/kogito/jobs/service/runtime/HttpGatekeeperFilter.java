@@ -15,45 +15,32 @@
  */
 package org.kie.kogito.jobs.service.runtime;
 
-import java.io.IOException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.inject.Inject;
-import javax.ws.rs.container.ContainerRequestContext;
-import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.ext.Provider;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
 
 import io.quarkus.vertx.web.RouteFilter;
-import io.vertx.core.http.HttpServerRequest;
 import io.vertx.ext.web.RoutingContext;
 
-@Provider
-public class HttpGatekeeperFilter implements ContainerRequestFilter {
+@ApplicationScoped
+public class HttpGatekeeperFilter {
 
-    @Context
-    UriInfo info;
+    private AtomicBoolean enabled = new AtomicBoolean(false);
 
-    @Context
-    HttpServerRequest request;
-
-    @Inject
-    JobServiceInstanceManager manager;
-
-    @Override
-    public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-        if (!manager.isMaster()) {
-            //            containerRequestContext.abortWith(Response.serverError().entity(new ErrorResponse("Job Service instance is not master.")).build());
-        }
+    protected void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
+        this.enabled.set(event.isEnabled());
     }
 
     @RouteFilter(100)
-    void myFilter(RoutingContext rc) {
-        //        if (!manager.isMaster()) {
-        //            rc.response().setStatusCode(500);
-        //            rc.end();
-        //            return;
-        //        }
+    void masterFilter(RoutingContext rc) {
+        if (!enabled.get() && !rc.request().path().contains("q/health")) {
+            //block
+            rc.response().setStatusCode(500);
+            rc.end("Not master");
+            return;
+        }
+        //continue
         rc.next();
     }
 }
