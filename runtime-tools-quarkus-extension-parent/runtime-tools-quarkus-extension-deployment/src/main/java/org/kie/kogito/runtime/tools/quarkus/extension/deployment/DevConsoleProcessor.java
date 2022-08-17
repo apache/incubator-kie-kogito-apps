@@ -23,8 +23,6 @@ import org.kie.kogito.quarkus.addons.common.deployment.TrustyServiceAvailableBui
 import org.kie.kogito.quarkus.common.deployment.KogitoDataIndexServiceAvailableBuildItem;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.config.DevConsoleRuntimeConfig;
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.user.UserInfoSupplier;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import io.quarkus.deployment.IsDevelopment;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -48,8 +46,6 @@ public class DevConsoleProcessor {
 
     private static final String DATA_INDEX_CLIENT_KEY = "quarkus.rest-client.\"" + DATA_INDEX_CONFIG_KEY + "\".url";
     private static final String STATIC_RESOURCES_PATH = "dev-static/";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(DevConsoleProcessor.class);
 
     @SuppressWarnings("unused")
     @BuildStep(onlyIf = IsDevelopment.class)

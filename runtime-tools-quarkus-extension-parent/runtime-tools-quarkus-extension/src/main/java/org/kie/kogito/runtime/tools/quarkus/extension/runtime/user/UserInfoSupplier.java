@@ -16,6 +16,7 @@
 
 package org.kie.kogito.runtime.tools.quarkus.extension.runtime.user;
 
+import java.util.Collections;
 import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -31,6 +32,10 @@ public class UserInfoSupplier implements Supplier<UserInfo> {
     }
 
     public UserInfo get() {
+        if (userConfigByUser == null || userConfigByUser.size() == 0) {
+            return new UserInfo(Collections.emptyList());
+        }
+
         return new UserInfo(userConfigByUser.entrySet().stream()
                 .map(entry -> new User(entry.getKey(), entry.getValue().groups)).collect(Collectors.toList()));
     }
