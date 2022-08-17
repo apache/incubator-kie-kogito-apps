@@ -20,10 +20,11 @@ import java.util.function.Function;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import io.quarkus.arc.DefaultBean;
-import io.smallrye.mutiny.Uni;
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
+
+import io.quarkus.arc.DefaultBean;
+import io.smallrye.mutiny.Uni;
 
 @DefaultBean
 @ApplicationScoped

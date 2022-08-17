@@ -66,7 +66,7 @@ public class JobServiceInstanceManager {
 
     private AtomicBoolean master = new AtomicBoolean(false);
 
-    void startup(@Observes StartupEvent startupEvent) {
+    Uni<JobServiceManagementInfo> startup(@Observes StartupEvent startupEvent) {
         buildInfo();
         //started
         checkMaster = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(5))
@@ -79,10 +79,9 @@ public class JobServiceInstanceManager {
                         .subscribe().with(i -> LOGGER.info("Heartbeat"),
                                 ex -> LOGGER.error("Error on heartbeat", ex)))
                 .pause());
-        if (isMaster()) {
-            return;
-        }
-        disableCommunication();
+
+        //initial check
+        return tryBecomeMaster(currentInfo.get());
     }
 
     private void disableCommunication() {

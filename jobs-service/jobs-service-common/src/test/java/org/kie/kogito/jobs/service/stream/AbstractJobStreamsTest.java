@@ -25,6 +25,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.jobs.service.events.JobDataEvent;
+import org.kie.kogito.jobs.service.management.MessagingChangeEvent;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
@@ -82,6 +83,7 @@ abstract class AbstractJobStreamsTest<T extends AbstractJobStreams> {
     @BeforeEach
     void setUp() {
         jobStreams = spy(createJobStreams());
+        jobStreams.onMessagingStatusChange(new MessagingChangeEvent(true));
     }
 
     protected abstract T createJobStreams();
