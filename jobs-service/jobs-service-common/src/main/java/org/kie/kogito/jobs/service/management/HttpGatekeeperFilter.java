@@ -13,12 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.runtime;
+package org.kie.kogito.jobs.service.management;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 import io.quarkus.vertx.web.RouteFilter;
 import io.vertx.ext.web.RoutingContext;
@@ -28,16 +30,20 @@ public class HttpGatekeeperFilter {
 
     private AtomicBoolean enabled = new AtomicBoolean(false);
 
+    @ConfigProperty(name = "quarkus.smallrye-health.root-path", defaultValue = "/q/health")
+    private String healthCheckPath;
+
     protected void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
         this.enabled.set(event.isEnabled());
     }
 
     @RouteFilter(100)
-    void masterFilter(RoutingContext rc) {
-        if (!enabled.get() && !rc.request().path().contains("q/health")) {
+    void masterFilter(RoutingContext rc) throws Exception {
+        if (!enabled.get() && !rc.request().path().contains(healthCheckPath)) {
             //block
             rc.response().setStatusCode(500);
-            rc.end("Not master");
+            rc.response().setStatusMessage("Job Service instance is not master");
+            rc.end();
             return;
         }
         //continue

@@ -25,10 +25,10 @@ import javax.enterprise.event.Observes;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.jobs.service.events.JobDataEvent;
+import org.kie.kogito.jobs.service.management.MessagingChangeEvent;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.resource.JobResource;
-import org.kie.kogito.jobs.service.runtime.MessagingChangeEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

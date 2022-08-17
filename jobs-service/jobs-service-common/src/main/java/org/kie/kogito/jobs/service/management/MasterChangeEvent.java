@@ -13,17 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.runtime;
+package org.kie.kogito.jobs.service.management;
 
-public class MessagingChangeEvent {
+public class MasterChangeEvent {
 
-    private final boolean enabled;
-
-    public MessagingChangeEvent(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
 }

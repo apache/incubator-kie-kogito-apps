@@ -15,20 +15,20 @@
  */
 package org.kie.kogito.jobs.service.repository;
 
+import java.util.function.Function;
+
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 
 import io.smallrye.mutiny.Uni;
 
 public interface JobServiceManagementRepository {
 
-    Uni<JobServiceManagementInfo> updateKeepAlive(JobServiceManagementInfo info);
+    Uni<JobServiceManagementInfo> get(Function<Uni<JobServiceManagementInfo>, Uni<JobServiceManagementInfo>> compute);
 
-    Uni<JobServiceManagementInfo> removeToken(JobServiceManagementInfo info);
+    Uni<JobServiceManagementInfo> get(String token);
 
-    Uni<JobServiceManagementInfo> tryUpdateMaster(String id);
+    Uni<JobServiceManagementInfo> set(JobServiceManagementInfo info);
 
-    Uni<JobServiceManagementInfo> release(JobServiceManagementInfo info);
-
-    Uni<JobServiceManagementInfo> keepAlive(JobServiceManagementInfo info);
+    Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info);
 
 }

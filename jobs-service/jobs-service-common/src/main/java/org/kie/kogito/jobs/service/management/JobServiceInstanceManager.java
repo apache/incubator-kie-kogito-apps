@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.runtime;
+package org.kie.kogito.jobs.service.management;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -30,6 +30,7 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.reactive.messaging.spi.Connector;
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
+import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,8 +57,8 @@ public class JobServiceInstanceManager {
     @Inject
     Vertx vertx;
 
-    //    @Inject
-    //    JobServiceManagementRepository repository;
+    @Inject
+    JobServiceManagementRepository repository;
 
     private AtomicReference<JobServiceManagementInfo> currentInfo = new AtomicReference<>();
 
@@ -67,17 +68,21 @@ public class JobServiceInstanceManager {
     private AtomicBoolean master = new AtomicBoolean(false);
 
     void startup(@Observes StartupEvent startupEvent) {
-        //started
-        checkMaster = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(5)))
-                .map(s -> s.handler(id -> checkMasterInstance()));
-        //paused
-        heartbeat = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(3)).handler(t -> keepAlive(currentInfo.get())).pause());
         buildInfo();
-
+        //started
+        checkMaster = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(5))
+                .handler(id -> tryBecomeMaster(currentInfo.get())
+                        .subscribe().with(i -> LOGGER.info("Checking Master"),
+                                ex -> LOGGER.error("Error checking Master", ex))));
+        //paused
+        heartbeat = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(3))
+                .handler(t -> heartbeat(currentInfo.get())
+                        .subscribe().with(i -> LOGGER.info("Heartbeat"),
+                                ex -> LOGGER.error("Error on heartbeat", ex)))
+                .pause());
         if (isMaster()) {
             return;
         }
-
         disableCommunication();
     }
 
@@ -91,18 +96,19 @@ public class JobServiceInstanceManager {
         //disable producing events
         messagingChangeEventEvent.fire(new MessagingChangeEvent(false));
         //kafkaConnector.getProducerChannels().stream().forEach(c -> kafkaConnector.getProducer(c).unwrap().close());
+
+        LOGGER.info("Disabled communication not master instance");
     }
 
     private void enableCommunication() {
-        //kafkaConnector.terminate(new Object());
-
         //disable consuming events
         kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).resume());
         //kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).unwrap().close());
 
         //disable producing events
         messagingChangeEventEvent.fire(new MessagingChangeEvent(true));
-        //kafkaConnector.getProducerChannels().stream().forEach(c -> kafkaConnector.getProducer(c).unwrap().close());
+
+        LOGGER.info("Enabled communication for master instance");
     }
 
     Uni<JobServiceManagementInfo> onShutdown(@Observes ShutdownEvent shutdownEvent) {
@@ -112,14 +118,8 @@ public class JobServiceInstanceManager {
         return release(currentInfo.get());
     }
 
-    public boolean isMaster() {
+    protected boolean isMaster() {
         return master.get();
-    }
-
-    public void checkMasterInstance() {
-        LOGGER.info("Checking Master");
-
-        tryBecomeMaster(currentInfo.get());
     }
 
     Uni<JobServiceManagementInfo> tryBecomeMaster(JobServiceManagementInfo info) {
@@ -134,26 +134,62 @@ public class JobServiceInstanceManager {
 
         //if not set master false
 
-        JobServiceManagementInfo current = this.currentInfo.get();
-
+        Uni<JobServiceManagementInfo> res = repository.get((current) ->
         //expired
-        if (!Objects.equals(current.getToken(), info.getToken()) || current.getLastKeepAlive().isBefore(ZonedDateTime.now().minusSeconds(6))) {
-            //old instance is not active
-            currentInfo.set(info);
-            master.set(true);
-            LOGGER.info("Master Ok {}", currentInfo.get());
-            enableCommunication();
-            this.heartbeat.ifPresent(s -> s.resume());
-            this.checkMaster.ifPresent(s -> s.pause());
-        } else {
-            LOGGER.info("Not Master");
-            master.set(false);
-            disableCommunication();
-            this.checkMaster.ifPresent(s -> s.resume());
-            this.heartbeat.ifPresent(s -> s.pause());
-        }
-        return Uni.createFrom().item(currentInfo.get());
+        current.onItem().invoke(c -> {
+            if (Objects.nonNull(c) && !Objects.equals(c.getToken(), info.getToken()) || c.getLastKeepAlive().isBefore(ZonedDateTime.now().minusSeconds(1))) {
+                //old instance is not active
+                repository.set(info);
+
+                master.set(true);
+                LOGGER.info("Master Ok {}", info);
+                enableCommunication();
+                this.heartbeat.ifPresent(s -> s.resume());
+                this.checkMaster.ifPresent(s -> s.pause());
+            } else {
+                LOGGER.info("Not Master");
+                master.set(false);
+                disableCommunication();
+                this.checkMaster.ifPresent(s -> s.resume());
+                this.heartbeat.ifPresent(s -> s.pause());
+            }
+        }));
+
+        return res;
     }
+
+    //    Uni<JobServiceManagementInfo> tryBecomeMaster(JobServiceManagementInfo info) {
+    //        LOGGER.info("Try to become Master");
+    //
+    //        //transaction
+    //
+    //        //select lastKeepAlive > 5s || null || token == null
+    //        //if match = last instance died
+    //        //update with info + keepalive
+    //        //set master true
+    //
+    //        //if not set master false
+    //
+    //        JobServiceManagementInfo current = this.currentInfo.get();
+    //
+    //        //expired
+    //        if (!Objects.equals(current.getToken(), info.getToken()) || current.getLastKeepAlive().isBefore(ZonedDateTime.now().minusSeconds(6))) {
+    //            //old instance is not active
+    //            currentInfo.set(info);
+    //            master.set(true);
+    //            LOGGER.info("Master Ok {}", currentInfo.get());
+    //            enableCommunication();
+    //            this.heartbeat.ifPresent(s -> s.resume());
+    //            this.checkMaster.ifPresent(s -> s.pause());
+    //        } else {
+    //            LOGGER.info("Not Master");
+    //            master.set(false);
+    //            disableCommunication();
+    //            this.checkMaster.ifPresent(s -> s.resume());
+    //            this.heartbeat.ifPresent(s -> s.pause());
+    //        }
+    //        return Uni.createFrom().item(currentInfo.get());
+    //    }
 
     Uni<JobServiceManagementInfo> release(JobServiceManagementInfo info) {
         LOGGER.info("Release Master");
@@ -163,13 +199,11 @@ public class JobServiceInstanceManager {
 
         //set master false
 
-        currentInfo.set(new JobServiceManagementInfo(null, null));
-        master.set(false);
-
-        return Uni.createFrom().item(currentInfo.get());
+        return repository.set(new JobServiceManagementInfo(null, null))
+                .onItem().invoke(i -> master.set(false));
     }
 
-    Uni<JobServiceManagementInfo> keepAlive(JobServiceManagementInfo info) {
+    Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
         LOGGER.info("Heartbeat Master");
 
         //transaction
@@ -182,15 +216,9 @@ public class JobServiceInstanceManager {
         //if fails (locked) try again
 
         if (isMaster()) {
-            JobServiceManagementInfo current = currentInfo.getAndUpdate(i -> {
-                if (Objects.equals(i.getToken(), info.getToken())) {
-                    i.setLastKeepAlive(ZonedDateTime.now());
-                }
-                return i;
-            });
-            return Uni.createFrom().item(current);
+            return repository.heartbeat(info);
         }
-        return Uni.createFrom().item(currentInfo.get());
+        return Uni.createFrom().nullItem();
     }
 
     private JobServiceManagementInfo buildInfo() {
