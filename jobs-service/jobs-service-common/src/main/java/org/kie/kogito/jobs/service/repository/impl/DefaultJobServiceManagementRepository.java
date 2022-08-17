@@ -15,23 +15,21 @@
  */
 package org.kie.kogito.jobs.service.repository.impl;
 
-import java.time.ZonedDateTime;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
-import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
-
 import io.quarkus.arc.DefaultBean;
 import io.smallrye.mutiny.Uni;
+import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
+import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
 
 @DefaultBean
 @ApplicationScoped
 public class DefaultJobServiceManagementRepository implements JobServiceManagementRepository {
 
-    private AtomicReference<JobServiceManagementInfo> instance = new AtomicReference<>(new JobServiceManagementInfo(null, null));
+    private AtomicReference<JobServiceManagementInfo> instance = new AtomicReference<>(new JobServiceManagementInfo(null, null, null));
 
     @Override
     public Uni<JobServiceManagementInfo> get(Function<Uni<JobServiceManagementInfo>, Uni<JobServiceManagementInfo>> compute) {
@@ -45,13 +43,11 @@ public class DefaultJobServiceManagementRepository implements JobServiceManageme
 
     @Override
     public Uni<JobServiceManagementInfo> set(JobServiceManagementInfo info) {
-        instance.set(info);
         return Uni.createFrom().item(info);
     }
 
     @Override
     public Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
-        instance.get().setLastKeepAlive(ZonedDateTime.now());
         return Uni.createFrom().item(info);
     }
 }

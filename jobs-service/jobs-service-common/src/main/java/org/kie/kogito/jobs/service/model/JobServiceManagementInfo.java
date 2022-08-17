@@ -16,20 +16,24 @@
 package org.kie.kogito.jobs.service.model;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 public class JobServiceManagementInfo {
 
     private UUID id;
-    private ZonedDateTime timestamp;
-    private ZonedDateTime lastKeepAlive;
+    private ZonedDateTime lastHeartbeat;
     private UUID token;
+
+    private ZonedDateTime timestamp;
     private String instanceName;
     private String instanceIp;
 
-    public JobServiceManagementInfo(ZonedDateTime lastKeepAlive, UUID token) {
-        this.lastKeepAlive = lastKeepAlive;
-        this.token = token;
+    public JobServiceManagementInfo(String id, String token, ZonedDateTime heartbeat) {
+        this.id = Optional.ofNullable(id).map(UUID::fromString).orElse(null);
+        this.token = Optional.ofNullable(token).map(UUID::fromString).orElse(null);
+        this.lastHeartbeat = heartbeat;
     }
 
     public UUID getId() {
@@ -40,8 +44,8 @@ public class JobServiceManagementInfo {
         return timestamp;
     }
 
-    public ZonedDateTime getLastKeepAlive() {
-        return lastKeepAlive;
+    public ZonedDateTime getLastHeartbeat() {
+        return lastHeartbeat;
     }
 
     public UUID getToken() {
@@ -56,7 +60,19 @@ public class JobServiceManagementInfo {
         return instanceIp;
     }
 
-    public void setLastKeepAlive(ZonedDateTime lastKeepAlive) {
-        this.lastKeepAlive = lastKeepAlive;
+    public void setLastHeartbeat(ZonedDateTime lastHeartbeat) {
+        this.lastHeartbeat = lastHeartbeat;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", JobServiceManagementInfo.class.getSimpleName() + "[", "]")
+                .add("id=" + id)
+                .add("lastHeartbeat=" + lastHeartbeat)
+                .add("token=" + token)
+                .add("timestamp=" + timestamp)
+                .add("instanceName='" + instanceName + "'")
+                .add("instanceIp='" + instanceIp + "'")
+                .toString();
     }
 }

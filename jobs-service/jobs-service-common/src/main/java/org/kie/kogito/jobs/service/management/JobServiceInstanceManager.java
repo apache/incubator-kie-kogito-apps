@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.jobs.service.management;
 
-import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -137,7 +136,8 @@ public class JobServiceInstanceManager {
         Uni<JobServiceManagementInfo> res = repository.get((current) ->
         //expired
         current.onItem().invoke(c -> {
-            if (Objects.nonNull(c) && !Objects.equals(c.getToken(), info.getToken()) || c.getLastKeepAlive().isBefore(ZonedDateTime.now().minusSeconds(1))) {
+            if (Objects.isNull(c) || Objects.isNull(c.getToken()) || Objects.equals(c.getToken(), info.getToken()) || Objects.isNull(c.getLastHeartbeat())
+                    || c.getLastHeartbeat().isBefore(DateUtil.now().minusSeconds(10))) {
                 //old instance is not active
                 repository.set(info);
 
@@ -146,7 +146,7 @@ public class JobServiceInstanceManager {
                 enableCommunication();
                 this.heartbeat.ifPresent(s -> s.resume());
                 this.checkMaster.ifPresent(s -> s.pause());
-            } else {
+            } else if (isMaster()) {
                 LOGGER.info("Not Master");
                 master.set(false);
                 disableCommunication();
@@ -158,39 +158,6 @@ public class JobServiceInstanceManager {
         return res;
     }
 
-    //    Uni<JobServiceManagementInfo> tryBecomeMaster(JobServiceManagementInfo info) {
-    //        LOGGER.info("Try to become Master");
-    //
-    //        //transaction
-    //
-    //        //select lastKeepAlive > 5s || null || token == null
-    //        //if match = last instance died
-    //        //update with info + keepalive
-    //        //set master true
-    //
-    //        //if not set master false
-    //
-    //        JobServiceManagementInfo current = this.currentInfo.get();
-    //
-    //        //expired
-    //        if (!Objects.equals(current.getToken(), info.getToken()) || current.getLastKeepAlive().isBefore(ZonedDateTime.now().minusSeconds(6))) {
-    //            //old instance is not active
-    //            currentInfo.set(info);
-    //            master.set(true);
-    //            LOGGER.info("Master Ok {}", currentInfo.get());
-    //            enableCommunication();
-    //            this.heartbeat.ifPresent(s -> s.resume());
-    //            this.checkMaster.ifPresent(s -> s.pause());
-    //        } else {
-    //            LOGGER.info("Not Master");
-    //            master.set(false);
-    //            disableCommunication();
-    //            this.checkMaster.ifPresent(s -> s.resume());
-    //            this.heartbeat.ifPresent(s -> s.pause());
-    //        }
-    //        return Uni.createFrom().item(currentInfo.get());
-    //    }
-
     Uni<JobServiceManagementInfo> release(JobServiceManagementInfo info) {
         LOGGER.info("Release Master");
 
@@ -199,7 +166,7 @@ public class JobServiceInstanceManager {
 
         //set master false
 
-        return repository.set(new JobServiceManagementInfo(null, null))
+        return repository.set(new JobServiceManagementInfo(null, null, null))
                 .onItem().invoke(i -> master.set(false));
     }
 
@@ -222,7 +189,7 @@ public class JobServiceInstanceManager {
     }
 
     private JobServiceManagementInfo buildInfo() {
-        currentInfo.set(new JobServiceManagementInfo(DateUtil.now(), UUID.randomUUID()));
+        currentInfo.set(new JobServiceManagementInfo(UUID.fromString("1cc6cc3d-f8af-4851-89ba-f0b9837898ac").toString(), UUID.randomUUID().toString(), DateUtil.now()));
         return currentInfo.get();
     }
 }
