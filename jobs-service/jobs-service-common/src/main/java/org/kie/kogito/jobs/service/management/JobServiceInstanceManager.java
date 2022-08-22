@@ -69,12 +69,12 @@ public class JobServiceInstanceManager {
     Uni<JobServiceManagementInfo> startup(@Observes StartupEvent startupEvent) {
         buildInfo();
         //started
-        checkMaster = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(5))
+        checkMaster = Optional.of(vertx.periodicStream(TimeUnit.MILLISECONDS.toMillis(50))
                 .handler(id -> tryBecomeMaster(currentInfo.get())
                         .subscribe().with(i -> LOGGER.info("Checking Master"),
                                 ex -> LOGGER.error("Error checking Master", ex))));
         //paused
-        heartbeat = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(3))
+        heartbeat = Optional.of(vertx.periodicStream(TimeUnit.MILLISECONDS.toMillis(100))
                 .handler(t -> heartbeat(currentInfo.get())
                         .subscribe().with(i -> LOGGER.info("Heartbeat"),
                                 ex -> LOGGER.error("Error on heartbeat", ex)))
@@ -132,19 +132,22 @@ public class JobServiceInstanceManager {
 
         //if not set master false
 
-        Uni<JobServiceManagementInfo> res = repository.get((current) ->
-        //expired
-        current.onItem().invoke(c -> {
+        return repository.getAndUpdate(currentInfo.get().getId().toString(), c -> {
+
+            //expired
+            LOGGER.info("Master process starting {}", info);
+
             if (Objects.isNull(c) || Objects.isNull(c.getToken()) || Objects.equals(c.getToken(), info.getToken()) || Objects.isNull(c.getLastHeartbeat())
                     || c.getLastHeartbeat().isBefore(DateUtil.now().minusSeconds(10))) {
                 //old instance is not active
-                repository.set(info);
-
+                info.setLastHeartbeat(DateUtil.now());
+                LOGGER.info("SET Master process {}", info);
                 master.set(true);
                 LOGGER.info("Master Ok {}", info);
                 enableCommunication();
                 this.heartbeat.ifPresent(s -> s.resume());
                 this.checkMaster.ifPresent(s -> s.pause());
+                return info;
             } else if (isMaster()) {
                 LOGGER.info("Not Master");
                 master.set(false);
@@ -152,9 +155,8 @@ public class JobServiceInstanceManager {
                 this.checkMaster.ifPresent(s -> s.resume());
                 this.heartbeat.ifPresent(s -> s.pause());
             }
-        }));
-
-        return res;
+            return null;
+        });
     }
 
     Uni<JobServiceManagementInfo> release(JobServiceManagementInfo info) {

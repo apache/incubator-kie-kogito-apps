@@ -16,7 +16,6 @@
 package org.kie.kogito.jobs.service.repository.impl;
 
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Function;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -31,11 +30,6 @@ import io.smallrye.mutiny.Uni;
 public class DefaultJobServiceManagementRepository implements JobServiceManagementRepository {
 
     private AtomicReference<JobServiceManagementInfo> instance = new AtomicReference<>(new JobServiceManagementInfo(null, null, null));
-
-    @Override
-    public Uni<JobServiceManagementInfo> get(Function<Uni<JobServiceManagementInfo>, Uni<JobServiceManagementInfo>> compute) {
-        return compute.apply(Uni.createFrom().item(instance.get()));
-    }
 
     @Override
     public Uni<JobServiceManagementInfo> get(String token) {
