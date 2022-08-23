@@ -23,10 +23,10 @@ import org.kie.kogito.runtime.tools.quarkus.extension.runtime.config.UserConfig;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserInfoSupplierTest {
+class UserInfoSupplierTest {
 
     @Test
-    public void testNullGetUserInfo() {
+    void testNullGetUserInfo() {
         final UserInfoSupplier userInfoSupplier = new UserInfoSupplier(null);
         final UserInfo userInfo = userInfoSupplier.get();
 
@@ -35,7 +35,7 @@ public class UserInfoSupplierTest {
     }
 
     @Test
-    public void testEmptyGetUserInfo() {
+    void testEmptyGetUserInfo() {
         final UserInfoSupplier userInfoSupplier = new UserInfoSupplier(Collections.emptyMap());
         final UserInfo userInfo = userInfoSupplier.get();
 
@@ -44,7 +44,7 @@ public class UserInfoSupplierTest {
     }
 
     @Test
-    public void testNotEmptyGetUserInfo() {
+    void testNotEmptyGetUserInfo() {
         final UserConfig userA = new UserConfig();
         userA.groups = Collections.singletonList("admin");
         final UserConfig userB = new UserConfig();
