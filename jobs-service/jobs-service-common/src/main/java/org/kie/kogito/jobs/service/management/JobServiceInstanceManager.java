@@ -45,6 +45,9 @@ import io.vertx.mutiny.core.Vertx;
 public class JobServiceInstanceManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceInstanceManager.class);
+    public static final long HEARTBEAT_INTERVAL_IN_SECONDS = TimeUnit.SECONDS.toMillis(1);
+    public static final long MASTER_CHECK_INTERVAL_IN_SECONDS = TimeUnit.SECONDS.toMillis(1);
+    public static final String MASTER_MANAGEMENT_ID = "1cc6cc3d-f8af-4851-89ba-f0b9837898ac";
 
     @Inject
     @Connector(value = "smallrye-kafka")
@@ -59,34 +62,32 @@ public class JobServiceInstanceManager {
     @Inject
     JobServiceManagementRepository repository;
 
-    private AtomicReference<JobServiceManagementInfo> currentInfo = new AtomicReference<>();
-
     private Optional<TimeoutStream> checkMaster = Optional.empty();
+
     private Optional<TimeoutStream> heartbeat = Optional.empty();
 
-    private AtomicBoolean master = new AtomicBoolean(false);
+    private final AtomicReference<JobServiceManagementInfo> currentInfo = new AtomicReference<>();
+
+    private final AtomicBoolean master = new AtomicBoolean(false);
 
     Uni<JobServiceManagementInfo> startup(@Observes StartupEvent startupEvent) {
         buildInfo();
         //started
-        checkMaster = Optional.of(vertx.periodicStream(TimeUnit.MILLISECONDS.toMillis(50))
+        checkMaster = Optional.of(vertx.periodicStream(MASTER_CHECK_INTERVAL_IN_SECONDS)
                 .handler(id -> tryBecomeMaster(currentInfo.get())
                         .subscribe().with(i -> LOGGER.info("Checking Master"),
                                 ex -> LOGGER.error("Error checking Master", ex))));
         //paused
-        heartbeat = Optional.of(vertx.periodicStream(TimeUnit.MILLISECONDS.toMillis(100))
+        heartbeat = Optional.of(vertx.periodicStream(HEARTBEAT_INTERVAL_IN_SECONDS)
                 .handler(t -> heartbeat(currentInfo.get())
                         .subscribe().with(i -> LOGGER.info("Heartbeat"),
                                 ex -> LOGGER.error("Error on heartbeat", ex)))
                 .pause());
-
         //initial check
         return tryBecomeMaster(currentInfo.get());
     }
 
     private void disableCommunication() {
-        //kafkaConnector.terminate(new Object());
-
         //disable consuming events
         kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).pause());
         //kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).unwrap().close());
@@ -101,7 +102,6 @@ public class JobServiceInstanceManager {
     private void enableCommunication() {
         //disable consuming events
         kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).resume());
-        //kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).unwrap().close());
 
         //disable producing events
         messagingChangeEventEvent.fire(new MessagingChangeEvent(true));
@@ -122,18 +122,7 @@ public class JobServiceInstanceManager {
 
     Uni<JobServiceManagementInfo> tryBecomeMaster(JobServiceManagementInfo info) {
         LOGGER.info("Try to become Master");
-
-        //transaction
-
-        //select lastKeepAlive > 5s || null || token == null
-        //if match = last instance died
-        //update with info + keepalive
-        //set master true
-
-        //if not set master false
-
-        return repository.getAndUpdate(currentInfo.get().getId().toString(), c -> {
-
+        return repository.getAndUpdate(currentInfo.get().getId(), c -> {
             //expired
             LOGGER.info("Master process starting {}", info);
 
@@ -161,28 +150,12 @@ public class JobServiceInstanceManager {
 
     Uni<JobServiceManagementInfo> release(JobServiceManagementInfo info) {
         LOGGER.info("Release Master");
-
-        //set token to null
-        //set keepalive to null
-
-        //set master false
-
         return repository.set(new JobServiceManagementInfo(null, null, null))
                 .onItem().invoke(i -> master.set(false));
     }
 
     Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
         LOGGER.info("Heartbeat Master");
-
-        //transaction
-
-        //if master true
-        //compare token with db if matches, update keepalive time
-        //if not match, set master to false
-        //stop keepalive, start become master
-
-        //if fails (locked) try again
-
         if (isMaster()) {
             return repository.heartbeat(info);
         }
@@ -190,7 +163,11 @@ public class JobServiceInstanceManager {
     }
 
     private JobServiceManagementInfo buildInfo() {
-        currentInfo.set(new JobServiceManagementInfo(UUID.fromString("1cc6cc3d-f8af-4851-89ba-f0b9837898ac").toString(), UUID.randomUUID().toString(), DateUtil.now()));
+        currentInfo.set(new JobServiceManagementInfo(UUID.fromString(MASTER_MANAGEMENT_ID).toString(), generateToken(), DateUtil.now()));
         return currentInfo.get();
+    }
+
+    private String generateToken() {
+        return UUID.randomUUID().toString();
     }
 }

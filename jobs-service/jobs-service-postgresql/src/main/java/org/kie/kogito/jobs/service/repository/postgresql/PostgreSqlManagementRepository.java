@@ -18,45 +18,32 @@ package org.kie.kogito.jobs.service.repository.postgresql;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.eclipse.microprofile.context.ManagedExecutor;
-import org.eclipse.microprofile.context.ThreadContext;
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.smallrye.context.api.ThreadContextConfig;
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.Row;
 import io.vertx.mutiny.sqlclient.RowSet;
 import io.vertx.mutiny.sqlclient.SqlClient;
-import io.vertx.mutiny.sqlclient.SqlConnection;
 import io.vertx.mutiny.sqlclient.Tuple;
 
 @ApplicationScoped
 public class PostgreSqlManagementRepository implements JobServiceManagementRepository {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostgreSqlManagementRepository.class);
+
     private PgPool client;
-
-    @Inject
-    @ThreadContextConfig
-    ThreadContext sharedConfiguredThreadContext;
-
-    @Inject
-    ManagedExecutor managedExecutor;
-    private Supplier<SqlConnection> connectionSupplier;
 
     @Inject
     public PostgreSqlManagementRepository(PgPool client) {
@@ -105,8 +92,8 @@ public class PostgreSqlManagementRepository implements JobServiceManagementRepos
                 "UPDATE SET token = $2, last_heartbeat = $3 " +
                 "RETURNING id, token, last_heartbeat")
                 .execute(Tuple.tuple(Stream.of(
-                        Optional.ofNullable(info.getId()).map(UUID::toString).orElse(null),
-                        Optional.ofNullable(info.getToken()).map(UUID::toString).orElse(null),
+                        info.getId(),
+                        info.getToken(),
                         Optional.ofNullable(info.getLastHeartbeat()).map(ZonedDateTime::toOffsetDateTime).orElse(null)).collect(Collectors.toList())))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)

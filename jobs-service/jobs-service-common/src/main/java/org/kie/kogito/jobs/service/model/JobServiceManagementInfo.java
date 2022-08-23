@@ -16,48 +16,30 @@
 package org.kie.kogito.jobs.service.model;
 
 import java.time.ZonedDateTime;
-import java.util.Optional;
 import java.util.StringJoiner;
-import java.util.UUID;
 
 public class JobServiceManagementInfo {
 
-    private UUID id;
+    private String id;
     private ZonedDateTime lastHeartbeat;
-    private UUID token;
-
-    private ZonedDateTime timestamp;
-    private String instanceName;
-    private String instanceIp;
+    private String token;
 
     public JobServiceManagementInfo(String id, String token, ZonedDateTime heartbeat) {
-        this.id = Optional.ofNullable(id).map(UUID::fromString).orElse(null);
-        this.token = Optional.ofNullable(token).map(UUID::fromString).orElse(null);
+        this.id = id;
+        this.token = token;
         this.lastHeartbeat = heartbeat;
     }
 
-    public UUID getId() {
+    public String getId() {
         return id;
-    }
-
-    public ZonedDateTime getTimestamp() {
-        return timestamp;
     }
 
     public ZonedDateTime getLastHeartbeat() {
         return lastHeartbeat;
     }
 
-    public UUID getToken() {
+    public String getToken() {
         return token;
-    }
-
-    public String getInstanceName() {
-        return instanceName;
-    }
-
-    public String getInstanceIp() {
-        return instanceIp;
     }
 
     public void setLastHeartbeat(ZonedDateTime lastHeartbeat) {
@@ -70,9 +52,6 @@ public class JobServiceManagementInfo {
                 .add("id=" + id)
                 .add("lastHeartbeat=" + lastHeartbeat)
                 .add("token=" + token)
-                .add("timestamp=" + timestamp)
-                .add("instanceName='" + instanceName + "'")
-                .add("instanceIp='" + instanceIp + "'")
                 .toString();
     }
 }
