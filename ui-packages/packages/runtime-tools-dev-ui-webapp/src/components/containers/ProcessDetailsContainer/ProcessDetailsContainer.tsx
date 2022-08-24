@@ -27,6 +27,7 @@ interface ProcessDetailsContainerProps {
   processInstance: ProcessInstance;
   omittedProcessTimelineEvents: string[];
   diagramPreviewSize?: DiagramPreviewSize;
+  showSwfDiagram: boolean;
 }
 
 const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
@@ -34,6 +35,7 @@ const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
   processInstance,
   omittedProcessTimelineEvents,
   diagramPreviewSize,
+  showSwfDiagram,
   ouiaId,
   ouiaSafe
 }) => {
@@ -60,6 +62,7 @@ const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
       processInstance={processInstance}
       omittedProcessTimelineEvents={omittedProcessTimelineEvents}
       diagramPreviewSize={diagramPreviewSize}
+      showSwfDiagram={showSwfDiagram}
     />
   );
 };

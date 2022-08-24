@@ -24,10 +24,11 @@ import { useHistory } from 'react-router-dom';
 
 interface ProcessDetailsContainerProps {
   processInstance: ProcessInstance;
+  showSwfDiagram: boolean;
 }
 
 const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
-  OUIAProps> = ({ processInstance, ouiaId, ouiaSafe }) => {
+  OUIAProps> = ({ processInstance, showSwfDiagram, ouiaId, ouiaSafe }) => {
   const history = useHistory();
   const gatewayApi: ProcessDetailsGatewayApi = useProcessDetailsGatewayApi();
   useEffect(() => {
@@ -49,6 +50,7 @@ const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
       driver={gatewayApi}
       targetOrigin={window.location.origin}
       processInstance={processInstance}
+      showSwfDiagram={showSwfDiagram}
     />
   );
 };

@@ -189,6 +189,17 @@
             </configuration>
           </execution>
           <execution>
+            <id>yarn install ignore-scripts</id>
+            <goals>
+              <goal>yarn</goal>
+            </goals>
+            <configuration>
+              <skip>${skip.ui.deps}</skip>
+              <npmRegistryURL>${env.NPM_REGISTRY_URL}</npmRegistryURL>
+              <arguments>install --fetch-retry-mintimeout=100000 --fetch-retries=10 --ignore-scripts</arguments>
+            </configuration>
+          </execution>
+          <execution>
             <id>yarn install</id>
             <goals>
               <goal>yarn</goal>

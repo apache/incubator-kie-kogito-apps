@@ -13,11 +13,14 @@ module.exports = {
     standalone: path.resolve(__dirname, 'src', 'standalone', 'standalone.ts'),
     envelope: path.resolve(__dirname, 'src', 'standalone', 'EnvelopeApp.ts'),
     'resources/form-displayer': './src/resources/form-displayer.ts',
-    'resources/swf-combined-editor': './src/resources/swf-combined-editor.ts'
+    "resources/serverless-workflow-text-editor-envelope": "./src/resources/ServerlessWorkflowTextEditorEnvelopeApp.ts",
+    "resources/serverless-workflow-mermaid-viewer-envelope": "./src/resources/ServerlessWorkflowMermaidViewerEnvelopeApp.ts",
+    "resources/serverless-workflow-combined-editor-envelope": "./src/resources/ServerlessWorkflowCombinedEditorEnvelopeApp.ts"
+
   },
   plugins: [
     new MonacoWebpackPlugin({
-      languages: ['typescript', 'html', 'json'],
+      languages: ['typescript', 'html', 'json','yaml'],
       globalAPI: true
     }),
     new webpack.EnvironmentPlugin({

@@ -15,14 +15,13 @@
  */
 
 import React from 'react';
-// import { UncontrolledReactSVGPanZoom } from 'react-svg-pan-zoom';
+import { UncontrolledReactSVGPanZoom } from 'react-svg-pan-zoom';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
-// import {
-//   ReactSvgPanZoomLoader,
-//   SvgLoaderSelectElement
-// } from 'react-svg-pan-zoom-loader';
+import {
+  ReactSvgPanZoomLoader,
+  SvgLoaderSelectElement
+} from 'react-svg-pan-zoom-loader';
 import { Title, Card, CardHeader, CardBody } from '@patternfly/react-core';
-import SwfCombinedEditorContainer from '../../containers/SwfCombinedEditorContainer/SwfCombinedEditorContainer';
 
 interface SvgType {
   src: string;
@@ -52,7 +51,7 @@ const ProcessDiagram: React.FC<IOwnProps & OUIAProps> = ({
           </Title>
         </CardHeader>
         <CardBody>
-          {/* <ReactSvgPanZoomLoader
+          <ReactSvgPanZoomLoader
             src={svg.props.src}
             width={width ?? 1000}
             height={height ?? 400}
@@ -73,8 +72,7 @@ const ProcessDiagram: React.FC<IOwnProps & OUIAProps> = ({
                 </svg>
               </UncontrolledReactSVGPanZoom>
             )}
-          /> */}
-          <SwfCombinedEditorContainer />
+          />
         </CardBody>
       </Card>
     </>

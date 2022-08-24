@@ -60,6 +60,7 @@ import ProcessDetailsNodeTrigger from '../ProcessDetailsNodeTrigger/ProcessDetai
 import ProcessVariables from '../ProcessVariables/ProcessVariables';
 import ProcessDetailsMilestonesPanel from '../ProcessDetailsMilestonesPanel/ProcessDetailsMilestonesPanel';
 import ProcessDetailsTimelinePanel from '../ProcessDetailsTimelinePanel/ProcessDetailsTimelinePanel';
+import SwfCombinedEditor from '../SwfCombinedEditor/SwfCombinedEditor';
 
 interface ProcessDetailsProps {
   isEnvelopeConnectedToChannel: boolean;
@@ -67,6 +68,7 @@ interface ProcessDetailsProps {
   processDetails: ProcessInstance;
   omittedProcessTimelineEvents: string[];
   diagramPreviewSize?: DiagramPreviewSize;
+  showSwfDiagram: boolean;
 }
 
 type svgResponse = SvgSuccessResponse | SvgErrorResponse;
@@ -76,7 +78,8 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   driver,
   processDetails,
   omittedProcessTimelineEvents,
-  diagramPreviewSize
+  diagramPreviewSize,
+  showSwfDiagram
 }) => {
   const [data, setData] = useState<ProcessInstance>({} as ProcessInstance);
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -95,7 +98,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   const [infoModalTitle, setInfoModalTitle] = useState<string>('');
   const [titleType, setTitleType] = useState<string>('');
   const [infoModalContent, setInfoModalContent] = useState<string>('');
-
+  console.log(data)
   const handleReload = async (): Promise<void> => {
     setIsLoading(true);
     try {
@@ -300,6 +303,16 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     );
   };
 
+  const renderSwfDiagram = (): JSX.Element => {
+    return (
+      <Flex>
+        <FlexItem>
+          <SwfCombinedEditor height={diagramPreviewSize?.height} width={diagramPreviewSize?.width}/>
+        </FlexItem>
+      </Flex>
+    );
+  };
+
   const renderProcessTimeline = (): JSX.Element => {
     return (
       <FlexItem>
@@ -358,6 +371,17 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
           </Flex>
         </Flex>
       );
+    }
+    else if (showSwfDiagram) {
+      return (
+        <Flex direction={{ default: 'column' }}>
+          {renderSwfDiagram()}
+          <Flex>
+            {renderProcessDetails()}
+            {renderProcessVariables()}
+          </Flex>
+        </Flex>
+      )
     } else {
       return (
         <>

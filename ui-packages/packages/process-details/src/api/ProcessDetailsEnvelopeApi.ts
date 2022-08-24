@@ -37,4 +37,5 @@ export interface ProcessDetailsInitArgs {
   processInstance: ProcessInstance;
   omittedProcessTimelineEvents?: string[];
   diagramPreviewSize?: DiagramPreviewSize;
+  showSwfDiagram: boolean;
 }
