@@ -74,6 +74,9 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/process-list/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kie-tools-core/guided-tour/dist/components'
           )
         ],
         use: {
@@ -145,6 +148,9 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/process-list/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kie-tools-core/guided-tour/dist/components'
           )
         ],
         use: [

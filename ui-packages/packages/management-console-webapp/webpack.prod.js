@@ -67,6 +67,9 @@ module.exports = merge(common, {
           ),
           path.resolve(
             '../../node_modules/react-datetime-picker/dist/DateTimePicker.css'
+          ),
+          path.resolve(
+            '../../node_modules/@kie-tools-core/guided-tour/dist/components'
           )
         ],
         loaders: ['style-loader', 'css-loader']

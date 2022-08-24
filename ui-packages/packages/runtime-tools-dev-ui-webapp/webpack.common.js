@@ -12,7 +12,8 @@ module.exports = {
   entry: {
     standalone: path.resolve(__dirname, 'src', 'standalone', 'standalone.ts'),
     envelope: path.resolve(__dirname, 'src', 'standalone', 'EnvelopeApp.ts'),
-    'resources/form-displayer': './src/resources/form-displayer.ts'
+    'resources/form-displayer': './src/resources/form-displayer.ts',
+    'resources/swf-combined-editor': './src/resources/swf-combined-editor.ts'
   },
   plugins: [
     new MonacoWebpackPlugin({
