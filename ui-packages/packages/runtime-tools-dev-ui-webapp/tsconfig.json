@@ -1,7 +1,6 @@
 {
     "extends": "../../tsconfig.json",
     "compilerOptions": {
-        "target": "ES2018",
         "declarationDir": "./dist",
         "declaration": true,
         "downlevelIteration": true

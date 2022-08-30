@@ -22,12 +22,12 @@ import { ProcessDetailsGatewayApi } from '../../../channel/ProcessDetails';
 import { useProcessDetailsGatewayApi } from '../../../channel/ProcessDetails/ProcessDetailsContext';
 import { useHistory } from 'react-router-dom';
 import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
+import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 
 interface ProcessDetailsContainerProps {
   processInstance: ProcessInstance;
   omittedProcessTimelineEvents: string[];
   diagramPreviewSize?: DiagramPreviewSize;
-  showSwfDiagram: boolean;
 }
 
 const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
@@ -35,11 +35,11 @@ const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
   processInstance,
   omittedProcessTimelineEvents,
   diagramPreviewSize,
-  showSwfDiagram,
   ouiaId,
   ouiaSafe
 }) => {
   const history = useHistory();
+  const appContext = useDevUIAppContext();
   const gatewayApi: ProcessDetailsGatewayApi = useProcessDetailsGatewayApi();
   useEffect(() => {
     const unSubscribeHandler = gatewayApi.onOpenProcessInstanceDetailsListener({
@@ -62,7 +62,7 @@ const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
       processInstance={processInstance}
       omittedProcessTimelineEvents={omittedProcessTimelineEvents}
       diagramPreviewSize={diagramPreviewSize}
-      showSwfDiagram={showSwfDiagram}
+      showSwfDiagram={appContext.isWorkflow()}
     />
   );
 };

@@ -15,115 +15,52 @@
  */
 
 import React, { useMemo } from 'react';
-import { EmbeddedEditor, useEditorRef } from "@kie-tools-core/editor/dist/embedded";
+import { EmbeddedEditor } from "@kie-tools-core/editor/dist/embedded";
 import { ChannelType, EditorEnvelopeLocator, EnvelopeMapping } from "@kie-tools-core/editor/dist/api";
 import { Title, Card, CardHeader, CardBody } from '@patternfly/react-core';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import { EmbeddedEditorFile } from '@kie-tools-core/editor/dist/channel';
 
 interface ISwfCombinedEditorProps {
+  sourceString: string,
   width?: number;
   height?: number;
 }
 
 const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
+  sourceString,
   width,
   height,
   ouiaId,
   ouiaSafe
 }) => {
-  const swf_file = {
-    "id": "jsongreet",
-    "version": "1.0",
-    "name": "Greeting workflow",
-    "description": "JSON based greeting workflow",
-    "start": "ChooseOnLanguage",
-    "functions": [
-      {
-        "name": "greetFunction",
-        "type": "custom",
-        "operation": "sysout"
-      }
-    ],
-    "states": [
-      {
-        "name": "ChooseOnLanguage",
-        "type": "switch",
-        "dataConditions": [
-          {
-            "condition": "${ .language == \"English\" }",
-            "transition": "GreetInEnglish"
-          },
-          {
-            "condition": "${ .language == \"Spanish\" }",
-            "transition": "GreetInSpanish"
-          }
-        ],
-        "defaultCondition": {
-          "transition": "GreetInEnglish"
-        }
-      },
-      {
-        "name": "GreetInEnglish",
-        "type": "inject",
-        "data": {
-          "greeting": "Hello from JSON Workflow, "
-        },
-        "transition": "GreetPerson"
-      },
-      {
-        "name": "GreetInSpanish",
-        "type": "inject",
-        "data": {
-          "greeting": "Saludos desde JSON Workflow, "
-        },
-        "transition": "GreetPerson"
-      },
-      {
-        "name": "GreetPerson",
-        "type": "operation",
-        "actions": [
-          {
-            "name": "greetAction",
-            "functionRef": {
-              "refName": "greetFunction",
-              "arguments": {
-                "message": ".greeting+.name"
-              }
-            }
-          }
-        ],
-        "end": {
-          "terminate": "true"
-        }
-      }
-    ]
-  }
-  const str = JSON.stringify(swf_file, null, 0);
-  const ret = new Uint8Array(str.length);
-  for (let i = 0; i < str.length; i++) {
-    ret[i] = str.charCodeAt(i);
-  }
-  const decoder = new TextDecoder("utf-8");
-  const content = decoder.decode(ret);
-  const { editor } = useEditorRef();
-  const isEditorReady = useMemo(() => editor?.isReady, [editor]);
-  const embeddedFile = {
-    getFileContents: async () => Promise.resolve(content),
+  const embeddedFile: EmbeddedEditorFile = {
+    getFileContents: async () => Promise.resolve(getFileContent()),
     isReadOnly: true,
     fileExtension: "sw.json",
-    fileName: "greetings.sw.json",
+    fileName: "*.sw.json",
   }
-  console.log(isEditorReady)
-  const editorEnvelopeLocator = new EditorEnvelopeLocator(window.location.origin, [
-    new EnvelopeMapping({
-      type: "swf",
-      filePathGlob: "**/*.sw.+(json|yml|yaml)",
-      resourcesPathPrefix: ".",
-      envelopePath: "resources/serverless-workflow-combined-editor-envelope.html",
-    }),
-  ]);
+  const editorEnvelopeLocator = useMemo(
+    () => new EditorEnvelopeLocator(window.location.origin, [
+      new EnvelopeMapping({
+        type: "swf",
+        filePathGlob: "**/*.sw.+(json|yml|yaml)",
+        resourcesPathPrefix: ".",
+        envelopePath: "resources/serverless-workflow-combined-editor-envelope.html",
+      }),
+    ]), []);
+
+  const getFileContent = () => {
+    const arr = new Uint8Array(sourceString.length);
+    for (let i = 0; i < sourceString.length; i++) {
+      arr[i] = sourceString.charCodeAt(i);
+    }
+    const decoder = new TextDecoder("utf-8");
+    return decoder.decode(arr);
+  }
+
   return (
-    <Card style={{height:height,width:width}} {...componentOuiaProps(ouiaId, 'swf-diagram', ouiaSafe)} >
+    <Card style={{ height: height, width: width }} {...componentOuiaProps(ouiaId, 'swf-diagram', ouiaSafe)} >
       <CardHeader>
         <Title headingLevel="h3" size="xl">
           Diagram
@@ -131,7 +68,6 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
       </CardHeader>
       <CardBody>
         <EmbeddedEditor
-          // ref={editorRef}
           isReady={true}
           file={embeddedFile}
           channelType={ChannelType.ONLINE_MULTI_FILE}

@@ -98,7 +98,6 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   const [infoModalTitle, setInfoModalTitle] = useState<string>('');
   const [titleType, setTitleType] = useState<string>('');
   const [infoModalContent, setInfoModalContent] = useState<string>('');
-  console.log(data)
   const handleReload = async (): Promise<void> => {
     setIsLoading(true);
     try {
@@ -307,7 +306,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     return (
       <Flex>
         <FlexItem>
-          <SwfCombinedEditor height={diagramPreviewSize?.height} width={diagramPreviewSize?.width}/>
+          <SwfCombinedEditor sourceString={data?.source} height={diagramPreviewSize?.height} width={diagramPreviewSize?.width}/>
         </FlexItem>
       </Flex>
     );

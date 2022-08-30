@@ -115,7 +115,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
           {processInstance &&
           Object.keys(processInstance).length > 0 &&
           !error ? (
-            <ProcessDetailsContainer processInstance={processInstance} showSwfDiagram={false}/>
+            <ProcessDetailsContainer processInstance={processInstance} />
           ) : (
             <>
               {error.length > 0 && (

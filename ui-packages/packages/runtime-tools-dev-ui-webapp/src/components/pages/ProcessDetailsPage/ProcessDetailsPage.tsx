@@ -61,8 +61,6 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   const [fetchError, setFetchError] = useState<string>('');
   let currentPage = JSON.parse(window.localStorage.getItem('state'));
   
-  const showSwfDiagram = appContext.customLabels.singularProcessLabel === 'Workflow' ? true : false;
-  
   useEffect(() => {
     window.onpopstate = () => {
       props.history.push({ state: Object.assign({}, props.location.state) });
@@ -127,7 +125,6 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
                 appContext.omittedProcessTimelineEvents
               }
               diagramPreviewSize={appContext.diagramPreviewSize}
-              showSwfDiagram={showSwfDiagram}
             />
           ) : (
             <>

@@ -38,7 +38,7 @@ const processInstance: ProcessInstance = {} as ProcessInstance;
 describe('WebApp - ProcessDetailsContainer tests', () => {
   it('Snapshot test with default values', () => {
     const wrapper = mount(
-      <ProcessDetailsContainer processInstance={processInstance} showSwfDiagram={false}/>
+      <ProcessDetailsContainer processInstance={processInstance} />
     ).find('ProcessDetailsContainer');
     expect(wrapper).toMatchSnapshot();
   });
