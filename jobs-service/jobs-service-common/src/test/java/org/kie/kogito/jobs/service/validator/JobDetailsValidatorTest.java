@@ -44,8 +44,9 @@ class JobDetailsValidatorTest {
     @Test
     void testValidateMissingId() {
         JobDetails job = new JobDetailsBuilder()
-                .id(ID)
-                .correlationId(ID)
+                .id(null)
+                .correlationId(null)
+                .payload("{\"name\":\"Arthur\"}")
                 .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
                 .trigger(new PointInTimeTrigger())
                 .build();
@@ -55,11 +56,13 @@ class JobDetailsValidatorTest {
     @Test
     void testValidateMissingPayload() {
         JobDetails job = new JobDetailsBuilder()
-                .payload("{\"name\":\"Arthur\"}")
+                .id(ID)
+                .correlationId(ID)
+                .payload(null)
                 .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
                 .trigger(new PointInTimeTrigger())
                 .build();
-        assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
+        assertThat(JobDetailsValidator.validateToCreate(job)).isEqualTo(job);
     }
 
     @Test
@@ -68,6 +71,7 @@ class JobDetailsValidatorTest {
                 .id(ID)
                 .correlationId(ID)
                 .payload("{\"name\":\"Arthur\"}")
+                .recipient(new Recipient.HTTPRecipient(null))
                 .trigger(new PointInTimeTrigger())
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
@@ -79,7 +83,7 @@ class JobDetailsValidatorTest {
                 .id(ID)
                 .correlationId(ID)
                 .payload("{\"name\":\"Arthur\"}")
-                .recipient(new Recipient.HTTPRecipient(null))
+                .recipient(null)
                 .trigger(new PointInTimeTrigger())
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);

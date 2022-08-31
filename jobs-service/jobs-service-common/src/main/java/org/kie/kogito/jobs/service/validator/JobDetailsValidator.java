@@ -24,8 +24,7 @@ import org.kie.kogito.jobs.service.model.job.Recipient;
 public class JobDetailsValidator {
 
     public static JobDetails validateToCreate(JobDetails job) {
-        if (Objects.isNull(job.getPayload())
-                || StringUtils.isEmpty(job.getId())
+        if (StringUtils.isEmpty(job.getId())
                 || StringUtils.isEmpty(job.getCorrelationId())
                 || Objects.isNull(job.getTrigger())
                 || Objects.isNull(job.getRecipient())
