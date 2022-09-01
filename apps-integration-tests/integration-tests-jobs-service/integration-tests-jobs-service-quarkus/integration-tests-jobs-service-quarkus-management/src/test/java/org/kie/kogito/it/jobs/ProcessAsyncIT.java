@@ -28,4 +28,8 @@ import static org.kie.kogito.test.resources.JobServiceQuarkusTestResource.JOBS_S
 @QuarkusTestResource(JobServiceQuarkusTestResource.class)
 class ProcessAsyncIT extends BaseProcessAsyncIT {
 
+    @Override
+    public String jobServiceUrl() {
+        return System.getProperty(JOBS_SERVICE_URL);
+    }
 }
