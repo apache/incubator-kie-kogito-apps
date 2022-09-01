@@ -27,6 +27,7 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.messaging.spi.Connector;
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
@@ -45,9 +46,15 @@ import io.vertx.mutiny.core.Vertx;
 public class JobServiceInstanceManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceInstanceManager.class);
-    public static final long HEARTBEAT_INTERVAL_IN_SECONDS = TimeUnit.SECONDS.toMillis(1);
-    public static final long MASTER_CHECK_INTERVAL_IN_SECONDS = TimeUnit.SECONDS.toMillis(1);
-    public static final String MASTER_MANAGEMENT_ID = "1cc6cc3d-f8af-4851-89ba-f0b9837898ac";
+
+    @ConfigProperty(name = "kogito.jobs-service.management.heartbeat.interval-in-seconds", defaultValue = "1")
+    long heardBeatIntervalInSeconds;
+
+    @ConfigProperty(name = "kogito.jobs-service.management.master-check.interval-in-seconds", defaultValue = "1")
+    long masterCheckIntervalInSeconds;
+
+    @ConfigProperty(name = "kogito.jobs-service.management.heartbeat.management-id", defaultValue = "kogito-jobs-service-master")
+    String masterManagementId;
 
     @Inject
     @Connector(value = "smallrye-kafka")
@@ -73,12 +80,12 @@ public class JobServiceInstanceManager {
     Uni<JobServiceManagementInfo> startup(@Observes StartupEvent startupEvent) {
         buildInfo();
         //started
-        checkMaster = Optional.of(vertx.periodicStream(MASTER_CHECK_INTERVAL_IN_SECONDS)
+        checkMaster = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(masterCheckIntervalInSeconds))
                 .handler(id -> tryBecomeMaster(currentInfo.get())
                         .subscribe().with(i -> LOGGER.info("Checking Master"),
                                 ex -> LOGGER.error("Error checking Master", ex))));
         //paused
-        heartbeat = Optional.of(vertx.periodicStream(HEARTBEAT_INTERVAL_IN_SECONDS)
+        heartbeat = Optional.of(vertx.periodicStream(TimeUnit.SECONDS.toMillis(heardBeatIntervalInSeconds))
                 .handler(t -> heartbeat(currentInfo.get())
                         .subscribe().with(i -> LOGGER.info("Heartbeat"),
                                 ex -> LOGGER.error("Error on heartbeat", ex)))
@@ -90,13 +97,11 @@ public class JobServiceInstanceManager {
     private void disableCommunication() {
         //disable consuming events
         kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).pause());
-        //kafkaConnector.getConsumerChannels().stream().forEach(c -> kafkaConnector.getConsumer(c).unwrap().close());
 
         //disable producing events
         messagingChangeEventEvent.fire(new MessagingChangeEvent(false));
-        //kafkaConnector.getProducerChannels().stream().forEach(c -> kafkaConnector.getProducer(c).unwrap().close());
 
-        LOGGER.info("Disabled communication not master instance");
+        LOGGER.warn("Disabled communication not master instance");
     }
 
     private void enableCommunication() {
@@ -106,7 +111,7 @@ public class JobServiceInstanceManager {
         //disable producing events
         messagingChangeEventEvent.fire(new MessagingChangeEvent(true));
 
-        LOGGER.info("Enabled communication for master instance");
+        LOGGER.warn("Enabled communication for master instance");
     }
 
     Uni<JobServiceManagementInfo> onShutdown(@Observes ShutdownEvent shutdownEvent) {
@@ -121,18 +126,14 @@ public class JobServiceInstanceManager {
     }
 
     Uni<JobServiceManagementInfo> tryBecomeMaster(JobServiceManagementInfo info) {
-        LOGGER.info("Try to become Master");
+        LOGGER.debug("Try to become Master");
         return repository.getAndUpdate(currentInfo.get().getId(), c -> {
-            //expired
-            LOGGER.info("Master process starting {}", info);
-
             if (Objects.isNull(c) || Objects.isNull(c.getToken()) || Objects.equals(c.getToken(), info.getToken()) || Objects.isNull(c.getLastHeartbeat())
                     || c.getLastHeartbeat().isBefore(DateUtil.now().minusSeconds(10))) {
                 //old instance is not active
                 info.setLastHeartbeat(DateUtil.now());
-                LOGGER.info("SET Master process {}", info);
+                LOGGER.info("SET Master {}", info);
                 master.set(true);
-                LOGGER.info("Master Ok {}", info);
                 enableCommunication();
                 this.heartbeat.ifPresent(s -> s.resume());
                 this.checkMaster.ifPresent(s -> s.pause());
@@ -155,7 +156,7 @@ public class JobServiceInstanceManager {
     }
 
     Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
-        LOGGER.info("Heartbeat Master");
+        LOGGER.debug("Heartbeat Master");
         if (isMaster()) {
             return repository.heartbeat(info);
         }
@@ -163,7 +164,8 @@ public class JobServiceInstanceManager {
     }
 
     private JobServiceManagementInfo buildInfo() {
-        currentInfo.set(new JobServiceManagementInfo(UUID.fromString(MASTER_MANAGEMENT_ID).toString(), generateToken(), DateUtil.now()));
+        currentInfo.set(new JobServiceManagementInfo(masterManagementId, generateToken(), DateUtil.now()));
+        LOGGER.info("Current Job Service Instance {}", currentInfo.get());
         return currentInfo.get();
     }
 
