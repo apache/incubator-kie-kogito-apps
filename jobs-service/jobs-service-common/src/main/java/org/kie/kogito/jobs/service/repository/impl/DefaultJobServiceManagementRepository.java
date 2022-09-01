@@ -16,6 +16,7 @@
 package org.kie.kogito.jobs.service.repository.impl;
 
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -32,8 +33,8 @@ public class DefaultJobServiceManagementRepository implements JobServiceManageme
     private AtomicReference<JobServiceManagementInfo> instance = new AtomicReference<>(new JobServiceManagementInfo(null, null, null));
 
     @Override
-    public Uni<JobServiceManagementInfo> get(String token) {
-        return Uni.createFrom().item(instance.get());
+    public Uni<JobServiceManagementInfo> getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate) {
+        return set(computeUpdate.apply(instance.get()));
     }
 
     @Override

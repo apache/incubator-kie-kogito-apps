@@ -70,7 +70,6 @@ public abstract class BaseKeycloakJobServiceIT {
         System.setProperty("quarkus.http.auth.policy.role-policy1.roles-allowed", "confidential");
         System.setProperty("quarkus.http.auth.permission.roles1.paths", "/*");
         System.setProperty("quarkus.http.auth.permission.roles1.policy", "role-policy1");
-        System.setProperty("quarkus.http.auth.permission.roles1.paths", "/*");
     }
 
     @BeforeEach

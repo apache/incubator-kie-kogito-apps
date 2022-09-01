@@ -39,14 +39,14 @@ import io.vertx.mutiny.sqlclient.SqlClient;
 import io.vertx.mutiny.sqlclient.Tuple;
 
 @ApplicationScoped
-public class PostgreSqlManagementRepository implements JobServiceManagementRepository {
+public class PostgreSqlJobServiceManagementRepository implements JobServiceManagementRepository {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PostgreSqlManagementRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostgreSqlJobServiceManagementRepository.class);
 
     private PgPool client;
 
     @Inject
-    public PostgreSqlManagementRepository(PgPool client) {
+    public PostgreSqlJobServiceManagementRepository(PgPool client) {
         this.client = client;
     }
 
@@ -64,16 +64,6 @@ public class PostgreSqlManagementRepository implements JobServiceManagementRepos
     JobServiceManagementInfo from(Row row) {
         return new JobServiceManagementInfo(row.getString("id"), row.getString("token"),
                 Optional.ofNullable(row.getOffsetDateTime("last_heartbeat")).map(t -> t.atZoneSameInstant(DateUtil.DEFAULT_ZONE)).orElse(null));
-    }
-
-    @Override
-    public Uni<JobServiceManagementInfo> get(String id) {
-        LOGGER.info("get {}", id);
-        return client.preparedQuery("SELECT id, token, last_heartbeat FROM job_service_management FOR UPDATE")
-                .execute()
-                .onItem().transform(RowSet::iterator)
-                .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : new JobServiceManagementInfo(null, null, null))
-                .onItem().invoke(r -> LOGGER.info("got {}", r));
     }
 
     @Override

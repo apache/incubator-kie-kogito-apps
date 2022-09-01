@@ -23,11 +23,7 @@ import io.smallrye.mutiny.Uni;
 
 public interface JobServiceManagementRepository {
 
-    default Uni<JobServiceManagementInfo> getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate) {
-        return get(id).onItem().transform(computeUpdate::apply).onItem().transformToUni(this::set);
-    }
-
-    Uni<JobServiceManagementInfo> get(String id);
+    Uni<JobServiceManagementInfo> getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate);
 
     Uni<JobServiceManagementInfo> set(JobServiceManagementInfo info);
 
