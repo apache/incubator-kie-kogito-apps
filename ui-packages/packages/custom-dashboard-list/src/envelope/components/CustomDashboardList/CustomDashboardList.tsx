@@ -101,7 +101,7 @@ const CustomDashboardList: React.FC<CustomDashboardListProps & OUIAProps> = ({
   }
 
   return (
-    <div {...componentOuiaProps(ouiaId, 'customDashboard-list', ouiaSafe)}>
+    <div {...componentOuiaProps(ouiaId, 'custom-dashboard-list', ouiaSafe)}>
       <Split hasGutter>
         <SplitItem>
           <CustomDashboardListToolbar

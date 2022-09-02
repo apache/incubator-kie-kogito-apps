@@ -23,12 +23,12 @@ import '../../styles.css';
 
 const CustomDashboardListPage: React.FC<OUIAProps> = () => {
   useEffect(() => {
-    return ouiaPageTypeAndObjectId('customDashboard-list');
+    return ouiaPageTypeAndObjectId('custom-dashboard-list');
   });
 
   return (
     <React.Fragment>
-      <PageSectionHeader titleText="CustomDashboards" />
+      <PageSectionHeader titleText="Dashboards" />
       <PageSection>
         <Card className="Dev-ui__card-size">
           <CustomDashboardListContainer />

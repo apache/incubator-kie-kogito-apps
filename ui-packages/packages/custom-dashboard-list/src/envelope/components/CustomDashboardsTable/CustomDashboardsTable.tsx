@@ -100,8 +100,8 @@ const CustomDashboardsTable: React.FC<CustomDashboardTableProps &
   const customDashboardLoadingComponent: JSX.Element = (
     <Bullseye>
       <KogitoSpinner
-        spinnerText="Loading customDashboard..."
-        ouiaId="customDashboard-list-customDashboard-list"
+        spinnerText="Loading Dashboard..."
+        ouiaId="custom-dashboard-list-custom-dashboard-list"
       />
     </Bullseye>
   );

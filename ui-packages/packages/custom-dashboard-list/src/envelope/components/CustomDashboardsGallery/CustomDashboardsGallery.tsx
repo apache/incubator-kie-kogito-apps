@@ -45,7 +45,7 @@ const CustomDashboardsGallery: React.FC<CustomDashboardGalleryProps &
       <Bullseye>
         <KogitoSpinner
           spinnerText="Loading customDashboard..."
-          ouiaId="customDashboard-list-loading-customDashboard"
+          ouiaId="custom-dashboard-list-loading-custom-dashboard"
         />
       </Bullseye>
     );

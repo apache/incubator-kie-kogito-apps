@@ -39,7 +39,7 @@ interface CustomDashboardListToolbarProps {
 }
 
 enum Category {
-  Custom_DashBoard_NAME = 'Custom Dashboard name'
+  CUSTOM_DASHBOARD_NAME = 'Custom Dashboard name'
 }
 
 const CustomDashboardListToolbar: React.FC<CustomDashboardListToolbarProps &
@@ -74,7 +74,7 @@ const CustomDashboardListToolbar: React.FC<CustomDashboardListToolbarProps &
 
   const onDeleteFilterGroup = (categoryName: Category, value: string): void => {
     const newFilterDashboardNames = [...filterDashboardNames];
-    if (categoryName === Category.Custom_DashBoard_NAME) {
+    if (categoryName === Category.CUSTOM_DASHBOARD_NAME) {
       _.remove(newFilterDashboardNames, (status: string) => {
         return status === value;
       });
@@ -104,17 +104,17 @@ const CustomDashboardListToolbar: React.FC<CustomDashboardListToolbarProps &
           key="input-customDashboard-name"
           chips={filterDashboardNames}
           deleteChip={onDeleteFilterGroup}
-          categoryName={Category.Custom_DashBoard_NAME}
+          categoryName={Category.CUSTOM_DASHBOARD_NAME}
         >
           <InputGroup>
             <TextInput
               name="customDashboardName"
               id="customDashboardName"
               type="search"
-              aria-label="customDashboard name"
+              aria-label="Dashboard name"
               onChange={setDashboardNameInput}
               onKeyPress={onEnterClicked}
-              placeholder="Filter by customDashboard name"
+              placeholder="Filter by dashboard name"
               value={dashboardNameInput}
             />
           </InputGroup>
@@ -147,12 +147,12 @@ const CustomDashboardListToolbar: React.FC<CustomDashboardListToolbarProps &
 
   return (
     <Toolbar
-      id="customDashboard-list-with-filter"
+      id="custom-dashboard-list-with-filter"
       className="pf-m-toggle-group-container"
       collapseListedFiltersBreakpoint="xl"
       clearAllFilters={doResetFilter}
       clearFiltersButtonText="Reset to default"
-      {...componentOuiaProps(ouiaId, 'customDashboard-list-toolbar', ouiaSafe)}
+      {...componentOuiaProps(ouiaId, 'custom-dashboard-list-toolbar', ouiaSafe)}
     >
       <ToolbarContent>{toolbarItems}</ToolbarContent>
     </Toolbar>

@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { Nav, NavItem, NavList, NavExpandable } from '@patternfly/react-core';
+import { Nav, NavItem, NavList } from '@patternfly/react-core';
 import { Link } from 'react-router-dom';
 import { ouiaAttribute } from '@kogito-apps/ouia-tools';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
@@ -98,6 +98,39 @@ const DevUINav: React.FC<IOwnProps> = ({ pathname }) => {
                 </Link>
               </NavItem>
             )}
+            {(!availablePages || availablePages.includes('Monitoring')) && (
+              <NavItem
+                key={'monitoring-nav'}
+                isActive={pathname.startsWith('/Monitoring')}
+              >
+                <Link
+                  to="/Monitoring"
+                  {...ouiaAttribute(
+                    'data-ouia-navigation-name',
+                    'monitoring-nav'
+                  )}
+                >
+                  Monitoring
+                </Link>
+              </NavItem>
+            )}
+            {(!availablePages ||
+              availablePages.includes('CustomDashboard')) && (
+              <NavItem
+                key={'customDashboard-nav'}
+                isActive={pathname.startsWith('/CustomDashboard')}
+              >
+                <Link
+                  to="/CustomDashboard"
+                  {...ouiaAttribute(
+                    'data-ouia-navigation-name',
+                    'customDashboard-nav'
+                  )}
+                >
+                  Dashboards
+                </Link>
+              </NavItem>
+            )}
           </>
         )}
         {isTracingEnabled && (
@@ -111,43 +144,6 @@ const DevUINav: React.FC<IOwnProps> = ({ pathname }) => {
           </NavItem>
         )}
       </NavList>
-
-      <NavExpandable
-        title="Monitoring"
-        srText="SR Monitoring"
-        groupId="grp-Monitoring"
-        isExpanded
-      >
-        {(!availablePages || availablePages.includes('Monitoring')) && (
-          <NavItem
-            key={'monitoring-nav'}
-            isActive={pathname.startsWith('/Monitoring')}
-          >
-            <Link
-              to="/Monitoring"
-              {...ouiaAttribute('data-ouia-navigation-name', 'monitoring-nav')}
-            >
-              Monitoring
-            </Link>
-          </NavItem>
-        )}
-        {(!availablePages || availablePages.includes('CustomDashboard')) && (
-          <NavItem
-            key={'customDashboard-nav'}
-            isActive={pathname.startsWith('/CustomDashboard')}
-          >
-            <Link
-              to="/CustomDashboard"
-              {...ouiaAttribute(
-                'data-ouia-navigation-name',
-                'customDashboard-nav'
-              )}
-            >
-              Dashboards
-            </Link>
-          </NavItem>
-        )}
-      </NavExpandable>
     </Nav>
   );
 };
