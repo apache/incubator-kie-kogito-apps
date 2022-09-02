@@ -23,7 +23,7 @@ import {
 } from '../api';
 
 /**
- * Implementation of FormsListDriver that delegates calls to the channel Api
+ * Implementation of CustomDashboardListDriver that delegates calls to the channel Api
  */
 export default class CustomDashboardListEnvelopeViewDriver
   implements CustomDashboardListDriver {
@@ -34,7 +34,7 @@ export default class CustomDashboardListEnvelopeViewDriver
   ) {}
 
   getCustomDashboardFilter(): Promise<CustomDashboardFilter> {
-    return this.channelApi.requests.customDashboardList__getFormFilter();
+    return this.channelApi.requests.customDashboardList__getFilter();
   }
 
   applyFilter(customDashboardFilter: CustomDashboardFilter): Promise<void> {

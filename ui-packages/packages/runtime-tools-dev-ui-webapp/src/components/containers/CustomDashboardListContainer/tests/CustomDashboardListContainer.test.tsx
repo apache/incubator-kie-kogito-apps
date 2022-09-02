@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,12 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import CustomDashboardListContainer from '../CustomDashboardListContainer';
-import * as FormsListContext from '../../../../channel/FormsList/FormsListContext';
-import { FormsListGatewayApiImpl } from '../../../../channel/FormsList/FormsListGatewayApi';
+import { CustomDashboardListGatewayApiImpl } from '../../../../channel/CustomDashboardList/CustomDashboardListGatewayApi';
+import * as CustomDashboardListContext from '../../../../channel/CustomDashboardList/CustomDashboardListContext';
 
 jest
-  .spyOn(FormsListContext, 'useFormsListGatewayApi')
-  .mockImplementation(() => new FormsListGatewayApiImpl());
+  .spyOn(CustomDashboardListContext, 'useCustomDashboardListGatewayApi')
+  .mockImplementation(() => new CustomDashboardListGatewayApiImpl());
 
 describe('CustomDashboardListContainer tests', () => {
   it('Snapshot', () => {

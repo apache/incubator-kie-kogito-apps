@@ -32,7 +32,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing audit inve
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-19"
+              data-ouia-component-id="OUIA-Generated-NavItem-22"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -74,7 +74,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing audit inve
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-20"
+              data-ouia-component-id="OUIA-Generated-NavItem-23"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -116,7 +116,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing audit inve
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-21"
+              data-ouia-component-id="OUIA-Generated-NavItem-24"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -158,7 +158,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing audit inve
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-22"
+              data-ouia-component-id="OUIA-Generated-NavItem-25"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -195,54 +195,12 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing audit inve
             </li>
           </NavItem>
           <NavItem
-            isActive={false}
-            key="monitoring-nav"
-          >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-23"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
-            >
-              <Link
-                aria-current={null}
-                className="pf-c-nav__link"
-                data-ouia-navigation-name="monitoring-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/Monitoring"
-              >
-                <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
-                  data-ouia-navigation-name="monitoring-nav"
-                  href="/Monitoring"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
-                >
-                  <a
-                    aria-current={null}
-                    className="pf-c-nav__link"
-                    data-ouia-navigation-name="monitoring-nav"
-                    href="/Monitoring"
-                    onClick={[Function]}
-                    tabIndex={null}
-                  >
-                    Monitoring
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
-          <NavItem
             isActive={true}
             key="audit-nav"
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-24"
+              data-ouia-component-id="OUIA-Generated-NavItem-26"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -280,6 +238,165 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing audit inve
           </NavItem>
         </ul>
       </NavList>
+      <NavExpandable
+        className=""
+        groupId="grp-Monitoring"
+        id=""
+        isActive={false}
+        isExpanded={true}
+        srText="SR Monitoring"
+        title="Monitoring"
+      >
+        <li
+          className="pf-c-nav__item pf-m-expandable pf-m-expanded"
+          data-ouia-component-id="OUIA-Generated-NavExpandable-4"
+          data-ouia-component-type="PF4/NavExpandable"
+          data-ouia-safe={true}
+        >
+          <button
+            aria-expanded={true}
+            className="pf-c-nav__link"
+            id={null}
+            onClick={[Function]}
+            tabIndex={null}
+          >
+            Monitoring
+            <span
+              className="pf-c-nav__toggle"
+            >
+              <span
+                className="pf-c-nav__toggle-icon"
+              >
+                <AngleRightIcon
+                  aria-hidden="true"
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
+                >
+                  <svg
+                    aria-hidden="true"
+                    aria-labelledby={null}
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style={
+                      Object {
+                        "verticalAlign": "-0.125em",
+                      }
+                    }
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                    />
+                  </svg>
+                </AngleRightIcon>
+              </span>
+            </span>
+          </button>
+          <section
+            aria-labelledby="pf-1662084631000ko3ol21vw69"
+            className="pf-c-nav__subnav"
+            hidden={null}
+          >
+            <h2
+              className="pf-u-screen-reader"
+              id="pf-1662084631000ko3ol21vw69"
+            >
+              SR Monitoring
+            </h2>
+            <ul
+              className="pf-c-nav__list"
+            >
+              <NavItem
+                isActive={false}
+                key="monitoring-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-27"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="monitoring-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/Monitoring"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="monitoring-nav"
+                      href="/Monitoring"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="monitoring-nav"
+                        href="/Monitoring"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Monitoring
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+              <NavItem
+                isActive={false}
+                key="customDashboard-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-28"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="customDashboard-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/CustomDashboard"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="customDashboard-nav"
+                      href="/CustomDashboard"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="customDashboard-nav"
+                        href="/CustomDashboard"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Dashboards
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+            </ul>
+          </section>
+        </li>
+      </NavExpandable>
     </nav>
   </Nav>
 </DevUINav>
@@ -317,7 +434,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with forms
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-13"
+              data-ouia-component-id="OUIA-Generated-NavItem-15"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -359,7 +476,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with forms
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-14"
+              data-ouia-component-id="OUIA-Generated-NavItem-16"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -401,7 +518,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with forms
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-15"
+              data-ouia-component-id="OUIA-Generated-NavItem-17"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -443,7 +560,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with forms
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-16"
+              data-ouia-component-id="OUIA-Generated-NavItem-18"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -481,53 +598,11 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with forms
           </NavItem>
           <NavItem
             isActive={false}
-            key="monitoring-nav"
-          >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-17"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
-            >
-              <Link
-                aria-current={null}
-                className="pf-c-nav__link"
-                data-ouia-navigation-name="monitoring-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/Monitoring"
-              >
-                <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
-                  data-ouia-navigation-name="monitoring-nav"
-                  href="/Monitoring"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
-                >
-                  <a
-                    aria-current={null}
-                    className="pf-c-nav__link"
-                    data-ouia-navigation-name="monitoring-nav"
-                    href="/Monitoring"
-                    onClick={[Function]}
-                    tabIndex={null}
-                  >
-                    Monitoring
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
-          <NavItem
-            isActive={false}
             key="audit-nav"
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-18"
+              data-ouia-component-id="OUIA-Generated-NavItem-19"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -565,6 +640,165 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with forms
           </NavItem>
         </ul>
       </NavList>
+      <NavExpandable
+        className=""
+        groupId="grp-Monitoring"
+        id=""
+        isActive={false}
+        isExpanded={true}
+        srText="SR Monitoring"
+        title="Monitoring"
+      >
+        <li
+          className="pf-c-nav__item pf-m-expandable pf-m-expanded"
+          data-ouia-component-id="OUIA-Generated-NavExpandable-3"
+          data-ouia-component-type="PF4/NavExpandable"
+          data-ouia-safe={true}
+        >
+          <button
+            aria-expanded={true}
+            className="pf-c-nav__link"
+            id={null}
+            onClick={[Function]}
+            tabIndex={null}
+          >
+            Monitoring
+            <span
+              className="pf-c-nav__toggle"
+            >
+              <span
+                className="pf-c-nav__toggle-icon"
+              >
+                <AngleRightIcon
+                  aria-hidden="true"
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
+                >
+                  <svg
+                    aria-hidden="true"
+                    aria-labelledby={null}
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style={
+                      Object {
+                        "verticalAlign": "-0.125em",
+                      }
+                    }
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                    />
+                  </svg>
+                </AngleRightIcon>
+              </span>
+            </span>
+          </button>
+          <section
+            aria-labelledby="pf-1662084630985re7zffn18om"
+            className="pf-c-nav__subnav"
+            hidden={null}
+          >
+            <h2
+              className="pf-u-screen-reader"
+              id="pf-1662084630985re7zffn18om"
+            >
+              SR Monitoring
+            </h2>
+            <ul
+              className="pf-c-nav__list"
+            >
+              <NavItem
+                isActive={false}
+                key="monitoring-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-20"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="monitoring-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/Monitoring"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="monitoring-nav"
+                      href="/Monitoring"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="monitoring-nav"
+                        href="/Monitoring"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Monitoring
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+              <NavItem
+                isActive={false}
+                key="customDashboard-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-21"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="customDashboard-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/CustomDashboard"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="customDashboard-nav"
+                      href="/CustomDashboard"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="customDashboard-nav"
+                        href="/CustomDashboard"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Dashboards
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+            </ul>
+          </section>
+        </li>
+      </NavExpandable>
     </nav>
   </Nav>
 </DevUINav>
@@ -602,7 +836,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with jobs 
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-7"
+              data-ouia-component-id="OUIA-Generated-NavItem-8"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -644,7 +878,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with jobs 
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-8"
+              data-ouia-component-id="OUIA-Generated-NavItem-9"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -686,7 +920,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with jobs 
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-9"
+              data-ouia-component-id="OUIA-Generated-NavItem-10"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -728,7 +962,7 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with jobs 
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-10"
+              data-ouia-component-id="OUIA-Generated-NavItem-11"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -759,48 +993,6 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with jobs 
                     tabIndex={null}
                   >
                     Forms
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
-          <NavItem
-            isActive={false}
-            key="monitoring-nav"
-          >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-11"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
-            >
-              <Link
-                aria-current={null}
-                className="pf-c-nav__link"
-                data-ouia-navigation-name="monitoring-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/Monitoring"
-              >
-                <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
-                  data-ouia-navigation-name="monitoring-nav"
-                  href="/Monitoring"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
-                >
-                  <a
-                    aria-current={null}
-                    className="pf-c-nav__link"
-                    data-ouia-navigation-name="monitoring-nav"
-                    href="/Monitoring"
-                    onClick={[Function]}
-                    tabIndex={null}
-                  >
-                    Monitoring
                   </a>
                 </LinkAnchor>
               </Link>
@@ -850,6 +1042,165 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with jobs 
           </NavItem>
         </ul>
       </NavList>
+      <NavExpandable
+        className=""
+        groupId="grp-Monitoring"
+        id=""
+        isActive={false}
+        isExpanded={true}
+        srText="SR Monitoring"
+        title="Monitoring"
+      >
+        <li
+          className="pf-c-nav__item pf-m-expandable pf-m-expanded"
+          data-ouia-component-id="OUIA-Generated-NavExpandable-2"
+          data-ouia-component-type="PF4/NavExpandable"
+          data-ouia-safe={true}
+        >
+          <button
+            aria-expanded={true}
+            className="pf-c-nav__link"
+            id={null}
+            onClick={[Function]}
+            tabIndex={null}
+          >
+            Monitoring
+            <span
+              className="pf-c-nav__toggle"
+            >
+              <span
+                className="pf-c-nav__toggle-icon"
+              >
+                <AngleRightIcon
+                  aria-hidden="true"
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
+                >
+                  <svg
+                    aria-hidden="true"
+                    aria-labelledby={null}
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style={
+                      Object {
+                        "verticalAlign": "-0.125em",
+                      }
+                    }
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                    />
+                  </svg>
+                </AngleRightIcon>
+              </span>
+            </span>
+          </button>
+          <section
+            aria-labelledby="pf-1662084630968zhm32bvek5"
+            className="pf-c-nav__subnav"
+            hidden={null}
+          >
+            <h2
+              className="pf-u-screen-reader"
+              id="pf-1662084630968zhm32bvek5"
+            >
+              SR Monitoring
+            </h2>
+            <ul
+              className="pf-c-nav__list"
+            >
+              <NavItem
+                isActive={false}
+                key="monitoring-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-13"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="monitoring-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/Monitoring"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="monitoring-nav"
+                      href="/Monitoring"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="monitoring-nav"
+                        href="/Monitoring"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Monitoring
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+              <NavItem
+                isActive={false}
+                key="customDashboard-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-14"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="customDashboard-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/CustomDashboard"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="customDashboard-nav"
+                      href="/CustomDashboard"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="customDashboard-nav"
+                        href="/CustomDashboard"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Dashboards
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+            </ul>
+          </section>
+        </li>
+      </NavExpandable>
     </nav>
   </Nav>
 </DevUINav>
@@ -1051,53 +1402,11 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with proce
           </NavItem>
           <NavItem
             isActive={false}
-            key="monitoring-nav"
-          >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-5"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
-            >
-              <Link
-                aria-current={null}
-                className="pf-c-nav__link"
-                data-ouia-navigation-name="monitoring-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/Monitoring"
-              >
-                <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
-                  data-ouia-navigation-name="monitoring-nav"
-                  href="/Monitoring"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
-                >
-                  <a
-                    aria-current={null}
-                    className="pf-c-nav__link"
-                    data-ouia-navigation-name="monitoring-nav"
-                    href="/Monitoring"
-                    onClick={[Function]}
-                    tabIndex={null}
-                  >
-                    Monitoring
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
-          <NavItem
-            isActive={false}
             key="audit-nav"
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-6"
+              data-ouia-component-id="OUIA-Generated-NavItem-5"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -1135,6 +1444,165 @@ exports[`DevUINav tests::Process and Tracing enabled Snapshot testing with proce
           </NavItem>
         </ul>
       </NavList>
+      <NavExpandable
+        className=""
+        groupId="grp-Monitoring"
+        id=""
+        isActive={false}
+        isExpanded={true}
+        srText="SR Monitoring"
+        title="Monitoring"
+      >
+        <li
+          className="pf-c-nav__item pf-m-expandable pf-m-expanded"
+          data-ouia-component-id="OUIA-Generated-NavExpandable-1"
+          data-ouia-component-type="PF4/NavExpandable"
+          data-ouia-safe={true}
+        >
+          <button
+            aria-expanded={true}
+            className="pf-c-nav__link"
+            id={null}
+            onClick={[Function]}
+            tabIndex={null}
+          >
+            Monitoring
+            <span
+              className="pf-c-nav__toggle"
+            >
+              <span
+                className="pf-c-nav__toggle-icon"
+              >
+                <AngleRightIcon
+                  aria-hidden="true"
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
+                >
+                  <svg
+                    aria-hidden="true"
+                    aria-labelledby={null}
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style={
+                      Object {
+                        "verticalAlign": "-0.125em",
+                      }
+                    }
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                    />
+                  </svg>
+                </AngleRightIcon>
+              </span>
+            </span>
+          </button>
+          <section
+            aria-labelledby="pf-1662084630943gvgs2a37ore"
+            className="pf-c-nav__subnav"
+            hidden={null}
+          >
+            <h2
+              className="pf-u-screen-reader"
+              id="pf-1662084630943gvgs2a37ore"
+            >
+              SR Monitoring
+            </h2>
+            <ul
+              className="pf-c-nav__list"
+            >
+              <NavItem
+                isActive={false}
+                key="monitoring-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-6"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="monitoring-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/Monitoring"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="monitoring-nav"
+                      href="/Monitoring"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="monitoring-nav"
+                        href="/Monitoring"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Monitoring
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+              <NavItem
+                isActive={false}
+                key="customDashboard-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-7"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="customDashboard-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/CustomDashboard"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="customDashboard-nav"
+                      href="/CustomDashboard"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="customDashboard-nav"
+                        href="/CustomDashboard"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Dashboards
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+            </ul>
+          </section>
+        </li>
+      </NavExpandable>
     </nav>
   </Nav>
 </DevUINav>
@@ -1172,7 +1640,7 @@ exports[`DevUINav tests::Sections disabled Snapshot testing audit investigation 
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-40"
+              data-ouia-component-id="OUIA-Generated-NavItem-47"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -1210,6 +1678,165 @@ exports[`DevUINav tests::Sections disabled Snapshot testing audit investigation 
           </NavItem>
         </ul>
       </NavList>
+      <NavExpandable
+        className=""
+        groupId="grp-Monitoring"
+        id=""
+        isActive={false}
+        isExpanded={true}
+        srText="SR Monitoring"
+        title="Monitoring"
+      >
+        <li
+          className="pf-c-nav__item pf-m-expandable pf-m-expanded"
+          data-ouia-component-id="OUIA-Generated-NavExpandable-8"
+          data-ouia-component-type="PF4/NavExpandable"
+          data-ouia-safe={true}
+        >
+          <button
+            aria-expanded={true}
+            className="pf-c-nav__link"
+            id={null}
+            onClick={[Function]}
+            tabIndex={null}
+          >
+            Monitoring
+            <span
+              className="pf-c-nav__toggle"
+            >
+              <span
+                className="pf-c-nav__toggle-icon"
+              >
+                <AngleRightIcon
+                  aria-hidden="true"
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
+                >
+                  <svg
+                    aria-hidden="true"
+                    aria-labelledby={null}
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style={
+                      Object {
+                        "verticalAlign": "-0.125em",
+                      }
+                    }
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                    />
+                  </svg>
+                </AngleRightIcon>
+              </span>
+            </span>
+          </button>
+          <section
+            aria-labelledby="pf-1662084631073b2hxc313hnq"
+            className="pf-c-nav__subnav"
+            hidden={null}
+          >
+            <h2
+              className="pf-u-screen-reader"
+              id="pf-1662084631073b2hxc313hnq"
+            >
+              SR Monitoring
+            </h2>
+            <ul
+              className="pf-c-nav__list"
+            >
+              <NavItem
+                isActive={false}
+                key="monitoring-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-48"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="monitoring-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/Monitoring"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="monitoring-nav"
+                      href="/Monitoring"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="monitoring-nav"
+                        href="/Monitoring"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Monitoring
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+              <NavItem
+                isActive={false}
+                key="customDashboard-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-49"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="customDashboard-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/CustomDashboard"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="customDashboard-nav"
+                      href="/CustomDashboard"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="customDashboard-nav"
+                        href="/CustomDashboard"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Dashboards
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+            </ul>
+          </section>
+        </li>
+      </NavExpandable>
     </nav>
   </Nav>
 </DevUINav>
@@ -1230,6 +1857,366 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with forms list prop
       aria-label="Nav"
       className="pf-c-nav"
       data-ouia-component-id="OUIA-Generated-Nav-7"
+      data-ouia-component-type="PF4/Nav"
+      data-ouia-safe={true}
+    >
+      <NavList
+        ariaLeftScroll="Scroll left"
+        ariaRightScroll="Scroll right"
+      >
+        <ul
+          className="pf-c-nav__list"
+          onScroll={[Function]}
+        >
+          <NavItem
+            isActive={false}
+            key="processes-nav"
+          >
+            <li
+              className="pf-c-nav__item"
+              data-ouia-component-id="OUIA-Generated-NavItem-41"
+              data-ouia-component-type="PF4/NavItem"
+              data-ouia-safe={true}
+              onMouseOver={[Function]}
+            >
+              <Link
+                aria-current={null}
+                className="pf-c-nav__link"
+                data-ouia-navigation-name="processes-nav"
+                onClick={[Function]}
+                tabIndex={null}
+                to="/Processes"
+              >
+                <LinkAnchor
+                  aria-current={null}
+                  className="pf-c-nav__link"
+                  data-ouia-navigation-name="processes-nav"
+                  href="/Processes"
+                  navigate={[Function]}
+                  onClick={[Function]}
+                  tabIndex={null}
+                >
+                  <a
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="processes-nav"
+                    href="/Processes"
+                    onClick={[Function]}
+                    tabIndex={null}
+                  >
+                    Workflows
+                  </a>
+                </LinkAnchor>
+              </Link>
+            </li>
+          </NavItem>
+          <NavItem
+            isActive={false}
+            key="jobs-management-nav"
+          >
+            <li
+              className="pf-c-nav__item"
+              data-ouia-component-id="OUIA-Generated-NavItem-42"
+              data-ouia-component-type="PF4/NavItem"
+              data-ouia-safe={true}
+              onMouseOver={[Function]}
+            >
+              <Link
+                aria-current={null}
+                className="pf-c-nav__link"
+                data-ouia-navigation-name="jobs-management-nav"
+                onClick={[Function]}
+                tabIndex={null}
+                to="/JobsManagement"
+              >
+                <LinkAnchor
+                  aria-current={null}
+                  className="pf-c-nav__link"
+                  data-ouia-navigation-name="jobs-management-nav"
+                  href="/JobsManagement"
+                  navigate={[Function]}
+                  onClick={[Function]}
+                  tabIndex={null}
+                >
+                  <a
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="jobs-management-nav"
+                    href="/JobsManagement"
+                    onClick={[Function]}
+                    tabIndex={null}
+                  >
+                    Jobs
+                  </a>
+                </LinkAnchor>
+              </Link>
+            </li>
+          </NavItem>
+          <NavItem
+            isActive={false}
+            key="task-inbox-nav"
+          >
+            <li
+              className="pf-c-nav__item"
+              data-ouia-component-id="OUIA-Generated-NavItem-43"
+              data-ouia-component-type="PF4/NavItem"
+              data-ouia-safe={true}
+              onMouseOver={[Function]}
+            >
+              <Link
+                aria-current={null}
+                className="pf-c-nav__link"
+                data-ouia-navigation-name="task-inbox-nav"
+                onClick={[Function]}
+                tabIndex={null}
+                to="/TaskInbox"
+              >
+                <LinkAnchor
+                  aria-current={null}
+                  className="pf-c-nav__link"
+                  data-ouia-navigation-name="task-inbox-nav"
+                  href="/TaskInbox"
+                  navigate={[Function]}
+                  onClick={[Function]}
+                  tabIndex={null}
+                >
+                  <a
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="task-inbox-nav"
+                    href="/TaskInbox"
+                    onClick={[Function]}
+                    tabIndex={null}
+                  >
+                    Tasks
+                  </a>
+                </LinkAnchor>
+              </Link>
+            </li>
+          </NavItem>
+          <NavItem
+            isActive={true}
+            key="forms-list-nav"
+          >
+            <li
+              className="pf-c-nav__item"
+              data-ouia-component-id="OUIA-Generated-NavItem-44"
+              data-ouia-component-type="PF4/NavItem"
+              data-ouia-safe={true}
+              onMouseOver={[Function]}
+            >
+              <Link
+                aria-current="page"
+                className="pf-c-nav__link pf-m-current"
+                data-ouia-navigation-name="forms-list-nav"
+                onClick={[Function]}
+                tabIndex={null}
+                to="/Forms"
+              >
+                <LinkAnchor
+                  aria-current="page"
+                  className="pf-c-nav__link pf-m-current"
+                  data-ouia-navigation-name="forms-list-nav"
+                  href="/Forms"
+                  navigate={[Function]}
+                  onClick={[Function]}
+                  tabIndex={null}
+                >
+                  <a
+                    aria-current="page"
+                    className="pf-c-nav__link pf-m-current"
+                    data-ouia-navigation-name="forms-list-nav"
+                    href="/Forms"
+                    onClick={[Function]}
+                    tabIndex={null}
+                  >
+                    Forms
+                  </a>
+                </LinkAnchor>
+              </Link>
+            </li>
+          </NavItem>
+        </ul>
+      </NavList>
+      <NavExpandable
+        className=""
+        groupId="grp-Monitoring"
+        id=""
+        isActive={false}
+        isExpanded={true}
+        srText="SR Monitoring"
+        title="Monitoring"
+      >
+        <li
+          className="pf-c-nav__item pf-m-expandable pf-m-expanded"
+          data-ouia-component-id="OUIA-Generated-NavExpandable-7"
+          data-ouia-component-type="PF4/NavExpandable"
+          data-ouia-safe={true}
+        >
+          <button
+            aria-expanded={true}
+            className="pf-c-nav__link"
+            id={null}
+            onClick={[Function]}
+            tabIndex={null}
+          >
+            Monitoring
+            <span
+              className="pf-c-nav__toggle"
+            >
+              <span
+                className="pf-c-nav__toggle-icon"
+              >
+                <AngleRightIcon
+                  aria-hidden="true"
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
+                >
+                  <svg
+                    aria-hidden="true"
+                    aria-labelledby={null}
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style={
+                      Object {
+                        "verticalAlign": "-0.125em",
+                      }
+                    }
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                    />
+                  </svg>
+                </AngleRightIcon>
+              </span>
+            </span>
+          </button>
+          <section
+            aria-labelledby="pf-1662084631060e1fpxvi72va"
+            className="pf-c-nav__subnav"
+            hidden={null}
+          >
+            <h2
+              className="pf-u-screen-reader"
+              id="pf-1662084631060e1fpxvi72va"
+            >
+              SR Monitoring
+            </h2>
+            <ul
+              className="pf-c-nav__list"
+            >
+              <NavItem
+                isActive={false}
+                key="monitoring-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-45"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="monitoring-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/Monitoring"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="monitoring-nav"
+                      href="/Monitoring"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="monitoring-nav"
+                        href="/Monitoring"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Monitoring
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+              <NavItem
+                isActive={false}
+                key="customDashboard-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-46"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="customDashboard-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/CustomDashboard"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="customDashboard-nav"
+                      href="/CustomDashboard"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="customDashboard-nav"
+                        href="/CustomDashboard"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Dashboards
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+            </ul>
+          </section>
+        </li>
+      </NavExpandable>
+    </nav>
+  </Nav>
+</DevUINav>
+`;
+
+exports[`DevUINav tests::Sections disabled Snapshot testing with jobs management props 1`] = `
+<DevUINav
+  pathname="/JobsManagement"
+>
+  <Nav
+    aria-label="Nav"
+    onSelect={[Function]}
+    onToggle={[Function]}
+    ouiaSafe={true}
+    theme="dark"
+  >
+    <nav
+      aria-label="Nav"
+      className="pf-c-nav"
+      data-ouia-component-id="OUIA-Generated-Nav-6"
       data-ouia-component-type="PF4/Nav"
       data-ouia-safe={true}
     >
@@ -1284,7 +2271,7 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with forms list prop
             </li>
           </NavItem>
           <NavItem
-            isActive={false}
+            isActive={true}
             key="jobs-management-nav"
           >
             <li
@@ -1295,16 +2282,16 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with forms list prop
               onMouseOver={[Function]}
             >
               <Link
-                aria-current={null}
-                className="pf-c-nav__link"
+                aria-current="page"
+                className="pf-c-nav__link pf-m-current"
                 data-ouia-navigation-name="jobs-management-nav"
                 onClick={[Function]}
                 tabIndex={null}
                 to="/JobsManagement"
               >
                 <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
+                  aria-current="page"
+                  className="pf-c-nav__link pf-m-current"
                   data-ouia-navigation-name="jobs-management-nav"
                   href="/JobsManagement"
                   navigate={[Function]}
@@ -1312,8 +2299,8 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with forms list prop
                   tabIndex={null}
                 >
                   <a
-                    aria-current={null}
-                    className="pf-c-nav__link"
+                    aria-current="page"
+                    className="pf-c-nav__link pf-m-current"
                     data-ouia-navigation-name="jobs-management-nav"
                     href="/JobsManagement"
                     onClick={[Function]}
@@ -1368,7 +2355,7 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with forms list prop
             </li>
           </NavItem>
           <NavItem
-            isActive={true}
+            isActive={false}
             key="forms-list-nav"
           >
             <li
@@ -1379,16 +2366,16 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with forms list prop
               onMouseOver={[Function]}
             >
               <Link
-                aria-current="page"
-                className="pf-c-nav__link pf-m-current"
+                aria-current={null}
+                className="pf-c-nav__link"
                 data-ouia-navigation-name="forms-list-nav"
                 onClick={[Function]}
                 tabIndex={null}
                 to="/Forms"
               >
                 <LinkAnchor
-                  aria-current="page"
-                  className="pf-c-nav__link pf-m-current"
+                  aria-current={null}
+                  className="pf-c-nav__link"
                   data-ouia-navigation-name="forms-list-nav"
                   href="/Forms"
                   navigate={[Function]}
@@ -1396,8 +2383,8 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with forms list prop
                   tabIndex={null}
                 >
                   <a
-                    aria-current="page"
-                    className="pf-c-nav__link pf-m-current"
+                    aria-current={null}
+                    className="pf-c-nav__link"
                     data-ouia-navigation-name="forms-list-nav"
                     href="/Forms"
                     onClick={[Function]}
@@ -1409,293 +2396,167 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with forms list prop
               </Link>
             </li>
           </NavItem>
-          <NavItem
-            isActive={false}
-            key="monitoring-nav"
-          >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-39"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
-            >
-              <Link
-                aria-current={null}
-                className="pf-c-nav__link"
-                data-ouia-navigation-name="monitoring-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/Monitoring"
-              >
-                <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
-                  data-ouia-navigation-name="monitoring-nav"
-                  href="/Monitoring"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
-                >
-                  <a
-                    aria-current={null}
-                    className="pf-c-nav__link"
-                    data-ouia-navigation-name="monitoring-nav"
-                    href="/Monitoring"
-                    onClick={[Function]}
-                    tabIndex={null}
-                  >
-                    Monitoring
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
         </ul>
       </NavList>
-    </nav>
-  </Nav>
-</DevUINav>
-`;
-
-exports[`DevUINav tests::Sections disabled Snapshot testing with jobs management props 1`] = `
-<DevUINav
-  pathname="/JobsManagement"
->
-  <Nav
-    aria-label="Nav"
-    onSelect={[Function]}
-    onToggle={[Function]}
-    ouiaSafe={true}
-    theme="dark"
-  >
-    <nav
-      aria-label="Nav"
-      className="pf-c-nav"
-      data-ouia-component-id="OUIA-Generated-Nav-6"
-      data-ouia-component-type="PF4/Nav"
-      data-ouia-safe={true}
-    >
-      <NavList
-        ariaLeftScroll="Scroll left"
-        ariaRightScroll="Scroll right"
+      <NavExpandable
+        className=""
+        groupId="grp-Monitoring"
+        id=""
+        isActive={false}
+        isExpanded={true}
+        srText="SR Monitoring"
+        title="Monitoring"
       >
-        <ul
-          className="pf-c-nav__list"
-          onScroll={[Function]}
+        <li
+          className="pf-c-nav__item pf-m-expandable pf-m-expanded"
+          data-ouia-component-id="OUIA-Generated-NavExpandable-6"
+          data-ouia-component-type="PF4/NavExpandable"
+          data-ouia-safe={true}
         >
-          <NavItem
-            isActive={false}
-            key="processes-nav"
+          <button
+            aria-expanded={true}
+            className="pf-c-nav__link"
+            id={null}
+            onClick={[Function]}
+            tabIndex={null}
           >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-30"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
+            Monitoring
+            <span
+              className="pf-c-nav__toggle"
             >
-              <Link
-                aria-current={null}
-                className="pf-c-nav__link"
-                data-ouia-navigation-name="processes-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/Processes"
+              <span
+                className="pf-c-nav__toggle-icon"
               >
-                <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
-                  data-ouia-navigation-name="processes-nav"
-                  href="/Processes"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
+                <AngleRightIcon
+                  aria-hidden="true"
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
                 >
-                  <a
-                    aria-current={null}
-                    className="pf-c-nav__link"
-                    data-ouia-navigation-name="processes-nav"
-                    href="/Processes"
-                    onClick={[Function]}
-                    tabIndex={null}
+                  <svg
+                    aria-hidden="true"
+                    aria-labelledby={null}
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style={
+                      Object {
+                        "verticalAlign": "-0.125em",
+                      }
+                    }
+                    viewBox="0 0 256 512"
+                    width="1em"
                   >
-                    Workflows
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
-          <NavItem
-            isActive={true}
-            key="jobs-management-nav"
+                    <path
+                      d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                    />
+                  </svg>
+                </AngleRightIcon>
+              </span>
+            </span>
+          </button>
+          <section
+            aria-labelledby="pf-1662084631042xkcq90ps25"
+            className="pf-c-nav__subnav"
+            hidden={null}
           >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-31"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
+            <h2
+              className="pf-u-screen-reader"
+              id="pf-1662084631042xkcq90ps25"
             >
-              <Link
-                aria-current="page"
-                className="pf-c-nav__link pf-m-current"
-                data-ouia-navigation-name="jobs-management-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/JobsManagement"
-              >
-                <LinkAnchor
-                  aria-current="page"
-                  className="pf-c-nav__link pf-m-current"
-                  data-ouia-navigation-name="jobs-management-nav"
-                  href="/JobsManagement"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
-                >
-                  <a
-                    aria-current="page"
-                    className="pf-c-nav__link pf-m-current"
-                    data-ouia-navigation-name="jobs-management-nav"
-                    href="/JobsManagement"
-                    onClick={[Function]}
-                    tabIndex={null}
-                  >
-                    Jobs
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
-          <NavItem
-            isActive={false}
-            key="task-inbox-nav"
-          >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-32"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
+              SR Monitoring
+            </h2>
+            <ul
+              className="pf-c-nav__list"
             >
-              <Link
-                aria-current={null}
-                className="pf-c-nav__link"
-                data-ouia-navigation-name="task-inbox-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/TaskInbox"
+              <NavItem
+                isActive={false}
+                key="monitoring-nav"
               >
-                <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
-                  data-ouia-navigation-name="task-inbox-nav"
-                  href="/TaskInbox"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-39"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
                 >
-                  <a
-                    aria-current={null}
-                    className="pf-c-nav__link"
-                    data-ouia-navigation-name="task-inbox-nav"
-                    href="/TaskInbox"
-                    onClick={[Function]}
-                    tabIndex={null}
-                  >
-                    Tasks
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
-          <NavItem
-            isActive={false}
-            key="forms-list-nav"
-          >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-33"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
-            >
-              <Link
-                aria-current={null}
-                className="pf-c-nav__link"
-                data-ouia-navigation-name="forms-list-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/Forms"
-              >
-                <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
-                  data-ouia-navigation-name="forms-list-nav"
-                  href="/Forms"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
-                >
-                  <a
-                    aria-current={null}
-                    className="pf-c-nav__link"
-                    data-ouia-navigation-name="forms-list-nav"
-                    href="/Forms"
-                    onClick={[Function]}
-                    tabIndex={null}
-                  >
-                    Forms
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
-          <NavItem
-            isActive={false}
-            key="monitoring-nav"
-          >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-34"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
-            >
-              <Link
-                aria-current={null}
-                className="pf-c-nav__link"
-                data-ouia-navigation-name="monitoring-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/Monitoring"
-              >
-                <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
-                  data-ouia-navigation-name="monitoring-nav"
-                  href="/Monitoring"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
-                >
-                  <a
+                  <Link
                     aria-current={null}
                     className="pf-c-nav__link"
                     data-ouia-navigation-name="monitoring-nav"
-                    href="/Monitoring"
                     onClick={[Function]}
                     tabIndex={null}
+                    to="/Monitoring"
                   >
-                    Monitoring
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
-        </ul>
-      </NavList>
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="monitoring-nav"
+                      href="/Monitoring"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="monitoring-nav"
+                        href="/Monitoring"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Monitoring
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+              <NavItem
+                isActive={false}
+                key="customDashboard-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-40"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="customDashboard-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/CustomDashboard"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="customDashboard-nav"
+                      href="/CustomDashboard"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="customDashboard-nav"
+                        href="/CustomDashboard"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Dashboards
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+            </ul>
+          </section>
+        </li>
+      </NavExpandable>
     </nav>
   </Nav>
 </DevUINav>
@@ -1733,7 +2594,7 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with processes props
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-25"
+              data-ouia-component-id="OUIA-Generated-NavItem-29"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -1775,7 +2636,7 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with processes props
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-26"
+              data-ouia-component-id="OUIA-Generated-NavItem-30"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -1817,7 +2678,7 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with processes props
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-27"
+              data-ouia-component-id="OUIA-Generated-NavItem-31"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -1859,7 +2720,7 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with processes props
           >
             <li
               className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-28"
+              data-ouia-component-id="OUIA-Generated-NavItem-32"
               data-ouia-component-type="PF4/NavItem"
               data-ouia-safe={true}
               onMouseOver={[Function]}
@@ -1895,50 +2756,167 @@ exports[`DevUINav tests::Sections disabled Snapshot testing with processes props
               </Link>
             </li>
           </NavItem>
-          <NavItem
-            isActive={false}
-            key="monitoring-nav"
+        </ul>
+      </NavList>
+      <NavExpandable
+        className=""
+        groupId="grp-Monitoring"
+        id=""
+        isActive={false}
+        isExpanded={true}
+        srText="SR Monitoring"
+        title="Monitoring"
+      >
+        <li
+          className="pf-c-nav__item pf-m-expandable pf-m-expanded"
+          data-ouia-component-id="OUIA-Generated-NavExpandable-5"
+          data-ouia-component-type="PF4/NavExpandable"
+          data-ouia-safe={true}
+        >
+          <button
+            aria-expanded={true}
+            className="pf-c-nav__link"
+            id={null}
+            onClick={[Function]}
+            tabIndex={null}
           >
-            <li
-              className="pf-c-nav__item"
-              data-ouia-component-id="OUIA-Generated-NavItem-29"
-              data-ouia-component-type="PF4/NavItem"
-              data-ouia-safe={true}
-              onMouseOver={[Function]}
+            Monitoring
+            <span
+              className="pf-c-nav__toggle"
             >
-              <Link
-                aria-current={null}
-                className="pf-c-nav__link"
-                data-ouia-navigation-name="monitoring-nav"
-                onClick={[Function]}
-                tabIndex={null}
-                to="/Monitoring"
+              <span
+                className="pf-c-nav__toggle-icon"
               >
-                <LinkAnchor
-                  aria-current={null}
-                  className="pf-c-nav__link"
-                  data-ouia-navigation-name="monitoring-nav"
-                  href="/Monitoring"
-                  navigate={[Function]}
-                  onClick={[Function]}
-                  tabIndex={null}
+                <AngleRightIcon
+                  aria-hidden="true"
+                  color="currentColor"
+                  noVerticalAlign={false}
+                  size="sm"
                 >
-                  <a
+                  <svg
+                    aria-hidden="true"
+                    aria-labelledby={null}
+                    fill="currentColor"
+                    height="1em"
+                    role="img"
+                    style={
+                      Object {
+                        "verticalAlign": "-0.125em",
+                      }
+                    }
+                    viewBox="0 0 256 512"
+                    width="1em"
+                  >
+                    <path
+                      d="M224.3 273l-136 136c-9.4 9.4-24.6 9.4-33.9 0l-22.6-22.6c-9.4-9.4-9.4-24.6 0-33.9l96.4-96.4-96.4-96.4c-9.4-9.4-9.4-24.6 0-33.9L54.3 103c9.4-9.4 24.6-9.4 33.9 0l136 136c9.5 9.4 9.5 24.6.1 34z"
+                    />
+                  </svg>
+                </AngleRightIcon>
+              </span>
+            </span>
+          </button>
+          <section
+            aria-labelledby="pf-166208463102150e490lvxa7"
+            className="pf-c-nav__subnav"
+            hidden={null}
+          >
+            <h2
+              className="pf-u-screen-reader"
+              id="pf-166208463102150e490lvxa7"
+            >
+              SR Monitoring
+            </h2>
+            <ul
+              className="pf-c-nav__list"
+            >
+              <NavItem
+                isActive={false}
+                key="monitoring-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-33"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
                     aria-current={null}
                     className="pf-c-nav__link"
                     data-ouia-navigation-name="monitoring-nav"
-                    href="/Monitoring"
                     onClick={[Function]}
                     tabIndex={null}
+                    to="/Monitoring"
                   >
-                    Monitoring
-                  </a>
-                </LinkAnchor>
-              </Link>
-            </li>
-          </NavItem>
-        </ul>
-      </NavList>
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="monitoring-nav"
+                      href="/Monitoring"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="monitoring-nav"
+                        href="/Monitoring"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Monitoring
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+              <NavItem
+                isActive={false}
+                key="customDashboard-nav"
+              >
+                <li
+                  className="pf-c-nav__item"
+                  data-ouia-component-id="OUIA-Generated-NavItem-34"
+                  data-ouia-component-type="PF4/NavItem"
+                  data-ouia-safe={true}
+                  onMouseOver={[Function]}
+                >
+                  <Link
+                    aria-current={null}
+                    className="pf-c-nav__link"
+                    data-ouia-navigation-name="customDashboard-nav"
+                    onClick={[Function]}
+                    tabIndex={null}
+                    to="/CustomDashboard"
+                  >
+                    <LinkAnchor
+                      aria-current={null}
+                      className="pf-c-nav__link"
+                      data-ouia-navigation-name="customDashboard-nav"
+                      href="/CustomDashboard"
+                      navigate={[Function]}
+                      onClick={[Function]}
+                      tabIndex={null}
+                    >
+                      <a
+                        aria-current={null}
+                        className="pf-c-nav__link"
+                        data-ouia-navigation-name="customDashboard-nav"
+                        href="/CustomDashboard"
+                        onClick={[Function]}
+                        tabIndex={null}
+                      >
+                        Dashboards
+                      </a>
+                    </LinkAnchor>
+                  </Link>
+                </li>
+              </NavItem>
+            </ul>
+          </section>
+        </li>
+      </NavExpandable>
     </nav>
   </Nav>
 </DevUINav>

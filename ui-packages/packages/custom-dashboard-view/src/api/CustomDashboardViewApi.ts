@@ -15,5 +15,5 @@
  */
 
 export interface CustomDashboardViewApi {
-  // custom dashboard list api
+  // custom dashboard view api
 }

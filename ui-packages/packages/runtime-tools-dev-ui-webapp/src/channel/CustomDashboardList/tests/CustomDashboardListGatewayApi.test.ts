@@ -14,58 +14,59 @@
  * limitations under the License.
  */
 
-// import { FormInfo } from '@kogito-apps/forms-list';
 import {
   CustomDashboardListGatewayApi,
-  CustomDashboardListGatewayApiImpl
-  // OnOpenFormListener
+  CustomDashboardListGatewayApiImpl,
+  OnOpenDashboardListener
 } from '../CustomDashboardListGatewayApi';
+import { getCustomDashboard } from '../../apis';
+import { CustomDashboardInfo } from '@kogito-apps/custom-dashboard-list';
 
 jest.mock('../../apis/apis', () => ({
-  getForms: jest.fn()
+  getCustomDashboard: jest.fn()
 }));
 
 let gatewayApi: CustomDashboardListGatewayApi;
 
-describe('FormsListGatewayApi tests', () => {
+describe('CustomDashboardListGatewayApi tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     gatewayApi = new CustomDashboardListGatewayApiImpl();
   });
 
   it('applyFilter', async () => {
-    const formsFilter = {
-      formNames: ['form1']
+    const filter = {
+      customDashboardNames: ['dashboard1']
     };
-    gatewayApi.applyFilter(formsFilter);
-    expect(await gatewayApi.getFormFilter()).toEqual(formsFilter);
+    gatewayApi.applyFilter(filter);
+    expect(await gatewayApi.getCustomDashboardFilter()).toEqual(filter);
   });
 
-  it('getForms', async () => {
-    const formsFilter = {
-      formNames: ['form1']
+  it('getCustomDashboard', async () => {
+    const filter = {
+      customDashboardNames: ['dashboard1']
     };
-    gatewayApi.applyFilter(formsFilter);
-    gatewayApi.getFormsQuery();
-    expect(await gatewayApi.getFormFilter()).toEqual(formsFilter);
+    gatewayApi.applyFilter(filter);
+    gatewayApi.getCustomDashboardsQuery();
+    expect(await gatewayApi.getCustomDashboardFilter()).toEqual(filter);
   });
 
-  // it('openForm', () => {
-  //   const form: FormInfo = {
-  //     name: 'form1',
-  //     type: 'html',
-  //     lastModified: new Date(2020, 6, 12)
-  //   };
-  //   const listener: OnOpenFormListener = {
-  //     onOpen: jest.fn()
-  //   };
-  //
-  //   const unsubscribe = gatewayApi.onOpenFormListen(listener);
-  //
-  //   gatewayApi.openForm(form);
-  //
-  //   expect(listener.onOpen).toHaveBeenLastCalledWith(form);
-  //
-  //   unsubscribe.unSubscribe();
-  // });
+  it('openDashboard', () => {
+    const dashboardInfo: CustomDashboardInfo = {
+      name: 'dashboard',
+      path: '/user/html',
+      lastModified: new Date(2020, 6, 12)
+    };
+    const listener: OnOpenDashboardListener = {
+      onOpen: jest.fn()
+    };
+
+    const unsubscribe = gatewayApi.onOpenCustomDashboardListen(listener);
+
+    gatewayApi.openDashboard(dashboardInfo);
+
+    expect(listener.onOpen).toHaveBeenLastCalledWith(dashboardInfo);
+
+    unsubscribe.unSubscribe();
+  });
 });

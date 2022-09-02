@@ -34,7 +34,7 @@ export const MockedApiRequests = jest.fn<
   >,
   []
 >(() => ({
-  customDashboardList__getFormFilter: jest.fn(),
+  customDashboardList__getFilter: jest.fn(),
   customDashboardList__applyFilter: jest.fn(),
   customDashboardList__getCustomDashboardQuery: jest.fn(),
   customDashboardList__openDashboard: jest.fn()
@@ -116,7 +116,7 @@ export const MockedEnvelopeBusController = new MockedEnvelopeBusControllerDefini
   CustomDashboardListChannelApi
 >;
 
-export const MockedFormsListEnvelopeViewApi = jest.fn<
+export const MockedCustomDashboardListEnvelopeViewApi = jest.fn<
   CustomDashboardListEnvelopeViewApi,
   []
 >(() => ({

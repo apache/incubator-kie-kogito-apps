@@ -24,7 +24,7 @@ import {
 import { CustomDashboardViewEnvelopeContext } from './CustomDashboardViewEnvelopeContext';
 
 /**
- * Implementation of the FormsListEnvelopeApi
+ * Implementation of the CustomDashboardViewEnvelopeApi
  */
 export class CustomDashboardViewEnvelopeApiImpl
   implements CustomDashboardViewEnvelopeApi {

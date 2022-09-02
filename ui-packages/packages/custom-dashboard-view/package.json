@@ -7,14 +7,18 @@
   "types": "dist/index.d.ts",
   "author": "",
   "license": "Apache-2.0",
-  "repository": "https://github.com/kiegroup/kogito-apps.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kiegroup/kogito-apps.git"
+  },
   "files": [
     "dist/"
   ],
   "scripts": {
     "precommit": "lint-staged",
     "copy:dashbuilder": "mkdir -p dist/dashbuilder && cp -r ../../node_modules/@dashbuilder-js/dashbuilder-client/dist/* dist/dashbuilder && cp src/dashbuilder/setup.js dist/dashbuilder",
-    "build": "rimraf dist  && tsc -m commonjs -p tsconfig.json && yarn run copy:dashbuilder ",
+    "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css,svg,png}\" dist/",
+    "build": "rimraf dist  && tsc -m commonjs -p tsconfig.json && yarn run copy:dashbuilder && yarn run copy:css ",
     "build:prod": "yarn run build",
     "test:report": "yarn test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
@@ -26,7 +30,6 @@
   },
   "dependencies": {
     "@kogito-apps/components-common": "^1.0.0",
-    "@kogito-apps/management-console-shared": "^1.0.0",
     "@kogito-apps/patternfly-base": "^1.0.0"
   },
   "devDependencies": {
@@ -46,6 +49,11 @@
     "coveragePathIgnorePatterns": [
       "./src/static",
       "dist/",
+      "src/types/",
+      "./tests/mocks/",
+      "./src/api/",
+      "./src/envelope/contexts/",
+      "./src/envelope/index.ts",
       "mocks/"
     ],
     "coverageReporters": [

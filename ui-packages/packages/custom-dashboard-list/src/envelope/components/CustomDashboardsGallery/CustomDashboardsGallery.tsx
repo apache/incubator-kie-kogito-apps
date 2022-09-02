@@ -72,10 +72,10 @@ const CustomDashboardsGallery: React.FC<CustomDashboardGalleryProps &
       {...componentOuiaProps(ouiaId, 'customDashboard-gallery', ouiaSafe)}
     >
       {customDashboardsDatas &&
-        customDashboardsDatas.map((formData, index) => (
+        customDashboardsDatas.map((customDashboardData, index) => (
           <GalleryItem key={index}>
             <CustomDashboardCard
-              customDashboardData={formData}
+              customDashboardData={customDashboardData}
               key={index}
               driver={driver}
             ></CustomDashboardCard>

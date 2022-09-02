@@ -55,7 +55,7 @@ export function init(args: {
    * Function that knows how to render a CustomDashboardList.
    * In this case, it's a React application, but any other framework can be used.
    *
-   * Returns a Promise<() => FormsListEnvelopeViewApi> that can be used in CustomDashboardListEnvelopeApiImpl.
+   * Returns a Promise<() => CustomDashboardListEnvelopeViewApi> that can be used in CustomDashboardListEnvelopeApiImpl.
    */
   const envelopeViewDelegate = async () => {
     const ref = React.createRef<CustomDashboardListEnvelopeViewApi>();

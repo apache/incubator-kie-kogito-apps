@@ -23,7 +23,7 @@ import '../../styles.css';
 
 const CustomDashboardListPage: React.FC<OUIAProps> = () => {
   useEffect(() => {
-    return ouiaPageTypeAndObjectId('customDashbaord-list');
+    return ouiaPageTypeAndObjectId('customDashboard-list');
   });
 
   return (

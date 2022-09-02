@@ -16,25 +16,25 @@
 
 import {
   MockedEnvelopeBusController,
-  MockedFormsListEnvelopeViewApi
+  MockedCustomDashboardViewEnvelopeViewApi
 } from './mocks/Mocks';
 import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
 import {
-  CustomDashboardListChannelApi,
-  CustomDashboardListEnvelopeApi
+  CustomDashboardViewChannelApi,
+  CustomDashboardViewEnvelopeApi
 } from '../../api';
-import { CustomDashboardViewEnvelopeApiImpl } from '../CustomDashboardListEnvelopeApiImpl';
-import { CustomDashboardListEnvelopeViewApi } from '../CustomDashboardListEnvelopeView';
-import { CustomDashboardViewEnvelopeContext } from '../CustomDashboardListEnvelopeContext';
+import { CustomDashboardViewEnvelopeApiImpl } from '../CustomDashboardViewEnvelopeApiImpl';
+import { CustomDashboardViewEnvelopeViewApi } from '../CustomDashboardViewEnvelopeView';
+import { CustomDashboardViewEnvelopeContext } from '../CustomDashboardViewEnvelopeContext';
 
 describe('CustomDashboardViewEnvelopeApiImpl tests', () => {
   it('initialize', () => {
     const envelopeBusController = MockedEnvelopeBusController;
-    const view = new MockedFormsListEnvelopeViewApi();
+    const view = new MockedCustomDashboardViewEnvelopeViewApi();
     const args: EnvelopeApiFactoryArgs<
-      CustomDashboardListEnvelopeApi,
-      CustomDashboardListChannelApi,
-      CustomDashboardListEnvelopeViewApi,
+      CustomDashboardViewEnvelopeApi,
+      CustomDashboardViewChannelApi,
+      CustomDashboardViewEnvelopeViewApi,
       CustomDashboardViewEnvelopeContext
     > = {
       envelopeBusController,
@@ -44,10 +44,13 @@ describe('CustomDashboardViewEnvelopeApiImpl tests', () => {
 
     const envelopeApi = new CustomDashboardViewEnvelopeApiImpl(args);
 
-    envelopeApi.customDashboardList__init({
-      envelopeServerId: 'envelopeServerId',
-      origin: 'origin'
-    });
+    envelopeApi.customDashboardView__init(
+      {
+        envelopeServerId: 'envelopeServerId',
+        origin: 'origin'
+      },
+      'name'
+    );
 
     expect(envelopeBusController.associate).toHaveBeenCalledWith(
       'origin',

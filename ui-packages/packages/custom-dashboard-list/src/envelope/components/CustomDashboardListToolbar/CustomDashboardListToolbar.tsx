@@ -33,8 +33,8 @@ import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { CustomDashboardFilter } from '../../../api';
 
 interface CustomDashboardListToolbarProps {
-  filterFormNames: string[];
-  setFilterFormNames: React.Dispatch<React.SetStateAction<string[]>>;
+  filterDashboardNames: string[];
+  setFilterDashboardNames: React.Dispatch<React.SetStateAction<string[]>>;
   applyFilter: (filter: CustomDashboardFilter) => void;
 }
 
@@ -45,55 +45,55 @@ enum Category {
 const CustomDashboardListToolbar: React.FC<CustomDashboardListToolbarProps &
   OUIAProps> = ({
   applyFilter,
-  filterFormNames,
-  setFilterFormNames,
+  filterDashboardNames,
+  setFilterDashboardNames,
   ouiaSafe,
   ouiaId
 }) => {
-  const [formNameInput, setFormNameInput] = useState<string>('');
+  const [dashboardNameInput, setDashboardNameInput] = useState<string>('');
 
   const doResetFilter = (): void => {
     applyFilter({
       customDashboardNames: []
     });
-    setFilterFormNames([]);
+    setFilterDashboardNames([]);
   };
 
   const doRefresh = (): void => {
     applyFilter({
-      customDashboardNames: [...filterFormNames]
+      customDashboardNames: [...filterDashboardNames]
     });
   };
 
   const onEnterClicked = (event: React.KeyboardEvent<EventTarget>): void => {
     /* istanbul ignore else */
     if (event.key === 'Enter') {
-      formNameInput.length > 0 && doApplyFilter();
+      dashboardNameInput.length > 0 && doApplyFilter();
     }
   };
 
   const onDeleteFilterGroup = (categoryName: Category, value: string): void => {
-    const newFilterFormNames = [...filterFormNames];
+    const newFilterDashboardNames = [...filterDashboardNames];
     if (categoryName === Category.Custom_DashBoard_NAME) {
-      _.remove(newFilterFormNames, (status: string) => {
+      _.remove(newFilterDashboardNames, (status: string) => {
         return status === value;
       });
-      setFilterFormNames(newFilterFormNames);
+      setFilterDashboardNames(newFilterDashboardNames);
       applyFilter({
-        customDashboardNames: newFilterFormNames
+        customDashboardNames: newFilterDashboardNames
       });
     }
   };
 
   const doApplyFilter = (): void => {
-    const newFormNames = [...filterFormNames];
-    if (formNameInput && !newFormNames.includes(formNameInput)) {
-      newFormNames.push(formNameInput);
-      setFilterFormNames(newFormNames);
+    const newDashboardNames = [...filterDashboardNames];
+    if (dashboardNameInput && !newDashboardNames.includes(dashboardNameInput)) {
+      newDashboardNames.push(dashboardNameInput);
+      setFilterDashboardNames(newDashboardNames);
     }
-    setFormNameInput('');
+    setDashboardNameInput('');
     applyFilter({
-      customDashboardNames: newFormNames
+      customDashboardNames: newDashboardNames
     });
   };
 
@@ -101,21 +101,21 @@ const CustomDashboardListToolbar: React.FC<CustomDashboardListToolbarProps &
     <React.Fragment>
       <ToolbarGroup variant="filter-group">
         <ToolbarFilter
-          key="input-form-name"
-          chips={filterFormNames}
+          key="input-customDashboard-name"
+          chips={filterDashboardNames}
           deleteChip={onDeleteFilterGroup}
           categoryName={Category.Custom_DashBoard_NAME}
         >
           <InputGroup>
             <TextInput
-              name="formName"
-              id="formName"
+              name="customDashboardName"
+              id="customDashboardName"
               type="search"
-              aria-label="form name"
-              onChange={setFormNameInput}
+              aria-label="customDashboard name"
+              onChange={setDashboardNameInput}
               onKeyPress={onEnterClicked}
-              placeholder="Filter by Form name"
-              value={formNameInput}
+              placeholder="Filter by customDashboard name"
+              value={dashboardNameInput}
             />
           </InputGroup>
         </ToolbarFilter>
@@ -147,7 +147,7 @@ const CustomDashboardListToolbar: React.FC<CustomDashboardListToolbarProps &
 
   return (
     <Toolbar
-      id="forms-list-with-filter"
+      id="customDashboard-list-with-filter"
       className="pf-m-toggle-group-container"
       collapseListedFiltersBreakpoint="xl"
       clearAllFilters={doResetFilter}

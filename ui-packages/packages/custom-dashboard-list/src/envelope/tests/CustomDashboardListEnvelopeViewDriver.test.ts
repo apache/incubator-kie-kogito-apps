@@ -33,7 +33,7 @@ let requests: Pick<
 >;
 let driver: CustomDashboardListEnvelopeViewDriver;
 
-describe('FormsListEnvelopeViewDriver tests', () => {
+describe('CustomDashboardListEnvelopeViewDriver tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     channelApi = new MockedMessageBusClientApi();
@@ -42,16 +42,16 @@ describe('FormsListEnvelopeViewDriver tests', () => {
   });
 
   describe('Requests', () => {
-    it('get forms query', () => {
+    it('get custom dashboard query', () => {
       driver.getCustomDashboardsQuery();
       expect(
-        requests.customDashboardList__getCustomDashboardQuery()
+        requests.customDashboardList__getCustomDashboardQuery
       ).toHaveBeenCalled();
     });
 
-    it('getFormFilter', () => {
+    it('getCustomDashboardFilter', () => {
       driver.getCustomDashboardFilter();
-      expect(requests.customDashboardList__getFormFilter()).toHaveBeenCalled();
+      expect(requests.customDashboardList__getFilter).toHaveBeenCalled();
     });
 
     it('applyFilter', () => {
@@ -65,14 +65,14 @@ describe('FormsListEnvelopeViewDriver tests', () => {
     });
 
     it('open dashboard', () => {
-      const formData: CustomDashboardInfo = {
+      const customDashboardData: CustomDashboardInfo = {
         name: 'dashboard1',
         path: '/user/home',
         lastModified: new Date(new Date('2022-07-11T18:30:00.000Z'))
       };
-      driver.openDashboard(formData);
+      driver.openDashboard(customDashboardData);
       expect(requests.customDashboardList__openDashboard).toHaveBeenCalledWith(
-        formData
+        customDashboardData
       );
     });
   });

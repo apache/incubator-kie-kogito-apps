@@ -32,7 +32,7 @@ import { Envelope, EnvelopeDivConfig } from '@kogito-tooling/envelope';
 /**
  * Function that starts an Envelope application.
  *
- * @param args.container: The HTML element in which the CustomDashboardList will render
+ * @param args.container: The HTML element in which the CustomDashboardView will render
  * @param args.bus: The implementation of a `bus` that knows how to send messages to the Channel.
  *
  */
@@ -52,10 +52,10 @@ export function init(args: {
   >(args.bus, args.config);
 
   /**
-   * Function that knows how to render a CustomDashboardList.
+   * Function that knows how to render a CustomDashboardView.
    * In this case, it's a React application, but any other framework can be used.
    *
-   * Returns a Promise<() => FormsListEnvelopeViewApi> that can be used in CustomDashboardViewEnvelopeApiImpl.
+   * Returns a Promise<() => CustomDashboardViewEnvelopeViewApi> that can be used in CustomDashboardViewEnvelopeApiImpl.
    */
   const envelopeViewDelegate = async () => {
     const ref = React.createRef<CustomDashboardViewEnvelopeViewApi>();

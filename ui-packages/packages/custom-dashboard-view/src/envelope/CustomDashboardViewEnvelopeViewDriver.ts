@@ -21,7 +21,7 @@ import {
 } from '../api';
 
 /**
- * Implementation of FormsListDriver that delegates calls to the channel Api
+ * Implementation of CustomDashboardViewEnvelopeViewDriver that delegates calls to the channel Api
  */
 export default class CustomDashboardViewEnvelopeViewDriver
   implements CustomDashboardViewDriver {

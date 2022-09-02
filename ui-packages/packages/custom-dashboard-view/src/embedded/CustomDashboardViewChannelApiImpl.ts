@@ -20,7 +20,7 @@ import {
 } from '../api';
 
 /**
- * Implementation of the CustomDashboardListChannelApiImpl delegating to a FormsListDriver
+ * Implementation of the CustomDashboardViewChannelApiImpl delegating to a CustomDashboardViewDriver
  */
 export class CustomDashboardViewChannelApiImpl
   implements CustomDashboardViewChannelApi {

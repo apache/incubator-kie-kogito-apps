@@ -106,8 +106,8 @@ const CustomDashboardList: React.FC<CustomDashboardListProps & OUIAProps> = ({
         <SplitItem>
           <CustomDashboardListToolbar
             applyFilter={applyFilter}
-            setFilterFormNames={setFilterNames}
-            filterFormNames={filterNames}
+            setFilterDashboardNames={setFilterNames}
+            filterDashboardNames={filterNames}
           />
         </SplitItem>
         <SplitItem isFilled></SplitItem>

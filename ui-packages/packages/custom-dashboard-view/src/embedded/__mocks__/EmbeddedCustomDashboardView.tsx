@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React from 'react';
 
-const MockedFormsGallery = (): React.ReactElement => {
+const MockedEmbeddedCustomDashboardView = (): React.ReactElement => {
   return <></>;
 };
 
-export default MockedFormsGallery;
+export default MockedEmbeddedCustomDashboardView;

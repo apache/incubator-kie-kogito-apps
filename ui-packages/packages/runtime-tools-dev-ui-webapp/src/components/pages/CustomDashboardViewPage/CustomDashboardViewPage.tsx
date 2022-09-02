@@ -19,7 +19,7 @@ import { OUIAProps } from '@kogito-apps/ouia-tools';
 import { Card, PageSection } from '@patternfly/react-core';
 import { PageTitle } from '@kogito-apps/consoles-common';
 import { useHistory } from 'react-router-dom';
-import CustomDashboardViewConatainer from '../../containers/CustomDashbaordViewContainer/CustomDashboardViewConatainer';
+import CustomDashboardViewConatainer from '../../containers/CustomDashboardViewContainer/CustomDashboardViewContainer';
 import { CustomDashboardInfo } from '@kogito-apps/custom-dashboard-list';
 
 const CustomDashboardViewPage: React.FC<OUIAProps> = () => {

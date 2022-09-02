@@ -49,12 +49,3 @@ export const getDateColumn = (
     isSortable: true
   };
 };
-
-// export const getFormTypeColumn = (): DataTableColumn => {
-//   return {
-//     label: 'Type',
-//     path: 'type',
-//     bodyCellTransformer: cellValue => getFormTypeLabel(cellValue),
-//     isSortable: true
-//   };
-// };

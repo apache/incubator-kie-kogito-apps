@@ -15,8 +15,8 @@
  */
 import React from 'react';
 
-const MockedFormsListContainer = (): React.ReactElement => {
+const MockedCustomDashboardListContainer = (): React.ReactElement => {
   return <></>;
 };
 
-export default MockedFormsListContainer;
+export default MockedCustomDashboardListContainer;

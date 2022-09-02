@@ -91,6 +91,9 @@ module.exports = {
             '../../node_modules/@kogito-apps/process-details/dist/static'
           ),
           path.resolve(
+                  '../../node_modules/@kogito-apps/custom-dashboard-view/dist/static'
+          ),
+          path.resolve(
             '../../node_modules/@kogito-apps/management-console-shared/dist/static'
           ),
           path.resolve(
@@ -110,6 +113,9 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/process-definition-list/dist/static'
+          ),
+          path.resolve(
+                  '../../node_modules/@kogito-apps/custom-dashboard-view/dist/static'
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/process-monitoring/dist/static'
@@ -205,6 +211,9 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/process-definition-list/dist/static'
+          ),
+          path.resolve(
+                  '../../node_modules/@kogito-apps/custom-dashboard-view/dist/static'
           )
         ],
         use: [

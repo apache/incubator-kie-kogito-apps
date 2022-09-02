@@ -16,7 +16,7 @@
 
 import {
   MockedEnvelopeBusController,
-  MockedFormsListEnvelopeViewApi
+  MockedCustomDashboardListEnvelopeViewApi
 } from './mocks/Mocks';
 import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
 import {
@@ -30,7 +30,7 @@ import { CustomDashboardListEnvelopeContext } from '../CustomDashboardListEnvelo
 describe('CustomDashboardListEnvelopeApiImpl tests', () => {
   it('initialize', () => {
     const envelopeBusController = MockedEnvelopeBusController;
-    const view = new MockedFormsListEnvelopeViewApi();
+    const view = new MockedCustomDashboardListEnvelopeViewApi();
     const args: EnvelopeApiFactoryArgs<
       CustomDashboardListEnvelopeApi,
       CustomDashboardListChannelApi,

@@ -21,7 +21,7 @@ const CustomDashboardViewContext = React.createContext<
   CustomDashboardViewGatewayApi
 >(null);
 
-export const useCustomDashboardListGatewayApi = (): CustomDashboardViewGatewayApi =>
+export const useCustomDashboardViewGatewayApi = (): CustomDashboardViewGatewayApi =>
   useContext<CustomDashboardViewGatewayApi>(CustomDashboardViewContext);
 
 export default CustomDashboardViewContext;

@@ -22,20 +22,20 @@ import {
 } from '../api';
 
 /**
- * Implementation of the CustomDashboardListChannelApiImpl delegating to a FormsListDriver
+ * Implementation of the CustomDashboardListChannelApiImpl delegating to a CustomDashboardListDriver
  */
 export class CustomDashboardListChannelApiImpl
   implements CustomDashboardListChannelApi {
   constructor(private readonly driver: CustomDashboardListDriver) {}
 
-  customDashboardList__getFormFilter(): Promise<CustomDashboardFilter> {
+  customDashboardList__getFilter(): Promise<CustomDashboardFilter> {
     return this.driver.getCustomDashboardFilter();
   }
 
   customDashboardList__applyFilter(
-    formFilter: CustomDashboardFilter
+    customDashboardFilter: CustomDashboardFilter
   ): Promise<void> {
-    return this.driver.applyFilter(formFilter);
+    return this.driver.applyFilter(customDashboardFilter);
   }
 
   customDashboardList__getCustomDashboardQuery(): Promise<

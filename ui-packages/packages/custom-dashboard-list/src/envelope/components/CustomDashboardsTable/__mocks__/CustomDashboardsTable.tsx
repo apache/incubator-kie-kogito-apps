@@ -15,8 +15,8 @@
  */
 import React from 'react';
 
-const MockedFormsTable = (): React.ReactElement => {
+const MockedCustomDashboardTable = (): React.ReactElement => {
   return <></>;
 };
 
-export default MockedFormsTable;
+export default MockedCustomDashboardTable;

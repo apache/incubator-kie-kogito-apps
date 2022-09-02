@@ -15,19 +15,19 @@
  */
 
 import React from 'react';
-import { EmbeddedCustomDashboardList } from '../EmbeddedCustomDashboardList';
-import { MockedCustomDashboardListDriver } from './utils/Mocks';
+import { EmbeddedCustomDashboardView } from '../EmbeddedCustomDashboardView';
+import { MockedCustomDashboardViewDriver } from './utils/Mocks';
 import { mount } from 'enzyme';
 
-describe('EmbeddedCustomDashboardList tests', () => {
+describe('EmbeddedCustomDashboardView tests', () => {
   it('Snapshot', () => {
     const props = {
+      dashboardName: 'name',
       targetOrigin: 'origin',
-      envelopePath: 'path',
-      driver: new MockedCustomDashboardListDriver()
+      driver: new MockedCustomDashboardViewDriver()
     };
 
-    const wrapper = mount(<EmbeddedCustomDashboardList {...props} />);
+    const wrapper = mount(<EmbeddedCustomDashboardView {...props} />);
 
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.props().driver).toStrictEqual(props.driver);

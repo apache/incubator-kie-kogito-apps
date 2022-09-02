@@ -16,4 +16,4 @@
 
 export { CustomDashboardListGatewayApi } from './CustomDashboardListGatewayApi';
 export * from './CustomDashboardListContext';
-export { default as CustomDashboardListContext } from './CustomDashboardListContextProvider';
+export { default as CustomDashboardListContextProvider } from './CustomDashboardListContextProvider';

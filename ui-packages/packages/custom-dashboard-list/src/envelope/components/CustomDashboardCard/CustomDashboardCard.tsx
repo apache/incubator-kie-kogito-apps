@@ -29,29 +29,17 @@ import {
 import { CustomDashboardInfo } from '../../../api/CustomDashboardListEnvelopeApi';
 import { CustomDashboardListDriver } from '../../../api/CustomDashboardListDriver';
 import Moment from 'react-moment';
-export interface FormCardProps {
+export interface CustomDashboardCardProps {
   customDashboardData: CustomDashboardInfo;
   driver: CustomDashboardListDriver;
 }
 
-const CustomDashboardCard: React.FC<FormCardProps & OUIAProps> = ({
+const CustomDashboardCard: React.FC<CustomDashboardCardProps & OUIAProps> = ({
   customDashboardData,
   driver,
   ouiaId,
   ouiaSafe
 }) => {
-  // const getLabel = (): string | JSX.Element => {
-  //   switch (customDashboardData.type) {
-  //     case 'HTML':
-  //       return <Label variant="outline">HTML</Label>;
-  //     case 'TSX':
-  //       return <Label variant="outline">REACT</Label>;
-  //     /* istanbul ignore next */
-  //     default:
-  //       return '';
-  //   }
-  // };
-
   const handleCardClick = (): void => {
     driver.openDashboard(customDashboardData);
   };

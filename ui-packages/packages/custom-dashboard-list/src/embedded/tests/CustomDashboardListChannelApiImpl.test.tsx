@@ -31,8 +31,8 @@ describe('CustomDashboardListChannelApiImpl tests', () => {
     api = new CustomDashboardListChannelApiImpl(driver);
   });
 
-  it('CustomDashboardList__getFormFilter', () => {
-    api.customDashboardList__getFormFilter();
+  it('CustomDashboardList__getFilter', () => {
+    api.customDashboardList__getFilter();
     expect(driver.getCustomDashboardFilter).toHaveBeenCalled();
   });
 
@@ -44,12 +44,12 @@ describe('CustomDashboardListChannelApiImpl tests', () => {
     expect(driver.applyFilter).toHaveBeenCalledWith(filter);
   });
 
-  it('CustomDashboardList__getFormsQuery', () => {
+  it('customDashboardList__getCustomDashboardQuery', () => {
     api.customDashboardList__getCustomDashboardQuery();
     expect(driver.getCustomDashboardsQuery).toHaveBeenCalled();
   });
 
-  it('CustomDashboardList__openForm', () => {
+  it('customDashboardList__openDashboard', () => {
     const data: CustomDashboardInfo = {
       name: 'dashboard1',
       path: '/user/home',

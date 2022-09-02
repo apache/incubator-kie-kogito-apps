@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 import { CustomDashboardViewDriver } from '../../../api/CustomDashboardViewDriver';
-import { ServerErrors } from '@kogito-apps/common';
+import { ServerErrors } from '@kogito-apps/components-common';
 import { Bullseye, Card } from '@patternfly/react-core';
 
 export interface CustomDashboardViewProps {
@@ -34,21 +34,27 @@ const CustomDashboardView: React.FC<CustomDashboardViewProps & OUIAProps> = ({
   ouiaSafe
 }) => {
   const ref = useRef(null);
-  const [dashbaordContent, setDashbaordContent] = useState<string>();
+  const [dashboardContent, setDashboardContent] = useState<string>();
   const [errorMessage, setErrorMessage] = useState<string>();
   const [isError, setError] = useState<boolean>(false);
-
+  const [isReady, setReady] = useState<boolean>(false);
   driver
     .getCustomDashboardContent(customDashboardName)
-    .then(value => setDashbaordContent(value))
+    .then(value => setDashboardContent(value))
     .catch(error => {
       setError(true);
-      setErrorMessage(error);
+      setErrorMessage(error.message);
     });
 
   window.addEventListener('message', e => {
     if (e.data == 'ready') {
-      ref.current.contentWindow.postMessage(dashbaordContent, null);
+      setReady(true);
+    }
+  });
+
+  useEffect(() => {
+    if (isReady) {
+      ref.current.contentWindow.postMessage(dashboardContent, null);
     }
   });
 
@@ -57,7 +63,7 @@ const CustomDashboardView: React.FC<CustomDashboardViewProps & OUIAProps> = ({
       {isError ? (
         <>
           {isEnvelopeConnectedToChannel && (
-            <Card className="kogito-process-details__card-size">
+            <Card className="kogito-custom-dashboard-view-__card-size">
               <Bullseye>
                 <ServerErrors error={errorMessage} variant="large" />
               </Bullseye>

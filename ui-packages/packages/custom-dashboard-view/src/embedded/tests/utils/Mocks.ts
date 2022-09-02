@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-import { CustomDashboardListDriver } from '../../../api';
+import { CustomDashboardViewDriver } from '../../../api';
 
-export const MockedCustomDashboardListDriver = jest.fn<
-  CustomDashboardListDriver,
+export const MockedCustomDashboardViewDriver = jest.fn<
+  CustomDashboardViewDriver,
   []
 >(() => ({
-  getCustomDashboardFilter: jest.fn(),
-  applyFilter: jest.fn(),
-  getCustomDashboardsQuery: jest.fn(),
-  openDashboard: jest.fn()
+  getCustomDashboardContent: jest.fn()
 }));

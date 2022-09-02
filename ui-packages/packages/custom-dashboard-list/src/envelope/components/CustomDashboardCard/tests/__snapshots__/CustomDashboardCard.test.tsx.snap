@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Form card tests renders card - with html 1`] = `
+exports[`customDashboard card tests renders card - with html 1`] = `
 <CustomDashboardCard
   customDashboardData={
     Object {
@@ -185,7 +185,7 @@ exports[`Form card tests renders card - with html 1`] = `
 </CustomDashboardCard>
 `;
 
-exports[`Form card tests renders card - with tsx 1`] = `
+exports[`customDashboard card tests renders card - with tsx 1`] = `
 <CustomDashboardCard
   customDashboardData={
     Object {

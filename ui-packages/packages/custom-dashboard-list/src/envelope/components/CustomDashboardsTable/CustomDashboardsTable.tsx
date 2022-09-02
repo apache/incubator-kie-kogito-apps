@@ -25,7 +25,6 @@ import { CustomDashboardInfo, CustomDashboardListDriver } from '../../../api';
 import {
   getDashboardNameColumn,
   getDateColumn
-  // getFormTypeColumn
 } from '../CustomDashboardListUtils/CustomDashboardListUtils';
 import _ from 'lodash';
 import { Bullseye } from '@patternfly/react-core';
@@ -58,7 +57,6 @@ const CustomDashboardsTable: React.FC<CustomDashboardTableProps &
       (customDashboardInfo: CustomDashboardInfo): Promise<void> =>
         driver.openDashboard(customDashboardInfo)
     ),
-    // getFormTypeColumn(),
     getDateColumn('lastModified', 'Last Modified')
   ]);
   const [sortBy, setSortBy] = useState<SortBy>({
@@ -99,11 +97,11 @@ const CustomDashboardsTable: React.FC<CustomDashboardTableProps &
     setSortBy(sortObj);
   };
 
-  const formsLoadingComponent: JSX.Element = (
+  const customDashboardLoadingComponent: JSX.Element = (
     <Bullseye>
       <KogitoSpinner
         spinnerText="Loading customDashboard..."
-        ouiaId="customDashboard-list-customDashboard-forms"
+        ouiaId="customDashboard-list-customDashboard-list"
       />
     </Bullseye>
   );
@@ -117,7 +115,7 @@ const CustomDashboardsTable: React.FC<CustomDashboardTableProps &
         error={false}
         sortBy={getSortBy()}
         onSorting={onSort}
-        LoadingComponent={formsLoadingComponent}
+        LoadingComponent={customDashboardLoadingComponent}
       />
     </div>
   );

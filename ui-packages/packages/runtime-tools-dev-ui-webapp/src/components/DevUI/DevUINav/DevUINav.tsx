@@ -116,6 +116,7 @@ const DevUINav: React.FC<IOwnProps> = ({ pathname }) => {
         title="Monitoring"
         srText="SR Monitoring"
         groupId="grp-Monitoring"
+        isExpanded
       >
         {(!availablePages || availablePages.includes('Monitoring')) && (
           <NavItem

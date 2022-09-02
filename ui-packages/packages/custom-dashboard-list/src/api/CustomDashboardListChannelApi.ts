@@ -19,10 +19,10 @@ import {
   CustomDashboardInfo
 } from './CustomDashboardListEnvelopeApi';
 /**
- * Channel Api for Forms List
+ * Channel Api for CustomDashboard List
  */
 export interface CustomDashboardListChannelApi {
-  customDashboardList__getFormFilter(): Promise<CustomDashboardFilter>;
+  customDashboardList__getFilter(): Promise<CustomDashboardFilter>;
   customDashboardList__applyFilter(
     customDashboardFilter: CustomDashboardFilter
   ): Promise<void>;

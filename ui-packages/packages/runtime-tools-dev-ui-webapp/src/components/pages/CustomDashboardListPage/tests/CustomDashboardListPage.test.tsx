@@ -19,7 +19,9 @@ import { mount } from 'enzyme';
 import CustomDashboardListPage from '../CustomDashboardListPage';
 import { BrowserRouter } from 'react-router-dom';
 
-jest.mock('../../../containers/FormsListContainer/FormsListContainer');
+jest.mock(
+  '../../../containers/CustomDashboardListContainer/CustomDashboardListContainer'
+);
 
 describe('CustomDashboardListPage tests', () => {
   it('Snapshot', () => {
@@ -30,6 +32,8 @@ describe('CustomDashboardListPage tests', () => {
     );
 
     expect(wrapper).toMatchSnapshot();
-    expect(wrapper.find('MockedFormsListContainer').exists()).toBeTruthy();
+    expect(
+      wrapper.find('MockedCustomDashboardListContainer').exists()
+    ).toBeTruthy();
   });
 });

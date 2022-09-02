@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 import React from 'react';
 
-const MockedFormsListToolbar = (): React.ReactElement => {
+const MockedCustomDashboardView = (): React.ReactElement => {
   return <></>;
 };
 
-export default MockedFormsListToolbar;
+export default MockedCustomDashboardView;

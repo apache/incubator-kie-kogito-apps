@@ -13,49 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import {
-  CustomDashboardFilter,
-  CustomDashboardInfo,
-  CustomDashboardListDriver
-} from '../../api';
-import { CustomDashboardListChannelApiImpl } from '../CustomDashboardListChannelApiImpl';
-import { MockedCustomDashboardListDriver } from './utils/Mocks';
+import { CustomDashboardViewDriver } from '../../api';
+import { CustomDashboardViewChannelApiImpl } from '../CustomDashboardViewChannelApiImpl';
+import { MockedCustomDashboardViewDriver } from './utils/Mocks';
 
-let driver: CustomDashboardListDriver;
-let api: CustomDashboardListChannelApiImpl;
+let driver: CustomDashboardViewDriver;
+let api: CustomDashboardViewChannelApiImpl;
 
-describe('CustomDashboardListChannelApiImpl tests', () => {
+describe('CustomDashboardViewChannelApiImpl tests', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    driver = new MockedCustomDashboardListDriver();
-    api = new CustomDashboardListChannelApiImpl(driver);
+    driver = new MockedCustomDashboardViewDriver();
+    api = new CustomDashboardViewChannelApiImpl(driver);
   });
 
-  it('CustomDashboardList__getFormFilter', () => {
-    api.customDashboardList__getFormFilter();
-    expect(driver.getCustomDashboardFilter).toHaveBeenCalled();
-  });
-
-  it('CustomDashboardList__applyFilter', () => {
-    const filter: CustomDashboardFilter = {
-      customDashboardNames: ['dashboard1']
-    };
-    api.customDashboardList__applyFilter(filter);
-    expect(driver.applyFilter).toHaveBeenCalledWith(filter);
-  });
-
-  it('CustomDashboardList__getFormsQuery', () => {
-    api.customDashboardList__getCustomDashboardQuery();
-    expect(driver.getCustomDashboardsQuery).toHaveBeenCalled();
-  });
-
-  it('CustomDashboardList__openForm', () => {
-    const data: CustomDashboardInfo = {
-      name: 'dashboard1',
-      path: '/user/home',
-      lastModified: new Date(new Date('2022-07-11T18:30:00.000Z'))
-    };
-    api.customDashboardList__openDashboard(data);
-    expect(driver.openDashboard).toHaveBeenCalledWith(data);
+  it('customDashboardView__getCusmtonDashboardView', () => {
+    api.customDashboardView__getCusmtonDashboardView('name');
+    expect(driver.getCustomDashboardContent).toHaveBeenCalledWith('name');
   });
 });

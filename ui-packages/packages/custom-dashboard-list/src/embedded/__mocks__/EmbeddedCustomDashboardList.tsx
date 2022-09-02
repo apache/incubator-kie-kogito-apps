@@ -16,8 +16,8 @@
 
 import React from 'react';
 
-const MockedEmbeddedFormsList = (): React.ReactElement => {
+const MockedEmbeddedCustomDashboardList = (): React.ReactElement => {
   return <></>;
 };
 
-export default MockedEmbeddedFormsList;
+export default MockedEmbeddedCustomDashboardList;

@@ -27,12 +27,12 @@ export interface CustomDashboardListGatewayApi {
   getCustomDashboardsQuery(): Promise<CustomDashboardInfo[]>;
   openDashboard: (customDashboardInfo: CustomDashboardInfo) => Promise<void>;
   onOpenCustomDashboardListen: (
-    listener: OnOpenFormListener
+    listener: OnOpenDashboardListener
   ) => UnSubscribeHandler;
 }
 
-export interface OnOpenFormListener {
-  onOpen: (formData: CustomDashboardInfo) => void;
+export interface OnOpenDashboardListener {
+  onOpen: (dashboardInfo: CustomDashboardInfo) => void;
 }
 
 export interface UnSubscribeHandler {
@@ -44,14 +44,16 @@ export class CustomDashboardListGatewayApiImpl
   private _CustomDashboardFilter: CustomDashboardFilter = {
     customDashboardNames: []
   };
-  private readonly listeners: OnOpenFormListener[] = [];
+  private readonly listeners: OnOpenDashboardListener[] = [];
 
   getCustomDashboardFilter = (): Promise<CustomDashboardFilter> => {
     return Promise.resolve(this._CustomDashboardFilter);
   };
 
-  applyFilter = (formFilter: CustomDashboardFilter): Promise<void> => {
-    this._CustomDashboardFilter = formFilter;
+  applyFilter = (
+    customDashboardFilter: CustomDashboardFilter
+  ): Promise<void> => {
+    this._CustomDashboardFilter = customDashboardFilter;
     return Promise.resolve();
   };
 
@@ -65,7 +67,7 @@ export class CustomDashboardListGatewayApiImpl
   };
 
   onOpenCustomDashboardListen(
-    listener: OnOpenFormListener
+    listener: OnOpenDashboardListener
   ): UnSubscribeHandler {
     this.listeners.push(listener);
 

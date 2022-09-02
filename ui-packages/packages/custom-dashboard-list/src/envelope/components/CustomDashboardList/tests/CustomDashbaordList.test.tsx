@@ -22,7 +22,7 @@ import { ToggleGroupItem } from '@patternfly/react-core';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
 
-describe('customDashbaord list tests', () => {
+describe('customDashboard list tests', () => {
   jest.mock('../../CustomDashboardsGallery/CustomDashboardsGallery');
   jest.mock('../../CustomDashboardListToolbar/CustomDashboardListToolbar');
   jest.mock('../../CustomDashboardsTable/CustomDashboardsTable');
@@ -55,7 +55,7 @@ describe('customDashbaord list tests', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  it('render forms list - gallery', async () => {
+  it('render CustomDashboard list - gallery', async () => {
     const props = {
       isEnvelopeConnectedToChannel: true,
       driver: driver
@@ -88,6 +88,6 @@ describe('customDashbaord list tests', () => {
     await act(async () => {
       wrapper = wrapper.update();
     });
-    expect(wrapper.find('MockedFormsTable').exists()).toBeTruthy();
+    expect(wrapper.find('CustomDashboardList').exists()).toBeTruthy();
   });
 });

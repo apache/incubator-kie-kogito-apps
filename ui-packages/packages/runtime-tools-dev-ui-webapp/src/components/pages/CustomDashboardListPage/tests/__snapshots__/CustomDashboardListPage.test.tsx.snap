@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FormsListPage tests Snapshot 1`] = `
+exports[`CustomDashboardListPage tests Snapshot 1`] = `
 <BrowserRouter>
   <Router
     history={
@@ -24,9 +24,9 @@ exports[`FormsListPage tests Snapshot 1`] = `
       }
     }
   >
-    <FormsListPage>
+    <CustomDashboardListPage>
       <PageSectionHeader
-        titleText="Forms"
+        titleText="CustomDashboards"
       >
         <PageSection
           data-ouia-component-type="page-section-header"
@@ -39,7 +39,7 @@ exports[`FormsListPage tests Snapshot 1`] = `
             data-ouia-safe={true}
           >
             <PageTitle
-              title="Forms"
+              title="CustomDashboards"
             >
               <Flex
                 data-ouia-component-type="page-title"
@@ -70,7 +70,7 @@ exports[`FormsListPage tests Snapshot 1`] = `
                           data-ouia-component-type="PF4/Title"
                           data-ouia-safe={true}
                         >
-                          Forms
+                          CustomDashboards
                         </h1>
                       </Title>
                     </div>
@@ -95,12 +95,12 @@ exports[`FormsListPage tests Snapshot 1`] = `
               data-ouia-safe={true}
               id=""
             >
-              <MockedFormsListContainer />
+              <MockedCustomDashboardListContainer />
             </article>
           </Card>
         </section>
       </PageSection>
-    </FormsListPage>
+    </CustomDashboardListPage>
   </Router>
 </BrowserRouter>
 `;

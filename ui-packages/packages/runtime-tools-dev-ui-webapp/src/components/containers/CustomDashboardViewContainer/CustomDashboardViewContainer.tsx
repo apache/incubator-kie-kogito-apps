@@ -17,16 +17,16 @@
 import React from 'react';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { EmbeddedCustomDashboardView } from '@kogito-apps/custom-dashboard-view';
-import { useCustomDashboardListGatewayApi } from '../../../channel/CustomDashboardView/CustomDashboardViewContext';
+import { useCustomDashboardViewGatewayApi } from '../../../channel/CustomDashboardView/CustomDashboardViewContext';
 import { CustomDashboardViewGatewayApi } from '../../../channel/CustomDashboardView';
 
-interface CustomDashbaordViewContainerContainerProps {
+interface CustomDashboardViewContainerContainerProps {
   dashboardName: string;
 }
 
-const CustomDashbaordViewContainer: React.FC<CustomDashbaordViewContainerContainerProps &
+const CustomDashboardViewContainer: React.FC<CustomDashboardViewContainerContainerProps &
   OUIAProps> = ({ dashboardName, ouiaId, ouiaSafe }) => {
-  const gatewayApi: CustomDashboardViewGatewayApi = useCustomDashboardListGatewayApi();
+  const gatewayApi: CustomDashboardViewGatewayApi = useCustomDashboardViewGatewayApi();
 
   return (
     <EmbeddedCustomDashboardView
@@ -38,4 +38,4 @@ const CustomDashbaordViewContainer: React.FC<CustomDashbaordViewContainerContain
   );
 };
 
-export default CustomDashbaordViewContainer;
+export default CustomDashboardViewContainer;

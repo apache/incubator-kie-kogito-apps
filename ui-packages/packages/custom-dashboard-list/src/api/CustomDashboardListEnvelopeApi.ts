@@ -34,11 +34,6 @@ export interface CustomDashboardFilter {
   customDashboardNames: string[];
 }
 
-// export enum FormType {
-//   HTML = 'HTML',
-//   TSX = 'TSX'
-// }
-
 export interface CustomDashboardInfo {
   name: string;
   path: string;
