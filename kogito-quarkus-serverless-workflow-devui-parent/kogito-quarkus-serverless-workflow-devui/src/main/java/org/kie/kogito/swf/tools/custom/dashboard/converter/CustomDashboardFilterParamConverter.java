@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.swf.tools.customDashboard.converter;
+package org.kie.kogito.swf.tools.custom.dashboard.converter;
 
 /*
  * Copyright 2022 Red Hat, Inc. and/or its affiliates.
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.Provider;
 
-import org.kie.kogito.swf.tools.customDashboard.model.CustomDashboardFilter;
+import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
 
 @Provider
 public class CustomDashboardFilterParamConverter implements ParamConverter<CustomDashboardFilter> {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.swf.tools.customDashboard.impl;
+package org.kie.kogito.swf.tools.custom.dashboard.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,9 +37,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.microprofile.config.ConfigProvider;
-import org.kie.kogito.swf.tools.customDashboard.CustomDashboardStorage;
-import org.kie.kogito.swf.tools.customDashboard.model.CustomDashboardFilter;
-import org.kie.kogito.swf.tools.customDashboard.model.CustomDashboardInfo;
+import org.kie.kogito.swf.tools.custom.dashboard.CustomDashboardStorage;
+import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
+import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +59,7 @@ public class CustomDashboardStorageImpl implements CustomDashboardStorage {
         start(Thread.currentThread().getContextClassLoader().getResource(CUSTOM_DASHBOARD_STORAGE_PATH));
     }
 
-    CustomDashboardStorageImpl(final URL classLoaderFormsUrl) {
+    public CustomDashboardStorageImpl(final URL classLoaderFormsUrl) {
         start(classLoaderFormsUrl);
     }
 

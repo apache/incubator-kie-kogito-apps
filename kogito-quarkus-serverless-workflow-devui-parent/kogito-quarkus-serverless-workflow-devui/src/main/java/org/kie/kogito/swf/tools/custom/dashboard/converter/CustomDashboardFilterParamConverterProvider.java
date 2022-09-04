@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.swf.tools.customDashboard.converter;
+package org.kie.kogito.swf.tools.custom.dashboard.converter;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
@@ -23,7 +23,7 @@ import javax.ws.rs.ext.ParamConverter;
 import javax.ws.rs.ext.ParamConverterProvider;
 import javax.ws.rs.ext.Provider;
 
-import org.kie.kogito.swf.tools.customDashboard.model.CustomDashboardFilter;
+import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
 
 @Provider
 public class CustomDashboardFilterParamConverterProvider implements ParamConverterProvider {

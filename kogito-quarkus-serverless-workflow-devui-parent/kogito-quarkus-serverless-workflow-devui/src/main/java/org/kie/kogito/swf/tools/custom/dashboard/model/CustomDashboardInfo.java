@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.swf.tools.customDashboard.model;
+package org.kie.kogito.swf.tools.custom.dashboard.model;
 
 import java.time.LocalDateTime;
 

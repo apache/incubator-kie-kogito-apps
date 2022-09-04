@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.swf.tools.customDashboard;
+package org.kie.kogito.swf.tools.custom.dashboard;
 
 import javax.inject.Inject;
 import javax.ws.rs.GET;
@@ -25,7 +25,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.kie.kogito.swf.tools.customDashboard.model.CustomDashboardFilter;
+import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.swf.tools.customDashboard;
+package org.kie.kogito.swf.tools.custom.dashboard;
 
 import java.io.IOException;
 import java.util.Collection;
 
-import org.kie.kogito.swf.tools.customDashboard.model.CustomDashboardFilter;
-import org.kie.kogito.swf.tools.customDashboard.model.CustomDashboardInfo;
+import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
+import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardInfo;
 
 public interface CustomDashboardStorage {
 
