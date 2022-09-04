@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import static javax.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 
-@Path("/custom")
+@Path("/customDashboard")
 public class CustomDashboardService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomDashboardService.class);
@@ -44,7 +44,7 @@ public class CustomDashboardService {
     }
 
     @GET
-    @Path("/dashboard/count")
+    @Path("/count")
     @Produces(MediaType.TEXT_PLAIN)
     public Response getCustomDashboardFilesCount() {
         try {
@@ -56,7 +56,7 @@ public class CustomDashboardService {
     }
 
     @GET
-    @Path("/dashboard/list")
+    @Path("/list")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCustomDashboardFiles(@QueryParam("names") CustomDashboardFilter filter) {
         try {
@@ -68,7 +68,7 @@ public class CustomDashboardService {
     }
 
     @GET
-    @Path("/dashboard/{name:\\S+}/content")
+    @Path("/{name:\\S+}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCustomDashboardFileContent(@PathParam("name") String name) {
         try {

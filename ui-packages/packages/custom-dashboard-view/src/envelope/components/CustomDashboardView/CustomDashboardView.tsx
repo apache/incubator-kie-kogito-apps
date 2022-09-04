@@ -74,7 +74,7 @@ const CustomDashboardView: React.FC<CustomDashboardViewProps & OUIAProps> = ({
         <iframe
           ref={ref}
           id="db"
-          src="resources/webapp/custom-dashboard-view/dashbuilder"
+          src="resources/webapp/custom-dashboard-view/dashbuilder/index.html"
           style={{ width: '100%', height: '100%', padding: '10px' }}
           {...componentOuiaProps(ouiaId, 'customDashboard-view', ouiaSafe)}
         />
