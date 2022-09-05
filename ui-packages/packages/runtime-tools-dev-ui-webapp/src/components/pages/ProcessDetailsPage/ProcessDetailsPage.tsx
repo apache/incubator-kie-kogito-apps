@@ -60,7 +60,6 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<string>('');
   let currentPage = JSON.parse(window.localStorage.getItem('state'));
-  
   useEffect(() => {
     window.onpopstate = () => {
       props.history.push({ state: Object.assign({}, props.location.state) });

@@ -167,7 +167,13 @@ describe('WebApp - ProcessDetailsPage tests', () => {
         customLabels: {
           singularProcessLabel: 'Workflow',
           pluralProcessLabel: 'Workflows'
-        }
+        },
+        diagramPreviewSize:{
+          width: 600,
+          height: 600
+        },
+        isStunnerEnabled:false,
+        isWorkflow:jest.fn()
       };
     });
 
