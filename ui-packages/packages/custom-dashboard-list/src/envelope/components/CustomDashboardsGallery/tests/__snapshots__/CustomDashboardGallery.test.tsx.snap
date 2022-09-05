@@ -462,7 +462,7 @@ exports[`customDashboard gallery tests renders loading component 1`] = `
       className="pf-l-bullseye"
     >
       <KogitoSpinner
-        ouiaId="customDashboard-list-loading-customDashboard"
+        ouiaId="custom-dashboard-list-loading-custom-dashboard"
         spinnerText="Loading customDashboard..."
       >
         <MockedComponent />

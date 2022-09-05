@@ -47,7 +47,7 @@ import org.slf4j.LoggerFactory;
 public class CustomDashboardStorageImpl implements CustomDashboardStorage {
 
     public static final String PROJECT_CUSTOM_DASHBOARD_STORAGE_PROP = "quarkus.kogito-runtime-tools.custom.dashboard.folder";
-    private static final String CUSTOM_DASHBOARD_STORAGE_PATH = "/META-INF/custom/dashboard/";
+    private static final String CUSTOM_DASHBOARD_STORAGE_PATH = "/dashboards/";
     private static final Logger LOGGER = LoggerFactory.getLogger(CustomDashboardStorageImpl.class);
 
     private final Map<String, CustomDashboardInfo> customDashboardInfoMap = new HashMap<>();

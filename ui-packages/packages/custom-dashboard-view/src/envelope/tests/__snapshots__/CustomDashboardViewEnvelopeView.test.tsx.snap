@@ -8,7 +8,7 @@ exports[`CustomDashboardViewEnvelopeView tests Snapshot 2`] = `
     Object {
       "notifications": [MockFunction],
       "requests": Object {
-        "customDashboardView__getCusmtonDashboardView": [MockFunction] {
+        "customDashboardView__getCustomDashboardView": [MockFunction] {
           "calls": Array [
             Array [
               "name",
@@ -34,7 +34,7 @@ exports[`CustomDashboardViewEnvelopeView tests Snapshot 2`] = `
         "channelApi": Object {
           "notifications": [MockFunction],
           "requests": Object {
-            "customDashboardView__getCusmtonDashboardView": [MockFunction] {
+            "customDashboardView__getCustomDashboardView": [MockFunction] {
               "calls": Array [
                 Array [
                   "name",
@@ -59,7 +59,7 @@ exports[`CustomDashboardViewEnvelopeView tests Snapshot 2`] = `
       data-ouia-component-type="customDashboard-view"
       data-ouia-safe={true}
       id="db"
-      src="resources/webapp/custom-dashboard-view/dashbuilder"
+      src="resources/webapp/custom-dashboard-view/dashbuilder/index.html"
       style={
         Object {
           "height": "100%",

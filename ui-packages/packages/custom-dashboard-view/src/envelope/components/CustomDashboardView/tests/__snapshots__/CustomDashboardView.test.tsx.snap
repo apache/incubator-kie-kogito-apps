@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Custom Dashbaord View tests Snapshot tests with data 1`] = `
+exports[`Custom Dashboard View tests Snapshot tests with data 1`] = `
 <CustomDashboardView
   customDashboardName="name"
   driver={
@@ -40,7 +40,7 @@ exports[`Custom Dashbaord View tests Snapshot tests with data 1`] = `
     data-ouia-component-type="customDashboard-view"
     data-ouia-safe={true}
     id="db"
-    src="resources/webapp/custom-dashboard-view/dashbuilder"
+    src="resources/webapp/custom-dashboard-view/dashbuilder/index.html"
     style={
       Object {
         "height": "100%",
@@ -52,7 +52,7 @@ exports[`Custom Dashbaord View tests Snapshot tests with data 1`] = `
 </CustomDashboardView>
 `;
 
-exports[`Custom Dashbaord View tests Snapshot tests with data 2`] = `
+exports[`Custom Dashboard View tests Snapshot tests with data 2`] = `
 <CustomDashboardView
   customDashboardName="name"
   driver={
@@ -92,7 +92,7 @@ exports[`Custom Dashbaord View tests Snapshot tests with data 2`] = `
     data-ouia-component-type="customDashboard-view"
     data-ouia-safe={true}
     id="db"
-    src="resources/webapp/custom-dashboard-view/dashbuilder"
+    src="resources/webapp/custom-dashboard-view/dashbuilder/index.html"
     style={
       Object {
         "height": "100%",
@@ -104,87 +104,7 @@ exports[`Custom Dashbaord View tests Snapshot tests with data 2`] = `
 </CustomDashboardView>
 `;
 
-exports[`Custom Dashbaord View tests Snapshot tests with error 1`] = `
-<CustomDashboardView
-  customDashboardName="name"
-  driver={
-    Object {
-      "getCustomDashboardContent": [MockFunction] {
-        "calls": Array [
-          Array [
-            "name",
-          ],
-          Array [
-            "name",
-          ],
-          Array [
-            "name",
-          ],
-          Array [
-            "name",
-          ],
-          Array [
-            "name",
-          ],
-          Array [
-            "name",
-          ],
-          Array [
-            "name",
-          ],
-        ],
-        "results": Array [
-          Object {
-            "type": "return",
-            "value": Promise {},
-          },
-          Object {
-            "type": "return",
-            "value": Promise {},
-          },
-          Object {
-            "type": "return",
-            "value": Promise {},
-          },
-          Object {
-            "type": "return",
-            "value": Promise {},
-          },
-          Object {
-            "type": "return",
-            "value": Promise {},
-          },
-          Object {
-            "type": "return",
-            "value": Promise {},
-          },
-          Object {
-            "type": "return",
-            "value": Promise {},
-          },
-        ],
-      },
-    }
-  }
-  isEnvelopeConnectedToChannel={true}
->
-  <iframe
-    data-ouia-component-type="customDashboard-view"
-    data-ouia-safe={true}
-    id="db"
-    src="resources/webapp/custom-dashboard-view/dashbuilder"
-    style={
-      Object {
-        "height": "100%",
-        "padding": "10px",
-        "width": "100%",
-      }
-    }
-  />
-</CustomDashboardView>
-`;
-
-exports[`Custom Dashbaord View tests Snapshot tests with error 2`] = `
+exports[`Custom Dashboard View tests Snapshot tests with error 1`] = `
 <CustomDashboardView
   customDashboardName="name"
   driver={
@@ -252,7 +172,7 @@ exports[`Custom Dashbaord View tests Snapshot tests with error 2`] = `
     data-ouia-component-type="customDashboard-view"
     data-ouia-safe={true}
     id="db"
-    src="resources/webapp/custom-dashboard-view/dashbuilder"
+    src="resources/webapp/custom-dashboard-view/dashbuilder/index.html"
     style={
       Object {
         "height": "100%",
@@ -264,7 +184,87 @@ exports[`Custom Dashbaord View tests Snapshot tests with error 2`] = `
 </CustomDashboardView>
 `;
 
-exports[`Custom Dashbaord View tests Snapshot tests with error 3`] = `
+exports[`Custom Dashboard View tests Snapshot tests with error 2`] = `
+<CustomDashboardView
+  customDashboardName="name"
+  driver={
+    Object {
+      "getCustomDashboardContent": [MockFunction] {
+        "calls": Array [
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+        ],
+      },
+    }
+  }
+  isEnvelopeConnectedToChannel={true}
+>
+  <iframe
+    data-ouia-component-type="customDashboard-view"
+    data-ouia-safe={true}
+    id="db"
+    src="resources/webapp/custom-dashboard-view/dashbuilder/index.html"
+    style={
+      Object {
+        "height": "100%",
+        "padding": "10px",
+        "width": "100%",
+      }
+    }
+  />
+</CustomDashboardView>
+`;
+
+exports[`Custom Dashboard View tests Snapshot tests with error 3`] = `
 <Card
   className="kogito-custom-dashboard-view-__card-size"
 >
@@ -404,7 +404,7 @@ exports[`Custom Dashbaord View tests Snapshot tests with error 3`] = `
 </Card>
 `;
 
-exports[`Custom Dashbaord View tests Snapshot tests with error 4`] = `
+exports[`Custom Dashboard View tests Snapshot tests with error 4`] = `
 Array [
   <Bullseye>
     <div
@@ -640,7 +640,7 @@ Array [
 ]
 `;
 
-exports[`Custom Dashbaord View tests Snapshot tests with error 5`] = `
+exports[`Custom Dashboard View tests Snapshot tests with error 5`] = `
 <ServerErrors
   error="network issue"
   variant="large"

@@ -27,8 +27,8 @@ describe('CustomDashboardViewChannelApiImpl tests', () => {
     api = new CustomDashboardViewChannelApiImpl(driver);
   });
 
-  it('customDashboardView__getCusmtonDashboardView', () => {
-    api.customDashboardView__getCusmtonDashboardView('name');
+  it('customDashboardView__getCustomDashboardView', () => {
+    api.customDashboardView__getCustomDashboardView('name');
     expect(driver.getCustomDashboardContent).toHaveBeenCalledWith('name');
   });
 });

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.swf.tools.custom.dashbaord.impl;
+package org.kie.kogito.swf.tools.custom.dashboard.impl;
 
 import java.io.File;
 import java.io.IOException;

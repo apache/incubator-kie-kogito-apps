@@ -34,7 +34,7 @@ export const MockedApiRequests = jest.fn<
   >,
   []
 >(() => ({
-  customDashboardView__getCusmtonDashboardView: jest.fn()
+  customDashboardView__getCustomDashboardView: jest.fn()
 }));
 
 export const MockedMessageBusClientApi = jest.fn<

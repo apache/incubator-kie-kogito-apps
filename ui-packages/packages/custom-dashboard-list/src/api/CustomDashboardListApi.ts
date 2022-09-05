@@ -14,6 +14,4 @@
  * limitations under the License.
  */
 
-export interface CustomDashboardListApi {
-  // custom dashboard list api
-}
+export interface CustomDashboardListApi {}

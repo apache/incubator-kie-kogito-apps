@@ -23,7 +23,7 @@ import { Bullseye, Card } from '@patternfly/react-core';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedCustomDashboardViewDriver } from '../../../../embedded/tests/utils/Mocks';
 
-describe('Custom Dashbaord View tests', () => {
+describe('Custom Dashboard View tests', () => {
   const props = {
     isEnvelopeConnectedToChannel: true,
     driver: MockedCustomDashboardViewDriver(),
@@ -51,7 +51,7 @@ describe('Custom Dashbaord View tests', () => {
     expect(wrapper.find(CustomDashboardView)).toBeTruthy();
     const iframeWrapper = wrapper.find('iframe');
     expect(iframeWrapper.find('iframe').props()['src']).toEqual(
-      'resources/webapp/custom-dashboard-view/dashbuilder'
+      'resources/webapp/custom-dashboard-view/dashbuilder/index.html'
     );
   });
 

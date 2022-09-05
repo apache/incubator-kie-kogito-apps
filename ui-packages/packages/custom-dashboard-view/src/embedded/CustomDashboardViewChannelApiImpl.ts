@@ -26,7 +26,7 @@ export class CustomDashboardViewChannelApiImpl
   implements CustomDashboardViewChannelApi {
   constructor(private readonly driver: CustomDashboardViewDriver) {}
 
-  customDashboardView__getCusmtonDashboardView(name: string): Promise<string> {
+  customDashboardView__getCustomDashboardView(name: string): Promise<string> {
     return this.driver.getCustomDashboardContent(name);
   }
 }

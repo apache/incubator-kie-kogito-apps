@@ -74,10 +74,10 @@ exports[`CustomDashboardViewPage tests Snapshot 1`] = `
           className="pf-c-page__main-section"
         >
           <Card
-            className="Dev-ui__card-size"
+            className="Dev-ui__card-size Dev-ui__custom-dashboard-viewer"
           >
             <article
-              className="pf-c-card Dev-ui__card-size"
+              className="pf-c-card Dev-ui__card-size Dev-ui__custom-dashboard-viewer"
               data-ouia-component-id="OUIA-Generated-Card-1"
               data-ouia-component-type="PF4/Card"
               data-ouia-safe={true}

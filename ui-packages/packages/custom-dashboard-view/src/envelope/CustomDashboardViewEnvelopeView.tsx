@@ -51,7 +51,7 @@ export const CustomDashboardViewEnvelopeView = React.forwardRef<
     []
   );
   return (
-    <React.Fragment>
+    <>
       {customDashboardName && customDashboardName != 'undefined' && (
         <CustomDashboardView
           isEnvelopeConnectedToChannel={isEnvelopeConnectedToChannel}
@@ -59,7 +59,7 @@ export const CustomDashboardViewEnvelopeView = React.forwardRef<
           customDashboardName={customDashboardName}
         />
       )}
-    </React.Fragment>
+    </>
   );
 });
 

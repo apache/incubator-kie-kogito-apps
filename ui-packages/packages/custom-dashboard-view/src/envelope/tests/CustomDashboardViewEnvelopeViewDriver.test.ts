@@ -40,7 +40,7 @@ describe('CustomDashboardViewEnvelopeViewDriver tests', () => {
   it('open dashboard', () => {
     driver.getCustomDashboardContent('name');
     expect(
-      requests.customDashboardView__getCusmtonDashboardView
+      requests.customDashboardView__getCustomDashboardView
     ).toHaveBeenCalledWith('name');
   });
 });

@@ -32,7 +32,7 @@ export default class CustomDashboardViewEnvelopeViewDriver
   ) {}
 
   getCustomDashboardContent(name: string): Promise<string> {
-    return this.channelApi.requests.customDashboardView__getCusmtonDashboardView(
+    return this.channelApi.requests.customDashboardView__getCustomDashboardView(
       name
     );
   }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.kie.kogito.swf.tools.custom.dashbaord.impl;
+package org.kie.kogito.swf.tools.custom.dashboard.impl;
 
 import java.io.IOException;
 import java.net.URL;
@@ -26,18 +26,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.kie.kogito.swf.tools.custom.dashboard.CustomDashboardStorage;
-import org.kie.kogito.swf.tools.custom.dashboard.impl.CustomDashboardStorageImpl;
 import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
 import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardInfo;
-
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-@QuarkusTest
-@TestProfile(CustomDashboardStorageTestProfile.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CustomDashboardStorageTest {
 

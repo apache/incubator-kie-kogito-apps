@@ -15,5 +15,5 @@
  */
 
 export interface CustomDashboardViewChannelApi {
-  customDashboardView__getCusmtonDashboardView(name: string): Promise<string>;
+  customDashboardView__getCustomDashboardView(name: string): Promise<string>;
 }
