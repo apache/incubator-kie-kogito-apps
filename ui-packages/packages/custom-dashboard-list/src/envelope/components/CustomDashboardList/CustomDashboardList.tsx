@@ -97,7 +97,7 @@ const CustomDashboardList: React.FC<CustomDashboardListProps & OUIAProps> = ({
     }
   };
   if (error) {
-    return <ServerErrors error={error} variant={'large'} />;
+    return <ServerErrors error={error.message} variant={'large'} />;
   }
 
   return (

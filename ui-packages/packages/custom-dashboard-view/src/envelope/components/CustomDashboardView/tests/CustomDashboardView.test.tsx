@@ -22,6 +22,7 @@ import { act } from 'react-dom/test-utils';
 import { Bullseye, Card } from '@patternfly/react-core';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedCustomDashboardViewDriver } from '../../../../embedded/tests/utils/Mocks';
+import wait from 'waait';
 
 describe('Custom Dashboard View tests', () => {
   const props = {
@@ -45,6 +46,7 @@ describe('Custom Dashboard View tests', () => {
     await act(async () => {
       wrapper = mount(<CustomDashboardView {...props} />);
       wrapper = wrapper.update().find('CustomDashboardView');
+      wait();
     });
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.find(CustomDashboardView)).toMatchSnapshot();
@@ -53,6 +55,7 @@ describe('Custom Dashboard View tests', () => {
     expect(iframeWrapper.find('iframe').props()['src']).toEqual(
       'resources/webapp/custom-dashboard-view/dashbuilder/index.html'
     );
+    expect(props.driver.getCustomDashboardContent).toHaveBeenCalled();
   });
 
   it('Snapshot tests with error', async () => {
@@ -82,6 +85,7 @@ describe('Custom Dashboard View tests', () => {
 
     const serverErrorsWrapper = wrapper.update().find(ServerErrors);
     expect(serverErrorsWrapper.find(ServerErrors)).toMatchSnapshot();
+    expect(props.driver.getCustomDashboardContent).toHaveBeenCalled();
 
     expect(serverErrorsWrapper.find(ServerErrors).props()['error']).toEqual(
       'network issue'

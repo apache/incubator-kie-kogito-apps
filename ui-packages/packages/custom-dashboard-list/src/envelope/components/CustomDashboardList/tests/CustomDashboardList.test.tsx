@@ -21,6 +21,8 @@ import { MockedCustomDashboardListDriver } from '../../../tests/mocks/MockedCust
 import { ToggleGroupItem } from '@patternfly/react-core';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
+import TestCustomDashboardListDriver from '../__mocks__/TestCustomDashboardListDriver';
+import { dashboardList } from '../__mocks__/MockData';
 
 describe('customDashboard list tests', () => {
   jest.mock('../../CustomDashboardsGallery/CustomDashboardsGallery');
@@ -89,5 +91,80 @@ describe('customDashboard list tests', () => {
       wrapper = wrapper.update();
     });
     expect(wrapper.find('CustomDashboardList').exists()).toBeTruthy();
+  });
+});
+
+let applyFilterMock;
+let getCustomDashboardsQueryMock;
+let props;
+const getCustomDashboardListDriver = (
+  items: number
+): TestCustomDashboardListDriver => {
+  const driver = new TestCustomDashboardListDriver(
+    dashboardList.slice(0, items)
+  );
+  applyFilterMock = jest.spyOn(driver, 'applyFilter');
+  getCustomDashboardsQueryMock = jest.spyOn(driver, 'getCustomDashboardsQuery');
+  props.driver = driver;
+  return driver;
+};
+
+describe('customDashboard list action tests', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    props = {
+      isEnvelopeConnectedToChannel: true,
+      driver: null
+    };
+  });
+
+  it('CustomDashboard list - error page', async () => {
+    getCustomDashboardListDriver(2);
+
+    getCustomDashboardsQueryMock.mockImplementation(() => {
+      throw new Error('404 error');
+    });
+
+    let wrapper;
+    await act(async () => {
+      wrapper = mount(<CustomDashboardList {...props} />).find('ServerErrors');
+      wait();
+    });
+    wrapper = wrapper.update();
+    expect(getCustomDashboardsQueryMock).toHaveBeenCalled();
+    const errorWrapper = wrapper.find('ServerErrors');
+    expect(errorWrapper.props()['error']).toEqual('404 error');
+  });
+
+  it('CustomDashboard list - applyFilter and handleItemClick', async () => {
+    getCustomDashboardListDriver(3);
+
+    let wrapper;
+    await act(async () => {
+      wrapper = mount(<CustomDashboardList {...props} />).find(
+        'CustomDashboardList'
+      );
+      wait();
+    });
+    wrapper = wrapper.update();
+
+    const toolbar = wrapper.find('CustomDashboardListToolbar');
+
+    const filters = ['age.dash.yaml'];
+    await act(async () => {
+      toolbar.props()['applyFilter'](filters);
+    });
+    expect(getCustomDashboardsQueryMock).toHaveBeenCalled();
+    expect(applyFilterMock).toHaveBeenCalled();
+
+    const views = wrapper.find('ToggleGroupItem');
+    expect(views.length).toBe(2);
+
+    await act(() => {
+      views.get(0).props['onChange'];
+    });
+
+    expect(views.get(0).props['isSelected']).toEqual(true);
+    expect(views.get(1).props['isSelected']).toEqual(false);
   });
 });
