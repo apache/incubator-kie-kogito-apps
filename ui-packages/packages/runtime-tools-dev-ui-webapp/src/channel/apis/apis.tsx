@@ -479,8 +479,8 @@ export const getCustomWorkflowSchema = (devUIUrl: string, openApiPath: string): 
 
 export const startWorkflowRest = (data: Record<string, any>, endpoint: string): Promise<string> => {
   return new Promise((resolve, reject) => {
-    axios.post(endpoint, { workflowdata: data }).then((data:any) => {
-      resolve(data?.id)
+    axios.post(endpoint, { workflowdata: data }).then((response:any) => {
+      resolve(response.data?.id)
     }).catch((err) => reject(err))
   })
 }

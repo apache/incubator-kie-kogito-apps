@@ -69,12 +69,14 @@ export const WorkflowFormEnvelopeView = React.forwardRef<
     }
   }, [isEnvelopeConnectedToChannel]);
 
-  const getCustomForm = useCallback(async () => {
+  const getCustomForm = useCallback(() => {
     if (!isEnvelopeConnectedToChannel) {
       setIsLoading(true);
     }
     driver.getCustomWorkflowSchema().then((schema: Record<string, any>) => {
       setWorkflowSchema(schema);
+    }).catch(err=>{
+      console.log(err)
     }).finally(() => {
       setIsLoading(false);
     })

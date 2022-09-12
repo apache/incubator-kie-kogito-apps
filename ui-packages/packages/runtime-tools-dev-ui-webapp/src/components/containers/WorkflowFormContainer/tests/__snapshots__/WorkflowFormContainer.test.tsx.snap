@@ -16,8 +16,10 @@ exports[`WorkflowFormContainer tests Snapshot 1`] = `
     data-ouia-safe={true}
     driver={
       Object {
+        "getCustomWorkflowSchema": [Function],
         "resetBusinessKey": [Function],
         "startWorkflow": [Function],
+        "startWorkflowRest": [Function],
       }
     }
     targetOrigin="*"

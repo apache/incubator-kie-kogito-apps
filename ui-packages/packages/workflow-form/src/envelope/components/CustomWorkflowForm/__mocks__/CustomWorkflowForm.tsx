@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-import { WorkflowFormDriver } from '../../../api';
+import React from 'react';
 
-export const MockedWorkflowFormDriver = jest.fn<WorkflowFormDriver, []>(() => ({
-  startWorkflow: jest.fn(),
-  resetBusinessKey: jest.fn(),
-  getCustomWorkflowSchema: jest.fn(),
-  startWorkflowRest: jest.fn()
-}));
+const MockedCustomWorkflowForm = (): React.ReactElement => {
+  return <></>;
+};
+
+export default MockedCustomWorkflowForm;
