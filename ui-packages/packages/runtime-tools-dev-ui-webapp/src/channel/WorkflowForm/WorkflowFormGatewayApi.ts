@@ -20,19 +20,19 @@ export interface WorkflowFormGatewayApi {
   startWorkflow(formData: any): Promise<string>;
   setBusinessKey(bk: string): void;
   getBusinessKey(): string;
-  getCustomWorkflowSchema():Promise<Record<string,any>>
-  startWorkflowRest(data: Record<string, any>, endpoint: string):Promise<string>
+  getCustomWorkflowSchema(): Promise<Record<string, any>>
+  startWorkflowRest(data: Record<string, any>, endpoint: string): Promise<string>
 }
 
 export class WorkflowFormGatewayApiImpl implements WorkflowFormGatewayApi {
   private businessKey: string;
   private readonly baseUrl: string;
-  private readonly openApiPath:string;
+  private readonly openApiPath: string;
 
-  constructor(baseUrl: string, openApiPath:string) {
+  constructor(baseUrl: string, openApiPath: string) {
     this.businessKey = '';
     this.baseUrl = baseUrl;
-    this.openApiPath=openApiPath;
+    this.openApiPath = openApiPath;
   }
 
   setBusinessKey(bk: string): void {
@@ -46,8 +46,8 @@ export class WorkflowFormGatewayApiImpl implements WorkflowFormGatewayApi {
   startWorkflow(formData: any): Promise<string> {
     return startWorkflowInstance(formData, this.businessKey, this.baseUrl);
   }
-  
-  getCustomWorkflowSchema():Promise<Record<string, any>>{
+
+  getCustomWorkflowSchema(): Promise<Record<string, any>> {
     return getCustomWorkflowSchema(this.baseUrl, this.openApiPath)
   }
 

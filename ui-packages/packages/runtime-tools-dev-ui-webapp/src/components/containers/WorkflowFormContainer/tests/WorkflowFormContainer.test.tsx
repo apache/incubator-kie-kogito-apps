@@ -17,12 +17,13 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import WorkflowFormContainer from '../WorkflowFormContainer';
-import * as FormDetailsContext from '../../../../channel/FormDetails/FormDetailsContext';
-import { FormDetailsGatewayApiImpl } from '../../../../channel/FormDetails/FormDetailsGatewayApi';
+import * as WorkflowFormContext from '../../../../channel/WorkflowForm/WorkflowFormContext';
+import { WorkflowFormGatewayApi, WorkflowFormGatewayApiImpl } from '../../../../channel/WorkflowForm/WorkflowFormGatewayApi';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
+
 jest.mock('@patternfly/react-code-editor', () =>
   Object.assign(jest.requireActual('@patternfly/react-code-editor'), {
     CodeEditor: () => {
@@ -31,22 +32,42 @@ jest.mock('@patternfly/react-code-editor', () =>
   })
 );
 
+const MockedWorkflowFormGatewayApi = jest.fn<WorkflowFormGatewayApi, []>(() => ({
+  startWorkflow: jest.fn().mockImplementation(()=> Promise.resolve('1234')),
+  setBusinessKey: jest.fn(),
+  getBusinessKey: jest.fn(),
+  getCustomWorkflowSchema: jest.fn(),
+  startWorkflowRest: jest.fn().mockImplementation(()=> Promise.resolve('1234'))
+}));
+
+let gatewayApi;
+
 jest
-  .spyOn(FormDetailsContext, 'useFormDetailsGatewayApi')
-  .mockImplementation(() => new FormDetailsGatewayApiImpl());
+  .spyOn(WorkflowFormContext, 'useWorkflowFormGatewayApi')
+  .mockImplementation(() => gatewayApi);
+
+const getWrapper = () => {
+  return mount(<WorkflowFormContainer {...props} />);
+}
+
+const props = {
+  workflowDefinitionData: {
+    workflowName: 'workflow1',
+    endpoint: 'http://localhost:4000'
+  },
+  onSubmitSuccess: jest.fn(),
+  onSubmitError: jest.fn(),
+  onResetForm: jest.fn()
+};
 
 describe('WorkflowFormContainer tests', () => {
-  it('Snapshot', () => {
-    const props = {
-      workflowDefinitionData: {
-        workflowName: 'workflow1',
-        endpoint: 'http://localhost:4000'
-      },
-      onSubmitSuccess: jest.fn(),
-      onSubmitError: jest.fn()
-    };
-    const wrapper = mount(<WorkflowFormContainer {...props} />);
 
+  beforeEach(() => {
+    gatewayApi = new MockedWorkflowFormGatewayApi();
+  })
+
+  it('Snapshot', () => {
+    const wrapper = getWrapper();
     expect(wrapper).toMatchSnapshot();
 
     const forwardRef = wrapper.childAt(0);
@@ -55,4 +76,24 @@ describe('WorkflowFormContainer tests', () => {
 
     expect(forwardRef.props().targetOrigin).toBe('*');
   });
+
+  it('test driver methods', () => {
+    const getCustomWorkflowSchemaSpy = jest.spyOn(gatewayApi, 'getCustomWorkflowSchema');
+    const startWorkflowRestSpy = jest.spyOn(gatewayApi, 'startWorkflowRest');
+    const startWorkflowSpy = jest.spyOn(gatewayApi, 'startWorkflow');
+    const wrapper = getWrapper();
+    const forwardRef = wrapper.childAt(0);
+
+    forwardRef.props().driver['getCustomWorkflowSchema']();
+    expect(getCustomWorkflowSchemaSpy).toHaveBeenCalled();
+
+    forwardRef.props().driver['startWorkflowRest']();
+    expect(startWorkflowRestSpy).toHaveBeenCalled();
+
+    forwardRef.props().driver['startWorkflow']();
+    expect(startWorkflowSpy).toHaveBeenCalled();
+
+    forwardRef.props().driver['resetBusinessKey']();
+    expect(props.onResetForm).toHaveBeenCalled();
+  })
 });

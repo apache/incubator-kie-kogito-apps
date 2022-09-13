@@ -2,6 +2,7 @@
 
 exports[`WorkflowFormContainer tests Snapshot 1`] = `
 <WorkflowFormContainer
+  onResetForm={[MockFunction]}
   onSubmitError={[MockFunction]}
   onSubmitSuccess={[MockFunction]}
   workflowDefinitionData={
