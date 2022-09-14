@@ -73,7 +73,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
         this(null, 0, 0, 0, null);
     }
 
-    public BaseTimerJobScheduler(ReactiveJobRepository jobRepository,
+    protected BaseTimerJobScheduler(ReactiveJobRepository jobRepository,
             long backoffRetryMillis,
             long maxIntervalLimitToRetryMillis,
             long schedulerChunkInMinutes,
