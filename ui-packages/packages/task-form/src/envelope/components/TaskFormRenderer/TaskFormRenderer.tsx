@@ -18,7 +18,7 @@ import React, { useEffect, useState } from 'react';
 import _ from 'lodash';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
-import { FormRenderer, FormAction, ActionType } from '@kogito-apps/components-common';
+import { FormRenderer, FormAction } from '@kogito-apps/components-common';
 import { generateFormData } from '../utils/TaskFormDataUtils';
 
 interface IOwnProps {
@@ -48,8 +48,7 @@ const TaskFormRenderer: React.FC<IOwnProps & OUIAProps> = ({
           name: phase,
           execute: () => {
             setSelectedPhase(phase);
-          },
-          actionType: ActionType.SUBMIT
+          }
         };
       });
       setFormActions(actions);

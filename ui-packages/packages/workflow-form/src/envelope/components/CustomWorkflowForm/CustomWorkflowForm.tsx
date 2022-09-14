@@ -36,8 +36,7 @@ const CustomWorkflowForm: React.FC<CustomWorkflowFormProps & OUIAProps> = ({
 
     const formAction: FormAction[] = [
         {
-            name: 'Start',
-            actionType: ActionType.SUBMIT
+            name: 'Start'
         },
         {
             name: 'Reset',

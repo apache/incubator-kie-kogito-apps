@@ -73,7 +73,7 @@ export const convertActionsToButton = (
       actionType: actionType,
       onClick: () => {
         action.execute && action.execute();
-        action.actionType === ActionType.SUBMIT && onSubmitForm && onSubmitForm();
+        actionType === ActionType.SUBMIT && onSubmitForm && onSubmitForm();
       }
     };
   });

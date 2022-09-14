@@ -22,7 +22,6 @@ import {
   KogitoSpinner,
   FormRendererApi,
   ServerErrors,
-  ActionType,
   FormAction
 } from '@kogito-apps/components-common';
 import { Bullseye } from '@patternfly/react-core';
@@ -46,8 +45,7 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
 
   const formAction:FormAction[] = [
     {
-      name: 'Start',
-      actionType: ActionType.SUBMIT
+      name: 'Start'
     }
   ];
 

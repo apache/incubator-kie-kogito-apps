@@ -52,7 +52,6 @@ exports[`CustomWorkflowForm Test Custom Workflow Form rendering 1`] = `
       formActions={
         Array [
           Object {
-            "actionType": "submit",
             "name": "Start",
           },
           Object {

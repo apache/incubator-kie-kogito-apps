@@ -142,12 +142,10 @@ exports[`TaskFormRenderer Test Form rendering 1`] = `
       formActions={
         Array [
           Object {
-            "actionType": "submit",
             "execute": [Function],
             "name": "complete",
           },
           Object {
-            "actionType": "submit",
             "execute": [Function],
             "name": "release",
           },

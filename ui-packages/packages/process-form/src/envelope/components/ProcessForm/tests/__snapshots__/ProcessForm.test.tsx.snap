@@ -125,7 +125,6 @@ exports[`ProcessForm Test Process Form rendering 1`] = `
       formActions={
         Array [
           Object {
-            "actionType": "submit",
             "name": "Start",
           },
         ]
