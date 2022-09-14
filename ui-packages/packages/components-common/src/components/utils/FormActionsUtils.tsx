@@ -18,15 +18,22 @@ import React from 'react';
 import _ from 'lodash';
 import { Button } from '@patternfly/react-core';
 
+export enum ActionType {
+  SUBMIT = 'submit',
+  BUTTON = 'button',
+  RESET = 'reset'
+}
 export interface FormAction {
   name: string;
   execute?(): void;
+  actionType?: ActionType
 }
 
 interface FormButton {
   key: string;
   label: string;
   variant: 'primary' | 'secondary';
+  actionType: ActionType
   onClick: () => void;
 }
 
@@ -58,13 +65,15 @@ export const convertActionsToButton = (
   };
 
   const buttons: FormButton[] = actions.map(action => {
+    const actionType = action.actionType? action.actionType : ActionType.SUBMIT;
     return {
       key: `submit-${action.name}`,
       label: capitalize(action.name),
       variant: resolveButtonVariant(action),
+      actionType: actionType,
       onClick: () => {
         action.execute && action.execute();
-        onSubmitForm && onSubmitForm();
+        action.actionType === ActionType.SUBMIT && onSubmitForm && onSubmitForm();
       }
     };
   });
@@ -82,7 +91,7 @@ export const convertActionsToButton = (
   return buttons.map(button => {
     return (
       <Button
-        type="submit"
+        type={button.actionType}
         key={button.key}
         variant={button.variant}
         onClick={() => {

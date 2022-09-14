@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
-import { DoResetAction, FormAction, FormRenderer } from '@kogito-apps/components-common';
+import { ActionType, FormRendererApi, FormAction, FormRenderer } from '@kogito-apps/components-common';
 import { WorkflowFormDriver } from '../../../api/WorkflowFormDriver';
 import { WorkflowDefinition } from '../../../api';
 
@@ -32,23 +32,25 @@ const CustomWorkflowForm: React.FC<CustomWorkflowFormProps & OUIAProps> = ({
     ouiaId,
     ouiaSafe
 }) => {
-    const doResetAction = React.useRef<DoResetAction>();
+    const formRendererApi = React.useRef<FormRendererApi>();
 
     const formAction: FormAction[] = [
         {
             name: 'Start',
+            actionType: ActionType.SUBMIT
         },
         {
             name: 'Reset',
             execute: () => {
-                doResetAction?.current?.doReset()
-            }
+                formRendererApi?.current?.doReset()
+            },
+            actionType: ActionType.RESET
         }
     ];
 
     const startWorkflow = (data: Record<string, any>): void => {
         driver.startWorkflowRest(data, workflowDefinition.endpoint).then(() => {
-            doResetAction?.current?.doReset();
+            formRendererApi?.current?.doReset();
         })
 
     }
@@ -60,7 +62,7 @@ const CustomWorkflowForm: React.FC<CustomWorkflowFormProps & OUIAProps> = ({
                 readOnly={false}
                 onSubmit={startWorkflow}
                 formActions={formAction}
-                ref={doResetAction}
+                ref={formRendererApi}
             />
         </div>
     );

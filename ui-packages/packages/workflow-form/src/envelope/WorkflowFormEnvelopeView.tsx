@@ -86,6 +86,7 @@ export const WorkflowFormEnvelopeView = React.forwardRef<
     return (
       <Bullseye
         {...componentOuiaProps(
+          /* istanbul ignore next */
           (ouiaId ? ouiaId : 'workflow-form-envelope-view') + '-loading-spinner',
           'workflow-form',
           true
