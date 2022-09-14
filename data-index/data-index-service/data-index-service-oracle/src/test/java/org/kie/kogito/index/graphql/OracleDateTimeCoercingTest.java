@@ -26,26 +26,26 @@ import graphql.schema.CoercingSerializeException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-public class OracleDateTimeCoercingTest {
+class OracleDateTimeCoercingTest {
 
     OracleDateTimeCoercing dateTimeCoercing = new OracleDateTimeCoercing();
 
     @Test
-    public void testParseValueAsZonedDateTime() {
+    void testParseValueAsZonedDateTime() {
         assertThat(dateTimeCoercing.parseValue(null)).isNull();
         assertThat(dateTimeCoercing.parseValue("2019-11-20T03:14:03.075Z"))
                 .isEqualTo(ZonedDateTime.parse("2019-11-20T03:14:03.075Z"));
     }
 
     @Test
-    public void testParseLiteral() {
+    void testParseLiteral() {
         assertThat(dateTimeCoercing.parseLiteral(null)).isNull();
         assertThat(dateTimeCoercing.parseLiteral(new StringValue("2019-11-20T03:14:03.075Z")))
                 .isEqualTo(ZonedDateTime.parse("2019-11-20T03:14:03.075Z"));
     }
 
     @Test
-    public void testSerializeInvalidString() {
+    void testSerializeInvalidString() {
         try {
             dateTimeCoercing.serialize("test");
             fail("Method should throw CoercingSerializeException");
@@ -56,7 +56,7 @@ public class OracleDateTimeCoercingTest {
     }
 
     @Test
-    public void testSerializeNull() {
+    void testSerializeNull() {
         try {
             dateTimeCoercing.serialize(null);
             fail("Method should throw CoercingSerializeException");
@@ -67,7 +67,7 @@ public class OracleDateTimeCoercingTest {
     }
 
     @Test
-    public void testSerializeInvalidType() {
+    void testSerializeInvalidType() {
         try {
             dateTimeCoercing.serialize(1);
             fail("Method should throw CoercingSerializeException");
@@ -78,7 +78,7 @@ public class OracleDateTimeCoercingTest {
     }
 
     @Test
-    public void testSerializeString() {
+    void testSerializeString() {
         String result = dateTimeCoercing.serialize("2019-08-20T19:26:02.092+00:00");
         assertThat(result).isEqualTo("2019-08-20T19:26:02.092Z");
     }

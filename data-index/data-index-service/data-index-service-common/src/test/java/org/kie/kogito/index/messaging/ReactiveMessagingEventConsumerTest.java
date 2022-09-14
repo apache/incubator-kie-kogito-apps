@@ -43,7 +43,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class ReactiveMessagingEventConsumerTest {
+class ReactiveMessagingEventConsumerTest {
 
     @Mock
     IndexingService service;
@@ -56,7 +56,7 @@ public class ReactiveMessagingEventConsumerTest {
     ReactiveMessagingEventConsumer consumer;
 
     @Test
-    public void testOnProcessInstanceEvent() {
+    void testOnProcessInstanceEvent() {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
 
@@ -72,7 +72,7 @@ public class ReactiveMessagingEventConsumerTest {
     }
 
     @Test
-    public void testOnUserTaskInstanceEvent() {
+    void testOnUserTaskInstanceEvent() {
 
         String taskId = UUID.randomUUID().toString();
         String processId = "travels";
@@ -89,7 +89,7 @@ public class ReactiveMessagingEventConsumerTest {
     }
 
     @Test
-    public void testOnProcessInstanceEventException() {
+    void testOnProcessInstanceEventException() {
         ProcessInstanceDataEvent event = mock(ProcessInstanceDataEvent.class);
         doThrow(new RuntimeException("")).when(service).indexProcessInstance(any());
 
@@ -102,7 +102,7 @@ public class ReactiveMessagingEventConsumerTest {
     }
 
     @Test
-    public void testOnUserTaskInstanceEventException() {
+    void testOnUserTaskInstanceEventException() {
         UserTaskInstanceDataEvent event = mock(UserTaskInstanceDataEvent.class);
         doThrow(new RuntimeException("")).when(service).indexUserTaskInstance(any());
 
@@ -115,7 +115,7 @@ public class ReactiveMessagingEventConsumerTest {
     }
 
     @Test
-    public void testOnJobEvent() {
+    void testOnJobEvent() {
         KogitoJobCloudEvent event = mock(KogitoJobCloudEvent.class);
 
         UniAssertSubscriber<Void> future = consumer.onJobEvent(event).subscribe().withSubscriber(UniAssertSubscriber.create());
@@ -125,7 +125,7 @@ public class ReactiveMessagingEventConsumerTest {
     }
 
     @Test
-    public void testOnJobEventException() {
+    void testOnJobEventException() {
         KogitoJobCloudEvent event = mock(KogitoJobCloudEvent.class);
         doThrow(new RuntimeException("")).when(service).indexJob(any());
 

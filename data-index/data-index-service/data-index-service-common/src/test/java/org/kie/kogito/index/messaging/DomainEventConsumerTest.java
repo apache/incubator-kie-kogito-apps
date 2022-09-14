@@ -43,7 +43,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-public class DomainEventConsumerTest {
+class DomainEventConsumerTest {
 
     @Mock
     IndexingService service;
@@ -57,7 +57,7 @@ public class DomainEventConsumerTest {
     }
 
     @Test
-    public void testOnUserTaskInstanceDomainEventMappingException() {
+    void testOnUserTaskInstanceDomainEventMappingException() {
         UserTaskInstanceDataEvent event = mock(UserTaskInstanceDataEvent.class);
 
         assertThatExceptionOfType(NullPointerException.class).isThrownBy(() -> consumer.onDomainEvent(event));
@@ -66,7 +66,7 @@ public class DomainEventConsumerTest {
     }
 
     @Test
-    public void testOnUserTaskInstanceDomainEventIndexingException() {
+    void testOnUserTaskInstanceDomainEventIndexingException() {
         doThrow(new RuntimeException("")).when(service).indexModel(any());
 
         String taskId = UUID.randomUUID().toString();
@@ -80,7 +80,7 @@ public class DomainEventConsumerTest {
     }
 
     @Test
-    public void testOnUserTaskInstanceEvent() {
+    void testOnUserTaskInstanceEvent() {
         String taskId = UUID.randomUUID().toString();
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
@@ -99,7 +99,7 @@ public class DomainEventConsumerTest {
     }
 
     @Test
-    public void testOnProcessInstanceDomainEventMappingException() {
+    void testOnProcessInstanceDomainEventMappingException() {
         ProcessInstanceDataEvent event = mock(ProcessInstanceDataEvent.class);
 
         assertThatExceptionOfType(NullPointerException.class).isThrownBy(() -> consumer.onDomainEvent(event));
@@ -108,7 +108,7 @@ public class DomainEventConsumerTest {
     }
 
     @Test
-    public void testOnProcessInstanceDomainEventIndexingException() {
+    void testOnProcessInstanceDomainEventIndexingException() {
         doThrow(new RuntimeException("")).when(service).indexModel(any());
 
         String processId = "travels";

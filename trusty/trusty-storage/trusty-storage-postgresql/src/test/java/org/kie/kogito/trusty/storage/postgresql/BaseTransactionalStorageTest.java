@@ -46,67 +46,67 @@ public class BaseTransactionalStorageTest {
     }
 
     @Test
-    public void testObjectCreatedListener() {
+    void testObjectCreatedListener() {
         storage.objectCreatedListener();
         verify(delegate).objectCreatedListener();
     }
 
     @Test
-    public void testObjectUpdatedListener() {
+    void testObjectUpdatedListener() {
         storage.objectUpdatedListener();
         verify(delegate).objectUpdatedListener();
     }
 
     @Test
-    public void testObjectRemovedListener() {
+    void testObjectRemovedListener() {
         storage.objectRemovedListener();
         verify(delegate).objectRemovedListener();
     }
 
     @Test
-    public void testQuery() {
+    void testQuery() {
         storage.query();
         verify(delegate).query();
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         storage.get(KEY);
         verify(delegate).get(KEY);
     }
 
     @Test
-    public void testPut() {
+    void testPut() {
         storage.put(KEY, VALUE);
         verify(delegate).put(KEY, VALUE);
     }
 
     @Test
-    public void testRemove() {
+    void testRemove() {
         storage.remove(KEY);
         verify(delegate).remove(KEY);
     }
 
     @Test
-    public void testContainsKey() {
+    void testContainsKey() {
         storage.containsKey(KEY);
         verify(delegate).containsKey(KEY);
     }
 
     @Test
-    public void testEntries() {
+    void testEntries() {
         storage.entries();
         verify(delegate).entries();
     }
 
     @Test
-    public void testClear() {
+    void testClear() {
         storage.clear();
         verify(delegate).clear();
     }
 
     @Test
-    public void testGetRootType() {
+    void testGetRootType() {
         storage.getRootType();
         verify(delegate).getRootType();
     }

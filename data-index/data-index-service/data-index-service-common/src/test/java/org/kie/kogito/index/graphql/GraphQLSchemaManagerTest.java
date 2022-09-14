@@ -29,13 +29,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class GraphQLSchemaManagerTest {
+class GraphQLSchemaManagerTest {
 
     GraphQLSchemaManager schemaManager = new GraphQLSchemaManager();
     ObjectMapper objectMapper = new ObjectMapper();
 
     @Test
-    public void testNullServiceUrl() {
+    void testNullServiceUrl() {
         assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv(null, null))).isNull();
         assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("travels", null))).isNull();
         assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("demo.orders", null))).isNull();
@@ -43,7 +43,7 @@ public class GraphQLSchemaManagerTest {
     }
 
     @Test
-    public void testJsonNullServiceUrl() {
+    void testJsonNullServiceUrl() {
         assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv(null, null))).isNull();
         assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("travels", null))).isNull();
         assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("demo.orders", null))).isNull();
@@ -51,21 +51,21 @@ public class GraphQLSchemaManagerTest {
     }
 
     @Test
-    public void testNullProcessIdServiceUrl() {
+    void testNullProcessIdServiceUrl() {
         assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("travels", "/travels"))).isNull();
         assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("demo.orders", "/orders"))).isNull();
         assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("demo.orderItems", "/orderItems"))).isNull();
     }
 
     @Test
-    public void testJsonNullProcessIdServiceUrl() {
+    void testJsonNullProcessIdServiceUrl() {
         assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("travels", "/travels"))).isNull();
         assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("demo.orders", "/orders"))).isNull();
         assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("demo.orderItems", "/orderItems"))).isNull();
     }
 
     @Test
-    public void testUrlProcessIdServiceUrl() {
+    void testUrlProcessIdServiceUrl() {
         assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("travels", "http://localhost:8080/travels"))).isEqualTo("http://localhost:8080");
         assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("travels", "http://travels.example.com/travels"))).isEqualTo("http://travels.example.com");
         assertThat(schemaManager.getProcessInstanceServiceUrl(getEnv("demo.orders", "http://localhost:8080/orders"))).isEqualTo("http://localhost:8080");
@@ -73,7 +73,7 @@ public class GraphQLSchemaManagerTest {
     }
 
     @Test
-    public void testJsonUrlProcessIdServiceUrl() {
+    void testJsonUrlProcessIdServiceUrl() {
         assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("travels", "http://localhost:8080/travels"))).isEqualTo("http://localhost:8080");
         assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("travels", "http://travels.example.com/travels"))).isEqualTo("http://travels.example.com");
         assertThat(schemaManager.getProcessInstanceJsonServiceUrl(geJsonEnv("demo.orders", "http://localhost:8080/orders"))).isEqualTo("http://localhost:8080");

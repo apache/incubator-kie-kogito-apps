@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
-public class ValidatorResourceTest {
+class ValidatorResourceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ValidatorResourceTest.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -51,7 +51,7 @@ public class ValidatorResourceTest {
                     JITDMNMessage.class);
 
     @Test
-    public void test() throws IOException {
+    void test() throws IOException {
         final String MODEL = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/loan.dmn")));
         String response = given()
                 .contentType(ContentType.XML)
@@ -72,7 +72,7 @@ public class ValidatorResourceTest {
     }
 
     @Test
-    public void testOverlap() throws IOException {
+    void testOverlap() throws IOException {
         final String MODEL = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/loan_withOverlap.dmn")));
         String response = given()
                 .contentType(ContentType.XML)

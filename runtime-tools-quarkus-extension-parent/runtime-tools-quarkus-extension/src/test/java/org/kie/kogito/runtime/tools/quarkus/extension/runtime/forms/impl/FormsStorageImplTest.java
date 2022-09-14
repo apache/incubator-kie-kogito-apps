@@ -43,7 +43,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.impl.FormsStorageImpl.PROJECT_FORM_STORAGE_PROP;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class FormsStorageImplTest {
+class FormsStorageImplTest {
 
     private static final String TEST_FORM_CONTENT = "<div></div>";
     private static final String STYLE1 = "style1";
@@ -68,12 +68,12 @@ public class FormsStorageImplTest {
     }
 
     @Test
-    public void testGetFormsCount() {
+    void testGetFormsCount() {
         assertEquals(2, formsStorage.getFormsCount());
     }
 
     @Test
-    public void testGetFormInfoList() {
+    void testGetFormInfoList() {
         Collection<FormInfo> formInfosAll = formsStorage.getFormInfoList(null);
         assertEquals(2, formInfosAll.size());
 
@@ -96,7 +96,7 @@ public class FormsStorageImplTest {
     }
 
     @Test
-    public void testGetFormContent() throws IOException {
+    void testGetFormContent() throws IOException {
         Form formContent = formsStorage.getFormContent(FORM_NAME);
         assertNotNull(formContent);
         FormInfo formInfo = formContent.getFormInfo();
@@ -104,19 +104,19 @@ public class FormsStorageImplTest {
     }
 
     @Test
-    public void testGetFormContentWithoutConfig() {
+    void testGetFormContentWithoutConfig() {
         assertThrows(RuntimeException.class, () -> formsStorage.getFormContent(FORM_NAME_WITH_OUT_CONFIG));
         assertThrows(RuntimeException.class, () -> formsStorage.getFormContent("ERROR"));
     }
 
     @Test
-    public void testUpdateFormContentInvalidForms() {
+    void testUpdateFormContentInvalidForms() {
         assertThrows(RuntimeException.class, () -> formsStorage.updateFormContent(FORM_NAME_WITH_OUT_CONFIG, new FormContent()));
         assertThrows(RuntimeException.class, () -> formsStorage.updateFormContent(FORM_NAME, null));
     }
 
     @Test
-    public void testUpdateValidForms() throws IOException {
+    void testUpdateValidForms() throws IOException {
         File storage = new File(System.getProperties().getProperty(PROJECT_FORM_STORAGE_PROP));
 
         File sourceFile = new File(storage.toURI().resolve(FORM_NAME + ".html"));

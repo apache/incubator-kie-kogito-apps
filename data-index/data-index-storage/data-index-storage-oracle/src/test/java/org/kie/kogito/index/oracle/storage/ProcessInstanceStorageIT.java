@@ -36,7 +36,7 @@ import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(OracleSqlQuarkusTestResource.class)
-public class ProcessInstanceStorageIT extends AbstractStorageIT<ProcessInstanceEntity, ProcessInstance> {
+class ProcessInstanceStorageIT extends AbstractStorageIT<ProcessInstanceEntity, ProcessInstance> {
 
     @Inject
     ProcessInstanceEntityRepository repository;
@@ -60,7 +60,7 @@ public class ProcessInstanceStorageIT extends AbstractStorageIT<ProcessInstanceE
 
     @Test
     @Transactional
-    public void testProcessInstanceEntity() {
+    void testProcessInstanceEntity() {
         String processInstanceId = UUID.randomUUID().toString();
         ProcessInstance processInstance1 = TestUtils
                 .createProcessInstance(processInstanceId, RandomStringUtils.randomAlphabetic(5), UUID.randomUUID().toString(),

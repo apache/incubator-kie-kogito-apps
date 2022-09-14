@@ -44,7 +44,7 @@ public class JITDMNResourceTest {
     }
 
     @Test
-    public void testjitEndpoint() {
+    void testjitEndpoint() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(model, buildContext());
         given()
                 .contentType(ContentType.JSON)
@@ -56,7 +56,7 @@ public class JITDMNResourceTest {
     }
 
     @Test
-    public void testjitdmnResultEndpoint() {
+    void testjitdmnResultEndpoint() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(model, buildContext());
         given()
                 .contentType(ContentType.JSON)
@@ -68,7 +68,7 @@ public class JITDMNResourceTest {
     }
 
     @Test
-    public void testjitExplainabilityEndpoint() {
+    void testjitExplainabilityEndpoint() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(model, buildContext());
         given()
                 .contentType(ContentType.JSON)
@@ -80,7 +80,7 @@ public class JITDMNResourceTest {
     }
 
     @Test
-    public void testjitdmnWithExtensionElements() {
+    void testjitdmnWithExtensionElements() {
         Map<String, Object> context = new HashMap<>();
         context.put("m", 1);
         context.put("n", 2);

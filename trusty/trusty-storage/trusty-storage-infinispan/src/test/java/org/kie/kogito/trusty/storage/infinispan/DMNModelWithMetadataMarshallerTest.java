@@ -24,10 +24,10 @@ import org.kie.kogito.trusty.storage.api.model.decision.DMNModelWithMetadata;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class DMNModelWithMetadataMarshallerTest extends MarshallerTestTemplate {
+class DMNModelWithMetadataMarshallerTest extends MarshallerTestTemplate {
 
     @Test
-    public void testWriteAndRead() throws IOException {
+    void testWriteAndRead() throws IOException {
 
         DMNModelWithMetadata dmnModelWithMetadata = new DMNModelWithMetadata("groupId", "artifactId", "version",
                 "dmnVersion", "name", "namespace",

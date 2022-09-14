@@ -43,16 +43,16 @@ import static org.kie.kogito.persistence.redis.TestContants.TEST_INDEX_NAME;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-public class RedisQueryTest {
+class RedisQueryTest {
 
     @Test
-    public void multipleAttributeSortingIsNotSupported() {
+    void multipleAttributeSortingIsNotSupported() {
         RedisQuery<Person> redisQuery = new RedisQuery<>(new RedisClientMock(), TEST_INDEX_NAME, Person.class);
         Assertions.assertThrows(UnsupportedOperationException.class, () -> redisQuery.sort(asList(orderBy("first", SortDirection.DESC), orderBy("second", SortDirection.ASC))));
     }
 
     @Test
-    public void executeTest() throws JsonProcessingException {
+    void executeTest() throws JsonProcessingException {
         Client client = Mockito.mock(Client.class);
 
         Person person = new Person("pippo", 20);

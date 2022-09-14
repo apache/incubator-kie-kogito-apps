@@ -28,10 +28,10 @@ import org.kie.kogito.tracing.typedvalue.UnitValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-public class CounterfactualExplainabilityResultMarshallerTest extends MarshallerTestTemplate {
+class CounterfactualExplainabilityResultMarshallerTest extends MarshallerTestTemplate {
 
     @Test
-    public void testWriteAndRead() throws IOException {
+    void testWriteAndRead() throws IOException {
         List<NamedTypedValue> inputs = List.of(new NamedTypedValue("unitIn",
                 new UnitValue("number",
                         "number",

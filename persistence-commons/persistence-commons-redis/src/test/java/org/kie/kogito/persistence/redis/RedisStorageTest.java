@@ -35,7 +35,7 @@ import static org.kie.kogito.persistence.redis.Person.NAME_PROPERTY;
 import static org.kie.kogito.persistence.redis.TestContants.TEST_INDEX_NAME;
 import static org.mockito.Mockito.when;
 
-public class RedisStorageTest {
+class RedisStorageTest {
 
     RedisClientMock redisClientMock;
     RedisStorage<Person> redisStorage;
@@ -56,30 +56,30 @@ public class RedisStorageTest {
     }
 
     @Test
-    public void addObjectCreatedListenerOperationShouldThrowException() {
+    void addObjectCreatedListenerOperationShouldThrowException() {
         assertThrows(UnsupportedOperationException.class, () -> redisStorage.objectCreatedListener().subscribe().with(x -> {
         }));
     }
 
     @Test
-    public void addObjectUpdatedListenerOperationShouldThrowException() {
+    void addObjectUpdatedListenerOperationShouldThrowException() {
         assertThrows(UnsupportedOperationException.class, () -> redisStorage.objectUpdatedListener().subscribe().with(x -> {
         }));
     }
 
     @Test
-    public void addObjectRemovedListenerOperationShouldThrowException() {
+    void addObjectRemovedListenerOperationShouldThrowException() {
         assertThrows(UnsupportedOperationException.class, () -> redisStorage.objectRemovedListener().subscribe().with(x -> {
         }));
     }
 
     @Test
-    public void entrySetOperationShouldThrowException() {
+    void entrySetOperationShouldThrowException() {
         assertThrows(UnsupportedOperationException.class, redisStorage::entries);
     }
 
     @Test
-    public void indexNameIsPresentInStoredDocument() {
+    void indexNameIsPresentInStoredDocument() {
         redisStorage.put("myKey", new Person("pippo", 22));
 
         Map<String, Map<String, Object>> storage = redisClientMock.getStorage();
@@ -96,7 +96,7 @@ public class RedisStorageTest {
     }
 
     @Test
-    public void containsKeyOperationTest() {
+    void containsKeyOperationTest() {
         String key = "myKey";
         redisStorage.put(key, new Person("pippo", 22));
 
@@ -105,7 +105,7 @@ public class RedisStorageTest {
     }
 
     @Test
-    public void putAndGetOperationsTest() {
+    void putAndGetOperationsTest() {
         String key = "myKey";
         Person value = new Person("pippo", 22);
         redisStorage.put(key, value);
@@ -116,12 +116,12 @@ public class RedisStorageTest {
     }
 
     @Test
-    public void getUnexistingDocumentOperationTest() {
+    void getUnexistingDocumentOperationTest() {
         Assertions.assertNull(redisStorage.get("a_key_that_does_not_exist"));
     }
 
     @Test
-    public void removeOperationTest() {
+    void removeOperationTest() {
         String key = "myKey";
         Person value = new Person("pippo", 22);
         redisStorage.put(key, value);
@@ -134,7 +134,7 @@ public class RedisStorageTest {
     }
 
     @Test
-    public void nullIndexedValuesTest() {
+    void nullIndexedValuesTest() {
         String key = "myKey";
         Person value = new Person(null, 22);
         redisStorage.put(key, value);

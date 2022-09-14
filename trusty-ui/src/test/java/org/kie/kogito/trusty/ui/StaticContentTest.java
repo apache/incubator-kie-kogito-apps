@@ -25,17 +25,17 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.containsString;
 
 @QuarkusTest
-public class StaticContentTest {
+class StaticContentTest {
 
     @Test
-    public void testIndexHtml() {
+    void testIndexHtml() {
         given().contentType(ContentType.JSON).when().get("/").then()
                 .statusCode(200)
                 .body(containsString("<title>Kogito - TrustyAI</title>"));
     }
 
     @Test
-    public void testHeaders() {
+    void testHeaders() {
         given().contentType(ContentType.JSON).when().get("/").then()
                 .statusCode(200)
                 .header(HttpHeaders.CACHE_CONTROL.toString(), "no-cache")
@@ -43,7 +43,7 @@ public class StaticContentTest {
     }
 
     @Test
-    public void testHandlePath() {
+    void testHandlePath() {
         given().when().get("/audit")
                 .then()
                 .statusCode(200);

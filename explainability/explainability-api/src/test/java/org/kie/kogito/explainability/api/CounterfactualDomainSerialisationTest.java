@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class CounterfactualDomainSerialisationTest {
+class CounterfactualDomainSerialisationTest {
 
     private ObjectMapper mapper;
     private StringWriter writer;
@@ -41,7 +41,7 @@ public class CounterfactualDomainSerialisationTest {
     }
 
     @Test
-    public void testCounterfactualSearchDomain_Range_RoundTrip() throws Exception {
+    void testCounterfactualSearchDomain_Range_RoundTrip() throws Exception {
         CounterfactualDomainRange domainRange = new CounterfactualDomainRange(new IntNode(18), new IntNode(65));
         CounterfactualSearchDomainUnitValue searchDomain = new CounterfactualSearchDomainUnitValue("integer",
                 "integer",
@@ -67,7 +67,7 @@ public class CounterfactualDomainSerialisationTest {
     }
 
     @Test
-    public void testCounterfactualSearchDomain_Categorical_RoundTrip() throws Exception {
+    void testCounterfactualSearchDomain_Categorical_RoundTrip() throws Exception {
         CounterfactualDomainCategorical domainCategorical = new CounterfactualDomainCategorical(List.of(new TextNode("A"), new TextNode("B")));
         CounterfactualSearchDomainUnitValue searchDomain = new CounterfactualSearchDomainUnitValue("integer",
                 "integer",

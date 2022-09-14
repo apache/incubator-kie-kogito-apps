@@ -96,7 +96,7 @@ public class MultipleModelsTest {
     }
 
     @Test
-    public void testForm() {
+    void testForm() {
         given()
                 .contentType(ContentType.JSON)
                 .body(new MultipleResourcesPayload(URI1, List.of(model1, model2)))
@@ -107,7 +107,7 @@ public class MultipleModelsTest {
     }
 
     @Test
-    public void testSchema() {
+    void testSchema() {
         given()
                 .contentType(ContentType.JSON)
                 .body(new MultipleResourcesPayload(URI1, List.of(model1, model2)))
@@ -118,7 +118,7 @@ public class MultipleModelsTest {
     }
 
     @Test
-    public void testjitEndpoint() {
+    void testjitEndpoint() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(URI1, List.of(model1, model2), buildContext());
         given()
                 .contentType(ContentType.JSON)
@@ -134,7 +134,7 @@ public class MultipleModelsTest {
     }
 
     @Test
-    public void testjitdmnResultEndpoint() {
+    void testjitdmnResultEndpoint() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(URI1, List.of(model1, model2), buildContext());
         given()
                 .contentType(ContentType.JSON)
@@ -146,7 +146,7 @@ public class MultipleModelsTest {
     }
 
     @Test
-    public void testValidation() throws IOException {
+    void testValidation() throws IOException {
         String response = given()
                 .contentType(ContentType.JSON)
                 .body(new MultipleResourcesPayload(URI1, List.of(model1, model2)))
@@ -164,7 +164,7 @@ public class MultipleModelsTest {
     }
 
     @Test
-    public void testjitExplainabilityEndpoint() {
+    void testjitExplainabilityEndpoint() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(XAIURI1, List.of(xaimodel1, model1, model2), Map.of("FICO Score", 800, "DTI Ratio", .1, "PITI Ratio", .1));
         given()
                 .contentType(ContentType.JSON)
@@ -176,7 +176,7 @@ public class MultipleModelsTest {
     }
 
     @Test
-    public void testjitEndpointCH11() {
+    void testjitEndpointCH11() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(CH11URI1, List.of(ch11model1, ch11model2), buildCH11Context());
         given()
                 .contentType(ContentType.JSON)
@@ -188,7 +188,7 @@ public class MultipleModelsTest {
     }
 
     @Test
-    public void testjitdmnResultEndpointCH11() {
+    void testjitdmnResultEndpointCH11() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(CH11URI1, List.of(ch11model1, ch11model2), buildCH11Context());
         given()
                 .contentType(ContentType.JSON)
@@ -219,7 +219,7 @@ public class MultipleModelsTest {
     }
 
     @Test
-    public void testjitdmnResultEndpointCH11_withErrors() throws Exception {
+    void testjitdmnResultEndpointCH11_withErrors() throws Exception {
         Map<String, Object> context = new HashMap<>(); // will omit `Applicant data` intentionally.
         context.put("Bureau data", Map.of("Bankrupt", false,
                 "CreditScore", 600));

@@ -41,7 +41,7 @@ public class JITDMNServiceImplTest {
     }
 
     @Test
-    public void testModelEvaluation() {
+    void testModelEvaluation() {
         Map<String, Object> context = new HashMap<>();
         context.put("FICO Score", 800);
         context.put("DTI Ratio", .1);
@@ -55,7 +55,7 @@ public class JITDMNServiceImplTest {
     }
 
     @Test
-    public void testExplainability() throws IOException {
+    void testExplainability() throws IOException {
         String allTypesModel = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/allTypes.dmn")));
 
         Map<String, Object> context = new HashMap<>();

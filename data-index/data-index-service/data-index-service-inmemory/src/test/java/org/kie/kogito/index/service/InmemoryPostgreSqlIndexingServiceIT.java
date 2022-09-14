@@ -22,7 +22,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
-@TestProfile(InMemoryMessageTestProfile.class)
+Profile(InMemoryMessageTestProfile.class)
 class InmemoryPostgreSqlIndexingServiceIT extends AbstractIndexingServiceIT {
 
 }

@@ -83,7 +83,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class TrustyServiceTest {
+class TrustyServiceTest {
 
     private static final String TEST_EXECUTION_ID = UUID.randomUUID().toString();
     private static final String TEST_COUNTERFACTUAL_ID = UUID.randomUUID().toString();

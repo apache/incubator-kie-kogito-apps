@@ -70,7 +70,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class CounterfactualExplainerServiceHandlerTest {
+class CounterfactualExplainerServiceHandlerTest {
 
     private static final String EXECUTION_ID = UUID.randomUUID().toString();
 
@@ -101,13 +101,13 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testSupports() {
+    void testSupports() {
         assertTrue(handler.supports(CounterfactualExplainabilityRequest.class));
         assertFalse(handler.supports(BaseExplainabilityRequest.class));
     }
 
     @Test
-    public void testGetPredictionWithEmptyDefinition() {
+    void testGetPredictionWithEmptyDefinition() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -127,7 +127,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithFlatInputModel() {
+    void testGetPredictionWithFlatInputModel() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -157,7 +157,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithStructuredInputModel() {
+    void testGetPredictionWithStructuredInputModel() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -172,7 +172,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithCollectionInputModel() {
+    void testGetPredictionWithCollectionInputModel() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -187,7 +187,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithFlatOutputModel() {
+    void testGetPredictionWithFlatOutputModel() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -215,7 +215,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithFlatOutputModelReordered() {
+    void testGetPredictionWithFlatOutputModelReordered() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -257,7 +257,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithStructuredOutputModel() {
+    void testGetPredictionWithStructuredOutputModel() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -272,7 +272,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithCollectionOutputModel() {
+    void testGetPredictionWithCollectionOutputModel() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -287,7 +287,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithFlatSearchDomainsFixed() {
+    void testGetPredictionWithFlatSearchDomainsFixed() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -313,7 +313,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithFlatSearchDomainsNotFixed() {
+    void testGetPredictionWithFlatSearchDomainsNotFixed() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -343,7 +343,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithStructuredSearchDomains() {
+    void testGetPredictionWithStructuredSearchDomains() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -363,7 +363,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testGetPredictionWithCollectionSearchDomains() {
+    void testGetPredictionWithCollectionSearchDomains() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -382,7 +382,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testCreateSucceededResult() {
+    void testCreateSucceededResult() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -425,7 +425,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testCreateSucceededResultWithNullPredictions() {
+    void testCreateSucceededResultWithNullPredictions() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -447,7 +447,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testCreateSucceededResultWithEmptyPredictions() {
+    void testCreateSucceededResultWithEmptyPredictions() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -469,7 +469,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testCreateSucceededResultWithMoreThanOnePrediction() {
+    void testCreateSucceededResultWithMoreThanOnePrediction() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -491,7 +491,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testCreateIntermediateResult() {
+    void testCreateIntermediateResult() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -535,7 +535,7 @@ public class CounterfactualExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testCreateFailedResult() {
+    void testCreateFailedResult() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -557,7 +557,7 @@ public class CounterfactualExplainerServiceHandlerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testExplainAsyncDelegation() {
+    void testExplainAsyncDelegation() {
         Prediction prediction = mock(Prediction.class);
         PredictionProvider predictionProvider = mock(PredictionProvider.class);
 
@@ -568,7 +568,7 @@ public class CounterfactualExplainerServiceHandlerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testExplainAsyncWithConsumerDelegation() {
+    void testExplainAsyncWithConsumerDelegation() {
         Prediction prediction = mock(Prediction.class);
         PredictionProvider predictionProvider = mock(PredictionProvider.class);
         Consumer<CounterfactualResult> callback = mock(Consumer.class);

@@ -28,10 +28,10 @@ import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
 import static org.kie.kogito.index.Constants.USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE;
 import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
 
-public class UserTaskInstanceMetaMapperTest {
+class UserTaskInstanceMetaMapperTest {
 
     @Test
-    public void testUserTaskInstanceMapper() {
+    void testUserTaskInstanceMapper() {
         String taskId = UUID.randomUUID().toString();
         String processId = "travels";
         String rootProcessId = "root_travels";

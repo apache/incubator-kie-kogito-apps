@@ -26,10 +26,10 @@ import static org.hamcrest.CoreMatchers.is;
 
 @NativeImageTest
 @QuarkusTestResource(InfinispanQuarkusTestResource.class)
-public class NativeInfinispanTrustyServiceIT {
+class NativeInfinispanTrustyServiceIT {
 
     @Test
-    public void testImageGeneration() {
+    void testImageGeneration() {
         given()
                 .when().get("/q/health/live")
                 .then()

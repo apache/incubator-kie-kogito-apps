@@ -39,7 +39,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class LocalExplainerServiceHandlerRegistryTest {
+class LocalExplainerServiceHandlerRegistryTest {
 
     private static final String EXECUTION_ID = "executionId";
 
@@ -79,7 +79,7 @@ public class LocalExplainerServiceHandlerRegistryTest {
     }
 
     @Test
-    public void testLIME_explainAsyncWithResults() {
+    void testLIME_explainAsyncWithResults() {
         LIMEExplainabilityRequest request = new LIMEExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -92,7 +92,7 @@ public class LocalExplainerServiceHandlerRegistryTest {
     }
 
     @Test
-    public void testCounterfactual_explainAsyncWithResults() {
+    void testCounterfactual_explainAsyncWithResults() {
         CounterfactualExplainabilityRequest request = new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,

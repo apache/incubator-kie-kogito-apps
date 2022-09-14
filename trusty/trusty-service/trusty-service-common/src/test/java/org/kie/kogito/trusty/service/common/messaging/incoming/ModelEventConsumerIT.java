@@ -37,7 +37,7 @@ import static org.mockito.Mockito.verify;
 
 @QuarkusTest
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
-public class ModelEventConsumerIT {
+class ModelEventConsumerIT {
 
     @QuarkusTestProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
     String kafkaBootstrapServers;
@@ -60,7 +60,7 @@ public class ModelEventConsumerIT {
     }
 
     @Test
-    public void eventLoopIsNotStoppedWithException() {
+    void eventLoopIsNotStoppedWithException() {
         doThrow(new RuntimeException("Something really bad"))
                 .when(trustyService)
                 .storeModel(any(DMNModelWithMetadata.class));

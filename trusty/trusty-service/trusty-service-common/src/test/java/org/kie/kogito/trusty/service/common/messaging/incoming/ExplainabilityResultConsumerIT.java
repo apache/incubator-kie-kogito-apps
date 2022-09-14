@@ -78,7 +78,7 @@ public class ExplainabilityResultConsumerIT {
     }
 
     @Test
-    public void explainabilityResultIsProcessedAndStored() {
+    void explainabilityResultIsProcessedAndStored() {
         String executionId = "executionId";
 
         doNothing().when(trustyService).storeExplainabilityResult(eq(executionId), any(BaseExplainabilityResult.class));

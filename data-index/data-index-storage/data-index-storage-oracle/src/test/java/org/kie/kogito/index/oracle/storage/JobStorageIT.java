@@ -36,7 +36,7 @@ import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(OracleSqlQuarkusTestResource.class)
-public class JobStorageIT extends AbstractStorageIT<JobEntity, Job> {
+class JobStorageIT extends AbstractStorageIT<JobEntity, Job> {
 
     @Inject
     JobEntityRepository repository;
@@ -66,7 +66,7 @@ public class JobStorageIT extends AbstractStorageIT<JobEntity, Job> {
 
     @Test
     @Transactional
-    public void testJobEntity() {
+    void testJobEntity() {
         String jobId = UUID.randomUUID().toString();
         String processInstanceId = UUID.randomUUID().toString();
 

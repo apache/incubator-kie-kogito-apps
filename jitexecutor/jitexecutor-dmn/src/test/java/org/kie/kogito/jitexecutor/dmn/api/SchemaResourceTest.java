@@ -28,10 +28,10 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
 
 @QuarkusTest
-public class SchemaResourceTest {
+class SchemaResourceTest {
 
     @Test
-    public void test() throws IOException {
+    void test() throws IOException {
         final String MODEL = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/test.dmn")));
         given()
                 .contentType(ContentType.XML)

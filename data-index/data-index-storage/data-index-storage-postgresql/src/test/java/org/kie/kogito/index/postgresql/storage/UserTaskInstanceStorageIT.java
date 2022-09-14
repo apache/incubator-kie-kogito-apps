@@ -35,7 +35,7 @@ import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(PostgreSqlQuarkusTestResource.class)
-public class UserTaskInstanceStorageIT extends AbstractStorageIT<UserTaskInstanceEntity, UserTaskInstance> {
+class UserTaskInstanceStorageIT extends AbstractStorageIT<UserTaskInstanceEntity, UserTaskInstance> {
 
     @Inject
     UserTaskInstanceEntityRepository repository;
@@ -59,7 +59,7 @@ public class UserTaskInstanceStorageIT extends AbstractStorageIT<UserTaskInstanc
 
     @Test
     @Transactional
-    public void testUserTaskInstanceEntity() {
+    void testUserTaskInstanceEntity() {
         String taskId = UUID.randomUUID().toString();
         String processInstanceId = UUID.randomUUID().toString();
         UserTaskInstance userTaskInstance1 = TestUtils

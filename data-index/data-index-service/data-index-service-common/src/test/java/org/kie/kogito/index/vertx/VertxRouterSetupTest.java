@@ -50,7 +50,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class VertxRouterSetupTest {
+class VertxRouterSetupTest {
 
     @Mock
     Router routerMock;
@@ -78,7 +78,7 @@ public class VertxRouterSetupTest {
     }
 
     @Test
-    public void testAuthEnabledTrue() {
+    void testAuthEnabledTrue() {
         vertxRouterSetup.authEnabled = true;
         vertxRouterSetup.graphUIPath = "/graphiql";
         vertxRouterSetup.setupRouter(routerMock);
@@ -87,7 +87,7 @@ public class VertxRouterSetupTest {
     }
 
     @Test
-    public void testAuthEnabledFalse() {
+    void testAuthEnabledFalse() {
         vertxRouterSetup.authEnabled = false;
         vertxRouterSetup.graphUIPath = "/graphiql";
         vertxRouterSetup.setupRouter(routerMock);
@@ -96,7 +96,7 @@ public class VertxRouterSetupTest {
     }
 
     @Test
-    public void testAddGraphiqlRequestHeader() {
+    void testAddGraphiqlRequestHeader() {
         GraphiQLHandler graphiQLHandlerMock = mock(GraphiQLHandler.class);
         String token = "TEST_TOKEN";
         QuarkusHttpUser quarkusHttpUser = mock(QuarkusHttpUser.class);

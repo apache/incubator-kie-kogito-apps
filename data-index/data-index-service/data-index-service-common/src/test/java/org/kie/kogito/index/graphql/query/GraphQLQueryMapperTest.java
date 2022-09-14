@@ -55,7 +55,7 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.isNull;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.notNull;
 
 @ExtendWith(MockitoExtension.class)
-public class GraphQLQueryMapperTest {
+class GraphQLQueryMapperTest {
 
     @InjectMocks
     GraphQLSchemaManager manager;
@@ -125,7 +125,7 @@ public class GraphQLQueryMapperTest {
     }
 
     @Test
-    public void testQuery() {
+    void testQuery() {
         Map<String, Object> where = new HashMap<>();
         Map<String, Object> id = new HashMap();
         Map<String, Object> idValues = new HashMap();
@@ -148,7 +148,7 @@ public class GraphQLQueryMapperTest {
     }
 
     @Test
-    public void testDatesQuery() {
+    void testDatesQuery() {
         Map<String, Object> where = new HashMap<>();
         where.put("start", singletonMap("equal", "2019-01-01"));
         Map<String, Object> between = new HashMap<>();
@@ -164,7 +164,7 @@ public class GraphQLQueryMapperTest {
     }
 
     @Test
-    public void testNodesQuery() {
+    void testNodesQuery() {
         Map<String, Object> where = new HashMap<>();
         where.put("nodes", singletonMap("name", singletonMap("equal", "StartNode")));
 
@@ -175,7 +175,7 @@ public class GraphQLQueryMapperTest {
     }
 
     @Test
-    public void testOrQuery() {
+    void testOrQuery() {
         Map<String, Object> where = new HashMap<>();
         Map<String, Object> id = new HashMap();
         Map<String, Object> idValues = new HashMap();

@@ -23,11 +23,11 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-public class SanitizerTest {
+class SanitizerTest {
 
     @ParameterizedTest
     @MethodSource("provideSanitizeTestCases")
-    public void sanitizeTest(String input, String expected) {
+    void sanitizeTest(String input, String expected) {
         String sanitized = (String) Sanitizer.sanitize(input);
         Assertions.assertEquals(expected, sanitized);
     }

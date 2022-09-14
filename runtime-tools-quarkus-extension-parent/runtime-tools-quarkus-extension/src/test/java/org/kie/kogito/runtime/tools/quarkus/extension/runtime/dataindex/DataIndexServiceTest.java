@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DataIndexServiceTest {
+class DataIndexServiceTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -60,7 +60,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testProcessInstancesCount() {
+    void testProcessInstancesCount() {
         when(dataIndexClient.query(DataIndexService.ALL_PROCESS_INSTANCES_IDS_QUERY)).thenReturn(PROCESS_INSTANCE_RESPONSE);
 
         Response response = dataIndexService.processInstancesCount();
@@ -69,7 +69,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testEmptyProcessInstancesCount() {
+    void testEmptyProcessInstancesCount() {
         when(dataIndexClient.query(DataIndexService.ALL_PROCESS_INSTANCES_IDS_QUERY)).thenReturn(EMPTY_PROCESS_INSTANCE_RESPONSE);
 
         Response response = dataIndexService.processInstancesCount();
@@ -78,7 +78,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testProcessInstancestCountError() {
+    void testProcessInstancestCountError() {
         when(dataIndexClient.query(DataIndexService.ALL_PROCESS_INSTANCES_IDS_QUERY)).thenReturn(ERROR_RESPONSE);
 
         Response response = dataIndexService.processInstancesCount();
@@ -86,7 +86,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testJobsCount() {
+    void testJobsCount() {
         when(dataIndexClient.query(DataIndexService.ALL_JOBS_IDS_QUERY)).thenReturn(JOBS_RESPONSE);
 
         Response response = dataIndexService.jobsCount();
@@ -95,7 +95,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testEmptyJobsCount() {
+    void testEmptyJobsCount() {
         when(dataIndexClient.query(DataIndexService.ALL_JOBS_IDS_QUERY)).thenReturn(EMPTY_JOBS_RESPONSE);
 
         Response response = dataIndexService.jobsCount();
@@ -104,7 +104,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testJobsCountError() {
+    void testJobsCountError() {
         when(dataIndexClient.query(DataIndexService.ALL_JOBS_IDS_QUERY)).thenReturn(ERROR_RESPONSE);
 
         Response response = dataIndexService.jobsCount();
@@ -112,7 +112,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testTasksCount() {
+    void testTasksCount() {
         when(dataIndexClient.query(DataIndexService.ALL_TASKS_IDS_QUERY)).thenReturn(USER_TASK_RESPONSE);
 
         Response response = dataIndexService.tasksCount();
@@ -121,7 +121,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testEmptyTasksCount() {
+    void testEmptyTasksCount() {
         when(dataIndexClient.query(DataIndexService.ALL_TASKS_IDS_QUERY)).thenReturn(EMPTY_USER_TASK_RESPONSE);
 
         Response response = dataIndexService.tasksCount();
@@ -130,7 +130,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testTasksCountError() {
+    void testTasksCountError() {
         when(dataIndexClient.query(DataIndexService.ALL_TASKS_IDS_QUERY)).thenReturn(ERROR_RESPONSE);
 
         Response response = dataIndexService.jobsCount();
@@ -138,7 +138,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testFormsCount() {
+    void testFormsCount() {
         when(formsStorage.getFormsCount()).thenReturn(5);
 
         Response response = dataIndexService.formsCount();
@@ -147,7 +147,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testFormsCountError() {
+    void testFormsCountError() {
         when(formsStorage.getFormsCount()).thenThrow(new RuntimeException("something went wrong!"));
 
         Response response = dataIndexService.formsCount();

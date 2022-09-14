@@ -39,7 +39,7 @@ import static org.mockito.Mockito.verify;
 
 @QuarkusTest
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
-public class TraceEventConsumerIT {
+class TraceEventConsumerIT {
 
     @InjectMock
     TrustyService trustyService;
@@ -62,7 +62,7 @@ public class TraceEventConsumerIT {
     }
 
     @Test
-    public void eventLoopIsNotStoppedWithException() {
+    void eventLoopIsNotStoppedWithException() {
         String executionIdException = "idException";
         String executionIdNoException = "idNoException";
         doThrow(new RuntimeException("Something really bad")).when(trustyService).processDecision(eq(executionIdException), any(Decision.class));

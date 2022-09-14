@@ -30,14 +30,14 @@ import io.restassured.http.ContentType;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
-public class OneOfEachTypeTest {
+class OneOfEachTypeTest {
 
     static {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
     }
 
     @Test
-    public void allTypes() throws IOException {
+    void allTypes() throws IOException {
         String model = new ObjectMapper().writeValueAsString(new String(IoUtils.readBytesFromInputStream(OneOfEachTypeTest.class.getResourceAsStream("/OneOfEachType.dmn"))));
         String payload = "{ \"model\": " + model + ", \"context\": {\n" +
                 "    \"InputBoolean\": true,\n" +

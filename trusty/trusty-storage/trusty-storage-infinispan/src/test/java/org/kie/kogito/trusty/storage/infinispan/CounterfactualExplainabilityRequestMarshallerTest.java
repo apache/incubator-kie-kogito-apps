@@ -32,10 +32,10 @@ import org.kie.kogito.tracing.typedvalue.UnitValue;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-public class CounterfactualExplainabilityRequestMarshallerTest extends MarshallerTestTemplate {
+class CounterfactualExplainabilityRequestMarshallerTest extends MarshallerTestTemplate {
 
     @Test
-    public void testWriteAndRead() throws IOException {
+    void testWriteAndRead() throws IOException {
         ModelIdentifier modelIdentifier = new ModelIdentifier("resourceType", "resourceId");
         List<NamedTypedValue> originalInputs = Collections.singletonList(new NamedTypedValue("unitIn",
                 new UnitValue("number",

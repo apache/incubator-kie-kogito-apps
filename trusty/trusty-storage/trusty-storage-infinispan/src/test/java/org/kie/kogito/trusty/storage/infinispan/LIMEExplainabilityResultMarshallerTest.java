@@ -28,10 +28,10 @@ import org.kie.kogito.explainability.api.SaliencyModel;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class LIMEExplainabilityResultMarshallerTest extends MarshallerTestTemplate {
+class LIMEExplainabilityResultMarshallerTest extends MarshallerTestTemplate {
 
     @Test
-    public void testWriteAndRead() throws IOException {
+    void testWriteAndRead() throws IOException {
 
         List<FeatureImportanceModel> featureImportanceModels = Collections.singletonList(new FeatureImportanceModel("aFeature", 0d));
         List<SaliencyModel> saliencyModels = Collections.singletonList(new SaliencyModel("outcomeName", featureImportanceModels));

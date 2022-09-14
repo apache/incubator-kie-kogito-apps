@@ -35,7 +35,7 @@ import io.vertx.mutiny.sqlclient.Tuple;
 
 import static java.util.stream.Collectors.toList;
 
-public class InmemoryPostgreSQLTest {
+class InmemoryPostgreSQLTest {
 
     // Start unit test with your extension loaded
     @RegisterExtension
@@ -48,14 +48,14 @@ public class InmemoryPostgreSQLTest {
     PgPool client;
 
     @Test
-    public void testFlyway() {
+    void testFlyway() {
         List<String> results = select(1);
         Assertions.assertEquals(1, results.size());
         Assertions.assertEquals("test1", results.get(0));
     }
 
     @Test
-    public void testCRUD() {
+    void testCRUD() {
         List<String> results;
 
         // Insert

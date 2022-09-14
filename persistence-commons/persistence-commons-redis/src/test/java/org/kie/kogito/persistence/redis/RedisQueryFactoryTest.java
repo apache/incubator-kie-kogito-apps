@@ -34,55 +34,55 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class RedisQueryFactoryTest {
+class RedisQueryFactoryTest {
 
     @Test
-    public void inFilterShouldNotBeSupported() {
+    void inFilterShouldNotBeSupported() {
         testFilterShouldNotBeSupported(QueryFilterFactory.in("attribute", new ArrayList<>()));
     }
 
     @Test
-    public void containsFilterShouldNotBeSupported() {
+    void containsFilterShouldNotBeSupported() {
         testFilterShouldNotBeSupported(QueryFilterFactory.contains("attribute", "value"));
     }
 
     @Test
-    public void containsAllFilterShouldNotBeSupported() {
+    void containsAllFilterShouldNotBeSupported() {
         testFilterShouldNotBeSupported(QueryFilterFactory.containsAll("attribute", new ArrayList<>()));
     }
 
     @Test
-    public void containsAnyFilterShouldNotBeSupported() {
+    void containsAnyFilterShouldNotBeSupported() {
         testFilterShouldNotBeSupported(QueryFilterFactory.containsAny("attribute", new ArrayList<>()));
     }
 
     @Test
-    public void isNullFilterShouldNotBeSupported() {
+    void isNullFilterShouldNotBeSupported() {
         testFilterShouldNotBeSupported(QueryFilterFactory.isNull("attribute"));
     }
 
     @Test
-    public void notNullFilterShouldNotBeSupported() {
+    void notNullFilterShouldNotBeSupported() {
         testFilterShouldNotBeSupported(QueryFilterFactory.notNull("attribute"));
     }
 
     @Test
-    public void andFilterShouldNotBeSupported() {
+    void andFilterShouldNotBeSupported() {
         testFilterShouldNotBeSupported(QueryFilterFactory.and(new ArrayList<>()));
     }
 
     @Test
-    public void orFilterShouldNotBeSupported() {
+    void orFilterShouldNotBeSupported() {
         testFilterShouldNotBeSupported(QueryFilterFactory.or(new ArrayList<>()));
     }
 
     @Test
-    public void notFilterShouldNotBeSupported() {
+    void notFilterShouldNotBeSupported() {
         testFilterShouldNotBeSupported(QueryFilterFactory.not(QueryFilterFactory.equalTo("attribute", "test")));
     }
 
     @Test
-    public void buildQueryBodyTest() {
+    void buildQueryBodyTest() {
         List<AttributeFilter<?>> filters = new ArrayList<>();
         filters.add(QueryFilterFactory.equalTo("firstAttribute", "firstValue"));
         filters.add(QueryFilterFactory.like("secondAttribute", "secondValue"));
@@ -93,7 +93,7 @@ public class RedisQueryFactoryTest {
     }
 
     @Test
-    public void addFiltersTest() {
+    void addFiltersTest() {
         List<AttributeFilter<?>> filters = new ArrayList<>();
         filters.add(QueryFilterFactory.equalTo("shouldBeIgnored", 0));
         filters.add(QueryFilterFactory.like("shouldBeIgnoredAsWell", "test"));

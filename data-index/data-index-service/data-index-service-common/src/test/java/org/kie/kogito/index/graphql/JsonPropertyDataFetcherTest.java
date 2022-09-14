@@ -32,13 +32,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class JsonPropertyDataFetcherTest {
+class JsonPropertyDataFetcherTest {
 
     ObjectMapper objectMapper = new ObjectMapper();
     JsonPropertyDataFetcher jsonPropertyDataFetcher = new JsonPropertyDataFetcher();
 
     @Test
-    public void testBasicTypesDataFetcher() {
+    void testBasicTypesDataFetcher() {
         JsonNode addressJson = createTestObjectNodeJson("city1", 8, true, null);
         assertThat(jsonPropertyDataFetcher.get(getMockEnv("city", addressJson))).isEqualTo("city1");
         assertThat(jsonPropertyDataFetcher.get(getMockEnv("amount", addressJson))).isEqualTo(8);
@@ -47,7 +47,7 @@ public class JsonPropertyDataFetcherTest {
     }
 
     @Test
-    public void testArraysTypesDataFetcher() {
+    void testArraysTypesDataFetcher() {
         JsonNode arraysJson = getArraysNodeJson();
         assertThat(((ArrayNode) jsonPropertyDataFetcher.get(getMockEnv("addressArray", arraysJson))).size()).isEqualTo(2);
         List stringArray = ((List) jsonPropertyDataFetcher.get(getMockEnv("stringArray", arraysJson)));

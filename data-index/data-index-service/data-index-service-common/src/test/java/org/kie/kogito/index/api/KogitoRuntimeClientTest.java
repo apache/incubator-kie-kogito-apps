@@ -71,7 +71,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class KogitoRuntimeClientTest {
+class KogitoRuntimeClientTest {
 
     private static int ACTIVE = 1;
     private static int ERROR = 5;
@@ -106,7 +106,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testAbortProcessInstance() {
+    void testAbortProcessInstance() {
         setupIdentityMock();
         when(webClientMock.delete(anyString())).thenReturn(httpRequestMock);
 
@@ -123,7 +123,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testRetryProcessInstance() {
+    void testRetryProcessInstance() {
         setupIdentityMock();
         when(webClientMock.post(anyString())).thenReturn(httpRequestMock);
         ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ERROR);
@@ -139,7 +139,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testSkipProcessInstance() {
+    void testSkipProcessInstance() {
         setupIdentityMock();
         when(webClientMock.post(anyString())).thenReturn(httpRequestMock);
 
@@ -156,7 +156,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testUpdateProcessInstanceVariables() {
+    void testUpdateProcessInstanceVariables() {
         setupIdentityMock();
         when(webClientMock.put(anyString())).thenReturn(httpRequestMock);
         when(httpRequestMock.putHeader(eq("Content-Type"), anyString())).thenReturn(httpRequestMock);
@@ -174,7 +174,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testTriggerNodeInstance() {
+    void testTriggerNodeInstance() {
         String nodeDefId = "nodeDefId";
         setupIdentityMock();
         when(webClientMock.post(anyString())).thenReturn(httpRequestMock);
@@ -191,7 +191,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testRetriggerNodeInstance() {
+    void testRetriggerNodeInstance() {
         String nodeInstanceId = "nodeInstanceId";
         setupIdentityMock();
         when(webClientMock.post(anyString())).thenReturn(httpRequestMock);
@@ -209,7 +209,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testCancelNodeInstance() {
+    void testCancelNodeInstance() {
         String nodeInstanceId = "nodeInstanceId";
         setupIdentityMock();
         when(webClientMock.delete(anyString())).thenReturn(httpRequestMock);
@@ -227,7 +227,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testCancelJob() {
+    void testCancelJob() {
         setupIdentityMock();
         when(webClientMock.delete(anyString())).thenReturn(httpRequestMock);
 
@@ -243,7 +243,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testRescheduleJob() {
+    void testRescheduleJob() {
         String newJobData = "{ }";
         setupIdentityMock();
         when(webClientMock.put(anyString())).thenReturn(httpRequestMock);
@@ -262,7 +262,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testGetProcessInstanceDiagram() {
+    void testGetProcessInstanceDiagram() {
         setupIdentityMock();
         when(webClientMock.get(anyString())).thenReturn(httpRequestMock);
 
@@ -280,7 +280,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testGetProcessInstanceNodeDefinitions() {
+    void testGetProcessInstanceNodeDefinitions() {
         setupIdentityMock();
         when(webClientMock.get(anyString())).thenReturn(httpRequestMock);
 
@@ -309,7 +309,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testGetProcessInstanceSource() {
+    void testGetProcessInstanceSource() {
         setupIdentityMock();
         when(webClientMock.get(anyString())).thenReturn(httpRequestMock);
 
@@ -327,7 +327,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testGetUserTaskSchema() {
+    void testGetUserTaskSchema() {
         setupIdentityMock();
         when(webClientMock.get(anyString())).thenReturn(httpRequestMock);
 
@@ -343,7 +343,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testUpdateUserTaskInstance() {
+    void testUpdateUserTaskInstance() {
         setupIdentityMock();
         when(webClientMock.patch(anyString())).thenReturn(httpRequestMock);
 
@@ -366,7 +366,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testCreateUserTaskInstanceComment() {
+    void testCreateUserTaskInstanceComment() {
         String commentInfo = "newComment";
         setupIdentityMock();
         when(webClientMock.post(anyString())).thenReturn(httpRequestMock);
@@ -384,7 +384,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testCreateUserTaskInstanceAttachment() {
+    void testCreateUserTaskInstanceAttachment() {
         String attachmentUri = "nhttps://drive.google.com/file/d/AttachmentUri";
         String attachmentName = "newAttachmentName";
         setupIdentityMock();
@@ -406,7 +406,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testUpdateUserTaskInstanceComment() {
+    void testUpdateUserTaskInstanceComment() {
         String commentInfo = "NewCommentContent";
         String commentId = "commentId";
         setupIdentityMock();
@@ -427,7 +427,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testDeleteTaskInstanceComment() {
+    void testDeleteTaskInstanceComment() {
         String commentId = "commentId";
         setupIdentityMock();
         when(webClientMock.delete(anyString())).thenReturn(httpRequestMock);
@@ -444,7 +444,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testUpdateUserTaskInstanceAttachment() {
+    void testUpdateUserTaskInstanceAttachment() {
         String attachmentName = "NewAttachmentName";
         String attachmentContent = "NewAttachmentContent";
         String attachmentId = "attachmentId";
@@ -470,7 +470,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testDeleteTaskInstanceAttachment() {
+    void testDeleteTaskInstanceAttachment() {
         String attachmentId = "attachmentId";
         setupIdentityMock();
         when(webClientMock.delete(anyString())).thenReturn(httpRequestMock);
@@ -487,7 +487,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testWebClientToURLOptions() {
+    void testWebClientToURLOptions() {
         String defaultHost = "localhost";
         int defaultPort = 8180;
         WebClientOptions webClientOptions = client.getWebClientToURLOptions("http://" + defaultHost + ":" + defaultPort);
@@ -496,7 +496,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testWebClientToURLOptionsWithoutPort() {
+    void testWebClientToURLOptionsWithoutPort() {
         String dataIndexUrl = "http://service.com";
         WebClientOptions webClientOptions = client.getWebClientToURLOptions(dataIndexUrl);
         assertThat(webClientOptions.getDefaultPort()).isEqualTo(80);
@@ -505,7 +505,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testWebClientToURLOptionsWithoutPortSSL() {
+    void testWebClientToURLOptionsWithoutPortSSL() {
         String dataIndexurl = "https://service.com";
         WebClientOptions webClientOptions = client.getWebClientToURLOptions(dataIndexurl);
         assertThat(webClientOptions.getDefaultPort()).isEqualTo(443);
@@ -514,7 +514,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testMalformedURL() {
+    void testMalformedURL() {
         assertThat(client.getWebClientToURLOptions("malformedURL")).isNull();
     }
 
@@ -527,7 +527,7 @@ public class KogitoRuntimeClientTest {
     }
 
     @Test
-    public void testGetAuthHeader() {
+    void testGetAuthHeader() {
         tokenCredential = mock(TokenCredential.class);
         when(identityMock.getCredential(TokenCredential.class)).thenReturn(tokenCredential);
         when(tokenCredential.getToken()).thenReturn(AUTHORIZED_TOKEN);

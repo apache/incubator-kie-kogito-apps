@@ -27,10 +27,10 @@ import static org.kie.kogito.trusty.storage.common.TrustyStorageService.DECISION
 import static org.kie.kogito.trusty.storage.common.TrustyStorageService.LIME_RESULTS_STORAGE;
 import static org.kie.kogito.trusty.storage.common.TrustyStorageService.MODELS_STORAGE;
 
-public class IndexProviderTest {
+class IndexProviderTest {
 
     @Test
-    public void indexesAreCreated() {
+    void indexesAreCreated() {
         RedisIndexManagerMock redisIndexManager = new RedisIndexManagerMock(Mockito.mock(RedisClientManager.class));
         IndexProvider indexProvider = new IndexProvider(redisIndexManager);
 

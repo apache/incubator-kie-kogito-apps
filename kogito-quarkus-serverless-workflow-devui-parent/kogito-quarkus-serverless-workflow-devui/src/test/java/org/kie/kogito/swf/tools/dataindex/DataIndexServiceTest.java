@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class DataIndexServiceTest {
+class DataIndexServiceTest {
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -53,7 +53,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testWorkflowInstancesCount() {
+    void testWorkflowInstancesCount() {
         when(dataIndexClient.query(DataIndexService.ALL_WORKFLOW_INSTANCES_IDS_QUERY)).thenReturn(WORKFLOW_INSTANCE_RESPONSE);
 
         Response response = dataIndexService.workflowInstancesCount();
@@ -62,7 +62,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testEmptyWorkflowInstancesCount() {
+    void testEmptyWorkflowInstancesCount() {
         when(dataIndexClient.query(DataIndexService.ALL_WORKFLOW_INSTANCES_IDS_QUERY)).thenReturn(EMPTY_WORKFLOW_INSTANCE_RESPONSE);
 
         Response response = dataIndexService.workflowInstancesCount();
@@ -71,7 +71,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testWorkflowInstancestCountError() {
+    void testWorkflowInstancestCountError() {
         when(dataIndexClient.query(DataIndexService.ALL_WORKFLOW_INSTANCES_IDS_QUERY)).thenReturn(ERROR_RESPONSE);
 
         Response response = dataIndexService.workflowInstancesCount();
@@ -79,7 +79,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testJobsCount() {
+    void testJobsCount() {
         when(dataIndexClient.query(DataIndexService.ALL_JOBS_IDS_QUERY)).thenReturn(JOBS_RESPONSE);
 
         Response response = dataIndexService.jobsCount();
@@ -88,7 +88,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testEmptyJobsCount() {
+    void testEmptyJobsCount() {
         when(dataIndexClient.query(DataIndexService.ALL_JOBS_IDS_QUERY)).thenReturn(EMPTY_JOBS_RESPONSE);
 
         Response response = dataIndexService.jobsCount();
@@ -97,7 +97,7 @@ public class DataIndexServiceTest {
     }
 
     @Test
-    public void testJobsCountError() {
+    void testJobsCountError() {
         when(dataIndexClient.query(DataIndexService.ALL_JOBS_IDS_QUERY)).thenReturn(ERROR_RESPONSE);
 
         Response response = dataIndexService.jobsCount();

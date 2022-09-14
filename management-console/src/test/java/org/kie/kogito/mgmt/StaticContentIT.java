@@ -29,7 +29,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
-public class StaticContentIT {
+class StaticContentIT {
 
     @TestHTTPResource
     URL url;
@@ -45,7 +45,7 @@ public class StaticContentIT {
     }
 
     @Test
-    public void testIndexHtml() throws Exception {
+    void testIndexHtml() throws Exception {
         try (InputStream in = url.openStream()) {
             String contents = readStream(in);
             assertTrue(contents.contains("<title>Kogito - Management Console</title>"));

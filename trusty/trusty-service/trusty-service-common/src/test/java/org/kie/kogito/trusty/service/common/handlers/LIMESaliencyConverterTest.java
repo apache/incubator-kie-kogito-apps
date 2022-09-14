@@ -46,7 +46,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class LIMESaliencyConverterTest {
+class LIMESaliencyConverterTest {
 
     private static final String EXECUTION_ID = "executionId";
 
@@ -61,7 +61,7 @@ public class LIMESaliencyConverterTest {
     }
 
     @Test
-    public void testFromResult_DecisionExists() {
+    void testFromResult_DecisionExists() {
         LIMEExplainabilityResult result = LIMEExplainabilityResult.buildSucceeded(EXECUTION_ID,
                 List.of(new SaliencyModel("outcomeName1",
                         List.of(new FeatureImportanceModel("feature1a", 1.0),
@@ -124,7 +124,7 @@ public class LIMESaliencyConverterTest {
     }
 
     @Test
-    public void testFromResult_DecisionExists_WhenOutcomeNameNotFound() {
+    void testFromResult_DecisionExists_WhenOutcomeNameNotFound() {
         LIMEExplainabilityResult result = LIMEExplainabilityResult.buildSucceeded(EXECUTION_ID,
                 List.of(new SaliencyModel("outcomeName1",
                         List.of(new FeatureImportanceModel("feature1", 1.0))),
@@ -174,7 +174,7 @@ public class LIMESaliencyConverterTest {
     }
 
     @Test
-    public void testFromResult_DecisionNotExists() {
+    void testFromResult_DecisionNotExists() {
         LIMEExplainabilityResult result = LIMEExplainabilityResult.buildSucceeded(EXECUTION_ID,
                 List.of(new SaliencyModel("outcomeName1",
                         List.of(new FeatureImportanceModel("feature1a", 1.0),

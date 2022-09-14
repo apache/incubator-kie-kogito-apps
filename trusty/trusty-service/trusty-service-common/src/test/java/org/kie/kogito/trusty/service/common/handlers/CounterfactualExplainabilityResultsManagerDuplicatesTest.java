@@ -39,7 +39,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
+class CounterfactualExplainabilityResultsManagerDuplicatesTest {
 
     private static final String EXECUTION_ID = "executionId";
 
@@ -64,7 +64,7 @@ public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
     }
 
     @Test
-    public void testPurgeWhenResultSetSizeIsSmallerThanMinimum() {
+    void testPurgeWhenResultSetSizeIsSmallerThanMinimum() {
         when(query.execute()).thenReturn(Collections.emptyList());
 
         manager.purge(COUNTERFACTUAL_ID, storage);
@@ -73,7 +73,7 @@ public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
     }
 
     @Test
-    public void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithDuplicateInputs() {
+    void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithDuplicateInputs() {
         CounterfactualExplainabilityResult result0 = makeResult(0, Collections.emptyList(), Collections.emptyList());
         CounterfactualExplainabilityResult result1 = makeResult(1, Collections.emptyList(), Collections.emptyList());
         CounterfactualExplainabilityResult result2 = makeResult(2, List.of(makeCounterfactualInput("a")), Collections.emptyList());
@@ -87,7 +87,7 @@ public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
     }
 
     @Test
-    public void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithDuplicateInputs_FinalLast() {
+    void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithDuplicateInputs_FinalLast() {
         CounterfactualExplainabilityResult result0 = makeResult(0, Collections.emptyList(), Collections.emptyList());
         CounterfactualExplainabilityResult result1 = makeResult(1, Collections.emptyList(), Collections.emptyList());
         CounterfactualExplainabilityResult result2 = makeResult(2, List.of(makeCounterfactualInput("a")), Collections.emptyList());
@@ -101,7 +101,7 @@ public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
     }
 
     @Test
-    public void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithDuplicateInputs_FinalPenultimate() {
+    void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithDuplicateInputs_FinalPenultimate() {
         CounterfactualExplainabilityResult result0 = makeResult(0, Collections.emptyList(), Collections.emptyList());
         CounterfactualExplainabilityResult result1 = makeResult(1, Collections.emptyList(), Collections.emptyList());
         CounterfactualExplainabilityResult result2 = makeResult(2, CounterfactualExplainabilityResult.Stage.FINAL, List.of(makeCounterfactualInput("a")), Collections.emptyList());
@@ -115,7 +115,7 @@ public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
     }
 
     @Test
-    public void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithoutDuplicateInputs() {
+    void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithoutDuplicateInputs() {
         CounterfactualExplainabilityResult result0 = makeResult(0, List.of(makeCounterfactualInput("0")), Collections.emptyList());
         CounterfactualExplainabilityResult result1 = makeResult(1, List.of(makeCounterfactualInput("1")), Collections.emptyList());
         CounterfactualExplainabilityResult result2 = makeResult(2, List.of(makeCounterfactualInput("2")), Collections.emptyList());
@@ -128,7 +128,7 @@ public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
     }
 
     @Test
-    public void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithDuplicateOutputs() {
+    void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithDuplicateOutputs() {
         CounterfactualExplainabilityResult result0 = makeResult(0, Collections.emptyList(), Collections.emptyList());
         CounterfactualExplainabilityResult result1 = makeResult(1, Collections.emptyList(), Collections.emptyList());
         CounterfactualExplainabilityResult result2 = makeResult(2, Collections.emptyList(), List.of(makeCounterfactualOutput("a")));
@@ -142,7 +142,7 @@ public class CounterfactualExplainabilityResultsManagerDuplicatesTest {
     }
 
     @Test
-    public void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithoutDuplicateOutputs() {
+    void testPurgeWhenResultSetSizeIsGreaterThanMinimum_WithoutDuplicateOutputs() {
         CounterfactualExplainabilityResult result0 = makeResult(0, Collections.emptyList(), List.of(makeCounterfactualOutput("0")));
         CounterfactualExplainabilityResult result1 = makeResult(1, Collections.emptyList(), List.of(makeCounterfactualOutput("1")));
         CounterfactualExplainabilityResult result2 = makeResult(2, Collections.emptyList(), List.of(makeCounterfactualOutput("2")));

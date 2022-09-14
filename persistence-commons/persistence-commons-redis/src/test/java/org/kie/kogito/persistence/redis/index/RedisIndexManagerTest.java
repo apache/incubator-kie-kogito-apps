@@ -33,10 +33,10 @@ import static org.kie.kogito.persistence.redis.Person.NAME_PROPERTY;
 import static org.kie.kogito.persistence.redis.TestContants.TEST_INDEX_NAME;
 import static org.mockito.Mockito.when;
 
-public class RedisIndexManagerTest {
+class RedisIndexManagerTest {
 
     @Test
-    public void createSchemaTest() {
+    void createSchemaTest() {
         RedisClientMock redisClientMock = new RedisClientMock();
         RedisClientManager redisClientManager = Mockito.mock(RedisClientManager.class);
         when(redisClientManager.getClient(TEST_INDEX_NAME)).thenReturn(redisClientMock);

@@ -29,10 +29,10 @@ import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
 import static org.kie.kogito.index.Constants.PROCESS_INSTANCES_DOMAIN_ATTRIBUTE;
 import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
 
-public class ProcessInstanceMetaMapperTest {
+class ProcessInstanceMetaMapperTest {
 
     @Test
-    public void testProcessInstanceMapper() {
+    void testProcessInstanceMapper() {
         String processId = "travels";
         String rootProcessId = "root_travels";
         String processInstanceId = UUID.randomUUID().toString();
@@ -63,7 +63,7 @@ public class ProcessInstanceMetaMapperTest {
     }
 
     @Test
-    public void testProcessInstanceMapperWithBusinessKey() {
+    void testProcessInstanceMapperWithBusinessKey() {
         String processId = "travels";
         String rootProcessId = "root_travels";
         String processInstanceId = UUID.randomUUID().toString();

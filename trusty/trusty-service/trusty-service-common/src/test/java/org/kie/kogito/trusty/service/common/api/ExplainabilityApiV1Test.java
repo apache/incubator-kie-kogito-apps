@@ -73,7 +73,7 @@ public class ExplainabilityApiV1Test {
     }
 
     @Test
-    public void testRequestCounterfactualsWhenExecutionDoesNotExist() {
+    void testRequestCounterfactualsWhenExecutionDoesNotExist() {
         when(trustyService.requestCounterfactuals(anyString(), any(), any())).thenThrow(new IllegalArgumentException());
 
         org.kie.kogito.trusty.service.common.requests.CounterfactualRequest request =
@@ -85,7 +85,7 @@ public class ExplainabilityApiV1Test {
     }
 
     @Test
-    public void testRequestCounterfactualsWhenExecutionDoesExist() {
+    void testRequestCounterfactualsWhenExecutionDoesExist() {
         when(trustyService.requestCounterfactuals(anyString(), any(), any())).thenReturn(new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 new ModelIdentifier("resourceType", "resourceIdentifier"),
@@ -111,7 +111,7 @@ public class ExplainabilityApiV1Test {
     }
 
     @Test
-    public void testGetAllCounterfactualsWhenExecutionDoesNotExist() {
+    void testGetAllCounterfactualsWhenExecutionDoesNotExist() {
         when(trustyService.getCounterfactualRequests(anyString())).thenThrow(new IllegalArgumentException());
 
         Response response = explainabilityEndpoint.getAllCounterfactualsSummary(EXECUTION_ID);
@@ -121,7 +121,7 @@ public class ExplainabilityApiV1Test {
 
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void testGetAllCounterfactualsWhenExecutionDoesExist() {
+    void testGetAllCounterfactualsWhenExecutionDoesExist() {
         when(trustyService.getCounterfactualRequests(anyString())).thenReturn(List.of(new CounterfactualExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 new ModelIdentifier("resourceType", "resourceIdentifier"),
@@ -147,7 +147,7 @@ public class ExplainabilityApiV1Test {
     }
 
     @Test
-    public void testGetCounterfactualResultsWhenExecutionDoesNotExist() {
+    void testGetCounterfactualResultsWhenExecutionDoesNotExist() {
         when(trustyService.getCounterfactualRequest(anyString(), anyString())).thenThrow(new IllegalArgumentException());
 
         Response response = explainabilityEndpoint.getCounterfactualDetails(EXECUTION_ID, COUNTERFACTUAL_ID);
@@ -156,7 +156,7 @@ public class ExplainabilityApiV1Test {
     }
 
     @Test
-    public void testGetCounterfactualResultsWhenExecutionDoesExist() {
+    void testGetCounterfactualResultsWhenExecutionDoesExist() {
         NamedTypedValue goal = buildGoalUnit("unit",
                 "string",
                 new TextNode("hello"));
@@ -192,7 +192,7 @@ public class ExplainabilityApiV1Test {
     }
 
     @Test
-    public void testGetCounterfactualResultsWhenExecutionDoesExistAndResultsHaveBeenCreated() {
+    void testGetCounterfactualResultsWhenExecutionDoesExistAndResultsHaveBeenCreated() {
         NamedTypedValue goal = buildGoalUnit("unit",
                 "string",
                 new TextNode("hello"));

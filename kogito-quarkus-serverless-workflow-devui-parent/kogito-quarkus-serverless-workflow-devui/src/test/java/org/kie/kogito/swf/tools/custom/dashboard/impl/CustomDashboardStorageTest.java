@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class CustomDashboardStorageTest {
+class CustomDashboardStorageTest {
 
     private static String[] DASHBOARD_NAMES = { "age.dash.yaml", "products.dash.yaml" };
     private static String DASHBOARD_NAME = "age.dash.yaml";
@@ -48,7 +48,7 @@ public class CustomDashboardStorageTest {
     }
 
     @Test
-    public void testGetFormInfoList() {
+    void testGetFormInfoList() {
         Collection<CustomDashboardInfo> customDashboardInfoFilterAll = customDashboardStorage.getCustomDashboardFiles(null);
         assertEquals(2, customDashboardInfoFilterAll.size());
 
@@ -65,7 +65,7 @@ public class CustomDashboardStorageTest {
     }
 
     @Test
-    public void testGetFormContent() throws IOException {
+    void testGetFormContent() throws IOException {
         String content = customDashboardStorage.getCustomDashboardFileContent(DASHBOARD_NAME);
         assertNotNull(content);
     }

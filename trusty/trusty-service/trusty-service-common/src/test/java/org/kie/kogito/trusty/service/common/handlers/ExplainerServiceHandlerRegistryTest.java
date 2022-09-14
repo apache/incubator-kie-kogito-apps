@@ -38,7 +38,7 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class ExplainerServiceHandlerRegistryTest {
+class ExplainerServiceHandlerRegistryTest {
 
     private static final String EXECUTION_ID = "executionId";
 
@@ -75,7 +75,7 @@ public class ExplainerServiceHandlerRegistryTest {
     }
 
     @Test
-    public void testLIME_getExplainabilityResultById() {
+    void testLIME_getExplainabilityResultById() {
         when(storageLIME.containsKey(eq(EXECUTION_ID))).thenReturn(true);
 
         registry.getExplainabilityResultById(EXECUTION_ID, LIMEExplainabilityResult.class);
@@ -84,7 +84,7 @@ public class ExplainerServiceHandlerRegistryTest {
     }
 
     @Test
-    public void testLIME_storeExplainabilityResult() {
+    void testLIME_storeExplainabilityResult() {
         when(storageLIME.containsKey(eq(EXECUTION_ID))).thenReturn(false);
         LIMEExplainabilityResult result = mock(LIMEExplainabilityResult.class);
 
@@ -95,7 +95,7 @@ public class ExplainerServiceHandlerRegistryTest {
 
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void testCounterfactual_getExplainabilityResultByIdWithFinalResult() {
+    void testCounterfactual_getExplainabilityResultByIdWithFinalResult() {
         Query query = mock(Query.class);
         CounterfactualExplainabilityResult result = mock(CounterfactualExplainabilityResult.class);
         when(result.getStage()).thenReturn(CounterfactualExplainabilityResult.Stage.FINAL);
@@ -112,7 +112,7 @@ public class ExplainerServiceHandlerRegistryTest {
 
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void testCounterfactual_getExplainabilityResultByIdWithOnlyIntermediateResults() {
+    void testCounterfactual_getExplainabilityResultByIdWithOnlyIntermediateResults() {
         Query query = mock(Query.class);
         CounterfactualExplainabilityResult result = mock(CounterfactualExplainabilityResult.class);
         when(result.getStage()).thenReturn(CounterfactualExplainabilityResult.Stage.INTERMEDIATE);
@@ -126,7 +126,7 @@ public class ExplainerServiceHandlerRegistryTest {
 
     @Test
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public void testCounterfactual_getExplainabilityResultByIdWithAllResults() {
+    void testCounterfactual_getExplainabilityResultByIdWithAllResults() {
         Query query = mock(Query.class);
         CounterfactualExplainabilityResult result1 = mock(CounterfactualExplainabilityResult.class);
         CounterfactualExplainabilityResult result2 = mock(CounterfactualExplainabilityResult.class);
@@ -144,7 +144,7 @@ public class ExplainerServiceHandlerRegistryTest {
     }
 
     @Test
-    public void testCounterfactual_storeExplainabilityResult() {
+    void testCounterfactual_storeExplainabilityResult() {
         when(storageCounterfactual.containsKey(eq(EXECUTION_ID))).thenReturn(false);
         CounterfactualExplainabilityResult result = mock(CounterfactualExplainabilityResult.class);
 

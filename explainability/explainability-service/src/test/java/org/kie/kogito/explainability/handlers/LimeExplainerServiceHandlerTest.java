@@ -57,7 +57,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class LimeExplainerServiceHandlerTest {
+class LimeExplainerServiceHandlerTest {
 
     private static final String EXECUTION_ID = "executionId";
 
@@ -78,13 +78,13 @@ public class LimeExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testSupports() {
+    void testSupports() {
         assertTrue(handler.supports(LIMEExplainabilityRequest.class));
         assertFalse(handler.supports(BaseExplainabilityRequest.class));
     }
 
     @Test
-    public void testGetPredictionWithEmptyDefinition() {
+    void testGetPredictionWithEmptyDefinition() {
         LIMEExplainabilityRequest request = new LIMEExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -101,7 +101,7 @@ public class LimeExplainerServiceHandlerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testGetPredictionWithNonEmptyDefinition() {
+    void testGetPredictionWithNonEmptyDefinition() {
         LIMEExplainabilityRequest request = new LIMEExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -190,7 +190,7 @@ public class LimeExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testCreateSucceededResult() {
+    void testCreateSucceededResult() {
         LIMEExplainabilityRequest request = new LIMEExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -219,7 +219,7 @@ public class LimeExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testCreateIntermediateResult() {
+    void testCreateIntermediateResult() {
         LIMEExplainabilityRequest request = new LIMEExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -230,7 +230,7 @@ public class LimeExplainerServiceHandlerTest {
     }
 
     @Test
-    public void testCreateFailedResult() {
+    void testCreateFailedResult() {
         LIMEExplainabilityRequest request = new LIMEExplainabilityRequest(EXECUTION_ID,
                 SERVICE_URL,
                 MODEL_IDENTIFIER,
@@ -248,7 +248,7 @@ public class LimeExplainerServiceHandlerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testExplainAsyncDelegation() {
+    void testExplainAsyncDelegation() {
         Prediction prediction = mock(Prediction.class);
         PredictionProvider predictionProvider = mock(PredictionProvider.class);
 
@@ -259,7 +259,7 @@ public class LimeExplainerServiceHandlerTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testExplainAsyncWithConsumerDelegation() {
+    void testExplainAsyncWithConsumerDelegation() {
         Prediction prediction = mock(Prediction.class);
         PredictionProvider predictionProvider = mock(PredictionProvider.class);
         Consumer<Map<String, Saliency>> callback = mock(Consumer.class);

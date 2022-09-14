@@ -35,7 +35,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CounterfactualExplainabilityResultsManagerSlidingWindowTest {
+class CounterfactualExplainabilityResultsManagerSlidingWindowTest {
 
     private static final String EXECUTION_ID = "executionId";
 
@@ -62,17 +62,17 @@ public class CounterfactualExplainabilityResultsManagerSlidingWindowTest {
     }
 
     @Test
-    public void testInstantiationWithInvalidWindowSizeOfZero() {
+    void testInstantiationWithInvalidWindowSizeOfZero() {
         assertThrows(IllegalArgumentException.class, () -> new CounterfactualExplainabilityResultsManagerSlidingWindow(0));
     }
 
     @Test
-    public void testInstantiationWithInvalidWindowSizeNegative() {
+    void testInstantiationWithInvalidWindowSizeNegative() {
         assertThrows(IllegalArgumentException.class, () -> new CounterfactualExplainabilityResultsManagerSlidingWindow(-1));
     }
 
     @Test
-    public void testPurgeWhenResultSetSizeIsSmallerThanWindowSize() {
+    void testPurgeWhenResultSetSizeIsSmallerThanWindowSize() {
         when(query.execute()).thenReturn(Collections.emptyList());
 
         manager.purge(COUNTERFACTUAL_ID, storage);
@@ -81,7 +81,7 @@ public class CounterfactualExplainabilityResultsManagerSlidingWindowTest {
     }
 
     @Test
-    public void testPurgeWhenResultSetSizeIsGreaterThanWindowSize() {
+    void testPurgeWhenResultSetSizeIsGreaterThanWindowSize() {
         CounterfactualExplainabilityResult result0 = makeResult(0);
         CounterfactualExplainabilityResult result1 = makeResult(1);
         CounterfactualExplainabilityResult result2 = makeResult(2);

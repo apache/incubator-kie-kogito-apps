@@ -25,7 +25,7 @@ import org.kie.kogito.trusty.storage.api.model.decision.DMNModelMetadata;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class DMNModelMetadataIdentifierTest {
+class DMNModelMetadataIdentifierTest {
 
     private static Stream<Arguments> provideParametersForModelIdCreator() {
         return Stream.of(

@@ -25,10 +25,10 @@ import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.core.IsNot.not;
 
 @QuarkusTest
-public class InmemoryPostgreSQLResourceTest {
+class InmemoryPostgreSQLResourceTest {
 
     @Test
-    public void testListAll() {
+    void testListAll() {
         // List all, should have all the database has initially
         given()
                 .when().get("/inmemory-postgresql")

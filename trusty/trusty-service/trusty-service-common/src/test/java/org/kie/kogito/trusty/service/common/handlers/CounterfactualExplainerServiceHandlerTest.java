@@ -32,7 +32,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class CounterfactualExplainerServiceHandlerTest
+class CounterfactualExplainerServiceHandlerTest
         extends BaseExplainerServiceHandlerTest<CounterfactualExplainerServiceHandler, CounterfactualExplainabilityResult> {
 
     private static final String COUNTERFACTUAL_ID = "counterfactualId";
@@ -85,7 +85,7 @@ public class CounterfactualExplainerServiceHandlerTest
     }
 
     @Test
-    public void testGetExplainabilityResultById_WhenMultipleStored() {
+    void testGetExplainabilityResultById_WhenMultipleStored() {
         CounterfactualExplainabilityResult intermediate = mock(CounterfactualExplainabilityResult.class);
         when(intermediate.getExecutionId()).thenReturn(EXECUTION_ID);
         when(intermediate.getSolutionId()).thenReturn(SOLUTION_ID);
@@ -97,7 +97,7 @@ public class CounterfactualExplainerServiceHandlerTest
     }
 
     @Test
-    public void testGetExplainabilityResultById_WhenOnlyIntermediateStored() {
+    void testGetExplainabilityResultById_WhenOnlyIntermediateStored() {
         CounterfactualExplainabilityResult intermediate = mock(CounterfactualExplainabilityResult.class);
         when(intermediate.getExecutionId()).thenReturn(EXECUTION_ID);
         when(intermediate.getSolutionId()).thenReturn(SOLUTION_ID);

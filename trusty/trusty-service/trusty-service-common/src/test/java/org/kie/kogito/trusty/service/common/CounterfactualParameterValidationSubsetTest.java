@@ -33,73 +33,73 @@ import static org.kie.kogito.trusty.service.common.TypedValueTestUtils.buildGoal
 import static org.kie.kogito.trusty.service.common.TypedValueTestUtils.buildOutcomeStructure;
 import static org.kie.kogito.trusty.service.common.TypedValueTestUtils.buildOutcomeUnit;
 
-public class CounterfactualParameterValidationSubsetTest {
+class CounterfactualParameterValidationSubsetTest {
 
     @Test
-    public void testGoals_NullNull() {
+    void testGoals_NullNull() {
         assertTrue(isStructureSubset(
                 null,
                 null));
     }
 
     @Test
-    public void testGoals_EmptyEmpty() {
+    void testGoals_EmptyEmpty() {
         assertTrue(isStructureSubset(
                 Collections.emptyList(),
                 Collections.emptyList()));
     }
 
     @Test
-    public void testGoals_NullEmpty() {
+    void testGoals_NullEmpty() {
         assertFalse(isStructureSubset(
                 null,
                 Collections.emptyList()));
     }
 
     @Test
-    public void testGoals_EmptyNull() {
+    void testGoals_EmptyNull() {
         assertFalse(isStructureSubset(
                 Collections.emptyList(),
                 null));
     }
 
     @Test
-    public void testGoals_UnitNull() {
+    void testGoals_UnitNull() {
         assertFalse(isStructureSubset(
                 List.of(buildOutcomeUnit("age", "integer", new IntNode(18))),
                 null));
     }
 
     @Test
-    public void testGoals_UnitEmpty() {
+    void testGoals_UnitEmpty() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeUnit("age", "integer", new IntNode(18))),
                 Collections.emptyList()));
     }
 
     @Test
-    public void testGoals_NullUnit() {
+    void testGoals_NullUnit() {
         assertFalse(isStructureSubset(
                 null,
                 List.of(buildGoalUnit("age", "integer", new IntNode(18)))));
     }
 
     @Test
-    public void testGoals_EmptyUnit() {
+    void testGoals_EmptyUnit() {
         assertFalse(isStructureSubset(
                 Collections.emptyList(),
                 List.of(buildGoalUnit("age", "integer", new IntNode(18)))));
     }
 
     @Test
-    public void testGoals_UnitUnit() {
+    void testGoals_UnitUnit() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeUnit("age", "integer", new IntNode(18))),
                 List.of(buildGoalUnit("age", "integer", new IntNode(18)))));
     }
 
     @Test
-    public void testGoals_UnitUnits() {
+    void testGoals_UnitUnits() {
         assertFalse(isStructureSubset(
                 List.of(buildOutcomeUnit("age", "integer", new IntNode(18))),
                 List.of(buildGoalUnit("age", "integer", new IntNode(18)),
@@ -107,7 +107,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_UnitsUnit() {
+    void testGoals_UnitsUnit() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeUnit("age", "integer", new IntNode(18)),
                         buildOutcomeUnit("salary", "integer", new IntNode(10000))),
@@ -115,7 +115,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_UnitsUnits() {
+    void testGoals_UnitsUnits() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeUnit("age", "integer", new IntNode(18)),
                         buildOutcomeUnit("salary", "integer", new IntNode(10000))),
@@ -124,7 +124,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_UnitsUnits__WithDifferentOrder() {
+    void testGoals_UnitsUnits__WithDifferentOrder() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeUnit("salary", "integer", new IntNode(10000)),
                         buildOutcomeUnit("age", "integer", new IntNode(18))),
@@ -133,7 +133,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_StructureUnit() {
+    void testGoals_StructureUnit() {
         assertFalse(isStructureSubset(
                 List.of(buildOutcomeStructure("person", "tPerson",
                         Map.of("age", new UnitValue("integer", "integer", new IntNode(18)),
@@ -142,7 +142,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_UnitStructure() {
+    void testGoals_UnitStructure() {
         assertFalse(isStructureSubset(
                 List.of(buildOutcomeUnit("age", "integer", new IntNode(18))),
                 List.of(buildGoalStructure("person", "tPerson",
@@ -151,7 +151,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_StructureStructure() {
+    void testGoals_StructureStructure() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeStructure("person", "tPerson",
                         Map.of("age", new UnitValue("integer", "integer", new IntNode(18)),
@@ -162,7 +162,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_StructureStructureSubset() {
+    void testGoals_StructureStructureSubset() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeStructure("person", "tPerson",
                         Map.of("age", new UnitValue("integer", "integer", new IntNode(18)),
@@ -172,7 +172,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_StructureStructure__WithDifferentOrder() {
+    void testGoals_StructureStructure__WithDifferentOrder() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeStructure("person", "tPerson",
                         Map.of("salary", new UnitValue("integer", "integer", new IntNode(10000)),
@@ -183,7 +183,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_StructureWithStructureStructureWithStructure() {
+    void testGoals_StructureWithStructureStructureWithStructure() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeStructure("person", "tPerson",
                         Map.of("age", new UnitValue("integer", "integer", new IntNode(18)),
@@ -198,7 +198,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_ComplexComplex() {
+    void testGoals_ComplexComplex() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeUnit("hatSize", "integer", new IntNode(16)),
                         buildOutcomeStructure("person", "tPerson",
@@ -215,7 +215,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_ComplexComplex__WithDifferentOrder() {
+    void testGoals_ComplexComplex__WithDifferentOrder() {
         assertTrue(isStructureSubset(
                 List.of(buildOutcomeStructure("person", "tPerson",
                         Map.of("income", new StructureValue("tIncome",
@@ -232,7 +232,7 @@ public class CounterfactualParameterValidationSubsetTest {
     }
 
     @Test
-    public void testGoals_ComplexComplex__WithDifferentOrder_WithDifference() {
+    void testGoals_ComplexComplex__WithDifferentOrder_WithDifference() {
         assertFalse(isStructureSubset(
                 List.of(buildOutcomeStructure("person", "tPerson",
                         Map.of("income", new StructureValue("tIncome",

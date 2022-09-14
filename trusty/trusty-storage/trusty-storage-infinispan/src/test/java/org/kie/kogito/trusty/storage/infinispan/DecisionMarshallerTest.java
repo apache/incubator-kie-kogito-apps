@@ -32,10 +32,10 @@ import org.kie.kogito.trusty.storage.api.model.decision.DecisionOutcome;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
-public class DecisionMarshallerTest extends MarshallerTestTemplate {
+class DecisionMarshallerTest extends MarshallerTestTemplate {
 
     @Test
-    public void testWriteAndRead() throws IOException {
+    void testWriteAndRead() throws IOException {
         List<DecisionInput> inputs = Collections.singletonList(new DecisionInput("id", "in", new UnitValue("nameIn", "number", JsonNodeFactory.instance.numberNode(10))));
         List<DecisionOutcome> outcomes = Collections.singletonList(new DecisionOutcome("id", "out",
                 DMNDecisionResult.DecisionEvaluationStatus.SUCCEEDED.toString(),

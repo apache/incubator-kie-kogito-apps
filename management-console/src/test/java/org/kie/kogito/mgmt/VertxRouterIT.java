@@ -22,10 +22,10 @@ import io.quarkus.test.junit.QuarkusTest;
 import static io.restassured.RestAssured.given;
 
 @QuarkusTest
-public class VertxRouterIT {
+class VertxRouterIT {
 
     @Test
-    public void testHandlePath() {
+    void testHandlePath() {
         given().when().get("/ProcessInstances")
                 .then()
                 .statusCode(200);
