@@ -190,7 +190,7 @@ class OracleStorageServiceIT {
         cache.remove(key);
 
         assertThat(cache.containsKey(key)).isFalse();
-        assertThat(cache.entries()).hasSize(0);
+        assertThat(cache.entries()).isEmpty();
 
         entity = repository.findById(new CacheId(cacheName, key));
 
@@ -231,7 +231,7 @@ class OracleStorageServiceIT {
         cache.remove(key);
 
         assertThat(cache.containsKey(key)).isFalse();
-        assertThat(cache.entries()).hasSize(0);
+        assertThat(cache.entries()).isEmpty();
 
         entity = repository.findById(new CacheId(cacheName, key));
 

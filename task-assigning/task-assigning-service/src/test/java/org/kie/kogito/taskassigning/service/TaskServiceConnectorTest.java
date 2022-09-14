@@ -102,7 +102,7 @@ class TaskServiceConnectorTest {
 
         TaskServiceConnector connector = new TaskServiceConnector(config, clientServices);
         List<UserTaskInstance> result = connector.findAllTasks(Collections.singletonList(READY.value()), 3);
-        assertThat(result.size()).isEqualTo(8);
+        assertThat(result).hasSize(8);
         List<String> expectedTasks = Arrays.asList(TASK1, TASK2, TASK4, TASK5, TASK6, TASK7, TASK8, TASK9);
         assertThat(expectedTasks).isEqualTo(result.stream().map(UserTaskInstance::getId).collect(Collectors.toList()));
     }

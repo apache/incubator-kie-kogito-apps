@@ -97,7 +97,7 @@ public abstract class BaseJobRepositoryTest {
     @Test
     void testFindAll() throws ExecutionException, InterruptedException {
         List<JobDetails> jobs = tested().findAll().toList().run().toCompletableFuture().get();
-        assertThat(jobs.size()).isEqualTo(1);
+        assertThat(jobs).hasSize(1);
         assertThat(jobs.get(0)).isEqualTo(job);
     }
 
@@ -123,7 +123,7 @@ public abstract class BaseJobRepositoryTest {
                 .toCompletableFuture()
                 .get();
 
-        assertThat(fetched.size()).isEqualTo(5);
+        assertThat(fetched).hasSize(5);
 
         IntStream.rangeClosed(0, 4).forEach(
                 i -> assertThat(fetched.get(i)).isEqualTo(jobs.get(fetched.size() - 1 - i)));
@@ -137,7 +137,7 @@ public abstract class BaseJobRepositoryTest {
                 .toCompletableFuture()
                 .get();
 
-        assertThat(fetchedNotFound.size()).isZero();
+        assertThat(fetchedNotFound).isEmpty();
 
         fetchedNotFound = tested().findByStatusBetweenDatesOrderByPriority(DateUtil.now().plusDays(1),
                 DateUtil.now().plusDays(2),
@@ -147,7 +147,7 @@ public abstract class BaseJobRepositoryTest {
                 .toCompletableFuture()
                 .get();
 
-        assertThat(fetchedNotFound.size()).isZero();
+        assertThat(fetchedNotFound).isEmpty();
     }
 
     @Test

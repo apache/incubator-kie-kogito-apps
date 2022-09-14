@@ -137,9 +137,9 @@ class SolutionBuilderTest {
             assignments.add(nextElement);
             nextElement = nextElement.getNextElement();
         }
-        assertThat(assignments.size())
+        assertThat(assignments)
                 .withFailMessage("User %s must have %s task assignments, but have %s", userId, expectedTasks, assignments.size())
-                .isEqualTo(expectedTasks);
+                .hasSize(expectedTasks);
         TaskAssignment taskAssignment = assignments.get(expectedTaskPosition);
         assertThat(taskAssignment.getId())
                 .withFailMessage("User %s must have the task %s at the position %s", userId, expectedTask, expectedTaskPosition)

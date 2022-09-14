@@ -102,7 +102,7 @@ class RemoveUserProblemFactChangeTest {
 
         verify(scoreDirector).beforeProblemFactRemoved(workingUser);
         verify(scoreDirector).afterProblemFactRemoved(workingUser);
-        assertThat(workingSolution.getUserList().size()).isEqualTo(originalUsersSize - 1);
+        assertThat(workingSolution.getUserList()).hasSize(originalUsersSize - 1);
         assertThat(workingSolution.getUserList()).contains(user2, user3);
         assertThat(workingSolution.getUserList()).doesNotContain(workingUser);
     }
@@ -116,7 +116,7 @@ class RemoveUserProblemFactChangeTest {
         verify(scoreDirector, never()).afterProblemPropertyChanged(any());
         verify(scoreDirector, never()).beforeProblemFactRemoved(any());
         verify(scoreDirector, never()).afterProblemFactRemoved(any());
-        assertThat(workingSolution.getUserList().size()).isEqualTo(2);
+        assertThat(workingSolution.getUserList()).hasSize(2);
         assertThat(workingSolution.getUserList()).contains(user2, user3);
         verify(scoreDirector, never()).triggerVariableListeners();
     }

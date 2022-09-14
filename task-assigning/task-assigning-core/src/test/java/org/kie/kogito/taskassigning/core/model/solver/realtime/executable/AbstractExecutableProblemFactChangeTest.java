@@ -149,8 +149,8 @@ abstract class AbstractExecutableProblemFactChangeTest extends AbstractTaskAssig
 
         solver.solve(solution);
 
-        assertThat(programmedChanges.isEmpty()).isTrue();
-        assertThat(scheduledChanges.size()).isEqualTo(totalProgrammedChanges);
+        assertThat(programmedChanges).isEmpty();
+        assertThat(scheduledChanges).hasSize(totalProgrammedChanges);
         assertThat(pendingChanges[0]).isZero();
         return initialSolution[0];
     }

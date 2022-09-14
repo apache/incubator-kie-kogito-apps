@@ -538,7 +538,7 @@ public class KogitoRuntimeClientTest {
 
         when(identityMock.getCredential(TokenCredential.class)).thenReturn(null);
         token = client.getAuthHeader();
-        assertThat(token).isEqualTo("");
+        assertThat(token).isEmpty();
     }
 
     private AsyncResult createResponseMocks(HttpResponse response, boolean succeed, int statusCode) {

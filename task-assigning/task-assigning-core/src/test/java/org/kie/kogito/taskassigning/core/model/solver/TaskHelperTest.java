@@ -183,7 +183,7 @@ class TaskHelperTest {
     void extractTasks() {
         ChainElement chainElement = buildChainElement();
         List<TaskAssignment> result = TaskHelper.extractTaskAssignments(chainElement);
-        assertThat(result.size()).isEqualTo(4);
+        assertThat(result).hasSize(4);
         assertThat(result.get(0).getId()).isEqualTo(TASK_ID_1);
         assertThat(result.get(1).getId()).isEqualTo(TASK_ID_2);
         assertThat(result.get(2).getId()).isEqualTo(TASK_ID_3);
@@ -194,7 +194,7 @@ class TaskHelperTest {
     void extractTasksFiltered() {
         ChainElement chainElement = buildChainElement();
         List<TaskAssignment> result = TaskHelper.extractTaskAssignments(chainElement, testedTask -> testedTask.getId().equals(TASK_ID_1) || testedTask.getId().equals(TASK_ID_4));
-        assertThat(result.size()).isEqualTo(2);
+        assertThat(result).hasSize(2);
         assertThat(result.get(0).getId()).isEqualTo(TASK_ID_1);
         assertThat(result.get(1).getId()).isEqualTo(TASK_ID_4);
     }

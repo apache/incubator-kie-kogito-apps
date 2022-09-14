@@ -82,7 +82,7 @@ class InfinispanStorageIT {
         String value = "testValue";
         storage.put(key, value);
 
-        assertThat(cache.get(key)).isEqualTo(value);
+        assertThat(cache).containsEntry(key, value);
     }
 
     @Test
@@ -91,7 +91,7 @@ class InfinispanStorageIT {
         String value = "testValue";
         cache.put(key, value);
         storage.clear();
-        assertThat(cache.size()).isZero();
+        assertThat(cache).isEmpty();
     }
 
     @Test
@@ -100,7 +100,7 @@ class InfinispanStorageIT {
         String value = "testValue";
         cache.put(key, value);
         storage.remove(key);
-        assertThat(cache.size()).isZero();
+        assertThat(cache).isEmpty();
     }
 
     @Test
