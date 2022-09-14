@@ -237,8 +237,8 @@ class ExplainabilityApiV1IT {
         assertNotNull(response);
         assertNotNull(response.getExecutionId());
         assertNotNull(response.getCounterfactualId());
-        assertEquals(response.getExecutionId(), TEST_EXECUTION_ID);
-        assertEquals(response.getCounterfactualId(), TEST_COUNTERFACTUAL_ID);
+        assertEquals(TEST_EXECUTION_ID, response.getExecutionId());
+        assertEquals(TEST_COUNTERFACTUAL_ID, response.getCounterfactualId());
 
         verify(executionService).requestCounterfactuals(eq(TEST_EXECUTION_ID), goalsCaptor.capture(), searchDomainsCaptor.capture());
         List<NamedTypedValue> goalsParameter = goalsCaptor.getValue();
@@ -311,8 +311,8 @@ class ExplainabilityApiV1IT {
         assertNotNull(response);
         assertNotNull(response.getExecutionId());
         assertNotNull(response.getCounterfactualId());
-        assertEquals(response.getExecutionId(), TEST_EXECUTION_ID);
-        assertEquals(response.getCounterfactualId(), TEST_COUNTERFACTUAL_ID);
+        assertEquals(TEST_EXECUTION_ID, response.getExecutionId());
+        assertEquals(TEST_COUNTERFACTUAL_ID, response.getCounterfactualId());
 
         verify(executionService).requestCounterfactuals(eq(TEST_EXECUTION_ID), goalsCaptor.capture(), searchDomainsCaptor.capture());
         List<NamedTypedValue> goalsParameter = goalsCaptor.getValue();
@@ -409,8 +409,8 @@ class ExplainabilityApiV1IT {
         assertNotNull(resultsResponse);
         assertNotNull(resultsResponse.getExecutionId());
         assertNotNull(resultsResponse.getCounterfactualId());
-        assertEquals(resultsResponse.getExecutionId(), TEST_EXECUTION_ID);
-        assertEquals(resultsResponse.getCounterfactualId(), TEST_COUNTERFACTUAL_ID);
+        assertEquals(TEST_EXECUTION_ID, resultsResponse.getExecutionId());
+        assertEquals(TEST_COUNTERFACTUAL_ID, resultsResponse.getCounterfactualId());
         assertEquals(2, resultsResponse.getSolutions().size());
     }
 
@@ -437,8 +437,8 @@ class ExplainabilityApiV1IT {
         assertNotNull(resultsResponse);
         assertNotNull(resultsResponse.getExecutionId());
         assertNotNull(resultsResponse.getCounterfactualId());
-        assertEquals(resultsResponse.getExecutionId(), TEST_EXECUTION_ID);
-        assertEquals(resultsResponse.getCounterfactualId(), TEST_COUNTERFACTUAL_ID);
+        assertEquals(TEST_EXECUTION_ID, resultsResponse.getExecutionId());
+        assertEquals(TEST_COUNTERFACTUAL_ID, resultsResponse.getCounterfactualId());
         assertTrue(resultsResponse.getSolutions().isEmpty());
     }
 
