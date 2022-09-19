@@ -45,7 +45,7 @@ public abstract class BaseSwitchStateTimeoutsIT {
 
     private static final String PROCESS_RESULT_EVENT_TYPE = "process_result_event";
 
-    private static final String EMPTY_WORKFLOW_DATA = "{\"workflowdata\" : \"\"}";
+    private static final String EMPTY_WORKFLOW_DATA = "{}";
 
     private KafkaTestClient kafkaClient;
 
