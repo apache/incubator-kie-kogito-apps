@@ -25,14 +25,10 @@ import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 import org.eclipse.microprofile.health.Readiness;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Readiness
 @ApplicationScoped
 public class JobServiceMasterHealthCheck implements HealthCheck {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceMasterHealthCheck.class);
 
     private AtomicBoolean enabled = new AtomicBoolean(false);
 

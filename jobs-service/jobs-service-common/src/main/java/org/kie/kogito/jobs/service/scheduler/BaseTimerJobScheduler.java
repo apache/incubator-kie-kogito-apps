@@ -28,6 +28,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
+import org.kie.kogito.jobs.service.exception.InvalidScheduleTimeException;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
@@ -136,7 +137,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
                 .peek(delay -> Optional
                         .of(delay.isNegative())
                         .filter(Boolean.FALSE::equals)
-                        .orElseThrow(() -> new RuntimeException("The expirationTime should be greater than current " +
+                        .orElseThrow(() -> new InvalidScheduleTimeException("The expirationTime should be greater than current " +
                                 "time")))
                 //schedule the job on the scheduler
                 .map(delay -> scheduleRegistering(job, Optional.empty()))

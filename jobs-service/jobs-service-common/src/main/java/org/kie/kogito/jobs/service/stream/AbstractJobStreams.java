@@ -18,14 +18,10 @@ package org.kie.kogito.jobs.service.stream;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import javax.enterprise.event.Observes;
 
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.jobs.service.events.JobDataEvent;
-import org.kie.kogito.jobs.service.management.MessagingChangeEvent;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.resource.JobResource;
@@ -40,28 +36,26 @@ public abstract class AbstractJobStreams {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractJobStreams.class);
 
-    private ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
 
-    private final AtomicBoolean enabledAtStartup = new AtomicBoolean();;
+    protected boolean enabled;
 
-    private final AtomicBoolean enabledAtRuntime = new AtomicBoolean();
+    protected Emitter<String> emitter;
 
-    private Emitter<String> emitter;
-
-    private String url;
+    protected String url;
 
     protected AbstractJobStreams() {
     }
 
     protected AbstractJobStreams(ObjectMapper objectMapper, boolean enabled, Emitter<String> emitter, String url) {
         this.objectMapper = objectMapper;
-        enabledAtStartup.set(enabled);
+        this.enabled = enabled;
         this.emitter = emitter;
         this.url = url;
     }
 
     protected void jobStatusChange(JobDetails job) {
-        if (enabledAtRuntime.get() && enabledAtStartup.get()) {
+        if (enabled) {
             try {
                 JobDataEvent event = JobDataEvent
                         .builder()
@@ -72,7 +66,6 @@ public abstract class AbstractJobStreams {
                 emitter.send(decorate(ContextAwareMessage.of(json)
                         .withAck(() -> onAck(job))
                         .withNack(reason -> onNack(reason, job))));
-                LOGGER.info("Sent event {} to kakfa", json);
             } catch (Exception e) {
                 String msg = String.format("An unexpected error was produced while processing a Job status change for the job: %s", job);
                 LOGGER.error(msg, e);
@@ -93,9 +86,5 @@ public abstract class AbstractJobStreams {
 
     protected Message<String> decorate(Message<String> message) {
         return message;
-    }
-
-    protected void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
-        this.enabledAtRuntime.set(event.isEnabled());
     }
 }

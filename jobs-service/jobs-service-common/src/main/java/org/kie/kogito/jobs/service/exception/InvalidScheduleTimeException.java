@@ -13,8 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.management;
+package org.kie.kogito.jobs.service.exception;
 
-public class MasterChangeEvent {
+public class InvalidScheduleTimeException extends RuntimeException {
 
+    public InvalidScheduleTimeException(String message) {
+        super(message);
+    }
 }

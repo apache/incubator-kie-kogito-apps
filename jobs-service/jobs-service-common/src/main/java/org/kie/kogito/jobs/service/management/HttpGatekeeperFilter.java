@@ -28,7 +28,8 @@ import io.vertx.ext.web.RoutingContext;
 @ApplicationScoped
 public class HttpGatekeeperFilter {
 
-    private AtomicBoolean enabled = new AtomicBoolean(false);
+    public static final String ERROR_MESSAGE = "Job Service instance is not master";
+    private final AtomicBoolean enabled = new AtomicBoolean(false);
 
     @ConfigProperty(name = "quarkus.smallrye-health.root-path", defaultValue = "/q/health")
     private String healthCheckPath;
@@ -41,8 +42,8 @@ public class HttpGatekeeperFilter {
     void masterFilter(RoutingContext rc) throws Exception {
         if (!enabled.get() && !rc.request().path().contains(healthCheckPath)) {
             //block
-            rc.response().setStatusCode(500);
-            rc.response().setStatusMessage("Job Service instance is not master");
+            rc.response().setStatusCode(503);
+            rc.response().setStatusMessage(ERROR_MESSAGE);
             rc.end();
             return;
         }

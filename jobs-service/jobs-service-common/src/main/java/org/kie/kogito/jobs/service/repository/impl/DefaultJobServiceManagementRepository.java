@@ -22,6 +22,7 @@ import javax.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
+import org.kie.kogito.jobs.service.utils.DateUtil;
 
 import io.quarkus.arc.DefaultBean;
 import io.smallrye.mutiny.Uni;
@@ -39,11 +40,13 @@ public class DefaultJobServiceManagementRepository implements JobServiceManageme
 
     @Override
     public Uni<JobServiceManagementInfo> set(JobServiceManagementInfo info) {
-        return Uni.createFrom().item(info);
+        instance.set(info);
+        return Uni.createFrom().item(instance.get());
     }
 
     @Override
     public Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
-        return Uni.createFrom().item(info);
+        info.setLastHeartbeat(DateUtil.now());
+        return set(info);
     }
 }

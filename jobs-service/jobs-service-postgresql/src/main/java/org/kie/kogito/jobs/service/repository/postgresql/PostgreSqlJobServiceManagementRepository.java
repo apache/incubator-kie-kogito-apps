@@ -86,13 +86,16 @@ public class PostgreSqlJobServiceManagementRepository implements JobServiceManag
                         info.getToken(),
                         Optional.ofNullable(info.getLastHeartbeat()).map(ZonedDateTime::toOffsetDateTime).orElse(null)).collect(Collectors.toList())))
                 .onItem().transform(RowSet::iterator)
-                .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)
-                .onItem().ignore().andContinueWith(new JobServiceManagementInfo(null, null, null));
+                .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null);
     }
 
     @Override
     public Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
-        info.setLastHeartbeat(DateUtil.now());
-        return set(info);
+        return client.withTransaction(conn -> conn
+                .preparedQuery("UPDATE job_service_management SET last_heartbeat = now() WHERE id = $1 AND token = $2 RETURNING id, token, last_heartbeat")
+                .execute(Tuple.of(info.getId(), info.getToken()))
+                .onItem().transform(RowSet::iterator)
+                .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)
+                .onItem().invoke(r -> LOGGER.info("heartbeat {}", r)));
     }
 }
