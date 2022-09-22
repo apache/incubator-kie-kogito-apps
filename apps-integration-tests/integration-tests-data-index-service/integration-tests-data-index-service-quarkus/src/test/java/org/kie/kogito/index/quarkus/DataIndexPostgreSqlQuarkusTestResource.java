@@ -34,6 +34,9 @@ public class DataIndexPostgreSqlQuarkusTestResource extends ConditionalQuarkusTe
     protected Map<String, String> getProperties() {
         Map<String, String> properties = new HashMap<>();
         properties.put(KOGITO_DATA_INDEX_SERVICE_URL, "http://localhost:" + getTestResource().getMappedPort());
+        properties.put("quarkus.flyway.migrate-at-start", "true");
+        properties.put("quarkus.flyway.baseline-on-migrate", "true");
+        properties.put("quarkus.flyway.clean-at-start", "true");
         properties.putAll(getTestResource().getProperties());
         return properties;
     }
