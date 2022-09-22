@@ -30,7 +30,7 @@ import io.restassured.http.ContentType;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusTest
-class OneOfEachTypeTest {
+public class OneOfEachTypeTest {
 
     static {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();

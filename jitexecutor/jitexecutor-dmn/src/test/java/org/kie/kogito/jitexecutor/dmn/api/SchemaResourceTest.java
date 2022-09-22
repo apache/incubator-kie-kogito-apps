@@ -28,7 +28,7 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
 
 @QuarkusTest
-class SchemaResourceTest {
+public class SchemaResourceTest {
 
     @Test
     void test() throws IOException {

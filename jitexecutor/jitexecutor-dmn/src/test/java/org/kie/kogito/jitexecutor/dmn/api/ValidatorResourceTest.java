@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @QuarkusTest
-class ValidatorResourceTest {
+public class ValidatorResourceTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(ValidatorResourceTest.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
