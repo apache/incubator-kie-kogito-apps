@@ -182,13 +182,9 @@ public class FormsStorageImpl implements FormsStorage {
 
         JsonObject resourcesJSON = configJSON.getJsonObject("resources");
 
-        resourcesJSON.getJsonObject("scripts").stream().forEach(entry ->
-            resources.getScripts().put(entry.getKey(), entry.getValue().toString())
-        );
+        resourcesJSON.getJsonObject("scripts").stream().forEach(entry -> resources.getScripts().put(entry.getKey(), entry.getValue().toString()));
 
-        resourcesJSON.getJsonObject("styles").stream().forEach(entry ->
-            resources.getStyles().put(entry.getKey(), entry.getValue().toString())
-        );
+        resourcesJSON.getJsonObject("styles").stream().forEach(entry -> resources.getStyles().put(entry.getKey(), entry.getValue().toString()));
 
         return new FormConfiguration(configJSON.getString("schema"), resources);
     }
