@@ -157,7 +157,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   }, [data]);
 
   useEffect(() => {
-    if (svgError && svgError.length > 0) {
+    if (svgError && svgError.length > 0 && !showSwfDiagram) {
       setSvgErrorModalOpen(true);
     }
   }, [svgError]);
