@@ -1,19 +1,3 @@
-/*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 /* eslint-disable */
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
@@ -959,6 +943,88 @@ export type GetJobsWithFiltersQueryVariables = Exact<{
 
 export type GetJobsWithFiltersQuery = { __typename?: 'Query', Jobs?: Array<{ __typename?: 'Job', id: string, processId?: string | null | undefined, processInstanceId?: string | null | undefined, rootProcessId?: string | null | undefined, status: JobStatus, expirationTime?: any | null | undefined, priority?: number | null | undefined, callbackEndpoint?: string | null | undefined, repeatInterval?: number | null | undefined, repeatLimit?: number | null | undefined, scheduledId?: string | null | undefined, retries?: number | null | undefined, lastUpdate?: any | null | undefined, endpoint?: string | null | undefined, executionCounter?: number | null | undefined } | null | undefined> | null | undefined };
 
+export type AbortProcessInstanceMutationVariables = Exact<{
+  processId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type AbortProcessInstanceMutation = { __typename?: 'Mutation', ProcessInstanceAbort?: string | null | undefined };
+
+export type SkipProcessInstanceMutationVariables = Exact<{
+  processId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type SkipProcessInstanceMutation = { __typename?: 'Mutation', ProcessInstanceSkip?: string | null | undefined };
+
+export type RetryProcessInstanceMutationVariables = Exact<{
+  processId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type RetryProcessInstanceMutation = { __typename?: 'Mutation', ProcessInstanceRetry?: string | null | undefined };
+
+export type GetProcessInstanceSvgQueryVariables = Exact<{
+  processId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetProcessInstanceSvgQuery = { __typename?: 'Query', ProcessInstances?: Array<{ __typename?: 'ProcessInstance', diagram?: string | null | undefined } | null | undefined> | null | undefined };
+
+export type GetProcessInstanceNodeDefinitionsQueryVariables = Exact<{
+  processId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetProcessInstanceNodeDefinitionsQuery = { __typename?: 'Query', ProcessInstances?: Array<{ __typename?: 'ProcessInstance', nodeDefinitions?: Array<{ __typename?: 'Node', id: string, name: string, type: string, uniqueId: string, nodeDefinitionId: string }> | null | undefined } | null | undefined> | null | undefined };
+
+export type HandleNodeTriggerMutationVariables = Exact<{
+  processId?: InputMaybe<Scalars['String']>;
+  nodeId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type HandleNodeTriggerMutation = { __typename?: 'Mutation', NodeInstanceTrigger?: string | null | undefined };
+
+export type HandleNodeInstanceCancelMutationVariables = Exact<{
+  processId?: InputMaybe<Scalars['String']>;
+  nodeInstanceId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type HandleNodeInstanceCancelMutation = { __typename?: 'Mutation', NodeInstanceCancel?: string | null | undefined };
+
+export type HandleNodeInstanceRetriggerMutationVariables = Exact<{
+  processId?: InputMaybe<Scalars['String']>;
+  nodeInstanceId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type HandleNodeInstanceRetriggerMutation = { __typename?: 'Mutation', NodeInstanceRetrigger?: string | null | undefined };
+
+export type HandleProcessVariableUpdateMutationVariables = Exact<{
+  processId?: InputMaybe<Scalars['String']>;
+  processInstanceVariables?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type HandleProcessVariableUpdateMutation = { __typename?: 'Mutation', ProcessInstanceUpdateVariables?: string | null | undefined };
+
+export type JobCancelMutationVariables = Exact<{
+  jobId?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type JobCancelMutation = { __typename?: 'Mutation', JobCancel?: string | null | undefined };
+
+export type HandleJobRescheduleMutationVariables = Exact<{
+  jobId?: InputMaybe<Scalars['String']>;
+  data?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type HandleJobRescheduleMutation = { __typename?: 'Mutation', JobReschedule?: string | null | undefined };
+
 
 export const GetProcessInstancesDocument = gql`
     query getProcessInstances($where: ProcessInstanceArgument, $offset: Int, $limit: Int, $orderBy: ProcessInstanceOrderBy) {
@@ -1679,4 +1745,367 @@ export function useGetJobsWithFiltersLazyQuery(baseOptions?: ApolloReactHooks.La
 export type GetJobsWithFiltersQueryHookResult = ReturnType<typeof useGetJobsWithFiltersQuery>;
 export type GetJobsWithFiltersLazyQueryHookResult = ReturnType<typeof useGetJobsWithFiltersLazyQuery>;
 export type GetJobsWithFiltersQueryResult = ApolloReactCommon.QueryResult<GetJobsWithFiltersQuery, GetJobsWithFiltersQueryVariables>;
+export const AbortProcessInstanceDocument = gql`
+    mutation abortProcessInstance($processId: String) {
+  ProcessInstanceAbort(id: $processId)
+}
+    `;
+export type AbortProcessInstanceMutationFn = ApolloReactCommon.MutationFunction<AbortProcessInstanceMutation, AbortProcessInstanceMutationVariables>;
+
+/**
+ * __useAbortProcessInstanceMutation__
+ *
+ * To run a mutation, you first call `useAbortProcessInstanceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAbortProcessInstanceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [abortProcessInstanceMutation, { data, loading, error }] = useAbortProcessInstanceMutation({
+ *   variables: {
+ *      processId: // value for 'processId'
+ *   },
+ * });
+ */
+export function useAbortProcessInstanceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<AbortProcessInstanceMutation, AbortProcessInstanceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<AbortProcessInstanceMutation, AbortProcessInstanceMutationVariables>(AbortProcessInstanceDocument, options);
+      }
+export type AbortProcessInstanceMutationHookResult = ReturnType<typeof useAbortProcessInstanceMutation>;
+export type AbortProcessInstanceMutationResult = ApolloReactCommon.MutationResult<AbortProcessInstanceMutation>;
+export type AbortProcessInstanceMutationOptions = ApolloReactCommon.BaseMutationOptions<AbortProcessInstanceMutation, AbortProcessInstanceMutationVariables>;
+export const SkipProcessInstanceDocument = gql`
+    mutation skipProcessInstance($processId: String) {
+  ProcessInstanceSkip(id: $processId)
+}
+    `;
+export type SkipProcessInstanceMutationFn = ApolloReactCommon.MutationFunction<SkipProcessInstanceMutation, SkipProcessInstanceMutationVariables>;
+
+/**
+ * __useSkipProcessInstanceMutation__
+ *
+ * To run a mutation, you first call `useSkipProcessInstanceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSkipProcessInstanceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [skipProcessInstanceMutation, { data, loading, error }] = useSkipProcessInstanceMutation({
+ *   variables: {
+ *      processId: // value for 'processId'
+ *   },
+ * });
+ */
+export function useSkipProcessInstanceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SkipProcessInstanceMutation, SkipProcessInstanceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<SkipProcessInstanceMutation, SkipProcessInstanceMutationVariables>(SkipProcessInstanceDocument, options);
+      }
+export type SkipProcessInstanceMutationHookResult = ReturnType<typeof useSkipProcessInstanceMutation>;
+export type SkipProcessInstanceMutationResult = ApolloReactCommon.MutationResult<SkipProcessInstanceMutation>;
+export type SkipProcessInstanceMutationOptions = ApolloReactCommon.BaseMutationOptions<SkipProcessInstanceMutation, SkipProcessInstanceMutationVariables>;
+export const RetryProcessInstanceDocument = gql`
+    mutation retryProcessInstance($processId: String) {
+  ProcessInstanceRetry(id: $processId)
+}
+    `;
+export type RetryProcessInstanceMutationFn = ApolloReactCommon.MutationFunction<RetryProcessInstanceMutation, RetryProcessInstanceMutationVariables>;
+
+/**
+ * __useRetryProcessInstanceMutation__
+ *
+ * To run a mutation, you first call `useRetryProcessInstanceMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRetryProcessInstanceMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [retryProcessInstanceMutation, { data, loading, error }] = useRetryProcessInstanceMutation({
+ *   variables: {
+ *      processId: // value for 'processId'
+ *   },
+ * });
+ */
+export function useRetryProcessInstanceMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<RetryProcessInstanceMutation, RetryProcessInstanceMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<RetryProcessInstanceMutation, RetryProcessInstanceMutationVariables>(RetryProcessInstanceDocument, options);
+      }
+export type RetryProcessInstanceMutationHookResult = ReturnType<typeof useRetryProcessInstanceMutation>;
+export type RetryProcessInstanceMutationResult = ApolloReactCommon.MutationResult<RetryProcessInstanceMutation>;
+export type RetryProcessInstanceMutationOptions = ApolloReactCommon.BaseMutationOptions<RetryProcessInstanceMutation, RetryProcessInstanceMutationVariables>;
+export const GetProcessInstanceSvgDocument = gql`
+    query getProcessInstanceSVG($processId: String) {
+  ProcessInstances(where: {id: {equal: $processId}}) {
+    diagram
+  }
+}
+    `;
+
+/**
+ * __useGetProcessInstanceSvgQuery__
+ *
+ * To run a query within a React component, call `useGetProcessInstanceSvgQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProcessInstanceSvgQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProcessInstanceSvgQuery({
+ *   variables: {
+ *      processId: // value for 'processId'
+ *   },
+ * });
+ */
+export function useGetProcessInstanceSvgQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProcessInstanceSvgQuery, GetProcessInstanceSvgQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetProcessInstanceSvgQuery, GetProcessInstanceSvgQueryVariables>(GetProcessInstanceSvgDocument, options);
+      }
+export function useGetProcessInstanceSvgLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProcessInstanceSvgQuery, GetProcessInstanceSvgQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetProcessInstanceSvgQuery, GetProcessInstanceSvgQueryVariables>(GetProcessInstanceSvgDocument, options);
+        }
+export type GetProcessInstanceSvgQueryHookResult = ReturnType<typeof useGetProcessInstanceSvgQuery>;
+export type GetProcessInstanceSvgLazyQueryHookResult = ReturnType<typeof useGetProcessInstanceSvgLazyQuery>;
+export type GetProcessInstanceSvgQueryResult = ApolloReactCommon.QueryResult<GetProcessInstanceSvgQuery, GetProcessInstanceSvgQueryVariables>;
+export const GetProcessInstanceNodeDefinitionsDocument = gql`
+    query getProcessInstanceNodeDefinitions($processId: String) {
+  ProcessInstances(where: {id: {equal: $processId}}) {
+    nodeDefinitions {
+      id
+      name
+      type
+      uniqueId
+      nodeDefinitionId
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetProcessInstanceNodeDefinitionsQuery__
+ *
+ * To run a query within a React component, call `useGetProcessInstanceNodeDefinitionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProcessInstanceNodeDefinitionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProcessInstanceNodeDefinitionsQuery({
+ *   variables: {
+ *      processId: // value for 'processId'
+ *   },
+ * });
+ */
+export function useGetProcessInstanceNodeDefinitionsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<GetProcessInstanceNodeDefinitionsQuery, GetProcessInstanceNodeDefinitionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useQuery<GetProcessInstanceNodeDefinitionsQuery, GetProcessInstanceNodeDefinitionsQueryVariables>(GetProcessInstanceNodeDefinitionsDocument, options);
+      }
+export function useGetProcessInstanceNodeDefinitionsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<GetProcessInstanceNodeDefinitionsQuery, GetProcessInstanceNodeDefinitionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return ApolloReactHooks.useLazyQuery<GetProcessInstanceNodeDefinitionsQuery, GetProcessInstanceNodeDefinitionsQueryVariables>(GetProcessInstanceNodeDefinitionsDocument, options);
+        }
+export type GetProcessInstanceNodeDefinitionsQueryHookResult = ReturnType<typeof useGetProcessInstanceNodeDefinitionsQuery>;
+export type GetProcessInstanceNodeDefinitionsLazyQueryHookResult = ReturnType<typeof useGetProcessInstanceNodeDefinitionsLazyQuery>;
+export type GetProcessInstanceNodeDefinitionsQueryResult = ApolloReactCommon.QueryResult<GetProcessInstanceNodeDefinitionsQuery, GetProcessInstanceNodeDefinitionsQueryVariables>;
+export const HandleNodeTriggerDocument = gql`
+    mutation handleNodeTrigger($processId: String, $nodeId: String) {
+  NodeInstanceTrigger(id: $processId, nodeId: $nodeId)
+}
+    `;
+export type HandleNodeTriggerMutationFn = ApolloReactCommon.MutationFunction<HandleNodeTriggerMutation, HandleNodeTriggerMutationVariables>;
+
+/**
+ * __useHandleNodeTriggerMutation__
+ *
+ * To run a mutation, you first call `useHandleNodeTriggerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHandleNodeTriggerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [handleNodeTriggerMutation, { data, loading, error }] = useHandleNodeTriggerMutation({
+ *   variables: {
+ *      processId: // value for 'processId'
+ *      nodeId: // value for 'nodeId'
+ *   },
+ * });
+ */
+export function useHandleNodeTriggerMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<HandleNodeTriggerMutation, HandleNodeTriggerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<HandleNodeTriggerMutation, HandleNodeTriggerMutationVariables>(HandleNodeTriggerDocument, options);
+      }
+export type HandleNodeTriggerMutationHookResult = ReturnType<typeof useHandleNodeTriggerMutation>;
+export type HandleNodeTriggerMutationResult = ApolloReactCommon.MutationResult<HandleNodeTriggerMutation>;
+export type HandleNodeTriggerMutationOptions = ApolloReactCommon.BaseMutationOptions<HandleNodeTriggerMutation, HandleNodeTriggerMutationVariables>;
+export const HandleNodeInstanceCancelDocument = gql`
+    mutation handleNodeInstanceCancel($processId: String, $nodeInstanceId: String) {
+  NodeInstanceCancel(id: $processId, nodeInstanceId: $nodeInstanceId)
+}
+    `;
+export type HandleNodeInstanceCancelMutationFn = ApolloReactCommon.MutationFunction<HandleNodeInstanceCancelMutation, HandleNodeInstanceCancelMutationVariables>;
+
+/**
+ * __useHandleNodeInstanceCancelMutation__
+ *
+ * To run a mutation, you first call `useHandleNodeInstanceCancelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHandleNodeInstanceCancelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [handleNodeInstanceCancelMutation, { data, loading, error }] = useHandleNodeInstanceCancelMutation({
+ *   variables: {
+ *      processId: // value for 'processId'
+ *      nodeInstanceId: // value for 'nodeInstanceId'
+ *   },
+ * });
+ */
+export function useHandleNodeInstanceCancelMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<HandleNodeInstanceCancelMutation, HandleNodeInstanceCancelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<HandleNodeInstanceCancelMutation, HandleNodeInstanceCancelMutationVariables>(HandleNodeInstanceCancelDocument, options);
+      }
+export type HandleNodeInstanceCancelMutationHookResult = ReturnType<typeof useHandleNodeInstanceCancelMutation>;
+export type HandleNodeInstanceCancelMutationResult = ApolloReactCommon.MutationResult<HandleNodeInstanceCancelMutation>;
+export type HandleNodeInstanceCancelMutationOptions = ApolloReactCommon.BaseMutationOptions<HandleNodeInstanceCancelMutation, HandleNodeInstanceCancelMutationVariables>;
+export const HandleNodeInstanceRetriggerDocument = gql`
+    mutation handleNodeInstanceRetrigger($processId: String, $nodeInstanceId: String) {
+  NodeInstanceRetrigger(id: $processId, nodeInstanceId: $nodeInstanceId)
+}
+    `;
+export type HandleNodeInstanceRetriggerMutationFn = ApolloReactCommon.MutationFunction<HandleNodeInstanceRetriggerMutation, HandleNodeInstanceRetriggerMutationVariables>;
+
+/**
+ * __useHandleNodeInstanceRetriggerMutation__
+ *
+ * To run a mutation, you first call `useHandleNodeInstanceRetriggerMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHandleNodeInstanceRetriggerMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [handleNodeInstanceRetriggerMutation, { data, loading, error }] = useHandleNodeInstanceRetriggerMutation({
+ *   variables: {
+ *      processId: // value for 'processId'
+ *      nodeInstanceId: // value for 'nodeInstanceId'
+ *   },
+ * });
+ */
+export function useHandleNodeInstanceRetriggerMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<HandleNodeInstanceRetriggerMutation, HandleNodeInstanceRetriggerMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<HandleNodeInstanceRetriggerMutation, HandleNodeInstanceRetriggerMutationVariables>(HandleNodeInstanceRetriggerDocument, options);
+      }
+export type HandleNodeInstanceRetriggerMutationHookResult = ReturnType<typeof useHandleNodeInstanceRetriggerMutation>;
+export type HandleNodeInstanceRetriggerMutationResult = ApolloReactCommon.MutationResult<HandleNodeInstanceRetriggerMutation>;
+export type HandleNodeInstanceRetriggerMutationOptions = ApolloReactCommon.BaseMutationOptions<HandleNodeInstanceRetriggerMutation, HandleNodeInstanceRetriggerMutationVariables>;
+export const HandleProcessVariableUpdateDocument = gql`
+    mutation handleProcessVariableUpdate($processId: String, $processInstanceVariables: String) {
+  ProcessInstanceUpdateVariables(
+    id: $processId
+    variables: $processInstanceVariables
+  )
+}
+    `;
+export type HandleProcessVariableUpdateMutationFn = ApolloReactCommon.MutationFunction<HandleProcessVariableUpdateMutation, HandleProcessVariableUpdateMutationVariables>;
+
+/**
+ * __useHandleProcessVariableUpdateMutation__
+ *
+ * To run a mutation, you first call `useHandleProcessVariableUpdateMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHandleProcessVariableUpdateMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [handleProcessVariableUpdateMutation, { data, loading, error }] = useHandleProcessVariableUpdateMutation({
+ *   variables: {
+ *      processId: // value for 'processId'
+ *      processInstanceVariables: // value for 'processInstanceVariables'
+ *   },
+ * });
+ */
+export function useHandleProcessVariableUpdateMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<HandleProcessVariableUpdateMutation, HandleProcessVariableUpdateMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<HandleProcessVariableUpdateMutation, HandleProcessVariableUpdateMutationVariables>(HandleProcessVariableUpdateDocument, options);
+      }
+export type HandleProcessVariableUpdateMutationHookResult = ReturnType<typeof useHandleProcessVariableUpdateMutation>;
+export type HandleProcessVariableUpdateMutationResult = ApolloReactCommon.MutationResult<HandleProcessVariableUpdateMutation>;
+export type HandleProcessVariableUpdateMutationOptions = ApolloReactCommon.BaseMutationOptions<HandleProcessVariableUpdateMutation, HandleProcessVariableUpdateMutationVariables>;
+export const JobCancelDocument = gql`
+    mutation jobCancel($jobId: String) {
+  JobCancel(id: $jobId)
+}
+    `;
+export type JobCancelMutationFn = ApolloReactCommon.MutationFunction<JobCancelMutation, JobCancelMutationVariables>;
+
+/**
+ * __useJobCancelMutation__
+ *
+ * To run a mutation, you first call `useJobCancelMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJobCancelMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [jobCancelMutation, { data, loading, error }] = useJobCancelMutation({
+ *   variables: {
+ *      jobId: // value for 'jobId'
+ *   },
+ * });
+ */
+export function useJobCancelMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<JobCancelMutation, JobCancelMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<JobCancelMutation, JobCancelMutationVariables>(JobCancelDocument, options);
+      }
+export type JobCancelMutationHookResult = ReturnType<typeof useJobCancelMutation>;
+export type JobCancelMutationResult = ApolloReactCommon.MutationResult<JobCancelMutation>;
+export type JobCancelMutationOptions = ApolloReactCommon.BaseMutationOptions<JobCancelMutation, JobCancelMutationVariables>;
+export const HandleJobRescheduleDocument = gql`
+    mutation handleJobReschedule($jobId: String, $data: String) {
+  JobReschedule(id: $jobId, data: $data)
+}
+    `;
+export type HandleJobRescheduleMutationFn = ApolloReactCommon.MutationFunction<HandleJobRescheduleMutation, HandleJobRescheduleMutationVariables>;
+
+/**
+ * __useHandleJobRescheduleMutation__
+ *
+ * To run a mutation, you first call `useHandleJobRescheduleMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useHandleJobRescheduleMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [handleJobRescheduleMutation, { data, loading, error }] = useHandleJobRescheduleMutation({
+ *   variables: {
+ *      jobId: // value for 'jobId'
+ *      data: // value for 'data'
+ *   },
+ * });
+ */
+export function useHandleJobRescheduleMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<HandleJobRescheduleMutation, HandleJobRescheduleMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return ApolloReactHooks.useMutation<HandleJobRescheduleMutation, HandleJobRescheduleMutationVariables>(HandleJobRescheduleDocument, options);
+      }
+export type HandleJobRescheduleMutationHookResult = ReturnType<typeof useHandleJobRescheduleMutation>;
+export type HandleJobRescheduleMutationResult = ApolloReactCommon.MutationResult<HandleJobRescheduleMutation>;
+export type HandleJobRescheduleMutationOptions = ApolloReactCommon.BaseMutationOptions<HandleJobRescheduleMutation, HandleJobRescheduleMutationVariables>;
 }
