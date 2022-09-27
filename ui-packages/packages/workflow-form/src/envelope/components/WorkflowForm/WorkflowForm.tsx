@@ -43,7 +43,7 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
   const [data, setData] = useState<string>('');
 
   const onSubmit = useCallback(() => {
-    driver.startWorkflow({
+    driver.startWorkflowCloudEvent({
       type,
       data
     });
@@ -59,13 +59,13 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
     <div {...componentOuiaProps(ouiaId, 'workflow-form', ouiaSafe)}>
       <Form isHorizontal>
         <FormGroup
-          label="Type"
+          label="Cloud Event Type"
           isRequired
           fieldId="formType"
           labelIcon={
             <Popover
               id="workflow-form-type-help"
-              bodyContent={<div>The type of the cloud event.</div>}
+              bodyContent={<div>The type of the cloud event to be triggered.</div>}
             >
               <button
                 type="button"
@@ -88,7 +88,7 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
           />
         </FormGroup>
         <FormGroup
-          label="Data"
+          label="Cloud Event Data"
           isRequired
           fieldId="formData"
           labelIcon={
@@ -124,7 +124,7 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
         </FormGroup>
         <ActionGroup>
           <Button variant="primary" onClick={onSubmit}>
-            Send
+            Start
           </Button>
           <Button variant="secondary" onClick={resetForm}>
             Reset
