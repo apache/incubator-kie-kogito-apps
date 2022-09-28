@@ -350,7 +350,8 @@ export const getProcessDetails = async (
   id: string,
   client: ApolloClient<any>
 ): Promise<any> => {
-  return client
+  return new Promise((resolve,reject)=>{
+    client
     .query({
       query: GraphQL.GetProcessInstanceByIdDocument,
       variables: {
@@ -359,12 +360,12 @@ export const getProcessDetails = async (
       fetchPolicy: 'network-only'
     })
     .then(value => {
-      return value.data.ProcessInstances[0];
+      resolve(value.data.ProcessInstances[0]);
     })
     .catch(error => {
-      const emptyResponse = {} as ProcessInstance;
-      return emptyResponse;
+      reject(error['graphQLErrors'][0]['message'])
     });
+  });
 };
 
 export const getJobs = async (
