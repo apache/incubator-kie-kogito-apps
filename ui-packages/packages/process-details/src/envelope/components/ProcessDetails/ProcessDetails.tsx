@@ -306,7 +306,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     return (
       <Flex>
         <FlexItem>
-          <SwfCombinedEditor sourceString={data?.source} height={diagramPreviewSize?.height} width={diagramPreviewSize?.width}/>
+          <SwfCombinedEditor sourceString={data?.source} height={diagramPreviewSize?.height} width={diagramPreviewSize?.width} />
         </FlexItem>
       </Flex>
     );
@@ -360,7 +360,18 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   };
 
   const renderPanels = (): JSX.Element => {
-    if (svg !== null && svg.props.src) {
+    if (showSwfDiagram) {
+      return (
+        <Flex direction={{ default: 'column' }}>
+          {renderSwfDiagram()}
+          <Flex>
+            {renderProcessDetails()}
+            {renderProcessVariables()}
+          </Flex>
+        </Flex>
+      )
+    }
+    else if (svg !== null && svg.props.src) {
       return (
         <Flex direction={{ default: 'column' }}>
           {renderProcessDiagram()}
@@ -371,17 +382,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
         </Flex>
       );
     }
-    else if (showSwfDiagram) {
-      return (
-        <Flex direction={{ default: 'column' }}>
-          {renderSwfDiagram()}
-          <Flex>
-            {renderProcessDetails()}
-            {renderProcessVariables()}
-          </Flex>
-        </Flex>
-      )
-    } else {
+    else {
       return (
         <>
           {renderProcessDetails()}
