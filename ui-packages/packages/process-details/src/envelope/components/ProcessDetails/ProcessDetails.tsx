@@ -69,6 +69,7 @@ interface ProcessDetailsProps {
   omittedProcessTimelineEvents: string[];
   diagramPreviewSize?: DiagramPreviewSize;
   showSwfDiagram: boolean;
+  isStunnerEnabled?:boolean;
 }
 
 type svgResponse = SvgSuccessResponse | SvgErrorResponse;
@@ -79,7 +80,8 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
   processDetails,
   omittedProcessTimelineEvents,
   diagramPreviewSize,
-  showSwfDiagram
+  showSwfDiagram,
+  isStunnerEnabled
 }) => {
   const [data, setData] = useState<ProcessInstance>({} as ProcessInstance);
   const [jobs, setJobs] = useState<Job[]>([]);
@@ -306,7 +308,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     return (
       <Flex>
         <FlexItem>
-          <SwfCombinedEditor sourceString={data?.source} height={diagramPreviewSize?.height} width={diagramPreviewSize?.width} />
+          <SwfCombinedEditor sourceString={data?.source} isStunnerEnabled={isStunnerEnabled} height={diagramPreviewSize?.height} width={diagramPreviewSize?.width} />
         </FlexItem>
       </Flex>
     );

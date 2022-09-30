@@ -54,6 +54,7 @@ export const ProcessDetailsEnvelopeView = React.forwardRef<
     DiagramPreviewSize
   >();
   const [showSwfDiagram, setShowSwfDiagram] = useState<boolean>(false);
+  const [isStunnerEnabled, setIsStunnerEnabled] = useState<boolean>(false);
   useImperativeHandle(
     forwardedRef,
     () => ({
@@ -62,6 +63,7 @@ export const ProcessDetailsEnvelopeView = React.forwardRef<
         setOmittedProcessTimelineEvents(initArgs.omittedProcessTimelineEvents);
         setDiagramPreviewSize(initArgs.diagramPreviewSize);
         setShowSwfDiagram(initArgs.showSwfDiagram);
+        setIsStunnerEnabled(initArgs.isStunnerEnabled);
         setEnvelopeConnectedToChannel(true);
       }
     }),
@@ -77,7 +79,7 @@ export const ProcessDetailsEnvelopeView = React.forwardRef<
         omittedProcessTimelineEvents={omittedProcessTimelineEvents}
         diagramPreviewSize={diagramPreviewSize}
         showSwfDiagram={showSwfDiagram}
-        
+        isStunnerEnabled={isStunnerEnabled}
       />
     </React.Fragment>
   );

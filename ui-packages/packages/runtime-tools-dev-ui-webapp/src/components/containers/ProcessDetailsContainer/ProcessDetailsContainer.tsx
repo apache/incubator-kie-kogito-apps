@@ -53,7 +53,6 @@ const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
       unSubscribeHandler.unSubscribe();
     };
   }, [processInstance]);
-
   return (
     <EmbeddedProcessDetails
       {...componentOuiaProps(ouiaId, 'process-details-container', ouiaSafe)}
@@ -63,6 +62,7 @@ const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
       omittedProcessTimelineEvents={omittedProcessTimelineEvents}
       diagramPreviewSize={diagramPreviewSize}
       showSwfDiagram={appContext.isWorkflow()}
+      isStunnerEnabled={appContext.getIsStunnerEnabled()}
     />
   );
 };

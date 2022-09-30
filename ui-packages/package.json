@@ -35,6 +35,7 @@
     "@kie-tools/serverless-workflow-combined-editor": "0.22.0",
     "@kie-tools/serverless-workflow-diagram-editor": "0.22.0",
     "@kie-tools/serverless-workflow-text-editor": "0.22.0",
+    "@kie-tools/serverless-workflow-diagram-editor-envelope": "0.22.0",
     "@kogito-apps/management-console": "file:packages/management-console",
     "apollo-boost": "^0.4.4",
     "apollo-link-context": "^1.0.20",

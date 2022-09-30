@@ -14,65 +14,95 @@
  * limitations under the License.
  */
 
-import React, { useMemo } from 'react';
-import { EmbeddedEditor } from "@kie-tools-core/editor/dist/embedded";
+import React, { useCallback, useMemo, useState } from 'react';
+import { EmbeddedEditor, EmbeddedEditorChannelApiImpl } from "@kie-tools-core/editor/dist/embedded";
 import { ChannelType, EditorEnvelopeLocator, EnvelopeMapping } from "@kie-tools-core/editor/dist/api";
 import { Title, Card, CardHeader, CardBody } from '@patternfly/react-core';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
-import { EmbeddedEditorFile } from '@kie-tools-core/editor/dist/channel';
-
+import { EmbeddedEditorFile, StateControl } from '@kie-tools-core/editor/dist/channel';
+import {
+  SwfCombinedEditorChannelApiImpl,
+  SwfFeatureToggleChannelApiImpl,
+} from "@kie-tools/serverless-workflow-combined-editor/dist/impl";
 interface ISwfCombinedEditorProps {
   sourceString: string,
+  isStunnerEnabled: boolean,
   width?: number;
   height?: number;
 }
 
 const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
   sourceString,
+  isStunnerEnabled,
   width,
   height,
   ouiaId,
   ouiaSafe
 }) => {
-  const embeddedFile: EmbeddedEditorFile = {
-    getFileContents: async () => Promise.resolve(getFileContent()),
-    isReadOnly: true,
-    fileExtension: "sw.json",
-    fileName: "*.sw.json",
-  }
-  const editorEnvelopeLocator = useMemo(
-    () => new EditorEnvelopeLocator(window.location.origin, [
-      new EnvelopeMapping({
-        type: "swf",
-        filePathGlob: "**/*.sw.+(json|yml|yaml)",
-        resourcesPathPrefix: ".",
-        envelopePath: "resources/serverless-workflow-combined-editor-envelope.html",
-      }),
-    ]), []);
+  const [isReady, setReady] = useState<boolean>(false);
+  const stateControl = new StateControl();
 
-  const getFileContent = () => {
+  const getFileContent = useCallback(() => {
     const arr = new Uint8Array(sourceString.length);
     for (let i = 0; i < sourceString.length; i++) {
       arr[i] = sourceString.charCodeAt(i);
     }
     const decoder = new TextDecoder("utf-8");
     return decoder.decode(arr);
-  }
+  }, [sourceString])
+
+  const getFileType = useCallback(() => {
+    const source = getFileContent()
+    if (source.trim().charAt(0) === '{') {
+      return 'json';
+    } else {
+      return 'yaml'
+    }
+  }, [sourceString]);
+
+  const embeddedFile: EmbeddedEditorFile = useMemo(() => {
+    return {
+      getFileContents: async () => Promise.resolve(getFileContent()),
+      isReadOnly: true,
+      fileExtension: `sw.${getFileType()}`,
+      fileName: `*.sw.${getFileType()}`
+    }
+  }, [sourceString]);
+
+  const editorEnvelopeLocator = useMemo(
+    () => new EditorEnvelopeLocator(window.location.origin, [
+      new EnvelopeMapping({
+        type: "swf",
+        filePathGlob: "**/*.sw.+(json|yml|yaml)",
+        resourcesPathPrefix: "webapp/resources",
+        envelopePath: "resources/serverless-workflow-combined-editor-envelope.html",
+      }),
+    ]), [sourceString]);
+
+  const channelApiImpl = useMemo(() => new EmbeddedEditorChannelApiImpl(stateControl, embeddedFile, "en", {
+    kogitoEditor_ready: () => {
+      setReady(true);
+    },
+  }), [isStunnerEnabled, sourceString]);
+  const swfFeatureToggleChannelApiImpl = useMemo(() => new SwfFeatureToggleChannelApiImpl({ stunnerEnabled: isStunnerEnabled }), [sourceString, isStunnerEnabled]);
+  const apiImpl = useMemo(() => new SwfCombinedEditorChannelApiImpl(channelApiImpl, swfFeatureToggleChannelApiImpl), [sourceString, isStunnerEnabled]);
 
   return (
     <Card style={{ height: height, width: width }} {...componentOuiaProps(ouiaId, 'swf-diagram', ouiaSafe)} >
       <CardHeader>
         <Title headingLevel="h3" size="xl">
-          Diagram
+          Serverless Workflow Diagram
         </Title>
       </CardHeader>
       <CardBody>
         <EmbeddedEditor
-          isReady={true}
+          customChannelApiImpl={apiImpl}
+          isReady={isReady}
           file={embeddedFile}
           channelType={ChannelType.ONLINE_MULTI_FILE}
           editorEnvelopeLocator={editorEnvelopeLocator}
           locale={"en"}
+          stateControl={stateControl}
         />
       </CardBody>
     </Card>

@@ -68,7 +68,7 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
 
   async function fetchDetails() {
     let response: ProcessInstance = {} as ProcessInstance;
-    let responseError: string;
+    let responseError: string = '';
     try {
       setIsLoading(true);
       response = await gatewayApi.processDetailsQuery(processId);
