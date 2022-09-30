@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,17 @@
 package org.kie.kogito.index.graphql;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import org.kie.kogito.index.DataIndexStorageService;
 import org.kie.kogito.index.api.KogitoRuntimeClient;
-import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
 import org.kie.kogito.index.json.DataIndexParsingException;
 import org.kie.kogito.index.model.Job;
@@ -54,12 +47,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLInputObjectType;
-import graphql.schema.GraphQLNamedType;
-import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
-import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
 
 import static java.lang.String.format;
@@ -69,9 +59,9 @@ import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.equalTo;
 
 @ApplicationScoped
-public class GraphQLSchemaManager {
+public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLSchemaManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLSchemaManagerImpl.class);
     private static final String PROCESS_INSTANCE_ADDED = "ProcessInstanceAdded";
     private static final String PROCESS_INSTANCE_UPDATED = "ProcessInstanceUpdated";
     private static final String USER_TASK_INSTANCE_ADDED = "UserTaskInstanceAdded";
@@ -80,31 +70,20 @@ public class GraphQLSchemaManager {
     private static final String JOB_ADDED = "JobAdded";
 
     @Inject
-    DataIndexStorageService cacheService;
-
-    @Inject
-    GraphQLScalarType qlDateTimeScalarType;
-
-    @Inject
     KogitoRuntimeClient dataIndexApiExecutor;
 
-    private GraphQLSchema schema;
-
+    @Override
     @PostConstruct
     public void setup() {
-        schema = createSchema();
-        GraphQLQueryParserRegistry.get().registerParsers(
-                (GraphQLInputObjectType) schema.getType("ProcessInstanceArgument"),
-                (GraphQLInputObjectType) schema.getType("UserTaskInstanceArgument"),
-                (GraphQLInputObjectType) schema.getType("JobArgument"),
-                (GraphQLInputObjectType) schema.getType("KogitoMetadataArgument"));
+        super.setup();
+        GraphQLQueryParserRegistry.get().registerParsers((GraphQLInputObjectType) getGraphQLSchema().getType("KogitoMetadataArgument"));
     }
 
-    private GraphQLSchema createSchema() {
-        InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream("schema.graphqls");
-
-        SchemaParser schemaParser = new SchemaParser();
-        TypeDefinitionRegistry typeDefinitionRegistry = schemaParser.parse(new InputStreamReader(stream));
+    @Override
+    protected GraphQLSchema createSchema() {
+        TypeDefinitionRegistry typeDefinitionRegistry = new TypeDefinitionRegistry();
+        typeDefinitionRegistry.merge(loadSchemaDefinitionFile("basic.schema.graphqls"));
+        typeDefinitionRegistry.merge(loadSchemaDefinitionFile("domain.schema.graphqls"));
 
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
                 .type("Query", builder -> {
@@ -235,14 +214,6 @@ public class GraphQLSchemaManager {
         return dataIndexApiExecutor.getProcessInstanceNodeDefinitions(getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()), processInstance);
     }
 
-    protected String getProcessInstanceServiceUrl(DataFetchingEnvironment env) {
-        ProcessInstance source = env.getSource();
-        if (source == null || source.getEndpoint() == null || source.getProcessId() == null) {
-            return null;
-        }
-        return getServiceUrl(source.getEndpoint(), source.getProcessId());
-    }
-
     protected String getProcessInstanceJsonServiceUrl(DataFetchingEnvironment env) {
         Object source = env.getSource();
         if (source != null && source instanceof JsonNode) {
@@ -251,43 +222,6 @@ public class GraphQLSchemaManager {
             return getServiceUrl(endpoint, processId);
         }
         return null;
-    }
-
-    private String getServiceUrl(String endpoint, String processId) {
-        LOGGER.debug("Process endpoint {}", endpoint);
-        if (endpoint.startsWith("/")) {
-            LOGGER.warn("Process '{}' endpoint '{}', does not contain full URL, please review the kogito.service.url system property to point the public URL for this runtime.",
-                    processId, endpoint);
-        }
-        String context = getContext(processId);
-        LOGGER.debug("Process context {}", context);
-        if (context.equals(endpoint) || endpoint.equals("/" + context)) {
-            return null;
-        } else {
-            return endpoint.contains("/" + context) ? endpoint.substring(0, endpoint.lastIndexOf("/" + context)) : null;
-        }
-    }
-
-    private String getContext(String processId) {
-        return processId.contains(".") ? processId.substring(processId.lastIndexOf('.') + 1) : processId;
-    }
-
-    private Collection<ProcessInstance> getChildProcessInstancesValues(DataFetchingEnvironment env) {
-        ProcessInstance source = env.getSource();
-        Query<ProcessInstance> query = cacheService.getProcessInstancesCache().query();
-        query.filter(singletonList(equalTo("parentProcessInstanceId", source.getId())));
-        return query.execute();
-    }
-
-    private ProcessInstance getParentProcessInstanceValue(DataFetchingEnvironment env) {
-        ProcessInstance source = env.getSource();
-        if (source.getParentProcessInstanceId() == null) {
-            return null;
-        }
-        Query<ProcessInstance> query = cacheService.getProcessInstancesCache().query();
-        query.filter(singletonList(equalTo("id", source.getParentProcessInstanceId())));
-        List<ProcessInstance> execute = query.execute();
-        return !execute.isEmpty() ? execute.get(0) : null;
     }
 
     private CompletableFuture getUserTaskInstanceSchema(DataFetchingEnvironment env) {
@@ -373,45 +307,6 @@ public class GraphQLSchemaManager {
                 env.getArgument("attachmentId"));
     }
 
-    private Collection<ProcessInstance> getProcessInstancesValues(DataFetchingEnvironment env) {
-        return executeAdvancedQueryForCache(cacheService.getProcessInstancesCache(), env);
-    }
-
-    private Collection<Job> getJobsValues(DataFetchingEnvironment env) {
-        return executeAdvancedQueryForCache(cacheService.getJobsCache(), env);
-    }
-
-    private <T> List<T> executeAdvancedQueryForCache(Storage<String, T> cache, DataFetchingEnvironment env) {
-        Objects.requireNonNull(cache, "Cache not found");
-
-        String inputTypeName = ((GraphQLNamedType) env.getFieldDefinition().getArgument("where").getType()).getName();
-
-        Query<T> query = cache.query();
-
-        Map<String, Object> where = env.getArgument("where");
-        query.filter(GraphQLQueryParserRegistry.get().getParser(inputTypeName).apply(where));
-
-        query.sort(new GraphQLQueryOrderByParser().apply(env));
-
-        Map<String, Integer> pagination = env.getArgument("pagination");
-        if (pagination != null) {
-            Integer limit = pagination.get("limit");
-            if (limit != null) {
-                query.limit(limit);
-            }
-            Integer offset = pagination.get("offset");
-            if (offset != null) {
-                query.offset(offset);
-            }
-        }
-
-        return query.execute();
-    }
-
-    private Collection<UserTaskInstance> getUserTaskInstancesValues(DataFetchingEnvironment env) {
-        return executeAdvancedQueryForCache(cacheService.getUserTaskInstancesCache(), env);
-    }
-
     private DataFetcher<Publisher<ObjectNode>> getProcessInstanceAddedDataFetcher() {
         return objectCreatedPublisher(() -> cacheService.getProcessInstancesCache());
     }
@@ -446,7 +341,7 @@ public class GraphQLSchemaManager {
 
     private Supplier<DataIndexServiceException> cacheNotFoundException(String processId) {
         return () -> new DataIndexServiceException(format("Cache for process %s not found", processId));
-    };
+    }
 
     protected DataFetcher<Publisher<ObjectNode>> getDomainModelUpdatedDataFetcher(String processId) {
         return env -> Optional.ofNullable(cacheService.getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)).objectUpdatedListener();
@@ -461,20 +356,12 @@ public class GraphQLSchemaManager {
             List result = executeAdvancedQueryForCache(Optional.ofNullable(cacheService.getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)), env);
             return (Collection<ObjectNode>) result.stream().map(json -> {
                 try {
-                    return (ObjectNode) getObjectMapper().readTree(json.toString());
+                    return getObjectMapper().readTree(json.toString());
                 } catch (IOException e) {
                     throw new DataIndexParsingException("Failed to parse JSON: " + e.getMessage(), e);
                 }
             }).collect(toList());
         };
-    }
-
-    public GraphQLSchema getGraphQLSchema() {
-        return schema;
-    }
-
-    public void transform(Consumer<GraphQLSchema.Builder> builder) {
-        schema = schema.transform(builder);
     }
 
     public void setDataIndexApiExecutor(KogitoRuntimeClient dataIndexApiExecutor) {
