@@ -15,7 +15,7 @@
  */
 package org.kie.kogito.jobs.service.management;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -80,21 +80,27 @@ public class JobServiceInstanceManager {
 
     private final AtomicBoolean master = new AtomicBoolean(false);
 
-    Uni<Void> startup(@Observes StartupEvent startupEvent) {
+    void startup(@Observes StartupEvent startupEvent) {
         buildAndSetInstanceInfo();
-        //started
+
+        //background task for master check, it will be started after the first tryBecomeMaster() execution
         checkMaster = vertx.periodicStream(TimeUnit.SECONDS.toMillis(masterCheckIntervalInSeconds))
                 .handler(id -> tryBecomeMaster(currentInfo.get())
                         .subscribe().with(i -> LOGGER.info("Checking Master"),
-                                ex -> LOGGER.error("Error checking Master", ex)));
-        //paused
+                                ex -> LOGGER.error("Error checking Master", ex)))
+                .pause();
+
+        //background task for heartbeat will be started when become master
         heartbeat = vertx.periodicStream(TimeUnit.SECONDS.toMillis(heardBeatIntervalInSeconds))
                 .handler(t -> heartbeat(currentInfo.get())
                         .subscribe().with(i -> LOGGER.info("Heartbeat"),
                                 ex -> LOGGER.error("Error on heartbeat", ex)))
                 .pause();
-        //initial check
-        return tryBecomeMaster(currentInfo.get()).replaceWithVoid();
+
+        //initial master check
+        tryBecomeMaster(currentInfo.get())
+                .subscribe().with(i -> LOGGER.info("Initial check master execution"),
+                        ex -> LOGGER.error("Error on initial check master", ex));
     }
 
     private void disableCommunication() {
@@ -117,12 +123,12 @@ public class JobServiceInstanceManager {
         LOGGER.warn("Enabled communication for master instance");
     }
 
-    Uni<Void> onShutdown(@Observes ShutdownEvent shutdownEvent) {
-        return release(currentInfo.get())
+    void onShutdown(@Observes ShutdownEvent shutdownEvent) {
+        release(currentInfo.get())
                 .onItem().invoke(i -> checkMaster.cancel())
                 .onItem().invoke(i -> heartbeat.cancel())
-                .onItem().invoke(i -> LOGGER.info("Shutting down master instance check"))
-                .replaceWithVoid();
+                .subscribe().with(i -> LOGGER.info("Shutting down master instance check"),
+                        ex -> LOGGER.error("Shutdown error", ex));
     }
 
     protected boolean isMaster() {
@@ -132,7 +138,7 @@ public class JobServiceInstanceManager {
     Uni<JobServiceManagementInfo> tryBecomeMaster(JobServiceManagementInfo info) {
         LOGGER.debug("Try to become Master");
         return repository.getAndUpdate(currentInfo.get().getId(), c -> {
-            ZonedDateTime currentTime = DateUtil.now();
+            final OffsetDateTime currentTime = DateUtil.now().toOffsetDateTime();
             if (Objects.isNull(c) || Objects.isNull(c.getToken()) || Objects.equals(c.getToken(), info.getToken()) || Objects.isNull(c.getLastHeartbeat())
                     || c.getLastHeartbeat().isBefore(currentTime.minusSeconds(heartbeatExpirationInSeconds))) {
                 //old instance is not active
@@ -143,21 +149,26 @@ public class JobServiceInstanceManager {
                 this.heartbeat.resume();
                 this.checkMaster.pause();
                 return info;
-            } else if (isMaster()) {
-                LOGGER.info("Not Master");
-                master.set(false);
-                disableCommunication();
-                this.checkMaster.resume();
+            } else {
+                if (isMaster()) {
+                    LOGGER.info("Not Master");
+                    master.set(false);
+                    disableCommunication();
+                }
+                //stop heartbeats if running
                 this.heartbeat.pause();
+                //guarantee the stream is running if not master
+                this.checkMaster.resume();
             }
             return null;
         });
     }
 
     Uni<Void> release(JobServiceManagementInfo info) {
-        LOGGER.info("Release Master");
         return repository.set(new JobServiceManagementInfo(info.getId(), null, null))
                 .onItem().invoke(i -> master.set(false))
+                .onItem().invoke(i -> LOGGER.info("Master instance released"))
+                .onFailure().invoke(ex -> LOGGER.error("Error releasing master"))
                 .replaceWithVoid();
     }
 
@@ -170,7 +181,7 @@ public class JobServiceInstanceManager {
     }
 
     private void buildAndSetInstanceInfo() {
-        currentInfo.set(new JobServiceManagementInfo(masterManagementId, generateToken(), DateUtil.now()));
+        currentInfo.set(new JobServiceManagementInfo(masterManagementId, generateToken(), DateUtil.now().toOffsetDateTime()));
         LOGGER.info("Current Job Service Instance {}", currentInfo.get());
     }
 

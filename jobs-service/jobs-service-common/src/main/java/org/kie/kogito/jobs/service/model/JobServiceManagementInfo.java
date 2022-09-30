@@ -15,16 +15,16 @@
  */
 package org.kie.kogito.jobs.service.model;
 
-import java.time.ZonedDateTime;
+import java.time.OffsetDateTime;
 import java.util.StringJoiner;
 
 public class JobServiceManagementInfo {
 
     private String id;
-    private ZonedDateTime lastHeartbeat;
+    private OffsetDateTime lastHeartbeat;
     private String token;
 
-    public JobServiceManagementInfo(String id, String token, ZonedDateTime heartbeat) {
+    public JobServiceManagementInfo(String id, String token, OffsetDateTime heartbeat) {
         this.id = id;
         this.token = token;
         this.lastHeartbeat = heartbeat;
@@ -34,7 +34,7 @@ public class JobServiceManagementInfo {
         return id;
     }
 
-    public ZonedDateTime getLastHeartbeat() {
+    public OffsetDateTime getLastHeartbeat() {
         return lastHeartbeat;
     }
 
@@ -42,7 +42,7 @@ public class JobServiceManagementInfo {
         return token;
     }
 
-    public void setLastHeartbeat(ZonedDateTime lastHeartbeat) {
+    public void setLastHeartbeat(OffsetDateTime lastHeartbeat) {
         this.lastHeartbeat = lastHeartbeat;
     }
 

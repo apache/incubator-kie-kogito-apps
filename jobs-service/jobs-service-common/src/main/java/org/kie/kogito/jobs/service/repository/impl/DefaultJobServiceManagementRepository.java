@@ -46,7 +46,7 @@ public class DefaultJobServiceManagementRepository implements JobServiceManageme
 
     @Override
     public Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
-        info.setLastHeartbeat(DateUtil.now());
+        info.setLastHeartbeat(DateUtil.now().toOffsetDateTime());
         return set(info);
     }
 }

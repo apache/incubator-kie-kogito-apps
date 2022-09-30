@@ -15,9 +15,7 @@
  */
 package org.kie.kogito.jobs.service.repository.postgresql;
 
-import java.time.ZonedDateTime;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,7 +25,6 @@ import javax.inject.Inject;
 
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
-import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,8 +59,9 @@ public class PostgreSqlJobServiceManagementRepository implements JobServiceManag
     }
 
     JobServiceManagementInfo from(Row row) {
-        return new JobServiceManagementInfo(row.getString("id"), row.getString("token"),
-                Optional.ofNullable(row.getOffsetDateTime("last_heartbeat")).map(t -> t.atZoneSameInstant(DateUtil.DEFAULT_ZONE)).orElse(null));
+        return new JobServiceManagementInfo(row.getString("id"),
+                row.getString("token"),
+                row.getOffsetDateTime("last_heartbeat"));
     }
 
     @Override
@@ -84,7 +82,7 @@ public class PostgreSqlJobServiceManagementRepository implements JobServiceManag
                 .execute(Tuple.tuple(Stream.of(
                         info.getId(),
                         info.getToken(),
-                        Optional.ofNullable(info.getLastHeartbeat()).map(ZonedDateTime::toOffsetDateTime).orElse(null)).collect(Collectors.toList())))
+                        info.getLastHeartbeat()).collect(Collectors.toList())))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null);
     }

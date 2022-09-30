@@ -73,7 +73,7 @@ public abstract class BaseKeycloakJobServiceIT {
     }
 
     @BeforeEach
-    void init() throws Exception {
+    public void init() throws Exception {
         //health check - wait to be ready
         await()
                 .atMost(2, MINUTES)

@@ -263,7 +263,7 @@ public abstract class BaseMessagingApiIT {
     private static <T> void waitUntilResult(Supplier<T> resultProducer, Predicate<T> condition, int pollIntervalInMillis, int timoutInSeconds) {
         await()
                 .pollInterval(pollIntervalInMillis, MILLISECONDS)
-                .timeout(timoutInSeconds, SECONDS)
+                .atMost(timoutInSeconds, SECONDS)
                 .until(() -> {
                     T result = resultProducer.get();
                     return condition.test(result);
