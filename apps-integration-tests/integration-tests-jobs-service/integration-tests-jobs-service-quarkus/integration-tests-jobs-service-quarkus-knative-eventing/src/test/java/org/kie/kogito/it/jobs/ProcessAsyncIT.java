@@ -16,10 +16,11 @@
 
 package org.kie.kogito.it.jobs;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusIntegrationTest;
 import org.kie.kogito.test.resources.JobServiceQuarkusTestResource;
 import org.kie.kogito.test.resources.KogitoServiceRandomPortQuarkusTestResource;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 import static org.kie.kogito.test.resources.JobServiceQuarkusTestResource.JOBS_SERVICE_URL;
 
