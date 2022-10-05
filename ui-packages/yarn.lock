@@ -3029,14 +3029,6 @@
   resolved "https://registry.yarnpkg.com/@jsdevtools/ono/-/ono-7.1.3.tgz#9df03bbd7c696a5c58885c34aa06da41c8543796"
   integrity sha512-4JQNk+3mVzK3xh2rqd6RB4J46qUR19azEHBneZyTZM+c456qOrbbM/5xcR8huNCCcbVt7+UmizG6GuUvPvKUYg==
 
-"@kie-tools/dashbuilder-client@^0.23.0":
-  version "0.23.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/dashbuilder-client/-/dashbuilder-client-0.23.0.tgz#241f410012b1070179c8270c919fcaacac061fe5"
-  integrity sha512-2KrpkU5d/MyvI/wmZ8ABCQDihwZSrDixETiy4WHet1t+Tlyw9INuR742hFw4tz0Jkn2RS2GsF47iZJ+TrfH3Nw==
-"@kie-tools-core/backend@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/backend/-/backend-0.22.0.tgz#221eb0724a6fa5ab03984ac15dea5999d0ac4c16"
-  integrity sha512-cAjTItNSXMTLM2BiPt03qXpXLQmU08v8QUcrtWXrcVj94aSmAeJpPZvW6IFDFWIUsfuSwuIOfwWETTu6e8LrMw==
 "@kie-tools-core/backend@0.24.0":
   version "0.24.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/backend/-/backend-0.24.0.tgz#db82744215e6c1da02a613899768009db82e6825"
@@ -3150,6 +3142,11 @@
   integrity sha512-bc8xa5mAHLAOb41d+LDaawjmcVhwrnTJ6lN0OJdDDI/w+0R7DFB7l7ksS3STr28rxPC2CO5gf8oOQ3pLAaAfEA==
   dependencies:
     "@kie-tools-core/operating-system" "0.24.0"
+
+"@kie-tools/dashbuilder-client@^0.23.0":
+  version "0.23.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/dashbuilder-client/-/dashbuilder-client-0.23.0.tgz#241f410012b1070179c8270c919fcaacac061fe5"
+  integrity sha512-2KrpkU5d/MyvI/wmZ8ABCQDihwZSrDixETiy4WHet1t+Tlyw9INuR742hFw4tz0Jkn2RS2GsF47iZJ+TrfH3Nw==
 
 "@kie-tools/kie-bc-editors@0.24.0":
   version "0.24.0"

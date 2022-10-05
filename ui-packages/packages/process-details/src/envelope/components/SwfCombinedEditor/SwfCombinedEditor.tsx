@@ -15,18 +15,30 @@
  */
 
 import React, { useCallback, useMemo, useState } from 'react';
-import { EmbeddedEditor, EmbeddedEditorChannelApiImpl } from "@kie-tools-core/editor/dist/embedded";
-import { ChannelType, EditorEnvelopeLocator, EnvelopeMapping } from "@kie-tools-core/editor/dist/api";
+import {
+  EmbeddedEditor,
+  EmbeddedEditorChannelApiImpl
+} from '@kie-tools-core/editor/dist/embedded';
+import {
+  ChannelType,
+  EditorEnvelopeLocator,
+  EnvelopeMapping
+} from '@kie-tools-core/editor/dist/api';
 import { Title, Card, CardHeader, CardBody } from '@patternfly/react-core';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
-import { EmbeddedEditorFile, StateControl } from '@kie-tools-core/editor/dist/channel';
+import {
+  EmbeddedEditorFile,
+  StateControl
+} from '@kie-tools-core/editor/dist/channel';
 import {
   SwfCombinedEditorChannelApiImpl,
   SwfFeatureToggleChannelApiImpl,
-} from "@kie-tools/serverless-workflow-combined-editor/dist/impl";
+  SwfPreviewOptionsChannelApiImpl
+} from '@kie-tools/serverless-workflow-combined-editor/dist/impl';
+
 interface ISwfCombinedEditorProps {
-  sourceString: string,
-  isStunnerEnabled: boolean,
+  sourceString: string;
+  isStunnerEnabled: boolean;
   width?: number;
   height?: number;
 }
@@ -47,16 +59,16 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
     for (let i = 0; i < sourceString.length; i++) {
       arr[i] = sourceString.charCodeAt(i);
     }
-    const decoder = new TextDecoder("utf-8");
+    const decoder = new TextDecoder('utf-8');
     return decoder.decode(arr);
-  }, [sourceString])
+  }, [sourceString]);
 
   const getFileType = useCallback(() => {
-    const source = getFileContent()
+    const source = getFileContent();
     if (source.trim().charAt(0) === '{') {
       return 'json';
     } else {
-      return 'yaml'
+      return 'yaml';
     }
   }, [sourceString]);
 
@@ -66,29 +78,70 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
       isReadOnly: true,
       fileExtension: `sw.${getFileType()}`,
       fileName: `*.sw.${getFileType()}`
-    }
+    };
   }, [sourceString]);
 
   const editorEnvelopeLocator = useMemo(
-    () => new EditorEnvelopeLocator(window.location.origin, [
-      new EnvelopeMapping({
-        type: "swf",
-        filePathGlob: "**/*.sw.+(json|yml|yaml)",
-        resourcesPathPrefix: "webapp/resources",
-        envelopePath: "resources/serverless-workflow-combined-editor-envelope.html",
-      }),
-    ]), [sourceString]);
+    () =>
+      new EditorEnvelopeLocator(window.location.origin, [
+        new EnvelopeMapping({
+          type: 'swf',
+          filePathGlob: '**/*.sw.+(json|yml|yaml)',
+          resourcesPathPrefix: 'webapp/resources',
+          envelopePath:
+            'resources/serverless-workflow-combined-editor-envelope.html'
+        })
+      ]),
+    [sourceString]
+  );
 
-  const channelApiImpl = useMemo(() => new EmbeddedEditorChannelApiImpl(stateControl, embeddedFile, "en", {
-    kogitoEditor_ready: () => {
-      setReady(true);
-    },
-  }), [isStunnerEnabled, sourceString]);
-  const swfFeatureToggleChannelApiImpl = useMemo(() => new SwfFeatureToggleChannelApiImpl({ stunnerEnabled: isStunnerEnabled }), [sourceString, isStunnerEnabled]);
-  const apiImpl = useMemo(() => new SwfCombinedEditorChannelApiImpl(channelApiImpl, swfFeatureToggleChannelApiImpl), [sourceString, isStunnerEnabled]);
+  const channelApiImpl = useMemo(
+    () =>
+      new EmbeddedEditorChannelApiImpl(stateControl, embeddedFile, 'en', {
+        kogitoEditor_ready: () => {
+          setReady(true);
+        }
+      }),
+    [stateControl, embeddedFile]
+  );
+
+  const swfFeatureToggleChannelApiImpl = useMemo(
+    () =>
+      new SwfFeatureToggleChannelApiImpl({
+        stunnerEnabled: isStunnerEnabled
+      }),
+    [isStunnerEnabled]
+  );
+
+  const swfPreviewOptionsChannelApiImpl = useMemo(
+    () =>
+      new SwfPreviewOptionsChannelApiImpl({
+        diagramDefaultWidth: '100%'
+      }),
+    []
+  );
+
+  const apiImpl = useMemo(
+    () =>
+      new SwfCombinedEditorChannelApiImpl(
+        channelApiImpl,
+        swfFeatureToggleChannelApiImpl,
+        null,
+        null,
+        swfPreviewOptionsChannelApiImpl
+      ),
+    [
+      channelApiImpl,
+      swfFeatureToggleChannelApiImpl,
+      swfPreviewOptionsChannelApiImpl
+    ]
+  );
 
   return (
-    <Card style={{ height: height, width: width }} {...componentOuiaProps(ouiaId, 'swf-diagram', ouiaSafe)} >
+    <Card
+      style={{ height: height, width: width }}
+      {...componentOuiaProps(ouiaId, 'swf-diagram', ouiaSafe)}
+    >
       <CardHeader>
         <Title headingLevel="h3" size="xl">
           Serverless Workflow Diagram
@@ -101,7 +154,7 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
           file={embeddedFile}
           channelType={ChannelType.ONLINE_MULTI_FILE}
           editorEnvelopeLocator={editorEnvelopeLocator}
-          locale={"en"}
+          locale={'en'}
           stateControl={stateControl}
         />
       </CardBody>
