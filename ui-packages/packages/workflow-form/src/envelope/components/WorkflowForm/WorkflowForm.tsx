@@ -42,18 +42,19 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
   const [type, setType] = useState<string>('');
   const [data, setData] = useState<string>('');
 
-  const onSubmit = useCallback(() => {
-    driver.startWorkflowCloudEvent({
-      type,
-      data
-    });
-  }, [driver, type, data]);
-
   const resetForm = useCallback(() => {
     driver.resetBusinessKey();
     setType('');
     setData('');
   }, []);
+
+  const onSubmit = useCallback(() => {
+    driver.startWorkflowCloudEvent({
+      type,
+      data
+    });
+    resetForm();
+  }, [driver, type, data]);
 
   return (
     <div {...componentOuiaProps(ouiaId, 'workflow-form', ouiaSafe)}>
