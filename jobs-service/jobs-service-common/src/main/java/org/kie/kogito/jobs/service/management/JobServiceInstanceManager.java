@@ -85,7 +85,7 @@ public class JobServiceInstanceManager {
 
         //background task for master check, it will be started after the first tryBecomeMaster() execution
         checkMaster = vertx.periodicStream(TimeUnit.SECONDS.toMillis(masterCheckIntervalInSeconds))
-                .handler(id -> tryBecomeMaster(currentInfo.get())
+                .handler(id -> tryBecomeMaster(currentInfo.get(), checkMaster, heartbeat)
                         .subscribe().with(i -> LOGGER.info("Checking Master"),
                                 ex -> LOGGER.error("Error checking Master", ex)))
                 .pause();
@@ -93,12 +93,12 @@ public class JobServiceInstanceManager {
         //background task for heartbeat will be started when become master
         heartbeat = vertx.periodicStream(TimeUnit.SECONDS.toMillis(heardBeatIntervalInSeconds))
                 .handler(t -> heartbeat(currentInfo.get())
-                        .subscribe().with(i -> LOGGER.info("Heartbeat"),
-                                ex -> LOGGER.error("Error on heartbeat", ex)))
+                        .subscribe().with(i -> LOGGER.info("Heartbeat {}", currentInfo.get()),
+                                ex -> LOGGER.error("Error on heartbeat {}", currentInfo.get(), ex)))
                 .pause();
 
         //initial master check
-        tryBecomeMaster(currentInfo.get())
+        tryBecomeMaster(currentInfo.get(), checkMaster, heartbeat)
                 .subscribe().with(i -> LOGGER.info("Initial check master execution"),
                         ex -> LOGGER.error("Error on initial check master", ex));
     }
@@ -135,9 +135,9 @@ public class JobServiceInstanceManager {
         return master.get();
     }
 
-    Uni<JobServiceManagementInfo> tryBecomeMaster(JobServiceManagementInfo info) {
+    protected Uni<JobServiceManagementInfo> tryBecomeMaster(JobServiceManagementInfo info, TimeoutStream checkMaster, TimeoutStream heartbeat) {
         LOGGER.debug("Try to become Master");
-        return repository.getAndUpdate(currentInfo.get().getId(), c -> {
+        return repository.getAndUpdate(info.getId(), c -> {
             final OffsetDateTime currentTime = DateUtil.now().toOffsetDateTime();
             if (Objects.isNull(c) || Objects.isNull(c.getToken()) || Objects.equals(c.getToken(), info.getToken()) || Objects.isNull(c.getLastHeartbeat())
                     || c.getLastHeartbeat().isBefore(currentTime.minusSeconds(heartbeatExpirationInSeconds))) {
@@ -146,8 +146,8 @@ public class JobServiceInstanceManager {
                 LOGGER.info("SET Master {}", info);
                 master.set(true);
                 enableCommunication();
-                this.heartbeat.resume();
-                this.checkMaster.pause();
+                heartbeat.resume();
+                checkMaster.pause();
                 return info;
             } else {
                 if (isMaster()) {
@@ -156,15 +156,15 @@ public class JobServiceInstanceManager {
                     disableCommunication();
                 }
                 //stop heartbeats if running
-                this.heartbeat.pause();
+                heartbeat.pause();
                 //guarantee the stream is running if not master
-                this.checkMaster.resume();
+                checkMaster.resume();
             }
             return null;
         });
     }
 
-    Uni<Void> release(JobServiceManagementInfo info) {
+    protected Uni<Void> release(JobServiceManagementInfo info) {
         return repository.set(new JobServiceManagementInfo(info.getId(), null, null))
                 .onItem().invoke(i -> master.set(false))
                 .onItem().invoke(i -> LOGGER.info("Master instance released"))
@@ -172,7 +172,7 @@ public class JobServiceInstanceManager {
                 .replaceWithVoid();
     }
 
-    Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
+    protected Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
         LOGGER.debug("Heartbeat Master");
         if (isMaster()) {
             return repository.heartbeat(info);
@@ -187,5 +187,17 @@ public class JobServiceInstanceManager {
 
     private String generateToken() {
         return UUID.randomUUID().toString();
+    }
+
+    protected JobServiceManagementInfo getCurrentInfo() {
+        return currentInfo.get();
+    }
+
+    protected TimeoutStream getCheckMaster() {
+        return checkMaster;
+    }
+
+    protected TimeoutStream getHeartbeat() {
+        return heartbeat;
     }
 }

@@ -16,6 +16,7 @@
 package org.kie.kogito.jobs.service.model;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import java.util.StringJoiner;
 
 public class JobServiceManagementInfo {
@@ -28,6 +29,9 @@ public class JobServiceManagementInfo {
         this.id = id;
         this.token = token;
         this.lastHeartbeat = heartbeat;
+    }
+
+    public JobServiceManagementInfo() {
     }
 
     public String getId() {
@@ -53,5 +57,22 @@ public class JobServiceManagementInfo {
                 .add("lastHeartbeat=" + lastHeartbeat)
                 .add("token=" + token)
                 .toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        JobServiceManagementInfo that = (JobServiceManagementInfo) o;
+        return Objects.equals(id, that.id) && Objects.equals(token, that.token);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, token);
     }
 }

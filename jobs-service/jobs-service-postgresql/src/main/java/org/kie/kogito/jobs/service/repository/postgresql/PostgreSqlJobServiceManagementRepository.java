@@ -94,6 +94,6 @@ public class PostgreSqlJobServiceManagementRepository implements JobServiceManag
                 .execute(Tuple.of(info.getId(), info.getToken()))
                 .onItem().transform(RowSet::iterator)
                 .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)
-                .onItem().invoke(r -> LOGGER.info("heartbeat {}", r)));
+                .onItem().invoke(r -> LOGGER.debug("Heartbeat {}", r)));
     }
 }
