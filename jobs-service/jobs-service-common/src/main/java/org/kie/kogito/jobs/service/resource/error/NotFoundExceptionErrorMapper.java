@@ -15,11 +15,13 @@
  */
 package org.kie.kogito.jobs.service.resource.error;
 
+import javax.ws.rs.NotFoundException;
 import javax.ws.rs.ext.Provider;
 
 @Provider
-public class DefaultErrorMapper extends BaseErrorMapper<Exception> {
-    public DefaultErrorMapper() {
-        super(true);
+public class NotFoundExceptionErrorMapper extends BaseErrorMapper<NotFoundException> {
+
+    public NotFoundExceptionErrorMapper() {
+        super(false);
     }
 }
