@@ -20,7 +20,7 @@ import javax.ws.rs.ext.Provider;
 @Provider
 public class IllegalArgumentExceptionErrorMapper extends BaseErrorMapper<IllegalArgumentException> {
 
-    public IllegalArgumentExceptionErrorMapper(boolean logStackTrace) {
+    public IllegalArgumentExceptionErrorMapper() {
         super(false);
     }
 }
