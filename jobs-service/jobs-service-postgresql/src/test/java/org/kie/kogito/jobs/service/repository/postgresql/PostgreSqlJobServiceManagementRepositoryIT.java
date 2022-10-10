@@ -22,16 +22,19 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
 
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
+import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
-class PostgreSqlJobServiceManagementRepositoryTest {
+@QuarkusTestResource(PostgreSqlQuarkusTestResource.class)
+class PostgreSqlJobServiceManagementRepositoryIT {
 
     @Inject
     JobServiceManagementRepository tested;
