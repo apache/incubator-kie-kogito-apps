@@ -15,9 +15,6 @@
  */
 package org.kie.kogito.jobs.service.resource.error;
 
-import java.util.Optional;
-
-import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
@@ -26,7 +23,7 @@ import org.kie.kogito.jobs.service.model.ErrorResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class BaseErrorMapper<T extends Throwable> implements ExceptionMapper<T> {
+public abstract class BaseExceptionMapper<T extends Throwable> implements ExceptionMapper<T> {
 
     public static final int DEFAULT_ERROR_CODE = 500;
 
@@ -34,27 +31,34 @@ public abstract class BaseErrorMapper<T extends Throwable> implements ExceptionM
     private final boolean logStackTrace;
     private final int errorCode;
 
-    public BaseErrorMapper(boolean logStackTrace) {
+    public BaseExceptionMapper(boolean logStackTrace) {
         this(DEFAULT_ERROR_CODE, logStackTrace);
     }
 
-    public BaseErrorMapper(int defaultErrorCode, boolean logStackTrace) {
-        this.errorCode = defaultErrorCode;
+    public BaseExceptionMapper(int errorCode, boolean logStackTrace) {
+        this.errorCode = errorCode;
         this.logStackTrace = logStackTrace;
     }
 
     @Override
     public Response toResponse(T exception) {
-        logger.error("Handling HTTP Error", logStackTrace ? exception : exception.getMessage());
-        return Response.status(Optional.ofNullable(exception)
-                .filter(WebApplicationException.class::isInstance)
-                .map(WebApplicationException.class::cast)
-                .map(WebApplicationException::getResponse)
-                .map(Response::getStatus)
-                .orElse(errorCode))
+        log(exception);
+        return buildResponse(exception, errorCode);
+    }
+
+    protected Response buildResponse(T exception, int errorCode) {
+        return Response.status(errorCode)
                 .type(MediaType.APPLICATION_JSON_TYPE)
                 .entity(new ErrorResponse(errorMessage(exception)))
                 .build();
+    }
+
+    protected void log(T exception) {
+        if (logStackTrace) {
+            logger.error("Handling HTTP Error", exception);
+        } else {
+            logger.error("Handling HTTP Error", exception.getMessage());
+        }
     }
 
     protected String errorMessage(T exception) {
