@@ -41,7 +41,7 @@ import static java.util.Collections.emptyList;
 
 @ApplicationScoped
 public class ProtoSchemaManager {
-    private static String PROTO_BASE_TYPE_STRING = "string";
+    private static final String PROTO_BASE_TYPE_STRING = "string";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProtoSchemaManager.class);
 
