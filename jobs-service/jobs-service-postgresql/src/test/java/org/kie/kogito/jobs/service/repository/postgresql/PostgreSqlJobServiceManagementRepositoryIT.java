@@ -45,8 +45,8 @@ class PostgreSqlJobServiceManagementRepositoryIT {
 
     @Test
     void testGetAndUpdate() {
-        String id = UUID.randomUUID().toString();
-        String token = UUID.randomUUID().toString();
+        String id = "instance-id-1";
+        String token = "token1";
         create(id, token);
 
         AtomicReference<OffsetDateTime> date = new AtomicReference<>();
@@ -63,7 +63,7 @@ class PostgreSqlJobServiceManagementRepositoryIT {
 
     @Test
     void testGetAndUpdateNotExisting() {
-        String id = UUID.randomUUID().toString();
+        String id = "instance-id-2";;
 
         AtomicReference<JobServiceManagementInfo> found = new AtomicReference<>(new JobServiceManagementInfo());
         JobServiceManagementInfo updated = tested.getAndUpdate(id, info -> {
@@ -84,9 +84,8 @@ class PostgreSqlJobServiceManagementRepositoryIT {
 
     @Test
     void testHeartbeat() {
-        String id = UUID.randomUUID().toString();
-        String token = UUID.randomUUID().toString();
-        ;
+        String id = "instance-id-3";;
+        String token = "token3";
         JobServiceManagementInfo created = create(id, token);
 
         JobServiceManagementInfo updated = tested.heartbeat(created).await().indefinitely();
@@ -96,9 +95,8 @@ class PostgreSqlJobServiceManagementRepositoryIT {
 
     @Test
     void testConflictHeartbeat() {
-        String id = UUID.randomUUID().toString();
-        String token = UUID.randomUUID().toString();
-        ;
+        String id = "instance-id-4";
+        String token = "token4";
         create(id, token);
 
         JobServiceManagementInfo updated = tested.heartbeat(new JobServiceManagementInfo(id, "differentToken", null)).await().indefinitely();
