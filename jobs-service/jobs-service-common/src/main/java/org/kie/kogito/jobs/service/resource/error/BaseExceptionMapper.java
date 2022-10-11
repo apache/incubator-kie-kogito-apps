@@ -57,7 +57,7 @@ public abstract class BaseExceptionMapper<T extends Throwable> implements Except
         if (logStackTrace) {
             logger.error("Handling HTTP Error", exception);
         } else {
-            logger.error("Handling HTTP Error", exception.getMessage());
+            logger.error("Handling HTTP Error {}", exception.getMessage());
         }
     }
 
