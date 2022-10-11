@@ -90,7 +90,7 @@ class PostgreSqlJobServiceManagementRepositoryIT {
 
         JobServiceManagementInfo updated = tested.heartbeat(created).await().indefinitely();
         assertThat(updated.getLastHeartbeat()).isNotNull();
-        assertThat(updated.getLastHeartbeat()).isBefore(OffsetDateTime.now().plusSeconds(1));
+        assertThat(updated.getLastHeartbeat()).isBeforeOrEqualTo(OffsetDateTime.now());
     }
 
     @Test
