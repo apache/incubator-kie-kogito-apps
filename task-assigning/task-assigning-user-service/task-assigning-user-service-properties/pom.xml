@@ -8,7 +8,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>task-assigning-user-service</artifactId>
-    <version>1.29.0-SNAPSHOT</version>
+    <version>1.29.0.Final</version>
   </parent>
   <artifactId>task-assigning-user-service-properties</artifactId>
   <name>Kogito Apps :: Task Assigning :: User Service Properties</name>
