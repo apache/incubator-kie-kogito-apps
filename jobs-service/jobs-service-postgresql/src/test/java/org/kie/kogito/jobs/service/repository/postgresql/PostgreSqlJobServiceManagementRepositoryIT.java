@@ -16,7 +16,6 @@
 package org.kie.kogito.jobs.service.repository.postgresql;
 
 import java.time.OffsetDateTime;
-import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.inject.Inject;
@@ -63,8 +62,7 @@ class PostgreSqlJobServiceManagementRepositoryIT {
 
     @Test
     void testGetAndUpdateNotExisting() {
-        String id = "instance-id-2";;
-
+        String id = "instance-id-2";
         AtomicReference<JobServiceManagementInfo> found = new AtomicReference<>(new JobServiceManagementInfo());
         JobServiceManagementInfo updated = tested.getAndUpdate(id, info -> {
             found.set(info);
@@ -84,7 +82,7 @@ class PostgreSqlJobServiceManagementRepositoryIT {
 
     @Test
     void testHeartbeat() {
-        String id = "instance-id-3";;
+        String id = "instance-id-3";
         String token = "token3";
         JobServiceManagementInfo created = create(id, token);
 
