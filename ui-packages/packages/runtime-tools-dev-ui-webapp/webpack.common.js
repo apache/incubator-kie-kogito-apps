@@ -7,7 +7,7 @@ const BG_IMAGES_DIRNAME = 'bgimages';
 const CopyPlugin = require("copy-webpack-plugin");
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const swEditor = require("@kie-tools/serverless-workflow-diagram-editor");
+const swEditor = require("@kie-tools/serverless-workflow-diagram-editor-assets");
 
 module.exports = {
   entry: {

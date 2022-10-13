@@ -127,7 +127,7 @@ module.exports = merge(common, {
             '../../node_modules/@kie-tools-core/editor/dist/envelope'
           ),
           path.resolve(
-            '../../node_modules/@kie-tools/serverless-workflow-mermaid-viewer/static/css'
+            '../../node_modules/@kie-tools/serverless-workflow-mermaid-viewer/dist/viewer'
           )
         ],
         use: ['style-loader', 'css-loader', 'sass-loader']

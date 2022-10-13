@@ -3037,31 +3037,35 @@
   version "0.22.0"
   resolved "https://registry.yarnpkg.com/@kie-tools-core/backend/-/backend-0.22.0.tgz#221eb0724a6fa5ab03984ac15dea5999d0ac4c16"
   integrity sha512-cAjTItNSXMTLM2BiPt03qXpXLQmU08v8QUcrtWXrcVj94aSmAeJpPZvW6IFDFWIUsfuSwuIOfwWETTu6e8LrMw==
+"@kie-tools-core/backend@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/backend/-/backend-0.24.0.tgz#db82744215e6c1da02a613899768009db82e6825"
+  integrity sha512-eXQnXoGnoGAGps4tLCxfN3XSXBqlVVWUgv2J8ViVLHjSOA4FBe5Ai7i0zBRLbN94QLdLuIpNiUI7PKQNARQwqQ==
   dependencies:
-    "@kie-tools-core/i18n" "0.22.0"
-    "@kie-tools-core/notifications" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
+    "@kie-tools-core/i18n" "0.24.0"
+    "@kie-tools-core/notifications" "0.24.0"
+    "@kie-tools-core/workspace" "0.24.0"
     axios "^0.27.2"
     fast-xml-parser "^3.17.4"
     portfinder "^1.0.27"
     semver "^7.3.5"
     sinon "^11.1.1"
 
-"@kie-tools-core/editor@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/editor/-/editor-0.22.0.tgz#f8bbbb8e0b990cc24355f599b6e859b37cb12fdd"
-  integrity sha512-OpB6rattZS+oRzi1R+Ei87VFIyiyopzcpCLrnZBPoyHjqYWlIaPodVfTnshTqYXclANO3x9WQXprS9COfhgWug==
+"@kie-tools-core/editor@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/editor/-/editor-0.24.0.tgz#30300e6f2be601761e88a73c814abb228acb78cc"
+  integrity sha512-o3wwEKquRDweaZuYXI6AjK9YHwGrnYbAf5vSG2v9mJVI4AIsL4OJeFsnIyKjFsPJ1W2hALATrPaVFHwxKf5ZBA==
   dependencies:
-    "@kie-tools-core/backend" "0.22.0"
-    "@kie-tools-core/envelope" "0.22.0"
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/guided-tour" "0.22.0"
-    "@kie-tools-core/i18n" "0.22.0"
-    "@kie-tools-core/keyboard-shortcuts" "0.22.0"
-    "@kie-tools-core/notifications" "0.22.0"
-    "@kie-tools-core/operating-system" "0.22.0"
-    "@kie-tools-core/patternfly-base" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
+    "@kie-tools-core/backend" "0.24.0"
+    "@kie-tools-core/envelope" "0.24.0"
+    "@kie-tools-core/envelope-bus" "0.24.0"
+    "@kie-tools-core/guided-tour" "0.24.0"
+    "@kie-tools-core/i18n" "0.24.0"
+    "@kie-tools-core/keyboard-shortcuts" "0.24.0"
+    "@kie-tools-core/notifications" "0.24.0"
+    "@kie-tools-core/operating-system" "0.24.0"
+    "@kie-tools-core/patternfly-base" "0.24.0"
+    "@kie-tools-core/workspace" "0.24.0"
     "@patternfly/react-core" "^4.157.3"
     "@patternfly/react-icons" "^4.11.17"
     csstype "^3.0.11"
@@ -3069,130 +3073,130 @@
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/envelope-bus@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.22.0.tgz#88f06a74250c9570a4a1702ce1f7612b7541e0e9"
-  integrity sha512-IAt+O69EaWuimVC/uOqoUdz63zJVxuPYvFKKAqYnwyFv0oAcEPwnq2hIZ48VwnSVOxAskt78+hzOJ9bTmlk9eg==
+"@kie-tools-core/envelope-bus@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope-bus/-/envelope-bus-0.24.0.tgz#70afbf3a735a79d39a7f3a401124561b1dab56cf"
+  integrity sha512-22zMDGwbu2ekBiw1WYpU5GxS0GJLwcNy4Q2LxhhZr3pUbRYo0Bl3/eAlWRG1j8c6ZZNZuS5Oxb+EuYdDJRDJew==
   dependencies:
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/envelope@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope/-/envelope-0.22.0.tgz#a76a187a0fcbb05fdc3c5885135bc2f45a85887c"
-  integrity sha512-qzuMHV9IvaINtxvyHSeWgCEHI+5wQN9zabjCY4ng3qqn3Ac7d6ABrVxEJyA/sC2br64Xy7ReqL8bj410ukNuFw==
+"@kie-tools-core/envelope@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/envelope/-/envelope-0.24.0.tgz#65c53d2a531785adb17d8102c012d7612cd52a9a"
+  integrity sha512-P+7NwdAiBm+bfnLzZgBFSNds9kj5TWAuTQ1/f+m3rj1o1uWHp6wJQiUb9NRvAUwnNf0+5VhZJ6eLKjOrgmMqCg==
   dependencies:
-    "@kie-tools-core/envelope-bus" "0.22.0"
+    "@kie-tools-core/envelope-bus" "0.24.0"
     csstype "^3.0.11"
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/guided-tour@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.22.0.tgz#ad45242a2d69c977e9b4220acf670b0261c7fe84"
-  integrity sha512-JyTY1R1jEH8ILuBbrBYqd09nk3gqBQo54c6kOj0Mz3W0DHCPHJ2fmhrUyHZRS2cUjZurHs+juZPxTq/iOLBivg==
+"@kie-tools-core/guided-tour@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/guided-tour/-/guided-tour-0.24.0.tgz#63126b24df57a45489a059c39dd03c40ffba924f"
+  integrity sha512-DAsOKvUzMMOXG5FI+jqeRa0d1gE/BXu/OZjPjRn0zagY2RxjKE+uJs4fJADqQt5Jj5DEubxN/5eo03zc1LPZcw==
   dependencies:
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/i18n" "0.22.0"
-    "@kie-tools-core/patternfly-base" "0.22.0"
+    "@kie-tools-core/envelope-bus" "0.24.0"
+    "@kie-tools-core/i18n" "0.24.0"
+    "@kie-tools-core/patternfly-base" "0.24.0"
     "@patternfly/react-core" "^4.157.3"
     "@patternfly/react-icons" "^4.11.17"
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/i18n@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.22.0.tgz#bc8dfc052971dd2240f637f0ae4c5672e8038ac1"
-  integrity sha512-MribIZxBSgnGk67vjVRddbNBxkpaSQbkkk3gUBn+zhf/FieVXiuyRJuKG1aaSx8M8vjD6Eb4v38NRyr8qPeXKQ==
+"@kie-tools-core/i18n@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/i18n/-/i18n-0.24.0.tgz#8be8cf3167cf1c4746e55feb7a4ff0f7ae528ff9"
+  integrity sha512-nH0F5OvOEmZzCwie/jLyfmKfVesUb5D1UCgPUv61umUlgtbx6Df/38zybNw5DgySEZ9F0Muv5wCpBFkokToXrA==
   dependencies:
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/keyboard-shortcuts@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/keyboard-shortcuts/-/keyboard-shortcuts-0.22.0.tgz#e443d35b0c57bac64beef9b9ab5134c55605d7fa"
-  integrity sha512-tjxgPLCezjrzW4Iik0BEkGcfMa7KDkDHmhxpkmi4nkdXUMy5oEAzHU+ep8t4xsUMndLRP3ZySHDQWWN/kx67Dw==
+"@kie-tools-core/keyboard-shortcuts@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/keyboard-shortcuts/-/keyboard-shortcuts-0.24.0.tgz#95de20bcb1cfa4bb2f71f945bc5d32a3b1ecb7b2"
+  integrity sha512-o+Po34Ev3FZKy/ceyOFU/zphPPADArEdX/9DvMEw9koXa3EoTGJO3GXwhpudGR0Mrf+DuPiWTAOebFK8Psgt0A==
   dependencies:
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/operating-system" "0.22.0"
+    "@kie-tools-core/envelope-bus" "0.24.0"
+    "@kie-tools-core/operating-system" "0.24.0"
+    react "^17.0.2"
+
+"@kie-tools-core/notifications@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.24.0.tgz#8f68075d95bf90baf95e7cf3823106d67d52a34d"
+  integrity sha512-lGFNtZiGv8JFN0akrkphBd6PP9tw3dlhQff7Fyf0xOCaUvl8l3rqph7SXgD0IkWSMf1aYasM9ZNjuBf499nT7g==
+  dependencies:
+    "@kie-tools-core/i18n" "0.24.0"
+    "@kie-tools-core/workspace" "0.24.0"
+
+"@kie-tools-core/operating-system@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.24.0.tgz#0508dd1a100aee068a07aac6a73eec9e550ca917"
+  integrity sha512-b5NWOwFm+QmteT6lj6bXQ7j8nc3OiZPA7G3if233Hym4pMnZ/rUBIjqgA2BNX94KgO5/ZzdCoAFLDRP4GWXomw==
+
+"@kie-tools-core/patternfly-base@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.24.0.tgz#76352a3ea81b8db560fab771966a86a6856c1a7a"
+  integrity sha512-flN8OpRZ9Mzjp2AjDhHa5LtP9p9qKA252Nk7S7xVv9fGXwCcoEiIhYDddVKC+rfq8qxIlzN9fq96PqbZx1KNIw==
+
+"@kie-tools-core/vscode-java-code-completion@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/vscode-java-code-completion/-/vscode-java-code-completion-0.24.0.tgz#d897d7b5000007dfa0a4f89712b389fb15e9ba49"
+  integrity sha512-xw1tNxtY2/FSADJaOeRpXbdQuEu+OHCnAVhv9ETpcuYkH2C7ulv2cEJukUczzmXulynRd6Z4Ef9g4GoNiWSZuw==
+
+"@kie-tools-core/workspace@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools-core/workspace/-/workspace-0.24.0.tgz#7082496d3c7bb14865302ab0adf88376f6bc8bcc"
+  integrity sha512-bc8xa5mAHLAOb41d+LDaawjmcVhwrnTJ6lN0OJdDDI/w+0R7DFB7l7ksS3STr28rxPC2CO5gf8oOQ3pLAaAfEA==
+  dependencies:
+    "@kie-tools-core/operating-system" "0.24.0"
+
+"@kie-tools/kie-bc-editors@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/kie-bc-editors/-/kie-bc-editors-0.24.0.tgz#b521ed54bd04a7477ac6623441a3eca975935af1"
+  integrity sha512-DovIlH2+PYTzgNy/8TjsWyBUVdSdwY8yqpNEjsP3/ziD+qK0eZ7/ILvCFYlo1caF7qf0CtC2+vYunlDyruDDIg==
+  dependencies:
+    "@kie-tools-core/editor" "0.24.0"
+    "@kie-tools-core/envelope" "0.24.0"
+    "@kie-tools-core/envelope-bus" "0.24.0"
+    "@kie-tools-core/guided-tour" "0.24.0"
+    "@kie-tools-core/i18n" "0.24.0"
+    "@kie-tools-core/notifications" "0.24.0"
+    "@kie-tools-core/operating-system" "0.24.0"
+    "@kie-tools-core/vscode-java-code-completion" "0.24.0"
+    "@kie-tools-core/workspace" "0.24.0"
+    "@kie-tools/pmml-editor-marshaller" "0.24.0"
+    "@patternfly/react-core" "^4.157.3"
     react "^17.0.2"
     react-dom "^17.0.2"
 
-"@kie-tools-core/notifications@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/notifications/-/notifications-0.22.0.tgz#32298eae001ffe2380f5a0dc354aeb3673ca3d1a"
-  integrity sha512-t41pH7LD3V9jKdg1ImEpUWSji6vhmGgQHkYkA6LXQWZGZ+HUQTHlb/3eD0SDs+LK77D0umcF0e8CPa8ODt6VfQ==
-  dependencies:
-    "@kie-tools-core/i18n" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
-
-"@kie-tools-core/operating-system@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/operating-system/-/operating-system-0.22.0.tgz#e2c8d86bced7f73d5bccb40f11b319353012aaec"
-  integrity sha512-b/1ZkZsk7YrBKkF/xSthI7s2KzJ6XlOUk3ueW8OZ2oY+6QW8OeDV28Ce2cHhc89J4Ghl00wVPIM/TCiBbBKzTg==
-
-"@kie-tools-core/patternfly-base@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/patternfly-base/-/patternfly-base-0.22.0.tgz#ea86c3907c505f9ea0653aacfbddaac0ea56c3a1"
-  integrity sha512-eY1u39bs/9jpd+z7zVK6zus6c+HTX8IczHLPVtvurb8pQdMChjdEUQ9uQtjAiQPuyMOvse3NMDiP0RQr9uOd7A==
-
-"@kie-tools-core/vscode-java-code-completion@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/vscode-java-code-completion/-/vscode-java-code-completion-0.22.0.tgz#8ba3cc79a0d400bce0b2033185801e8e941030a3"
-  integrity sha512-jdP6K3H9Nmc256mscqbk8w3FR2BKHb9nf7P6vLiuuxl50so+5GWLI+cFBbsLJ5W3jUMRum5ulclria0opGCJkA==
-
-"@kie-tools-core/workspace@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools-core/workspace/-/workspace-0.22.0.tgz#98718ba16f045380cf5344b5528c04994d991d8f"
-  integrity sha512-MZV5bhHu1Vou5dexASnmXmlaqxwb882Myd/DVxrieEWHw5wmbOEZBoknm9lT4dmBHmj80/zhKjvETDJzz8zNfg==
-  dependencies:
-    "@kie-tools-core/operating-system" "0.22.0"
-
-"@kie-tools/kie-bc-editors@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/kie-bc-editors/-/kie-bc-editors-0.22.0.tgz#f0ddc2d218149e01f9e7c37f7d10eb510346b5ba"
-  integrity sha512-XIkGBrrVaOJucYXnTEV/jgV95/pypzV2toDNugFt5nVGkncraI5zYQe+tESpoS1vWEChDijFr9bDN4wAVsBDqg==
-  dependencies:
-    "@kie-tools-core/editor" "0.22.0"
-    "@kie-tools-core/envelope" "0.22.0"
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/guided-tour" "0.22.0"
-    "@kie-tools-core/i18n" "0.22.0"
-    "@kie-tools-core/notifications" "0.22.0"
-    "@kie-tools-core/operating-system" "0.22.0"
-    "@kie-tools-core/vscode-java-code-completion" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
-    "@kie-tools/pmml-editor-marshaller" "0.22.0"
-    react "^17.0.2"
-    react-dom "^17.0.2"
-
-"@kie-tools/pmml-editor-marshaller@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/pmml-editor-marshaller/-/pmml-editor-marshaller-0.22.0.tgz#86e01dda9d841a18802d512a1bb783c85e89cad2"
-  integrity sha512-BgbBoN9gbqACenbw1hJDj/MRCquxfU1bSTxIzxP4fcb7wV+G/tYpPFVRvublUKs6mhQjJnS29iCRAbJ4Rn8fcQ==
+"@kie-tools/pmml-editor-marshaller@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/pmml-editor-marshaller/-/pmml-editor-marshaller-0.24.0.tgz#3f257075307587eddf9c61475b7b230ea1690020"
+  integrity sha512-nDW776wVprSLnFtbAgTht/xMmL043pERADjRs/lUuoAOn8J3ONh9H5xM2sT70FLc9E+Bh/cPaQ29Cr87SoUevw==
   dependencies:
     jsonata "^1.8.3"
     xml-js "^1.6.11"
 
-"@kie-tools/serverless-workflow-combined-editor@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-combined-editor/-/serverless-workflow-combined-editor-0.22.0.tgz#5c9b93ad3ce4a5286e50d512ec6a66a0b4cce52c"
-  integrity sha512-WNlx+Ochm8eN3VMGPsyI37zTA+pZxn4iisUDgM/KnJQfAr6YOISLLPQEyZLTX3LWZJ4NNxBoc1rNyZKFJatOOA==
+"@kie-tools/serverless-workflow-combined-editor@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-combined-editor/-/serverless-workflow-combined-editor-0.24.0.tgz#5816ace97f1cc842d2959c731296a701739ff7f5"
+  integrity sha512-PxgdciFmKbioiX+DiObc+h0TLNqMuG0suS0cwzsn6XCLwVxz7ps2hjQ+jF9LywEnUjcm05N4f2h0MC5tAeM/Xg==
   dependencies:
-    "@kie-tools-core/editor" "0.22.0"
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/guided-tour" "0.22.0"
-    "@kie-tools-core/keyboard-shortcuts" "0.22.0"
-    "@kie-tools-core/notifications" "0.22.0"
-    "@kie-tools-core/operating-system" "0.22.0"
-    "@kie-tools-core/patternfly-base" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
-    "@kie-tools/serverless-workflow-diagram-editor" "0.22.0"
-    "@kie-tools/serverless-workflow-diagram-editor-envelope" "0.22.0"
-    "@kie-tools/serverless-workflow-language-service" "0.22.0"
-    "@kie-tools/serverless-workflow-mermaid-viewer" "0.22.0"
-    "@kie-tools/serverless-workflow-service-catalog" "0.22.0"
-    "@kie-tools/serverless-workflow-text-editor" "0.22.0"
+    "@kie-tools-core/editor" "0.24.0"
+    "@kie-tools-core/envelope-bus" "0.24.0"
+    "@kie-tools-core/guided-tour" "0.24.0"
+    "@kie-tools-core/keyboard-shortcuts" "0.24.0"
+    "@kie-tools-core/notifications" "0.24.0"
+    "@kie-tools-core/operating-system" "0.24.0"
+    "@kie-tools-core/patternfly-base" "0.24.0"
+    "@kie-tools-core/workspace" "0.24.0"
+    "@kie-tools/serverless-workflow-diagram-editor-assets" "0.24.0"
+    "@kie-tools/serverless-workflow-diagram-editor-envelope" "0.24.0"
+    "@kie-tools/serverless-workflow-language-service" "0.24.0"
+    "@kie-tools/serverless-workflow-mermaid-viewer" "0.24.0"
+    "@kie-tools/serverless-workflow-service-catalog" "0.24.0"
+    "@kie-tools/serverless-workflow-text-editor" "0.24.0"
     "@patternfly/react-core" "^4.157.3"
     "@patternfly/react-icons" "^4.11.17"
     json-schema "^0.4.0"
@@ -3202,33 +3206,33 @@
     react-dom "^17.0.2"
     vscode-languageserver-types "^3.16.0"
 
-"@kie-tools/serverless-workflow-diagram-editor-envelope@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-diagram-editor-envelope/-/serverless-workflow-diagram-editor-envelope-0.22.0.tgz#a3b661900cea9208c7d576e61191f74f12c83a42"
-  integrity sha512-kXhBmwUTgEmNPz9MCnroCM88uZZmhTIqKJ+iXA89phqKSFNt7qfc6T2/JcSVtbLYFwExX+hmoIihc941aaZ8Xg==
-  dependencies:
-    "@kie-tools-core/editor" "0.22.0"
-    "@kie-tools-core/envelope" "0.22.0"
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/guided-tour" "0.22.0"
-    "@kie-tools-core/i18n" "0.22.0"
-    "@kie-tools-core/notifications" "0.22.0"
-    "@kie-tools-core/operating-system" "0.22.0"
-    "@kie-tools-core/vscode-java-code-completion" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
-    "@kie-tools/kie-bc-editors" "0.22.0"
+"@kie-tools/serverless-workflow-diagram-editor-assets@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-diagram-editor-assets/-/serverless-workflow-diagram-editor-assets-0.24.0.tgz#a00ac57429e79d6585bb770bd7fef164ca78a8c9"
+  integrity sha512-fNKgpHguYOoRn89sGAITyNkfsfVzYmhjgDPfZ6rJF8Ky5Pkxgws/9lEfdHqzCd66ptQH8wlxHgrsKI5AZc4Ezw==
 
-"@kie-tools/serverless-workflow-diagram-editor@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-diagram-editor/-/serverless-workflow-diagram-editor-0.22.0.tgz#6576f3a9c29881792d63f71bb1a0c0014ef791fa"
-  integrity sha512-repMBl5bPh4ibhoBOEU+9uId5y758DpNnOqK1KfZtEsDo2OyLlke0XvdLoqU+N5YcVLGSd7eoFjSZkaV5iLbtw==
-
-"@kie-tools/serverless-workflow-language-service@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-language-service/-/serverless-workflow-language-service-0.22.0.tgz#70a6784d8e64c7ce3622c6262909c909506b67a2"
-  integrity sha512-phpnyT6mVOqbp9faitrzw2yPHf5nJrmOUqHmVYoHGHvKj0ZfVuUYPI7qo58XG2Kt4jKDFKnuHinett44/vfPEA==
+"@kie-tools/serverless-workflow-diagram-editor-envelope@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-diagram-editor-envelope/-/serverless-workflow-diagram-editor-envelope-0.24.0.tgz#8a21c0594f24bbb5b1653da04625a224c2576a9c"
+  integrity sha512-Py77vh82kULYpMjI/rM5fhHYSSt5qps9RuEmie1p14lfF8lcQfDOxhh11mLbxQlzlunX2+9dK0rkOqWy2pfNLA==
   dependencies:
-    "@kie-tools/serverless-workflow-service-catalog" "0.22.0"
+    "@kie-tools-core/editor" "0.24.0"
+    "@kie-tools-core/envelope" "0.24.0"
+    "@kie-tools-core/envelope-bus" "0.24.0"
+    "@kie-tools-core/guided-tour" "0.24.0"
+    "@kie-tools-core/i18n" "0.24.0"
+    "@kie-tools-core/notifications" "0.24.0"
+    "@kie-tools-core/operating-system" "0.24.0"
+    "@kie-tools-core/vscode-java-code-completion" "0.24.0"
+    "@kie-tools-core/workspace" "0.24.0"
+    "@kie-tools/kie-bc-editors" "0.24.0"
+
+"@kie-tools/serverless-workflow-language-service@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-language-service/-/serverless-workflow-language-service-0.24.0.tgz#ce62388dd6f8627bae17d1119d2c39311b31ae04"
+  integrity sha512-p3SCh2vYs+PQBS6X9Bq8p+/ojUDEWTwCTtfxilcmqlsHai92K8u3x37bYFDXXdUDUpN98ICZFDElXaTouGSfbw==
+  dependencies:
+    "@kie-tools/serverless-workflow-service-catalog" "0.24.0"
     "@severlessworkflow/sdk-typescript" "^3.0.3"
     json-to-ast "^2.1.0"
     jsonata "^1.8.3"
@@ -3238,52 +3242,53 @@
     vscode-languageserver-types "^3.16.0"
     yaml-language-server-parser "^0.1.3"
 
-"@kie-tools/serverless-workflow-mermaid-viewer@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-mermaid-viewer/-/serverless-workflow-mermaid-viewer-0.22.0.tgz#1498481129c29d267b6112a49b863796b1d25a1d"
-  integrity sha512-vy7Z2jlG6SpjxSHvhax2vc4ZzGwoJYJyJHEAoodK2Ao7R243yCok+UVXoWnNz8iSKnTF3TuBI5BWVH/aL7y05Q==
+"@kie-tools/serverless-workflow-mermaid-viewer@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-mermaid-viewer/-/serverless-workflow-mermaid-viewer-0.24.0.tgz#af662dd91bf15a531c525a8205d6017d65a4170d"
+  integrity sha512-9zCIzdU1aVhNPfuJ6M865NCJFDinEiEiGzaD5+sLBpvGPb7uRGX/3Paiez2kCUWtYdI3iNdFy6kmKHKD6mBGmw==
   dependencies:
-    "@kie-tools-core/editor" "0.22.0"
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/guided-tour" "0.22.0"
-    "@kie-tools-core/keyboard-shortcuts" "0.22.0"
-    "@kie-tools-core/notifications" "0.22.0"
-    "@kie-tools-core/operating-system" "0.22.0"
-    "@kie-tools-core/patternfly-base" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
+    "@kie-tools-core/editor" "0.24.0"
+    "@kie-tools-core/envelope-bus" "0.24.0"
+    "@kie-tools-core/guided-tour" "0.24.0"
+    "@kie-tools-core/keyboard-shortcuts" "0.24.0"
+    "@kie-tools-core/notifications" "0.24.0"
+    "@kie-tools-core/operating-system" "0.24.0"
+    "@kie-tools-core/patternfly-base" "0.24.0"
+    "@kie-tools-core/workspace" "0.24.0"
     "@patternfly/react-core" "^4.157.3"
     "@patternfly/react-icons" "^4.11.17"
     "@severlessworkflow/sdk-typescript" "^3.0.3"
-    mermaid "^9.0.0"
+    mermaid "^9.1.7"
     react "^17.0.2"
     react-dom "^17.0.2"
     svg-pan-zoom "^3.6.1"
 
-"@kie-tools/serverless-workflow-service-catalog@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-service-catalog/-/serverless-workflow-service-catalog-0.22.0.tgz#3a23816ec63023da7f77b590bbc0ea8d4ce26e7f"
-  integrity sha512-h7a/dEaiArp6iJpps7DHbm59sV0w/NMhE52n1M89CH2FxcBg+/kADdv92PoghIHjXYoErHfk31mnRTYfZ0ZhjQ==
+"@kie-tools/serverless-workflow-service-catalog@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-service-catalog/-/serverless-workflow-service-catalog-0.24.0.tgz#0e4b8a6f5be02d39a869b3ab1fe978f2ace731b0"
+  integrity sha512-v/8oFkkz98VXw0qr6i8VtvhdxxVeSGx+ls5K0YHMyeBkcNFr0J92jSVahxQMwJmcrDL6MioEx/LXycYqx6dQRw==
   dependencies:
-    "@kie-tools-core/envelope-bus" "0.22.0"
+    "@kie-tools-core/envelope-bus" "0.24.0"
     "@types/js-yaml" "^4.0.5"
     js-yaml "^4.1.0"
     lodash "^4.17.21"
     openapi-types "^7.0.1"
 
-"@kie-tools/serverless-workflow-text-editor@0.22.0":
-  version "0.22.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-text-editor/-/serverless-workflow-text-editor-0.22.0.tgz#739ac42ff451110bc6a02b66a3a123a91f6a67e8"
-  integrity sha512-q70lsX/695gW7hrL15VuK6Z+SH5/mAifecJX2RnzKe/aiADctYs7/Eps17oebA4XXGhWtPthuz2JUsSdj4OZhg==
+"@kie-tools/serverless-workflow-text-editor@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/serverless-workflow-text-editor/-/serverless-workflow-text-editor-0.24.0.tgz#1a6d4f64c24298f9d16a819af82250ecb4d9842f"
+  integrity sha512-zgXz5yC7EYCgj9nnNn/cTQNuapXxkmmfDmyd7B96ggoVxtICJNNvxjn1/q/e4nvUNJ2n2qAXS178YizUaLB/rg==
   dependencies:
-    "@kie-tools-core/editor" "0.22.0"
-    "@kie-tools-core/envelope-bus" "0.22.0"
-    "@kie-tools-core/guided-tour" "0.22.0"
-    "@kie-tools-core/notifications" "0.22.0"
-    "@kie-tools-core/operating-system" "0.22.0"
-    "@kie-tools-core/patternfly-base" "0.22.0"
-    "@kie-tools-core/workspace" "0.22.0"
-    "@kie-tools/serverless-workflow-language-service" "0.22.0"
-    "@kie-tools/serverless-workflow-service-catalog" "0.22.0"
+    "@kie-tools-core/editor" "0.24.0"
+    "@kie-tools-core/envelope" "0.24.0"
+    "@kie-tools-core/envelope-bus" "0.24.0"
+    "@kie-tools-core/guided-tour" "0.24.0"
+    "@kie-tools-core/notifications" "0.24.0"
+    "@kie-tools-core/operating-system" "0.24.0"
+    "@kie-tools-core/patternfly-base" "0.24.0"
+    "@kie-tools-core/workspace" "0.24.0"
+    "@kie-tools/serverless-workflow-language-service" "0.24.0"
+    "@kie-tools/serverless-workflow-service-catalog" "0.24.0"
     "@patternfly/react-core" "^4.157.3"
     "@patternfly/react-icons" "^4.11.17"
     json-schema "^0.4.0"
@@ -10725,10 +10730,10 @@ domhandler@^4.0.0, domhandler@^4.2.0:
   dependencies:
     domelementtype "^2.2.0"
 
-dompurify@2.3.10:
-  version "2.3.10"
-  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.3.10.tgz#901f7390ffe16a91a5a556b94043314cd4850385"
-  integrity sha512-o7Fg/AgC7p/XpKjf/+RC3Ok6k4St5F7Q6q6+Nnm3p2zGWioAY6dh0CbbuwOhH2UcSzKsdniE/YnE2/92JcsA+g==
+dompurify@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/dompurify/-/dompurify-2.4.0.tgz#c9c88390f024c2823332615c9e20a453cf3825dd"
+  integrity sha512-Be9tbQMZds4a3C6xTmz68NlMfeONA//4dOavl/1rNw50E+/QO0KVpbcU0PcaW0nsQxurXls9ZocqFxk8R2mWEA==
 
 domutils@^2.5.2, domutils@^2.6.0, domutils@^2.7.0:
   version "2.8.0"
@@ -15954,16 +15959,16 @@ merge2@^1.2.3, merge2@^1.3.0:
   resolved "https://registry.yarnpkg.com/merge2/-/merge2-1.4.1.tgz#4368892f885e907455a6fd7dc55c0c9d404990ae"
   integrity sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==
 
-mermaid@^9.0.0:
-  version "9.1.6"
-  resolved "https://registry.yarnpkg.com/mermaid/-/mermaid-9.1.6.tgz#e34d5ad632455df014784d7c77af21fd51388341"
-  integrity sha512-oBuQk7s55wQgEgH/AK0GYY8U0kBqOIGK9QlJL+VYxh+1kZQtU9tNwoy0gWCfBJDaFIRdfpc/fm9PagaIXg6XFQ==
+mermaid@^9.1.7:
+  version "9.1.7"
+  resolved "https://registry.yarnpkg.com/mermaid/-/mermaid-9.1.7.tgz#e24de9b2d36c8cb25a09d72ffce966941b24bd6e"
+  integrity sha512-MRVHXy5FLjnUQUG7YS3UN9jEN6FXCJbFCXVGJQjVIbiR6Vhw0j/6pLIjqsiah9xoHmQU6DEaKOvB3S1g/1nBPA==
   dependencies:
     "@braintree/sanitize-url" "^6.0.0"
     d3 "^7.0.0"
     dagre "^0.8.5"
     dagre-d3 "^0.6.4"
-    dompurify "2.3.10"
+    dompurify "2.4.0"
     graphlib "^2.1.8"
     khroma "^2.0.0"
     moment-mini "2.24.0"

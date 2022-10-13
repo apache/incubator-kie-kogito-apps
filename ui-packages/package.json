@@ -18,8 +18,7 @@
     "test:e2e:trusty": "lerna run --scope @kogito-apps/trusty test:e2e:trusty --",
     "format:all": "lerna run format --stream --",
     "build:prod:swf": "lerna run --scope='@kogito-apps/runtime-tools-dev-ui-webapp' build:prod --include-dependencies --stream --",
-    "test:swf": "lerna run --scope='@kogito-apps/runtime-tools-dev-ui-webapp' test --include-dependencies --stream --",
-    "postinstall": "patch-package"
+    "test:swf": "lerna run --scope='@kogito-apps/runtime-tools-dev-ui-webapp' test --include-dependencies --stream --"
   },
   "husky": {
     "hooks": {
@@ -29,13 +28,11 @@
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
-    "@kie-tools-core/editor": "0.22.0",
-    "@kie-tools-core/envelope": "0.22.0",
-    "@kie-tools-core/envelope-bus": "0.22.0",
-    "@kie-tools/serverless-workflow-combined-editor": "0.22.0",
-    "@kie-tools/serverless-workflow-diagram-editor": "0.22.0",
-    "@kie-tools/serverless-workflow-text-editor": "0.22.0",
-    "@kie-tools/serverless-workflow-diagram-editor-envelope": "0.22.0",
+    "@kie-tools-core/editor": "0.24.0",
+    "@kie-tools-core/envelope": "0.24.0",
+    "@kie-tools-core/envelope-bus": "0.24.0",
+    "@kie-tools/serverless-workflow-combined-editor": "0.24.0",
+    "@kie-tools/serverless-workflow-diagram-editor-assets": "0.24.0",
     "@kogito-apps/management-console": "file:packages/management-console",
     "apollo-boost": "^0.4.4",
     "apollo-link-context": "^1.0.20",
