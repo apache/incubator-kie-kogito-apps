@@ -20,7 +20,7 @@ import { ServerlessWorkflowCombinedEditorFactory } from "@kie-tools/serverless-w
 
 init({
   container: document.getElementById("swf-combined-editor-envelope-app")!,
-  bus: { postMessage: (message, targetOrigin, _) => window.parent.postMessage(message, "*", _) },
+  bus: { postMessage: (message, targetOrigin, _) => window.parent.postMessage(message, window.location.origin, _) },
   editorFactory: new ServerlessWorkflowCombinedEditorFactory(),
   keyboardShortcutsService: new NoOpKeyboardShortcutsService(),
 });
