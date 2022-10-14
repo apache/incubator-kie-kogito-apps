@@ -23,7 +23,8 @@ describe('SwfCombinedEditor component tests', () => {
         const props = {
             sourceString: "",
             height: 600,
-            width: 600
+            width: 600,
+            isStunnerEnabled: true
         }
         const wrapper = shallow(<SwfCombinedEditor {...props} />);
         expect(wrapper).toMatchSnapshot();

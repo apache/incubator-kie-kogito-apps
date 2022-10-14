@@ -63,7 +63,8 @@ jest
   .spyOn(RuntimeToolsDevUIAppContext, 'useDevUIAppContext')
   .mockImplementation(() => {
     return {
-      isWorkflow:jest.fn()
+      isWorkflow:jest.fn(),
+      getIsStunnerEnabled: jest.fn()
     };
   });
 
