@@ -3,8 +3,7 @@
     "compilerOptions": {
         "declarationDir": "./dist",
         "declaration": true,
-        "outDir": "dist",
-        "downlevelIteration": true
+        "outDir": "dist"
     },
     "include": [
         "src/",

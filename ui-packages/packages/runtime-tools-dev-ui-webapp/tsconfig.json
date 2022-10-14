@@ -2,8 +2,7 @@
     "extends": "../../tsconfig.json",
     "compilerOptions": {
         "declarationDir": "./dist",
-        "declaration": true,
-        "downlevelIteration": true
+        "declaration": true
     },
     "include": [
         "src/**/*.ts",
