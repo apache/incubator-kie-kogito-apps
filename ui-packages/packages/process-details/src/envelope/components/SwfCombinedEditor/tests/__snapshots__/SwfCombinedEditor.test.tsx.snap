@@ -16,12 +16,44 @@ exports[`SwfCombinedEditor component tests snapshot of the emedded editor 1`] = 
       headingLevel="h3"
       size="xl"
     >
-      Diagram
+      Serverless Workflow Diagram
     </Title>
   </CardHeader>
   <CardBody>
     <ForwardRef(RefForwardingEmbeddedEditor)
       channelType="ONLINE_MULTI_FILE"
+      customChannelApiImpl={
+        SwfCombinedEditorChannelApiImpl {
+          "defaultApiImpl": EmbeddedEditorChannelApiImpl {
+            "file": Object {
+              "fileExtension": "sw.yaml",
+              "fileName": "*.sw.yaml",
+              "getFileContents": [Function],
+              "isReadOnly": true,
+            },
+            "locale": "en",
+            "overrides": Object {
+              "kogitoEditor_ready": [Function],
+            },
+            "stateControl": StateControl {
+              "commandStack": Array [],
+              "registeredCallbacks": Array [],
+            },
+          },
+          "swfFeatureToggleApiImpl": SwfFeatureToggleChannelApiImpl {
+            "featureToggle": Object {
+              "stunnerEnabled": true,
+            },
+          },
+          "swfLanguageServiceChannelApiImpl": null,
+          "swfPreviewOptionsChannelApiImpl": SwfPreviewOptionsChannelApiImpl {
+            "swfPreviewOptions": Object {
+              "diagramDefaultWidth": "100%",
+            },
+          },
+          "swfServiceCatalogApiImpl": null,
+        }
+      }
       editorEnvelopeLocator={
         EditorEnvelopeLocator {
           "envelopeMappings": Array [
@@ -29,7 +61,7 @@ exports[`SwfCombinedEditor component tests snapshot of the emedded editor 1`] = 
               "args": Object {
                 "envelopePath": "resources/serverless-workflow-combined-editor-envelope.html",
                 "filePathGlob": "**/*.sw.+(json|yml|yaml)",
-                "resourcesPathPrefix": ".",
+                "resourcesPathPrefix": "webapp/resources",
                 "type": "swf",
               },
               "matcher": Minimatch {
@@ -65,14 +97,20 @@ exports[`SwfCombinedEditor component tests snapshot of the emedded editor 1`] = 
       }
       file={
         Object {
-          "fileExtension": "sw.json",
-          "fileName": "*.sw.json",
+          "fileExtension": "sw.yaml",
+          "fileName": "*.sw.yaml",
           "getFileContents": [Function],
           "isReadOnly": true,
         }
       }
-      isReady={true}
+      isReady={false}
       locale="en"
+      stateControl={
+        StateControl {
+          "commandStack": Array [],
+          "registeredCallbacks": Array [],
+        }
+      }
     />
   </CardBody>
 </Card>

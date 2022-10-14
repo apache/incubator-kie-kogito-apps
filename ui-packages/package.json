@@ -152,6 +152,6 @@
   "resolutions": {
     "@types/express-serve-static-core": "^4.17.21",
     "axios": "0.21.2",
-    "@patternfly/react-core": "4.128.2"
+    "@patternfly/react-core": "4.157.3"
   }
 }
