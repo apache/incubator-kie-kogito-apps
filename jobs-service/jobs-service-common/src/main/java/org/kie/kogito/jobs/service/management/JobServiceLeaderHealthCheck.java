@@ -28,7 +28,7 @@ import org.eclipse.microprofile.health.Readiness;
 
 @Readiness
 @ApplicationScoped
-public class JobServiceMasterHealthCheck implements HealthCheck {
+public class JobServiceLeaderHealthCheck implements HealthCheck {
 
     private AtomicBoolean enabled = new AtomicBoolean(false);
 
@@ -38,7 +38,7 @@ public class JobServiceMasterHealthCheck implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {
-        final HealthCheckResponseBuilder responseBuilder = HealthCheckResponse.named("Master Instance");
+        final HealthCheckResponseBuilder responseBuilder = HealthCheckResponse.named("Leader Instance");
         if (enabled.get()) {
             return responseBuilder.up().build();
         }
