@@ -314,7 +314,7 @@ public abstract class BaseJobResourceIT {
 
     @Test
     void testCreateExpiredJob() throws Exception {
-        createExpiredJob().statusCode(500);
+        createExpiredJob().statusCode(BAD_REQUEST);
     }
 
     @Test
