@@ -147,6 +147,13 @@
                     <include>serverless-workflow-diagram-editor-envelope.js</include>
                   </includes>
                 </resource>
+                <!--copy diagram into the dev-static-->
+                 <resource>
+                  <directory>${path.to.webapp.app}/dist</directory>
+                  <includes>
+                    <include>diagram/</include>
+                  </includes>
+                </resource>
               </resources>
             </configuration>
           </execution>

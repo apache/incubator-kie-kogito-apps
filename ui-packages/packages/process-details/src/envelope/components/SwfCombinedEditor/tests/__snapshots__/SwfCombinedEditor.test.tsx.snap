@@ -61,7 +61,7 @@ exports[`SwfCombinedEditor component tests snapshot of the emedded editor 1`] = 
               "args": Object {
                 "envelopePath": "resources/serverless-workflow-combined-editor-envelope.html",
                 "filePathGlob": "**/*.sw.+(json|yml|yaml)",
-                "resourcesPathPrefix": "webapp/resources",
+                "resourcesPathPrefix": ".",
                 "type": "swf",
               },
               "matcher": Minimatch {

@@ -46,11 +46,11 @@ module.exports = {
     new FileManagerPlugin({
       events: {
         onEnd: {
+          mkdir:['./dist/resources/webapp/'],
           copy: [
-            { source: './dist/*.js', destination: './dist/resources/webapp' },
-            { source: './dist/*.map', destination: './dist/resources/webapp' },
-            { source: './dist/fonts', destination: './dist/resources/webapp' },
-            { source: './dist/diagram', destination: './dist/resources/webapp/resources/diagram' },
+            { source: './dist/*.js', destination: './dist/resources/webapp/' },
+            { source: './dist/*.map', destination: './dist/resources/webapp/' },
+            { source: './dist/fonts', destination: './dist/resources/webapp/' },
             { source: './dist/monitoring-webapp', destination: './dist/resources/webapp/monitoring-webapp' },
             { source: './dist/custom-dashboard-view', destination: './dist/resources/webapp/custom-dashboard-view' }
           ]

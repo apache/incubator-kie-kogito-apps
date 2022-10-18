@@ -9,7 +9,8 @@ module.exports = merge(common, {
   mode: 'production',
   devtool: 'source-map',
   output: {
-    publicPath: "./resources/webapp/"
+    // the swf diagram looks for the workers here
+    publicPath: "./webapp/"
   },
   optimization: {
     minimizer: [new OptimizeCSSAssetsPlugin({})]

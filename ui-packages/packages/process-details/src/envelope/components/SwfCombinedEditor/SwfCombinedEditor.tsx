@@ -87,7 +87,8 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
         new EnvelopeMapping({
           type: 'swf',
           filePathGlob: '**/*.sw.+(json|yml|yaml)',
-          resourcesPathPrefix: 'webapp/resources',
+          // look for the resources in the same path as the swf-diagram html
+          resourcesPathPrefix: '.',
           envelopePath:
             'resources/serverless-workflow-combined-editor-envelope.html'
         })
