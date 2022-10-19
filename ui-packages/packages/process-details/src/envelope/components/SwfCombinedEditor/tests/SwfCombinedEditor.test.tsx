@@ -19,14 +19,14 @@ import { shallow } from 'enzyme';
 import SwfCombinedEditor from '../SwfCombinedEditor';
 
 describe('SwfCombinedEditor component tests', () => {
-    it("snapshot of the emedded editor", () => {
-        const props = {
-            sourceString: "",
-            height: 600,
-            width: 600,
-            isStunnerEnabled: true
-        }
-        const wrapper = shallow(<SwfCombinedEditor {...props} />);
-        expect(wrapper).toMatchSnapshot();
-    });
+  it('snapshot of the emedded editor', () => {
+    const props = {
+      sourceString: '',
+      height: 600,
+      width: 600,
+      isStunnerEnabled: true
+    };
+    const wrapper = shallow(<SwfCombinedEditor {...props} />);
+    expect(wrapper).toMatchSnapshot();
+  });
 });

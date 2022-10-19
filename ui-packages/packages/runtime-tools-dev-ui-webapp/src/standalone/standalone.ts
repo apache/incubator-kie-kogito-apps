@@ -135,7 +135,7 @@ export function open(args: {
   availablePages?: string[];
   customLabels?: CustomLabels;
   omittedProcessTimelineEvents?: string[];
-  isStunnerEnabled: boolean
+  isStunnerEnabled: boolean;
   diagramPreviewSize?: DiagramPreviewSize;
 }): StandaloneDevUIApi {
   const iframe = document.createElement('iframe');

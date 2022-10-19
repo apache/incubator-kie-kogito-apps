@@ -128,7 +128,6 @@ describe('ProcessDetails tests', () => {
       processDetails: data,
       omittedProcessTimelineEvents: [],
       showSwfDiagram: true
-      
     };
 
     const Jobs: Job[] = [

@@ -69,7 +69,7 @@ interface ProcessDetailsProps {
   omittedProcessTimelineEvents: string[];
   diagramPreviewSize?: DiagramPreviewSize;
   showSwfDiagram: boolean;
-  isStunnerEnabled?:boolean;
+  isStunnerEnabled?: boolean;
 }
 
 type svgResponse = SvgSuccessResponse | SvgErrorResponse;
@@ -308,7 +308,12 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
     return (
       <Flex>
         <FlexItem>
-          <SwfCombinedEditor sourceString={data?.source} isStunnerEnabled={isStunnerEnabled} height={diagramPreviewSize?.height} width={diagramPreviewSize?.width} />
+          <SwfCombinedEditor
+            sourceString={data?.source}
+            isStunnerEnabled={isStunnerEnabled}
+            height={diagramPreviewSize?.height}
+            width={diagramPreviewSize?.width}
+          />
         </FlexItem>
       </Flex>
     );
@@ -371,9 +376,8 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
             {renderProcessVariables()}
           </Flex>
         </Flex>
-      )
-    }
-    else if (svg !== null && svg.props.src) {
+      );
+    } else if (svg !== null && svg.props.src) {
       return (
         <Flex direction={{ default: 'column' }}>
           {renderProcessDiagram()}
@@ -383,8 +387,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
           </Flex>
         </Flex>
       );
-    }
-    else {
+    } else {
       return (
         <>
           {renderProcessDetails()}

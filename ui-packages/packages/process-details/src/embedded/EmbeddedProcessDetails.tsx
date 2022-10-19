@@ -36,7 +36,7 @@ export interface Props {
   omittedProcessTimelineEvents?: string[];
   diagramPreviewSize?: DiagramPreviewSize;
   showSwfDiagram: boolean;
-  isStunnerEnabled?:boolean;
+  isStunnerEnabled?: boolean;
 }
 
 export const EmbeddedProcessDetails = React.forwardRef<
