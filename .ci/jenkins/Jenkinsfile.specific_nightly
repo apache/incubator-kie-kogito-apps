@@ -298,11 +298,11 @@ git clone --branch ${kogitoBranch} --depth 1 https://github.com/kiegroup/${kogit
 git clone --branch ${getQuarkusBranch()} --depth 1 https://github.com/quarkusio/quarkus.git
 cd quarkus && ${getBasicMavenCommand('quarkus').withProperty('quickly').getFullRunCommand('clean install')}
 cd ../${droolsRepo}
-mvn -f drools/pom.xml -pl :drools-build-parent versions:compare-dependencies -DremotePom=io.quarkus:quarkus-bom:999-SNAPSHOT -DupdatePropertyVersions=true -DupdateDependencies=true -DgenerateBackupPoms=false
-mvn -f drools/pom.xml -e versions:set-property -Dproperty=version.io.quarkus -DnewVersion=999-SNAPSHOT -DallowSnapshots=true -DgenerateBackupPoms=false
+mvn -pl :drools-build-parent versions:compare-dependencies -DremotePom=io.quarkus:quarkus-bom:999-SNAPSHOT -DupdatePropertyVersions=true -DupdateDependencies=true -DgenerateBackupPoms=false
+mvn -e versions:set-property -Dproperty=version.io.quarkus -DnewVersion=999-SNAPSHOT -DallowSnapshots=true -DgenerateBackupPoms=false
 cd ../${kogitoRuntimesRepo}
-mvn -f kogito-runtimes/pom.xml -pl :kogito-dependencies-bom -pl :kogito-build-parent -pl :kogito-quarkus-bom -pl :kogito-build-no-bom-parent versions:compare-dependencies -DremotePom=io.quarkus:quarkus-bom:999-SNAPSHOT -DupdatePropertyVersions=true -DupdateDependencies=true -DgenerateBackupPoms=false
-mvn -f kogito-runtimes/pom.xml -e versions:set-property -Dproperty=version.io.quarkus -DnewVersion=999-SNAPSHOT -DallowSnapshots=true -DgenerateBackupPoms=false
+mvn -pl :kogito-dependencies-bom -pl :kogito-build-parent -pl :kogito-quarkus-bom -pl :kogito-build-no-bom-parent versions:compare-dependencies -DremotePom=io.quarkus:quarkus-bom:999-SNAPSHOT -DupdatePropertyVersions=true -DupdateDependencies=true -DgenerateBackupPoms=false
+mvn -e versions:set-property -Dproperty=version.io.quarkus -DnewVersion=999-SNAPSHOT -DallowSnapshots=true -DgenerateBackupPoms=false
 cd ..
 """
     }
