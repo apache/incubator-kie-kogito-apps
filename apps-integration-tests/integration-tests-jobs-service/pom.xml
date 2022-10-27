@@ -77,4 +77,35 @@
       </plugin>
     </plugins>
   </build>
+
+  <profiles>
+    <profile>
+      <id>common</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+
+      <properties>
+        <container.image.jobs-service>org.kie.kogito/jobs-service-postgresql:${project.version}</container.image.jobs-service>
+        <container.image.data-index-service-inmemory>org.kie.kogito/data-index-service-inmemory:${project.version}</container.image.data-index-service-inmemory>
+      </properties>
+
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <configuration>
+              <systemPropertyVariables>
+                <container.image.jobs-service>${container.image.jobs-service}</container.image.jobs-service>
+                <container.image.data-index>${container.image.data-index-service-inmemory}</container.image.data-index>
+                <container.image.data-index-service-inmemory>${container.image.data-index-service-inmemory}</container.image.data-index-service-inmemory>
+              </systemPropertyVariables>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+
 </project>

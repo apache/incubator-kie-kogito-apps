@@ -15,17 +15,14 @@
  */
 package org.kie.kogito.it.jobs;
 
-import org.kie.kogito.test.resources.JobServiceQuarkusTestResource;
-import org.kie.kogito.test.resources.KogitoServiceRandomPortQuarkusTestResource;
+import org.kie.kogito.test.resources.JobServiceTestResource;
 
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
-import static org.kie.kogito.test.resources.JobServiceQuarkusTestResource.JOBS_SERVICE_URL;
+import static org.kie.kogito.test.resources.JobServiceComposeQuarkusTestResource.JOBS_SERVICE_URL;
 
 @QuarkusIntegrationTest
-@QuarkusTestResource(KogitoServiceRandomPortQuarkusTestResource.class)
-@QuarkusTestResource(JobServiceQuarkusTestResource.class)
+@JobServiceTestResource
 class ProcessAsyncIT extends BaseProcessAsyncIT {
 
     @Override

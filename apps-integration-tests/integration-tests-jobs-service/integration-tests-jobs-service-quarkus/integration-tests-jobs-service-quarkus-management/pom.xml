@@ -17,10 +17,6 @@
       <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-addons-quarkus-jobs-management</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-health</artifactId>
-    </dependency>
   </dependencies>
 
   <build>
@@ -37,5 +33,4 @@
       </resource>
     </resources>
   </build>
-
 </project>

@@ -16,14 +16,11 @@
 
 package org.kie.kogito.it.jobs;
 
-import org.kie.kogito.test.resources.JobServiceQuarkusTestResource;
-import org.kie.kogito.test.resources.KogitoServiceRandomPortQuarkusTestResource;
+import org.kie.kogito.test.resources.JobServiceTestResource;
 
-import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
-@QuarkusTestResource(KogitoServiceRandomPortQuarkusTestResource.class)
-@QuarkusTestResource(JobServiceQuarkusTestResource.class)
 @QuarkusIntegrationTest
+@JobServiceTestResource
 class CallbackStateTimeoutsIT extends BaseCallbackStateTimeoutsIT {
 }

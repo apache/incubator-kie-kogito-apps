@@ -23,8 +23,16 @@ import org.kie.kogito.testcontainers.JobServiceContainer;
 
 public abstract class AbstractJobServiceResource implements TestResource {
 
-    protected final JobServiceContainer jobService = new JobServiceContainer();
+    protected final JobServiceContainer jobService;
     protected final Map<String, String> properties = new HashMap<>();
+
+    public AbstractJobServiceResource() {
+        this(new JobServiceContainer());
+    }
+
+    public AbstractJobServiceResource(JobServiceContainer jobService) {
+        this.jobService = jobService;
+    }
 
     @Override
     public String getResourceName() {

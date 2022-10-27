@@ -13,14 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.test.resources;
 
-public class JobServiceKafkaQuarkusTestResource extends AbstractJobServiceQuarkusTestResource<JobServiceKafkaResource> {
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-    public static final String JOBS_SERVICE_KAFKA_URL = "kogito.jobs-service-kafka.url";
+import io.quarkus.test.common.QuarkusTestResource;
 
-    public JobServiceKafkaQuarkusTestResource() {
-        super(JOBS_SERVICE_KAFKA_URL, new JobServiceKafkaResource());
-    }
+@QuarkusTestResource(JobServiceComposeQuarkusTestResource.class)
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface JobServiceTestResource {
+
+    boolean enableKafka() default false;
+
+    boolean enablePostgreSQL() default true;
+
+    boolean enableKnativeEventing() default false;
+
+    boolean enableDataIndex() default false;
+
+    int jobServiceInstances() default 1;
 }

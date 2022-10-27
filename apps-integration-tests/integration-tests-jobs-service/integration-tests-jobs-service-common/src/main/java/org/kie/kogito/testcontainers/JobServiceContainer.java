@@ -26,7 +26,8 @@ public class JobServiceContainer extends KogitoGenericContainer<JobServiceContai
     public JobServiceContainer() {
         super(NAME);
         addExposedPort(PORT);
-        waitingFor(Wait.forLogMessage(".*Listening on:.*", 1));
+        //waitingFor(Wait.forLogMessage(".*Listening on:.*", 1));
+        waitingFor(Wait.forHttp("/q/health/live").forStatusCode(200));
         addEnv("QUARKUS_HTTP_PORT", Integer.toString(PORT));
         addEnv("QUARKUS_LOG_CATEGORY__ORG_KIE_KOGITO_JOBS_SERVICE__LEVEL", "DEBUG");
     }
@@ -43,6 +44,14 @@ public class JobServiceContainer extends KogitoGenericContainer<JobServiceContai
 
     public void setKafkaURL(String kafkaURL) {
         addEnv("KAFKA_BOOTSTRAP_SERVERS", kafkaURL);
+    }
+
+    public void setPostgreSQLURL(String jdbcUrl, String reactiveUrl, String username, String password) {
+        addEnv("QUARKUS_DATASOURCE_JDBC_URL", jdbcUrl);
+        addEnv("QUARKUS_DATASOURCE_REACTIVE_URL", reactiveUrl);
+        addEnv("QUARKUS_DATASOURCE_USERNAME", username);
+        addEnv("QUARKUS_DATASOURCE_PASSWORD", password);
+        addEnv("QUARKUS_DATASOURCE_DB-KIND", "postgresql");
     }
 
     public void setQuarkusProfile(String profile) {

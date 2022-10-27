@@ -16,14 +16,14 @@
 
 package org.kie.kogito.it.jobs;
 
-import org.kie.kogito.test.resources.JobServiceKafkaQuarkusTestResource;
+import org.kie.kogito.test.resources.JobServiceTestResource;
 import org.kie.kogito.test.resources.KogitoServiceRandomPortQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusTestResource(KogitoServiceRandomPortQuarkusTestResource.class)
-@QuarkusTestResource(JobServiceKafkaQuarkusTestResource.class)
+@JobServiceTestResource
 @QuarkusIntegrationTest
 class SwitchStateTimeoutsIT extends KafkaBaseSwitchStateTimeoutsIT {
 }
