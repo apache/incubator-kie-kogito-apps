@@ -15,9 +15,10 @@
  */
 package org.kie.kogito.test.resources;
 
-import io.quarkus.test.common.QuarkusTestResourceConfigurableLifecycleManager;
 import org.kie.kogito.testcontainers.KogitoKafkaContainer;
 import org.kie.kogito.testcontainers.KogitoPostgreSqlContainer;
+
+import io.quarkus.test.common.QuarkusTestResourceConfigurableLifecycleManager;
 
 public class JobServiceComposeQuarkusTestResource extends AbstractJobServiceQuarkusTestResource<JobServiceComposeResource>
         implements QuarkusTestResourceConfigurableLifecycleManager<JobServiceTestResource> {
