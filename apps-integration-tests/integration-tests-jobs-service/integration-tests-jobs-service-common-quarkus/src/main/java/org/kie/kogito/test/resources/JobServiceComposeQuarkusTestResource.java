@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.test.resources;
 
+import org.kie.kogito.index.testcontainers.DataIndexInMemoryContainer;
+import org.kie.kogito.testcontainers.JobServiceContainer;
 import org.kie.kogito.testcontainers.KogitoKafkaContainer;
 import org.kie.kogito.testcontainers.KogitoPostgreSqlContainer;
 
@@ -31,9 +33,20 @@ public class JobServiceComposeQuarkusTestResource extends AbstractJobServiceQuar
 
     @Override
     public void init(JobServiceTestResource annotation) {
-        //TODO: set containers according to properties
-        getTestResource()
-                .withDependencyContainer(new KogitoPostgreSqlContainer())
-                .withDependencyContainer(new KogitoKafkaContainer());
+        switch (annotation.persistence()) {
+            case POSTGRESQL:
+                getTestResource().withDependencyContainer(new KogitoPostgreSqlContainer());
+                break;
+            case IN_MEMORY:
+            default:
+                //no persistence
+        }
+        if (annotation.kafkaEnabled()) {
+            getTestResource().withDependencyContainer(new KogitoKafkaContainer());
+            getTestResource().getServiceContainers(JobServiceContainer.class).forEach(c -> c.addEnv("QUARKUS_PROFILE", "events-support"));
+        }
+        if (annotation.dataIndexEnabled()) {
+            getTestResource().withServiceContainer("data-index", new DataIndexInMemoryContainer());
+        }
     }
 }

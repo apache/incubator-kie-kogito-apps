@@ -17,6 +17,7 @@
 package org.kie.kogito.it.jobs;
 
 import org.kie.kogito.test.resources.JobServiceTestResource;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 
@@ -31,8 +32,9 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
 
 @QuarkusIntegrationTest
+@QuarkusTestResource(KafkaQuarkusTestResource.class)
 @QuarkusTestResource(SinkMock.class)
-@JobServiceTestResource
+@JobServiceTestResource(knativeEventingEnabled = true)
 class SwitchStateTimeoutsIT extends BaseSwitchStateTimeoutsIT implements SinkMock.SinkMockAware {
 
     private WireMockServer sink;

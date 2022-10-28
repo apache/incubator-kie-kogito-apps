@@ -100,13 +100,10 @@ public class JobServiceComposeResource extends AbstractJobServiceResource {
                     properties.put("kafka.bootstrap.servers", kafkaURL);
                     properties.put("spring.kafka.bootstrap-servers", kafkaURL);
 
+                    //internal access
                     final String kafkaInternalUrl = hostName(kafka) + ":29092";
                     LOGGER.info("kafkaInternalURL: {}", kafkaInternalUrl);
-                    serviceContainers.values()
-                            .forEach(service -> {
-                                service.addEnv("KAFKA_BOOTSTRAP_SERVERS", kafkaInternalUrl);
-                                service.addEnv("QUARKUS_PROFILE", "events-support");
-                            });
+                    serviceContainers.values().forEach(service -> service.addEnv("KAFKA_BOOTSTRAP_SERVERS", kafkaInternalUrl));
                 });
     }
 

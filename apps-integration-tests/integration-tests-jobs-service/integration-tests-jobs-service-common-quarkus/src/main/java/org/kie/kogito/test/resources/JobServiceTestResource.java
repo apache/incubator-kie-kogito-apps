@@ -23,17 +23,21 @@ import java.lang.annotation.Target;
 import io.quarkus.test.common.QuarkusTestResource;
 
 @QuarkusTestResource(JobServiceComposeQuarkusTestResource.class)
+@QuarkusTestResource(KogitoServiceRandomPortQuarkusTestResource.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface JobServiceTestResource {
 
-    boolean enableKafka() default false;
+    enum Persistence {
+        POSTGRESQL,
+        IN_MEMORY;
+    }
 
-    boolean enablePostgreSQL() default true;
+    boolean kafkaEnabled() default false;
 
-    boolean enableKnativeEventing() default false;
+    Persistence persistence() default Persistence.POSTGRESQL;
 
-    boolean enableDataIndex() default false;
+    boolean knativeEventingEnabled() default false;
 
-    int jobServiceInstances() default 1;
+    boolean dataIndexEnabled() default false;
 }

@@ -16,13 +16,16 @@
 package org.kie.kogito.it.jobs;
 
 import org.kie.kogito.test.resources.JobServiceTestResource;
+import org.kie.kogito.testcontainers.quarkus.KafkaQuarkusTestResource;
 
+import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 import static org.kie.kogito.test.resources.JobServiceComposeQuarkusTestResource.JOBS_SERVICE_URL;
 
 @QuarkusIntegrationTest
-@JobServiceTestResource
+@QuarkusTestResource(KafkaQuarkusTestResource.class)
+@JobServiceTestResource(knativeEventingEnabled = true)
 class ProcessTimerIT extends BaseProcessTimerIT {
 
     @Override
