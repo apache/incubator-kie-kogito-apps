@@ -15,38 +15,67 @@
  */
 package org.kie.kogito.test.resources;
 
-import org.kie.kogito.index.testcontainers.DataIndexInMemoryContainer;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.kie.kogito.index.testcontainers.DataIndexPostgreSqlContainer;
 import org.kie.kogito.testcontainers.JobServiceContainer;
 import org.kie.kogito.testcontainers.KogitoKafkaContainer;
 import org.kie.kogito.testcontainers.KogitoPostgreSqlContainer;
 
 import io.quarkus.test.common.QuarkusTestResourceConfigurableLifecycleManager;
 
-public class JobServiceComposeQuarkusTestResource extends AbstractJobServiceQuarkusTestResource<JobServiceComposeResource>
-        implements QuarkusTestResourceConfigurableLifecycleManager<JobServiceTestResource> {
+public class JobServiceComposeQuarkusTestResource implements QuarkusTestResourceConfigurableLifecycleManager<JobServiceTestResource> {
 
     public static final String JOBS_SERVICE_URL = "kogito.jobs-service.url";
+    public static final String DATA_INDEX_SERVICE_URL = "kogito.data-index.url";
+
+    private JobServiceTestResource annotation;
+
+    private JobServiceComposeResource resource;
 
     public JobServiceComposeQuarkusTestResource() {
-        super(JOBS_SERVICE_URL, new JobServiceComposeResource());
+        resource = new JobServiceComposeResource(new JobServiceContainer());
     }
 
     @Override
     public void init(JobServiceTestResource annotation) {
+        this.annotation = annotation;
         switch (annotation.persistence()) {
             case POSTGRESQL:
-                getTestResource().withDependencyContainer(new KogitoPostgreSqlContainer());
+                resource.withDependencyToService(JobServiceComposeResource.MAIN_SERVICE_ID, new KogitoPostgreSqlContainer());
+                //resource.withSharedDependencyContainer("postgres", new KogitoPostgreSqlContainer());
                 break;
             case IN_MEMORY:
             default:
                 //no persistence
         }
         if (annotation.kafkaEnabled()) {
-            getTestResource().withDependencyContainer(new KogitoKafkaContainer());
-            getTestResource().getServiceContainers(JobServiceContainer.class).forEach(c -> c.addEnv("QUARKUS_PROFILE", "events-support"));
+            resource.withSharedDependencyContainer("kafka", new KogitoKafkaContainer());
+            resource.getServiceContainers(JobServiceContainer.class).forEach(c -> c.addEnv("QUARKUS_PROFILE", "events-support"));
         }
         if (annotation.dataIndexEnabled()) {
-            getTestResource().withServiceContainer("data-index", new DataIndexInMemoryContainer());
+            DataIndexPostgreSqlContainer container = new DataIndexPostgreSqlContainer();
+            container.addProtoFileFolder();
+            KogitoPostgreSqlContainer postgresql = new KogitoPostgreSqlContainer().withInitScript("data_index_create.sql");
+            resource.withServiceContainer("data-index", container, postgresql);
         }
+    }
+
+    @Override
+    public void stop() {
+        resource.stop();
+    }
+
+    @Override
+    public Map<String, String> start() {
+        resource.start();
+        if (annotation.dataIndexEnabled()) {
+            DataIndexPostgreSqlContainer dataIndexContainer = resource.getServiceContainer("data-index");
+            System.setProperty(DATA_INDEX_SERVICE_URL, "http://" + dataIndexContainer.getHost() + ":" + dataIndexContainer.getMappedPort());
+        }
+        Map<String, String> properties = new HashMap<>(resource.getProperties());
+        properties.put(JOBS_SERVICE_URL, "http://localhost:" + resource.getMappedPort());
+        return properties;
     }
 }

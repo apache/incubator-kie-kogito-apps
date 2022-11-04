@@ -42,10 +42,11 @@ public class JobServiceLeaderIT {
 
     @BeforeAll
     public static void init() {
-        resource = new JobServiceComposeResource()
-                .withServiceContainer("job-service-1", new JobServiceContainer())
-                .withServiceContainer("job-service-2", new JobServiceContainer())
-                .withDependencyContainer(new KogitoPostgreSqlContainer());
+        KogitoPostgreSqlContainer postgreSqlContainer = new KogitoPostgreSqlContainer();
+        resource = new JobServiceComposeResource(new JobServiceContainer())
+                .withServiceContainer("job-service-1", new JobServiceContainer(), postgreSqlContainer)
+                .withServiceContainer("job-service-2", new JobServiceContainer(), postgreSqlContainer)
+                .withDependencyToService(JobServiceComposeResource.MAIN_SERVICE_ID, postgreSqlContainer);
         containers = resource.getServiceContainers(JobServiceContainer.class);
         //decrease the leader expiration timeout to 2 seconds to make the test quicker
         containers.stream().forEach(c -> c.withEnv("KOGITO_JOBS_SERVICE_MANAGEMENT_HEARTBEAT_EXPIRATION_IN_SECONDS", "2"));

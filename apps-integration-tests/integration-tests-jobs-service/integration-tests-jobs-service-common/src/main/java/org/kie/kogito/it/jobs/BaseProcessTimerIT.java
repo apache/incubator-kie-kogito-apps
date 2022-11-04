@@ -26,6 +26,7 @@ import io.restassured.response.ValidatableResponse;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
+import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
 public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
@@ -47,6 +48,54 @@ public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
         assertThat(id).isEqualTo(id2);
         await().atMost(TIMEOUT)
                 .untilAsserted(() -> getTimerWithStatusCode(id, 404, TIMERS));
+
+        if (dataIndexUrl() != null) {
+            //data index test
+
+            String query = "{  \"query\" : " +
+                    "\"{ProcessInstances (where : {" +
+                    "    id: {equal : \\\"" + id + "\\\" }" +
+                    "  }) {" +
+                    "    id,processId,state" +
+                    "  }" +
+                    "}\"" +
+                    "}";
+            await()
+                    .atMost(TIMEOUT)
+                    .untilAsserted(() -> given()
+                            .baseUri(dataIndexUrl())
+                            .contentType(ContentType.JSON)
+                            //.body("{ \"query\" : \"{ProcessInstances{ id, processId, state } }\" }")
+                            .body(query)
+                            .when().post("/graphql")
+                            .then().statusCode(200)
+                            .body("data.ProcessInstances.size()", is(1))
+                            .body("data.ProcessInstances[0].id", is(id))
+                            .body("data.ProcessInstances[0].processId", is("timers"))
+                            .body("data.ProcessInstances[0].state", is("COMPLETED")));
+
+            String queryJobs = "{  \"query\" : " +
+                    "\"{Jobs (where : {" +
+                    "    processInstanceId: {equal : \\\"" + id + "\\\" }" +
+                    "  }) {" +
+                    "    status" +
+                    "  }" +
+                    "}\"" +
+                    "}";
+
+            given()
+                    .baseUri(dataIndexUrl())
+                    .contentType(ContentType.JSON)
+                    .body(queryJobs)
+                    .when().post("/graphql")
+                    .then().statusCode(200)
+                    .body("data.Jobs.size()", is(1))
+                    .body("data.Jobs[0].status", is("EXECUTED"));
+        }
+    }
+
+    public String dataIndexUrl() {
+        return null;
     }
 
     @Test

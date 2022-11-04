@@ -18,10 +18,14 @@ package org.kie.kogito.test.resources;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.kie.kogito.testcontainers.KogitoGenericContainer;
 import org.kie.kogito.testcontainers.KogitoKafkaContainer;
@@ -32,30 +36,53 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
 
-public class JobServiceComposeResource extends AbstractJobServiceResource {
+public class JobServiceComposeResource implements TestResource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceComposeResource.class);
-    private final List<GenericContainer<?>> dependencyContainers;
-    private final Map<String, KogitoGenericContainer> serviceContainers;
+    public static final String MAIN_SERVICE_ID = "job-service-main";
+    private final Map<String, GenericContainer<?>> sharedDependencyContainers;
+    private final Map<String, KogitoGenericContainer<?>> serviceContainers;
 
-    public JobServiceComposeResource() {
-        this.dependencyContainers = new ArrayList<>();
+    private final Map<String, List<GenericContainer<?>>> dependencyContainers;
+
+    private final KogitoGenericContainer<?> mainContainer;
+    private Map<String, String> properties;
+
+    public JobServiceComposeResource(KogitoGenericContainer<?> mainContainer) {
+        this.sharedDependencyContainers = new HashMap<>();
+        this.dependencyContainers = new HashMap<>();
         this.serviceContainers = new HashMap<>();
-        withServiceContainer("job-service-main", jobService);
+        this.properties = new HashMap<>();
+        this.mainContainer = mainContainer;
+        withServiceContainer(MAIN_SERVICE_ID, mainContainer);
     }
 
-    public JobServiceComposeResource withServiceContainer(String id, KogitoGenericContainer<?> container) {
+    public JobServiceComposeResource withServiceContainer(String id, KogitoGenericContainer<?> container, GenericContainer<?>... dependency) {
         serviceContainers.put(id, container);
+        List<GenericContainer<?>> containers = dependencyContainers.getOrDefault(id, new ArrayList<>());
+        containers.addAll(Arrays.asList(dependency));
+        dependencyContainers.put(id, containers);
         return this;
     }
 
-    public JobServiceComposeResource withDependencyContainer(GenericContainer<?> container) {
-        dependencyContainers.add(container);
+    public JobServiceComposeResource withDependencyToService(String serviceId, GenericContainer<?> dependency) {
+        List<GenericContainer<?>> containers = dependencyContainers.getOrDefault(serviceId, new ArrayList<>());
+        containers.add(dependency);
+        dependencyContainers.put(serviceId, containers);
+        return this;
+    }
+
+    public JobServiceComposeResource withSharedDependencyContainer(String prefix, GenericContainer<?> container) {
+        sharedDependencyContainers.put(prefix, container);
         return this;
     }
 
     public <T> List<T> getServiceContainers(Class<T> type) {
         return serviceContainers.values().stream().filter(type::isInstance).map(type::cast).collect(Collectors.toList());
+    }
+
+    public <T extends KogitoGenericContainer<?>> T getServiceContainer(String id) {
+        return (T) serviceContainers.get(id);
     }
 
     private String hostName(GenericContainer<?> container) {
@@ -64,22 +91,36 @@ public class JobServiceComposeResource extends AbstractJobServiceResource {
 
     @Override
     public void start() {
-        LOGGER.info("Start JobService with {} test resources", dependencyContainers.stream().map(GenericContainer::getImage).collect(Collectors.toList()));
-        properties.clear();
-
+        LOGGER.info("Start JobService with {} test resources", sharedDependencyContainers.values().stream().map(GenericContainer::getImage).collect(Collectors.toList()));
         final Network network = Network.newNetwork();
-        dependencyContainers.stream()
+        sharedDependencyContainers.values().stream()
                 .map(c -> c.withNetwork(network))
                 .map(c -> c.waitingFor(Wait.forListeningPort()))
                 .forEach(GenericContainer::start);
-
-        configurePostgreSQL();
-        configureKafka();
+        //configurePostgreSQL(sharedDependencyContainers.values(), mainContainer);
+        configureKafka(sharedDependencyContainers.values(), serviceContainers.values().toArray(GenericContainer[]::new));
         startServices(network);
     }
 
     protected void startServices(Network network) {
-        serviceContainers.values()
+        serviceContainers.entrySet()
+                .stream()
+                .map(entry -> {
+                    List<GenericContainer<?>> dependencies = dependencyContainers.getOrDefault(entry.getKey(), Collections.emptyList())
+                            .stream()
+                            .map(container -> container.withNetwork(network))
+                            .map(container -> {
+                                if (!container.isRunning()) {
+                                    container.start();
+                                }
+                                return container;
+                            })
+                            .collect(Collectors.toList());
+                    configurePostgreSQL(dependencies, serviceContainers.get(entry.getKey()));
+                    configureKafka(dependencies, serviceContainers.get(entry.getKey()));
+                    return entry;
+                })
+                .map(Map.Entry::getValue)
                 .forEach(service -> {
                     service.withNetwork(network);
                     service.start();
@@ -87,8 +128,8 @@ public class JobServiceComposeResource extends AbstractJobServiceResource {
                 });
     }
 
-    protected void configureKafka() {
-        dependencyContainers.stream()
+    protected void configureKafka(Collection<GenericContainer<?>> containers, GenericContainer<?>... services) {
+        containers.stream()
                 .filter(KogitoKafkaContainer.class::isInstance)
                 .map(KogitoKafkaContainer.class::cast)
                 .findFirst()
@@ -103,12 +144,12 @@ public class JobServiceComposeResource extends AbstractJobServiceResource {
                     //internal access
                     final String kafkaInternalUrl = hostName(kafka) + ":29092";
                     LOGGER.info("kafkaInternalURL: {}", kafkaInternalUrl);
-                    serviceContainers.values().forEach(service -> service.addEnv("KAFKA_BOOTSTRAP_SERVERS", kafkaInternalUrl));
+                    Stream.of(services).forEach(service -> service.addEnv("KAFKA_BOOTSTRAP_SERVERS", kafkaInternalUrl));
                 });
     }
 
-    protected void configurePostgreSQL() {
-        dependencyContainers.stream()
+    protected void configurePostgreSQL(Collection<GenericContainer<?>> containers, GenericContainer<?>... services) {
+        containers.stream()
                 .filter(KogitoPostgreSqlContainer.class::isInstance)
                 .map(KogitoPostgreSqlContainer.class::cast)
                 .findFirst()
@@ -123,7 +164,7 @@ public class JobServiceComposeResource extends AbstractJobServiceResource {
                     final String database = postgreSql.getDatabaseName();
                     final String reactiveUrl = MessageFormat.format(connectionTemplate, server, port, database);
                     final String jdbcUrl = MessageFormat.format(jdbcConnectionTemplate, server, port, database);
-                    serviceContainers.values()
+                    Stream.of(services)
                             .forEach(service -> {
                                 service.addEnv("QUARKUS_DATASOURCE_JDBC_URL", jdbcUrl);
                                 service.addEnv("QUARKUS_DATASOURCE_REACTIVE_URL", reactiveUrl);
@@ -138,7 +179,22 @@ public class JobServiceComposeResource extends AbstractJobServiceResource {
     public void stop() {
         LOGGER.info("Stopping test resource");
         serviceContainers.values().forEach(GenericContainer::stop);
-        dependencyContainers.forEach(GenericContainer::stop);
+        sharedDependencyContainers.values().forEach(GenericContainer::stop);
+        dependencyContainers.values().stream().flatMap(List::stream).forEach(GenericContainer::stop);
         LOGGER.info("Test resource stopped");
+    }
+
+    @Override
+    public String getResourceName() {
+        return mainContainer.getContainerName();
+    }
+
+    @Override
+    public int getMappedPort() {
+        return mainContainer.getMappedPort(8080);
+    }
+
+    public Map<String, String> getProperties() {
+        return properties;
     }
 }

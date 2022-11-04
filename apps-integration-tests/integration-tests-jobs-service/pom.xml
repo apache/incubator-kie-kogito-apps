@@ -53,30 +53,29 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
-        <!-- overriding parent configuration because quarkus.http.test-port should not be set -->
-        <configuration combine.self="override">
-          <includes>
-            <include>${failsafe.include}</include>
-          </includes>
-          <excludes>
-            <exclude>${failsafe.exclude}</exclude>
-          </excludes>
-          <systemPropertyVariables>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-            <container.image.jobs-service>${container.image.jobs-service}</container.image.jobs-service>
-            <container.image.kafka>${container.image.kafka}</container.image.kafka>
-          </systemPropertyVariables>
-          <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+<!--  <build>-->
+<!--    <plugins>-->
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-failsafe-plugin</artifactId>-->
+<!--        &lt;!&ndash; overriding parent configuration because quarkus.http.test-port should not be set &ndash;&gt;-->
+<!--        <configuration combine.self="override">-->
+<!--          <includes>-->
+<!--            <include>${failsafe.include}</include>-->
+<!--          </includes>-->
+<!--          <excludes>-->
+<!--            <exclude>${failsafe.exclude}</exclude>-->
+<!--          </excludes>-->
+<!--          <systemPropertyVariables>-->
+<!--            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>-->
+<!--            <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>-->
+<!--            <container.image.kafka>${container.image.kafka}</container.image.kafka>-->
+<!--          </systemPropertyVariables>-->
+<!--          <classesDirectory>${project.build.outputDirectory}</classesDirectory>-->
+<!--        </configuration>-->
+<!--      </plugin>-->
+<!--    </plugins>-->
+<!--  </build>-->
 
   <profiles>
     <profile>
@@ -87,6 +86,7 @@
 
       <properties>
         <container.image.jobs-service>org.kie.kogito/jobs-service-postgresql:${project.version}</container.image.jobs-service>
+        <container.image.data-index-service-postgresql>org.kie.kogito/data-index-service-postgresql:${project.version}</container.image.data-index-service-postgresql>
         <container.image.data-index-service-inmemory>org.kie.kogito/data-index-service-inmemory:${project.version}</container.image.data-index-service-inmemory>
       </properties>
 
@@ -97,8 +97,12 @@
             <artifactId>maven-failsafe-plugin</artifactId>
             <configuration>
               <systemPropertyVariables>
+                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
+                <container.image.kafka>${container.image.kafka}</container.image.kafka>
+
                 <container.image.jobs-service>${container.image.jobs-service}</container.image.jobs-service>
-                <container.image.data-index>${container.image.data-index-service-inmemory}</container.image.data-index>
+                <container.image.data-index-service-postgresql>${container.image.data-index-service-postgresql}</container.image.data-index-service-postgresql>
                 <container.image.data-index-service-inmemory>${container.image.data-index-service-inmemory}</container.image.data-index-service-inmemory>
               </systemPropertyVariables>
             </configuration>
