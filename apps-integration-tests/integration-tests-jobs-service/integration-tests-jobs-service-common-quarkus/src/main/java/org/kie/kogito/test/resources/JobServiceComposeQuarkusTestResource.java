@@ -32,10 +32,10 @@ public class JobServiceComposeQuarkusTestResource implements QuarkusTestResource
 
     private JobServiceTestResource annotation;
 
-    private JobServiceComposeResource resource;
+    private ComposeTestResource resource;
 
     public JobServiceComposeQuarkusTestResource() {
-        resource = new JobServiceComposeResource(new JobServiceContainer());
+        resource = new ComposeTestResource(new JobServiceContainer());
     }
 
     @Override
@@ -43,7 +43,7 @@ public class JobServiceComposeQuarkusTestResource implements QuarkusTestResource
         this.annotation = annotation;
         switch (annotation.persistence()) {
             case POSTGRESQL:
-                resource.withDependencyToService(JobServiceComposeResource.MAIN_SERVICE_ID, new KogitoPostgreSqlContainer());
+                resource.withDependencyToService(ComposeTestResource.MAIN_SERVICE_ID, new KogitoPostgreSqlContainer());
                 //resource.withSharedDependencyContainer("postgres", new KogitoPostgreSqlContainer());
                 break;
             case IN_MEMORY:
@@ -70,12 +70,15 @@ public class JobServiceComposeQuarkusTestResource implements QuarkusTestResource
     @Override
     public Map<String, String> start() {
         resource.start();
+        Map<String, String> properties = new HashMap<>(resource.getProperties());
         if (annotation.dataIndexEnabled()) {
             DataIndexPostgreSqlContainer dataIndexContainer = resource.getServiceContainer("data-index");
             System.setProperty(DATA_INDEX_SERVICE_URL, "http://" + dataIndexContainer.getHost() + ":" + dataIndexContainer.getMappedPort());
+            properties.put(DATA_INDEX_SERVICE_URL, "http://" + dataIndexContainer.getHost() + ":" + dataIndexContainer.getMappedPort());
         }
-        Map<String, String> properties = new HashMap<>(resource.getProperties());
+        System.setProperty(JOBS_SERVICE_URL, "http://localhost:" + resource.getMappedPort());
         properties.put(JOBS_SERVICE_URL, "http://localhost:" + resource.getMappedPort());
+
         return properties;
     }
 }

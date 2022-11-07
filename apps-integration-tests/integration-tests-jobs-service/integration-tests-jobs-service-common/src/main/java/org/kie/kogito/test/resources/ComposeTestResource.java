@@ -36,10 +36,10 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
 
-public class JobServiceComposeResource implements TestResource {
+public class ComposeTestResource implements TestResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceComposeResource.class);
-    public static final String MAIN_SERVICE_ID = "job-service-main";
+    private static final Logger LOGGER = LoggerFactory.getLogger(ComposeTestResource.class);
+    public static final String MAIN_SERVICE_ID = "job-service-main";//fixme
     private final Map<String, GenericContainer<?>> sharedDependencyContainers;
     private final Map<String, KogitoGenericContainer<?>> serviceContainers;
 
@@ -48,7 +48,7 @@ public class JobServiceComposeResource implements TestResource {
     private final KogitoGenericContainer<?> mainContainer;
     private Map<String, String> properties;
 
-    public JobServiceComposeResource(KogitoGenericContainer<?> mainContainer) {
+    public ComposeTestResource(KogitoGenericContainer<?> mainContainer) {
         this.sharedDependencyContainers = new HashMap<>();
         this.dependencyContainers = new HashMap<>();
         this.serviceContainers = new HashMap<>();
@@ -57,7 +57,7 @@ public class JobServiceComposeResource implements TestResource {
         withServiceContainer(MAIN_SERVICE_ID, mainContainer);
     }
 
-    public JobServiceComposeResource withServiceContainer(String id, KogitoGenericContainer<?> container, GenericContainer<?>... dependency) {
+    public ComposeTestResource withServiceContainer(String id, KogitoGenericContainer<?> container, GenericContainer<?>... dependency) {
         serviceContainers.put(id, container);
         List<GenericContainer<?>> containers = dependencyContainers.getOrDefault(id, new ArrayList<>());
         containers.addAll(Arrays.asList(dependency));
@@ -65,14 +65,14 @@ public class JobServiceComposeResource implements TestResource {
         return this;
     }
 
-    public JobServiceComposeResource withDependencyToService(String serviceId, GenericContainer<?> dependency) {
+    public ComposeTestResource withDependencyToService(String serviceId, GenericContainer<?> dependency) {
         List<GenericContainer<?>> containers = dependencyContainers.getOrDefault(serviceId, new ArrayList<>());
         containers.add(dependency);
         dependencyContainers.put(serviceId, containers);
         return this;
     }
 
-    public JobServiceComposeResource withSharedDependencyContainer(String prefix, GenericContainer<?> container) {
+    public ComposeTestResource withSharedDependencyContainer(String prefix, GenericContainer<?> container) {
         sharedDependencyContainers.put(prefix, container);
         return this;
     }

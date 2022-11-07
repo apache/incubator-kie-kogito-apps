@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.test.resources.JobServiceComposeResource;
+import org.kie.kogito.test.resources.ComposeTestResource;
 import org.kie.kogito.testcontainers.JobServiceContainer;
 import org.kie.kogito.testcontainers.KogitoPostgreSqlContainer;
 import org.slf4j.Logger;
@@ -35,7 +35,7 @@ import static org.awaitility.Awaitility.await;
 
 public class JobServiceLeaderIT {
 
-    private static JobServiceComposeResource resource;
+    private static ComposeTestResource resource;
     private final static Logger logger = LoggerFactory.getLogger(JobServiceLeaderIT.class);
 
     private static List<JobServiceContainer> containers;
@@ -43,10 +43,10 @@ public class JobServiceLeaderIT {
     @BeforeAll
     public static void init() {
         KogitoPostgreSqlContainer postgreSqlContainer = new KogitoPostgreSqlContainer();
-        resource = new JobServiceComposeResource(new JobServiceContainer())
+        resource = new ComposeTestResource(new JobServiceContainer())
                 .withServiceContainer("job-service-1", new JobServiceContainer(), postgreSqlContainer)
                 .withServiceContainer("job-service-2", new JobServiceContainer(), postgreSqlContainer)
-                .withDependencyToService(JobServiceComposeResource.MAIN_SERVICE_ID, postgreSqlContainer);
+                .withDependencyToService(ComposeTestResource.MAIN_SERVICE_ID, postgreSqlContainer);
         containers = resource.getServiceContainers(JobServiceContainer.class);
         //decrease the leader expiration timeout to 2 seconds to make the test quicker
         containers.stream().forEach(c -> c.withEnv("KOGITO_JOBS_SERVICE_MANAGEMENT_HEARTBEAT_EXPIRATION_IN_SECONDS", "2"));
