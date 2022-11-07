@@ -57,7 +57,7 @@ public class JobServiceComposeQuarkusTestResource implements QuarkusTestResource
         if (annotation.dataIndexEnabled()) {
             DataIndexPostgreSqlContainer container = new DataIndexPostgreSqlContainer();
             container.addProtoFileFolder();
-            KogitoPostgreSqlContainer postgresql = new KogitoPostgreSqlContainer().withInitScript("data_index_create.sql");
+            KogitoPostgreSqlContainer postgresql = new KogitoPostgreSqlContainer().withInitScript("data_index_postgresql_create.sql");
             resource.withServiceContainer("data-index", container, postgresql);
         }
     }
