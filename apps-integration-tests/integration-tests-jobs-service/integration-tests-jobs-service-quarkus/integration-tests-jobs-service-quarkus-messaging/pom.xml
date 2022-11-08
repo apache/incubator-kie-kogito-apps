@@ -48,8 +48,23 @@
       </resource>
     </resources>
 
-
     <plugins>
+      <plugin>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-maven-plugin</artifactId>
+        <version>${version.io.quarkus}</version>
+        <configuration>
+          <skipOriginalJarRename>true</skipOriginalJarRename>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>com.coderplus.maven.plugins</groupId>
         <artifactId>copy-rename-maven-plugin</artifactId>
