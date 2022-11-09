@@ -43,7 +43,7 @@ public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
     //Timers Tests
     @Test
     public void testTimers() {
-        String id = createTimer(new RequestPayload("PT02S"), TIMERS);
+        String id = createTimer(new RequestPayload("PT01S"), TIMERS);
         Object id2 = getTimerById(id, TIMERS);
         assertThat(id).isEqualTo(id2);
         await().atMost(TIMEOUT)
@@ -120,19 +120,20 @@ public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
 
     @Test
     public void testDeleteTimerCycle() {
-        String id = createTimer(new RequestPayload("R20/PT1S"), TIMERS_CYCLE);
+        String id = createTimer(new RequestPayload("R20/PT10S"), TIMERS_CYCLE);
         String id2 = getTimerById(id, TIMERS_CYCLE);
         assertThat(id).isEqualTo(id2);
         deleteTimer(id, TIMERS_CYCLE);
         await().atMost(TIMEOUT)
                 .untilAsserted(() -> getTimerWithStatusCode(id, 404, TIMERS_CYCLE));
-        assertJobsAndProcessOnDataIndex(TIMERS_CYCLE, id, "ABORTED", "CANCELED");
+        await().atMost(TIMEOUT)
+                .untilAsserted(() -> assertJobsAndProcessOnDataIndex(TIMERS_CYCLE, id, "ABORTED", "CANCELED"));
     }
 
     //Boundary Timers Tests
     @Test
     public void testBoundaryTimersOnTask() {
-        String id = createTimer(new RequestPayload("PT02S"), TIMERS_ON_TASK);
+        String id = createTimer(new RequestPayload("PT01S"), TIMERS_ON_TASK);
         String id2 = getTimerById(id, TIMERS_ON_TASK);
         assertThat(id).isEqualTo(id2);
         await().atMost(TIMEOUT)
