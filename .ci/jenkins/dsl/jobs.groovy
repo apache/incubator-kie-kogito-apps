@@ -46,11 +46,11 @@ Map getMultijobPRConfig(Folder jobFolder) {
                     BUILD_MVN_OPTS_CURRENT: jobFolder.isQuarkusLTS() ? '' : jobFolder.isNative() || jobFolder.isMandrel() ? '-Pkogito-apps-downstream-native' : '-Pkogito-apps-downstream'
                 ],
             ], [
-                id: 'kogito-springboot-examples',
+                id: 'serverless-workflow-examples',
                 repository: 'kogito-examples',
                 dependsOn: 'kogito-apps',
                 env : [
-                    KOGITO_EXAMPLES_SUBFOLDER_POM: 'kogito-springboot-examples/',
+                    KOGITO_EXAMPLES_SUBFOLDER_POM: 'serverless-workflow-examples/',
                     BUILD_MVN_OPTS_CURRENT: jobFolder.isQuarkusLTS() ? '' : jobFolder.isNative() || jobFolder.isMandrel() ? '-Pkogito-apps-downstream-native' : '-Pkogito-apps-downstream'
                 ],
             ]
