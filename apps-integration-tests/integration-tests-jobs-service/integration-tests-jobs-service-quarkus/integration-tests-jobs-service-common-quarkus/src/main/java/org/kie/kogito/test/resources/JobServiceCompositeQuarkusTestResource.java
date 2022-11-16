@@ -25,17 +25,17 @@ import org.kie.kogito.testcontainers.KogitoPostgreSqlContainer;
 
 import io.quarkus.test.common.QuarkusTestResourceConfigurableLifecycleManager;
 
-public class JobServiceComposeQuarkusTestResource implements QuarkusTestResourceConfigurableLifecycleManager<JobServiceTestResource> {
+public class JobServiceCompositeQuarkusTestResource implements QuarkusTestResourceConfigurableLifecycleManager<JobServiceTestResource> {
 
     public static final String JOBS_SERVICE_URL = "kogito.jobs-service.url";
     public static final String DATA_INDEX_SERVICE_URL = "kogito.data-index.url";
 
     private JobServiceTestResource annotation;
 
-    private ComposeTestResource resource;
+    private CompositeTestResource resource;
 
-    public JobServiceComposeQuarkusTestResource() {
-        resource = new ComposeTestResource(new JobServiceContainer());
+    public JobServiceCompositeQuarkusTestResource() {
+        resource = new CompositeTestResource(new JobServiceContainer());
     }
 
     @Override
@@ -43,7 +43,7 @@ public class JobServiceComposeQuarkusTestResource implements QuarkusTestResource
         this.annotation = annotation;
         switch (annotation.persistence()) {
             case POSTGRESQL:
-                resource.withDependencyToService(ComposeTestResource.MAIN_SERVICE_ID, new KogitoPostgreSqlContainer());
+                resource.withDependencyToService(CompositeTestResource.MAIN_SERVICE_ID, new KogitoPostgreSqlContainer());
                 //resource.withSharedDependencyContainer("postgres", new KogitoPostgreSqlContainer());
                 break;
             case IN_MEMORY:

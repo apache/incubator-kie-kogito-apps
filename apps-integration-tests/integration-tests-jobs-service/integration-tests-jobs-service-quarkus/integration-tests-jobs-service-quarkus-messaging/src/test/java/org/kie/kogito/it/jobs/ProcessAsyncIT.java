@@ -19,7 +19,7 @@ import org.kie.kogito.test.resources.JobServiceTestResource;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
-import static org.kie.kogito.test.resources.JobServiceComposeQuarkusTestResource.JOBS_SERVICE_URL;
+import static org.kie.kogito.test.resources.JobServiceCompositeQuarkusTestResource.JOBS_SERVICE_URL;
 
 @QuarkusIntegrationTest
 @JobServiceTestResource(kafkaEnabled = true)

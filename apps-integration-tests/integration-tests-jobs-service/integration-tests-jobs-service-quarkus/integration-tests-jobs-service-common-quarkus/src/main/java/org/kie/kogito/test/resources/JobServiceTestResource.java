@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
 
 import io.quarkus.test.common.QuarkusTestResource;
 
-@QuarkusTestResource(JobServiceComposeQuarkusTestResource.class)
+@QuarkusTestResource(JobServiceCompositeQuarkusTestResource.class)
 @QuarkusTestResource(KogitoServiceRandomPortQuarkusTestResource.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

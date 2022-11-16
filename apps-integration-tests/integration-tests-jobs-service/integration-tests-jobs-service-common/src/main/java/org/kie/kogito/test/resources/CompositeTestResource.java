@@ -36,19 +36,19 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.wait.strategy.Wait;
 
-public class ComposeTestResource implements TestResource {
+public class CompositeTestResource implements TestResource {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ComposeTestResource.class);
-    public static final String MAIN_SERVICE_ID = "job-service-main";//fixme
+    private static final Logger LOGGER = LoggerFactory.getLogger(CompositeTestResource.class);
+    public static final String MAIN_SERVICE_ID = "main-service";
     private final Map<String, GenericContainer<?>> sharedDependencyContainers;
     private final Map<String, KogitoGenericContainer<?>> serviceContainers;
 
     private final Map<String, List<GenericContainer<?>>> dependencyContainers;
 
     private final KogitoGenericContainer<?> mainContainer;
-    private Map<String, String> properties;
+    private final Map<String, String> properties;
 
-    public ComposeTestResource(KogitoGenericContainer<?> mainContainer) {
+    public CompositeTestResource(KogitoGenericContainer<?> mainContainer) {
         this.sharedDependencyContainers = new HashMap<>();
         this.dependencyContainers = new HashMap<>();
         this.serviceContainers = new HashMap<>();
@@ -57,22 +57,19 @@ public class ComposeTestResource implements TestResource {
         withServiceContainer(MAIN_SERVICE_ID, mainContainer);
     }
 
-    public ComposeTestResource withServiceContainer(String id, KogitoGenericContainer<?> container, GenericContainer<?>... dependency) {
+    public CompositeTestResource withServiceContainer(String id, KogitoGenericContainer<?> container, GenericContainer<?>... dependency) {
         serviceContainers.put(id, container);
-        List<GenericContainer<?>> containers = dependencyContainers.getOrDefault(id, new ArrayList<>());
-        containers.addAll(Arrays.asList(dependency));
-        dependencyContainers.put(id, containers);
-        return this;
+        return withDependencyToService(id, dependency);
     }
 
-    public ComposeTestResource withDependencyToService(String serviceId, GenericContainer<?> dependency) {
+    public CompositeTestResource withDependencyToService(String serviceId, GenericContainer<?>... dependency) {
         List<GenericContainer<?>> containers = dependencyContainers.getOrDefault(serviceId, new ArrayList<>());
-        containers.add(dependency);
+        containers.addAll(Arrays.asList(dependency));
         dependencyContainers.put(serviceId, containers);
         return this;
     }
 
-    public ComposeTestResource withSharedDependencyContainer(String prefix, GenericContainer<?> container) {
+    public CompositeTestResource withSharedDependencyContainer(String prefix, GenericContainer<?> container) {
         sharedDependencyContainers.put(prefix, container);
         return this;
     }
@@ -91,14 +88,13 @@ public class ComposeTestResource implements TestResource {
 
     @Override
     public void start() {
-        LOGGER.info("Start JobService with {} test resources", sharedDependencyContainers.values().stream().map(GenericContainer::getImage).collect(Collectors.toList()));
+        LOGGER.info("Starting {} Test Resource", mainContainer);
         final Network network = Network.newNetwork();
         sharedDependencyContainers.values().stream()
                 .map(c -> c.withNetwork(network))
                 .map(c -> c.waitingFor(Wait.forListeningPort()))
                 .forEach(GenericContainer::start);
-        //configurePostgreSQL(sharedDependencyContainers.values(), mainContainer);
-        configureKafka(sharedDependencyContainers.values(), serviceContainers.values().toArray(GenericContainer[]::new));
+        configureKafkaToService(sharedDependencyContainers.values(), serviceContainers.values().toArray(GenericContainer[]::new));
         startServices(network);
     }
 
@@ -116,45 +112,41 @@ public class ComposeTestResource implements TestResource {
                                 return container;
                             })
                             .collect(Collectors.toList());
-                    configurePostgreSQL(dependencies, serviceContainers.get(entry.getKey()));
-                    configureKafka(dependencies, serviceContainers.get(entry.getKey()));
+                    configurePostgreSQLToService(dependencies, serviceContainers.get(entry.getKey()));
+                    configureKafkaToService(dependencies, serviceContainers.get(entry.getKey()));
                     return entry;
                 })
                 .map(Map.Entry::getValue)
                 .forEach(service -> {
                     service.withNetwork(network);
                     service.start();
-                    LOGGER.info("JobService test resource started");
+                    LOGGER.info("Test resource started");
                 });
     }
 
-    protected void configureKafka(Collection<GenericContainer<?>> containers, GenericContainer<?>... services) {
+    protected void configureKafkaToService(Collection<GenericContainer<?>> containers, GenericContainer<?>... services) {
         containers.stream()
                 .filter(KogitoKafkaContainer.class::isInstance)
                 .map(KogitoKafkaContainer.class::cast)
                 .findFirst()
                 .ifPresent(kafka -> {
-                    LOGGER.info("Configure Kafka");
                     // external access url
                     String kafkaURL = kafka.getBootstrapServers();
-                    LOGGER.info("kafkaURL: {}", kafkaURL);
                     properties.put("kafka.bootstrap.servers", kafkaURL);
                     properties.put("spring.kafka.bootstrap-servers", kafkaURL);
 
                     //internal access
                     final String kafkaInternalUrl = hostName(kafka) + ":29092";
-                    LOGGER.info("kafkaInternalURL: {}", kafkaInternalUrl);
                     Stream.of(services).forEach(service -> service.addEnv("KAFKA_BOOTSTRAP_SERVERS", kafkaInternalUrl));
                 });
     }
 
-    protected void configurePostgreSQL(Collection<GenericContainer<?>> containers, GenericContainer<?>... services) {
+    protected void configurePostgreSQLToService(Collection<GenericContainer<?>> containers, GenericContainer<?>... services) {
         containers.stream()
                 .filter(KogitoPostgreSqlContainer.class::isInstance)
                 .map(KogitoPostgreSqlContainer.class::cast)
                 .findFirst()
                 .ifPresent(postgreSql -> {
-                    LOGGER.info("Configure PostgreSQL");
                     final String connectionTemplate = "postgresql://{0}:{1}/{2}";
                     final String jdbcConnectionTemplate = "jdbc:postgresql://{0}:{1}/{2}";
                     final String server = hostName(postgreSql);
@@ -181,7 +173,6 @@ public class ComposeTestResource implements TestResource {
         serviceContainers.values().forEach(GenericContainer::stop);
         sharedDependencyContainers.values().forEach(GenericContainer::stop);
         dependencyContainers.values().stream().flatMap(List::stream).forEach(GenericContainer::stop);
-        LOGGER.info("Test resource stopped");
     }
 
     @Override

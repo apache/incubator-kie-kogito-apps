@@ -26,8 +26,8 @@ import io.restassured.response.ValidatableResponse;
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.kie.kogito.test.TestUtils.assertJobsAndProcessOnDataIndex;
 
 public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
 
@@ -48,7 +48,7 @@ public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
         assertThat(id).isEqualTo(id2);
         await().atMost(TIMEOUT)
                 .untilAsserted(() -> getTimerWithStatusCode(id, 404, TIMERS));
-        assertJobsAndProcessOnDataIndex(TIMERS, id, "COMPLETED", "EXECUTED");
+        assertJobsAndProcessOnDataIndex(dataIndexUrl(), TIMERS, id, "COMPLETED", "EXECUTED", TIMEOUT);
     }
 
     public String dataIndexUrl() {
@@ -61,50 +61,7 @@ public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
         Object id2 = deleteTimer(id, TIMERS);
         assertThat(id).isEqualTo(id2);
         getTimerWithStatusCode(id, 404, TIMERS);
-        assertJobsAndProcessOnDataIndex(TIMERS, id, "ABORTED", "CANCELED");
-    }
-
-    private void assertJobsAndProcessOnDataIndex(String processId, String processInstanceId, String processStatus, String jobStatus) {
-        if (dataIndexUrl() != null) {
-            String query = "{  \"query\" : " +
-                    "\"{ProcessInstances (where : {" +
-                    "    id: {equal : \\\"" + processInstanceId + "\\\" }" +
-                    "  }) {" +
-                    "    id,processId,state" +
-                    "  }" +
-                    "}\"" +
-                    "}";
-            await()
-                    .atMost(TIMEOUT)
-                    .untilAsserted(() -> given()
-                            .baseUri(dataIndexUrl())
-                            .contentType(ContentType.JSON)
-                            .body(query)
-                            .when().post("/graphql")
-                            .then().statusCode(200)
-                            .body("data.ProcessInstances.size()", is(1))
-                            .body("data.ProcessInstances[0].id", is(processInstanceId))
-                            .body("data.ProcessInstances[0].processId", is(processId))
-                            .body("data.ProcessInstances[0].state", is(processStatus)));
-
-            String queryJobs = "{  \"query\" : " +
-                    "\"{Jobs (where : {" +
-                    "    processInstanceId: {equal : \\\"" + processInstanceId + "\\\" }" +
-                    "  }) {" +
-                    "    status" +
-                    "  }" +
-                    "}\"" +
-                    "}";
-
-            given()
-                    .baseUri(dataIndexUrl())
-                    .contentType(ContentType.JSON)
-                    .body(queryJobs)
-                    .when().post("/graphql")
-                    .then().statusCode(200)
-                    .body("data.Jobs.size()", is(1))
-                    .body("data.Jobs[0].status", is(jobStatus));
-        }
+        assertJobsAndProcessOnDataIndex(dataIndexUrl(), TIMERS, id, "ABORTED", "CANCELED", TIMEOUT);
     }
 
     //Cycle Timers Tests
@@ -115,7 +72,7 @@ public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
         assertThat(id).isEqualTo(id2);
         await().atMost(TIMEOUT)
                 .untilAsserted(() -> getTimerWithStatusCode(id, 404, TIMERS_CYCLE));
-        assertJobsAndProcessOnDataIndex(TIMERS_CYCLE, id, "COMPLETED", "EXECUTED");
+        assertJobsAndProcessOnDataIndex(dataIndexUrl(), TIMERS_CYCLE, id, "COMPLETED", "EXECUTED", TIMEOUT);
     }
 
     @Test
@@ -127,7 +84,7 @@ public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
         await().atMost(TIMEOUT)
                 .untilAsserted(() -> getTimerWithStatusCode(id, 404, TIMERS_CYCLE));
         await().atMost(TIMEOUT)
-                .untilAsserted(() -> assertJobsAndProcessOnDataIndex(TIMERS_CYCLE, id, "ABORTED", "CANCELED"));
+                .untilAsserted(() -> assertJobsAndProcessOnDataIndex(dataIndexUrl(), TIMERS_CYCLE, id, "ABORTED", "CANCELED", TIMEOUT));
     }
 
     //Boundary Timers Tests
@@ -138,7 +95,7 @@ public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
         assertThat(id).isEqualTo(id2);
         await().atMost(TIMEOUT)
                 .untilAsserted(() -> getTimerWithStatusCode(id, 404, TIMERS_ON_TASK));
-        assertJobsAndProcessOnDataIndex(TIMERS_ON_TASK, id, "COMPLETED", "EXECUTED");
+        assertJobsAndProcessOnDataIndex(dataIndexUrl(), TIMERS_ON_TASK, id, "COMPLETED", "EXECUTED", TIMEOUT);
     }
 
     @Test
@@ -147,7 +104,7 @@ public abstract class BaseProcessTimerIT implements JobServiceHealthAware {
         String id2 = getTimerById(id, TIMERS_ON_TASK);
         assertThat(id).isEqualTo(id2);
         deleteTimer(id, TIMERS_ON_TASK);
-        assertJobsAndProcessOnDataIndex(TIMERS_ON_TASK, id, "ABORTED", "CANCELED");
+        assertJobsAndProcessOnDataIndex(dataIndexUrl(), TIMERS_ON_TASK, id, "ABORTED", "CANCELED", TIMEOUT);
     }
 
     private ValidatableResponse getTimerWithStatusCode(String id, int code, String path) {
