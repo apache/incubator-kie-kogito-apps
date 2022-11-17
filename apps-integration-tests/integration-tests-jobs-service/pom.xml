@@ -32,6 +32,12 @@
         <artifactId>integration-tests-jobs-service-common-quarkus</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>integration-tests-jobs-service-common-quarkus</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 

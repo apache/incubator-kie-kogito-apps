@@ -69,6 +69,12 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
+      <artifactId>integration-tests-jobs-service-common-quarkus</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-quarkus-test-utils</artifactId>
       <scope>test</scope>
     </dependency>
