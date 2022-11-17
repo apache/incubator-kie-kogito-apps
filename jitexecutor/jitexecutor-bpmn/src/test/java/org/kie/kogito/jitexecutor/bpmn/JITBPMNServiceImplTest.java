@@ -77,7 +77,7 @@ class JITBPMNServiceImplTest {
                 RuntimeException.class,
                 () -> JITBPMNServiceImpl.parseModelXml(invalidModel),
                 "Expected parseModelXml to throw, but it didn't");
-        String expectedMessage = "Could not parse";
+        String expectedMessage = "Could not find message _T6T0kEcTEDuygKsUt0on2Q____";
         assertThat(thrown.getMessage()).contains(expectedMessage);
     }
 
