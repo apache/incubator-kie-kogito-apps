@@ -43,7 +43,7 @@ import org.kie.kogito.jitexecutor.dmn.responses.JITDMNMessage;
 import org.kie.kogito.jitexecutor.dmn.utils.ResolveByKey;
 
 @Path("jitdmn/validate")
-public class ValidationResource {
+public class DMNValidationResource {
 
     // trick for resolver/implementation for NI
     static final DMNValidator validator = DMNValidatorFactory.newValidator(Arrays.asList(new ExtendedDMNProfile()));
