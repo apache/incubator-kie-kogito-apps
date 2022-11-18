@@ -18,77 +18,185 @@ package org.kie.kogito.jitexecutor.bpmn;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Objects;
 
 import org.drools.io.FileSystemResource;
 import org.drools.util.IoUtils;
-import org.junit.jupiter.api.BeforeAll;
+import org.drools.util.StringUtils;
+import org.jbpm.process.core.impl.ProcessImpl;
+import org.jbpm.process.core.validation.ProcessValidationError;
+import org.jbpm.process.core.validation.impl.ProcessValidationErrorImpl;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.api.definition.process.Process;
+import org.kie.api.io.Resource;
 import org.kie.kogito.jitexecutor.bpmn.responses.JITBPMNValidationResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_INVALID_BPMN2_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_INVALID_BPMN2_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN2_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN2_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.UNPARSABLE_BPMN2_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.getFilePath;
 
 class JITBPMNServiceImplTest {
 
-    private static String validModel;
-    private static String invalidModel;
+    private static final JITBPMNService jitBpmnService  = new JITBPMNServiceImpl();
 
-    private static JITBPMNService jitBpmnService;
+    // BPMN
 
-    @BeforeAll
-    public static void setup() throws IOException {
-        validModel = new String(IoUtils.readBytesFromInputStream(JITBPMNService.class.getResourceAsStream("/ValidModel.bpmn")));
-        invalidModel = new String(IoUtils.readBytesFromInputStream(JITBPMNService.class.getResourceAsStream("/InvalidModel.bpmn")));
+    @Disabled("Correct testing file unavailable model")
+    @Test
+    void validateModel_SingleValidBPMN() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_BPMN_FILE))));
+        JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
+        assertThat(retrieved).isNotNull();
+        assertThat(retrieved.getErrors()).isNotNull().isEmpty();
+    }
 
-        jitBpmnService = new JITBPMNServiceImpl();
+    @Disabled("Correct testing file unavailable model")
+    @Test
+    void validateModel_MultipleValidBPMN() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(getFilePath(MULTIPLE_BPMN_FILE)))));
+        JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
+        assertThat(retrieved).isNotNull();
+        assertThat(retrieved.getErrors()).isNotNull().isEmpty();
+    }
+
+
+    @Test
+    void parseModelXml_SingleValidBPMN() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_BPMN_FILE))));
+        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelXml(toValidate);
+        assertThat(retrieved).isNotNull().hasSize(1);
+    }
+
+    @Disabled("Correct testing file unavailable model")
+    @Test
+    void parseModelXml_MultipleValidBPMN() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(getFilePath(MULTIPLE_BPMN_FILE)))));
+        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelXml(toValidate);
+        assertThat(retrieved).isNotNull().hasSize(2);
     }
 
     @Test
-    void evaluateModel_SingleValid() {
-        JITBPMNValidationResult retrieved = jitBpmnService.evaluateModel(validModel);
+    void parseModelResource_SingleValidBPMN() {
+        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(getFilePath(SINGLE_BPMN_FILE))));
+        assertThat(retrieved).isNotNull().hasSize(1);
+    }
+
+    @Disabled("Correct testing file unavailable model")
+    @Test
+    void parseModelResource_MultipleValidBPMN() {
+        //String fileName = "src/test/resources/SingleProcess.bpmn";
+        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(MULTIPLE_BPMN_FILE)));
+        assertThat(retrieved).isNotNull().hasSize(2);
+    }
+
+
+
+    // BPMN2
+
+    @Test
+    void validateModel_SingleValidBPMN2() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_BPMN2_FILE))));
+        JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
         assertThat(retrieved).isNotNull();
         assertThat(retrieved.getErrors()).isNotNull().isEmpty();
     }
 
     @Test
-    void evaluateModel_SingleInvalid() {
-        JITBPMNValidationResult retrieved = jitBpmnService.evaluateModel(invalidModel);
+    void validateModel_MultipleValidBPMN2() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(MULTIPLE_BPMN2_FILE))));
+        JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
+        assertThat(retrieved).isNotNull();
+        assertThat(retrieved.getErrors()).isNotNull().isEmpty();
+    }
+
+    @Test
+    void validateModel_SingleInvalidBPMN2() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_INVALID_BPMN2_FILE))));
+        JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
         assertThat(retrieved).isNotNull();
         assertThat(retrieved.getErrors()).isNotNull().hasSize(1);
+        assertThat(retrieved.getErrors()).contains("Could not find message _T6T0kEcTEDuygKsUt0on2Q____");
+    }
+
+    @Disabled("Correct testing file unavailable model")
+    @Test
+    void validateModel_MultipleInvalidBPMN2() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(MULTIPLE_INVALID_BPMN2_FILE))));
+        JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
+        assertThat(retrieved).isNotNull();
+        assertThat(retrieved.getErrors()).isNotNull().hasSize(1);
+        assertThat(retrieved.getErrors()).contains("Could not find target node for connection:_5");
     }
 
     @Test
-    void parseModelXml_SingleValid() {
-        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelXml(validModel);
+    void parseModelXml_SingleValidBPMN2() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_BPMN2_FILE))));
+        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelXml(toValidate);
         assertThat(retrieved).isNotNull().hasSize(1);
     }
 
     @Test
-    void parseModelResource_SingleValid() {
-        String fileName = "src/test/resources/ProcessWithDocumentation.bpmn";
-        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(fileName)));
-        assertThat(retrieved).isNotNull().hasSize(1);
+    void parseModelXml_MultipleValidBPMN2() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(MULTIPLE_BPMN2_FILE))));
+        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelXml(toValidate);
+        assertThat(retrieved).isNotNull().hasSize(2);
     }
 
     @Test
-    void parseModelXml_SingleInValid() {
+    void parseModelXml_UnparsableBPMN2() throws IOException {
+        String toParse = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(UNPARSABLE_BPMN2_FILE))));
         RuntimeException thrown = assertThrows(
                 RuntimeException.class,
-                () -> JITBPMNServiceImpl.parseModelXml(invalidModel),
-                "Expected parseModelXml to throw, but it didn't");
-        String expectedMessage = "Could not find message _T6T0kEcTEDuygKsUt0on2Q____";
-        assertThat(thrown.getMessage()).contains(expectedMessage);
-    }
-
-    @Test
-    void parseModelResource_SingleInValid() {
-        String fileName = "src/test/resources/UnparsableModel.bpmn";
-        RuntimeException thrown = assertThrows(
-                RuntimeException.class,
-                () -> JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(fileName))),
+                () -> JITBPMNServiceImpl.parseModelXml(toParse),
                 "Expected parseModelXml to throw, but it didn't");
         String expectedMessage = "Could not parse";
         assertThat(thrown.getMessage()).contains(expectedMessage);
     }
+
+    @Test
+    void parseModelResource_SingleValidBPMN2() {
+        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(getFilePath(SINGLE_BPMN2_FILE))));
+        assertThat(retrieved).isNotNull().hasSize(1);
+    }
+
+    @Test
+    void parseModelResource_MultipleValidBPMN2() {
+        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(getFilePath(MULTIPLE_BPMN2_FILE))));
+        assertThat(retrieved).isNotNull().hasSize(2);
+    }
+
+    @Test
+    void parseModelResource_UnparsableBPMN2() {
+        Resource resource = new FileSystemResource(new File(UNPARSABLE_BPMN2_FILE));
+        RuntimeException thrown = assertThrows(
+                RuntimeException.class,
+                () -> JITBPMNServiceImpl.parseModelResource(resource),
+                "Expected parseModelXml to throw, but it didn't");
+        String expectedMessage = "Could not parse";
+        assertThat(thrown.getMessage()).contains(expectedMessage);
+    }
+
+    @Test
+    void getErrorString() {
+        Process process = new ProcessImpl();
+        String id = StringUtils.generateUUID();
+        String name = StringUtils.generateUUID();
+        ((ProcessImpl)process).setId(id);
+        ((ProcessImpl)process).setName(name);
+        String message = StringUtils.generateUUID();
+        ProcessValidationError processValidationError = new ProcessValidationErrorImpl(process, message);
+        String expected = "Process id: " + id + " - name : " + name + " - error : " + message;
+        String retrieved = JITBPMNServiceImpl.getErrorString(processValidationError);
+        assertThat(retrieved).isEqualTo(expected);
+    }
+
+
 }

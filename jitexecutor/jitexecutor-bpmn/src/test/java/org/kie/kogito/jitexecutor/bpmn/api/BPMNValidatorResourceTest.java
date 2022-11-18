@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +18,33 @@ package org.kie.kogito.jitexecutor.bpmn.api;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
 import org.drools.util.IoUtils;
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jitexecutor.bpmn.JITBPMNService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
-
-import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.ContentType;
-
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_INVALID_BPMN2_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN2_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN2_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.getFilePath;
 
 @QuarkusTest
 public class BPMNValidatorResourceTest {
 
-    private static String validModel;
-    private static String invalidModel;
 
     private static final Logger LOG = LoggerFactory.getLogger(BPMNValidatorResourceTest.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -53,17 +56,57 @@ public class BPMNValidatorResourceTest {
             .constructCollectionType(List.class,
                     String.class);
 
-    @BeforeAll
-    public static void setup() throws IOException {
-        validModel = new String(IoUtils.readBytesFromInputStream(JITBPMNService.class.getResourceAsStream("/ValidModel.bpmn")));
-        invalidModel = new String(IoUtils.readBytesFromInputStream(JITBPMNService.class.getResourceAsStream("/InvalidModel.bpmn")));
-    }
 
+    // BPMN
+
+    @Disabled("Correct testing file unavailable model")
     @Test
-    public void test_SingleValid() throws IOException {
+    void test_SingleValidBPMN() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_BPMN_FILE))));
         String response = given()
                 .contentType(ContentType.XML)
-                .body(validModel)
+                .body(toValidate)
+                .when()
+                .post("/jitbpmn/validate")
+                .then()
+                .statusCode(200)
+                .body(containsString("[]"))
+                .extract()
+                .asString();
+
+        LOG.info("Validate response: {}", response);
+        List<String> messages = MAPPER.readValue(response, LIST_OF_MSGS);
+        assertThat(messages).isEmpty();
+    }
+
+    @Disabled("Correct testing file unavailable model")
+    @Test
+    void test_MultipleValidBPMN() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(getFilePath(MULTIPLE_BPMN_FILE)))));
+        String response = given()
+                .contentType(ContentType.XML)
+                .body(toValidate)
+                .when()
+                .post("/jitbpmn/validate")
+                .then()
+                .statusCode(200)
+                .body(containsString("[]"))
+                .extract()
+                .asString();
+
+        LOG.info("Validate response: {}", response);
+        List<String> messages = MAPPER.readValue(response, LIST_OF_MSGS);
+        assertThat(messages).isEmpty();
+    }
+
+    // BPMN2
+
+    @Test
+    void test_SingleValidBPMN2() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_BPMN2_FILE))));
+        String response = given()
+                .contentType(ContentType.XML)
+                .body(toValidate)
                 .when()
                 .post("/jitbpmn/validate")
                 .then()
@@ -78,10 +121,30 @@ public class BPMNValidatorResourceTest {
     }
 
     @Test
-    public void test_SingleInvalid() throws IOException {
+    void validateModel_MultipleValidBPMN2() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(MULTIPLE_BPMN2_FILE))));
         String response = given()
                 .contentType(ContentType.XML)
-                .body(invalidModel)
+                .body(toValidate)
+                .when()
+                .post("/jitbpmn/validate")
+                .then()
+                .statusCode(200)
+                .body(containsString("[]"))
+                .extract()
+                .asString();
+
+        LOG.info("Validate response: {}", response);
+        List<String> messages = MAPPER.readValue(response, LIST_OF_MSGS);
+        assertThat(messages).isEmpty();
+    }
+
+    @Test
+    void validateModel_SingleInvalidBPMN2() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_INVALID_BPMN2_FILE))));
+        String response = given()
+                .contentType(ContentType.XML)
+                .body(toValidate)
                 .when()
                 .post("/jitbpmn/validate")
                 .then()
@@ -94,5 +157,6 @@ public class BPMNValidatorResourceTest {
         List<String> messages = MAPPER.readValue(response, LIST_OF_MSGS);
         assertThat(messages).hasSize(1);
     }
+
 
 }

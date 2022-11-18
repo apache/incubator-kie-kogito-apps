@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,18 +36,16 @@ import org.jbpm.ruleflow.core.validation.RuleFlowProcessValidator;
 import org.kie.api.definition.process.Process;
 import org.kie.api.io.Resource;
 import org.kie.kogito.jitexecutor.bpmn.responses.JITBPMNValidationResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 @ApplicationScoped
 public class JITBPMNServiceImpl implements JITBPMNService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JITBPMNServiceImpl.class);
-
     private static final RuleFlowProcessValidator PROCESS_VALIDATOR = RuleFlowProcessValidator.getInstance();
 
     private static final SemanticModules BPMN_SEMANTIC_MODULES = new SemanticModules();
+
+    private static String ERROR_TEMPLATE = "Process id: %s - name : %s - error : %s";
 
     static {
         BPMN_SEMANTIC_MODULES.addSemanticModule(new BPMNSemanticModule());
@@ -56,7 +54,7 @@ public class JITBPMNServiceImpl implements JITBPMNService {
     }
 
     @Override
-    public JITBPMNValidationResult evaluateModel(String modelXML) {
+    public JITBPMNValidationResult validateModel(String modelXML) {
         Collection<String> errors;
         Collection<Process> processes;
         try {
@@ -65,9 +63,9 @@ public class JITBPMNServiceImpl implements JITBPMNService {
                 errors = Collections.singleton("Failed to parse process");
             } else {
                 errors = new ArrayList<>();
-                ProcessValidationError[] processValidationErrors = PROCESS_VALIDATOR.validateProcess(processes.iterator().next());
+                ProcessValidationError[] processValidationErrors = validateProcesses(processes);
                 for (ProcessValidationError processValidationError : processValidationErrors) {
-                    errors.add(processValidationError.getMessage());
+                    errors.add( getErrorString(processValidationError));
                 }
             }
         } catch (Exception e) {
@@ -76,6 +74,17 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         }
         return new JITBPMNValidationResult(errors);
     }
+
+
+    static ProcessValidationError[] validateProcesses(Collection<Process> processes) {
+        ProcessValidationError[] toReturn = new ProcessValidationError[0];
+        for (Process toValidate : processes) {
+            ProcessValidationError[] toAdd = PROCESS_VALIDATOR.validateProcess(toValidate);
+            System.arraycopy(toAdd, 0, toReturn, toReturn.length, toAdd.length);
+        }
+        return toReturn;
+    }
+
 
     static Collection<Process> parseModelXml(String modelXML) {
         Resource r = new InputStreamResource(new ByteArrayInputStream(modelXML.getBytes()));
@@ -91,5 +100,10 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         } catch (SAXException | IOException e) {
             throw new RuntimeException("Could not parse " + r, e);
         }
+    }
+
+    static String getErrorString(ProcessValidationError processValidationError) {
+        Process failed = processValidationError.getProcess();
+        return String.format(ERROR_TEMPLATE, failed.getId(), failed.getName(), processValidationError.getMessage());
     }
 }

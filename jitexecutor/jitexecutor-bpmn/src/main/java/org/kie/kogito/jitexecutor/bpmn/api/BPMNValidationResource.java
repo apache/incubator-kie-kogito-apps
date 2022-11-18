@@ -37,7 +37,7 @@ public class BPMNValidationResource {
     @Consumes(MediaType.APPLICATION_XML)
     @Produces(MediaType.APPLICATION_JSON)
     public Response schema(String payload) {
-        JITBPMNValidationResult result = jitbpmnService.evaluateModel(payload);
+        JITBPMNValidationResult result = jitbpmnService.validateModel(payload);
         return Response.ok(result.getErrors()).build();
     }
 

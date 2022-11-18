@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,5 +20,5 @@ import org.kie.kogito.jitexecutor.bpmn.responses.JITBPMNValidationResult;
 
 public interface JITBPMNService {
 
-    JITBPMNValidationResult evaluateModel(String modelXML);
+    JITBPMNValidationResult validateModel(String modelXML);
 }
