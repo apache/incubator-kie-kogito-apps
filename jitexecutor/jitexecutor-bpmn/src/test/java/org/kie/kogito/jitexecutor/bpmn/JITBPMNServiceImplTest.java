@@ -34,18 +34,18 @@ import org.kie.kogito.jitexecutor.bpmn.responses.JITBPMNValidationResult;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_INVALID_BPMN2_FILE;
-import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_INVALID_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_INVALID_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_INVALID_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.UNPARSABLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.getFilePath;
 
 class JITBPMNServiceImplTest {
 
-    private static final JITBPMNService jitBpmnService  = new JITBPMNServiceImpl();
+    private static final JITBPMNService jitBpmnService = new JITBPMNServiceImpl();
 
     // BPMN
 
@@ -66,7 +66,6 @@ class JITBPMNServiceImplTest {
         assertThat(retrieved).isNotNull();
         assertThat(retrieved.getErrors()).isNotNull().isEmpty();
     }
-
 
     @Test
     void parseModelXml_SingleValidBPMN() throws IOException {
@@ -96,8 +95,6 @@ class JITBPMNServiceImplTest {
         Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(MULTIPLE_BPMN_FILE)));
         assertThat(retrieved).isNotNull().hasSize(2);
     }
-
-
 
     // BPMN2
 
@@ -189,14 +186,13 @@ class JITBPMNServiceImplTest {
         Process process = new ProcessImpl();
         String id = StringUtils.generateUUID();
         String name = StringUtils.generateUUID();
-        ((ProcessImpl)process).setId(id);
-        ((ProcessImpl)process).setName(name);
+        ((ProcessImpl) process).setId(id);
+        ((ProcessImpl) process).setName(name);
         String message = StringUtils.generateUUID();
         ProcessValidationError processValidationError = new ProcessValidationErrorImpl(process, message);
         String expected = "Process id: " + id + " - name : " + name + " - error : " + message;
         String retrieved = JITBPMNServiceImpl.getErrorString(processValidationError);
         assertThat(retrieved).isEqualTo(expected);
     }
-
 
 }

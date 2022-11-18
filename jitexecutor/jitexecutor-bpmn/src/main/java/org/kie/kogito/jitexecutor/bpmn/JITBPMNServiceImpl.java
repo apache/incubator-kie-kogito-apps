@@ -65,7 +65,7 @@ public class JITBPMNServiceImpl implements JITBPMNService {
                 errors = new ArrayList<>();
                 ProcessValidationError[] processValidationErrors = validateProcesses(processes);
                 for (ProcessValidationError processValidationError : processValidationErrors) {
-                    errors.add( getErrorString(processValidationError));
+                    errors.add(getErrorString(processValidationError));
                 }
             }
         } catch (Exception e) {
@@ -75,7 +75,6 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         return new JITBPMNValidationResult(errors);
     }
 
-
     static ProcessValidationError[] validateProcesses(Collection<Process> processes) {
         ProcessValidationError[] toReturn = new ProcessValidationError[0];
         for (Process toValidate : processes) {
@@ -84,7 +83,6 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         }
         return toReturn;
     }
-
 
     static Collection<Process> parseModelXml(String modelXML) {
         Resource r = new InputStreamResource(new ByteArrayInputStream(modelXML.getBytes()));

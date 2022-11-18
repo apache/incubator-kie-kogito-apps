@@ -20,11 +20,6 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.CollectionType;
-import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.http.ContentType;
 import org.drools.util.IoUtils;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -32,19 +27,25 @@ import org.kie.kogito.jitexecutor.bpmn.JITBPMNService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
+
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.http.ContentType;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
-import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_INVALID_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_INVALID_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.getFilePath;
 
 @QuarkusTest
 public class BPMNValidatorResourceTest {
-
 
     private static final Logger LOG = LoggerFactory.getLogger(BPMNValidatorResourceTest.class);
     private static final ObjectMapper MAPPER = new ObjectMapper();
@@ -55,7 +56,6 @@ public class BPMNValidatorResourceTest {
     private static final CollectionType LIST_OF_MSGS = MAPPER.getTypeFactory()
             .constructCollectionType(List.class,
                     String.class);
-
 
     // BPMN
 
@@ -157,6 +157,5 @@ public class BPMNValidatorResourceTest {
         List<String> messages = MAPPER.readValue(response, LIST_OF_MSGS);
         assertThat(messages).hasSize(1);
     }
-
 
 }
