@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,10 @@
 
 package org.kie.kogito.jitexecutor.runner;
 
-import org.kie.kogito.jitexecutor.bpmn.api.BPMNValidatorResourceTest;
-
+// import org.kie.kogito.jitexecutor.bpmn.api.BPMNValidatorResourceTest;
 import io.quarkus.test.junit.QuarkusIntegrationTest;
 
 @QuarkusIntegrationTest
-public class BPMNValidatorResourceIT extends BPMNValidatorResourceTest {
+public class BPMNValidatorResourceIT /* extends BPMNValidatorResourceTest */ {
     // Execute the same tests but in native mode.
 }
