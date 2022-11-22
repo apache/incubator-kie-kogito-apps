@@ -22,6 +22,7 @@
       <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-addons-quarkus-events-process</artifactId>
     </dependency>
+    <!-- Used to enable the proto generation set in the data-index -->
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-addons-quarkus-persistence-filesystem</artifactId>
