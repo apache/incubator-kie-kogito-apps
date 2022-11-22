@@ -26,7 +26,6 @@ import org.drools.util.StringUtils;
 import org.jbpm.process.core.impl.ProcessImpl;
 import org.jbpm.process.core.validation.ProcessValidationError;
 import org.jbpm.process.core.validation.impl.ProcessValidationErrorImpl;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.api.definition.process.Process;
 import org.kie.api.io.Resource;
@@ -35,10 +34,8 @@ import org.kie.kogito.jitexecutor.bpmn.responses.JITBPMNValidationResult;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN2_FILE;
-import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_INVALID_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN2_FILE;
-import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_INVALID_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_UNPARSABLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.UNPARSABLE_BPMN2_FILE;
@@ -47,57 +44,6 @@ import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.getFilePath;
 class JITBPMNServiceImplTest {
 
     private static final JITBPMNService jitBpmnService = new JITBPMNServiceImpl();
-
-    // BPMN
-
-    @Disabled("Correct testing file unavailable model")
-    @Test
-    void validateModel_SingleValidBPMN() throws IOException {
-        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_BPMN_FILE))));
-        JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
-        assertThat(retrieved).isNotNull();
-        assertThat(retrieved.getErrors()).isNotNull().isEmpty();
-    }
-
-    @Disabled("Correct testing file unavailable model")
-    @Test
-    void validateModel_MultipleValidBPMN() throws IOException {
-        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(getFilePath(MULTIPLE_BPMN_FILE)))));
-        JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
-        assertThat(retrieved).isNotNull();
-        assertThat(retrieved.getErrors()).isNotNull().isEmpty();
-    }
-
-    @Test
-    void parseModelXml_SingleValidBPMN() throws IOException {
-        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_BPMN_FILE))));
-        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelXml(toValidate);
-        assertThat(retrieved).isNotNull().hasSize(1);
-    }
-
-    @Disabled("Correct testing file unavailable model")
-    @Test
-    void parseModelXml_MultipleValidBPMN() throws IOException {
-        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(getFilePath(MULTIPLE_BPMN_FILE)))));
-        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelXml(toValidate);
-        assertThat(retrieved).isNotNull().hasSize(2);
-    }
-
-    @Test
-    void parseModelResource_SingleValidBPMN() {
-        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(getFilePath(SINGLE_BPMN_FILE))));
-        assertThat(retrieved).isNotNull().hasSize(1);
-    }
-
-    @Disabled("Correct testing file unavailable model")
-    @Test
-    void parseModelResource_MultipleValidBPMN() {
-        //String fileName = "src/test/resources/SingleProcess.bpmn";
-        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(MULTIPLE_BPMN_FILE)));
-        assertThat(retrieved).isNotNull().hasSize(2);
-    }
-
-    // BPMN2
 
     @Test
     void validateModel_SingleValidBPMN2() throws IOException {

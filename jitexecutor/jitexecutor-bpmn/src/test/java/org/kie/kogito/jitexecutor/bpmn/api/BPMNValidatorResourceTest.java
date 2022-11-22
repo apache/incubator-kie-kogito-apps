@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 
 import org.drools.util.IoUtils;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jitexecutor.bpmn.JITBPMNService;
 import org.slf4j.Logger;
@@ -38,13 +37,10 @@ import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN2_FILE;
-import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_BPMN_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_INVALID_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN2_FILE;
-import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_INVALID_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_UNPARSABLE_BPMN2_FILE;
-import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.getFilePath;
 
 @QuarkusTest
 public class BPMNValidatorResourceTest {
@@ -58,50 +54,6 @@ public class BPMNValidatorResourceTest {
     private static final CollectionType LIST_OF_MSGS = MAPPER.getTypeFactory()
             .constructCollectionType(List.class,
                     String.class);
-
-    // BPMN
-
-    @Disabled("Correct testing file unavailable model")
-    @Test
-    void test_SingleValidBPMN() throws IOException {
-        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_BPMN_FILE))));
-        String response = given()
-                .contentType(ContentType.XML)
-                .body(toValidate)
-                .when()
-                .post("/jitbpmn/validate")
-                .then()
-                .statusCode(200)
-                .body(containsString("[]"))
-                .extract()
-                .asString();
-
-        LOG.info("Validate response: {}", response);
-        List<String> messages = MAPPER.readValue(response, LIST_OF_MSGS);
-        assertThat(messages).isEmpty();
-    }
-
-    @Disabled("Correct testing file unavailable model")
-    @Test
-    void test_MultipleValidBPMN() throws IOException {
-        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(getFilePath(MULTIPLE_BPMN_FILE)))));
-        String response = given()
-                .contentType(ContentType.XML)
-                .body(toValidate)
-                .when()
-                .post("/jitbpmn/validate")
-                .then()
-                .statusCode(200)
-                .body(containsString("[]"))
-                .extract()
-                .asString();
-
-        LOG.info("Validate response: {}", response);
-        List<String> messages = MAPPER.readValue(response, LIST_OF_MSGS);
-        assertThat(messages).isEmpty();
-    }
-
-    // BPMN2
 
     @Test
     void test_SingleValidBPMN2() throws IOException {
@@ -152,8 +104,8 @@ public class BPMNValidatorResourceTest {
                 .then()
                 .statusCode(200)
                 .body(containsString("[\"Process id: invalid - name : invalid-process-id - error : Process has no " +
-                                             "start node.\",\"Process id: invalid - name : invalid-process-id - error" +
-                                             " : Process has no end node.\"]"))
+                        "start node.\",\"Process id: invalid - name : invalid-process-id - error" +
+                        " : Process has no end node.\"]"))
                 .extract()
                 .asString();
 
@@ -173,11 +125,11 @@ public class BPMNValidatorResourceTest {
                 .then()
                 .statusCode(200)
                 .body(containsString("[\"Process id: invalid1 - name : invalid1-process-id - error : Process has no " +
-                                             "start node.\",\"Process id: invalid1 - name : invalid1-process-id - " +
-                                             "error : Process has no end node.\",\"Process id: invalid2 - name : " +
-                                             "invalid2-process-id - error : Process has no start node.\",\"Process " +
-                                             "id: invalid2 - name : invalid2-process-id - error : Process has no end " +
-                                             "node.\"]"))
+                        "start node.\",\"Process id: invalid1 - name : invalid1-process-id - " +
+                        "error : Process has no end node.\",\"Process id: invalid2 - name : " +
+                        "invalid2-process-id - error : Process has no start node.\",\"Process " +
+                        "id: invalid2 - name : invalid2-process-id - error : Process has no end " +
+                        "node.\"]"))
                 .extract()
                 .asString();
 
