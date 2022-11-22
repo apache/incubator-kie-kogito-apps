@@ -60,7 +60,7 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         try {
             processes = parseModelXml(modelXML);
             if (processes.isEmpty()) {
-                errors = Collections.singleton("Failed to parse process");
+                errors = Collections.singleton("No process found");
             } else {
                 errors = new ArrayList<>();
                 ProcessValidationError[] processValidationErrors = validateProcesses(processes);
@@ -79,7 +79,10 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         ProcessValidationError[] toReturn = new ProcessValidationError[0];
         for (Process toValidate : processes) {
             ProcessValidationError[] toAdd = PROCESS_VALIDATOR.validateProcess(toValidate);
-            System.arraycopy(toAdd, 0, toReturn, toReturn.length, toAdd.length);
+            ProcessValidationError[] temp = new ProcessValidationError[toReturn.length + toAdd.length];
+            System.arraycopy(toReturn, 0, temp, 0, toReturn.length);
+            System.arraycopy(toAdd, 0, temp, (temp.length - toAdd.length), toAdd.length);
+            toReturn = temp;
         }
         return toReturn;
     }

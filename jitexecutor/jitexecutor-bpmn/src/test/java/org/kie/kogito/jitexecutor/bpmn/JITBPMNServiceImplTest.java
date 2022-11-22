@@ -40,6 +40,7 @@ import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.MULTIPLE_INVALID_BPMN
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_INVALID_BPMN2_FILE;
+import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_UNPARSABLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.UNPARSABLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.getFilePath;
 
@@ -119,18 +120,30 @@ class JITBPMNServiceImplTest {
         String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_INVALID_BPMN2_FILE))));
         JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
         assertThat(retrieved).isNotNull();
-        assertThat(retrieved.getErrors()).isNotNull().hasSize(1);
-        assertThat(retrieved.getErrors()).contains("Could not find message _T6T0kEcTEDuygKsUt0on2Q____");
+        assertThat(retrieved.getErrors()).isNotNull().hasSize(2);
+        assertThat(retrieved.getErrors()).contains("Process id: invalid - name : invalid-process-id - error : Process has no start node.");
+        assertThat(retrieved.getErrors()).contains("Process id: invalid - name : invalid-process-id - error : Process has no end node.");
     }
 
-    @Disabled("Correct testing file unavailable model")
     @Test
     void validateModel_MultipleInvalidBPMN2() throws IOException {
         String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(MULTIPLE_INVALID_BPMN2_FILE))));
         JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
         assertThat(retrieved).isNotNull();
+        assertThat(retrieved.getErrors()).isNotNull().hasSize(4);
+        assertThat(retrieved.getErrors()).contains("Process id: invalid1 - name : invalid1-process-id - error : Process has no start node.");
+        assertThat(retrieved.getErrors()).contains("Process id: invalid1 - name : invalid1-process-id - error : Process has no end node.");
+        assertThat(retrieved.getErrors()).contains("Process id: invalid2 - name : invalid2-process-id - error : Process has no start node.");
+        assertThat(retrieved.getErrors()).contains("Process id: invalid2 - name : invalid2-process-id - error : Process has no end node.");
+    }
+
+    @Test
+    void validateModel_SingleUnparsableBPMN2() throws IOException {
+        String toValidate = new String(IoUtils.readBytesFromInputStream(Objects.requireNonNull(JITBPMNService.class.getResourceAsStream(SINGLE_UNPARSABLE_BPMN2_FILE))));
+        JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
+        assertThat(retrieved).isNotNull();
         assertThat(retrieved.getErrors()).isNotNull().hasSize(1);
-        assertThat(retrieved.getErrors()).contains("Could not find target node for connection:_5");
+        assertThat(retrieved.getErrors()).contains("Could not find message _T6T0kEcTEDuygKsUt0on2Q____");
     }
 
     @Test

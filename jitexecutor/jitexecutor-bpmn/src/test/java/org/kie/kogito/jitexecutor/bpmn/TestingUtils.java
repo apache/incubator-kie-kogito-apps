@@ -27,6 +27,8 @@ public class TestingUtils {
     public static final String MULTIPLE_BPMN2_FILE = "/MultipleProcess.bpmn2";
     public static final String SINGLE_INVALID_BPMN2_FILE = "/SingleInvalidModel.bpmn2";
 
+    public static final String SINGLE_UNPARSABLE_BPMN2_FILE = "/SingleUnparsableModel.bpmn2";
+
     public static final String MULTIPLE_INVALID_BPMN2_FILE = "/MultipleInvalidModel.bpmn2";
 
     public static final String UNPARSABLE_BPMN2_FILE = "/UnparsableModel.bpmn2";
