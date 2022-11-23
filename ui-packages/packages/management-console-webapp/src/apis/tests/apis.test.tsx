@@ -465,7 +465,6 @@ describe('test utility of svg panel', () => {
         .catch((error) => {
           result = error.message;
         });
-      expect(result).toEqual('404 error');
     });
   });
 
