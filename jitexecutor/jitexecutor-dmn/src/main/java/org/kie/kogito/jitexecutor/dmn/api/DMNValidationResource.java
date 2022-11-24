@@ -37,8 +37,8 @@ import org.kie.dmn.validation.DMNValidator;
 import org.kie.dmn.validation.DMNValidator.Validation;
 import org.kie.dmn.validation.DMNValidatorFactory;
 import org.kie.internal.io.ResourceFactory;
-import org.kie.kogito.jitexecutor.dmn.requests.MultipleResourcesPayload;
-import org.kie.kogito.jitexecutor.dmn.requests.ResourceWithURI;
+import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
+import org.kie.kogito.jitexecutor.common.requests.ResourceWithURI;
 import org.kie.kogito.jitexecutor.dmn.responses.JITDMNMessage;
 import org.kie.kogito.jitexecutor.dmn.utils.ResolveByKey;
 

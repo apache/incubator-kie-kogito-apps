@@ -42,14 +42,13 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>jbpm-flow</artifactId>
+      <artifactId>jitexecutor-common</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>jbpm-bpmn2</artifactId>
+      <artifactId>kogito-quarkus-processes</artifactId>
     </dependency>
 
     <dependency>

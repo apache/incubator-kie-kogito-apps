@@ -39,7 +39,6 @@ import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_INVALID_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.SINGLE_UNPARSABLE_BPMN2_FILE;
 import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.UNPARSABLE_BPMN2_FILE;
-import static org.kie.kogito.jitexecutor.bpmn.TestingUtils.getFilePath;
 
 class JITBPMNServiceImplTest {
 
@@ -67,8 +66,8 @@ class JITBPMNServiceImplTest {
         JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
         assertThat(retrieved).isNotNull();
         assertThat(retrieved.getErrors()).isNotNull().hasSize(2);
-        assertThat(retrieved.getErrors()).contains("Process id: invalid - name : invalid-process-id - error : Process has no start node.");
-        assertThat(retrieved.getErrors()).contains("Process id: invalid - name : invalid-process-id - error : Process has no end node.");
+        assertThat(retrieved.getErrors()).contains("Uri: (unknown) - Process id: invalid - name : invalid-process-id - error : Process has no start node.");
+        assertThat(retrieved.getErrors()).contains("Uri: (unknown) - Process id: invalid - name : invalid-process-id - error : Process has no end node.");
     }
 
     @Test
@@ -77,10 +76,10 @@ class JITBPMNServiceImplTest {
         JITBPMNValidationResult retrieved = jitBpmnService.validateModel(toValidate);
         assertThat(retrieved).isNotNull();
         assertThat(retrieved.getErrors()).isNotNull().hasSize(4);
-        assertThat(retrieved.getErrors()).contains("Process id: invalid1 - name : invalid1-process-id - error : Process has no start node.");
-        assertThat(retrieved.getErrors()).contains("Process id: invalid1 - name : invalid1-process-id - error : Process has no end node.");
-        assertThat(retrieved.getErrors()).contains("Process id: invalid2 - name : invalid2-process-id - error : Process has no start node.");
-        assertThat(retrieved.getErrors()).contains("Process id: invalid2 - name : invalid2-process-id - error : Process has no end node.");
+        assertThat(retrieved.getErrors()).contains("Uri: (unknown) - Process id: invalid1 - name : invalid1-process-id - error : Process has no start node.");
+        assertThat(retrieved.getErrors()).contains("Uri: (unknown) - Process id: invalid1 - name : invalid1-process-id - error : Process has no end node.");
+        assertThat(retrieved.getErrors()).contains("Uri: (unknown) - Process id: invalid2 - name : invalid2-process-id - error : Process has no start node.");
+        assertThat(retrieved.getErrors()).contains("Uri: (unknown) - Process id: invalid2 - name : invalid2-process-id - error : Process has no end node.");
     }
 
     @Test
@@ -119,13 +118,13 @@ class JITBPMNServiceImplTest {
 
     @Test
     void parseModelResource_SingleValidBPMN2() {
-        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(getFilePath(SINGLE_BPMN2_FILE))));
+        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(JITBPMNService.class.getResource(SINGLE_BPMN2_FILE).getFile())));
         assertThat(retrieved).isNotNull().hasSize(1);
     }
 
     @Test
     void parseModelResource_MultipleValidBPMN2() {
-        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(getFilePath(MULTIPLE_BPMN2_FILE))));
+        Collection<Process> retrieved = JITBPMNServiceImpl.parseModelResource(new FileSystemResource(new File(JITBPMNService.class.getResource(MULTIPLE_BPMN2_FILE).getFile())));
         assertThat(retrieved).isNotNull().hasSize(2);
     }
 
@@ -149,8 +148,12 @@ class JITBPMNServiceImplTest {
         ((ProcessImpl) process).setName(name);
         String message = StringUtils.generateUUID();
         ProcessValidationError processValidationError = new ProcessValidationErrorImpl(process, message);
-        String expected = "Process id: " + id + " - name : " + name + " - error : " + message;
-        String retrieved = JITBPMNServiceImpl.getErrorString(processValidationError);
+        String expected = "Uri: (unknown) - Process id: " + id + " - name : " + name + " - error : " + message;
+        String retrieved = JITBPMNServiceImpl.getErrorString(processValidationError, null);
+        assertThat(retrieved).isEqualTo(expected);
+        String uri = "uri";
+        expected = "Uri: " + uri + " - Process id: " + id + " - name : " + name + " - error : " + message;
+        retrieved = JITBPMNServiceImpl.getErrorString(processValidationError, uri);
         assertThat(retrieved).isEqualTo(expected);
     }
 

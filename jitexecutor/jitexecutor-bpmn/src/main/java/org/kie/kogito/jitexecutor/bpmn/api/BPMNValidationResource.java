@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response;
 
 import org.kie.kogito.jitexecutor.bpmn.JITBPMNService;
 import org.kie.kogito.jitexecutor.bpmn.responses.JITBPMNValidationResult;
+import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
 
 @Path("jitbpmn/validate")
 public class BPMNValidationResource {
@@ -34,10 +35,10 @@ public class BPMNValidationResource {
     JITBPMNService jitbpmnService;
 
     @POST
-    @Consumes(MediaType.APPLICATION_XML)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response schema(String payload) {
-        JITBPMNValidationResult result = jitbpmnService.validateModel(payload);
+    public Response schema(MultipleResourcesPayload payload) {
+        JITBPMNValidationResult result = jitbpmnService.validatePayload(payload);
         return Response.ok(result.getErrors()).build();
     }
 

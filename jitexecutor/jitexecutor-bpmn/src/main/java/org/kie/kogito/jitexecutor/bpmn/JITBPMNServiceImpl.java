@@ -36,16 +36,22 @@ import org.jbpm.ruleflow.core.validation.RuleFlowProcessValidator;
 import org.kie.api.definition.process.Process;
 import org.kie.api.io.Resource;
 import org.kie.kogito.jitexecutor.bpmn.responses.JITBPMNValidationResult;
+import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
+import org.kie.kogito.jitexecutor.common.requests.ResourceWithURI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 @ApplicationScoped
 public class JITBPMNServiceImpl implements JITBPMNService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JITBPMNServiceImpl.class);
+
     private static final RuleFlowProcessValidator PROCESS_VALIDATOR = RuleFlowProcessValidator.getInstance();
 
     private static final SemanticModules BPMN_SEMANTIC_MODULES = new SemanticModules();
 
-    private static String ERROR_TEMPLATE = "Process id: %s - name : %s - error : %s";
+    private static String ERROR_TEMPLATE = "Uri: %s - Process id: %s - name : %s - error : %s";
 
     static {
         BPMN_SEMANTIC_MODULES.addSemanticModule(new BPMNSemanticModule());
@@ -54,25 +60,46 @@ public class JITBPMNServiceImpl implements JITBPMNService {
     }
 
     @Override
+    public JITBPMNValidationResult validatePayload(MultipleResourcesPayload payload) {
+        Collection<String> errors = new ArrayList<>();
+        for (ResourceWithURI resourceWithURI : payload.getResources()) {
+            errors.addAll(collectErrors(resourceWithURI.getContent(), resourceWithURI.getURI()));
+        }
+        return new JITBPMNValidationResult(errors);
+    }
+
+    @Override
     public JITBPMNValidationResult validateModel(String modelXML) {
-        Collection<String> errors;
+        LOGGER.trace("Received\n{}", modelXML);
+        Collection<String> errors = collectErrors(modelXML, null);
+        return new JITBPMNValidationResult(errors);
+    }
+
+    static Collection<String> collectErrors(String modelXML, String resourceUri) {
+        LOGGER.trace("Received\n{}", modelXML);
+        Collection<String> toReturn;
         Collection<Process> processes;
         try {
             processes = parseModelXml(modelXML);
             if (processes.isEmpty()) {
-                errors = Collections.singleton("No process found");
+                String error = "No process found";
+                if (resourceUri != null) {
+                    error += " on resource " + resourceUri;
+                }
+                toReturn = Collections.singleton(error);
             } else {
-                errors = new ArrayList<>();
+                toReturn = new ArrayList<>();
                 ProcessValidationError[] processValidationErrors = validateProcesses(processes);
                 for (ProcessValidationError processValidationError : processValidationErrors) {
-                    errors.add(getErrorString(processValidationError));
+                    toReturn.add(getErrorString(processValidationError, resourceUri));
                 }
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             String error = e.getMessage() != null && !e.getMessage().isEmpty() ? e.getMessage() : e.toString();
-            errors = Collections.singleton(error);
+            toReturn = Collections.singleton(error);
+            LOGGER.error("Fail to validate", e);
         }
-        return new JITBPMNValidationResult(errors);
+        return toReturn;
     }
 
     static ProcessValidationError[] validateProcesses(Collection<Process> processes) {
@@ -103,8 +130,9 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         }
     }
 
-    static String getErrorString(ProcessValidationError processValidationError) {
+    static String getErrorString(ProcessValidationError processValidationError, String resourceUri) {
         Process failed = processValidationError.getProcess();
-        return String.format(ERROR_TEMPLATE, failed.getId(), failed.getName(), processValidationError.getMessage());
+        String uri = resourceUri != null ? resourceUri : "(unknown)";
+        return String.format(ERROR_TEMPLATE, uri, failed.getId(), failed.getName(), processValidationError.getMessage());
     }
 }

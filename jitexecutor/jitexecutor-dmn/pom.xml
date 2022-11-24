@@ -40,6 +40,10 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-smallrye-openapi</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>jitexecutor-common</artifactId>
+    </dependency>
     <dependency><!-- Leverage easily the best POM from: -->
       <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-dmn</artifactId>
