@@ -12,7 +12,7 @@
 
     <properties>
         <container.image.kogito-service>to-be-changed-in-submodules</container.image.kogito-service>
-        <version.dmp.fabric8>0.38.1</version.dmp.fabric8>
+        <version.dmp.fabric8>0.40.2</version.dmp.fabric8>
     </properties>
 
     <dependencies>
