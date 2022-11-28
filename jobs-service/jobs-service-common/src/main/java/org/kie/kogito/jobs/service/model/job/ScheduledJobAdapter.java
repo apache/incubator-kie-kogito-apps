@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,8 +58,8 @@ public class ScheduledJobAdapter {
                                 .map(DateUtil::fromDate)
                                 .orElse(null))
                         .callbackEndpoint(Optional.ofNullable(jobDetails.getRecipient())
-                                .map(Recipient.HTTPRecipient.class::cast)
-                                .map(Recipient.HTTPRecipient::getEndpoint)
+                                .map(HTTPRecipient.class::cast)
+                                .map(HTTPRecipient::getEndpoint)
                                 .orElse(null))
                         .repeatLimit(Optional.ofNullable(jobDetails.getTrigger())
                                 .filter(IntervalTrigger.class::isInstance)
@@ -93,7 +93,7 @@ public class ScheduledJobAdapter {
                 .executionCounter(scheduledJob.getExecutionCounter())
                 .lastUpdate(scheduledJob.getLastUpdate())
                 .recipient(Optional.ofNullable(scheduledJob.getCallbackEndpoint())
-                        .map(Recipient.HTTPRecipient::new)
+                        .map(HTTPRecipient::new)
                         .orElse(null))
                 .retries(scheduledJob.getRetries())
                 .scheduledId(scheduledJob.getScheduledId())

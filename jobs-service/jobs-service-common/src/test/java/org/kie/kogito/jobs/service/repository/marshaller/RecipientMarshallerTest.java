@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.repository.marshaller;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.Recipient;
 
 import io.vertx.core.json.JsonObject;
@@ -30,11 +30,11 @@ class RecipientMarshallerTest {
 
     @Test
     void marshall() {
-        Recipient recipient = new Recipient.HTTPRecipient("test");
+        Recipient recipient = new HTTPRecipient("test");
         JsonObject jsonObject = marshaller.marshall(recipient);
         assertEquals(new JsonObject()
                 .put("endpoint", "test")
-                .put("classType", Recipient.HTTPRecipient.class.getName()),
+                .put("classType", HTTPRecipient.class.getName()),
                 jsonObject);
     }
 
@@ -48,9 +48,9 @@ class RecipientMarshallerTest {
     void unmarshall() {
         JsonObject jsonObject = new JsonObject()
                 .put("endpoint", "test")
-                .put("classType", Recipient.HTTPRecipient.class.getName());
+                .put("classType", HTTPRecipient.class.getName());
         Recipient recipient = marshaller.unmarshall(jsonObject);
-        assertEquals(new Recipient.HTTPRecipient("test"), recipient);
+        assertEquals(new HTTPRecipient("test"), recipient);
     }
 
     @Test

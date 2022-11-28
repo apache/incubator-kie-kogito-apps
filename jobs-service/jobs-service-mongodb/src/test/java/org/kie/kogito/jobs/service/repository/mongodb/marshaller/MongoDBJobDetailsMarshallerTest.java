@@ -21,8 +21,8 @@ import java.util.Date;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.timer.Trigger;
@@ -49,7 +49,7 @@ class MongoDBJobDetailsMarshallerTest {
         Integer executionCounter = 4;
         String scheduledId = "testScheduledId";
         Object payload = new JsonObject().put("payload", "test");
-        Recipient.HTTPRecipient recipient = new Recipient.HTTPRecipient("testEndpoint");
+        HTTPRecipient recipient = new HTTPRecipient("testEndpoint");
         Trigger trigger = new PointInTimeTrigger(new Date().toInstant().toEpochMilli(), null, null);
         JobDetails.Type type = JobDetails.Type.HTTP;
 
@@ -82,7 +82,7 @@ class MongoDBJobDetailsMarshallerTest {
                 .put("priority", priority)
                 .put("recipient", new JsonObject()
                         .put("endpoint", recipient.getEndpoint())
-                        .put("classType", Recipient.HTTPRecipient.class.getName()))
+                        .put("classType", HTTPRecipient.class.getName()))
                 .put("trigger", new JsonObject()
                         .put("nextFireTime", trigger.hasNextFireTime().getTime())
                         .put("classType", PointInTimeTrigger.class.getName()));

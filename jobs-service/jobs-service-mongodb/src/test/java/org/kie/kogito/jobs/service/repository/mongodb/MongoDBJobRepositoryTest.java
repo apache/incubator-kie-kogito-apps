@@ -29,6 +29,7 @@ import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.JobDetailsBuilder;
 import org.kie.kogito.jobs.service.model.job.Recipient;
@@ -134,7 +135,7 @@ class MongoDBJobRepositoryTest {
 
         ZonedDateTime time = ZonedDateTime.now(DEFAULT_ZONE);
         PointInTimeTrigger trigger = new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null);
-        Recipient recipient = new Recipient.HTTPRecipient("test");
+        Recipient recipient = new HTTPRecipient("test");
         unmarshalled = new JobDetailsBuilder().id("test").trigger(trigger).recipient(recipient).build();
         marshalled = new JsonObject().put("id", "test");
 

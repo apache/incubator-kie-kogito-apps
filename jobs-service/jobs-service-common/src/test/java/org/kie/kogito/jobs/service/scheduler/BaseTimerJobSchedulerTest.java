@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ import org.mockito.Mock;
 import org.reactivestreams.Publisher;
 
 import io.smallrye.mutiny.Multi;
+import io.smallrye.mutiny.Uni;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.jobs.service.model.JobStatus.CANCELED;
@@ -83,6 +84,8 @@ public abstract class BaseTimerJobSchedulerTest {
 
     public JobExecutionResponse errorResponse;
 
+    public JobExecutionResponse successResponse;
+
     public ZonedDateTime expirationTime;
 
     public Trigger trigger;
@@ -93,19 +96,23 @@ public abstract class BaseTimerJobSchedulerTest {
         tested().forceExecuteExpiredJobs = Optional.of(Boolean.FALSE);
         //expiration on the current scheduler chunk
         expirationTime = DateUtil.now().plusMinutes(tested().schedulerChunkInMinutes - 1);
+        errorResponse = JobExecutionResponse.builder()
+                .jobId(JOB_ID)
+                .message("error")
+                .now()
+                .build();
+        successResponse = JobExecutionResponse.builder()
+                .jobId(JOB_ID)
+                .message("sucess")
+                .now()
+                .build();
 
         trigger = new PointInTimeTrigger(expirationTime.toInstant().toEpochMilli(), null, null);
         scheduledJob = JobDetails.builder().id(JOB_ID).trigger(trigger).status(SCHEDULED).build();
         scheduled = CompletableFuture.completedFuture(scheduledJob);
         lenient().when(jobRepository.get(JOB_ID)).thenReturn(scheduled);
         lenient().when(jobRepository.save(any(JobDetails.class))).thenAnswer(a -> CompletableFuture.completedFuture(a.getArgument(0)));
-        lenient().when(jobExecutor.execute(any())).thenReturn(scheduled);
-
-        errorResponse = JobExecutionResponse.builder()
-                .jobId(JOB_ID)
-                .message("error")
-                .now()
-                .build();
+        lenient().when(jobExecutor.execute(any())).thenReturn(Uni.createFrom().item(successResponse));
     }
 
     public abstract BaseTimerJobScheduler tested();

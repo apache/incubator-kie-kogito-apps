@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@ package org.kie.kogito.jobs.service.model.job;
 import org.kie.kogito.timer.JobContext;
 import org.kie.kogito.timer.JobHandle;
 
-public class HttpJobContext implements JobContext {
+public class JobDetailsContext implements JobContext {
 
     private JobDetails jobDetails;
     private JobHandle jobHandle;
 
-    public HttpJobContext(JobDetails jobDetails) {
+    public JobDetailsContext(JobDetails jobDetails) {
         this.jobDetails = jobDetails;
         if (jobHandle == null) {
             jobHandle = new ManageableJobHandle(jobDetails.getScheduledId());

@@ -27,6 +27,7 @@ import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
@@ -105,7 +106,7 @@ class PostgreSqlJobRepositoryTest {
         when(triggerMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null));
         RecipientMarshaller recipientMarshaller = mock(RecipientMarshaller.class);
         when(recipientMarshaller.marshall(any(Recipient.class))).thenReturn(new JsonObject().put("recipientMarshaller", "test"));
-        when(recipientMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new Recipient.HTTPRecipient("test"));
+        when(recipientMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new HTTPRecipient("test"));
 
         repository = new PostgreSqlJobRepository(null, null, client, triggerMarshaller, recipientMarshaller);
     }
@@ -113,7 +114,7 @@ class PostgreSqlJobRepositoryTest {
     @Test
     void doSave() {
         PointInTimeTrigger trigger = new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null);
-        Recipient recipient = new Recipient.HTTPRecipient("test");
+        Recipient recipient = new HTTPRecipient("test");
 
         JobDetails job = JobDetails.builder()
                 .id("test")
@@ -294,7 +295,7 @@ class PostgreSqlJobRepositoryTest {
     @Test
     void from() {
         PointInTimeTrigger trigger = new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null);
-        Recipient recipient = new Recipient.HTTPRecipient("test");
+        Recipient recipient = new HTTPRecipient("test");
 
         Row row = mock(Row.class);
         when(row.getString("id")).thenReturn("test");

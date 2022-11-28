@@ -20,5 +20,6 @@
         <module>jobs-service-postgresql</module>
         <module>jobs-service-mongodb</module>
         <module>jobs-service-inmemory</module>
+        <module>jobs-recipients</module>
     </modules>
 </project>

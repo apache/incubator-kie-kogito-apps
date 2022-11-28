@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.stream.JobStreams;
 import org.kie.kogito.jobs.service.utils.DateUtil;
@@ -73,7 +73,7 @@ public abstract class BaseJobRepositoryTest {
                 .id(id)
                 .trigger(new PointInTimeTrigger(System.currentTimeMillis(), null, null))//
                 .priority(1)
-                .recipient(new Recipient.HTTPRecipient("url"))
+                .recipient(new HTTPRecipient("url"))
                 .build();
         tested().save(job).toCompletableFuture().get();
     }
@@ -155,7 +155,7 @@ public abstract class BaseJobRepositoryTest {
         String id = UUID.randomUUID().toString();
         createAndSaveJob(id);
         final String newCallbackEndpoint = "http://localhost/newcallback";
-        final Recipient.HTTPRecipient recipient = new Recipient.HTTPRecipient(newCallbackEndpoint);
+        final HTTPRecipient recipient = new HTTPRecipient(newCallbackEndpoint);
         final JobDetails toMerge = JobDetails.builder()
                 .id(id)
                 .recipient(recipient)

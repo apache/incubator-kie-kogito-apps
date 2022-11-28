@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,14 @@ package org.kie.kogito.jobs.service.executor;
 
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.jobs.service.converters.HttpConverters;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.jobs.service.model.job.ScheduledJobAdapter;
-import org.kie.kogito.jobs.service.stream.JobStreams;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
@@ -63,10 +61,6 @@ class HttpJobExecutorTest {
 
     @Spy
     private HttpConverters httpConverters = new HttpConverters();
-
-    @Mock
-    private JobStreams jobStreams;
-
     @Mock
     private WebClient webClient;
 
@@ -82,7 +76,7 @@ class HttpJobExecutorTest {
         JobDetails scheduledJob =
                 JobDetails.builder()
                         .id(JOB_ID)
-                        .recipient(new Recipient.HTTPRecipient(ENDPOINT))
+                        .recipient(new HTTPRecipient(ENDPOINT))
                         .trigger(ScheduledJobAdapter.intervalTrigger(DateUtil.now(), 10, 1))
                         .build();
         Map queryParams = assertExecuteAndReturnQueryParams(request, params, scheduledJob, false);
@@ -93,24 +87,23 @@ class HttpJobExecutorTest {
             JobDetails scheduledJob, boolean mockError) {
         when(webClient.request(HttpMethod.POST, 8080, "localhost", "/endpoint")).thenReturn(request);
         when(request.queryParams()).thenReturn(params);
-        HttpResponse response = mock(HttpResponse.class);
-        when(response.statusCode()).thenReturn(mockError ? 500 : 200);
-        when(request.send()).thenReturn(Uni.createFrom().item(response));
+        HttpResponse httpResponse = mock(HttpResponse.class);
+        when(httpResponse.statusCode()).thenReturn(mockError ? 500 : 200);
+        when(request.send()).thenReturn(Uni.createFrom().item(httpResponse));
 
         ArgumentCaptor<Map> mapCaptor = ArgumentCaptor.forClass(Map.class);
-        ArgumentCaptor<JobExecutionResponse> responseCaptor = ArgumentCaptor.forClass(JobExecutionResponse.class);
 
-        tested.execute(CompletableFuture.completedFuture(scheduledJob));
+        JobExecutionResponse response = tested.execute(scheduledJob).onFailure().recoverWithNull().await().indefinitely();
         verify(webClient).request(HttpMethod.POST, 8080, "localhost", "/endpoint");
         verify(request).queryParams();
         verify(params).addAll(mapCaptor.capture());
         verify(request).send();
-        JobExecutionResponse jobExecutionResponse = mockError
-                ? verify(jobStreams).publishJobError(responseCaptor.capture())
-                : verify(jobStreams).publishJobSuccess(responseCaptor.capture());
-        JobExecutionResponse value = responseCaptor.getValue();
-        assertThat(value.getJobId()).isEqualTo(JOB_ID);
-        assertThat(value.getCode()).isEqualTo(mockError ? "500" : "200");
+        if (!mockError) {
+            assertThat(response.getJobId()).isEqualTo(JOB_ID);
+            assertThat(response.getCode()).isEqualTo("200");
+        } else {
+            assertThat(response).isNull();//since recover with null
+        }
         return mapCaptor.getValue();
     }
 
@@ -131,6 +124,6 @@ class HttpJobExecutorTest {
     }
 
     private JobDetails createSimpleJob() {
-        return JobDetails.builder().recipient(new Recipient.HTTPRecipient(ENDPOINT)).id(JOB_ID).build();
+        return JobDetails.builder().recipient(new HTTPRecipient(ENDPOINT)).id(JOB_ID).build();
     }
 }

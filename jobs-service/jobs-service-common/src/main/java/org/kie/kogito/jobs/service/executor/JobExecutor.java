@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,24 @@
  */
 package org.kie.kogito.jobs.service.executor;
 
-import java.util.concurrent.CompletionStage;
+import java.util.Optional;
 
+import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
+import org.kie.kogito.jobs.service.model.job.Recipient;
+
+import io.smallrye.mutiny.Uni;
 
 public interface JobExecutor {
 
-    CompletionStage<JobDetails> execute(CompletionStage<JobDetails> job);
+    Uni<JobExecutionResponse> execute(JobDetails job);
+
+    default boolean accept(JobDetails job) {
+        return Optional.ofNullable(job)
+                .map(JobDetails::getRecipient)
+                .filter(recipient -> type().isAssignableFrom(recipient.getClass()))
+                .isPresent();
+    }
+
+    Class<? extends Recipient> type();
 }

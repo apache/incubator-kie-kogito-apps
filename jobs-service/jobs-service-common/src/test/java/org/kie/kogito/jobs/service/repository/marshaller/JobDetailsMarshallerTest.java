@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.repository.marshaller;
 
 import java.time.ZonedDateTime;
@@ -22,8 +21,8 @@ import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
@@ -55,7 +54,7 @@ class JobDetailsMarshallerTest {
         Integer executionCounter = 4;
         String scheduledId = "testScheduledId";
         Object payload = new JsonObject().put("payload", "test");
-        Recipient.HTTPRecipient recipient = new Recipient.HTTPRecipient("testEndpoint");
+        HTTPRecipient recipient = new HTTPRecipient("testEndpoint");
         Trigger trigger = new PointInTimeTrigger(new Date().toInstant().toEpochMilli(), null, null);
         JobDetails.Type type = JobDetails.Type.HTTP;
 
@@ -87,7 +86,7 @@ class JobDetailsMarshallerTest {
                 .put("priority", priority)
                 .put("recipient", new JsonObject()
                         .put("endpoint", recipient.getEndpoint())
-                        .put("classType", Recipient.HTTPRecipient.class.getName()))
+                        .put("classType", HTTPRecipient.class.getName()))
                 .put("trigger", new JsonObject()
                         .put("nextFireTime", trigger.hasNextFireTime().getTime())
                         .put("classType", PointInTimeTrigger.class.getName()));

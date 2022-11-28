@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package org.kie.kogito.jobs.service.executor;
 
 import java.net.URI;
 import java.util.Optional;
-import java.util.concurrent.CompletionStage;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -29,9 +28,9 @@ import org.kie.kogito.jobs.service.converters.HttpConverters;
 import org.kie.kogito.jobs.service.exception.JobExecutionException;
 import org.kie.kogito.jobs.service.model.HTTPRequestCallback;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.Recipient.HTTPRecipient;
-import org.kie.kogito.jobs.service.stream.JobStreams;
+import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,9 +54,6 @@ public class HttpJobExecutor implements JobExecutor {
 
     @Inject
     HttpConverters httpConverters;
-
-    @Inject
-    JobStreams jobStreams;
 
     @PostConstruct
     void initialize() {
@@ -87,22 +83,19 @@ public class HttpJobExecutor implements JobExecutor {
     }
 
     private <T extends JobExecutionResponse> Uni<T> handleError(T response) {
-        LOGGER.info("handle error {}", response);
         return Uni.createFrom().item(response)
-                .onItem().invoke(jobStreams::publishJobError)
-                .onItem().invoke(r -> LOGGER.debug("Error executing job {}.", r));
+                .onItem().invoke(r -> LOGGER.debug("Error executing job {}.", r))
+                .onItem().failWith(() -> new JobExecutionException(response.getJobId(), "Response error when executing HTTP request for " + response));
     }
 
     private <T extends JobExecutionResponse> Uni<T> handleSuccess(T response) {
-        LOGGER.info("handle success {}", response);
         return Uni.createFrom().item(response)
-                .onItem().invoke(jobStreams::publishJobSuccess)
                 .onItem().invoke(r -> LOGGER.debug("Success executing job {}.", r));
     }
 
     @Override
-    public CompletionStage<JobDetails> execute(CompletionStage<JobDetails> futureJob) {
-        return Uni.createFrom().completionStage(futureJob)
+    public Uni<JobExecutionResponse> execute(JobDetails futureJob) {
+        return Uni.createFrom().item(futureJob)
                 .chain(job -> {
                     //Using just POST method for now
                     final String callbackEndpoint = getCallbackEndpoint(job);
@@ -115,20 +108,8 @@ public class HttpJobExecutor implements JobExecutor {
                                     .now()
                                     .jobId(job.getId())
                                     .build())
-                            .chain(this::handleResponse)
-                            .onItem().transform(response -> job)
-                            .onFailure().transform(ex -> new JobExecutionException(job, ex.getMessage()));
-                })
-                .onFailure(JobExecutionException.class).invoke(ex -> {
-                    JobDetails job = ((JobExecutionException) ex).getJob();
-                    LOGGER.error("Generic error executing job {}", job, ex);
-                    jobStreams.publishJobError(JobExecutionResponse.builder()
-                            .message(ex.getMessage())
-                            .now()
-                            .jobId(job.getId())
-                            .build());
-                })
-                .convert().toCompletionStage();
+                            .chain(this::handleResponse);
+                });
     }
 
     private HTTPRequestCallback buildCallbackRequest(String callbackEndpoint, String limit) {
@@ -163,5 +144,10 @@ public class HttpJobExecutor implements JobExecutor {
 
     WebClient getClient() {
         return client;
+    }
+
+    @Override
+    public Class<? extends Recipient> type() {
+        return HTTPRecipient.class;
     }
 }

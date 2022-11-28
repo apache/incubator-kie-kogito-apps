@@ -27,6 +27,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.jobs.service.events.JobDataEvent;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.timer.Trigger;
@@ -61,7 +62,7 @@ abstract class AbstractJobStreamsTest<T extends AbstractJobStreams> {
     private static final Integer EXECUTION_COUNTER = 1;
     private static final String SCHEDULE_ID = "SCHEDULE_ID";
 
-    private static final Recipient RECIPIENT = new Recipient.HTTPRecipient("http://recipient");
+    private static final Recipient RECIPIENT = new HTTPRecipient("http://recipient");
     private static final Trigger TRIGGER = new PointInTimeTrigger();
     private static final JobDetails.Type TYPE = JobDetails.Type.HTTP;
 

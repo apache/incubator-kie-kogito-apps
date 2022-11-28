@@ -18,8 +18,8 @@ package org.kie.kogito.jobs.service.validator;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.Recipient;
 
 public class JobDetailsValidator {
 
@@ -29,7 +29,7 @@ public class JobDetailsValidator {
                 || StringUtils.isEmpty(job.getCorrelationId())
                 || Objects.isNull(job.getTrigger())
                 || Objects.isNull(job.getRecipient())
-                || (job.getRecipient() instanceof Recipient.HTTPRecipient && StringUtils.isBlank(((Recipient.HTTPRecipient) job.getRecipient()).getEndpoint()))) {
+                || (job.getRecipient() instanceof HTTPRecipient && StringUtils.isBlank(((HTTPRecipient) job.getRecipient()).getEndpoint()))) {
             throw new IllegalArgumentException("Invalid Job Attributes. " + job);
         }
         return job;

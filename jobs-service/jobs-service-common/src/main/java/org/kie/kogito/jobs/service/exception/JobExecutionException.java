@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,18 +15,16 @@
  */
 package org.kie.kogito.jobs.service.exception;
 
-import org.kie.kogito.jobs.service.model.job.JobDetails;
-
 public class JobExecutionException extends JobServiceException {
 
-    private JobDetails job;
+    private String jobId;
 
-    public JobExecutionException(JobDetails job, String message) {
+    public JobExecutionException(String jobId, String message) {
         super(message);
-        this.job = job;
+        this.jobId = jobId;
     }
 
-    public JobDetails getJob() {
-        return job;
+    public String getJobId() {
+        return jobId;
     }
 }

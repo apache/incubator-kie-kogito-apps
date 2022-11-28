@@ -16,9 +16,9 @@
 package org.kie.kogito.jobs.service.validator;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.JobDetailsBuilder;
-import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,7 +35,7 @@ class JobDetailsValidatorTest {
                 .id(ID)
                 .correlationId(ID)
                 .payload("{\"name\":\"Arthur\"}")
-                .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
+                .recipient(new HTTPRecipient(CALLBACK_ENDPOINT))
                 .trigger(new PointInTimeTrigger())
                 .build();
         assertThat(JobDetailsValidator.validateToCreate(job)).isEqualTo(job);
@@ -46,7 +46,7 @@ class JobDetailsValidatorTest {
         JobDetails job = new JobDetailsBuilder()
                 .id(ID)
                 .correlationId(ID)
-                .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
+                .recipient(new HTTPRecipient(CALLBACK_ENDPOINT))
                 .trigger(new PointInTimeTrigger())
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
@@ -56,7 +56,7 @@ class JobDetailsValidatorTest {
     void testValidateMissingPayload() {
         JobDetails job = new JobDetailsBuilder()
                 .payload("{\"name\":\"Arthur\"}")
-                .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
+                .recipient(new HTTPRecipient(CALLBACK_ENDPOINT))
                 .trigger(new PointInTimeTrigger())
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
@@ -79,7 +79,7 @@ class JobDetailsValidatorTest {
                 .id(ID)
                 .correlationId(ID)
                 .payload("{\"name\":\"Arthur\"}")
-                .recipient(new Recipient.HTTPRecipient(null))
+                .recipient(new HTTPRecipient(null))
                 .trigger(new PointInTimeTrigger())
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
@@ -91,7 +91,7 @@ class JobDetailsValidatorTest {
                 .id(ID)
                 .correlationId(ID)
                 .payload("{\"name\":\"Arthur\"}")
-                .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
+                .recipient(new HTTPRecipient(CALLBACK_ENDPOINT))
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
     }
@@ -126,7 +126,7 @@ class JobDetailsValidatorTest {
     @Test
     void testValidateToMergeWithRecipient() {
         JobDetails job = new JobDetailsBuilder()
-                .recipient(new Recipient.HTTPRecipient(CALLBACK_ENDPOINT))
+                .recipient(new HTTPRecipient(CALLBACK_ENDPOINT))
                 .trigger(new PointInTimeTrigger())
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToMerge(job)).isInstanceOf(IllegalArgumentException.class);
