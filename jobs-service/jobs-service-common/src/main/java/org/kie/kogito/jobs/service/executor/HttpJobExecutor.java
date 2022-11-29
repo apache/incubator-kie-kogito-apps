@@ -139,7 +139,7 @@ public class HttpJobExecutor implements JobExecutor {
 
     private int getRepeatableJobCountDown(JobDetails job) {
         IntervalTrigger trigger = (IntervalTrigger) job.getTrigger();
-        return trigger.getRepeatLimit() - trigger.getRepeatCount() - 1;//since repeatCount is init with 1
+        return trigger.getRepeatLimit() - trigger.getRepeatCount() - 1;//since the repeatCount is updated only after this call when persisting the job.
     }
 
     WebClient getClient() {
