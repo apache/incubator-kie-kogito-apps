@@ -20,8 +20,8 @@ import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import org.kie.kogito.jobs.service.model.JobDetails;
-import org.kie.kogito.jobs.service.model.Recipient;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.Recipient;
 import org.kie.kogito.timer.Trigger;
 
 import static org.kie.kogito.jobs.service.utils.DateUtil.instantToZonedDateTime;
