@@ -20,8 +20,8 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
@@ -51,7 +51,6 @@ class MongoDBJobDetailsMarshallerTest {
         Object payload = new JsonObject().put("payload", "test");
         HTTPRecipient recipient = new HTTPRecipient("testEndpoint");
         Trigger trigger = new PointInTimeTrigger(new Date().toInstant().toEpochMilli(), null, null);
-        JobDetails.Type type = JobDetails.Type.HTTP;
 
         JobDetails jobDetails = JobDetails.builder()
                 .id(id)
@@ -62,7 +61,6 @@ class MongoDBJobDetailsMarshallerTest {
                 .executionCounter(executionCounter)
                 .scheduledId(scheduledId)
                 .payload(payload)
-                .type(type)
                 .priority(priority)
                 .recipient(recipient)
                 .trigger(trigger)
@@ -78,7 +76,6 @@ class MongoDBJobDetailsMarshallerTest {
                 .put("executionCounter", executionCounter)
                 .put("scheduledId", scheduledId)
                 .put("payload", payload)
-                .put("type", type.name())
                 .put("priority", priority)
                 .put("recipient", new JsonObject()
                         .put("endpoint", recipient.getEndpoint())

@@ -19,6 +19,7 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.api.JobBuilder;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
@@ -30,8 +31,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
-import static org.kie.kogito.jobs.service.utils.DateUtil.toDate;
 
 public class ScheduledJobAdapter {
 
@@ -98,7 +97,6 @@ public class ScheduledJobAdapter {
                 .retries(scheduledJob.getRetries())
                 .scheduledId(scheduledJob.getScheduledId())
                 .status(scheduledJob.getStatus())
-                .type(JobDetails.Type.HTTP)
                 .trigger(triggerAdapter(scheduledJob))
                 .priority(scheduledJob.getPriority())
                 .payload(payloadSerialize(scheduledJob))
@@ -110,7 +108,7 @@ public class ScheduledJobAdapter {
                 .filter(job -> Objects.nonNull(job.getExpirationTime()))
                 .map(job -> job.hasInterval()
                         .<Trigger> map(interval -> new IntervalTrigger(0l,
-                                toDate(scheduledJob.getExpirationTime()),
+                                DateUtil.toDate(scheduledJob.getExpirationTime()),
                                 null,
                                 scheduledJob.getRepeatLimit(),
                                 0,
@@ -123,7 +121,7 @@ public class ScheduledJobAdapter {
     }
 
     public static IntervalTrigger intervalTrigger(ZonedDateTime start, int repeatLimit, int intervalMillis) {
-        return new IntervalTrigger(0, toDate(start), null, repeatLimit, 0, intervalMillis, null, null);
+        return new IntervalTrigger(0, DateUtil.toDate(start), null, repeatLimit, 0, intervalMillis, null, null);
     }
 
     public static String payloadSerialize(ScheduledJob scheduledJob) {

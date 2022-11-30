@@ -16,7 +16,7 @@
 package org.kie.kogito.jobs.service.repository.marshaller;
 
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
+import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.Recipient;
 
 import io.vertx.core.json.JsonObject;

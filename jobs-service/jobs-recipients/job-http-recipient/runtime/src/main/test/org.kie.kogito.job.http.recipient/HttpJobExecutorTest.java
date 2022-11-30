@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.executor;
+package org.kie.kogito.job.http.recipient;
 
 import java.util.Map;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.jobs.service.converters.HttpConverters;
+import org.kie.kogito.job.http.recipient.converters.HttpConverters;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -43,9 +43,6 @@ import io.vertx.mutiny.ext.web.client.WebClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class HttpJobExecutorTest {
@@ -66,7 +63,7 @@ class HttpJobExecutorTest {
 
     @Test
     void testInitialize(@Mock io.vertx.core.Vertx vertxCore) {
-        when(vertx.getDelegate()).thenReturn(vertxCore);
+        Mockito.when(vertx.getDelegate()).thenReturn(vertxCore);
         tested.initialize();
         assertNotNull(tested.getClient());
     }
@@ -85,19 +82,19 @@ class HttpJobExecutorTest {
 
     private Map assertExecuteAndReturnQueryParams(@Mock HttpRequest<Buffer> request, @Mock MultiMap params,
             JobDetails scheduledJob, boolean mockError) {
-        when(webClient.request(HttpMethod.POST, 8080, "localhost", "/endpoint")).thenReturn(request);
-        when(request.queryParams()).thenReturn(params);
-        HttpResponse httpResponse = mock(HttpResponse.class);
-        when(httpResponse.statusCode()).thenReturn(mockError ? 500 : 200);
-        when(request.send()).thenReturn(Uni.createFrom().item(httpResponse));
+        Mockito.when(webClient.request(HttpMethod.POST, 8080, "localhost", "/endpoint")).thenReturn(request);
+        Mockito.when(request.queryParams()).thenReturn(params);
+        HttpResponse httpResponse = Mockito.mock(HttpResponse.class);
+        Mockito.when(httpResponse.statusCode()).thenReturn(mockError ? 500 : 200);
+        Mockito.when(request.send()).thenReturn(Uni.createFrom().item(httpResponse));
 
         ArgumentCaptor<Map> mapCaptor = ArgumentCaptor.forClass(Map.class);
 
         JobExecutionResponse response = tested.execute(scheduledJob).onFailure().recoverWithNull().await().indefinitely();
-        verify(webClient).request(HttpMethod.POST, 8080, "localhost", "/endpoint");
-        verify(request).queryParams();
-        verify(params).addAll(mapCaptor.capture());
-        verify(request).send();
+        Mockito.verify(webClient).request(HttpMethod.POST, 8080, "localhost", "/endpoint");
+        Mockito.verify(request).queryParams();
+        Mockito.verify(params).addAll(mapCaptor.capture());
+        Mockito.verify(request).send();
         if (!mockError) {
             assertThat(response.getJobId()).isEqualTo(JOB_ID);
             assertThat(response.getCode()).isEqualTo("200");

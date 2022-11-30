@@ -15,6 +15,7 @@
   <packaging>pom</packaging>
 
   <modules>
+    <module>jobs-service-internal-api</module>
     <module>jobs-service-common</module>
     <module>jobs-service-infinispan</module>
     <module>jobs-service-postgresql</module>

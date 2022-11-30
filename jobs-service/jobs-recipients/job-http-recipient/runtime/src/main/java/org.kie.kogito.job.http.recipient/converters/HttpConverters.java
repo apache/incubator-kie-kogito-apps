@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,17 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.model;
+package org.kie.kogito.job.http.recipient.converters;
 
-public class ErrorResponse {
+import org.kie.kogito.job.http.recipient.HTTPRequestCallback;
 
-    private String message;
+import io.vertx.core.http.HttpMethod;
 
-    public ErrorResponse(String message) {
-        this.message = message;
-    }
+public class HttpConverters {
 
-    public String getMessage() {
-        return message;
+    public static HttpMethod convertHttpMethod(HTTPRequestCallback.HTTPMethod method) {
+        return HttpMethod.valueOf(method.name());
     }
 }

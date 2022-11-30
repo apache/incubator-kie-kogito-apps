@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ public class JobDetailsBuilder {
     private Object payload;
     private Recipient recipient;
     private Trigger trigger;
-    private JobDetails.Type type;
     private Integer priority;
 
     public JobDetailsBuilder id(String id) {
@@ -86,11 +85,6 @@ public class JobDetailsBuilder {
         return this;
     }
 
-    public JobDetailsBuilder type(JobDetails.Type type) {
-        this.type = type;
-        return this;
-    }
-
     public JobDetailsBuilder priority(Integer priority) {
         this.priority = priority;
         return this;
@@ -98,7 +92,7 @@ public class JobDetailsBuilder {
 
     public JobDetails build() {
         return new JobDetails(id, correlationId, status, lastUpdate, retries, executionCounter, scheduledId, payload,
-                recipient, trigger, type, priority);
+                recipient, trigger, priority);
     }
 
     public JobDetailsBuilder of(JobDetails jobDetails) {
@@ -112,7 +106,6 @@ public class JobDetailsBuilder {
                 .payload(jobDetails.getPayload())
                 .recipient(jobDetails.getRecipient())
                 .trigger(jobDetails.getTrigger())
-                .type(jobDetails.getType())
                 .priority(jobDetails.getPriority());
     }
 
@@ -135,7 +128,6 @@ public class JobDetailsBuilder {
                 .trigger(j.map(JobDetails::getTrigger).orElse(trigger))
                 .recipient(j.map(JobDetails::getRecipient).orElse(recipient))
                 .correlationId(j.map(JobDetails::getCorrelationId).orElse(correlationId))
-                .type(j.map(JobDetails::getType).orElse(type))
                 .priority(j.map(JobDetails::getPriority).orElse(priority))
                 .payload(j.map(JobDetails::getPayload).orElse(payload))
                 .executionCounter(j.map(JobDetails::getExecutionCounter).orElse(executionCounter));

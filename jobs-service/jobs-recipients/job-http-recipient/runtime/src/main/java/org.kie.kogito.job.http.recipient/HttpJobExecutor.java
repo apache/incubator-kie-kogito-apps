@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.executor;
+package org.kie.kogito.job.http.recipient;
 
 import java.net.URI;
 import java.util.Optional;
@@ -23,12 +23,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
+import org.kie.kogito.job.http.recipient.converters.HttpConverters;
 import org.kie.kogito.jobs.api.URIBuilder;
-import org.kie.kogito.jobs.service.converters.HttpConverters;
 import org.kie.kogito.jobs.service.exception.JobExecutionException;
-import org.kie.kogito.jobs.service.model.HTTPRequestCallback;
+import org.kie.kogito.jobs.service.executor.JobExecutor;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.model.job.Recipient;
 import org.kie.kogito.timer.impl.IntervalTrigger;
@@ -52,9 +51,6 @@ public class HttpJobExecutor implements JobExecutor {
 
     private WebClient client;
 
-    @Inject
-    HttpConverters httpConverters;
-
     @PostConstruct
     void initialize() {
         this.client = WebClient.create(vertx);
@@ -63,7 +59,7 @@ public class HttpJobExecutor implements JobExecutor {
     private Uni<HttpResponse<Buffer>> executeCallback(HTTPRequestCallback request) {
         LOGGER.debug("Executing callback {}", request);
         final URI uri = URIBuilder.toURI(request.getUrl());
-        final HttpRequest<Buffer> clientRequest = client.request(httpConverters.convertHttpMethod(request.getMethod()),
+        final HttpRequest<Buffer> clientRequest = client.request(HttpConverters.convertHttpMethod(request.getMethod()),
                 uri.getPort(),
                 uri.getHost(),
                 uri.getPath());

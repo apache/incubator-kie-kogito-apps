@@ -18,7 +18,7 @@ package org.kie.kogito.jobs.service.validator;
 import java.util.Objects;
 
 import org.apache.commons.lang3.StringUtils;
-import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
+import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 
 public class JobDetailsValidator {

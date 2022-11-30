@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.api.JobBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
@@ -154,7 +155,6 @@ class ScheduledJobAdapterTest {
                 .priority(PRIORITY)
                 .recipient(new HTTPRecipient(ENDPOINT))
                 .scheduledId(SCHEDULED_ID)
-                .type(JobDetails.Type.HTTP)
                 .status(STATUS)
                 .correlationId(ID)
                 .lastUpdate(LAST_UPDATE)
@@ -192,7 +192,6 @@ class ScheduledJobAdapterTest {
         assertThat(jobDetails.getLastUpdate()).isEqualTo(LAST_UPDATE);
         assertThat(jobDetails.getPriority()).isEqualTo(PRIORITY);
         assertThat(jobDetails.getStatus()).isEqualTo(STATUS);
-        assertThat(jobDetails.getType()).isEqualTo(JobDetails.Type.HTTP);
         assertThat(jobDetails.getRecipient()).isInstanceOf(HTTPRecipient.class);
         assertThat(((HTTPRecipient) jobDetails.getRecipient()).getEndpoint()).isEqualTo(ENDPOINT);
         assertThat(jobDetails.getPayload()).isEqualTo(payload);

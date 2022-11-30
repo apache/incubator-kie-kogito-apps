@@ -19,7 +19,7 @@ import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
+import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.Recipient;
 
 import io.vertx.core.json.JsonObject;

@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.model.job;
+package org.kie.kogito.job.http.recipient;
 
 import java.util.Objects;
 import java.util.StringJoiner;
+
+import org.kie.kogito.jobs.service.model.job.Recipient;
 
 public class HTTPRecipient implements Recipient {
 
@@ -41,10 +43,10 @@ public class HTTPRecipient implements Recipient {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof org.kie.kogito.jobs.service.model.job.HTTPRecipient)) {
+        if (!(o instanceof HTTPRecipient)) {
             return false;
         }
-        org.kie.kogito.jobs.service.model.job.HTTPRecipient that = (org.kie.kogito.jobs.service.model.job.HTTPRecipient) o;
+        HTTPRecipient that = (HTTPRecipient) o;
         return Objects.equals(getEndpoint(), that.getEndpoint());
     }
 
@@ -55,7 +57,7 @@ public class HTTPRecipient implements Recipient {
 
     @Override
     public String toString() {
-        return new StringJoiner(", ", org.kie.kogito.jobs.service.model.job.HTTPRecipient.class.getSimpleName() + "[", "]")
+        return new StringJoiner(", ", HTTPRecipient.class.getSimpleName() + "[", "]")
                 .add("endpoint='" + endpoint + "'")
                 .toString();
     }

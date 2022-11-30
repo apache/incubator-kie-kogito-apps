@@ -40,28 +40,10 @@ public class JobDetails {
     private Object payload;//process, rule, decision
     private Recipient recipient;//http callback, event topic
     private Trigger trigger;//when/how it should be executed
-    private Type type;
-
-    //fixme: can remove this
-    public enum Type {
-
-        HTTP(DelegateJob.class);
-
-        private Class<? extends Job> jobClass;
-
-        Type(Class<? extends Job> jobClass) {
-            this.jobClass = jobClass;
-        }
-
-        public Class<? extends Job> getJobClass() {
-            return jobClass;
-        }
-    }
 
     @SuppressWarnings("java:S107")
     protected JobDetails(String id, String correlationId, JobStatus status, ZonedDateTime lastUpdate, Integer retries,
-            Integer executionCounter, String scheduledId, Object payload, Recipient recipient, Trigger trigger,
-            Type type, Integer priority) {
+            Integer executionCounter, String scheduledId, Object payload, Recipient recipient, Trigger trigger, Integer priority) {
         this.id = id;
         this.correlationId = correlationId;
         this.status = status;
@@ -72,7 +54,6 @@ public class JobDetails {
         this.payload = payload;
         this.recipient = recipient;
         this.trigger = trigger;
-        this.type = type;
         this.priority = priority;
     }
 
@@ -116,10 +97,6 @@ public class JobDetails {
         return trigger;
     }
 
-    public Type getType() {
-        return type;
-    }
-
     public Integer getPriority() {
         return priority;
     }
@@ -145,13 +122,12 @@ public class JobDetails {
                 Objects.equals(getExecutionCounter(), that.getExecutionCounter()) &&
                 Objects.equals(getScheduledId(), that.getScheduledId()) &&
                 Objects.equals(getRecipient(), that.getRecipient()) &&
-                Objects.equals(getTrigger().hasNextFireTime(), that.getTrigger().hasNextFireTime()) &&
-                Objects.equals(getType(), that.getType());
+                Objects.equals(getTrigger().hasNextFireTime(), that.getTrigger().hasNextFireTime());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCorrelationId(), getStatus(), getLastUpdate(), getRetries(), getExecutionCounter(), getScheduledId(), getPayload(), getRecipient(), getTrigger(), getType());
+        return Objects.hash(getId(), getCorrelationId(), getStatus(), getLastUpdate(), getRetries(), getExecutionCounter(), getScheduledId(), getPayload(), getRecipient(), getTrigger());
     }
 
     @Override
@@ -167,7 +143,6 @@ public class JobDetails {
                 .add("payload=" + payload)
                 .add("recipient=" + recipient)
                 .add("trigger=" + trigger)
-                .add("type=" + type)
                 .toString();
     }
 }

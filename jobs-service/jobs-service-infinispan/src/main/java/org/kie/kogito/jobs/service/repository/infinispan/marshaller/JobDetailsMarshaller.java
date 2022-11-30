@@ -52,7 +52,7 @@ public class JobDetailsMarshaller extends BaseMarshaller<JobDetails> {
         writer.writeString("payload", String.valueOf(job.getPayload()));
         writer.writeObject("recipient", job.getRecipient(), getInterface(job.getRecipient()));
         writer.writeObject("trigger", job.getTrigger(), getInterface(job.getTrigger()));
-        writer.writeString("type", mapEnum(job.getType()));
+        ;
     }
 
     public Class<?> getInterface(Object object) {
@@ -76,7 +76,6 @@ public class JobDetailsMarshaller extends BaseMarshaller<JobDetails> {
         String payload = reader.readString("payload");//serialize payload
         Recipient recipient = reader.readObject("recipient", Recipient.class);
         Trigger trigger = reader.readObject("trigger", Trigger.class);
-        JobDetails.Type type = mapString(reader.readString("type"), JobDetails.Type.class);
 
         return JobDetails.builder()
                 .id(id)
@@ -90,7 +89,6 @@ public class JobDetailsMarshaller extends BaseMarshaller<JobDetails> {
                 .payload(payload)
                 .recipient(recipient)
                 .trigger(trigger)
-                .type(type)
                 .build();
     }
 }

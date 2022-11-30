@@ -15,6 +15,9 @@
  */
 package org.kie.kogito.job.http.recipient.deployment;
 
+import org.kie.kogito.job.http.recipient.HttpJobExecutor;
+
+import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 
@@ -25,5 +28,10 @@ class JobHttpRecipientProcessor {
     @BuildStep
     FeatureBuildItem feature() {
         return new FeatureBuildItem(FEATURE);
+    }
+
+    @BuildStep
+    AdditionalBeanBuildItem additionalBeans() {
+        return new AdditionalBeanBuildItem(HttpJobExecutor.class);
     }
 }

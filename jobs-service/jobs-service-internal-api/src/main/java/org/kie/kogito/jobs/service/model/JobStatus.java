@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,18 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.converters;
+package org.kie.kogito.jobs.service.model;
 
-import javax.enterprise.context.ApplicationScoped;
-
-import org.kie.kogito.jobs.service.model.HTTPRequestCallback;
-
-import io.vertx.core.http.HttpMethod;
-
-@ApplicationScoped
-public class HttpConverters {
-
-    public HttpMethod convertHttpMethod(HTTPRequestCallback.HTTPMethod method) {
-        return HttpMethod.valueOf(method.name());
-    }
+public enum JobStatus {
+    ERROR, //final
+    EXECUTED, //final
+    SCHEDULED, //active
+    RETRY, //active
+    CANCELED//final
 }

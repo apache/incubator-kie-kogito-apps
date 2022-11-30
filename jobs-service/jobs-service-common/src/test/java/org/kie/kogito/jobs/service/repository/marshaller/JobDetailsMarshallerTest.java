@@ -20,8 +20,8 @@ import java.util.Date;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.model.job.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
@@ -56,7 +56,6 @@ class JobDetailsMarshallerTest {
         Object payload = new JsonObject().put("payload", "test");
         HTTPRecipient recipient = new HTTPRecipient("testEndpoint");
         Trigger trigger = new PointInTimeTrigger(new Date().toInstant().toEpochMilli(), null, null);
-        JobDetails.Type type = JobDetails.Type.HTTP;
 
         jobDetails = JobDetails.builder()
                 .id(id)
@@ -67,7 +66,6 @@ class JobDetailsMarshallerTest {
                 .executionCounter(executionCounter)
                 .scheduledId(scheduledId)
                 .payload(payload)
-                .type(type)
                 .priority(priority)
                 .recipient(recipient)
                 .trigger(trigger)
@@ -82,7 +80,6 @@ class JobDetailsMarshallerTest {
                 .put("executionCounter", executionCounter)
                 .put("scheduledId", scheduledId)
                 .put("payload", payload)
-                .put("type", type.name())
                 .put("priority", priority)
                 .put("recipient", new JsonObject()
                         .put("endpoint", recipient.getEndpoint())

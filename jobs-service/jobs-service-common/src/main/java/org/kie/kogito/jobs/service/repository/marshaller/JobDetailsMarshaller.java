@@ -76,7 +76,6 @@ public class JobDetailsMarshaller {
         private Map<String, Object> payload;
         private Map<String, Object> recipient;
         private Map<String, Object> trigger;
-        private String type;
 
         public JobDetailsAccessor() {
         }
@@ -93,7 +92,6 @@ public class JobDetailsMarshaller {
             this.payload = Optional.ofNullable(jobDetails.getPayload()).map(p -> new JsonObject(p.toString()).getMap()).orElse(null);
             this.recipient = Optional.ofNullable(jobDetails.getRecipient()).map(r -> recipientMarshaller.marshall(r).getMap()).orElse(null);
             this.trigger = Optional.ofNullable(jobDetails.getTrigger()).map(t -> triggerMarshaller.marshall(t).getMap()).orElse(null);
-            this.type = Optional.ofNullable(jobDetails.getType()).map(Enum::name).orElse(null);
         }
 
         public JobDetails to(RecipientMarshaller recipientMarshaller, TriggerMarshaller triggerMarshaller) {
@@ -106,7 +104,6 @@ public class JobDetailsMarshaller {
                     .executionCounter(this.executionCounter)
                     .scheduledId(this.scheduledId)
                     .payload(Optional.ofNullable(this.payload).map(p -> new JsonObject(p).toString()).orElse(null))
-                    .type(Optional.ofNullable(this.type).map(JobDetails.Type::valueOf).orElse(null))
                     .priority(this.priority)
                     .recipient(Optional.ofNullable(this.recipient).map(r -> recipientMarshaller.unmarshall(new JsonObject(r))).orElse(null))
                     .trigger(Optional.ofNullable(this.trigger).map(t -> triggerMarshaller.unmarshall(new JsonObject(t))).orElse(null))
@@ -201,12 +198,5 @@ public class JobDetailsMarshaller {
             this.trigger = trigger;
         }
 
-        public String getType() {
-            return type;
-        }
-
-        public void setType(String type) {
-            this.type = type;
-        }
     }
 }
