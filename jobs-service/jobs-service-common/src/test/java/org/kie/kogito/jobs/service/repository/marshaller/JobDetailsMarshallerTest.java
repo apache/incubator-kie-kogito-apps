@@ -21,8 +21,8 @@ import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.job.http.recipient.HTTPRecipient;
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 

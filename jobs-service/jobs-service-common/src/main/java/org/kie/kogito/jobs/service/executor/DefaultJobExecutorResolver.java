@@ -19,7 +19,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
-import org.kie.kogito.jobs.service.model.job.JobDetails;
+import org.kie.kogito.jobs.service.model.JobDetails;
 
 @ApplicationScoped
 public class DefaultJobExecutorResolver implements JobExecutorResolver {

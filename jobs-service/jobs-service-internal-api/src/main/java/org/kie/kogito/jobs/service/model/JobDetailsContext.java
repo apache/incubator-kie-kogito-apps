@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.model.job;
+package org.kie.kogito.jobs.service.model;
 
 import org.kie.kogito.timer.JobContext;
 import org.kie.kogito.timer.JobHandle;

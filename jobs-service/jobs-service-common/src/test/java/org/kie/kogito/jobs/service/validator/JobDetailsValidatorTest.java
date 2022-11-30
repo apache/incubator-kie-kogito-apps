@@ -17,8 +17,8 @@ package org.kie.kogito.jobs.service.validator;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.job.http.recipient.HTTPRecipient;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.JobDetailsBuilder;
+import org.kie.kogito.jobs.service.model.JobDetails;
+import org.kie.kogito.jobs.service.model.JobDetailsBuilder;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
 import static org.assertj.core.api.Assertions.assertThat;

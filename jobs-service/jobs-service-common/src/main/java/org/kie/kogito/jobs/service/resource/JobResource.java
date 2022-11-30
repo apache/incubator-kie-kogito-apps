@@ -30,10 +30,10 @@ import javax.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.kie.kogito.jobs.api.Job;
+import org.kie.kogito.jobs.service.adapter.ScheduledJobAdapter;
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.model.ScheduledJob.ScheduledJobBuilder;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
 import org.kie.kogito.jobs.service.validator.JobDetailsValidator;

@@ -13,14 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.model.job;
+package org.kie.kogito.jobs.service.model;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.timer.Job;
 import org.kie.kogito.timer.Trigger;
 
 /**

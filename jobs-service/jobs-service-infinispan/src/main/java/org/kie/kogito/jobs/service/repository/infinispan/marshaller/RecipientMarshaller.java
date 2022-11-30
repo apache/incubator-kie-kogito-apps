@@ -18,7 +18,7 @@ package org.kie.kogito.jobs.service.repository.infinispan.marshaller;
 import java.io.IOException;
 
 import org.kie.kogito.job.http.recipient.HTTPRecipient;
-import org.kie.kogito.jobs.service.model.job.Recipient;
+import org.kie.kogito.jobs.service.model.Recipient;
 
 public class RecipientMarshaller extends BaseMarshaller<Recipient> {
 

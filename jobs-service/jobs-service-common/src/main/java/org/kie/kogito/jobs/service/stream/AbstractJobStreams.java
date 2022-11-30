@@ -21,9 +21,9 @@ import java.util.concurrent.CompletionStage;
 
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Message;
+import org.kie.kogito.jobs.service.adapter.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.events.JobDataEvent;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.ScheduledJobAdapter;
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.resource.JobResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

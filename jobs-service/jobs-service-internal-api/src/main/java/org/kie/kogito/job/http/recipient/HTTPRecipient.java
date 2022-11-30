@@ -18,7 +18,7 @@ package org.kie.kogito.job.http.recipient;
 import java.util.Objects;
 import java.util.StringJoiner;
 
-import org.kie.kogito.jobs.service.model.job.Recipient;
+import org.kie.kogito.jobs.service.model.Recipient;
 
 public class HTTPRecipient implements Recipient {
 

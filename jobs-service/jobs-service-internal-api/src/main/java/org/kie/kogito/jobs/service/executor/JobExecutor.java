@@ -17,9 +17,9 @@ package org.kie.kogito.jobs.service.executor;
 
 import java.util.Optional;
 
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.Recipient;
+import org.kie.kogito.jobs.service.model.Recipient;
 
 import io.smallrye.mutiny.Uni;
 

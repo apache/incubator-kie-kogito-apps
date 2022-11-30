@@ -18,8 +18,8 @@ package org.kie.kogito.jobs.service.scheduler;
 import java.util.concurrent.CompletionStage;
 
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.timer.Trigger;
 import org.reactivestreams.Publisher;
 

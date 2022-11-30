@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.model.job;
+package org.kie.kogito.jobs.service.adapter;
 
 import java.time.ZonedDateTime;
 import java.util.Objects;
@@ -21,6 +21,8 @@ import java.util.Optional;
 
 import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.api.JobBuilder;
+import org.kie.kogito.jobs.service.model.JobDetails;
+import org.kie.kogito.jobs.service.model.JobDetailsBuilder;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
@@ -155,7 +157,7 @@ public class ScheduledJobAdapter {
                 .orElse(new ProcessPayload());
     }
 
-    final static class ProcessPayload {
+    public final static class ProcessPayload {
 
         private String processInstanceId;
         private String rootProcessInstanceId;

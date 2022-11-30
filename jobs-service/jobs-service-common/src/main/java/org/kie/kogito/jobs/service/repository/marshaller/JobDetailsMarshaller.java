@@ -24,8 +24,8 @@ import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
 
 import io.quarkus.arc.DefaultBean;
 import io.vertx.core.json.JsonObject;

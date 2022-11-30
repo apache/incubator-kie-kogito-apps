@@ -13,12 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.model.job;
+package org.kie.kogito.jobs.service.job;
 
 import java.util.Optional;
 
 import org.kie.kogito.jobs.service.exception.JobExecutionException;
 import org.kie.kogito.jobs.service.executor.JobExecutorResolver;
+import org.kie.kogito.jobs.service.model.JobDetailsContext;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.stream.JobStreams;
 import org.kie.kogito.timer.Job;
