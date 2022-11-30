@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import io.quarkus.arc.Arc;
 import io.quarkus.arc.InstanceHandle;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 
 /**
  * The job that sends an HTTP Request based on the {@link JobDetailsContext}.
@@ -74,6 +75,9 @@ public class DelegateJob implements Job<JobDetailsContext> {
                             .jobId(jobId)
                             .build());
                 })
+                //to avoid blocking IO pool from eventloop since execute() is blocking currently
+                //might consider execute() method to be non-blocking/async
+                .runSubscriptionOn(Infrastructure.getDefaultWorkerPool())
                 .subscribe().with(response -> LOGGER.info("Executed successfully with response {}", response));
 
     }
