@@ -26,30 +26,14 @@
 
   <dependencyManagement>
     <dependencies>
-      <!-- Jobs service -->
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>jobs-service-common</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
+     <dependency>
         <groupId>org.kie.kogito</groupId>
         <artifactId>jobs-service-internal-api</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
         <groupId>org.kie.kogito</groupId>
-        <artifactId>jobs-recipients</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
         <artifactId>job-http-recipient</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>job-http-recipient-deployment</artifactId>
         <version>${project.version}</version>
       </dependency>
     </dependencies>
