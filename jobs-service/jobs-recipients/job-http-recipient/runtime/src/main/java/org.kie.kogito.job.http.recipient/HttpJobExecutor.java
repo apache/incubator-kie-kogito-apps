@@ -90,8 +90,8 @@ public class HttpJobExecutor implements JobExecutor {
     }
 
     @Override
-    public Uni<JobExecutionResponse> execute(JobDetails futureJob) {
-        return Uni.createFrom().item(futureJob)
+    public Uni<JobExecutionResponse> execute(JobDetails jobDetails) {
+        return Uni.createFrom().item(jobDetails)
                 .chain(job -> {
                     //Using just POST method for now
                     final String callbackEndpoint = getCallbackEndpoint(job);
@@ -99,7 +99,7 @@ public class HttpJobExecutor implements JobExecutor {
                     final HTTPRequestCallback callback = buildCallbackRequest(callbackEndpoint, limit);
                     return executeCallback(callback)
                             .onItem().transform(response -> JobExecutionResponse.builder()
-                                    .message(response.statusMessage())
+                                    .message(response.bodyAsString())
                                     .code(String.valueOf(response.statusCode()))
                                     .now()
                                     .jobId(job.getId())

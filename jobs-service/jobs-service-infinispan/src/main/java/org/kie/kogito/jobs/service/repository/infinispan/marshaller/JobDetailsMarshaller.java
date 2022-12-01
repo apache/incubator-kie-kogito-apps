@@ -52,7 +52,6 @@ public class JobDetailsMarshaller extends BaseMarshaller<JobDetails> {
         writer.writeString("payload", String.valueOf(job.getPayload()));
         writer.writeObject("recipient", job.getRecipient(), getInterface(job.getRecipient()));
         writer.writeObject("trigger", job.getTrigger(), getInterface(job.getTrigger()));
-        ;
     }
 
     public Class<?> getInterface(Object object) {

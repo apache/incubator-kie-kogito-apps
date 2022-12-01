@@ -1,9 +1,5 @@
-name: Job Http Recipient
-#description: Job Http Recipient ...
+name: Job Http Recipient extension
+description: Handle HTTP requests based on information from the job recipient.
 metadata:
-#  keywords:
-#    - job-http-recipient
-#  guide: ...
-#  categories:
-#    - "miscellaneous"
-#  status: "preview"
+  keywords:
+    - HTTP, HTTPRecipient

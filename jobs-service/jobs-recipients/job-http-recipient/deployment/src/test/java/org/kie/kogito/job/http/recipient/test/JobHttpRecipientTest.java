@@ -15,14 +15,25 @@
  */
 package org.kie.kogito.job.http.recipient.test;
 
+import javax.inject.Inject;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.kie.kogito.job.http.recipient.HTTPRecipient;
+import org.kie.kogito.job.http.recipient.HttpJobExecutor;
+import org.kie.kogito.jobs.service.model.JobDetails;
+import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 
 import io.quarkus.test.QuarkusUnitTest;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.smallrye.mutiny.helpers.test.UniAssertSubscriber;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
+@QuarkusTestResource(HttpRecipientResourceMock.class)
 public class JobHttpRecipientTest {
 
     // Start unit test with your extension loaded
@@ -30,9 +41,21 @@ public class JobHttpRecipientTest {
     static final QuarkusUnitTest unitTest = new QuarkusUnitTest()
             .setArchiveProducer(() -> ShrinkWrap.create(JavaArchive.class));
 
+    @Inject
+    HttpJobExecutor httpJobExecutor;
+
+    @ConfigProperty(name = HttpRecipientResourceMock.MOCK_SERVICE_URL)
+    String mockServiceUrl;
+
     @Test
-    public void writeYourOwnUnitTest() {
-        // Write your unit tests here - see the testing extension guide https://quarkus.io/guides/writing-extensions#testing-extensions for more information
-        Assertions.assertTrue(true, "Add some assertions to " + getClass().getName());
+    public void httpExecutorTest() {
+        JobDetails job = JobDetails.builder().id("12345").recipient(new HTTPRecipient(mockServiceUrl)).build();
+
+        UniAssertSubscriber<JobExecutionResponse> tester = httpJobExecutor.execute(job)
+                .invoke(response -> assertThat(response.getJobId()).isEqualTo(job.getId()))
+                .invoke(response -> assertThat(response.getCode()).isEqualTo("200"))
+                .invoke(response -> assertThat(response.getMessage()).isEqualTo("Message"))
+                .subscribe().withSubscriber(UniAssertSubscriber.create());
+        tester.awaitItem();
     }
 }

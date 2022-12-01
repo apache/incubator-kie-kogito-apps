@@ -39,7 +39,7 @@ public class DelegateJob implements Job<JobDetailsContext> {
 
     private final JobExecutorResolver jobExecutorResolver;
 
-    JobStreams jobStreams;
+    private final JobStreams jobStreams;
 
     public DelegateJob(JobExecutorResolver executorResolver, JobStreams jobStreams) {
         this.jobExecutorResolver = executorResolver;
