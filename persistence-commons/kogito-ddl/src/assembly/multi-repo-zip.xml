@@ -20,7 +20,7 @@
             <directory>${project.root.dir}/data-index/data-index-service/data-index-service-postgresql/src/main/resources/db/migration</directory>
             <outputDirectory>postgresql</outputDirectory>
             <includes>
-                <include>*_flyway.sql</include>
+                <include>*.sql</include>
             </includes>
         </fileSet>
         <fileSet>
