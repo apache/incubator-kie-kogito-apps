@@ -32,7 +32,6 @@ public class DataIndexPostgreSqlContainer extends AbstractDataIndexContainer {
         addEnv("QUARKUS_DATASOURCE_PASSWORD", password);
         addEnv("QUARKUS_FLYWAY_MIGRATE_AT_START", "true");
         addEnv("QUARKUS_FLYWAY_BASELINE_ON_MIGRATE", "true");
-        addEnv("QUARKUS_FLYWAY_CLEAN_AT_START", "true");
     }
 
     @Override
