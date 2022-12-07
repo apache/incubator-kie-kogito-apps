@@ -18,12 +18,19 @@ package org.kie.kogito.job.http.recipient;
 import java.util.Objects;
 import java.util.StringJoiner;
 
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.Recipient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class HTTPRecipient implements Recipient {
 
     public static final String TYPE = "HTTP";
     private String endpoint;
+
+    public HTTPRecipient() {
+
+    }
 
     public HTTPRecipient(String endpoint) {
         this.endpoint = endpoint;
@@ -36,6 +43,12 @@ public class HTTPRecipient implements Recipient {
     @Override
     public String type() {
         return TYPE;
+    }
+
+    @JsonIgnore
+    @Override
+    public HttpRecipient getRecipient() {
+        return HttpRecipient.builder().url(getEndpoint()).build();
     }
 
     @Override

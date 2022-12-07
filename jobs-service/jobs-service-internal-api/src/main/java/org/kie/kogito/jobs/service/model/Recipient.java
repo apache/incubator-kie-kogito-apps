@@ -19,4 +19,6 @@ public interface Recipient {
 
     String type();
 
+    <T> org.kie.kogito.jobs.service.api.Recipient<T> getRecipient();
+
 }

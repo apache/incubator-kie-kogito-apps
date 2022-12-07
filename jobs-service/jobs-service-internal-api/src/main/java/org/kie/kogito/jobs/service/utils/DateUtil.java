@@ -54,8 +54,12 @@ public class DateUtil {
         return ZonedDateTime.ofInstant(date.toInstant(), DEFAULT_ZONE);
     }
 
-    public static Date toDate(ZonedDateTime zonedDateTime) {
-        return new Date(zonedDateTime.toInstant().toEpochMilli());
+    public static Date toDate(OffsetDateTime dateTime) {
+        return new Date(dateTime.toInstant().toEpochMilli());
+    }
+
+    public static Date toDate(ZonedDateTime dateTime) {
+        return new Date(dateTime.toInstant().toEpochMilli());
     }
 
     public static OffsetDateTime dateToOffsetDateTime(Date date) {
