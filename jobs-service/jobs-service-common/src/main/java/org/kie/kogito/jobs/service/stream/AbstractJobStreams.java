@@ -24,7 +24,7 @@ import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.jobs.service.adapter.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.events.JobDataEvent;
 import org.kie.kogito.jobs.service.model.JobDetails;
-import org.kie.kogito.jobs.service.resource.JobResource;
+import org.kie.kogito.jobs.service.resource.RestApiConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +59,7 @@ public abstract class AbstractJobStreams {
             try {
                 JobDataEvent event = JobDataEvent
                         .builder()
-                        .source(url + JobResource.JOBS_PATH)
+                        .source(url + RestApiConstants.JOBS_PATH)
                         .data(ScheduledJobAdapter.of(job))
                         .build();
                 String json = objectMapper.writeValueAsString(event);

@@ -15,11 +15,11 @@
  */
 package org.kie.kogito.jobs.service.repository.marshaller;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.Recipient;
 
 import io.vertx.core.json.JsonObject;
@@ -30,42 +30,27 @@ public class RecipientMarshaller {
     private static final String CLASS_TYPE = "classType";
 
     public JsonObject marshall(Recipient recipient) {
-        if (recipient instanceof HTTPRecipient) {
-            return JsonObject.mapFrom(new HTTPRecipientAccessor((HTTPRecipient) recipient))
-                    .put(CLASS_TYPE, recipient.getClass().getName());
+        if (Objects.isNull(recipient)) {
+            return null;
         }
-        return null;
+        JsonObject jsonObject = JsonObject
+                .mapFrom(recipient)
+                .put(CLASS_TYPE, recipient.getClass().getName());
+        return jsonObject;
     }
 
     public Recipient unmarshall(JsonObject jsonObject) {
+        if (Objects.isNull(jsonObject)) {
+            return null;
+        }
         String classType = Optional.ofNullable(jsonObject).map(o -> (String) o.remove(CLASS_TYPE)).orElse(null);
-        if (HTTPRecipient.class.getName().equals(classType)) {
-            return jsonObject.mapTo(HTTPRecipientAccessor.class).to();
+        if (Objects.isNull(classType)) {
+            return null;
         }
-        return null;
-    }
-
-    static class HTTPRecipientAccessor {
-
-        private String endpoint;
-
-        public HTTPRecipientAccessor() {
-        }
-
-        public HTTPRecipientAccessor(HTTPRecipient recipient) {
-            this.endpoint = recipient.getEndpoint();
-        }
-
-        public HTTPRecipient to() {
-            return new HTTPRecipient(this.endpoint);
-        }
-
-        public String getEndpoint() {
-            return endpoint;
-        }
-
-        public void setEndpoint(String endpoint) {
-            this.endpoint = endpoint;
+        try {
+            return (Recipient) jsonObject.mapTo(Class.forName(classType));
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
 }

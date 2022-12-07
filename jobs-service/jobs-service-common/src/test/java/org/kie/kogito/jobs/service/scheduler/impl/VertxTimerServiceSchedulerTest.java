@@ -80,7 +80,7 @@ class VertxTimerServiceSchedulerTest {
         ZonedDateTime time = DateUtil.now().plusSeconds(1);
         final ManageableJobHandle handle = schedule(time);
         verify(vertx).setTimer(timeCaptor.capture(), any());
-        assertThat(timeCaptor.getValue()).isGreaterThan(time.toInstant().minusMillis(System.currentTimeMillis()).toEpochMilli());
+        assertThat(timeCaptor.getValue()).isGreaterThanOrEqualTo(time.toInstant().minusMillis(System.currentTimeMillis()).toEpochMilli());
         given().await()
                 .atMost(2, TimeUnit.SECONDS)
                 .untilAsserted(() -> verify(jobExecutorResolver).get(jobCaptor.capture()));

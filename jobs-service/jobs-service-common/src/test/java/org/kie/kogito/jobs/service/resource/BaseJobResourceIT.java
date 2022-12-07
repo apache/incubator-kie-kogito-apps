@@ -122,7 +122,7 @@ public abstract class BaseJobResourceIT {
                 .contentType(ContentType.JSON)
                 .body(body)
                 .when()
-                .post(JobResource.JOBS_PATH)
+                .post(RestApiConstants.JOBS_PATH)
                 .then();
     }
 
@@ -162,7 +162,7 @@ public abstract class BaseJobResourceIT {
         create(jobToJson(job));
         final ScheduledJob response = given().pathParam("id", id)
                 .when()
-                .delete(JobResource.JOBS_PATH + "/{id}")
+                .delete(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK)
                 .contentType(ContentType.JSON)
@@ -256,7 +256,7 @@ public abstract class BaseJobResourceIT {
         given()
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(404);
     }
@@ -265,7 +265,7 @@ public abstract class BaseJobResourceIT {
         ScheduledJob scheduledJob = given()
                 .pathParam("id", id)
                 .when()
-                .delete(JobResource.JOBS_PATH + "/{id}")
+                .delete(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK)
                 .contentType(ContentType.JSON)
@@ -287,7 +287,7 @@ public abstract class BaseJobResourceIT {
         ScheduledJob scheduledJob = given()
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK)
                 .contentType(ContentType.JSON)
@@ -376,7 +376,7 @@ public abstract class BaseJobResourceIT {
                 .contentType(ContentType.JSON)
                 .body(jobToJson(toPatch))
                 .when()
-                .patch(JobResource.JOBS_PATH + "/{id}")
+                .patch(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(i);
     }
