@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>integration-tests-jobs-service-quarkus</artifactId>
-    <version>1.31.1.Final</version>
+    <version>1.31.2-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>integration-tests-jobs-service-quarkus-knative-eventing</artifactId>
