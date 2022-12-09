@@ -13,8 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-package org.kie.kogito.jobs.service.messaging;
+package org.kie.kogito.jobs.service.messaging.v2;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -34,16 +33,15 @@ import io.smallrye.mutiny.Uni;
 @ApplicationScoped
 public class KnativeReactiveMessagingEventConsumer extends MessagingConsumer {
 
-    private static final String KOGITO_JOB_SERVICE_JOB_REQUEST_EVENTS_KNATIVE = "kogito-job-service-job-request-events-knative";
+    private static final String KOGITO_JOB_SERVICE_JOB_REQUEST_EVENTS_KNATIVE_V2 = "kogito-job-service-job-request-events-knative-v2";
 
     @Inject
-    public KnativeReactiveMessagingEventConsumer(TimerDelegateJobScheduler scheduler,
-            ReactiveJobRepository jobRepository,
+    public KnativeReactiveMessagingEventConsumer(TimerDelegateJobScheduler scheduler, ReactiveJobRepository jobRepository,
             ObjectMapper objectMapper) {
         super(scheduler, jobRepository, objectMapper);
     }
 
-    @Incoming(KOGITO_JOB_SERVICE_JOB_REQUEST_EVENTS_KNATIVE)
+    @Incoming(KOGITO_JOB_SERVICE_JOB_REQUEST_EVENTS_KNATIVE_V2)
     @Acknowledgment(Acknowledgment.Strategy.MANUAL)
     @Retry(delay = 500, maxRetries = 4)
     @Override

@@ -31,7 +31,7 @@ import io.quarkus.arc.InstanceHandle;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 
 /**
- * The job that sends an HTTP Request based on the {@link JobDetailsContext}.
+ * The job that delegates the execution to the {@link JobExecutorResolver} with the {@link JobDetailsContext}.
  */
 public class DelegateJob implements Job<JobDetailsContext> {
 

@@ -23,6 +23,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.job.http.recipient.converters.HttpConverters;
 import org.kie.kogito.jobs.api.URIBuilder;
 import org.kie.kogito.jobs.service.exception.JobExecutionException;
@@ -46,9 +47,11 @@ public class HttpJobExecutor implements JobExecutor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpJobExecutor.class);
 
+    @ConfigProperty(name = "quarkus.job.recipient.http.timeout-in-millis", defaultValue = "5000")
+    long timeout;
+
     @Inject
     Vertx vertx;
-
     private WebClient client;
 
     @PostConstruct
@@ -62,7 +65,7 @@ public class HttpJobExecutor implements JobExecutor {
         final HttpRequest<Buffer> clientRequest = client.request(HttpConverters.convertHttpMethod(request.getMethod()),
                 uri.getPort(),
                 uri.getHost(),
-                uri.getPath());
+                uri.getPath()).timeout(timeout);
         Optional.ofNullable(request.getQueryParams())
                 .ifPresent(params -> clientRequest.queryParams().addAll(params));
         return clientRequest.send();

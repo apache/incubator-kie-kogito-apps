@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.jobs.service.model;
+package org.kie.kogito.jobs.service.resource.v2;
 
-import org.kie.kogito.jobs.api.Job;
+import org.junit.jupiter.api.Test;
 
-public class ProcessJob extends Job {
+import static org.junit.jupiter.api.Assertions.*;
 
+class JobResourceV2IT {
+
+    @Test
+    void create() {
+    }
 }
