@@ -17,7 +17,7 @@
     </dependencySets>
     <fileSets>
         <fileSet>
-            <directory>${project.root.dir}/data-index/data-index-service/data-index-service-postgresql/src/main/resources/db/migration</directory>
+            <directory>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources/db/migration</directory>
             <outputDirectory>postgresql</outputDirectory>
             <includes>
                 <include>*.sql</include>
