@@ -110,7 +110,7 @@ public class ScheduledJobAdapter {
                 .filter(job -> Objects.nonNull(job.getExpirationTime()))
                 .map(job -> job.hasInterval()
                         .<Trigger> map(interval -> new IntervalTrigger(0l,
-                                DateUtil.toDate(scheduledJob.getExpirationTime()),
+                                DateUtil.toDate(scheduledJob.getExpirationTime().toOffsetDateTime()),
                                 null,
                                 scheduledJob.getRepeatLimit(),
                                 0,
@@ -123,7 +123,7 @@ public class ScheduledJobAdapter {
     }
 
     public static IntervalTrigger intervalTrigger(ZonedDateTime start, int repeatLimit, int intervalMillis) {
-        return new IntervalTrigger(0, DateUtil.toDate(start), null, repeatLimit, 0, intervalMillis, null, null);
+        return new IntervalTrigger(0, DateUtil.toDate(start.toOffsetDateTime()), null, repeatLimit, 0, intervalMillis, null, null);
     }
 
     public static String payloadSerialize(ScheduledJob scheduledJob) {

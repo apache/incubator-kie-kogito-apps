@@ -18,7 +18,6 @@ package org.kie.kogito.jobs.service.messaging.v2;
 import java.util.Objects;
 
 import org.kie.kogito.jobs.service.adapter.JobDetailsAdapter;
-import org.kie.kogito.jobs.service.api.Job;
 import org.kie.kogito.jobs.service.api.event.CreateJobEvent;
 import org.kie.kogito.jobs.service.api.event.DeleteJobEvent;
 import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
@@ -49,9 +48,8 @@ public class MessagingConsumer extends ReactiveMessagingEventConsumer<JobCloudEv
         if (!Objects.equals(getCreateJobEventType(), createEvent.getType())) {
             throw new IllegalArgumentException("Only " + getCreateJobEventType() + "is supported to get JobDetails " + createEvent);
         }
-        final JobCloudEvent<?> jobCloudEvent = deserializer.deserialize(createEvent);
-        Job job = (Job) jobCloudEvent.getData();
-        return JobDetailsAdapter.from(job);
+        final CreateJobEvent jobCloudEvent = (CreateJobEvent) deserializer.deserialize(createEvent);
+        return JobDetailsAdapter.from(jobCloudEvent.getData());
     }
 
     @Override

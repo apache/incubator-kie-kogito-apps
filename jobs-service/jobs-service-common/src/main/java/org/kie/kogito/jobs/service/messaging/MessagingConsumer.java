@@ -17,7 +17,6 @@ package org.kie.kogito.jobs.service.messaging;
 
 import java.util.Objects;
 
-import org.kie.kogito.jobs.api.Job;
 import org.kie.kogito.jobs.api.event.CancelJobRequestEvent;
 import org.kie.kogito.jobs.api.event.CreateProcessInstanceJobRequestEvent;
 import org.kie.kogito.jobs.api.event.JobCloudEvent;
@@ -49,9 +48,8 @@ public class MessagingConsumer extends ReactiveMessagingEventConsumer<JobCloudEv
         if (!Objects.equals(getCreateJobEventType(), createEvent.getType())) {
             throw new IllegalArgumentException("Only " + getCreateJobEventType() + "is supported to get JobDetails " + createEvent);
         }
-        final JobCloudEvent<?> jobCloudEvent = deserializer.deserialize(createEvent);
-        Job job = (Job) jobCloudEvent.getData();
-        return ScheduledJobAdapter.to(ScheduledJob.builder().job(job).build());
+        final CreateProcessInstanceJobRequestEvent jobCloudEvent = (CreateProcessInstanceJobRequestEvent) deserializer.deserialize(createEvent);
+        return ScheduledJobAdapter.to(ScheduledJob.builder().job(jobCloudEvent.getData()).build());
     }
 
     @Override

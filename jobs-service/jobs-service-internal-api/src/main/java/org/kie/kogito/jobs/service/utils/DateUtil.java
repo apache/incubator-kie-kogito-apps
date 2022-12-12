@@ -58,10 +58,6 @@ public class DateUtil {
         return new Date(dateTime.toInstant().toEpochMilli());
     }
 
-    public static Date toDate(ZonedDateTime dateTime) {
-        return new Date(dateTime.toInstant().toEpochMilli());
-    }
-
     public static OffsetDateTime dateToOffsetDateTime(Date date) {
         return fromDate(date).toOffsetDateTime();
     }

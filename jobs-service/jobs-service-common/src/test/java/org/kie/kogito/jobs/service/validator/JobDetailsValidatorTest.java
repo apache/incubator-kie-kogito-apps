@@ -79,7 +79,7 @@ class JobDetailsValidatorTest {
                 .id(ID)
                 .correlationId(ID)
                 .payload("{\"name\":\"Arthur\"}")
-                .recipient(new HTTPRecipient(null))
+                .recipient(null)
                 .trigger(new PointInTimeTrigger())
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);

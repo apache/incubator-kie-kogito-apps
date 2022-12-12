@@ -78,7 +78,7 @@ class ScheduledJobAdapterTest {
     @Test
     void testOfJobDetailsInterval() {
         JobDetails jobDetails = getJobDetailsCommonBuilder()
-                .trigger(new IntervalTrigger(0, DateUtil.toDate(TIME), null, REPEAT_LIMIT, 0, INTERVAL, null, null))
+                .trigger(new IntervalTrigger(0, DateUtil.toDate(TIME.toOffsetDateTime()), null, REPEAT_LIMIT, 0, INTERVAL, null, null))
                 .build();
 
         ScheduledJob scheduledJob = ScheduledJobAdapter.of(jobDetails);
@@ -96,7 +96,7 @@ class ScheduledJobAdapterTest {
         assertJobDetails(jobDetails);
         assertThat(jobDetails.getTrigger()).isInstanceOf(IntervalTrigger.class);
         IntervalTrigger intervalTrigger = (IntervalTrigger) jobDetails.getTrigger();
-        assertThat(intervalTrigger.getNextFireTime()).isEqualTo(DateUtil.toDate(TIME));
+        assertThat(intervalTrigger.getNextFireTime()).isEqualTo(DateUtil.toDate(TIME.toOffsetDateTime()));
         assertThat(intervalTrigger.getRepeatLimit()).isEqualTo(REPEAT_LIMIT);
         assertThat(intervalTrigger.getPeriod()).isEqualTo(INTERVAL);
     }
@@ -109,7 +109,7 @@ class ScheduledJobAdapterTest {
         assertJobDetails(jobDetails);
         assertThat(jobDetails.getTrigger()).isInstanceOf(PointInTimeTrigger.class);
         PointInTimeTrigger trigger = (PointInTimeTrigger) jobDetails.getTrigger();
-        assertThat(trigger.nextFireTime()).isEqualTo(DateUtil.toDate(TIME));
+        assertThat(trigger.nextFireTime()).isEqualTo(DateUtil.toDate(TIME.toOffsetDateTime()));
     }
 
     @Test

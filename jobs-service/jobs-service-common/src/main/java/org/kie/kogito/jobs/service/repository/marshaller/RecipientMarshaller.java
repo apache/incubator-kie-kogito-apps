@@ -33,10 +33,9 @@ public class RecipientMarshaller {
         if (Objects.isNull(recipient)) {
             return null;
         }
-        JsonObject jsonObject = JsonObject
+        return JsonObject
                 .mapFrom(recipient)
                 .put(CLASS_TYPE, recipient.getClass().getName());
-        return jsonObject;
     }
 
     public Recipient unmarshall(JsonObject jsonObject) {

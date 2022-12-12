@@ -26,8 +26,6 @@ import org.kie.kogito.timer.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.quarkus.arc.Arc;
-import io.quarkus.arc.InstanceHandle;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 
 /**
@@ -44,17 +42,6 @@ public class DelegateJob implements Job<JobDetailsContext> {
     public DelegateJob(JobExecutorResolver executorResolver, JobStreams jobStreams) {
         this.jobExecutorResolver = executorResolver;
         this.jobStreams = jobStreams;
-    }
-
-    public DelegateJob() {
-        this(getFromContainer(JobExecutorResolver.class), getFromContainer(JobStreams.class));
-    }
-
-    private static <T> T getFromContainer(Class<T> type) {
-        return Optional.ofNullable(Arc.container())
-                .map(c -> c.instance(type))
-                .map(InstanceHandle::get)
-                .orElseThrow(() -> new IllegalArgumentException(type + " cannot be null"));
     }
 
     @Override
