@@ -34,7 +34,7 @@ import static org.kie.kogito.jobs.service.utils.DateUtil.DEFAULT_ZONE;
 
 @DefaultBean
 @ApplicationScoped
-public class JobDetailsMarshaller {
+public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> {
 
     RecipientMarshaller recipientMarshaller;
 
@@ -49,6 +49,7 @@ public class JobDetailsMarshaller {
         this.triggerMarshaller = triggerMarshaller;
     }
 
+    @Override
     public JsonObject marshall(JobDetails jobDetails) {
         if (jobDetails != null) {
             return JsonObject.mapFrom(new JobDetailsAccessor(jobDetails, recipientMarshaller, triggerMarshaller));
@@ -56,6 +57,7 @@ public class JobDetailsMarshaller {
         return null;
     }
 
+    @Override
     public JobDetails unmarshall(JsonObject jsonObject) {
         if (jsonObject != null) {
             return jsonObject.mapTo(JobDetailsAccessor.class).to(recipientMarshaller, triggerMarshaller);

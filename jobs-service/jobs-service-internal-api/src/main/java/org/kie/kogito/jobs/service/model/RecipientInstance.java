@@ -19,6 +19,9 @@ import java.util.Objects;
 
 import org.kie.kogito.jobs.service.api.RecipientDescriptorRegistry;
 
+/**
+ * Class is used to wrap the public API recipient and do the interface with the internal API and persistence.
+ */
 public class RecipientInstance implements Recipient {
 
     private final org.kie.kogito.jobs.service.api.Recipient<?> recipient;

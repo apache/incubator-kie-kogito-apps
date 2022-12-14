@@ -30,6 +30,7 @@ import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.Recipient;
+import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.timer.Trigger;
@@ -108,7 +109,7 @@ class PostgreSqlJobRepositoryTest {
         when(recipientMarshaller.marshall(any(Recipient.class))).thenReturn(new JsonObject().put("recipientMarshaller", "test"));
         when(recipientMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new HTTPRecipient("test"));
 
-        repository = new PostgreSqlJobRepository(null, null, client, triggerMarshaller, recipientMarshaller);
+        repository = new PostgreSqlJobRepository(null, null, client, triggerMarshaller, recipientMarshaller, new PayloadMarshaller());
     }
 
     @Test

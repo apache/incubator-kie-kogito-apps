@@ -32,6 +32,7 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.jobs.service.stream.JobStreams;
@@ -59,23 +60,26 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
     private static final String JOB_DETAILS_COLUMNS = "id, correlation_id, status, last_update, retries, " +
             "execution_counter, scheduled_id, payload, priority, recipient, trigger, fire_time";
 
-    private PgPool client;
+    private final PgPool client;
 
-    private TriggerMarshaller triggerMarshaller;
+    private final TriggerMarshaller triggerMarshaller;
 
-    private RecipientMarshaller recipientMarshaller;
+    private final RecipientMarshaller recipientMarshaller;
+
+    private final PayloadMarshaller payloadMarshaller;
 
     PostgreSqlJobRepository() {
-        super(null, null);
+        this(null, null, null, null, null, null);
     }
 
     @Inject
     public PostgreSqlJobRepository(Vertx vertx, JobStreams jobStreams, PgPool client,
-            TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller) {
+            TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller, PayloadMarshaller payloadMarshaller) {
         super(vertx, jobStreams);
         this.client = client;
         this.triggerMarshaller = triggerMarshaller;
         this.recipientMarshaller = recipientMarshaller;
+        this.payloadMarshaller = payloadMarshaller;
     }
 
     @Override
@@ -95,7 +99,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
                         job.getRetries(),
                         job.getExecutionCounter(),
                         job.getScheduledId(),
-                        Optional.ofNullable(job.getPayload()).map(p -> new JsonObject(p.toString())).orElse(null),
+                        payloadMarshaller.marshall(job.getPayload()),
                         job.getPriority(),
                         recipientMarshaller.marshall(job.getRecipient()),
                         triggerMarshaller.marshall(job.getTrigger()),
@@ -182,7 +186,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
                 .retries(row.getInteger("retries"))
                 .executionCounter(row.getInteger("execution_counter"))
                 .scheduledId(row.getString("scheduled_id"))
-                .payload(Optional.ofNullable(row.get(JsonObject.class, 7)).map(JsonObject::toString).orElse(null))
+                .payload(payloadMarshaller.unmarshall(row.get(JsonObject.class, 7)))
                 .priority(row.getInteger("priority"))
                 .recipient(recipientMarshaller.unmarshall(row.get(JsonObject.class, 9)))
                 .trigger(triggerMarshaller.unmarshall(row.get(JsonObject.class, 10)))

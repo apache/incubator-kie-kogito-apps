@@ -30,6 +30,9 @@ import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class JobDetailsAdapter {
 
     public static class StatusAdapter {
@@ -91,15 +94,22 @@ public class JobDetailsAdapter {
     }
 
     public static class RecipientAdapter {
+
+        static ObjectMapper objectMapper = new ObjectMapper();
+
         public static Recipient<?> toRecipient(JobDetails jobDetails) {
             if (!(jobDetails.getRecipient() instanceof HTTPRecipient)) {
                 throw new NotImplementedException("Only HTTPRecipient is supported");
             }
             HTTPRecipient recipient = (HTTPRecipient) jobDetails.getRecipient();
-            return HttpRecipient.builder()
-                    .url(recipient.getEndpoint())
-                    .payload(jobDetails.getPayload())
-                    .build();
+            try {
+                return HttpRecipient.builder()
+                        .url(recipient.getEndpoint())
+                        .payload(objectMapper.writeValueAsBytes(jobDetails.getPayload()))
+                        .build();
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         public static <T> T payload(Recipient<?> recipient) {

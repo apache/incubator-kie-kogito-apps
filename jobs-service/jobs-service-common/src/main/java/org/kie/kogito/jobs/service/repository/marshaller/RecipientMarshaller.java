@@ -25,10 +25,11 @@ import org.kie.kogito.jobs.service.model.Recipient;
 import io.vertx.core.json.JsonObject;
 
 @ApplicationScoped
-public class RecipientMarshaller {
+public class RecipientMarshaller implements Marshaller<Recipient, JsonObject> {
 
     private static final String CLASS_TYPE = "classType";
 
+    @Override
     public JsonObject marshall(Recipient recipient) {
         if (Objects.isNull(recipient)) {
             return null;
@@ -38,6 +39,7 @@ public class RecipientMarshaller {
                 .put(CLASS_TYPE, recipient.getClass().getName());
     }
 
+    @Override
     public Recipient unmarshall(JsonObject jsonObject) {
         if (Objects.isNull(jsonObject)) {
             return null;
