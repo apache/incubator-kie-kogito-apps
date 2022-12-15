@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>integration-tests-jobs-service-quarkus</artifactId>
-    <version>1.32.0-SNAPSHOT</version>
+    <version>1.32.0.Final</version>
   </parent>
   <artifactId>integration-tests-jobs-service-quarkus-messaging</artifactId>
   <name>Kogito Apps :: Integration Tests :: Jobs Service :: Quarkus :: Messaging</name>
