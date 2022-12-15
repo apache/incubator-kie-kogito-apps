@@ -40,19 +40,22 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
 
     TriggerMarshaller triggerMarshaller;
 
+    PayloadMarshaller payloadMarshaller;
+
     public JobDetailsMarshaller() {
     }
 
     @Inject
-    public JobDetailsMarshaller(TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller) {
+    public JobDetailsMarshaller(TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller, PayloadMarshaller payloadMarshaller) {
         this.recipientMarshaller = recipientMarshaller;
         this.triggerMarshaller = triggerMarshaller;
+        this.payloadMarshaller = payloadMarshaller;
     }
 
     @Override
     public JsonObject marshall(JobDetails jobDetails) {
         if (jobDetails != null) {
-            return JsonObject.mapFrom(new JobDetailsAccessor(jobDetails, recipientMarshaller, triggerMarshaller));
+            return JsonObject.mapFrom(new JobDetailsAccessor(jobDetails, recipientMarshaller, triggerMarshaller, payloadMarshaller));
         }
         return null;
     }
@@ -60,7 +63,7 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
     @Override
     public JobDetails unmarshall(JsonObject jsonObject) {
         if (jsonObject != null) {
-            return jsonObject.mapTo(JobDetailsAccessor.class).to(recipientMarshaller, triggerMarshaller);
+            return jsonObject.mapTo(JobDetailsAccessor.class).to(recipientMarshaller, triggerMarshaller, payloadMarshaller);
         }
         return null;
     }
@@ -82,7 +85,7 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
         public JobDetailsAccessor() {
         }
 
-        public JobDetailsAccessor(JobDetails jobDetails, RecipientMarshaller recipientMarshaller, TriggerMarshaller triggerMarshaller) {
+        public JobDetailsAccessor(JobDetails jobDetails, RecipientMarshaller recipientMarshaller, TriggerMarshaller triggerMarshaller, PayloadMarshaller payloadMarshaller) {
             this.id = jobDetails.getId();
             this.correlationId = jobDetails.getCorrelationId();
             this.status = Optional.ofNullable(jobDetails.getStatus()).map(Enum::name).orElse(null);
@@ -91,12 +94,12 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
             this.priority = jobDetails.getPriority();
             this.executionCounter = jobDetails.getExecutionCounter();
             this.scheduledId = jobDetails.getScheduledId();
-            this.payload = Optional.ofNullable(jobDetails.getPayload()).map(p -> new JsonObject(p.toString()).getMap()).orElse(null);
+            this.payload = Optional.ofNullable(jobDetails.getPayload()).map(p -> payloadMarshaller.marshall(p).getMap()).orElse(null);
             this.recipient = Optional.ofNullable(jobDetails.getRecipient()).map(r -> recipientMarshaller.marshall(r).getMap()).orElse(null);
             this.trigger = Optional.ofNullable(jobDetails.getTrigger()).map(t -> triggerMarshaller.marshall(t).getMap()).orElse(null);
         }
 
-        public JobDetails to(RecipientMarshaller recipientMarshaller, TriggerMarshaller triggerMarshaller) {
+        public JobDetails to(RecipientMarshaller recipientMarshaller, TriggerMarshaller triggerMarshaller, PayloadMarshaller payloadMarshaller) {
             return JobDetails.builder()
                     .id(this.id)
                     .correlationId(this.correlationId)
@@ -105,7 +108,7 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
                     .retries(this.retries)
                     .executionCounter(this.executionCounter)
                     .scheduledId(this.scheduledId)
-                    .payload(Optional.ofNullable(this.payload).map(p -> new JsonObject(p).toString()).orElse(null))
+                    .payload(Optional.ofNullable(this.payload).map(p -> payloadMarshaller.unmarshall(JsonObject.mapFrom(p))).orElse(null))
                     .priority(this.priority)
                     .recipient(Optional.ofNullable(this.recipient).map(r -> recipientMarshaller.unmarshall(new JsonObject(r))).orElse(null))
                     .trigger(Optional.ofNullable(this.trigger).map(t -> triggerMarshaller.unmarshall(new JsonObject(t))).orElse(null))

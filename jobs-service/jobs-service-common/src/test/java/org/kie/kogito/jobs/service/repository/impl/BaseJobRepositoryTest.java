@@ -23,10 +23,12 @@ import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.job.http.recipient.HTTPRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.Recipient;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.stream.JobStreams;
 import org.kie.kogito.jobs.service.utils.DateUtil;
@@ -71,9 +73,9 @@ public abstract class BaseJobRepositoryTest {
     private void createAndSaveJob(String id) throws Exception {
         job = JobDetails.builder()
                 .id(id)
-                .trigger(new PointInTimeTrigger(System.currentTimeMillis(), null, null))//
+                .trigger(new PointInTimeTrigger(System.currentTimeMillis(), null, null))
                 .priority(1)
-                .recipient(new HTTPRecipient("url"))
+                .recipient(new RecipientInstance(HttpRecipient.builder().url("url").build()))
                 .build();
         tested().save(job).toCompletableFuture().get();
     }
@@ -155,7 +157,7 @@ public abstract class BaseJobRepositoryTest {
         String id = UUID.randomUUID().toString();
         createAndSaveJob(id);
         final String newCallbackEndpoint = "http://localhost/newcallback";
-        final HTTPRecipient recipient = new HTTPRecipient(newCallbackEndpoint);
+        final Recipient recipient = new RecipientInstance(HttpRecipient.builder().url(newCallbackEndpoint).build());
         final JobDetails toMerge = JobDetails.builder()
                 .id(id)
                 .recipient(recipient)

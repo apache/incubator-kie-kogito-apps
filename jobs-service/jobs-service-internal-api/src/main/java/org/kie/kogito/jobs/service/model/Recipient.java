@@ -15,8 +15,11 @@
  */
 package org.kie.kogito.jobs.service.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public interface Recipient {
 
+    @JsonIgnore
     String type();
 
     <T> org.kie.kogito.jobs.service.api.Recipient<T> getRecipient();

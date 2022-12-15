@@ -26,10 +26,11 @@ import java.util.stream.Stream;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.job.http.recipient.HTTPRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.Recipient;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
@@ -107,7 +108,7 @@ class PostgreSqlJobRepositoryTest {
         when(triggerMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null));
         RecipientMarshaller recipientMarshaller = mock(RecipientMarshaller.class);
         when(recipientMarshaller.marshall(any(Recipient.class))).thenReturn(new JsonObject().put("recipientMarshaller", "test"));
-        when(recipientMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new HTTPRecipient("test"));
+        when(recipientMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new RecipientInstance(HttpRecipient.builder().url("test").build()));
 
         repository = new PostgreSqlJobRepository(null, null, client, triggerMarshaller, recipientMarshaller, new PayloadMarshaller());
     }
@@ -115,7 +116,7 @@ class PostgreSqlJobRepositoryTest {
     @Test
     void doSave() {
         PointInTimeTrigger trigger = new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null);
-        Recipient recipient = new HTTPRecipient("test");
+        Recipient recipient = new RecipientInstance(HttpRecipient.builder().url("test").build());
 
         JobDetails job = JobDetails.builder()
                 .id("test")
@@ -293,7 +294,7 @@ class PostgreSqlJobRepositoryTest {
     @Test
     void from() {
         PointInTimeTrigger trigger = new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null);
-        Recipient recipient = new HTTPRecipient("test");
+        Recipient recipient = new RecipientInstance(HttpRecipient.builder().url("test").build());
 
         Row row = mock(Row.class);
         when(row.getString("id")).thenReturn("test");

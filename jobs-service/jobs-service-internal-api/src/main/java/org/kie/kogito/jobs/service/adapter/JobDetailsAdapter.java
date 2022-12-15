@@ -16,7 +16,6 @@
 package org.kie.kogito.jobs.service.adapter;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.service.api.Job;
 import org.kie.kogito.jobs.service.api.Recipient;
 import org.kie.kogito.jobs.service.api.Retry;
@@ -25,6 +24,7 @@ import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.api.schedule.timer.TimerSchedule;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.IntervalTrigger;
@@ -98,14 +98,17 @@ public class JobDetailsAdapter {
         static ObjectMapper objectMapper = new ObjectMapper();
 
         public static Recipient<?> toRecipient(JobDetails jobDetails) {
-            if (!(jobDetails.getRecipient() instanceof HTTPRecipient)) {
+            if (!(jobDetails.getRecipient().getRecipient() instanceof HttpRecipient)) {
                 throw new NotImplementedException("Only HTTPRecipient is supported");
             }
-            HTTPRecipient recipient = (HTTPRecipient) jobDetails.getRecipient();
+            Recipient<?> recipient = jobDetails.getRecipient().getRecipient();
+            if (!(recipient instanceof HttpRecipient)) {
+                throw new IllegalArgumentException();
+            }
             try {
                 return HttpRecipient.builder()
-                        .url(recipient.getEndpoint())
-                        .payload(objectMapper.writeValueAsBytes(jobDetails.getPayload()))
+                        .url(((HttpRecipient) recipient).getUrl())
+                        .payload(objectMapper.writeValueAsString(jobDetails.getPayload()))
                         .build();
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
@@ -120,8 +123,7 @@ public class JobDetailsAdapter {
             if (!(recipient instanceof HttpRecipient)) {
                 throw new NotImplementedException("Only HTTPRecipient is supported");
             }
-            HttpRecipient httpRecipient = (HttpRecipient) recipient;
-            return new HTTPRecipient(httpRecipient.getUrl());
+            return new RecipientInstance(recipient);
         }
     }
 

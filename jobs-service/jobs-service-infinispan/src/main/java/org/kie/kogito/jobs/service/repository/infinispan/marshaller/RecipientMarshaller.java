@@ -17,8 +17,9 @@ package org.kie.kogito.jobs.service.repository.infinispan.marshaller;
 
 import java.io.IOException;
 
-import org.kie.kogito.job.http.recipient.HTTPRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.Recipient;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 
 public class RecipientMarshaller extends BaseMarshaller<Recipient> {
 
@@ -34,13 +35,13 @@ public class RecipientMarshaller extends BaseMarshaller<Recipient> {
 
     @Override
     public void writeTo(ProtoStreamWriter writer, Recipient recipient) throws IOException {
-        HTTPRecipient httpRecipient = (HTTPRecipient) recipient;
-        writer.writeString("endpoint", httpRecipient.getEndpoint());
+        HttpRecipient httpRecipient = (HttpRecipient) recipient.getRecipient();
+        writer.writeString("endpoint", httpRecipient.getUrl());
     }
 
     @Override
     public Recipient readFrom(ProtoStreamReader reader) throws IOException {
         String endpoint = reader.readString("endpoint");
-        return new HTTPRecipient(endpoint);
+        return new RecipientInstance(HttpRecipient.builder().url(endpoint).build());
     }
 }

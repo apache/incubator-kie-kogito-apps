@@ -19,6 +19,8 @@ import java.util.Objects;
 
 import org.kie.kogito.jobs.service.api.RecipientDescriptorRegistry;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Class is used to wrap the public API recipient and do the interface with the internal API and persistence.
  */
@@ -31,6 +33,7 @@ public class RecipientInstance implements Recipient {
         this.recipient = recipient;
     }
 
+    @JsonIgnore
     @Override
     public String type() {
         return RecipientDescriptorRegistry.getInstance()
@@ -41,5 +44,22 @@ public class RecipientInstance implements Recipient {
     @Override
     public org.kie.kogito.jobs.service.api.Recipient<?> getRecipient() {
         return recipient;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        RecipientInstance that = (RecipientInstance) o;
+        return Objects.equals(recipient, that.recipient);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(recipient);
     }
 }

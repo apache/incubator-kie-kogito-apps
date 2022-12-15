@@ -20,9 +20,11 @@ import java.time.ZonedDateTime;
 import java.util.Date;
 
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.job.http.recipient.HTTPRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
+import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.timer.Trigger;
@@ -35,7 +37,7 @@ import static org.kie.kogito.jobs.service.utils.DateUtil.DEFAULT_ZONE;
 
 class MongoDBJobDetailsMarshallerTest {
 
-    MongoDBJobDetailsMarshaller mongoDBJobDetailsMarshaller = new MongoDBJobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller());
+    MongoDBJobDetailsMarshaller mongoDBJobDetailsMarshaller = new MongoDBJobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller(), new PayloadMarshaller());
 
     @Test
     void unmarshall() {
@@ -49,7 +51,7 @@ class MongoDBJobDetailsMarshallerTest {
         Integer executionCounter = 4;
         String scheduledId = "testScheduledId";
         Object payload = new JsonObject().put("payload", "test");
-        HTTPRecipient recipient = new HTTPRecipient("testEndpoint");
+        RecipientInstance recipient = new RecipientInstance(HttpRecipient.builder().url("testEndpoint").build());
         Trigger trigger = new PointInTimeTrigger(new Date().toInstant().toEpochMilli(), null, null);
 
         JobDetails jobDetails = JobDetails.builder()
@@ -77,9 +79,9 @@ class MongoDBJobDetailsMarshallerTest {
                 .put("scheduledId", scheduledId)
                 .put("payload", payload)
                 .put("priority", priority)
-                .put("recipient", new JsonObject()
-                        .put("endpoint", recipient.getEndpoint())
-                        .put("classType", HTTPRecipient.class.getName()))
+                .put("recipient", JsonObject
+                        .mapFrom(new RecipientInstance(HttpRecipient.builder().url("testEndpoint").build()))
+                        .put("classType", HttpRecipient.class.getName()))
                 .put("trigger", new JsonObject()
                         .put("nextFireTime", trigger.hasNextFireTime().getTime())
                         .put("classType", PointInTimeTrigger.class.getName()));

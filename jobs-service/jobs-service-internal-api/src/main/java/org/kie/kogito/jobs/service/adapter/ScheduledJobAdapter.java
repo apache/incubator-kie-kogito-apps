@@ -19,10 +19,12 @@ import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
-import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.api.JobBuilder;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobDetailsBuilder;
+import org.kie.kogito.jobs.service.model.Recipient;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
@@ -59,8 +61,10 @@ public class ScheduledJobAdapter {
                                 .map(DateUtil::fromDate)
                                 .orElse(null))
                         .callbackEndpoint(Optional.ofNullable(jobDetails.getRecipient())
-                                .map(HTTPRecipient.class::cast)
-                                .map(HTTPRecipient::getEndpoint)
+                                .map(Recipient::getRecipient)
+                                .filter(HttpRecipient.class::isInstance)
+                                .map(HttpRecipient.class::cast)
+                                .map(HttpRecipient::getUrl)
                                 .orElse(null))
                         .repeatLimit(Optional.ofNullable(jobDetails.getTrigger())
                                 .filter(IntervalTrigger.class::isInstance)
@@ -93,9 +97,7 @@ public class ScheduledJobAdapter {
                 .correlationId(scheduledJob.getId())
                 .executionCounter(scheduledJob.getExecutionCounter())
                 .lastUpdate(scheduledJob.getLastUpdate())
-                .recipient(Optional.ofNullable(scheduledJob.getCallbackEndpoint())
-                        .map(HTTPRecipient::new)
-                        .orElse(null))
+                .recipient(recipientAdapter(scheduledJob))
                 .retries(scheduledJob.getRetries())
                 .scheduledId(scheduledJob.getScheduledId())
                 .status(scheduledJob.getStatus())
@@ -103,6 +105,12 @@ public class ScheduledJobAdapter {
                 .priority(scheduledJob.getPriority())
                 .payload(payloadSerialize(scheduledJob))
                 .build();
+    }
+
+    private static RecipientInstance recipientAdapter(ScheduledJob scheduledJob) {
+        return Optional.ofNullable(scheduledJob.getCallbackEndpoint())
+                .map(url -> new RecipientInstance(HttpRecipient.builder().url(url).build()))
+                .orElse(null);
     }
 
     public static Trigger triggerAdapter(ScheduledJob scheduledJob) {

@@ -22,10 +22,11 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
-import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.job.http.recipient.HttpJobExecutor;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 
 import io.quarkus.test.QuarkusUnitTest;
 import io.quarkus.test.common.QuarkusTestResource;
@@ -49,8 +50,8 @@ public class JobHttpRecipientTest {
 
     @Test
     public void httpExecutorTest() {
-        JobDetails job = JobDetails.builder().id("12345").recipient(new HTTPRecipient(mockServiceUrl)).build();
-
+        HttpRecipient httpRecipient = HttpRecipient.builder().url(mockServiceUrl).build();
+        JobDetails job = JobDetails.builder().id("12345").recipient(new RecipientInstance(httpRecipient)).build();
         UniAssertSubscriber<JobExecutionResponse> tester = httpJobExecutor.execute(job)
                 .invoke(response -> assertThat(response.getJobId()).isEqualTo(job.getId()))
                 .invoke(response -> assertThat(response.getCode()).isEqualTo("200"))

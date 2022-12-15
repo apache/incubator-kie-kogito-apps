@@ -26,6 +26,7 @@ import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.job.http.recipient.converters.HttpConverters;
 import org.kie.kogito.jobs.api.URIBuilder;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.exception.JobExecutionException;
 import org.kie.kogito.jobs.service.executor.JobExecutor;
 import org.kie.kogito.jobs.service.model.JobDetails;
@@ -130,9 +131,10 @@ public class HttpJobExecutor implements JobExecutor {
 
     private String getCallbackEndpoint(JobDetails job) {
         return Optional.ofNullable(job.getRecipient())
-                .filter(HTTPRecipient.class::isInstance)
-                .map(HTTPRecipient.class::cast)
-                .map(HTTPRecipient::getEndpoint)
+                .map(Recipient::getRecipient)
+                .filter(HttpRecipient.class::isInstance)
+                .map(HttpRecipient.class::cast)
+                .map(HttpRecipient::getUrl)
                 .orElseThrow(() -> new IllegalArgumentException("Callback Endpoint is null for job " + job));
     }
 
@@ -141,12 +143,8 @@ public class HttpJobExecutor implements JobExecutor {
         return trigger.getRepeatLimit() - trigger.getRepeatCount() - 1;//since the repeatCount is updated only after this call when persisting the job.
     }
 
-    WebClient getClient() {
-        return client;
-    }
-
     @Override
-    public Class<? extends Recipient> type() {
-        return HTTPRecipient.class;
+    public Class<HttpRecipient> type() {
+        return HttpRecipient.class;
     }
 }

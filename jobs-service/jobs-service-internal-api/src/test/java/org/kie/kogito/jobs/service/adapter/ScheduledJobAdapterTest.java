@@ -20,11 +20,12 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.job.http.recipient.HTTPRecipient;
 import org.kie.kogito.jobs.api.JobBuilder;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobDetailsBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.impl.IntervalTrigger;
@@ -155,7 +156,7 @@ class ScheduledJobAdapterTest {
         return JobDetails.builder()
                 .id(ID)
                 .priority(PRIORITY)
-                .recipient(new HTTPRecipient(ENDPOINT))
+                .recipient(new RecipientInstance(HttpRecipient.builder().url(ENDPOINT).build()))
                 .scheduledId(SCHEDULED_ID)
                 .status(STATUS)
                 .correlationId(ID)
@@ -194,8 +195,8 @@ class ScheduledJobAdapterTest {
         assertThat(jobDetails.getLastUpdate()).isEqualTo(LAST_UPDATE);
         assertThat(jobDetails.getPriority()).isEqualTo(PRIORITY);
         assertThat(jobDetails.getStatus()).isEqualTo(STATUS);
-        assertThat(jobDetails.getRecipient()).isInstanceOf(HTTPRecipient.class);
-        assertThat(((HTTPRecipient) jobDetails.getRecipient()).getEndpoint()).isEqualTo(ENDPOINT);
+        assertThat(jobDetails.getRecipient()).isInstanceOf(RecipientInstance.class);
+        assertThat(((HttpRecipient) jobDetails.getRecipient().getRecipient()).getUrl()).isEqualTo(ENDPOINT);
         assertThat(jobDetails.getPayload()).isEqualTo(payload);
     }
 }

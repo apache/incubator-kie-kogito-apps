@@ -21,6 +21,7 @@ import javax.inject.Inject;
 
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.repository.marshaller.JobDetailsMarshaller;
+import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 
@@ -33,8 +34,8 @@ public class MongoDBJobDetailsMarshaller extends JobDetailsMarshaller {
     }
 
     @Inject
-    public MongoDBJobDetailsMarshaller(TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller) {
-        super(triggerMarshaller, recipientMarshaller);
+    public MongoDBJobDetailsMarshaller(TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller, PayloadMarshaller payloadMarshaller) {
+        super(triggerMarshaller, recipientMarshaller, payloadMarshaller);
     }
 
     @Override

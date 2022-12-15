@@ -26,7 +26,7 @@ public class PayloadMarshaller implements Marshaller<Object, JsonObject> {
 
     @Override
     public JsonObject marshall(Object value) {
-        return Optional.ofNullable((String) value).map(v -> new JsonObject(v)).orElse(null);
+        return Optional.ofNullable(value).map(v -> new JsonObject(v.toString())).orElse(null);
     }
 
     @Override

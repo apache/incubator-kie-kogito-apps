@@ -16,8 +16,9 @@
 package org.kie.kogito.jobs.service.repository.marshaller;
 
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.job.http.recipient.HTTPRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.Recipient;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 
 import io.vertx.core.json.JsonObject;
 
@@ -30,12 +31,15 @@ class RecipientMarshallerTest {
 
     @Test
     void marshall() {
-        Recipient recipient = new HTTPRecipient("test");
+        Recipient recipient = new RecipientInstance(HttpRecipient.builder().url("test").build());
         JsonObject jsonObject = marshaller.marshall(recipient);
-        assertEquals(new JsonObject()
-                .put("endpoint", "test")
-                .put("classType", HTTPRecipient.class.getName()),
-                jsonObject);
+        assertEquals(buildRecipient(), jsonObject);
+    }
+
+    private static JsonObject buildRecipient() {
+        return JsonObject
+                .mapFrom(new RecipientInstance(HttpRecipient.builder().url("test").build()))
+                .put(RecipientMarshaller.CLASS_TYPE, HttpRecipient.class.getName());
     }
 
     @Test
@@ -46,16 +50,14 @@ class RecipientMarshallerTest {
 
     @Test
     void unmarshall() {
-        JsonObject jsonObject = new JsonObject()
-                .put("endpoint", "test")
-                .put("classType", HTTPRecipient.class.getName());
+        JsonObject jsonObject = buildRecipient();
         Recipient recipient = marshaller.unmarshall(jsonObject);
-        assertEquals(new HTTPRecipient("test"), recipient);
+        assertEquals(HttpRecipient.builder().url("test").build(), recipient.getRecipient());
     }
 
     @Test
     void unmarshallInvalid() {
-        JsonObject jsonObject = new JsonObject().put("endpoint", "test");
+        JsonObject jsonObject = new JsonObject();
         Recipient recipient = marshaller.unmarshall(jsonObject);
         assertNull(recipient);
     }

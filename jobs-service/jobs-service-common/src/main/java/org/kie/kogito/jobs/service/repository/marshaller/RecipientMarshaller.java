@@ -21,13 +21,14 @@ import java.util.Optional;
 import javax.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.jobs.service.model.Recipient;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 
 import io.vertx.core.json.JsonObject;
 
 @ApplicationScoped
 public class RecipientMarshaller implements Marshaller<Recipient, JsonObject> {
 
-    private static final String CLASS_TYPE = "classType";
+    public static final String CLASS_TYPE = "classType";
 
     @Override
     public JsonObject marshall(Recipient recipient) {
@@ -36,7 +37,7 @@ public class RecipientMarshaller implements Marshaller<Recipient, JsonObject> {
         }
         return JsonObject
                 .mapFrom(recipient)
-                .put(CLASS_TYPE, recipient.getClass().getName());
+                .put(CLASS_TYPE, recipient.getRecipient().getClass().getName());
     }
 
     @Override
@@ -49,7 +50,7 @@ public class RecipientMarshaller implements Marshaller<Recipient, JsonObject> {
             return null;
         }
         try {
-            return (Recipient) jsonObject.mapTo(Class.forName(classType));
+            return new RecipientInstance((org.kie.kogito.jobs.service.api.Recipient<?>) jsonObject.getJsonObject("recipient").mapTo(Class.forName(classType)));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
