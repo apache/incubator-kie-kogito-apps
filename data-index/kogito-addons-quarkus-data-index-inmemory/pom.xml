@@ -10,7 +10,7 @@
   <artifactId>kogito-addons-quarkus-data-index-inmemory-parent</artifactId>
   <packaging>pom</packaging>
 
-  <name>Kogito Apps :: Kogito Addons Quarkus Data Index In-memory - Parent</name>
+  <name>Kogito Apps :: Kogito Addons Quarkus Data Index In-memory</name>
 
   <modules>
     <module>deployment</module>

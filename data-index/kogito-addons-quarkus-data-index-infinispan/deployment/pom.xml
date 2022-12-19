@@ -4,11 +4,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>kogito-addons-quarkus-data-index-postgresql-parent</artifactId>
+    <artifactId>kogito-addons-quarkus-data-index-infinispan-parent</artifactId>
     <version>2.0.0-SNAPSHOT</version>
   </parent>
-  <artifactId>kogito-addons-quarkus-data-index-postgresql-deployment</artifactId>
-  <name>Kogito Apps :: Kogito Addons Quarkus Data Index PostgreSQL :: Deployment</name>
+  <artifactId>kogito-addons-quarkus-data-index-infinispan-deployment</artifactId>
+  <name>Kogito Apps :: Kogito Addons Quarkus Data Index Infinispan :: Deployment</name>
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
@@ -16,11 +16,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-addons-quarkus-data-index-postgresql</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx-deployment</artifactId>
+      <artifactId>kogito-addons-quarkus-data-index-infinispan</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -28,23 +24,15 @@
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-rest-client-reactive-deployment</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jackson-deployment</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-orm-panache-deployment</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jdbc-postgresql-deployment</artifactId>
+      <artifactId>quarkus-infinispan-client-deployment</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-reactive-routes-deployment</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-qute-deployment</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
