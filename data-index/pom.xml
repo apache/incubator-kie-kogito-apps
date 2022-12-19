@@ -18,11 +18,7 @@
     <module>data-index-storage</module>
     <module>data-index-common</module>
     <module>data-index-service</module>
-    <module>kogito-addons-quarkus-data-index-common</module>
-    <module>kogito-addons-quarkus-data-index-inmemory</module>
-    <module>kogito-addons-quarkus-data-index-postgresql</module>
-    <module>kogito-addons-quarkus-data-index-infinispan</module>
-    <module>kogito-addons-quarkus-data-index-mongodb</module>
+    <module>kogito-addons-quarkus-data-index</module>
   </modules>
 
 </project>
