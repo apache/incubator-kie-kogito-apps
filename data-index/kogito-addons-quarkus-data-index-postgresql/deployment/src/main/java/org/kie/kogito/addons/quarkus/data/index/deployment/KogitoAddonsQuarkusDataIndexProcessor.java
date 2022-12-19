@@ -18,7 +18,7 @@ package org.kie.kogito.addons.quarkus.data.index.deployment;
 
 class KogitoAddonsQuarkusDataIndexProcessor extends AbstractKogitoAddonsQuarkusDataIndexProcessor {
 
-    private static final String FEATURE = "kogito-addons-quarkus-data-index-inmemory";
+    private static final String FEATURE = "kogito-addons-quarkus-data-index-postgresql";
 
     KogitoAddonsQuarkusDataIndexProcessor() {
         super(FEATURE);

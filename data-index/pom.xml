@@ -18,7 +18,9 @@
     <module>data-index-storage</module>
     <module>data-index-common</module>
     <module>data-index-service</module>
+    <module>kogito-addons-quarkus-data-index-common</module>
     <module>kogito-addons-quarkus-data-index-inmemory</module>
+    <module>kogito-addons-quarkus-data-index-postgresql</module>
   </modules>
 
 </project>
