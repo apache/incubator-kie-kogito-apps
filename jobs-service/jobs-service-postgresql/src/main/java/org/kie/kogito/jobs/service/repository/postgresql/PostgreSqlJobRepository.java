@@ -86,17 +86,17 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
     @Override
     public CompletionStage<JobDetails> doSave(JobDetails job) {
         return client.preparedQuery("INSERT INTO " + JOB_DETAILS_TABLE + " (" + JOB_DETAILS_COLUMNS +
-                ") VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) " +
+                ") VALUES ($1, $2, $3, now(), $4, $5, $6, $7, $8, $9, $10, $11) " +
                 "ON CONFLICT (id) DO " +
-                "UPDATE SET correlation_id = $2, status = $3, last_update = $4, retries = $5, " +
-                "execution_counter = $6, scheduled_id = $7, recipient_payload = $8, priority = $9, " +
-                "recipient = $10, trigger = $11, fire_time = $12 " +
+                "UPDATE SET correlation_id = $2, status = $3, last_update = now(), retries = $4, " +
+                "execution_counter = $5, scheduled_id = $6, recipient_payload = $7, priority = $8, " +
+                "recipient = $9, trigger = $10, fire_time = $11 " +
                 "RETURNING " + JOB_DETAILS_COLUMNS)
                 .execute(Tuple.tuple(Stream.of(
                         job.getId(),
                         job.getCorrelationId(),
                         Optional.ofNullable(job.getStatus()).map(Enum::name).orElse(null),
-                        Optional.ofNullable(job.getLastUpdate()).map(ZonedDateTime::toOffsetDateTime).orElse(null),
+                        //Optional.ofNullable(job.getLastUpdate()).map(ZonedDateTime::toOffsetDateTime).orElse(null),
                         job.getRetries(),
                         job.getExecutionCounter(),
                         job.getScheduledId(),
