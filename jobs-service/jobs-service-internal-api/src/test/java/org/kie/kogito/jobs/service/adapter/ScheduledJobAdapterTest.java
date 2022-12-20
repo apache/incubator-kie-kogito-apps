@@ -31,8 +31,6 @@ import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ScheduledJobAdapterTest {
@@ -53,15 +51,15 @@ class ScheduledJobAdapterTest {
     public static final String PROCESS_ID = "ID";
     public static final String PROCESS_INSTANCE_ID = "ID";
     private static final String NODE_INSTANCE_ID = "nodeId";
-    public static String payload;
+    public static Object payload;
 
     @BeforeAll
     public static void before() throws Exception {
-        payload = new ObjectMapper().writeValueAsString(new ScheduledJobAdapter.ProcessPayload(PROCESS_INSTANCE_ID,
+        payload = new ScheduledJobAdapter.ProcessPayload(PROCESS_INSTANCE_ID,
                 ROOT_PROCESS_INSTANCE_ID,
                 PROCESS_ID,
                 ROOT_PROCESS_ID,
-                NODE_INSTANCE_ID));
+                NODE_INSTANCE_ID);
     }
 
     @Test

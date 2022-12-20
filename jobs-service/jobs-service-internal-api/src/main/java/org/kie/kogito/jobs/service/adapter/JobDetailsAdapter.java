@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.jobs.service.adapter;
 
+import java.util.Objects;
+
 import org.apache.commons.lang3.NotImplementedException;
 import org.kie.kogito.jobs.service.api.Job;
 import org.kie.kogito.jobs.service.api.Recipient;
@@ -37,6 +39,9 @@ public class JobDetailsAdapter {
 
     public static class StatusAdapter {
         public static Job.State toState(JobStatus status) {
+            if (Objects.isNull(status)) {
+                return Job.State.TBD3;
+            }
             Job.State state = null;
             switch (status) {
                 case ERROR:
@@ -57,7 +62,18 @@ public class JobDetailsAdapter {
         }
 
         public static JobStatus from(Job.State state) {
-            return null;
+            if (Objects.isNull(state)) {
+                return JobStatus.SCHEDULED;
+            }
+            switch (state) {
+                case TBD1:
+                    return JobStatus.ERROR;
+                case TBD2:
+                    return JobStatus.EXECUTED;
+                case TBD3:
+                    return JobStatus.SCHEDULED;
+            }
+            return JobStatus.EXECUTED;
         }
     }
 

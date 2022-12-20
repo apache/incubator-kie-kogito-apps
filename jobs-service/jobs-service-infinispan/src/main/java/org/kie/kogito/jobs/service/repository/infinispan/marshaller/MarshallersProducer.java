@@ -19,13 +19,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
 import org.infinispan.protostream.MessageMarshaller;
+import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
 
 @ApplicationScoped
 public class MarshallersProducer {
 
     @Produces
-    public MessageMarshaller jobDetailsMarshaller() {
-        return new JobDetailsMarshaller();
+    public MessageMarshaller jobDetailsMarshaller(PayloadMarshaller payloadMarshaller) {
+        return new JobDetailsMarshaller(payloadMarshaller);
     }
 
     @Produces

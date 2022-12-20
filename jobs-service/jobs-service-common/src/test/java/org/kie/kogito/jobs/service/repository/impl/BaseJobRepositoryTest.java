@@ -76,6 +76,7 @@ public abstract class BaseJobRepositoryTest {
                 .trigger(new PointInTimeTrigger(System.currentTimeMillis(), null, null))
                 .priority(1)
                 .recipient(new RecipientInstance(HttpRecipient.builder().url("url").build()))
+                .payload("payload test")
                 .build();
         tested().save(job).toCompletableFuture().get();
     }

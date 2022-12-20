@@ -37,7 +37,8 @@ import static org.kie.kogito.jobs.service.utils.DateUtil.DEFAULT_ZONE;
 
 class MongoDBJobDetailsMarshallerTest {
 
-    MongoDBJobDetailsMarshaller mongoDBJobDetailsMarshaller = new MongoDBJobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller(), new PayloadMarshaller());
+    private final PayloadMarshaller payloadMarshaller = new PayloadMarshaller();
+    MongoDBJobDetailsMarshaller mongoDBJobDetailsMarshaller = new MongoDBJobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller(), payloadMarshaller);
 
     @Test
     void unmarshall() {
@@ -50,7 +51,7 @@ class MongoDBJobDetailsMarshallerTest {
         Integer priority = 3;
         Integer executionCounter = 4;
         String scheduledId = "testScheduledId";
-        Object payload = new JsonObject().put("payload", "test");
+        Object payload = new JsonObject().put("payload", "test").encode();
         RecipientInstance recipient = new RecipientInstance(HttpRecipient.builder().url("testEndpoint").build());
         Trigger trigger = new PointInTimeTrigger(new Date().toInstant().toEpochMilli(), null, null);
 
@@ -77,7 +78,7 @@ class MongoDBJobDetailsMarshallerTest {
                 .put("retries", retries)
                 .put("executionCounter", executionCounter)
                 .put("scheduledId", scheduledId)
-                .put("payload", payload)
+                .put("payload", payloadMarshaller.marshall(payload))
                 .put("priority", priority)
                 .put("recipient", JsonObject
                         .mapFrom(new RecipientInstance(HttpRecipient.builder().url("testEndpoint").build()))

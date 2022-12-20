@@ -44,6 +44,7 @@ import io.smallrye.mutiny.groups.MultiOnItem;
 import io.smallrye.mutiny.groups.UniConvert;
 import io.smallrye.mutiny.groups.UniOnItem;
 import io.vertx.core.json.JsonObject;
+import io.vertx.mutiny.core.buffer.Buffer;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.PreparedQuery;
 import io.vertx.mutiny.sqlclient.Row;
@@ -73,6 +74,7 @@ class PostgreSqlJobRepositoryTest {
     CompletableFuture completableFuture;
 
     ZonedDateTime time;
+    private PayloadMarshaller payloadMarshaller;
 
     @BeforeEach
     void setUp() {
@@ -110,7 +112,8 @@ class PostgreSqlJobRepositoryTest {
         when(recipientMarshaller.marshall(any(Recipient.class))).thenReturn(new JsonObject().put("recipientMarshaller", "test"));
         when(recipientMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new RecipientInstance(HttpRecipient.builder().url("test").build()));
 
-        repository = new PostgreSqlJobRepository(null, null, client, triggerMarshaller, recipientMarshaller, new PayloadMarshaller());
+        payloadMarshaller = new PayloadMarshaller();
+        repository = new PostgreSqlJobRepository(null, null, client, triggerMarshaller, recipientMarshaller, payloadMarshaller);
     }
 
     @Test
@@ -141,11 +144,11 @@ class PostgreSqlJobRepositoryTest {
         verify(query, times(1)).execute(parameterCaptor.capture());
 
         String query = "INSERT INTO job_details (id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "payload, priority, recipient, trigger, fire_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) " +
+                "recipient_payload, priority, recipient, trigger, fire_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) " +
                 "ON CONFLICT (id) DO UPDATE SET correlation_id = $2, status = $3, last_update = $4, retries = $5, " +
-                "execution_counter = $6, scheduled_id = $7, payload = $8, priority = $9, " +
+                "execution_counter = $6, scheduled_id = $7, recipient_payload = $8, priority = $9, " +
                 "recipient = $10, trigger = $11, fire_time = $12 RETURNING id, correlation_id, status, last_update, retries, " +
-                "execution_counter, scheduled_id, payload, priority, recipient, trigger, fire_time";
+                "execution_counter, scheduled_id, recipient_payload, priority, recipient, trigger, fire_time";
 
         Tuple parameter = Tuple.tuple(Stream.of(
                 job.getId(),
@@ -155,7 +158,7 @@ class PostgreSqlJobRepositoryTest {
                 job.getRetries(),
                 job.getExecutionCounter(),
                 job.getScheduledId(),
-                new JsonObject(job.getPayload().toString()),
+                payloadMarshaller.marshall(job.getPayload()),
                 job.getPriority(),
                 new JsonObject().put("recipientMarshaller", "test"),
                 new JsonObject().put("triggerMarshaller", "test"))
@@ -169,7 +172,7 @@ class PostgreSqlJobRepositoryTest {
         assertEquals(parameter.getInteger(4), parameterCaptor.getValue().getInteger(4));
         assertEquals(parameter.getInteger(5), parameterCaptor.getValue().getInteger(5));
         assertEquals(parameter.getString(6), parameterCaptor.getValue().getString(6));
-        assertEquals(parameter.getJson(7), parameterCaptor.getValue().getJson(7));
+        assertEquals(parameter.getBuffer(7), parameterCaptor.getValue().getBuffer(7));
         assertEquals(parameter.getInteger(8), parameterCaptor.getValue().getInteger(8));
         assertEquals(parameter.getJson(9), parameterCaptor.getValue().getJson(9));
         assertEquals(parameter.getJson(10), parameterCaptor.getValue().getJson(10));
@@ -186,7 +189,7 @@ class PostgreSqlJobRepositoryTest {
         verify(query, times(1)).execute(parameterCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "payload, priority, recipient, trigger, fire_time FROM job_details WHERE id = $1";
+                "recipient_payload, priority, recipient, trigger, fire_time FROM job_details WHERE id = $1";
         String parameter = "test";
 
         assertEquals(query, queryCaptor.getValue());
@@ -222,7 +225,7 @@ class PostgreSqlJobRepositoryTest {
 
         String query = "DELETE FROM job_details WHERE id = $1 " +
                 "RETURNING id, correlation_id, status, last_update, retries, " +
-                "execution_counter, scheduled_id, payload, priority, recipient, trigger, fire_time";
+                "execution_counter, scheduled_id, recipient_payload, priority, recipient, trigger, fire_time";
         String parameter = "test";
 
         assertEquals(query, queryCaptor.getValue());
@@ -238,7 +241,7 @@ class PostgreSqlJobRepositoryTest {
         verify(client, times(1)).preparedQuery(queryCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, " +
-                "execution_counter, scheduled_id, payload, priority, recipient, trigger, fire_time FROM job_details LIMIT $1";
+                "execution_counter, scheduled_id, recipient_payload, priority, recipient, trigger, fire_time FROM job_details LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());
     }
@@ -255,7 +258,7 @@ class PostgreSqlJobRepositoryTest {
         verify(client, times(1)).preparedQuery(queryCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "payload, priority, recipient, trigger, fire_time FROM job_details " +
+                "recipient_payload, priority, recipient, trigger, fire_time FROM job_details " +
                 "WHERE status IN ('SCHEDULED', 'RETRY') AND fire_time BETWEEN $2 AND $3 ORDER BY priority DESC LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());
@@ -273,7 +276,7 @@ class PostgreSqlJobRepositoryTest {
         verify(client, times(1)).preparedQuery(queryCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "payload, priority, recipient, trigger, fire_time FROM job_details " +
+                "recipient_payload, priority, recipient, trigger, fire_time FROM job_details " +
                 "WHERE status IN ('SCHEDULED') AND fire_time BETWEEN $2 AND $3 ORDER BY priority DESC LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());
@@ -304,10 +307,10 @@ class PostgreSqlJobRepositoryTest {
         when(row.getInteger("retries")).thenReturn(1);
         when(row.getInteger("execution_counter")).thenReturn(1);
         when(row.getString("scheduled_id")).thenReturn("test");
-        when(row.get(JsonObject.class, 7)).thenReturn(new JsonObject("{\"payload\": \"test\"}"));
+        when(row.getBuffer("recipient_payload")).thenReturn(Buffer.buffer(payloadMarshaller.marshall("{\"payload\": \"test\"}")));
         when(row.getInteger("priority")).thenReturn(1);
-        when(row.get(JsonObject.class, 9)).thenReturn(new JsonObject().put("recipientMarshaller", "test"));
-        when(row.get(JsonObject.class, 10)).thenReturn(new JsonObject().put("triggerMarshaller", "test"));
+        when(row.get(JsonObject.class, "recipient")).thenReturn(new JsonObject().put("recipientMarshaller", "test"));
+        when(row.get(JsonObject.class, "trigger")).thenReturn(new JsonObject().put("triggerMarshaller", "test"));
 
         JobDetails jobDetails = repository.from(row);
 

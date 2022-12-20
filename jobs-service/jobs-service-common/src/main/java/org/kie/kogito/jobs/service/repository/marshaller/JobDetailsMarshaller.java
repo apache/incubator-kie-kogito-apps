@@ -78,7 +78,7 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
         private Integer priority;
         private Integer executionCounter;
         private String scheduledId;
-        private Map<String, Object> payload;
+        private byte[] payload;
         private Map<String, Object> recipient;
         private Map<String, Object> trigger;
 
@@ -94,7 +94,7 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
             this.priority = jobDetails.getPriority();
             this.executionCounter = jobDetails.getExecutionCounter();
             this.scheduledId = jobDetails.getScheduledId();
-            this.payload = Optional.ofNullable(jobDetails.getPayload()).map(p -> payloadMarshaller.marshall(p).getMap()).orElse(null);
+            this.payload = Optional.ofNullable(jobDetails.getPayload()).map(p -> payloadMarshaller.marshall(p)).orElse(null);
             this.recipient = Optional.ofNullable(jobDetails.getRecipient()).map(r -> recipientMarshaller.marshall(r).getMap()).orElse(null);
             this.trigger = Optional.ofNullable(jobDetails.getTrigger()).map(t -> triggerMarshaller.marshall(t).getMap()).orElse(null);
         }
@@ -108,7 +108,7 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
                     .retries(this.retries)
                     .executionCounter(this.executionCounter)
                     .scheduledId(this.scheduledId)
-                    .payload(Optional.ofNullable(this.payload).map(p -> payloadMarshaller.unmarshall(JsonObject.mapFrom(p))).orElse(null))
+                    .payload(payloadMarshaller.unmarshall(payload))
                     .priority(this.priority)
                     .recipient(Optional.ofNullable(this.recipient).map(r -> recipientMarshaller.unmarshall(new JsonObject(r))).orElse(null))
                     .trigger(Optional.ofNullable(this.trigger).map(t -> triggerMarshaller.unmarshall(new JsonObject(t))).orElse(null))
@@ -179,11 +179,11 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
             this.scheduledId = scheduledId;
         }
 
-        public Map<String, Object> getPayload() {
+        public Object getPayload() {
             return payload;
         }
 
-        public void setPayload(Map<String, Object> payload) {
+        public void setPayload(byte[] payload) {
             this.payload = payload;
         }
 
@@ -202,6 +202,5 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
         public void setTrigger(Map<String, Object> trigger) {
             this.trigger = trigger;
         }
-
     }
 }

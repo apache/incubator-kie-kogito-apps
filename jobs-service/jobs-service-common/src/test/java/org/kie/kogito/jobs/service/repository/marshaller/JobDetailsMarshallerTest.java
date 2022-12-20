@@ -36,6 +36,7 @@ import static org.kie.kogito.jobs.service.utils.DateUtil.DEFAULT_ZONE;
 
 class JobDetailsMarshallerTest {
 
+    private final PayloadMarshaller payloadMarshaller = new PayloadMarshaller();
     JobDetailsMarshaller jobDetailsMarshaller;
 
     JobDetails jobDetails;
@@ -44,7 +45,7 @@ class JobDetailsMarshallerTest {
 
     @BeforeEach
     void setUp() {
-        jobDetailsMarshaller = new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller(), new PayloadMarshaller());
+        jobDetailsMarshaller = new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller(), payloadMarshaller);
 
         String id = "testId";
         String correlationId = "testCorrelationId";
@@ -55,7 +56,7 @@ class JobDetailsMarshallerTest {
         Integer priority = 3;
         Integer executionCounter = 4;
         String scheduledId = "testScheduledId";
-        Object payload = new JsonObject().put("payload", "test");
+        Object payload = "test";
         Recipient recipient = new RecipientInstance(HttpRecipient.builder().url("url").build());
         Trigger trigger = new PointInTimeTrigger(new Date().toInstant().toEpochMilli(), null, null);
 
@@ -81,7 +82,7 @@ class JobDetailsMarshallerTest {
                 .put("retries", retries)
                 .put("executionCounter", executionCounter)
                 .put("scheduledId", scheduledId)
-                .put("payload", payload)
+                .put("payload", payloadMarshaller.marshall(payload))
                 .put("priority", priority)
                 .put("recipient", JsonObject
                         .mapFrom(new RecipientInstance((HttpRecipient.builder().url("url").build())))

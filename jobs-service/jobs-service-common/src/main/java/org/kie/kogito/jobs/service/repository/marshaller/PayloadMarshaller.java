@@ -15,22 +15,35 @@
  */
 package org.kie.kogito.jobs.service.repository.marshaller;
 
-import java.util.Optional;
+import java.io.IOException;
 
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 
-import io.vertx.core.json.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ApplicationScoped
-public class PayloadMarshaller implements Marshaller<Object, JsonObject> {
+public class PayloadMarshaller implements Marshaller<Object, byte[]> {
+
+    @Inject
+    ObjectMapper objectMapper;
 
     @Override
-    public JsonObject marshall(Object value) {
-        return Optional.ofNullable(value).map(v -> new JsonObject(v.toString())).orElse(null);
+    public byte[] marshall(Object value) {
+        try {
+            return objectMapper.writeValueAsBytes(value);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
-    public Object unmarshall(JsonObject value) {
-        return Optional.ofNullable(value).map(JsonObject::encode).orElse(null);
+    public Object unmarshall(byte[] value) {
+        try {
+            return objectMapper.readTree(value);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

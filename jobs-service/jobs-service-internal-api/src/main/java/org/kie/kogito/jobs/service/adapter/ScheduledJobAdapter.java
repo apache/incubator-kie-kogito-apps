@@ -134,7 +134,7 @@ public class ScheduledJobAdapter {
         return new IntervalTrigger(0, DateUtil.toDate(start.toOffsetDateTime()), null, repeatLimit, 0, intervalMillis, null, null);
     }
 
-    public static String payloadSerialize(ScheduledJob scheduledJob) {
+    public static Object payloadSerialize(ScheduledJob scheduledJob) {
         try {
             if (Objects.isNull(scheduledJob.getProcessInstanceId())
                     && Objects.isNull(scheduledJob.getRootProcessInstanceId())
@@ -142,23 +142,29 @@ public class ScheduledJobAdapter {
                     && Objects.isNull(scheduledJob.getRootProcessId())) {
                 return null;
             }
-            return OBJECT_MAPPER.writeValueAsString(new ProcessPayload(scheduledJob.getProcessInstanceId(),
+            return new ProcessPayload(scheduledJob.getProcessInstanceId(),
                     scheduledJob.getRootProcessInstanceId(),
                     scheduledJob.getProcessId(),
                     scheduledJob.getRootProcessId(),
-                    scheduledJob.getNodeInstanceId()));
-        } catch (JsonProcessingException e) {
+                    scheduledJob.getNodeInstanceId());
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     public static ProcessPayload payloadDeserialize(Object payload) {
         return Optional.ofNullable(payload)
-                .map(String::valueOf)
                 .map(p -> {
                     try {
-                        return OBJECT_MAPPER.readValue(p, ProcessPayload.class);
+                        return p instanceof String ? OBJECT_MAPPER.readTree((String) p) : p;
                     } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .map(p -> {
+                    try {
+                        return OBJECT_MAPPER.convertValue(p, ProcessPayload.class);
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 })
@@ -204,6 +210,24 @@ public class ScheduledJobAdapter {
 
         public String getNodeInstanceId() {
             return nodeInstanceId;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            ProcessPayload that = (ProcessPayload) o;
+            return Objects.equals(processInstanceId, that.processInstanceId) && Objects.equals(rootProcessInstanceId, that.rootProcessInstanceId) && Objects.equals(processId,
+                    that.processId) && Objects.equals(rootProcessId, that.rootProcessId) && Objects.equals(nodeInstanceId, that.nodeInstanceId);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(processInstanceId, rootProcessInstanceId, processId, rootProcessId, nodeInstanceId);
         }
     }
 }

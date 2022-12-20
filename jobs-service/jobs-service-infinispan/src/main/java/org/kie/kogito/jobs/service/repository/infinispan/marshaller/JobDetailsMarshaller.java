@@ -22,12 +22,19 @@ import java.util.Optional;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.Recipient;
+import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
 import org.kie.kogito.timer.Trigger;
 
 import static org.kie.kogito.jobs.service.utils.DateUtil.instantToZonedDateTime;
 import static org.kie.kogito.jobs.service.utils.DateUtil.zonedDateTimeToInstant;
 
 public class JobDetailsMarshaller extends BaseMarshaller<JobDetails> {
+
+    PayloadMarshaller payloadMarshaller;
+
+    public JobDetailsMarshaller(PayloadMarshaller payloadMarshaller) {
+        this.payloadMarshaller = payloadMarshaller;
+    }
 
     @Override
     public String getTypeName() {
@@ -49,7 +56,7 @@ public class JobDetailsMarshaller extends BaseMarshaller<JobDetails> {
         writer.writeInt("priority", job.getPriority());
         writer.writeInt("executionCounter", job.getExecutionCounter());
         writer.writeString("scheduledId", job.getScheduledId());
-        writer.writeString("payload", String.valueOf(job.getPayload()));
+        writer.writeBytes("payload", payloadMarshaller.marshall(job.getPayload()));
         writer.writeObject("recipient", job.getRecipient(), getInterface(job.getRecipient()));
         writer.writeObject("trigger", job.getTrigger(), getInterface(job.getTrigger()));
     }
@@ -72,7 +79,7 @@ public class JobDetailsMarshaller extends BaseMarshaller<JobDetails> {
         Integer priority = reader.readInt("priority");
         Integer executionCounter = reader.readInt("executionCounter");
         String scheduledId = reader.readString("scheduledId");
-        String payload = reader.readString("payload");//serialize payload
+        Object payload = payloadMarshaller.unmarshall(reader.readBytes("payload"));//serialize payload
         Recipient recipient = reader.readObject("recipient", Recipient.class);
         Trigger trigger = reader.readObject("trigger", Trigger.class);
 
