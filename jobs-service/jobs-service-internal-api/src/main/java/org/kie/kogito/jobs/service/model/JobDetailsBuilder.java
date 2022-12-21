@@ -29,7 +29,6 @@ public class JobDetailsBuilder {
     private Integer retries = 0;
     private Integer executionCounter = 0;
     private String scheduledId;
-    private Object payload;
     private Recipient recipient;
     private Trigger trigger;
     private Integer priority;
@@ -69,11 +68,6 @@ public class JobDetailsBuilder {
         return this;
     }
 
-    public JobDetailsBuilder payload(Object payload) {
-        this.payload = payload;
-        return this;
-    }
-
     public JobDetailsBuilder recipient(Recipient recipient) {
         this.recipient = recipient;
         return this;
@@ -90,8 +84,7 @@ public class JobDetailsBuilder {
     }
 
     public JobDetails build() {
-        return new JobDetails(id, correlationId, status, lastUpdate, retries, executionCounter, scheduledId, payload,
-                recipient, trigger, priority);
+        return new JobDetails(id, correlationId, status, lastUpdate, retries, executionCounter, scheduledId, recipient, trigger, priority);
     }
 
     public JobDetailsBuilder of(JobDetails jobDetails) {
@@ -102,7 +95,6 @@ public class JobDetailsBuilder {
                 .retries(jobDetails.getRetries())
                 .executionCounter(jobDetails.getExecutionCounter())
                 .scheduledId(jobDetails.getScheduledId())
-                .payload(jobDetails.getPayload())
                 .recipient(jobDetails.getRecipient())
                 .trigger(jobDetails.getTrigger())
                 .priority(jobDetails.getPriority());
@@ -128,7 +120,6 @@ public class JobDetailsBuilder {
                 .recipient(j.map(JobDetails::getRecipient).orElse(recipient))
                 .correlationId(j.map(JobDetails::getCorrelationId).orElse(correlationId))
                 .priority(j.map(JobDetails::getPriority).orElse(priority))
-                .payload(j.map(JobDetails::getPayload).orElse(payload))
                 .executionCounter(j.map(JobDetails::getExecutionCounter).orElse(executionCounter));
     }
 }

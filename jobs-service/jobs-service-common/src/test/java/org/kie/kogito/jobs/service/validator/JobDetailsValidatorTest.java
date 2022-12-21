@@ -30,14 +30,13 @@ class JobDetailsValidatorTest {
 
     private static final String CALLBACK_ENDPOINT = "http://localhost:8080/callback";
     private static final String ID = "id";
-    private Recipient recipient = new RecipientInstance(HttpRecipient.builder().url(CALLBACK_ENDPOINT).build());
+    private Recipient recipient = new RecipientInstance(HttpRecipient.builder().url(CALLBACK_ENDPOINT).payload("{\"name\":\"Arthur\"}").build());
 
     @Test
     void testValidateSuccess() {
         JobDetails job = new JobDetailsBuilder()
                 .id(ID)
                 .correlationId(ID)
-                .payload("{\"name\":\"Arthur\"}")
                 .recipient(recipient)
                 .trigger(new PointInTimeTrigger())
                 .build();
@@ -57,7 +56,6 @@ class JobDetailsValidatorTest {
     @Test
     void testValidateMissingPayload() {
         JobDetails job = new JobDetailsBuilder()
-                .payload("{\"name\":\"Arthur\"}")
                 .recipient(recipient)
                 .trigger(new PointInTimeTrigger())
                 .build();
@@ -69,7 +67,6 @@ class JobDetailsValidatorTest {
         JobDetails job = new JobDetailsBuilder()
                 .id(ID)
                 .correlationId(ID)
-                .payload("{\"name\":\"Arthur\"}")
                 .trigger(new PointInTimeTrigger())
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);
@@ -80,7 +77,6 @@ class JobDetailsValidatorTest {
         JobDetails job = new JobDetailsBuilder()
                 .id(ID)
                 .correlationId(ID)
-                .payload("{\"name\":\"Arthur\"}")
                 .recipient(null)
                 .trigger(new PointInTimeTrigger())
                 .build();
@@ -92,7 +88,6 @@ class JobDetailsValidatorTest {
         JobDetails job = new JobDetailsBuilder()
                 .id(ID)
                 .correlationId(ID)
-                .payload("{\"name\":\"Arthur\"}")
                 .recipient(recipient)
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToCreate(job)).isInstanceOf(IllegalArgumentException.class);

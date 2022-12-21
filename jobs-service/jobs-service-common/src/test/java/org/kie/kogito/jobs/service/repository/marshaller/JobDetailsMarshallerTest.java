@@ -28,8 +28,6 @@ import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.vertx.core.json.JsonObject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -38,7 +36,6 @@ import static org.kie.kogito.jobs.service.utils.DateUtil.DEFAULT_ZONE;
 
 class JobDetailsMarshallerTest {
 
-    private PayloadMarshaller payloadMarshaller;
     JobDetailsMarshaller jobDetailsMarshaller;
 
     JobDetails jobDetails;
@@ -47,8 +44,7 @@ class JobDetailsMarshallerTest {
 
     @BeforeEach
     void setUp() {
-        payloadMarshaller = new PayloadMarshaller(new ObjectMapper());
-        jobDetailsMarshaller = new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller(), payloadMarshaller);
+        jobDetailsMarshaller = new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller());
 
         String id = "testId";
         String correlationId = "testCorrelationId";
@@ -60,7 +56,7 @@ class JobDetailsMarshallerTest {
         Integer executionCounter = 4;
         String scheduledId = "testScheduledId";
         Object payload = "test";
-        Recipient recipient = new RecipientInstance(HttpRecipient.builder().url("url").build());
+        Recipient recipient = new RecipientInstance(HttpRecipient.builder().url("url").payload(payload).build());
         Trigger trigger = new PointInTimeTrigger(new Date().toInstant().toEpochMilli(), null, null);
 
         jobDetails = JobDetails.builder()
@@ -71,7 +67,6 @@ class JobDetailsMarshallerTest {
                 .retries(retries)
                 .executionCounter(executionCounter)
                 .scheduledId(scheduledId)
-                .payload(payload)
                 .priority(priority)
                 .recipient(recipient)
                 .trigger(trigger)
@@ -85,10 +80,9 @@ class JobDetailsMarshallerTest {
                 .put("retries", retries)
                 .put("executionCounter", executionCounter)
                 .put("scheduledId", scheduledId)
-                .put("payload", payloadMarshaller.marshall(payload))
                 .put("priority", priority)
                 .put("recipient", JsonObject
-                        .mapFrom(new RecipientInstance((HttpRecipient.builder().url("url").build())))
+                        .mapFrom(new RecipientInstance((HttpRecipient.builder().url("url").payload(payload).build())))
                         .put("classType", HttpRecipient.class.getName()))
                 .put("trigger", new JsonObject()
                         .put("nextFireTime", trigger.hasNextFireTime().getTime())

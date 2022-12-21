@@ -34,14 +34,12 @@ public class JobDetails {
     private Integer priority;
     private Integer executionCounter;//number of times the job was executed
     private String scheduledId;//the execution control on the scheduler (id on vertx.setTimer, quartzId...)
-
-    private Object payload;//process, rule, decision
     private Recipient recipient;//http callback, event topic
     private Trigger trigger;//when/how it should be executed
 
     @SuppressWarnings("java:S107")
     protected JobDetails(String id, String correlationId, JobStatus status, ZonedDateTime lastUpdate, Integer retries,
-            Integer executionCounter, String scheduledId, Object payload, Recipient recipient, Trigger trigger, Integer priority) {
+            Integer executionCounter, String scheduledId, Recipient recipient, Trigger trigger, Integer priority) {
         this.id = id;
         this.correlationId = correlationId;
         this.status = status;
@@ -49,7 +47,6 @@ public class JobDetails {
         this.retries = retries;
         this.executionCounter = executionCounter;
         this.scheduledId = scheduledId;
-        this.payload = payload;
         this.recipient = recipient;
         this.trigger = trigger;
         this.priority = priority;
@@ -81,10 +78,6 @@ public class JobDetails {
 
     public String getScheduledId() {
         return scheduledId;
-    }
-
-    public Object getPayload() {
-        return payload;
     }
 
     public Recipient getRecipient() {
@@ -124,7 +117,7 @@ public class JobDetails {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCorrelationId(), getStatus(), getRetries(), getExecutionCounter(), getScheduledId(), getPayload(), getRecipient(), getTrigger());
+        return Objects.hash(getId(), getCorrelationId(), getStatus(), getRetries(), getExecutionCounter(), getScheduledId(), getRecipient(), getTrigger());
     }
 
     @Override
@@ -137,7 +130,6 @@ public class JobDetails {
                 .add("retries=" + retries)
                 .add("executionCounter=" + executionCounter)
                 .add("scheduledId='" + scheduledId + "'")
-                .add("payload=" + payload)
                 .add("recipient=" + recipient)
                 .add("trigger=" + trigger)
                 .toString();

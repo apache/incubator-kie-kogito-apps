@@ -31,14 +31,11 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.Recipient;
 import org.kie.kogito.jobs.service.model.RecipientInstance;
-import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 import org.mockito.ArgumentCaptor;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
@@ -77,7 +74,6 @@ class PostgreSqlJobRepositoryTest {
     CompletableFuture completableFuture;
 
     ZonedDateTime time;
-    private PayloadMarshaller payloadMarshaller;
 
     @BeforeEach
     void setUp() {
@@ -115,8 +111,7 @@ class PostgreSqlJobRepositoryTest {
         when(recipientMarshaller.marshall(any(Recipient.class))).thenReturn(new JsonObject().put("recipientMarshaller", "test"));
         when(recipientMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new RecipientInstance(HttpRecipient.builder().url("test").build()));
 
-        payloadMarshaller = new PayloadMarshaller(new ObjectMapper());
-        repository = new PostgreSqlJobRepository(null, null, client, triggerMarshaller, recipientMarshaller, payloadMarshaller);
+        repository = new PostgreSqlJobRepository(null, null, client, triggerMarshaller, recipientMarshaller);
     }
 
     @Test

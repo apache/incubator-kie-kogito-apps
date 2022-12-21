@@ -24,13 +24,10 @@ import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.RecipientInstance;
-import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.vertx.core.json.JsonObject;
 
@@ -38,9 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.jobs.service.utils.DateUtil.DEFAULT_ZONE;
 
 class MongoDBJobDetailsMarshallerTest {
-
-    private final PayloadMarshaller payloadMarshaller = new PayloadMarshaller(new ObjectMapper());
-    MongoDBJobDetailsMarshaller mongoDBJobDetailsMarshaller = new MongoDBJobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller(), payloadMarshaller);
+    MongoDBJobDetailsMarshaller mongoDBJobDetailsMarshaller = new MongoDBJobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller());
 
     @Test
     void unmarshall() {
@@ -65,7 +60,6 @@ class MongoDBJobDetailsMarshallerTest {
                 .retries(retries)
                 .executionCounter(executionCounter)
                 .scheduledId(scheduledId)
-                .payload(payload)
                 .priority(priority)
                 .recipient(recipient)
                 .trigger(trigger)
@@ -80,7 +74,6 @@ class MongoDBJobDetailsMarshallerTest {
                 .put("retries", retries)
                 .put("executionCounter", executionCounter)
                 .put("scheduledId", scheduledId)
-                .put("payload", payloadMarshaller.marshall(payload))
                 .put("priority", priority)
                 .put("recipient", JsonObject
                         .mapFrom(new RecipientInstance(HttpRecipient.builder().url("testEndpoint").build()))

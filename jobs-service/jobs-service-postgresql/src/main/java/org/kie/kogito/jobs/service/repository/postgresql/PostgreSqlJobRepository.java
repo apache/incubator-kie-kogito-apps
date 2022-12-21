@@ -32,7 +32,6 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseReactiveJobRepository;
-import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.jobs.service.stream.JobStreams;
@@ -66,20 +65,17 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
 
     private final RecipientMarshaller recipientMarshaller;
 
-    private final PayloadMarshaller payloadMarshaller;
-
     PostgreSqlJobRepository() {
-        this(null, null, null, null, null, null);
+        this(null, null, null, null, null);
     }
 
     @Inject
     public PostgreSqlJobRepository(Vertx vertx, JobStreams jobStreams, PgPool client,
-            TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller, PayloadMarshaller payloadMarshaller) {
+            TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller) {
         super(vertx, jobStreams);
         this.client = client;
         this.triggerMarshaller = triggerMarshaller;
         this.recipientMarshaller = recipientMarshaller;
-        this.payloadMarshaller = payloadMarshaller;
     }
 
     @Override
