@@ -16,11 +16,11 @@
 
 package org.kie.kogito.addons.quarkus.data.index.deployment;
 
-class KogitoAddonsQuarkusDataIndexProcessor extends AbstractKogitoAddonsQuarkusDataIndexProcessor {
+class MongoDataIndexProcessor extends AbstractKogitoAddonsQuarkusDataIndexProcessor {
 
-    private static final String FEATURE = "kogito-addons-quarkus-data-index-postgresql";
+    private static final String FEATURE = "kogito-addons-quarkus-data-index-mongodb";
 
-    KogitoAddonsQuarkusDataIndexProcessor() {
+    MongoDataIndexProcessor() {
         super(FEATURE);
     }
 

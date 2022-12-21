@@ -16,11 +16,11 @@
 
 package org.kie.kogito.addons.quarkus.data.index.deployment;
 
-class KogitoAddonsQuarkusDataIndexProcessor extends AbstractKogitoAddonsQuarkusDataIndexProcessor {
+class InfinispanDataIndexProcessor extends AbstractKogitoAddonsQuarkusDataIndexProcessor {
 
-    private static final String FEATURE = "kogito-addons-quarkus-data-index-mongodb";
+    private static final String FEATURE = "kogito-addons-quarkus-data-index-infinispan";
 
-    KogitoAddonsQuarkusDataIndexProcessor() {
+    InfinispanDataIndexProcessor() {
         super(FEATURE);
     }
 
