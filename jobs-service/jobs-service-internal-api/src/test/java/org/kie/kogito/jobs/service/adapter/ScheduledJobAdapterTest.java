@@ -117,12 +117,14 @@ class ScheduledJobAdapterTest {
                 .job(JobBuilder.builder().id(UUID.randomUUID().toString()).build())
                 .build();
         JobDetails jobDetails = ScheduledJobAdapter.to(scheduledJob);
-        assertThat(jobDetails.getPayload()).isNull();
+        assertThat(jobDetails.getRecipient()).isNull();
     }
 
     @Test
     void testToScheduledJobWithEmptyPayload() {
-        JobDetails jobDetails = JobDetails.builder().id(UUID.randomUUID().toString()).build();
+        JobDetails jobDetails = JobDetails.builder().id(UUID.randomUUID().toString())
+                .recipient(new RecipientInstance(HttpRecipient.builder().payload(null).build()))
+                .build();
         ScheduledJob scheduledJob = ScheduledJobAdapter.of(jobDetails);
         assertThat(scheduledJob.getProcessId()).isNull();
         assertThat(scheduledJob.getProcessInstanceId()).isNull();
@@ -154,15 +156,14 @@ class ScheduledJobAdapterTest {
         return JobDetails.builder()
                 .id(ID)
                 .priority(PRIORITY)
-                .recipient(new RecipientInstance(HttpRecipient.builder().url(ENDPOINT).build()))
+                .recipient(new RecipientInstance(HttpRecipient.builder().url(ENDPOINT).payload(payload).build()))
                 .scheduledId(SCHEDULED_ID)
                 .status(STATUS)
                 .correlationId(ID)
                 .lastUpdate(LAST_UPDATE)
                 .executionCounter(COUNTER)
                 .priority(PRIORITY)
-                .retries(RETRIES)
-                .payload(payload);
+                .retries(RETRIES);
     }
 
     private void assertScheduledJob(ScheduledJob scheduledJob) {
@@ -174,13 +175,11 @@ class ScheduledJobAdapterTest {
         assertThat(scheduledJob.getPriority()).isEqualTo(PRIORITY);
         assertThat(scheduledJob.getStatus()).isEqualTo(STATUS);
         assertThat(scheduledJob.getExpirationTime()).isEqualTo(TIME);
-
         assertThat(scheduledJob.getRootProcessInstanceId()).isEqualTo(ROOT_PROCESS_INSTANCE_ID);
         assertThat(scheduledJob.getRootProcessId()).isEqualTo(ROOT_PROCESS_ID);
         assertThat(scheduledJob.getProcessId()).isEqualTo(PROCESS_ID);
         assertThat(scheduledJob.getProcessInstanceId()).isEqualTo(PROCESS_INSTANCE_ID);
         assertThat(scheduledJob.getNodeInstanceId()).isEqualTo(NODE_INSTANCE_ID);
-
         assertThat(scheduledJob.getCallbackEndpoint()).isEqualTo(ENDPOINT);
     }
 
@@ -195,6 +194,6 @@ class ScheduledJobAdapterTest {
         assertThat(jobDetails.getStatus()).isEqualTo(STATUS);
         assertThat(jobDetails.getRecipient()).isInstanceOf(RecipientInstance.class);
         assertThat(((HttpRecipient) jobDetails.getRecipient().getRecipient()).getUrl()).isEqualTo(ENDPOINT);
-        assertThat(jobDetails.getPayload()).isEqualTo(payload);
+        assertThat(jobDetails.getRecipient().getRecipient().getPayload()).isEqualTo(payload);
     }
 }

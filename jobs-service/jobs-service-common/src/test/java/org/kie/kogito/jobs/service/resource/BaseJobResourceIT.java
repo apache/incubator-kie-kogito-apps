@@ -351,18 +351,6 @@ public abstract class BaseJobResourceIT {
 
         assertPatch(id, toPatch, BAD_REQUEST);
 
-        toPatch = JobBuilder.builder().processId(UUID.randomUUID().toString()).build();
-        assertPatch(id, toPatch, BAD_REQUEST);
-
-        toPatch = JobBuilder.builder().rootProcessId(UUID.randomUUID().toString()).build();
-        assertPatch(id, toPatch, BAD_REQUEST);
-
-        toPatch = JobBuilder.builder().rootProcessInstanceId(UUID.randomUUID().toString()).build();
-        assertPatch(id, toPatch, BAD_REQUEST);
-
-        toPatch = JobBuilder.builder().processInstanceId(UUID.randomUUID().toString()).build();
-        assertPatch(id, toPatch, BAD_REQUEST);
-
         toPatch = JobBuilder.builder().priority(10).build();
         assertPatch(id, toPatch, BAD_REQUEST);
 

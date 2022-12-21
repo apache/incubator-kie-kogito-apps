@@ -111,7 +111,6 @@ public abstract class BaseJobRepositoryTest {
                         .status(JobStatus.SCHEDULED)
                         .id(String.valueOf(id))
                         .priority(id)
-                        .payload("{\"payload\": \"test\"}")
                         .trigger(new PointInTimeTrigger(DateUtil.now().plusMinutes(id).toInstant().toEpochMilli(), null, null))
                         .priority(id)
                         .build())

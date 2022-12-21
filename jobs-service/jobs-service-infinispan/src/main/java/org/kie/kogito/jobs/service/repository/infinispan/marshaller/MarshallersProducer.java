@@ -19,19 +19,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
 import org.infinispan.protostream.MessageMarshaller;
-import org.kie.kogito.jobs.service.repository.marshaller.PayloadMarshaller;
+import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 
 @ApplicationScoped
 public class MarshallersProducer {
 
     @Produces
-    public MessageMarshaller jobDetailsMarshaller(PayloadMarshaller payloadMarshaller) {
-        return new JobDetailsMarshaller(payloadMarshaller);
-    }
-
-    @Produces
-    public MessageMarshaller recipientMarshaller() {
-        return new RecipientMarshaller();
+    public MessageMarshaller jobDetailsMarshaller(RecipientMarshaller recipientMarshaller) {
+        return new JobDetailsMarshaller(recipientMarshaller);
     }
 
     @Produces

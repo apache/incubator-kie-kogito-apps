@@ -47,7 +47,6 @@ class JobDetailsValidatorTest {
     @Test
     void testValidateMissingId() {
         JobDetails job = new JobDetailsBuilder()
-                .id(ID)
                 .correlationId(ID)
                 .recipient(recipient)
                 .trigger(new PointInTimeTrigger())
@@ -112,15 +111,6 @@ class JobDetailsValidatorTest {
         JobDetails job = new JobDetailsBuilder()
                 .id(ID)
                 .correlationId(ID)
-                .trigger(new PointInTimeTrigger())
-                .build();
-        assertThatThrownBy(() -> JobDetailsValidator.validateToMerge(job)).isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    void testValidateToMergeWithPayload() {
-        JobDetails job = new JobDetailsBuilder()
-                .payload("{\"name\":\"Arthur\"}")
                 .trigger(new PointInTimeTrigger())
                 .build();
         assertThatThrownBy(() -> JobDetailsValidator.validateToMerge(job)).isInstanceOf(IllegalArgumentException.class);

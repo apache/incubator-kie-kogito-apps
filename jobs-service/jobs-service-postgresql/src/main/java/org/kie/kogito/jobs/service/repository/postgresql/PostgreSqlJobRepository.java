@@ -41,7 +41,6 @@ import org.kie.kogito.timer.Trigger;
 
 import io.smallrye.mutiny.Multi;
 import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.mutiny.pgclient.PgPool;
 import io.vertx.mutiny.sqlclient.Row;
@@ -59,7 +58,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
     private static final String JOB_DETAILS_TABLE = "job_details";
 
     private static final String JOB_DETAILS_COLUMNS = "id, correlation_id, status, last_update, retries, " +
-            "execution_counter, scheduled_id, recipient_payload, priority, recipient, trigger, fire_time";
+            "execution_counter, scheduled_id, priority, recipient, trigger, fire_time";
 
     private final PgPool client;
 
@@ -86,11 +85,11 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
     @Override
     public CompletionStage<JobDetails> doSave(JobDetails job) {
         return client.preparedQuery("INSERT INTO " + JOB_DETAILS_TABLE + " (" + JOB_DETAILS_COLUMNS +
-                ") VALUES ($1, $2, $3, now(), $4, $5, $6, $7, $8, $9, $10, $11) " +
+                ") VALUES ($1, $2, $3, now(), $4, $5, $6, $7, $8, $9, $10) " +
                 "ON CONFLICT (id) DO " +
                 "UPDATE SET correlation_id = $2, status = $3, last_update = now(), retries = $4, " +
-                "execution_counter = $5, scheduled_id = $6, recipient_payload = $7, priority = $8, " +
-                "recipient = $9, trigger = $10, fire_time = $11 " +
+                "execution_counter = $5, scheduled_id = $6, priority = $7, " +
+                "recipient = $8, trigger = $9, fire_time = $10 " +
                 "RETURNING " + JOB_DETAILS_COLUMNS)
                 .execute(Tuple.tuple(Stream.of(
                         job.getId(),
@@ -99,7 +98,6 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
                         job.getRetries(),
                         job.getExecutionCounter(),
                         job.getScheduledId(),
-                        Buffer.buffer(payloadMarshaller.marshall(job.getPayload())),
                         job.getPriority(),
                         recipientMarshaller.marshall(job.getRecipient()),
                         triggerMarshaller.marshall(job.getTrigger()),
@@ -186,7 +184,6 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
                 .retries(row.getInteger("retries"))
                 .executionCounter(row.getInteger("execution_counter"))
                 .scheduledId(row.getString("scheduled_id"))
-                .payload(payloadMarshaller.unmarshall(row.getBuffer("recipient_payload").getBytes()))
                 .priority(row.getInteger("priority"))
                 .recipient(recipientMarshaller.unmarshall(row.get(JsonObject.class, "recipient")))
                 .trigger(triggerMarshaller.unmarshall(row.get(JsonObject.class, "trigger")))

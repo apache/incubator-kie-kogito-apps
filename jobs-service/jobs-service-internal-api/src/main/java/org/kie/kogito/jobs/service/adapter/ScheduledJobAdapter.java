@@ -51,7 +51,11 @@ public class ScheduledJobAdapter {
     }
 
     public static ScheduledJob of(JobDetails jobDetails) {
-        final ProcessPayload payload = payloadDeserialize(jobDetails.getPayload());
+        Object recipientPayload = Optional.ofNullable(jobDetails.getRecipient())
+                .map(Recipient::getRecipient)
+                .map(org.kie.kogito.jobs.service.api.Recipient::getPayload)
+                .orElse(null);
+        final ProcessPayload payload = payloadDeserialize(recipientPayload);
         return ScheduledJob.builder()
                 .job(new JobBuilder()
                         .id(jobDetails.getId())
@@ -103,13 +107,16 @@ public class ScheduledJobAdapter {
                 .status(scheduledJob.getStatus())
                 .trigger(triggerAdapter(scheduledJob))
                 .priority(scheduledJob.getPriority())
-                .payload(payloadSerialize(scheduledJob))
+                //.payload(payloadSerialize(scheduledJob))
                 .build();
     }
 
     private static RecipientInstance recipientAdapter(ScheduledJob scheduledJob) {
         return Optional.ofNullable(scheduledJob.getCallbackEndpoint())
-                .map(url -> new RecipientInstance(HttpRecipient.builder().url(url).build()))
+                .map(url -> new RecipientInstance(HttpRecipient.builder()
+                        .url(url)
+                        .payload(payloadSerialize(scheduledJob))
+                        .build()))
                 .orElse(null);
     }
 

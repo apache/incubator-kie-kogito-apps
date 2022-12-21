@@ -23,8 +23,7 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 public class JobDetailsValidator {
 
     public static JobDetails validateToCreate(JobDetails job) {
-        if (Objects.isNull(job.getPayload())
-                || StringUtils.isEmpty(job.getId())
+        if (StringUtils.isEmpty(job.getId())
                 || StringUtils.isEmpty(job.getCorrelationId())
                 || Objects.isNull(job.getTrigger())
                 || Objects.isNull(job.getRecipient())
@@ -35,8 +34,7 @@ public class JobDetailsValidator {
     }
 
     public static JobDetails validateToMerge(JobDetails job) {
-        if (Objects.nonNull(job.getPayload())
-                || StringUtils.isNotEmpty(job.getId())
+        if (StringUtils.isNotEmpty(job.getId())
                 || StringUtils.isNotEmpty(job.getScheduledId())
                 || StringUtils.isNotEmpty(job.getCorrelationId())
                 || (Objects.nonNull(job.getExecutionCounter()) && job.getExecutionCounter() > 0)
