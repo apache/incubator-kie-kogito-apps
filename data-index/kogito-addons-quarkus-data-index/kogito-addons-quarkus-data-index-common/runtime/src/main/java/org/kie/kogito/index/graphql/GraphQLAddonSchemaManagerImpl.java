@@ -25,7 +25,7 @@ import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.TypeDefinitionRegistry;
 
 @ApplicationScoped
-public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
+public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager {
 
     protected GraphQLSchema createSchema() {
         TypeDefinitionRegistry typeDefinitionRegistry = new TypeDefinitionRegistry();
