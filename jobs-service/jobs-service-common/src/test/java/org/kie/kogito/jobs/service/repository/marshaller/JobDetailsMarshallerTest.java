@@ -28,6 +28,8 @@ import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.vertx.core.json.JsonObject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -36,7 +38,7 @@ import static org.kie.kogito.jobs.service.utils.DateUtil.DEFAULT_ZONE;
 
 class JobDetailsMarshallerTest {
 
-    private final PayloadMarshaller payloadMarshaller = new PayloadMarshaller();
+    private PayloadMarshaller payloadMarshaller;
     JobDetailsMarshaller jobDetailsMarshaller;
 
     JobDetails jobDetails;
@@ -45,6 +47,7 @@ class JobDetailsMarshallerTest {
 
     @BeforeEach
     void setUp() {
+        payloadMarshaller = new PayloadMarshaller(new ObjectMapper());
         jobDetailsMarshaller = new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller(), payloadMarshaller);
 
         String id = "testId";

@@ -108,7 +108,7 @@ public class JobDetailsMarshaller implements Marshaller<JobDetails, JsonObject> 
                     .retries(this.retries)
                     .executionCounter(this.executionCounter)
                     .scheduledId(this.scheduledId)
-                    .payload(payloadMarshaller.unmarshall(payload))
+                    .payload(Optional.ofNullable(this.payload).map(p -> payloadMarshaller.unmarshall(p)).orElse(null))
                     .priority(this.priority)
                     .recipient(Optional.ofNullable(this.recipient).map(r -> recipientMarshaller.unmarshall(new JsonObject(r))).orElse(null))
                     .trigger(Optional.ofNullable(this.trigger).map(t -> triggerMarshaller.unmarshall(new JsonObject(t))).orElse(null))

@@ -26,8 +26,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ApplicationScoped
 public class PayloadMarshaller implements Marshaller<Object, byte[]> {
 
+    private ObjectMapper objectMapper;
+
     @Inject
-    ObjectMapper objectMapper;
+    public PayloadMarshaller(ObjectMapper objectMapper) {
+        this.objectMapper = objectMapper;
+    }
 
     @Override
     public byte[] marshall(Object value) {
