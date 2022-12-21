@@ -115,7 +115,6 @@ public class JobDetails {
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getCorrelationId(), that.getCorrelationId()) &&
                 Objects.equals(getStatus(), that.getStatus()) &&
-                Objects.equals(getLastUpdate(), that.getLastUpdate()) &&
                 Objects.equals(getRetries(), that.getRetries()) &&
                 Objects.equals(getExecutionCounter(), that.getExecutionCounter()) &&
                 Objects.equals(getScheduledId(), that.getScheduledId()) &&
@@ -125,7 +124,7 @@ public class JobDetails {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCorrelationId(), getStatus(), getLastUpdate(), getRetries(), getExecutionCounter(), getScheduledId(), getPayload(), getRecipient(), getTrigger());
+        return Objects.hash(getId(), getCorrelationId(), getStatus(), getRetries(), getExecutionCounter(), getScheduledId(), getPayload(), getRecipient(), getTrigger());
     }
 
     @Override

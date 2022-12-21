@@ -38,6 +38,8 @@ import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 import org.mockito.ArgumentCaptor;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.smallrye.mutiny.Multi;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.groups.MultiOnItem;
@@ -112,7 +114,7 @@ class PostgreSqlJobRepositoryTest {
         when(recipientMarshaller.marshall(any(Recipient.class))).thenReturn(new JsonObject().put("recipientMarshaller", "test"));
         when(recipientMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new RecipientInstance(HttpRecipient.builder().url("test").build()));
 
-        payloadMarshaller = new PayloadMarshaller();
+        payloadMarshaller = new PayloadMarshaller(new ObjectMapper());
         repository = new PostgreSqlJobRepository(null, null, client, triggerMarshaller, recipientMarshaller, payloadMarshaller);
     }
 
@@ -144,17 +146,16 @@ class PostgreSqlJobRepositoryTest {
         verify(query, times(1)).execute(parameterCaptor.capture());
 
         String query = "INSERT INTO job_details (id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "recipient_payload, priority, recipient, trigger, fire_time) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) " +
-                "ON CONFLICT (id) DO UPDATE SET correlation_id = $2, status = $3, last_update = $4, retries = $5, " +
-                "execution_counter = $6, scheduled_id = $7, recipient_payload = $8, priority = $9, " +
-                "recipient = $10, trigger = $11, fire_time = $12 RETURNING id, correlation_id, status, last_update, retries, " +
+                "recipient_payload, priority, recipient, trigger, fire_time) VALUES ($1, $2, $3, now(), $4, $5, $6, $7, $8, $9, $10, $11) " +
+                "ON CONFLICT (id) DO UPDATE SET correlation_id = $2, status = $3, last_update = now(), retries = $4, " +
+                "execution_counter = $5, scheduled_id = $6, recipient_payload = $7, priority = $8, " +
+                "recipient = $9, trigger = $10, fire_time = $11 RETURNING id, correlation_id, status, last_update, retries, " +
                 "execution_counter, scheduled_id, recipient_payload, priority, recipient, trigger, fire_time";
 
         Tuple parameter = Tuple.tuple(Stream.of(
                 job.getId(),
                 job.getCorrelationId(),
                 job.getStatus().name(),
-                job.getLastUpdate().toOffsetDateTime(),
                 job.getRetries(),
                 job.getExecutionCounter(),
                 job.getScheduledId(),
@@ -168,14 +169,13 @@ class PostgreSqlJobRepositoryTest {
         assertEquals(parameter.getString(0), parameterCaptor.getValue().getString(0));
         assertEquals(parameter.getString(1), parameterCaptor.getValue().getString(1));
         assertEquals(parameter.getString(2), parameterCaptor.getValue().getString(2));
-        assertEquals(parameter.getOffsetDateTime(3), parameterCaptor.getValue().getOffsetDateTime(3));
+        assertEquals(parameter.getInteger(3), parameterCaptor.getValue().getInteger(3));
         assertEquals(parameter.getInteger(4), parameterCaptor.getValue().getInteger(4));
-        assertEquals(parameter.getInteger(5), parameterCaptor.getValue().getInteger(5));
-        assertEquals(parameter.getString(6), parameterCaptor.getValue().getString(6));
-        assertEquals(parameter.getBuffer(7), parameterCaptor.getValue().getBuffer(7));
-        assertEquals(parameter.getInteger(8), parameterCaptor.getValue().getInteger(8));
+        assertEquals(parameter.getString(5), parameterCaptor.getValue().getString(5));
+        assertEquals(parameter.getBuffer(6), parameterCaptor.getValue().getBuffer(6));
+        assertEquals(parameter.getInteger(7), parameterCaptor.getValue().getInteger(7));
+        assertEquals(parameter.getJson(8), parameterCaptor.getValue().getJson(8));
         assertEquals(parameter.getJson(9), parameterCaptor.getValue().getJson(9));
-        assertEquals(parameter.getJson(10), parameterCaptor.getValue().getJson(10));
     }
 
     @Test

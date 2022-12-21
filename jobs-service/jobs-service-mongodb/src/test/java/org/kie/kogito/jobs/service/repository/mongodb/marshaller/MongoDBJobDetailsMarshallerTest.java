@@ -30,6 +30,8 @@ import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.vertx.core.json.JsonObject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,7 +39,7 @@ import static org.kie.kogito.jobs.service.utils.DateUtil.DEFAULT_ZONE;
 
 class MongoDBJobDetailsMarshallerTest {
 
-    private final PayloadMarshaller payloadMarshaller = new PayloadMarshaller();
+    private final PayloadMarshaller payloadMarshaller = new PayloadMarshaller(new ObjectMapper());
     MongoDBJobDetailsMarshaller mongoDBJobDetailsMarshaller = new MongoDBJobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller(), payloadMarshaller);
 
     @Test

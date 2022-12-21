@@ -96,7 +96,6 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
                         job.getId(),
                         job.getCorrelationId(),
                         Optional.ofNullable(job.getStatus()).map(Enum::name).orElse(null),
-                        //Optional.ofNullable(job.getLastUpdate()).map(ZonedDateTime::toOffsetDateTime).orElse(null),
                         job.getRetries(),
                         job.getExecutionCounter(),
                         job.getScheduledId(),
