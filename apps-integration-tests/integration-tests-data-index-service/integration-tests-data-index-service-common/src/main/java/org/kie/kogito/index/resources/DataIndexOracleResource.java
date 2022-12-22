@@ -63,7 +63,7 @@ public class DataIndexOracleResource implements TestResource {
 
         dataIndex.addProtoFileFolder();
         dataIndex.withNetwork(network);
-        dataIndex.setDatabaseURL("jdbc:oracle:thin:@//oracle:1521/" + oracle.getDatabaseName(),
+        dataIndex.setDatabaseURL("jdbc:oracle:thin:@oracle:1521/" + oracle.getDatabaseName(),
                 oracle.getUsername(), oracle.getPassword());
         dataIndex.setKafkaURL("kafka:29092");
         dataIndex.start();
