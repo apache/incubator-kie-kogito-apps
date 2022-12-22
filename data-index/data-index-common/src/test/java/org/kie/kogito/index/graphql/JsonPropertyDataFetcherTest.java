@@ -32,13 +32,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class JsonPropertyDataFetcherTest {
+class JsonPropertyDataFetcherTest {
 
     ObjectMapper objectMapper = new ObjectMapper();
     JsonPropertyDataFetcher jsonPropertyDataFetcher = new JsonPropertyDataFetcher();
 
     @Test
-    public void testBasicTypesDataFetcher() {
+    void testBasicTypesDataFetcher() {
         JsonNode addressJson = createTestObjectNodeJson("city1", 8, true, null);
         assertThat(jsonPropertyDataFetcher.get(getMockEnv("city", addressJson))).isEqualTo("city1");
         assertThat(jsonPropertyDataFetcher.get(getMockEnv("amount", addressJson))).isEqualTo(8);
@@ -47,19 +47,19 @@ public class JsonPropertyDataFetcherTest {
     }
 
     @Test
-    public void testArraysTypesDataFetcher() {
+    void testArraysTypesDataFetcher() {
         JsonNode arraysJson = getArraysNodeJson();
         assertThat(((ArrayNode) jsonPropertyDataFetcher.get(getMockEnv("addressArray", arraysJson))).size()).isEqualTo(2);
         List stringArray = ((List) jsonPropertyDataFetcher.get(getMockEnv("stringArray", arraysJson)));
-        assertThat(stringArray.size()).isEqualTo(2);
+        assertThat(stringArray).hasSize(2);
         assertThat(stringArray.get(0)).isEqualTo("st1");
         assertThat(stringArray.get(1)).isEqualTo("st2");
         List numberArray = ((List) jsonPropertyDataFetcher.get(getMockEnv("numberArray", arraysJson)));
-        assertThat(numberArray.size()).isEqualTo(2);
+        assertThat(numberArray).hasSize(2);
         assertThat(numberArray.get(0)).isEqualTo(8);
         assertThat(numberArray.get(1)).isEqualTo(98.6);
         List booleanArray = ((List) jsonPropertyDataFetcher.get(getMockEnv("booleanArray", arraysJson)));
-        assertThat(booleanArray.size()).isEqualTo(2);
+        assertThat(booleanArray).hasSize(2);
         assertThat(booleanArray.get(0)).isEqualTo(true);
         assertThat(booleanArray.get(1)).isEqualTo(false);
     }

@@ -22,12 +22,12 @@ import graphql.schema.GraphQLScalarType;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class DateTimeScalarTypeProducerTest {
+class DateTimeScalarTypeProducerTest {
 
     GraphQLScalarType dateTimeScalar = new GraphQLScalarTypeProducer(new DefaultDateTimeCoercing()).dateTimeScalar();
 
     @Test
-    public void testScalarType() {
+    void testScalarType() {
         assertThat(dateTimeScalar.getName()).isEqualTo("DateTime");
         assertThat(dateTimeScalar.getDescription()).isEqualTo("An ISO-8601 compliant DateTime Scalar");
         assertThat(dateTimeScalar.getCoercing()).isNotNull();

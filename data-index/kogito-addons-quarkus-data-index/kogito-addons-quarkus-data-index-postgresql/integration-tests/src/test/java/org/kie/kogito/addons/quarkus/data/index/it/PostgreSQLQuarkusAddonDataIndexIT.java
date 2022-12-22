@@ -25,10 +25,10 @@ import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 
 @QuarkusIntegrationTest
-public class KogitoAddonsQuarkusDataIndexResourceIT {
+class PostgreSQLQuarkusAddonDataIndexIT {
 
     @Test
-    void testGreetRest() {
+    void testDataIndexAddon() {
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances{ id } }\" }")
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200)

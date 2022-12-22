@@ -39,7 +39,7 @@ import static org.kie.kogito.persistence.api.query.QueryFilterFactory.orderBy;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class GraphQLQueryOrderParserTest {
+class GraphQLQueryOrderParserTest {
 
     private static DataFetchingEnvironment mockDataFetchingEnvironment(List<Argument> arguments, Map<String, Object> variables) {
         DataFetchingEnvironment env = mock(DataFetchingEnvironment.class);
@@ -51,26 +51,26 @@ public class GraphQLQueryOrderParserTest {
     }
 
     @Test
-    public void testNull() {
+    void testNull() {
         assertThat(new GraphQLQueryOrderByParser().apply(null)).isEmpty();
     }
 
     @Test
-    public void testEmpty() {
+    void testEmpty() {
         DataFetchingEnvironment env = mockDataFetchingEnvironment(emptyList(), emptyMap());
 
         assertThat(new GraphQLQueryOrderByParser().apply(env)).isEmpty();
     }
 
     @Test
-    public void testNonMatchingArgument() {
+    void testNonMatchingArgument() {
         DataFetchingEnvironment env = mockDataFetchingEnvironment(singletonList(Argument.newArgument().name("where").build()), emptyMap());
 
         assertThat(new GraphQLQueryOrderByParser().apply(env)).isEmpty();
     }
 
     @Test
-    public void testSortSingleArgument() {
+    void testSortSingleArgument() {
         DataFetchingEnvironment env = mockDataFetchingEnvironment(singletonList(
                 Argument.newArgument().name("orderBy").value(
                         ObjectValue.newObjectValue().objectField(
@@ -86,7 +86,7 @@ public class GraphQLQueryOrderParserTest {
     }
 
     @Test
-    public void testSortUsingVariable() {
+    void testSortUsingVariable() {
         DataFetchingEnvironment env = mockDataFetchingEnvironment(singletonList(
                 Argument.newArgument().name("orderBy").value(
                         VariableReference.newVariableReference().name("orderBy").build()).build()),
@@ -100,7 +100,7 @@ public class GraphQLQueryOrderParserTest {
     }
 
     @Test
-    public void testSortArgumentOrder() {
+    void testSortArgumentOrder() {
         DataFetchingEnvironment env = mockDataFetchingEnvironment(singletonList(
                 Argument.newArgument().name("orderBy").value(
                         ObjectValue.newObjectValue()
@@ -120,7 +120,7 @@ public class GraphQLQueryOrderParserTest {
     }
 
     @Test
-    public void testSortArgumentUsingChildEntity() {
+    void testSortArgumentUsingChildEntity() {
         DataFetchingEnvironment env = mockDataFetchingEnvironment(singletonList(
                 Argument.newArgument().name("orderBy").value(
                         ObjectValue.newObjectValue()
