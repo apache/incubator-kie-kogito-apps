@@ -31,14 +31,14 @@ class RecipientMarshallerTest {
 
     @Test
     void marshall() {
-        Recipient recipient = new RecipientInstance(HttpRecipient.builder().url("test").build());
+        Recipient recipient = new RecipientInstance(HttpRecipient.builder().forStringPayload().url("test").build());
         JsonObject jsonObject = marshaller.marshall(recipient);
         assertEquals(buildRecipient(), jsonObject);
     }
 
     private static JsonObject buildRecipient() {
         return JsonObject
-                .mapFrom(new RecipientInstance(HttpRecipient.builder().url("test").build()))
+                .mapFrom(new RecipientInstance(HttpRecipient.builder().forStringPayload().url("test").build()))
                 .put(RecipientMarshaller.CLASS_TYPE, HttpRecipient.class.getName());
     }
 
@@ -52,7 +52,7 @@ class RecipientMarshallerTest {
     void unmarshall() {
         JsonObject jsonObject = buildRecipient();
         Recipient recipient = marshaller.unmarshall(jsonObject);
-        assertEquals(HttpRecipient.builder().url("test").build(), recipient.getRecipient());
+        assertEquals(HttpRecipient.builder().forStringPayload().url("test").build(), recipient.getRecipient());
     }
 
     @Test

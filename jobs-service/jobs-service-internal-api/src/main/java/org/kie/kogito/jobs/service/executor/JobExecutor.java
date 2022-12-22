@@ -35,5 +35,5 @@ public interface JobExecutor {
                 .isPresent();
     }
 
-    Class<? extends Recipient<?>> type();
+    Class<? extends Recipient> type();
 }

@@ -29,6 +29,7 @@ import io.vertx.core.json.JsonObject;
 public class RecipientMarshaller implements Marshaller<Recipient, JsonObject> {
 
     public static final String CLASS_TYPE = "classType";
+    public static final String PAYLOAD_TYPE = "payloadType";
 
     @Override
     public JsonObject marshall(Recipient recipient) {
@@ -50,7 +51,8 @@ public class RecipientMarshaller implements Marshaller<Recipient, JsonObject> {
             return null;
         }
         try {
-            return new RecipientInstance((org.kie.kogito.jobs.service.api.Recipient<?>) jsonObject.getJsonObject("recipient").mapTo(Class.forName(classType)));
+            JsonObject recipient = jsonObject.getJsonObject("recipient");
+            return new RecipientInstance((org.kie.kogito.jobs.service.api.Recipient<?>) recipient.mapTo(Class.forName(classType)));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

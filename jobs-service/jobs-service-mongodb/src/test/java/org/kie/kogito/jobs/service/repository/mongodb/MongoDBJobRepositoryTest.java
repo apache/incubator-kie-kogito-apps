@@ -136,7 +136,7 @@ class MongoDBJobRepositoryTest {
 
         ZonedDateTime time = ZonedDateTime.now(DEFAULT_ZONE);
         PointInTimeTrigger trigger = new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null);
-        Recipient recipient = new RecipientInstance(HttpRecipient.builder().url("test").build());
+        Recipient recipient = new RecipientInstance(HttpRecipient.builder().forStringPayload().url("test").build());
         unmarshalled = new JobDetailsBuilder().id("test").trigger(trigger).recipient(recipient).build();
         marshalled = new JsonObject().put("id", "test");
 

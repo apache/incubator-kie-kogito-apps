@@ -24,6 +24,7 @@ import java.util.stream.IntStream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipientStringPayloadData;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -75,7 +76,7 @@ public abstract class BaseJobRepositoryTest {
                 .id(id)
                 .trigger(new PointInTimeTrigger(System.currentTimeMillis(), null, null))
                 .priority(1)
-                .recipient(new RecipientInstance(HttpRecipient.builder().url("url").payload("payload test").build()))
+                .recipient(new RecipientInstance(HttpRecipient.builder().forStringPayload().url("url").payload(HttpRecipientStringPayloadData.from("payload test")).build()))
                 .build();
         tested().save(job).toCompletableFuture().get();
     }
@@ -156,7 +157,7 @@ public abstract class BaseJobRepositoryTest {
         String id = UUID.randomUUID().toString();
         createAndSaveJob(id);
         final String newCallbackEndpoint = "http://localhost/newcallback";
-        final Recipient recipient = new RecipientInstance(HttpRecipient.builder().url(newCallbackEndpoint).build());
+        final Recipient recipient = new RecipientInstance(HttpRecipient.builder().forStringPayload().url(newCallbackEndpoint).build());
         final JobDetails toMerge = JobDetails.builder()
                 .id(id)
                 .recipient(recipient)

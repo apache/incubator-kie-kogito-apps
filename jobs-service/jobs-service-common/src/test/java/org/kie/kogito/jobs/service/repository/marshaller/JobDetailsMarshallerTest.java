@@ -21,6 +21,7 @@ import java.util.Date;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipientStringPayloadData;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.Recipient;
@@ -55,8 +56,8 @@ class JobDetailsMarshallerTest {
         Integer priority = 3;
         Integer executionCounter = 4;
         String scheduledId = "testScheduledId";
-        Object payload = "test";
-        Recipient recipient = new RecipientInstance(HttpRecipient.builder().url("url").payload(payload).build());
+        String payload = "test";
+        Recipient recipient = new RecipientInstance(HttpRecipient.builder().forStringPayload().url("url").payload(HttpRecipientStringPayloadData.from(payload)).build());
         Trigger trigger = new PointInTimeTrigger(new Date().toInstant().toEpochMilli(), null, null);
 
         jobDetails = JobDetails.builder()
@@ -82,7 +83,7 @@ class JobDetailsMarshallerTest {
                 .put("scheduledId", scheduledId)
                 .put("priority", priority)
                 .put("recipient", JsonObject
-                        .mapFrom(new RecipientInstance((HttpRecipient.builder().url("url").payload(payload).build())))
+                        .mapFrom(new RecipientInstance((HttpRecipient.builder().forStringPayload().url("url").payload(HttpRecipientStringPayloadData.from(payload)).build())))
                         .put("classType", HttpRecipient.class.getName()))
                 .put("trigger", new JsonObject()
                         .put("nextFireTime", trigger.hasNextFireTime().getTime())

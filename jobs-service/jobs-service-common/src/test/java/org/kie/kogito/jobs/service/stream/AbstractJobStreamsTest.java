@@ -63,7 +63,7 @@ abstract class AbstractJobStreamsTest<T extends AbstractJobStreams> {
     private static final Integer EXECUTION_COUNTER = 1;
     private static final String SCHEDULE_ID = "SCHEDULE_ID";
 
-    private static final Recipient RECIPIENT = new RecipientInstance(HttpRecipient.builder().url("http://recipient").build());
+    private static final Recipient RECIPIENT = new RecipientInstance(HttpRecipient.builder().forStringPayload().url("http://recipient").build());
     private static final Trigger TRIGGER = new PointInTimeTrigger();
     @Captor
     ArgumentCaptor<Message<String>> messageCaptor;

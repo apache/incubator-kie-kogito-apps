@@ -21,7 +21,9 @@ import java.util.UUID;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.api.JobBuilder;
+import org.kie.kogito.jobs.service.adapter.ScheduledJobAdapter.ProcessPayload;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipientStringPayloadData;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobDetailsBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -30,6 +32,8 @@ import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -51,15 +55,12 @@ class ScheduledJobAdapterTest {
     public static final String PROCESS_ID = "ID";
     public static final String PROCESS_INSTANCE_ID = "ID";
     private static final String NODE_INSTANCE_ID = "nodeId";
-    public static Object payload;
+    public static String payload;
 
     @BeforeAll
     public static void before() throws Exception {
-        payload = new ScheduledJobAdapter.ProcessPayload(PROCESS_INSTANCE_ID,
-                ROOT_PROCESS_INSTANCE_ID,
-                PROCESS_ID,
-                ROOT_PROCESS_ID,
-                NODE_INSTANCE_ID);
+        payload = new ObjectMapper().writeValueAsString(
+                new ProcessPayload(PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID, NODE_INSTANCE_ID));
     }
 
     @Test
@@ -123,7 +124,7 @@ class ScheduledJobAdapterTest {
     @Test
     void testToScheduledJobWithEmptyPayload() {
         JobDetails jobDetails = JobDetails.builder().id(UUID.randomUUID().toString())
-                .recipient(new RecipientInstance(HttpRecipient.builder().payload(null).build()))
+                .recipient(new RecipientInstance(HttpRecipient.builder().forStringPayload().payload(null).build()))
                 .build();
         ScheduledJob scheduledJob = ScheduledJobAdapter.of(jobDetails);
         assertThat(scheduledJob.getProcessId()).isNull();
@@ -156,7 +157,7 @@ class ScheduledJobAdapterTest {
         return JobDetails.builder()
                 .id(ID)
                 .priority(PRIORITY)
-                .recipient(new RecipientInstance(HttpRecipient.builder().url(ENDPOINT).payload(payload).build()))
+                .recipient(new RecipientInstance(HttpRecipient.builder().forStringPayload().url(ENDPOINT).payload(HttpRecipientStringPayloadData.from(payload)).build()))
                 .scheduledId(SCHEDULED_ID)
                 .status(STATUS)
                 .correlationId(ID)
@@ -194,6 +195,6 @@ class ScheduledJobAdapterTest {
         assertThat(jobDetails.getStatus()).isEqualTo(STATUS);
         assertThat(jobDetails.getRecipient()).isInstanceOf(RecipientInstance.class);
         assertThat(((HttpRecipient) jobDetails.getRecipient().getRecipient()).getUrl()).isEqualTo(ENDPOINT);
-        assertThat(jobDetails.getRecipient().getRecipient().getPayload()).isEqualTo(payload);
+        assertThat(jobDetails.getRecipient().getRecipient().getPayload().getData()).isEqualTo(payload);
     }
 }

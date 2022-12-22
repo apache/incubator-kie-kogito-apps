@@ -27,6 +27,7 @@ import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipientStringPayloadData;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.Recipient;
@@ -109,7 +110,8 @@ class PostgreSqlJobRepositoryTest {
         when(triggerMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null));
         RecipientMarshaller recipientMarshaller = mock(RecipientMarshaller.class);
         when(recipientMarshaller.marshall(any(Recipient.class))).thenReturn(new JsonObject().put("recipientMarshaller", "test"));
-        when(recipientMarshaller.unmarshall(any(JsonObject.class))).thenReturn(new RecipientInstance(HttpRecipient.builder().url("test").build()));
+        when(recipientMarshaller.unmarshall(any(JsonObject.class)))
+                .thenReturn(new RecipientInstance(HttpRecipient.builder().forStringPayload().url(URL).payload(HttpRecipientStringPayloadData.from(PAYLOAD_TEST)).build()));
 
         repository = new PostgreSqlJobRepository(null, null, client, triggerMarshaller, recipientMarshaller);
     }
@@ -117,7 +119,7 @@ class PostgreSqlJobRepositoryTest {
     @Test
     void doSave() {
         PointInTimeTrigger trigger = new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null);
-        Recipient recipient = new RecipientInstance(HttpRecipient.builder().url(URL).payload(PAYLOAD_TEST).build());
+        Recipient recipient = new RecipientInstance(HttpRecipient.builder().forStringPayload().url(URL).payload(HttpRecipientStringPayloadData.from(PAYLOAD_TEST)).build());
 
         JobDetails job = JobDetails.builder()
                 .id("test")
@@ -290,7 +292,7 @@ class PostgreSqlJobRepositoryTest {
     @Test
     void from() {
         PointInTimeTrigger trigger = new PointInTimeTrigger(time.toInstant().getEpochSecond(), null, null);
-        Recipient recipient = new RecipientInstance(HttpRecipient.builder().url(URL).payload(PAYLOAD_TEST).build());
+        Recipient recipient = new RecipientInstance(HttpRecipient.builder().forStringPayload().url(URL).payload(HttpRecipientStringPayloadData.from(PAYLOAD_TEST)).build());
 
         Row row = mock(Row.class);
         when(row.getString("id")).thenReturn("test");

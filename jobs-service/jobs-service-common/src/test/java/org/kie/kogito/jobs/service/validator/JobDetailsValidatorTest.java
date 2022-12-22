@@ -17,6 +17,7 @@ package org.kie.kogito.jobs.service.validator;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipientStringPayloadData;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobDetailsBuilder;
 import org.kie.kogito.jobs.service.model.Recipient;
@@ -30,7 +31,8 @@ class JobDetailsValidatorTest {
 
     private static final String CALLBACK_ENDPOINT = "http://localhost:8080/callback";
     private static final String ID = "id";
-    private Recipient recipient = new RecipientInstance(HttpRecipient.builder().url(CALLBACK_ENDPOINT).payload("{\"name\":\"Arthur\"}").build());
+    private Recipient recipient =
+            new RecipientInstance(HttpRecipient.builder().forStringPayload().url(CALLBACK_ENDPOINT).payload(HttpRecipientStringPayloadData.from("{\"name\":\"Arthur\"}")).build());
 
     @Test
     void testValidateSuccess() {

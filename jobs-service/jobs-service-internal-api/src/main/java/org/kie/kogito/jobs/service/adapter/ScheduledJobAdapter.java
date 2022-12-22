@@ -20,7 +20,9 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.kie.kogito.jobs.api.JobBuilder;
+import org.kie.kogito.jobs.service.api.HasData;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
+import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipientStringPayloadData;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobDetailsBuilder;
 import org.kie.kogito.jobs.service.model.Recipient;
@@ -54,6 +56,7 @@ public class ScheduledJobAdapter {
         Object recipientPayload = Optional.ofNullable(jobDetails.getRecipient())
                 .map(Recipient::getRecipient)
                 .map(org.kie.kogito.jobs.service.api.Recipient::getPayload)
+                .map(HasData::getData)
                 .orElse(null);
         final ProcessPayload payload = payloadDeserialize(recipientPayload);
         return ScheduledJob.builder()
@@ -114,8 +117,9 @@ public class ScheduledJobAdapter {
     private static RecipientInstance recipientAdapter(ScheduledJob scheduledJob) {
         return Optional.ofNullable(scheduledJob.getCallbackEndpoint())
                 .map(url -> new RecipientInstance(HttpRecipient.builder()
+                        .forStringPayload()
                         .url(url)
-                        .payload(payloadSerialize(scheduledJob))
+                        .payload(HttpRecipientStringPayloadData.from(payloadSerialize(scheduledJob)))
                         .build()))
                 .orElse(null);
     }
@@ -141,7 +145,7 @@ public class ScheduledJobAdapter {
         return new IntervalTrigger(0, DateUtil.toDate(start.toOffsetDateTime()), null, repeatLimit, 0, intervalMillis, null, null);
     }
 
-    public static Object payloadSerialize(ScheduledJob scheduledJob) {
+    public static String payloadSerialize(ScheduledJob scheduledJob) {
         try {
             if (Objects.isNull(scheduledJob.getProcessInstanceId())
                     && Objects.isNull(scheduledJob.getRootProcessInstanceId())
@@ -149,11 +153,11 @@ public class ScheduledJobAdapter {
                     && Objects.isNull(scheduledJob.getRootProcessId())) {
                 return null;
             }
-            return new ProcessPayload(scheduledJob.getProcessInstanceId(),
+            return OBJECT_MAPPER.writeValueAsString(new ProcessPayload(scheduledJob.getProcessInstanceId(),
                     scheduledJob.getRootProcessInstanceId(),
                     scheduledJob.getProcessId(),
                     scheduledJob.getRootProcessId(),
-                    scheduledJob.getNodeInstanceId());
+                    scheduledJob.getNodeInstanceId()));
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

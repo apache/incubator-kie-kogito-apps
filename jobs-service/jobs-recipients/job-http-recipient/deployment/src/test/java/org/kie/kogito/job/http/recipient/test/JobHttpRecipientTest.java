@@ -50,7 +50,7 @@ public class JobHttpRecipientTest {
 
     @Test
     public void httpExecutorTest() {
-        HttpRecipient httpRecipient = HttpRecipient.builder().url(mockServiceUrl).build();
+        HttpRecipient httpRecipient = HttpRecipient.builder().forStringPayload().url(mockServiceUrl).build();
         JobDetails job = JobDetails.builder().id("12345").recipient(new RecipientInstance(httpRecipient)).build();
         UniAssertSubscriber<JobExecutionResponse> tester = httpJobExecutor.execute(job)
                 .invoke(response -> assertThat(response.getJobId()).isEqualTo(job.getId()))
