@@ -16,12 +16,16 @@
 
 package org.kie.kogito.addons.quarkus.data.index.deployment;
 
-class InMemoryDataIndexProcessor extends AbstractKogitoAddonsQuarkusDataIndexProcessor {
+import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.builditem.FeatureBuildItem;
+
+public class InMemoryDataIndexProcessor extends AbstractKogitoAddonsQuarkusDataIndexProcessor {
 
     private static final String FEATURE = "kogito-addons-quarkus-data-index-inmemory";
 
-    InMemoryDataIndexProcessor() {
-        super(FEATURE);
+    @BuildStep
+    public FeatureBuildItem feature() {
+        return new FeatureBuildItem(FEATURE);
     }
 
 }

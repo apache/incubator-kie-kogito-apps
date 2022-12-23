@@ -16,40 +16,25 @@
 
 package org.kie.kogito.addons.quarkus.data.index.deployment;
 
-import org.kie.kogito.index.config.DataIndexBuildConfig;
 import org.kie.kogito.index.vertx.VertxGraphiQLSetup;
 import org.kie.kogito.quarkus.addons.common.deployment.KogitoCapability;
 import org.kie.kogito.quarkus.addons.common.deployment.OneOfCapabilityKogitoAddOnProcessor;
 
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
 import io.quarkus.arc.processor.DotNames;
+import io.quarkus.deployment.IsDevelopment;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
-import io.quarkus.deployment.builditem.FeatureBuildItem;
-import io.quarkus.deployment.builditem.LaunchModeBuildItem;
 
-abstract class AbstractKogitoAddonsQuarkusDataIndexProcessor extends OneOfCapabilityKogitoAddOnProcessor {
+public abstract class AbstractKogitoAddonsQuarkusDataIndexProcessor extends OneOfCapabilityKogitoAddOnProcessor {
 
-    private final String feature;
-
-    AbstractKogitoAddonsQuarkusDataIndexProcessor(String feature) {
+    AbstractKogitoAddonsQuarkusDataIndexProcessor() {
         super(KogitoCapability.SERVERLESS_WORKFLOW, KogitoCapability.PROCESSES);
-        this.feature = feature;
     }
 
-    @BuildStep
-    FeatureBuildItem feature() {
-        return new FeatureBuildItem(feature);
+    @BuildStep(onlyIf = IsDevelopment.class)
+    public void processGraphiql(BuildProducer<AdditionalBeanBuildItem> additionalBean) {
+        additionalBean.produce(AdditionalBeanBuildItem.builder().addBeanClass(VertxGraphiQLSetup.class).setUnremovable().setDefaultScope(DotNames.APPLICATION_SCOPED).build());
     }
 
-    @BuildStep
-    void processGraphiql(BuildProducer<AdditionalBeanBuildItem> additionalBean, LaunchModeBuildItem launchMode, DataIndexBuildConfig config) {
-        if (shouldInclude(launchMode, config)) {
-            additionalBean.produce(AdditionalBeanBuildItem.builder().addBeanClass(VertxGraphiQLSetup.class).setUnremovable().setDefaultScope(DotNames.APPLICATION_SCOPED).build());
-        }
-    }
-
-    private static boolean shouldInclude(LaunchModeBuildItem launchMode, DataIndexBuildConfig config) {
-        return launchMode.getLaunchMode().isDevOrTest() || config.graphqlUIEnabled;
-    }
 }

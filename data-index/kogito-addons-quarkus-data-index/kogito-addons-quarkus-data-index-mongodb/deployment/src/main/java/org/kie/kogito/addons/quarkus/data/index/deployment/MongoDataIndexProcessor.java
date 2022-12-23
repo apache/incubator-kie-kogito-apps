@@ -16,12 +16,16 @@
 
 package org.kie.kogito.addons.quarkus.data.index.deployment;
 
-class MongoDataIndexProcessor extends AbstractKogitoAddonsQuarkusDataIndexProcessor {
+import io.quarkus.deployment.annotations.BuildStep;
+import io.quarkus.deployment.builditem.FeatureBuildItem;
+
+public class MongoDataIndexProcessor extends AbstractKogitoAddonsQuarkusDataIndexProcessor {
 
     private static final String FEATURE = "kogito-addons-quarkus-data-index-mongodb";
 
-    MongoDataIndexProcessor() {
-        super(FEATURE);
+    @BuildStep
+    public FeatureBuildItem feature() {
+        return new FeatureBuildItem(FEATURE);
     }
 
 }

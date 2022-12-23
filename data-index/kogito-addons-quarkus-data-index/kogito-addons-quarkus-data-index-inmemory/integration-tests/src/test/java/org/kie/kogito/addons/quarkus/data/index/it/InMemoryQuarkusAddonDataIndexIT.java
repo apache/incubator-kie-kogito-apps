@@ -19,6 +19,7 @@ package org.kie.kogito.addons.quarkus.data.index.it;
 import org.junit.jupiter.api.Test;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
+import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
@@ -27,11 +28,15 @@ import static org.hamcrest.CoreMatchers.is;
 @QuarkusIntegrationTest
 class InMemoryQuarkusAddonDataIndexIT {
 
+    static {
+        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+    }
+
     @Test
     void testDataIndexAddon() {
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances{ id } }\" }")
                 .when().post("/graphql")
-                .then().log().ifValidationFails().statusCode(200)
+                .then().statusCode(200)
                 .body("data.ProcessInstances.size()", is(0));
 
         String id = given()
@@ -46,10 +51,18 @@ class InMemoryQuarkusAddonDataIndexIT {
 
         given().contentType(ContentType.JSON).body("{ \"query\" : \"{ProcessInstances{ id, state } }\" }")
                 .when().post("/graphql")
-                .then().log().ifValidationFails().statusCode(200)
+                .then().statusCode(200)
                 .body("data.ProcessInstances.size()", is(1))
                 .body("data.ProcessInstances[0].id", is(id))
                 .body("data.ProcessInstances[0].state", is("COMPLETED"));
+    }
+
+    @Test
+    void testGraphQLUI() {
+        given().contentType(ContentType.HTML)
+                .when().get("/q/graphql-ui/")
+                .then().statusCode(200)
+                .body("html.head.title", is("GraphiQL"));
     }
 
 }
