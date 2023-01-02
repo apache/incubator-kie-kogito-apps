@@ -51,12 +51,15 @@ public class JobResourceV2 {
     @Inject
     ReactiveJobRepository jobRepository;
 
+    @Inject
+    JobDetailsValidator jobDetailsValidator;
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Uni<Job> create(Job job) {
         LOGGER.debug("REST create {}", job);
-        JobDetails jobDetails = JobDetailsValidator.validateToCreate(JobDetailsAdapter.from(job));
+        JobDetails jobDetails = jobDetailsValidator.validateToCreate(JobDetailsAdapter.from(job));
         return Uni.createFrom().publisher(scheduler.schedule(jobDetails))
                 .onItem().ifNull().failWith(new RuntimeException("Failed to schedule job " + job))
                 .onItem().transform(JobDetailsAdapter::toJob);

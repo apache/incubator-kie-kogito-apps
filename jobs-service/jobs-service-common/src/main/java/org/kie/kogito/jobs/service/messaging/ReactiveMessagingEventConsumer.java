@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import io.cloudevents.CloudEvent;
 import io.smallrye.mutiny.Uni;
 
-public abstract class ReactiveMessagingEventConsumer<T> {
+public abstract class ReactiveMessagingEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveMessagingEventConsumer.class);
 

@@ -19,7 +19,6 @@ import java.util.Objects;
 
 import org.kie.kogito.jobs.api.event.CancelJobRequestEvent;
 import org.kie.kogito.jobs.api.event.CreateProcessInstanceJobRequestEvent;
-import org.kie.kogito.jobs.api.event.JobCloudEvent;
 import org.kie.kogito.jobs.api.event.serialization.JobCloudEventDeserializer;
 import org.kie.kogito.jobs.service.adapter.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.model.JobDetails;
@@ -31,7 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.cloudevents.CloudEvent;
 
-public class MessagingConsumer extends ReactiveMessagingEventConsumer<JobCloudEvent<?>> {
+public class MessagingConsumer extends ReactiveMessagingEventConsumer {
 
     protected JobCloudEventDeserializer deserializer;
 

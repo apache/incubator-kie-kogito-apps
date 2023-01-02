@@ -17,10 +17,6 @@ package org.kie.kogito.jobs.service.model;
 
 import java.util.Objects;
 
-import org.kie.kogito.jobs.service.api.RecipientDescriptorRegistry;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 /**
  * Class is used to wrap the public API recipient and do the interface with the internal API and persistence.
  */
@@ -31,14 +27,6 @@ public class RecipientInstance implements Recipient {
     public RecipientInstance(org.kie.kogito.jobs.service.api.Recipient<?> recipient) {
         Objects.requireNonNull(recipient);
         this.recipient = recipient;
-    }
-
-    @JsonIgnore
-    @Override
-    public String type() {
-        return RecipientDescriptorRegistry.getInstance()
-                .getDescriptor(recipient).orElseThrow(() -> new IllegalStateException("Recipient Type not found"))
-                .getName();
     }
 
     @Override

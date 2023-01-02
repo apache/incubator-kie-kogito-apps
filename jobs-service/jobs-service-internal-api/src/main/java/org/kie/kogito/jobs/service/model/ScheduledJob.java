@@ -112,13 +112,14 @@ public class ScheduledJob extends Job {
         return Objects.equals(getScheduledId(), that.getScheduledId()) &&
                 Objects.equals(getRetries(), that.getRetries()) &&
                 getStatus() == that.getStatus() &&
+                getLastUpdate().equals(that.getLastUpdate()) &&
                 Objects.equals(getExecutionCounter(), that.getExecutionCounter()) &&
                 Objects.equals(getExecutionResponse(), that.getExecutionResponse());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getScheduledId(), getRetries(), getStatus(), getExecutionCounter(), getExecutionResponse());
+        return Objects.hash(super.hashCode(), getScheduledId(), getRetries(), getStatus(), getLastUpdate(), getExecutionCounter(), getExecutionResponse());
     }
 
     public static class ScheduledJobBuilder {

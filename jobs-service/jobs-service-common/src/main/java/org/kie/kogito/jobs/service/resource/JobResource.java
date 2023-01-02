@@ -54,12 +54,15 @@ public class JobResource {
     @Inject
     ReactiveJobRepository jobRepository;
 
+    @Inject
+    JobDetailsValidator jobDetailsValidator;
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Uni<ScheduledJob> create(Job job) {
         LOGGER.debug("REST create {}", job);
-        JobDetails jobDetails = JobDetailsValidator.validateToCreate(ScheduledJobAdapter.to(ScheduledJob.builder().job(job).build()));
+        JobDetails jobDetails = jobDetailsValidator.validateToCreate(ScheduledJobAdapter.to(ScheduledJob.builder().job(job).build()));
         return Uni.createFrom().publisher(scheduler.schedule(jobDetails))
                 .onItem().ifNull().failWith(new RuntimeException("Failed to schedule job " + job))
                 .onItem().transform(ScheduledJobAdapter::of);
@@ -72,7 +75,7 @@ public class JobResource {
     public Uni<ScheduledJob> patch(@PathParam("id") String id, @RequestBody Job job) {
         LOGGER.debug("REST patch update {}", job);
         //validating allowed patch attributes
-        JobDetails jobToBeMerged = JobDetailsValidator.validateToMerge(ScheduledJobAdapter.to(ScheduledJobBuilder.from(job)));
+        JobDetails jobToBeMerged = jobDetailsValidator.validateToMerge(ScheduledJobAdapter.to(ScheduledJobBuilder.from(job)));
         return Uni.createFrom().publisher(scheduler.reschedule(id, jobToBeMerged.getTrigger()).buildRs())
                 .onItem().ifNull().failWith(new NotFoundException("Failed to reschedule job " + job))
                 .onItem().transform(ScheduledJobAdapter::of);

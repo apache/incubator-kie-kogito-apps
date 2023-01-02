@@ -108,6 +108,7 @@ public class JobDetails {
         return Objects.equals(getId(), that.getId()) &&
                 Objects.equals(getCorrelationId(), that.getCorrelationId()) &&
                 Objects.equals(getStatus(), that.getStatus()) &&
+                (Objects.equals(getLastUpdate(), that.getLastUpdate()) || Objects.isNull(getLastUpdate()) || Objects.isNull(that.getLastUpdate())) &&
                 Objects.equals(getRetries(), that.getRetries()) &&
                 Objects.equals(getExecutionCounter(), that.getExecutionCounter()) &&
                 Objects.equals(getScheduledId(), that.getScheduledId()) &&

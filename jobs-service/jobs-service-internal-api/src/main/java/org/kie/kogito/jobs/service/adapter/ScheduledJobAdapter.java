@@ -110,7 +110,6 @@ public class ScheduledJobAdapter {
                 .status(scheduledJob.getStatus())
                 .trigger(triggerAdapter(scheduledJob))
                 .priority(scheduledJob.getPriority())
-                //.payload(payloadSerialize(scheduledJob))
                 .build();
     }
 

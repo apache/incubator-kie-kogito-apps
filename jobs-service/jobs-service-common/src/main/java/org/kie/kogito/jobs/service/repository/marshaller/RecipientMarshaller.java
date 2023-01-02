@@ -29,7 +29,6 @@ import io.vertx.core.json.JsonObject;
 public class RecipientMarshaller implements Marshaller<Recipient, JsonObject> {
 
     public static final String CLASS_TYPE = "classType";
-    public static final String PAYLOAD_TYPE = "payloadType";
 
     @Override
     public JsonObject marshall(Recipient recipient) {

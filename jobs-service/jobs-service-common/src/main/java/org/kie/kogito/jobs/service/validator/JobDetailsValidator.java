@@ -17,23 +17,34 @@ package org.kie.kogito.jobs.service.validator;
 
 import java.util.Objects;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+
 import org.apache.commons.lang3.StringUtils;
 import org.kie.kogito.jobs.service.model.JobDetails;
 
+@ApplicationScoped
 public class JobDetailsValidator {
 
-    public static JobDetails validateToCreate(JobDetails job) {
+    private RecipientInstanceValidator recipientValidator;
+
+    @Inject
+    public JobDetailsValidator(RecipientInstanceValidator recipientValidator) {
+        this.recipientValidator = recipientValidator;
+    }
+
+    public JobDetails validateToCreate(JobDetails job) {
         if (StringUtils.isEmpty(job.getId())
                 || StringUtils.isEmpty(job.getCorrelationId())
                 || Objects.isNull(job.getTrigger())
                 || Objects.isNull(job.getRecipient())
-                || !RecipientValidator.validate(job.getRecipient())) {
+                || !recipientValidator.validate(job.getRecipient())) {
             throw new IllegalArgumentException("Invalid Job Attributes. " + job);
         }
         return job;
     }
 
-    public static JobDetails validateToMerge(JobDetails job) {
+    public JobDetails validateToMerge(JobDetails job) {
         if (StringUtils.isNotEmpty(job.getId())
                 || StringUtils.isNotEmpty(job.getScheduledId())
                 || StringUtils.isNotEmpty(job.getCorrelationId())
