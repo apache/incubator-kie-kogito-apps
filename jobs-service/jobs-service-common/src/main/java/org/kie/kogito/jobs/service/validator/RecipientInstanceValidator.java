@@ -28,7 +28,7 @@ import org.kie.kogito.jobs.service.model.Recipient;
 @ApplicationScoped
 public class RecipientInstanceValidator {
 
-    Instance<RecipientValidator> validators;
+    private Instance<RecipientValidator> validators;
 
     @Inject
     public RecipientInstanceValidator(Instance<RecipientValidator> validators) {

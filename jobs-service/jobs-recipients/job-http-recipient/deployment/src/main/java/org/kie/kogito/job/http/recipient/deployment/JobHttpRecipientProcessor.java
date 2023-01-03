@@ -16,6 +16,7 @@
 package org.kie.kogito.job.http.recipient.deployment;
 
 import org.kie.kogito.job.http.recipient.HttpJobExecutor;
+import org.kie.kogito.job.http.recipient.HttpRecipientValidator;
 import org.kie.kogito.job.http.recipient.JobHttpRecipientConfiguration;
 
 import io.quarkus.arc.deployment.AdditionalBeanBuildItem;
@@ -33,7 +34,7 @@ class JobHttpRecipientProcessor {
 
     @BuildStep
     AdditionalBeanBuildItem additionalBeans() {
-        return new AdditionalBeanBuildItem(HttpJobExecutor.class);
+        return new AdditionalBeanBuildItem(HttpJobExecutor.class, HttpRecipientValidator.class);
     }
 
     /**
