@@ -71,7 +71,8 @@ const WorkflowFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
     });
   };
 
-  const onSubmitSuccess = (message: string): void => {
+  const onSubmitSuccess = (id: string): void => {
+    const message = `A workflow with id ${id} was triggered successfully.`;
     showNotification('success', message);
   };
 
