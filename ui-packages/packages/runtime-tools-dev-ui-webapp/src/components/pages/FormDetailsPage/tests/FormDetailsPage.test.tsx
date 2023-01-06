@@ -18,6 +18,8 @@ import React from 'react';
 import { mount } from 'enzyme';
 import FormDetailsPage from '../FormDetailsPage';
 import { BrowserRouter } from 'react-router-dom';
+import { act } from 'react-dom/test-utils';
+import { JobsDetailsModal } from '@kogito-apps/management-console-shared';
 
 jest.mock('../../../containers/FormDetailsContainer/FormDetailsContainer');
 
@@ -45,8 +47,53 @@ describe('FormDetailsPage tests', () => {
         <FormDetailsPage />
       </BrowserRouter>
     );
-
     expect(wrapper).toMatchSnapshot();
     expect(wrapper.find('MockedFormDetailsContainer').exists()).toBeTruthy();
+  });
+
+  it('test case for onSuccess prop', () => {
+    let wrapper;
+    act(() => {
+      wrapper = mount(
+        <BrowserRouter>
+          <FormDetailsPage />
+        </BrowserRouter>
+      );
+    })
+     const successMessage = {
+        type: 'success',
+        message: "The form 'form1.html' has been successfully saved.",
+        details: undefined,
+        close: ['Function: close']
+      };
+     wrapper
+        .find('MockedFormDetailsContainer')
+        .props()
+        ['onSuccess']();
+     wrapper.update();
+    expect(wrapper.find('FormNotification').props()['notification'].message).toEqual(successMessage.message); 
+  });
+
+  it('test case for onSuccess prop', () => {
+    let wrapper;
+    act(() => {
+      wrapper = mount(
+        <BrowserRouter>
+          <FormDetailsPage />
+        </BrowserRouter>
+      );
+      })
+      const errorMessage = {
+        type: 'error',
+        message: "The form 'form1.html' couldn't be saved.",
+        details: undefined,
+        close: ['Function: close']
+      };
+      wrapper
+        .find('MockedFormDetailsContainer')
+        .props()
+        ['onError']();
+        wrapper.update();
+     expect (wrapper.find('FormNotification').props()['notification'].message).toEqual(errorMessage.message);
   });
 });

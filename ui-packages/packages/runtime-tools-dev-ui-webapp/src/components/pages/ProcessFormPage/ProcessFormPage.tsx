@@ -120,7 +120,6 @@ const ProcessFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
             <FormNotification notification={notification} />
           </div>
         )}
-        {console.log('notification', notification)}
       </PageSection>
       <PageSection
         {...componentOuiaProps(

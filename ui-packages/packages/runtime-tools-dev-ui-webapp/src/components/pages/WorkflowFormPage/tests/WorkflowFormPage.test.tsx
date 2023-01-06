@@ -54,7 +54,7 @@ describe('WorkflowFormPage tests', () => {
     expect(wrapper.find('MockedWorkflowFormContainer').exists()).toBeTruthy();
   });
 
-  it('test case for onSubmitSuccess prop', () => {
+  it('test case for onSubmitSuccess prop',() => {
     let wrapper;
     act(() => {
       wrapper = mount(
@@ -62,27 +62,23 @@ describe('WorkflowFormPage tests', () => {
           <WorkflowFormPage />
         </BrowserRouter>
       );
-
-      const successMessage = {
+    })
+      const successMessage =  {
         type: 'success',
-        message: 'The process with id: undefined has started successfully',
+        message: 'A workflow with id undefined was triggered successfully.',
         details: undefined,
-        customActions: [
-          { label: 'Go to process list', onClick: ['Function: onClick'] },
-          { label: 'Go to Process details', onClick: ['Function: onClick'] }
-        ],
+        customActions: [ { label: 'Go to workflow list', onClick: ['Function: onClick'] } ],
         close: ['Function: close']
-      };
+      }
       wrapper
         .find('MockedWorkflowFormContainer')
         .props()
         ['onSubmitSuccess']();
-      //expect( wrapper.find('FormNotification').props()['notification']).toEqual(errorMessage)
-    });
-    wrapper.update();
+      wrapper.update();
+      expect( wrapper.find('FormNotification').props()['notification'].message).toEqual(successMessage.message)
   });
 
-  it('test case for onSubmitError prop', () => {
+  it('test case for onSubmitError prop',() => {
     let wrapper;
     act(() => {
       wrapper = mount(
@@ -90,23 +86,19 @@ describe('WorkflowFormPage tests', () => {
           <WorkflowFormPage />
         </BrowserRouter>
       );
-
+      })
       const errorMessage = {
         type: 'error',
-        message: 'Failed to start the process.',
+        message: 'Failed to trigger workflow.',
         details: undefined,
-        customActions: [
-          { label: 'Go to process list', onClick: ['Function: onClick'] },
-          { label: 'Go to Process details', onClick: ['Function: onClick'] }
-        ],
+        customActions: [ { label: 'Go to workflow list', onClick: ['Function: onClick'] } ],
         close: ['Function: close']
-      };
+      }
       wrapper
         .find('MockedWorkflowFormContainer')
         .props()
         ['onSubmitError']();
-      //expect( wrapper.find('FormNotification').props()['notification']).toEqual(errorMessage)
-    });
-    wrapper.update();
+      wrapper.update();
+      expect( wrapper.find('FormNotification').props()['notification'].message).toEqual(errorMessage.message)
   });
 });

@@ -56,33 +56,35 @@ describe('ProcessFormPage tests', () => {
     expect(wrapper.find('MockedProcessFormContainer').exists()).toBeTruthy();
   });
 
-  it('test case for onSubmitSuccess prop', async () => {
+  it('test case for onSubmitSuccess prop',() => {
     let wrapper;
-    await act(async () => {
+     act(() => {
       wrapper = mount(
         <BrowserRouter>
           <ProcessFormPage />
         </BrowserRouter>
       );
-
-      const successMessage = {
+     })
+     
+    const successMessage = {
         type: 'success',
         message: 'The process with id: undefined has started successfully',
         details: undefined,
         customActions: [
           { label: 'Go to process list', onClick: ['Function: onClick'] },
-          { label: 'Go to Process details', onClick: ['Function: onClick'] }
+          { label: 'Go to Process details', onClick:['Function: onClick'] }
         ],
-        close: ['Function: close']
+        close:['Function: close']
       };
-      wrapper
-        .find('MockedProcessFormContainer')
-        .props()
-        ['onSubmitSuccess']();
-    });
-    wrapper.update();
-    //expect( wrapper.find('FormNotification').props()['notification']).toEqual(successMessage)
-  });
+  
+   wrapper
+    .find('MockedProcessFormContainer')
+    .props()
+     ['onSubmitSuccess']()
+
+  wrapper.update()
+  expect(wrapper.find('FormNotification').props()['notification'].message).toEqual(successMessage.message);
+  })
 
   it('test case for onSubmitError prop', () => {
     let wrapper;
@@ -91,24 +93,24 @@ describe('ProcessFormPage tests', () => {
         <BrowserRouter>
           <ProcessFormPage />
         </BrowserRouter>
-      );
+      )
+    })
 
-      const errorMessage = {
+    const errorMessage = {
         type: 'error',
         message: 'Failed to start the process.',
         details: undefined,
         customActions: [
           { label: 'Go to process list', onClick: ['Function: onClick'] },
-          { label: 'Go to Process details', onClick: ['Function: onClick'] }
+          { label: 'Go to Process details', onClick:['Function: onClick'] }
         ],
-        close: ['Function: close']
+        close:['Function: close']
       };
       wrapper
         .find('MockedProcessFormContainer')
         .props()
         ['onSubmitError']();
-    });
-    wrapper.update();
-    //expect( wrapper.find('FormNotification').props()['notification']).toEqual(successMessage)
+     wrapper.update();
+     expect( wrapper.find('FormNotification').props()['notification'].message).toEqual(errorMessage.message);
   });
 });
