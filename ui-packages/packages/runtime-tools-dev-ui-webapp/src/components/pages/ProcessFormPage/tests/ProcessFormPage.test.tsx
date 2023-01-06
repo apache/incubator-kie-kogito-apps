@@ -18,6 +18,15 @@ import React from 'react';
 import { mount } from 'enzyme';
 import ProcessFormPage from '../ProcessFormPage';
 import { BrowserRouter } from 'react-router-dom';
+import * as ProcessFormContext from '../../../../channel/ProcessForm/ProcessFormContext';
+import {
+  ProcessFormGatewayApi,
+  ProcessFormGatewayApiImpl
+} from '../../../../channel/ProcessForm/ProcessFormGatewayApi';
+import { JobsDetailsModal } from '@kogito-apps/management-console-shared';
+import { hasUncaughtExceptionCaptureCallback } from 'process';
+import ProcessFormContainer from '../../../containers/ProcessFormContainer/ProcessFormContainer';
+import { act } from 'react-dom/test-utils';
 
 jest.mock('../components/InlineEdit/InlineEdit');
 jest.mock('../../../containers/ProcessFormContainer/ProcessFormContainer');
@@ -43,8 +52,63 @@ describe('ProcessFormPage tests', () => {
         <ProcessFormPage />
       </BrowserRouter>
     );
-
     expect(wrapper.find('ProcessFormPage')).toMatchSnapshot();
     expect(wrapper.find('MockedProcessFormContainer').exists()).toBeTruthy();
+  });
+
+  it('test case for onSubmitSuccess prop', async () => {
+    let wrapper;
+    await act(async () => {
+      wrapper = mount(
+        <BrowserRouter>
+          <ProcessFormPage />
+        </BrowserRouter>
+      );
+
+      const successMessage = {
+        type: 'success',
+        message: 'The process with id: undefined has started successfully',
+        details: undefined,
+        customActions: [
+          { label: 'Go to process list', onClick: ['Function: onClick'] },
+          { label: 'Go to Process details', onClick: ['Function: onClick'] }
+        ],
+        close: ['Function: close']
+      };
+      wrapper
+        .find('MockedProcessFormContainer')
+        .props()
+        ['onSubmitSuccess']();
+    });
+    wrapper.update();
+    //expect( wrapper.find('FormNotification').props()['notification']).toEqual(successMessage)
+  });
+
+  it('test case for onSubmitError prop', () => {
+    let wrapper;
+    act(() => {
+      wrapper = mount(
+        <BrowserRouter>
+          <ProcessFormPage />
+        </BrowserRouter>
+      );
+
+      const errorMessage = {
+        type: 'error',
+        message: 'Failed to start the process.',
+        details: undefined,
+        customActions: [
+          { label: 'Go to process list', onClick: ['Function: onClick'] },
+          { label: 'Go to Process details', onClick: ['Function: onClick'] }
+        ],
+        close: ['Function: close']
+      };
+      wrapper
+        .find('MockedProcessFormContainer')
+        .props()
+        ['onSubmitError']();
+    });
+    wrapper.update();
+    //expect( wrapper.find('FormNotification').props()['notification']).toEqual(successMessage)
   });
 });
