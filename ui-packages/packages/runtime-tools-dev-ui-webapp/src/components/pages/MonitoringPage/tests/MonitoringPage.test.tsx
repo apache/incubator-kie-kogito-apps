@@ -1,28 +1,26 @@
-import React from 'react';
+import React, { JSXElementConstructor } from 'react';
 import { mount } from 'enzyme';
 import {
+  JobsDetailsModal,
   MilestoneStatus,
   ProcessInstance,
   ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
 import MonitoringPage from '../MonitoringPage';
 import { MemoryRouter } from 'react-router-dom';
-import { ProcessListGatewayApi } from '../../../../channel/ProcessList/ProcessListGatewayApi';
+import {
+  ProcessListGatewayApi,
+  ProcessListGatewayApiImpl
+} from '../../../../channel/ProcessList/ProcessListGatewayApi';
 import * as ProcessListContext from '../../../../channel/ProcessList/ProcessListContext';
-import { ItemDescriptor } from '@kogito-apps/components-common';
+import { act } from 'react-dom/test-utils';
 import { hasUncaughtExceptionCaptureCallback } from 'process';
 
-describe('WebApp - MonitoringPage tests', () => {
-  // const props = {
-  //   match: {
-  //     params: {
-  //       dataIndexUrl: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b'
-  //     },
-  //     url: '',
-  //     isExact: false,
-  //     path: ''
-  //   },
-  // };
+jest.mock('../../../containers/MonitoringContainer/MonitoringContainer');
+describe('WebApp - ProcessDetailsPage tests', () => {
+  const props = {
+    dataIndexUrl: 'http://localhost:8000'
+  };
 
   const data: ProcessInstance = {
     id: '8035b580-6ae4-4aa8-9ec0-e18e19809e0b',
@@ -143,28 +141,21 @@ describe('WebApp - MonitoringPage tests', () => {
     ]
   };
 
-  const getProcessList = jest.fn().mockResolvedValue(data);
+  const getProcessList = jest.fn().mockResolvedValue([data]);
 
-  const MockProcessListGatewayApi = jest.fn<ProcessListGatewayApi, []>(() => ({
-    processListState: undefined,
+  const MockProcessListGatewayApi = jest.fn<
+    Pick<ProcessListGatewayApi, 'initialLoad' | 'query'>,
+    []
+  >(() => ({
     initialLoad: jest.fn(),
-    openProcess: jest.fn(),
-    applyFilter: jest.fn(),
-    applySorting: jest.fn(),
-    handleProcessSkip: jest.fn(),
-    handleProcessRetry: jest.fn(),
-    handleProcessAbort: jest.fn(),
-    handleProcessMultipleAction: jest.fn(),
-    query: jest.fn(),
-    getChildProcessesQuery: getProcessList,
-    onOpenProcessListen: jest.fn()
+    query: getProcessList
   }));
 
   let gatewayApi: ProcessListGatewayApi;
 
   jest
     .spyOn(ProcessListContext, 'useProcessListGatewayApi')
-    .mockImplementation(() => MockProcessListGatewayApi);
+    .mockImplementation(() => gatewayApi);
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -172,11 +163,17 @@ describe('WebApp - MonitoringPage tests', () => {
   });
 
   it('Snapshot test with default values', async () => {
-    const wrapper = mount(
-      <MemoryRouter initialEntries={['/']} keyLength={0}>
-        <MonitoringPage />
-      </MemoryRouter>
-    );
+    jest.useFakeTimers();
+    let wrapper;
+    await act(async () => {
+      wrapper = mount(
+        <MemoryRouter>
+          <MonitoringPage {...props} />
+        </MemoryRouter>
+      );
+      jest.advanceTimersByTime(1000);
+    });
+    wrapper = wrapper.update();
     expect(wrapper.find(MonitoringPage)).toMatchSnapshot();
   });
 });
