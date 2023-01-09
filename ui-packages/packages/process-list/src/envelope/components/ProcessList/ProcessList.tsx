@@ -231,7 +231,6 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
   if (error) {
     return <ServerErrors error={error} variant={'large'} />;
   }
-
   return (
     <div
       {...componentOuiaProps(
@@ -255,6 +254,8 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
         setIsAllChecked={setIsAllChecked}
         driver={driver}
         defaultStatusFilter={defaultStatusFilter}
+        singularProcessLabel={singularProcessLabel}
+        pluralProcessLabel={pluralProcessLabel}
       />
       {filters.status.length > 0 ? (
         <>

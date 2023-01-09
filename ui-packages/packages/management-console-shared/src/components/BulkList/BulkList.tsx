@@ -130,7 +130,7 @@ const BulkList: React.FC<IOwnProps & OUIAProps> = ({
           <TextContent>
             <Text component={TextVariants.h2}>
               {operationResult.type === BulkListType.PROCESS_INSTANCE && (
-                <span>Ignored process instances:</span>
+                <span>Ignored instances:</span>
               )}
               {operationResult.type === BulkListType.JOB && (
                 <span>Ignored jobs:</span>
