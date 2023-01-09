@@ -457,6 +457,7 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
               "rescheduleJob": [MockFunction],
             }
           }
+          pluralProcessLabel="processes"
           processInstance={
             Object {
               "addons": Array [
@@ -537,6 +538,7 @@ exports[`WebApp - ProcessDetailsPage tests Snapshot test with default values 1`]
             }
           }
           showSwfDiagram={false}
+          singularProcessLabel="process"
           targetOrigin="http://localhost"
         >
           <ForwardRef>
