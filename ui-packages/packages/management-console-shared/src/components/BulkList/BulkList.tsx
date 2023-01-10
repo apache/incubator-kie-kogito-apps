@@ -35,7 +35,8 @@ export enum OperationType {
 
 export enum BulkListType {
   PROCESS_INSTANCE = 'process_instance',
-  JOB = 'job'
+  JOB = 'job',
+  WORKFLOW = 'workflow'
 }
 export interface IOperationResult {
   successItems: BulkListItem[];
@@ -130,7 +131,10 @@ const BulkList: React.FC<IOwnProps & OUIAProps> = ({
           <TextContent>
             <Text component={TextVariants.h2}>
               {operationResult.type === BulkListType.PROCESS_INSTANCE && (
-                <span>Ignored instances:</span>
+                <span>Ignored process instances:</span>
+              )}
+              {operationResult.type === BulkListType.WORKFLOW && (
+                <span>Ignored workflows:</span>
               )}
               {operationResult.type === BulkListType.JOB && (
                 <span>Ignored jobs:</span>

@@ -141,7 +141,10 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
 
   const operations: IOperations = {
     ABORT: {
-      type: BulkListType.PROCESS_INSTANCE,
+      type:
+        singularProcessLabel?.toLowerCase() === 'workflow'
+          ? BulkListType.WORKFLOW
+          : BulkListType.PROCESS_INSTANCE,
       results: operationResults[OperationType.ABORT],
       messages: {
         successMessage: `Aborted ${pluralProcessLabel?.toLowerCase()}: `,
@@ -192,7 +195,10 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
       }
     },
     SKIP: {
-      type: BulkListType.PROCESS_INSTANCE,
+      type:
+        singularProcessLabel?.toLowerCase() === 'workflow'
+          ? BulkListType.WORKFLOW
+          : BulkListType.PROCESS_INSTANCE,
       results: operationResults[OperationType.SKIP],
       messages: {
         successMessage: `Skipped ${pluralProcessLabel?.toLowerCase()}: `,
@@ -226,7 +232,10 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
       }
     },
     RETRY: {
-      type: BulkListType.PROCESS_INSTANCE,
+      type:
+        singularProcessLabel?.toLowerCase() === 'workflow'
+          ? BulkListType.WORKFLOW
+          : BulkListType.PROCESS_INSTANCE,
       results: operationResults[OperationType.RETRY],
       messages: {
         successMessage: `Retriggered ${pluralProcessLabel?.toLowerCase()}: `,
