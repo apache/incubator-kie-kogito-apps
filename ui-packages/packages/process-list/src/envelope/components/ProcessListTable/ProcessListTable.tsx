@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {
   TableComposable,
   Thead,
@@ -78,6 +78,7 @@ interface ProcessListTableProps {
   setIsAllChecked: React.Dispatch<React.SetStateAction<boolean>>;
   singularProcessLabel: string;
   pluralProcessLabel: string;
+  isTriggerCloudEventEnabled?: boolean;
 }
 
 const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
@@ -95,6 +96,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
   setIsAllChecked,
   singularProcessLabel,
   pluralProcessLabel,
+  isTriggerCloudEventEnabled,
   driver,
   ouiaId,
   ouiaSafe
@@ -219,6 +221,13 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
     }
   };
 
+  const onOpenTriggerCloudEvent: (processiInstance: ProcessInstance) => void = useMemo(() => {
+    if(isTriggerCloudEventEnabled) {
+      return (instance) => driver.openTriggerCloudEvent(instance);
+    }
+    return undefined;
+  }, [driver, isTriggerCloudEventEnabled]);
+
   const handleClick = (processInstance: ProcessInstance): void => {
     driver.openProcess(processInstance);
   };
@@ -301,6 +310,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
               onSkipClick={onSkipClick}
               onRetryClick={onRetryClick}
               onAbortClick={onAbortClick}
+              onOpenTriggerCloudEvent={onOpenTriggerCloudEvent}
               key={processInstance.id}
             />
           ],

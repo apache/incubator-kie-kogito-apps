@@ -181,6 +181,7 @@ exports[`DevUILayout tests Snapshot test with Processing disabled 1`] = `
             }
           >
             <MockedDevUIRoutes
+              dataIndexUrl="http://localhost:8189"
               navigate="JobsManagement"
               trustyServiceUrl="http://localhost:8081"
             />

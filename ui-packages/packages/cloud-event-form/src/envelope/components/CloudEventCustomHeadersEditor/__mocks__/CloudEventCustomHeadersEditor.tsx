@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-export const CloudEventForm = {
-  type: 'object',
-  properties: {
-    type: {
-      type: 'string'
-    },
-    data: {
-      type: 'string'
-    }
-  }
-};
+import React from 'react';
+import { CloudEventCustomHeadersEditorApi } from '../CloudEventCustomHeadersEditor';
+import { OUIAProps } from '@kogito-apps/ouia-tools';
+
+const MockedCloudEventCustomHeadersEditor = React.forwardRef<
+  CloudEventCustomHeadersEditorApi,
+  OUIAProps
+>((props, ref) => {
+  return <></>;
+});
+
+export default MockedCloudEventCustomHeadersEditor;

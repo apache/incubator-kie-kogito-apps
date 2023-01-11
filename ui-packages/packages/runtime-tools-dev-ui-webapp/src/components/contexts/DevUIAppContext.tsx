@@ -126,7 +126,7 @@ export class DevUIAppContextImpl implements DevUIAppContext {
   }
 
   isWorkflow(): boolean {
-    return this.customLabels.singularProcessLabel == 'Workflow';
+    return this.customLabels?.singularProcessLabel == 'Workflow';
   }
 
   getIsStunnerEnabled(): boolean {

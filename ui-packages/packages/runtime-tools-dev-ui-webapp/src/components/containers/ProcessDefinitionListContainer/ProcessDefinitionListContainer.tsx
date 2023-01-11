@@ -21,9 +21,10 @@ import {
   ProcessDefinition
 } from '@kogito-apps/process-definition-list';
 import { ProcessDefinitionListGatewayApi } from '../../../channel/ProcessDefinitionList';
-import { useProcessDefinitionListGatewayApi } from '../../../channel/ProcessDefinitionList/ProcessDefinitionListContext';
+import { useProcessDefinitionListGatewayApi } from '../../../channel/ProcessDefinitionList';
 import { useHistory } from 'react-router-dom';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
+import {CloudEventPageSource} from "../../pages/CloudEventFormPage/CloudEventFormPage";
 
 interface ProcessDefinitionListProps {
   singularProcessLabel: string;
@@ -61,11 +62,25 @@ const ProcessDefinitionListContainer: React.FC<
         });
       }
     };
-    const unsubscriber = gatewayApi.onOpenProcessFormListen(
+    const onOpenInstanceUnsubscriber = gatewayApi.onOpenProcessFormListen(
       appContext.isWorkflow() ? onOpenWorkflow : onOpenProcess
     );
+
+    const onTriggerCloudEventUnsubscriber = appContext.isWorkflow()
+      ? gatewayApi.onOpenTriggerCloudEventListen({
+          onOpen: () => {
+            history.push({
+              pathname: `/WorkflowDefinitions/CloudEvent`,
+              state: {
+                source: CloudEventPageSource.DEFINITIONS
+              }
+            });
+          }
+        })
+      : undefined;
     return () => {
-      unsubscriber.unSubscribe();
+      onOpenInstanceUnsubscriber.unSubscribe();
+      onTriggerCloudEventUnsubscriber?.unSubscribe();
     };
   }, []);
 
@@ -79,6 +94,7 @@ const ProcessDefinitionListContainer: React.FC<
       driver={gatewayApi}
       targetOrigin={'*'}
       singularProcessLabel={singularProcessLabel}
+      isTriggerCloudEventEnabled={appContext.isWorkflow()}
     />
   );
 };

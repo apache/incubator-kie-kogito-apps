@@ -79,6 +79,12 @@ public class DevConsoleProcessor {
                 .handler(recorder.devConsoleHandler(devConsoleStaticResourcesDeploymentPath.toString(),
                         shutdownContext))
                 .build());
+
+        routeBuildItemBuildProducer.produce(new RouteBuildItem.Builder()
+                .route("/q/dev/org.kie.kogito.kogito-quarkus-serverless-workflow-devui/*")
+                .handler(recorder.devConsoleHandler(devConsoleStaticResourcesDeploymentPath.toString(),
+                        shutdownContext))
+                .build());
     }
 
     @SuppressWarnings("unused")
