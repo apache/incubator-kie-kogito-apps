@@ -18,12 +18,9 @@ package org.kie.kogito.jobs.service.adapter;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.api.JobBuilder;
-import org.kie.kogito.jobs.service.adapter.ScheduledJobAdapter.ProcessPayload;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
-import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipientStringPayloadData;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobDetailsBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -32,8 +29,6 @@ import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -55,13 +50,6 @@ class ScheduledJobAdapterTest {
     public static final String PROCESS_ID = "ID";
     public static final String PROCESS_INSTANCE_ID = "ID";
     private static final String NODE_INSTANCE_ID = "nodeId";
-    public static String payload;
-
-    @BeforeAll
-    public static void before() throws Exception {
-        payload = new ObjectMapper().writeValueAsString(
-                new ProcessPayload(PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID, NODE_INSTANCE_ID));
-    }
 
     @Test
     void testOfJobDetailsPointInTime() {
@@ -157,7 +145,13 @@ class ScheduledJobAdapterTest {
         return JobDetails.builder()
                 .id(ID)
                 .priority(PRIORITY)
-                .recipient(new RecipientInstance(HttpRecipient.builder().forStringPayload().url(ENDPOINT).payload(HttpRecipientStringPayloadData.from(payload)).build()))
+                .recipient(new RecipientInstance(HttpRecipient.builder().forStringPayload().url(ENDPOINT)
+                        .header("processId", PROCESS_ID)
+                        .header("processInstanceId", PROCESS_INSTANCE_ID)
+                        .header("rootProcessInstanceId", ROOT_PROCESS_INSTANCE_ID)
+                        .header("rootProcessId", ROOT_PROCESS_ID)
+                        .header("nodeInstanceId", NODE_INSTANCE_ID)
+                        .build()))
                 .scheduledId(SCHEDULED_ID)
                 .status(STATUS)
                 .correlationId(ID)
@@ -194,7 +188,12 @@ class ScheduledJobAdapterTest {
         assertThat(jobDetails.getPriority()).isEqualTo(PRIORITY);
         assertThat(jobDetails.getStatus()).isEqualTo(STATUS);
         assertThat(jobDetails.getRecipient()).isInstanceOf(RecipientInstance.class);
-        assertThat(((HttpRecipient) jobDetails.getRecipient().getRecipient()).getUrl()).isEqualTo(ENDPOINT);
-        assertThat(jobDetails.getRecipient().getRecipient().getPayload().getData()).isEqualTo(payload);
+        HttpRecipient recipient = (HttpRecipient) jobDetails.getRecipient().getRecipient();
+        assertThat(recipient.getUrl()).isEqualTo(ENDPOINT);
+        assertThat(recipient.getHeader("processId")).isEqualTo(PROCESS_ID);
+        assertThat(recipient.getHeader("processInstanceId")).isEqualTo(PROCESS_INSTANCE_ID);
+        assertThat(recipient.getHeader("rootProcessId")).isEqualTo(ROOT_PROCESS_ID);
+        assertThat(recipient.getHeader("rootProcessInstanceId")).isEqualTo(ROOT_PROCESS_INSTANCE_ID);
+        assertThat(recipient.getHeader("nodeInstanceId")).isEqualTo(NODE_INSTANCE_ID);
     }
 }

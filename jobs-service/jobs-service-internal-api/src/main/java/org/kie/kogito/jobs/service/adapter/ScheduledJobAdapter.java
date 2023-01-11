@@ -20,9 +20,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.kie.kogito.jobs.api.JobBuilder;
-import org.kie.kogito.jobs.service.api.HasData;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
-import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipientStringPayloadData;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobDetailsBuilder;
 import org.kie.kogito.jobs.service.model.Recipient;
@@ -33,13 +31,11 @@ import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
 public class ScheduledJobAdapter {
-
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     static {
@@ -53,12 +49,22 @@ public class ScheduledJobAdapter {
     }
 
     public static ScheduledJob of(JobDetails jobDetails) {
-        Object recipientPayload = Optional.ofNullable(jobDetails.getRecipient())
+        //using headers (the new API approach)
+        final ProcessPayload payload = Optional.ofNullable(jobDetails.getRecipient())
                 .map(Recipient::getRecipient)
-                .map(org.kie.kogito.jobs.service.api.Recipient::getPayload)
-                .map(HasData::getData)
-                .orElse(null);
-        final ProcessPayload payload = payloadDeserialize(recipientPayload);
+                .filter(HttpRecipient.class::isInstance)
+                .map(HttpRecipient.class::cast)
+                .map(httpRecipient -> {
+                    String processInstanceId = httpRecipient.getHeader("processInstanceId");
+                    String rootProcessInstanceId = httpRecipient.getHeader("rootProcessInstanceId");
+                    String processId = httpRecipient.getHeader("processId");
+                    String rootProcessId = httpRecipient.getHeader("rootProcessId");
+                    String nodeInstanceId = httpRecipient.getHeader("nodeInstanceId");
+                    return new ProcessPayload(processInstanceId, rootProcessInstanceId, processId, rootProcessId, nodeInstanceId);
+                })
+                .filter(processPayload -> Objects.nonNull(processPayload.processInstanceId))//just to guarantee headers were present
+                .orElse(new ProcessPayload());
+
         return ScheduledJob.builder()
                 .job(new JobBuilder()
                         .id(jobDetails.getId())
@@ -118,7 +124,11 @@ public class ScheduledJobAdapter {
                 .map(url -> new RecipientInstance(HttpRecipient.builder()
                         .forStringPayload()
                         .url(url)
-                        .payload(HttpRecipientStringPayloadData.from(payloadSerialize(scheduledJob)))
+                        .header("processId", scheduledJob.getProcessId())
+                        .header("processInstanceId", scheduledJob.getProcessInstanceId())
+                        .header("rootProcessInstanceId", scheduledJob.getRootProcessInstanceId())
+                        .header("rootProcessId", scheduledJob.getRootProcessId())
+                        .header("nodeInstanceId", scheduledJob.getNodeInstanceId())
                         .build()))
                 .orElse(null);
     }
@@ -144,45 +154,7 @@ public class ScheduledJobAdapter {
         return new IntervalTrigger(0, DateUtil.toDate(start.toOffsetDateTime()), null, repeatLimit, 0, intervalMillis, null, null);
     }
 
-    public static String payloadSerialize(ScheduledJob scheduledJob) {
-        try {
-            if (Objects.isNull(scheduledJob.getProcessInstanceId())
-                    && Objects.isNull(scheduledJob.getRootProcessInstanceId())
-                    && Objects.isNull(scheduledJob.getProcessId())
-                    && Objects.isNull(scheduledJob.getRootProcessId())) {
-                return null;
-            }
-            return OBJECT_MAPPER.writeValueAsString(new ProcessPayload(scheduledJob.getProcessInstanceId(),
-                    scheduledJob.getRootProcessInstanceId(),
-                    scheduledJob.getProcessId(),
-                    scheduledJob.getRootProcessId(),
-                    scheduledJob.getNodeInstanceId()));
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static ProcessPayload payloadDeserialize(Object payload) {
-        return Optional.ofNullable(payload)
-                .map(p -> {
-                    try {
-                        return p instanceof String ? OBJECT_MAPPER.readTree((String) p) : p;
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .map(p -> {
-                    try {
-                        return OBJECT_MAPPER.convertValue(p, ProcessPayload.class);
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                })
-                .orElse(new ProcessPayload());
-    }
-
     public final static class ProcessPayload {
-
         private String processInstanceId;
         private String rootProcessInstanceId;
         private String processId;

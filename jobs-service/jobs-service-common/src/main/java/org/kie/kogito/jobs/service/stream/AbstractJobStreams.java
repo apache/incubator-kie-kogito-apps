@@ -60,7 +60,7 @@ public abstract class AbstractJobStreams {
                 JobDataEvent event = JobDataEvent
                         .builder()
                         .source(url + RestApiConstants.JOBS_PATH)
-                        .data(ScheduledJobAdapter.of(job))
+                        .data(ScheduledJobAdapter.of(job))//this should support jobs crated with V1 and V2
                         .build();
                 String json = objectMapper.writeValueAsString(event);
                 emitter.send(decorate(ContextAwareMessage.of(json)
