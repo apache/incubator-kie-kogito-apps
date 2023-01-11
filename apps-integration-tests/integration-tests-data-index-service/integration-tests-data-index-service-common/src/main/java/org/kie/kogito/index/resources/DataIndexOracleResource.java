@@ -51,7 +51,6 @@ public class DataIndexOracleResource implements TestResource {
         oracle.withNetworkAliases("oracle");
         oracle.withUsername("kogito");
         oracle.withPassword("kogito");
-        oracle.waitingFor(Wait.forListeningPort());
         oracle.start();
         kafka.withNetwork(network);
         kafka.withNetworkAliases("kafka");
