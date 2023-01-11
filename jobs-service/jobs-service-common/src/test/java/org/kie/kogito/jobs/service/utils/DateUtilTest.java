@@ -27,6 +27,7 @@ class DateUtilTest {
 
     @Test
     void dateToOffsetDateTime() {
+        System.out.println("This is a test");
         Date date = new Date();
         OffsetDateTime offsetDateTime = DateUtil.dateToOffsetDateTime(date);
         assertThat(offsetDateTime).isEqualTo(OffsetDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault()));
