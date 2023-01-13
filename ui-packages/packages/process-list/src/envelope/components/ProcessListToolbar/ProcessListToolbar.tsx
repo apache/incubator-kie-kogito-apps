@@ -86,6 +86,7 @@ interface ProcessListToolbarProps {
   defaultStatusFilter: ProcessInstanceState[];
   singularProcessLabel: string;
   pluralProcessLabel: string;
+  isWorkflow: boolean;
 }
 
 const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
@@ -105,6 +106,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
   defaultStatusFilter,
   singularProcessLabel,
   pluralProcessLabel,
+  isWorkflow,
   ouiaId,
   ouiaSafe
 }) => {
@@ -232,10 +234,7 @@ const ProcessListToolbar: React.FC<ProcessListToolbarProps & OUIAProps> = ({
       }
     },
     RETRY: {
-      type:
-        singularProcessLabel?.toLowerCase() === 'workflow'
-          ? BulkListType.WORKFLOW
-          : BulkListType.PROCESS_INSTANCE,
+      type: isWorkflow ? BulkListType.WORKFLOW : BulkListType.PROCESS_INSTANCE,
       results: operationResults[OperationType.RETRY],
       messages: {
         successMessage: `Retriggered ${pluralProcessLabel?.toLowerCase()}: `,

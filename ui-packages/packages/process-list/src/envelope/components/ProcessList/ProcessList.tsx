@@ -51,6 +51,7 @@ interface ProcessListProps {
   initialState: ProcessListState;
   singularProcessLabel: string;
   pluralProcessLabel: string;
+  isWorkflow: boolean;
 }
 const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
   driver,
@@ -58,6 +59,7 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
   initialState,
   singularProcessLabel,
   pluralProcessLabel,
+  isWorkflow,
   ouiaId,
   ouiaSafe
 }) => {
@@ -256,6 +258,7 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
         defaultStatusFilter={defaultStatusFilter}
         singularProcessLabel={singularProcessLabel}
         pluralProcessLabel={pluralProcessLabel}
+        isWorkflow={isWorkflow}
       />
       {filters.status.length > 0 ? (
         <>
