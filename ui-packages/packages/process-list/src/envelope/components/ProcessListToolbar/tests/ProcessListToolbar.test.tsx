@@ -55,7 +55,8 @@ const props = {
   driver: null,
   defaultStatusFilter: [ProcessInstanceState.Active],
   singularProcessLabel: 'Workflow',
-  pluralProcessLabel: 'Workflows'
+  pluralProcessLabel: 'Workflows',
+  isWorkflow: true
 };
 beforeEach(() => {
   props.setProcessStates.mockClear();

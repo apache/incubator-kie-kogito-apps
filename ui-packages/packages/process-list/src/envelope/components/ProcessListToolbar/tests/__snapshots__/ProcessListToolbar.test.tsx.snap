@@ -20,6 +20,7 @@ exports[`ProcessListToolbar test Snapshot tests 1`] = `
     }
   }
   isAllChecked={false}
+  isWorkflow={true}
   pluralProcessLabel="Workflows"
   processInstances={
     Array [
