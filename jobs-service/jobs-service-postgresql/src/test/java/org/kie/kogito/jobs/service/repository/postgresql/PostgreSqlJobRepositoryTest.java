@@ -66,6 +66,7 @@ class PostgreSqlJobRepositoryTest {
 
     public static final String PAYLOAD_TEST = "{\"payload\": \"test\"}";
     public static final String URL = "test";
+    public static final String JOB_DETAILS = "job_details_v2";
     PostgreSqlJobRepository repository;
 
     PgPool client;
@@ -142,7 +143,7 @@ class PostgreSqlJobRepositoryTest {
         verify(client, times(1)).preparedQuery(queryCaptor.capture());
         verify(query, times(1)).execute(parameterCaptor.capture());
 
-        String query = "INSERT INTO job_details (id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
+        String query = "INSERT INTO " + JOB_DETAILS + " (id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
                 "priority, recipient, trigger, fire_time) VALUES ($1, $2, $3, now(), $4, $5, $6, $7, $8, $9, $10) " +
                 "ON CONFLICT (id) DO UPDATE SET correlation_id = $2, status = $3, last_update = now(), retries = $4, " +
                 "execution_counter = $5, scheduled_id = $6, priority = $7, " +
@@ -184,7 +185,7 @@ class PostgreSqlJobRepositoryTest {
         verify(query, times(1)).execute(parameterCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "priority, recipient, trigger, fire_time FROM job_details WHERE id = $1";
+                "priority, recipient, trigger, fire_time FROM " + JOB_DETAILS + " WHERE id = $1";
         String parameter = "test";
 
         assertEquals(query, queryCaptor.getValue());
@@ -201,7 +202,7 @@ class PostgreSqlJobRepositoryTest {
         verify(client, times(1)).preparedQuery(queryCaptor.capture());
         verify(query, times(1)).execute(parameterCaptor.capture());
 
-        String query = "SELECT id FROM job_details WHERE id = $1";
+        String query = "SELECT id FROM " + JOB_DETAILS + " WHERE id = $1";
         String parameter = "test";
 
         assertEquals(query, queryCaptor.getValue());
@@ -218,7 +219,7 @@ class PostgreSqlJobRepositoryTest {
         verify(client, times(1)).preparedQuery(queryCaptor.capture());
         verify(query, times(1)).execute(parameterCaptor.capture());
 
-        String query = "DELETE FROM job_details WHERE id = $1 " +
+        String query = "DELETE FROM " + JOB_DETAILS + " WHERE id = $1 " +
                 "RETURNING id, correlation_id, status, last_update, retries, " +
                 "execution_counter, scheduled_id, priority, recipient, trigger, fire_time";
         String parameter = "test";
@@ -236,7 +237,7 @@ class PostgreSqlJobRepositoryTest {
         verify(client, times(1)).preparedQuery(queryCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, " +
-                "execution_counter, scheduled_id, priority, recipient, trigger, fire_time FROM job_details LIMIT $1";
+                "execution_counter, scheduled_id, priority, recipient, trigger, fire_time FROM " + JOB_DETAILS + " LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());
     }
@@ -253,7 +254,7 @@ class PostgreSqlJobRepositoryTest {
         verify(client, times(1)).preparedQuery(queryCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "priority, recipient, trigger, fire_time FROM job_details " +
+                "priority, recipient, trigger, fire_time FROM " + JOB_DETAILS + " " +
                 "WHERE status IN ('SCHEDULED', 'RETRY') AND fire_time BETWEEN $2 AND $3 ORDER BY priority DESC LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());
@@ -271,7 +272,7 @@ class PostgreSqlJobRepositoryTest {
         verify(client, times(1)).preparedQuery(queryCaptor.capture());
 
         String query = "SELECT id, correlation_id, status, last_update, retries, execution_counter, scheduled_id, " +
-                "priority, recipient, trigger, fire_time FROM job_details " +
+                "priority, recipient, trigger, fire_time FROM " + JOB_DETAILS + " " +
                 "WHERE status IN ('SCHEDULED') AND fire_time BETWEEN $2 AND $3 ORDER BY priority DESC LIMIT $1";
 
         assertEquals(query, queryCaptor.getValue());

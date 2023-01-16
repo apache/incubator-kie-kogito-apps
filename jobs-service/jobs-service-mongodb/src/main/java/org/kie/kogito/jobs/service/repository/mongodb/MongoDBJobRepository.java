@@ -66,7 +66,7 @@ public class MongoDBJobRepository extends BaseReactiveJobRepository implements R
 
     static final String ID = "_id";
 
-    static final String JOB_DETAILS_COLLECTION = "jobDetails";
+    static final String JOB_DETAILS_COLLECTION = "jobDetails.v2";
 
     static final String STATUS_COLUMN = "status";
 
