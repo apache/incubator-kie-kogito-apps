@@ -93,6 +93,8 @@ public class GraphQLInputObjectTypeMapper extends AbstractInputObjectTypeMapper 
         switch (name) {
             case "Int":
             case "Long":
+            case "Double":
+            case "Float":
                 return getInputObjectType("NumericArgument");
             case "String":
                 return getInputObjectType("StringArgument");
