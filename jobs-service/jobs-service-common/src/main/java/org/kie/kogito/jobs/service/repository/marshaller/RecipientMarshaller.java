@@ -36,7 +36,7 @@ public class RecipientMarshaller implements Marshaller<Recipient, JsonObject> {
             return null;
         }
         return JsonObject
-                .mapFrom(recipient)
+                .mapFrom(recipient.getRecipient())
                 .put(CLASS_TYPE, recipient.getRecipient().getClass().getName());
     }
 
@@ -50,8 +50,7 @@ public class RecipientMarshaller implements Marshaller<Recipient, JsonObject> {
             return null;
         }
         try {
-            JsonObject recipient = jsonObject.getJsonObject("recipient");
-            return new RecipientInstance((org.kie.kogito.jobs.service.api.Recipient<?>) recipient.mapTo(Class.forName(classType)));
+            return new RecipientInstance((org.kie.kogito.jobs.service.api.Recipient<?>) jsonObject.mapTo(Class.forName(classType)));
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }

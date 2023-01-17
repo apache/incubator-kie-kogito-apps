@@ -1,7 +1,7 @@
 CREATE TABLE job_details_v2
 (
-  id VARCHAR(40) PRIMARY KEY,
-  correlation_id VARCHAR(40),
+  id VARCHAR(50) PRIMARY KEY,
+  correlation_id VARCHAR(50),
   status VARCHAR(40),
   last_update TIMESTAMPTZ,
   retries INT4,
