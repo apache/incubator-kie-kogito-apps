@@ -38,7 +38,7 @@ class RecipientMarshallerTest {
 
     private static JsonObject buildRecipient() {
         return JsonObject
-                .mapFrom(new RecipientInstance(HttpRecipient.builder().forStringPayload().url("test").build()))
+                .mapFrom(HttpRecipient.builder().forStringPayload().url("test").build())
                 .put(RecipientMarshaller.CLASS_TYPE, HttpRecipient.class.getName());
     }
 

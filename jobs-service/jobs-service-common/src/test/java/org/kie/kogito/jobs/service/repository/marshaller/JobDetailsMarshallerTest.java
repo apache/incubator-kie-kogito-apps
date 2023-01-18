@@ -83,7 +83,7 @@ class JobDetailsMarshallerTest {
                 .put("scheduledId", scheduledId)
                 .put("priority", priority)
                 .put("recipient", JsonObject
-                        .mapFrom(new RecipientInstance((HttpRecipient.builder().forStringPayload().url("url").payload(HttpRecipientStringPayloadData.from(payload)).build())))
+                        .mapFrom(HttpRecipient.builder().forStringPayload().url("url").payload(HttpRecipientStringPayloadData.from(payload)).build())
                         .put("classType", HttpRecipient.class.getName()))
                 .put("trigger", new JsonObject()
                         .put("nextFireTime", trigger.hasNextFireTime().getTime())

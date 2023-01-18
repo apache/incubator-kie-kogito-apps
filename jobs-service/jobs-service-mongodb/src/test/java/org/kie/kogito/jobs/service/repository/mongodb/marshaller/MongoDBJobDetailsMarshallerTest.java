@@ -76,7 +76,7 @@ class MongoDBJobDetailsMarshallerTest {
                 .put("scheduledId", scheduledId)
                 .put("priority", priority)
                 .put("recipient", JsonObject
-                        .mapFrom(new RecipientInstance(HttpRecipient.builder().forStringPayload().url("testEndpoint").build()))
+                        .mapFrom(HttpRecipient.builder().forStringPayload().url("testEndpoint").build())
                         .put("classType", HttpRecipient.class.getName()))
                 .put("trigger", new JsonObject()
                         .put("nextFireTime", trigger.hasNextFireTime().getTime())
