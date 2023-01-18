@@ -16,6 +16,7 @@
 package org.kie.kogito.job.http.recipient;
 
 import java.net.URI;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -26,6 +27,7 @@ import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.job.http.recipient.converters.HttpConverters;
 import org.kie.kogito.jobs.api.URIBuilder;
+import org.kie.kogito.jobs.service.api.HasData;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.exception.JobExecutionException;
 import org.kie.kogito.jobs.service.executor.JobExecutor;
@@ -69,6 +71,12 @@ public class HttpJobExecutor implements JobExecutor {
                 uri.getPath()).timeout(timeout);
         Optional.ofNullable(request.getQueryParams())
                 .ifPresent(params -> clientRequest.queryParams().addAll(params));
+        Optional.ofNullable(request.getHeaders())
+                .ifPresent(headers -> clientRequest.headers().addAll(headers));
+
+        if (Objects.nonNull(request.getBody())) {
+            return clientRequest.sendJson(request.getBody());
+        }
         return clientRequest.send();
     }
 
@@ -97,10 +105,9 @@ public class HttpJobExecutor implements JobExecutor {
     public Uni<JobExecutionResponse> execute(JobDetails jobDetails) {
         return Uni.createFrom().item(jobDetails)
                 .chain(job -> {
-                    //Using just POST method for now
-                    final String callbackEndpoint = getCallbackEndpoint(job);
+                    final HttpRecipient<?> httpRecipient = getCallbackEndpoint(job);
                     final String limit = getLimit(job);
-                    final HTTPRequestCallback callback = buildCallbackRequest(callbackEndpoint, limit);
+                    final HTTPRequestCallback callback = buildCallbackRequest(httpRecipient, limit);
                     return executeCallback(callback)
                             .onItem().transform(response -> JobExecutionResponse.builder()
                                     .message(response.bodyAsString())
@@ -112,12 +119,15 @@ public class HttpJobExecutor implements JobExecutor {
                 });
     }
 
-    private HTTPRequestCallback buildCallbackRequest(String callbackEndpoint, String limit) {
+    private HTTPRequestCallback buildCallbackRequest(HttpRecipient recipient, String limit) {
         return HTTPRequestCallback.builder()
-                .url(callbackEndpoint)
-                .method(HTTPRequestCallback.HTTPMethod.POST)
+                .url(recipient.getUrl())
+                .method(recipient.getMethod())
                 //in case of repeatable jobs add the limit parameter
                 .addQueryParam("limit", limit)
+                .headers(recipient.getHeaders())
+                .queryParams(recipient.getQueryParams())
+                .body(Optional.ofNullable(recipient.getPayload()).map(HasData::getData).orElse(null))
                 .build();
     }
 
@@ -129,13 +139,12 @@ public class HttpJobExecutor implements JobExecutor {
                 .orElse(null);
     }
 
-    private String getCallbackEndpoint(JobDetails job) {
+    private HttpRecipient getCallbackEndpoint(JobDetails job) {
         return Optional.ofNullable(job.getRecipient())
                 .map(Recipient::getRecipient)
                 .filter(HttpRecipient.class::isInstance)
                 .map(HttpRecipient.class::cast)
-                .map(HttpRecipient::getUrl)
-                .orElseThrow(() -> new IllegalArgumentException("Callback Endpoint is null for job " + job));
+                .orElseThrow(() -> new IllegalArgumentException("HttpRecipient expected for job " + job));
     }
 
     private int getRepeatableJobCountDown(JobDetails job) {

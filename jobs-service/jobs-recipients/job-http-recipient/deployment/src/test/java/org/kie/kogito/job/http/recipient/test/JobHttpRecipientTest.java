@@ -22,6 +22,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.kie.kogito.job.http.recipient.HTTPRequestCallback.HTTPMethod;
 import org.kie.kogito.job.http.recipient.HttpJobExecutor;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.JobDetails;
@@ -50,12 +51,24 @@ public class JobHttpRecipientTest {
 
     @Test
     public void httpExecutorTest() {
-        HttpRecipient httpRecipient = HttpRecipient.builder().forStringPayload().url(mockServiceUrl).build();
+        testRequest(HTTPMethod.DELETE);
+        testRequest(HTTPMethod.GET);
+        testRequest(HTTPMethod.POST);
+        testRequest(HTTPMethod.PUT);
+        testRequest(HTTPMethod.PATCH);
+    }
+
+    private void testRequest(HTTPMethod method) {
+        HttpRecipient httpRecipient = HttpRecipient.builder()
+                .forStringPayload()
+                .method(method.name())
+                .url(mockServiceUrl)
+                .build();
         JobDetails job = JobDetails.builder().id("12345").recipient(new RecipientInstance(httpRecipient)).build();
         UniAssertSubscriber<JobExecutionResponse> tester = httpJobExecutor.execute(job)
                 .invoke(response -> assertThat(response.getJobId()).isEqualTo(job.getId()))
                 .invoke(response -> assertThat(response.getCode()).isEqualTo("200"))
-                .invoke(response -> assertThat(response.getMessage()).isEqualTo("Message"))
+                .invoke(response -> assertThat(response.getMessage()).isEqualTo(method.name()))
                 .subscribe().withSubscriber(UniAssertSubscriber.create());
         tester.awaitItem();
     }

@@ -33,8 +33,11 @@ public class HttpRecipientResourceMock implements QuarkusTestResourceLifecycleMa
     public Map<String, String> start() {
         wireMockServer = new WireMockServer();
         wireMockServer.start();
-        stubFor(WireMock.any(WireMock.urlMatching(".*")).willReturn(WireMock.ok("Message")));
-
+        stubFor(WireMock.post(WireMock.urlMatching(".*")).willReturn(WireMock.ok("POST")));
+        stubFor(WireMock.get(WireMock.urlMatching(".*")).willReturn(WireMock.ok("GET")));
+        stubFor(WireMock.put(WireMock.urlMatching(".*")).willReturn(WireMock.ok("PUT")));
+        stubFor(WireMock.delete(WireMock.urlMatching(".*")).willReturn(WireMock.ok("DELETE")));
+        stubFor(WireMock.patch(WireMock.urlMatching(".*")).willReturn(WireMock.ok("PATCH")));
         return Map.of(MOCK_SERVICE_URL, "http://localhost:" + wireMockServer.port());
     }
 

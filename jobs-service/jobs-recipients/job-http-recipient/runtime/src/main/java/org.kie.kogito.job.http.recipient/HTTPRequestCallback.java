@@ -31,17 +31,16 @@ public class HTTPRequestCallback {
         PATCH,
         OPTIONS,
         HEAD,
-        TRACE,
-        CONNECT
+        TRACE
     }
 
     private String url;
     private HTTPMethod method;
     private Map<String, String> headers;
     private Map<String, String> queryParams;
-    private String body;
+    private Object body;
 
-    public HTTPRequestCallback(String url, HTTPMethod method, Map<String, String> headers, String body, Map<String, String> queryParams) {
+    public HTTPRequestCallback(String url, HTTPMethod method, Map<String, String> headers, Object body, Map<String, String> queryParams) {
         this.url = url;
         this.method = method;
         this.headers = headers;
@@ -61,7 +60,7 @@ public class HTTPRequestCallback {
         return headers;
     }
 
-    public String getBody() {
+    public Object getBody() {
         return body;
     }
 
@@ -109,7 +108,7 @@ public class HTTPRequestCallback {
         private String url;
         private HTTPMethod method;
         private Map<String, String> headers;
-        private String body;
+        private Object body;
         private Map<String, String> queryParams = new HashMap<>();
 
         public Builder url(String url) {
@@ -132,7 +131,7 @@ public class HTTPRequestCallback {
             return this;
         }
 
-        public Builder body(String body) {
+        public Builder body(Object body) {
             this.body = body;
             return this;
         }
