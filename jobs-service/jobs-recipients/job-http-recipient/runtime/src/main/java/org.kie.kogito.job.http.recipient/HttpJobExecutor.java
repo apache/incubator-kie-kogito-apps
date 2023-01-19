@@ -100,7 +100,7 @@ public class HttpJobExecutor implements JobExecutor {
     public Uni<JobExecutionResponse> execute(JobDetails jobDetails) {
         return Uni.createFrom().item(jobDetails)
                 .chain(job -> {
-                    final HttpRecipient<?> httpRecipient = getCallbackEndpoint(job);
+                    final HttpRecipient<?> httpRecipient = getHttpRecipient(job);
                     final String limit = getLimit(job);
                     final HTTPRequestCallback callback = buildCallbackRequest(httpRecipient, limit);
                     return executeCallback(callback)
@@ -134,7 +134,7 @@ public class HttpJobExecutor implements JobExecutor {
                 .orElse(null);
     }
 
-    private HttpRecipient getCallbackEndpoint(JobDetails job) {
+    private HttpRecipient getHttpRecipient(JobDetails job) {
         return Optional.ofNullable(job.getRecipient())
                 .map(Recipient::getRecipient)
                 .filter(HttpRecipient.class::isInstance)
