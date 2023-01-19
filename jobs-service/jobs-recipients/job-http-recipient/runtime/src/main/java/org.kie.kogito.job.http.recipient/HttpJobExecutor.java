@@ -73,10 +73,8 @@ public class HttpJobExecutor implements JobExecutor {
                 .ifPresent(params -> clientRequest.queryParams().addAll(params));
         Optional.ofNullable(request.getHeaders())
                 .ifPresent(headers -> clientRequest.headers().addAll(headers));
-
-        if (Objects.nonNull(request.getBody())) {
-            return clientRequest.sendJson(request.getBody());
-        }
+        Optional.ofNullable(request.getBody())
+                .ifPresent(body -> clientRequest.sendJson(body));
         return clientRequest.send();
     }
 
