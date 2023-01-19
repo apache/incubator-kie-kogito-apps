@@ -16,7 +16,10 @@
 package org.kie.kogito.job.http.recipient;
 
 import java.net.URI;
+import java.util.Collections;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -26,7 +29,6 @@ import javax.ws.rs.core.Response;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.job.http.recipient.converters.HttpConverters;
 import org.kie.kogito.jobs.api.URIBuilder;
-import org.kie.kogito.jobs.service.api.HasData;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.exception.JobExecutionException;
 import org.kie.kogito.jobs.service.executor.JobExecutor;
@@ -36,6 +38,9 @@ import org.kie.kogito.jobs.service.model.Recipient;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.Vertx;
@@ -56,6 +61,9 @@ public class HttpJobExecutor implements JobExecutor {
     Vertx vertx;
     private WebClient client;
 
+    @Inject
+    ObjectMapper objectMapper;
+
     @PostConstruct
     void initialize() {
         this.client = WebClient.create(vertx);
@@ -68,11 +76,26 @@ public class HttpJobExecutor implements JobExecutor {
                 uri.getPort(),
                 uri.getHost(),
                 uri.getPath()).timeout(timeout);
-        clientRequest.queryParams().addAll(request.getQueryParams());
-        clientRequest.headers().addAll(request.getHeaders());
+        clientRequest.queryParams().addAll(filterEntries(request.getQueryParams()));
+        clientRequest.headers().addAll(filterEntries(request.getHeaders()));
         return request.getBody()
-                .map(clientRequest::sendJson)
-                .orElseGet(clientRequest::send);
+                .map(body -> clientRequest.sendBuffer(buildBuffer(body)))
+                .orElse(clientRequest.send());
+    }
+
+    private Buffer buildBuffer(Object body) {
+        if (body instanceof String) {
+            return Buffer.buffer((String) body);
+        } else if (body instanceof byte[]) {
+            return Buffer.buffer(((byte[]) body));
+        } else if (body instanceof JsonNode) {
+            try {
+                return Buffer.buffer(objectMapper.writeValueAsBytes(body));
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to encode body as JSON: " + e.getMessage(), e);
+            }
+        }
+        throw new IllegalArgumentException("Unexpected body type: " + body.getClass());
     }
 
     private <T extends JobExecutionResponse> Uni<T> handleResponse(T response) {
@@ -118,11 +141,11 @@ public class HttpJobExecutor implements JobExecutor {
         return HTTPRequestCallback.builder()
                 .url(recipient.getUrl())
                 .method(recipient.getMethod())
-                //in case of repeatable jobs add the limit parameter
-                .addQueryParam("limit", limit)
                 .headers(recipient.getHeaders())
                 .queryParams(recipient.getQueryParams())
-                .body(Optional.ofNullable(recipient.getPayload()).map(HasData::getData).orElse(null))
+                //in case of repeatable jobs add the limit parameter, override if already present.
+                .addQueryParam("limit", limit)
+                .body(recipient.getPayload() != null ? recipient.getPayload().getData() : null)
                 .build();
     }
 
@@ -150,5 +173,15 @@ public class HttpJobExecutor implements JobExecutor {
     @Override
     public Class<HttpRecipient> type() {
         return HttpRecipient.class;
+    }
+
+    private static Map<String, String> filterEntries(Map<String, String> source) {
+        if (source == null) {
+            return Collections.emptyMap();
+        }
+        return source.entrySet()
+                .stream()
+                .filter(entry -> entry.getValue() != null)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 }
