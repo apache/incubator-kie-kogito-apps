@@ -16,7 +16,6 @@
 package org.kie.kogito.job.http.recipient;
 
 import java.net.URI;
-import java.util.Objects;
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
@@ -69,13 +68,11 @@ public class HttpJobExecutor implements JobExecutor {
                 uri.getPort(),
                 uri.getHost(),
                 uri.getPath()).timeout(timeout);
-        Optional.ofNullable(request.getQueryParams())
-                .ifPresent(params -> clientRequest.queryParams().addAll(params));
-        Optional.ofNullable(request.getHeaders())
-                .ifPresent(headers -> clientRequest.headers().addAll(headers));
-        Optional.ofNullable(request.getBody())
-                .ifPresent(body -> clientRequest.sendJson(body));
-        return clientRequest.send();
+        clientRequest.queryParams().addAll(request.getQueryParams());
+        clientRequest.headers().addAll(request.getHeaders());
+        return request.getBody()
+                .map(clientRequest::sendJson)
+                .orElseGet(clientRequest::send);
     }
 
     private <T extends JobExecutionResponse> Uni<T> handleResponse(T response) {

@@ -38,9 +38,9 @@ public class HTTPRequestCallback {
     private HTTPMethod method;
     private Map<String, String> headers;
     private Map<String, String> queryParams;
-    private Object body;
+    private Optional<Object> body;
 
-    public HTTPRequestCallback(String url, HTTPMethod method, Map<String, String> headers, Object body, Map<String, String> queryParams) {
+    public HTTPRequestCallback(String url, HTTPMethod method, Map<String, String> headers, Optional<Object> body, Map<String, String> queryParams) {
         this.url = url;
         this.method = method;
         this.headers = headers;
@@ -60,7 +60,7 @@ public class HTTPRequestCallback {
         return headers;
     }
 
-    public Object getBody() {
+    public Optional<Object> getBody() {
         return body;
     }
 
@@ -107,8 +107,8 @@ public class HTTPRequestCallback {
 
         private String url;
         private HTTPMethod method;
-        private Map<String, String> headers;
-        private Object body;
+        private Map<String, String> headers = new HashMap<>();
+        private Optional<Object> body = Optional.empty();
         private Map<String, String> queryParams = new HashMap<>();
 
         public Builder url(String url) {
@@ -132,7 +132,7 @@ public class HTTPRequestCallback {
         }
 
         public Builder body(Object body) {
-            this.body = body;
+            this.body = Optional.ofNullable(body);
             return this;
         }
 
@@ -142,7 +142,7 @@ public class HTTPRequestCallback {
         }
 
         public Builder addQueryParam(String name, String value) {
-            Optional.ofNullable(value).ifPresent(v -> queryParams.put(name, v));
+            queryParams.put(name, value);
             return this;
         }
 
