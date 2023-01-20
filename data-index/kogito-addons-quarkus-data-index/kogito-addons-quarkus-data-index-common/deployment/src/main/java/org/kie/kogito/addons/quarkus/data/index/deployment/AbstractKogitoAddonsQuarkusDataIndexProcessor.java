@@ -48,11 +48,12 @@ public abstract class AbstractKogitoAddonsQuarkusDataIndexProcessor extends OneO
     public void nativeResources(BuildProducer<NativeImageResourceBuildItem> resource,
             BuildProducer<ReflectiveHierarchyBuildItem> reflectiveHierarchyClass) {
         resource.produce(new NativeImageResourceBuildItem("basic.schema.graphqls"));
+        resource.produce(new NativeImageResourceBuildItem("io/vertx/ext/web/handler/graphiql/index.html"));
         reflectiveHierarchy(ProcessInstance.class, reflectiveHierarchyClass);
         reflectiveHierarchy(UserTaskInstance.class, reflectiveHierarchyClass);
     }
 
-    private void reflectiveHierarchy(Class<?> clazz, BuildProducer<ReflectiveHierarchyBuildItem> reflectiveHierarchyClass) {
+    protected void reflectiveHierarchy(Class<?> clazz, BuildProducer<ReflectiveHierarchyBuildItem> reflectiveHierarchyClass) {
         DotName dotName = DotName.createSimple(clazz.getName());
         Type type = Type.create(dotName, Type.Kind.CLASS);
         reflectiveHierarchyClass.produce(new ReflectiveHierarchyBuildItem.Builder().type(type).build());
