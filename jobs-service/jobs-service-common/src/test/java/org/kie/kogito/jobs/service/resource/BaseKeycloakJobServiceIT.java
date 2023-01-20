@@ -106,7 +106,7 @@ public abstract class BaseKeycloakJobServiceIT {
                 .contentType(ContentType.JSON)
                 .body(body)
                 .when()
-                .post(JobResource.JOBS_PATH)
+                .post(RestApiConstants.JOBS_PATH)
                 .then()
                 .statusCode(statusCode);
     }
@@ -139,20 +139,20 @@ public abstract class BaseKeycloakJobServiceIT {
         createJob(jobToJson(job), getAccessToken("jdoe"), OK_CODE);
         given().pathParam("id", id)
                 .when()
-                .delete(JobResource.JOBS_PATH + "/{id}")
+                .delete(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(FORBIDDEN_CODE);
         given().auth().oauth2(getAccessToken("alice"))
                 .pathParam("id", id)
                 .when()
-                .delete(JobResource.JOBS_PATH + "/{id}")
+                .delete(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(UNAUTHORIZED_CODE);
 
         final ScheduledJob response = given().auth().oauth2(getAccessToken("jdoe"))
                 .pathParam("id", id)
                 .when()
-                .delete(JobResource.JOBS_PATH + "/{id}")
+                .delete(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK_CODE)
                 .contentType(ContentType.JSON)
@@ -168,19 +168,19 @@ public abstract class BaseKeycloakJobServiceIT {
         createJob(jobToJson(job), getAccessToken("jdoe"), OK_CODE);
         given().pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(FORBIDDEN_CODE);
         given().auth().oauth2(getAccessToken("alice"))
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(UNAUTHORIZED_CODE);
         final ScheduledJob scheduledJob = given().auth().oauth2(getAccessToken("jdoe"))
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK_CODE)
                 .contentType(ContentType.JSON)
@@ -197,19 +197,19 @@ public abstract class BaseKeycloakJobServiceIT {
         createJob(jobToJson(job), getAccessToken("jdoe"), OK_CODE);
         given().pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(FORBIDDEN_CODE);
         given().auth().oauth2(getAccessToken("alice"))
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(UNAUTHORIZED_CODE);
         final ScheduledJob scheduledJob = given().auth().oauth2(getAccessToken("jdoe"))
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK_CODE)
                 .contentType(ContentType.JSON)
