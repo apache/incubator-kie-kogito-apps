@@ -1,4 +1,7 @@
-CREATE TABLE job_details_v2
+ALTER TABLE job_details
+    RENAME TO job_details_v1;
+
+CREATE TABLE job_details
 (
   id VARCHAR(50) PRIMARY KEY,
   correlation_id VARCHAR(50),
@@ -13,5 +16,7 @@ CREATE TABLE job_details_v2
   fire_time TIMESTAMPTZ
 );
 
-CREATE INDEX job_details_v2_fire_time_idx
-    ON job_details_v2 (fire_time);
+CREATE INDEX job_details_fire_time_idx
+    ON job_details (fire_time);
+
+job_details_fire_time_idx
