@@ -1,6 +1,9 @@
 ALTER TABLE job_details
     RENAME TO job_details_v1;
 
+DROP INDEX job_details_fire_time_idx;
+DROP INDEX status_date;
+
 CREATE TABLE job_details
 (
   id VARCHAR(50) PRIMARY KEY,
@@ -18,5 +21,3 @@ CREATE TABLE job_details
 
 CREATE INDEX job_details_fire_time_idx
     ON job_details (fire_time);
-
-job_details_fire_time_idx
