@@ -81,13 +81,11 @@ export const MockedApiRequests = jest.fn<
 }));
 
 export const MockedApiNotifications = jest.fn<
-    Pick<ProcessListChannelApi, NotificationPropertyNames<ProcessListChannelApi>>,
-    []
->(() => (
-    {
-      processList__openTriggerCloudEvent: jest.fn()
-    }
-))
+  Pick<ProcessListChannelApi, NotificationPropertyNames<ProcessListChannelApi>>,
+  []
+>(() => ({
+  processList__openTriggerCloudEvent: jest.fn()
+}));
 
 export const MockedMessageBusClientApi = jest.fn<
   MessageBusClientApi<ProcessListChannelApi>,
