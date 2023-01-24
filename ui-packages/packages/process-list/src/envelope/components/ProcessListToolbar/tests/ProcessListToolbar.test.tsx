@@ -56,7 +56,7 @@ const props = {
   defaultStatusFilter: [ProcessInstanceState.Active],
   singularProcessLabel: 'Workflow',
   pluralProcessLabel: 'Workflows',
-  isWorkflow: true
+  isWorkflow: true,
   isTriggerCloudEventEnabled: false
 };
 beforeEach(() => {
@@ -76,11 +76,13 @@ describe('ProcessListToolbar test', () => {
   it('Snapshot tests with trigger cloud event', () => {
     props.isTriggerCloudEventEnabled = true;
     const wrapper = mount(<ProcessListToolbar {...props} />).find(
-        'ProcessListToolbar'
+      'ProcessListToolbar'
     );
     expect(wrapper).toMatchSnapshot();
 
-    const triggerButton = wrapper.findWhere(child => child.text().includes("Trigger Cloud Event"));
+    const triggerButton = wrapper.findWhere((child) =>
+      child.text().includes('Trigger Cloud Event')
+    );
     expect(triggerButton).not.toBeNull();
   });
 
