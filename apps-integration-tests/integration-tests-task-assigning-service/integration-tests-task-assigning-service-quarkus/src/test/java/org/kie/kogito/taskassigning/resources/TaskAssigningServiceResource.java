@@ -59,7 +59,7 @@ public class TaskAssigningServiceResource implements TestResource {
         infinispan.start();
         // external access url
         String infinispanURL = "localhost:" + infinispan.getMappedPort();
-        properties.put("quarkus.infinispan-client.hosts", infinispanURL);
+        properties.put("quarkus.infinispan-client.server-list", infinispanURL);
 
         LOGGER.debug("Start Kafka test resource");
         kafka.withNetwork(network);

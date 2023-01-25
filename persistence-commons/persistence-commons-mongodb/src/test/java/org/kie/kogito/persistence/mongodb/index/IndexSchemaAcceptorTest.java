@@ -16,8 +16,6 @@
 
 package org.kie.kogito.persistence.mongodb.index;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.schema.SchemaType;
 
@@ -31,13 +29,13 @@ class IndexSchemaAcceptorTest {
 
     @Test
     void supportedStorageType() {
-        indexSchemaAcceptor.storageType = Optional.of(MONGODB_STORAGE);
+        indexSchemaAcceptor.storageType = MONGODB_STORAGE;
         assertTrue(indexSchemaAcceptor.accept(new SchemaType("test")));
     }
 
     @Test
     void unsupportedStorageType() {
-        indexSchemaAcceptor.storageType = Optional.of("test");
+        indexSchemaAcceptor.storageType = "test";
         assertFalse(indexSchemaAcceptor.accept(new SchemaType("test")));
     }
 }

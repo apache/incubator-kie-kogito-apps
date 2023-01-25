@@ -16,8 +16,6 @@
 
 package org.kie.kogito.persistence.infinispan.cache;
 
-import java.util.Optional;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.persistence.api.StorageService;
@@ -35,7 +33,7 @@ class InfinispanCacheShutdownObserverTest {
 
     InfinispanStorageService infinispanStorageService = mock(InfinispanStorageService.class);
 
-    Optional<String> nonInfinispanStorageType = Optional.of("testStorage");
+    String nonInfinispanStorageType = "testStorage";
 
     InfinispanCacheShutdownObserver observer = new InfinispanCacheShutdownObserver();
 
@@ -57,7 +55,7 @@ class InfinispanCacheShutdownObserverTest {
     @Test
     void testStop_nonInfinispanStorageService() {
         observer.cacheService = nonInfinispanStorageService;
-        observer.storageType = Optional.of(INFINISPAN_STORAGE);
+        observer.storageType = INFINISPAN_STORAGE;
 
         observer.stop(null);
 
@@ -67,7 +65,7 @@ class InfinispanCacheShutdownObserverTest {
     @Test
     void testStop_infinispanStorageService() {
         observer.cacheService = infinispanStorageService;
-        observer.storageType = Optional.of(INFINISPAN_STORAGE);
+        observer.storageType = INFINISPAN_STORAGE;
 
         observer.stop(null);
 

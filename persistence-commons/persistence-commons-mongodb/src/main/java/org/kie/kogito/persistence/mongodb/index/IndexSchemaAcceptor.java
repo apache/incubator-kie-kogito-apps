@@ -16,8 +16,6 @@
 
 package org.kie.kogito.persistence.mongodb.index;
 
-import java.util.Optional;
-
 import javax.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -31,10 +29,10 @@ import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
 public class IndexSchemaAcceptor implements SchemaAcceptor {
 
     @ConfigProperty(name = PERSISTENCE_TYPE_PROPERTY)
-    Optional<String> storageType;
+    String storageType;
 
     @Override
     public boolean accept(SchemaType type) {
-        return storageType.isPresent() && MONGODB_STORAGE.equals(storageType.get());
+        return MONGODB_STORAGE.equals(storageType);
     }
 }

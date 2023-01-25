@@ -83,13 +83,13 @@ public class InfinispanQuery<T> implements Query<T> {
 
     @Override
     public List<T> execute() {
-        StringBuilder queryString = new StringBuilder("FROM " + rootType + " o");
+        StringBuilder queryString = new StringBuilder("from " + rootType + " o");
         if (filters != null && !filters.isEmpty()) {
-            queryString.append(" WHERE ");
+            queryString.append(" where ");
             queryString.append(filters.stream().map(filterStringFunction()).collect(joining(AND)));
         }
         if (sortBy != null && !sortBy.isEmpty()) {
-            queryString.append(" ORDER BY ");
+            queryString.append(" order by ");
             queryString.append(sortBy.stream().map(f -> "o." + f.getAttribute() + " " + f.getSort().name()).collect(joining(", ")));
         }
         LOGGER.debug("Executing Infinispan query: {}", queryString);
