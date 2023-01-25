@@ -124,7 +124,7 @@ public abstract class BaseTimerJobSchedulerTest {
         verify(tested(), never()).doSchedule(eq(scheduledJob), delayCaptor.capture());
         subscribeOn(schedule);
         verify(tested()).doSchedule(eq(scheduledJob), delayCaptor.capture());
-        verify(jobRepository).save(scheduleCaptor.capture());
+        verify(jobRepository, times(2)).save(scheduleCaptor.capture());
         JobDetails scheduledJob = scheduleCaptor.getValue();
         assertThat(scheduledJob.getScheduledId()).isEqualTo(SCHEDULED_ID);
         assertThat(scheduledJob.getId()).isEqualTo(JOB_ID);
@@ -334,7 +334,7 @@ public abstract class BaseTimerJobSchedulerTest {
         subscribeOn(tested().schedule(scheduledJob));
 
         verify(tested()).doSchedule(eq(scheduledJob), delayCaptor.capture());
-        verify(jobRepository).save(scheduleCaptor.capture());
+        verify(jobRepository, times(2)).save(scheduleCaptor.capture());
         JobDetails current = scheduleCaptor.getValue();
         assertThat(current.getId()).isEqualTo(JOB_ID);
         assertThat(current.getStatus()).isEqualTo(SCHEDULED);

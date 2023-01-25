@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2023 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.kie.kogito.jobs.service.resource.v2;
 
-import org.junit.jupiter.api.Test;
+import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
 
-import static org.junit.jupiter.api.Assertions.*;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
-class JobResourceV2IT {
+@QuarkusTest
+@QuarkusTestResource(PostgreSqlQuarkusTestResource.class)
+class PostgreSqlJobResourceV2IT extends BaseJobResourceV2IT {
 
-    @Test
-    void create() {
-    }
 }
