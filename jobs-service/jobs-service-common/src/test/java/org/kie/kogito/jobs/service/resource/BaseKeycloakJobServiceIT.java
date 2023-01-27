@@ -41,11 +41,9 @@ import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.MINUTES;
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.kie.kogito.jobs.service.resource.BaseJobResourceIT.HEALTH_ENDPOINT;
+import static org.kie.kogito.jobs.service.health.HealthCheckUtils.awaitReadyHealthCheck;
 import static org.kie.kogito.jobs.service.resource.BaseJobResourceIT.NODE_INSTANCE_ID;
 import static org.kie.kogito.jobs.service.resource.BaseJobResourceIT.PRIORITY;
 import static org.kie.kogito.jobs.service.resource.BaseJobResourceIT.PROCESS_ID;
@@ -75,15 +73,7 @@ public abstract class BaseKeycloakJobServiceIT {
     @BeforeEach
     public void init() throws Exception {
         //health check - wait to be ready
-        await()
-                .atMost(2, MINUTES)
-                .pollInterval(1, SECONDS)
-                .untilAsserted(() -> given()
-                        .contentType(ContentType.JSON)
-                        .accept(ContentType.JSON)
-                        .get(HEALTH_ENDPOINT)
-                        .then()
-                        .statusCode(OK_CODE));
+        awaitReadyHealthCheck(2, MINUTES);
     }
 
     @Test

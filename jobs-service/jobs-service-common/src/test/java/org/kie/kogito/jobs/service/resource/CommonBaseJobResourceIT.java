@@ -33,10 +33,9 @@ import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.MINUTES;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.awaitility.Awaitility.await;
+import static org.kie.kogito.jobs.service.health.HealthCheckUtils.awaitReadyHealthCheck;
 
 public abstract class CommonBaseJobResourceIT {
-
-    public static final String HEALTH_ENDPOINT = "/q/health";
     protected static final String CALLBACK_ENDPOINT = "http://localhost:%d/callback";
     protected static final String PROCESS_ID = "processId";
     protected static final String PROCESS_INSTANCE_ID = "processInstanceId";
@@ -62,15 +61,7 @@ public abstract class CommonBaseJobResourceIT {
     @BeforeEach
     void init() {
         //health check - wait to be ready
-        await()
-                .atMost(1, MINUTES)
-                .pollInterval(1, SECONDS)
-                .untilAsserted(() -> given()
-                        .contentType(ContentType.JSON)
-                        .accept(ContentType.JSON)
-                        .get(HEALTH_ENDPOINT)
-                        .then()
-                        .statusCode(OK));
+        awaitReadyHealthCheck(1, MINUTES);
     }
 
     @AfterEach
