@@ -18,14 +18,16 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { EmbeddedProcessList } from '@kogito-apps/process-list';
-import { ProcessListGatewayApi } from '../../../channel/ProcessList';
-import { useProcessListGatewayApi } from '../../../channel/ProcessList';
+import {
+  ProcessListGatewayApi,
+  useProcessListGatewayApi
+} from '../../../channel/ProcessList';
 import {
   ProcessInstance,
   ProcessListState
 } from '@kogito-apps/management-console-shared';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
-import {CloudEventPageSource} from "../../pages/CloudEventFormPage/CloudEventFormPage";
+import { CloudEventPageSource } from '../../pages/CloudEventFormPage/CloudEventFormPage';
 
 interface ProcessListContainerProps {
   initialState: ProcessListState;

@@ -20,6 +20,7 @@ import React, {
   useImperativeHandle,
   useState
 } from 'react';
+import uuidv4 from 'uuid';
 import {
   Button,
   Grid,
@@ -38,6 +39,7 @@ export interface CloudEventCustomHeadersEditorApi {
 }
 
 type CustomHeaderEntry = {
+  uuid: string;
   key: string;
   value: string;
 };
@@ -78,6 +80,7 @@ const CloudEventCustomHeadersEditor = React.forwardRef<
   const addNewHeader = useCallback(() => {
     const headersCopy = [...headers];
     headersCopy.push({
+      uuid: uuidv4(),
       key: '',
       value: ''
     });
@@ -144,25 +147,23 @@ const CloudEventCustomHeadersEditor = React.forwardRef<
               </GridItem>
               {headers.map((header, index) => {
                 return (
-                  <React.Fragment key={`headers-grid-row-${index}`}>
-                    <GridItem span={4} key={`header-key-${index}`}>
+                  <React.Fragment key={`headers-grid-row-${header.uuid}`}>
+                    <GridItem span={4} key={`header-key-${header.uuid}`}>
                       <TextInput
                         id={`header-key-${index}-input`}
                         value={header.key}
                         onChange={(value) => updateHeaderKey(index, value)}
-                        autoFocus={
-                          isNewHeader && index === headers.indexOf(header)
-                        }
+                        autoFocus={isNewHeader && index === headers.length - 1}
                       />
                     </GridItem>
-                    <GridItem span={7} key={`header-value-${index}`}>
+                    <GridItem span={7} key={`header-value-${header.uuid}`}>
                       <TextInput
                         id={`header-value-${index}-input`}
                         value={header.value}
                         onChange={(value) => updateHeaderValue(index, value)}
                       />
                     </GridItem>
-                    <GridItem span={1} key={`header-delete-${index}`}>
+                    <GridItem span={1} key={`header-delete-${header.uuid}`}>
                       <Button
                         variant="plain"
                         aria-label="delete"

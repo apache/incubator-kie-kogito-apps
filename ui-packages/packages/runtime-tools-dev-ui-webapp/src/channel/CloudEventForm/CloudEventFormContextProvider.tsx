@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import {
   DevUIAppContext,
   useDevUIAppContext
@@ -28,10 +28,14 @@ interface IOwnProps {
 
 const CloudEventFormContextProvider: React.FC<IOwnProps> = ({ children }) => {
   const runtimeToolsApi: DevUIAppContext = useDevUIAppContext();
+
+  const gatewayApi = useMemo(
+    () => new CloudEventFormGatewayApiImpl(runtimeToolsApi.getDevUIUrl()),
+    []
+  );
+
   return (
-    <CloudEventFormContext.Provider
-      value={new CloudEventFormGatewayApiImpl(runtimeToolsApi.getDevUIUrl())}
-    >
+    <CloudEventFormContext.Provider value={gatewayApi}>
       {children}
     </CloudEventFormContext.Provider>
   );

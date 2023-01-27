@@ -22,6 +22,11 @@ import CloudEventCustomHeadersEditor, {
 } from '../CloudEventCustomHeadersEditor';
 import { Grid, TextInput } from '@patternfly/react-core';
 
+jest.mock('uuid', () => {
+  let count = 0;
+  return () => count++;
+});
+
 const MockedComponent = (): React.ReactElement => {
   return <></>;
 };

@@ -20,11 +20,13 @@ import {
   EmbeddedProcessDefinitionList,
   ProcessDefinition
 } from '@kogito-apps/process-definition-list';
-import { ProcessDefinitionListGatewayApi } from '../../../channel/ProcessDefinitionList';
-import { useProcessDefinitionListGatewayApi } from '../../../channel/ProcessDefinitionList';
+import {
+  ProcessDefinitionListGatewayApi,
+  useProcessDefinitionListGatewayApi
+} from '../../../channel/ProcessDefinitionList';
 import { useHistory } from 'react-router-dom';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
-import {CloudEventPageSource} from "../../pages/CloudEventFormPage/CloudEventFormPage";
+import { CloudEventPageSource } from '../../pages/CloudEventFormPage/CloudEventFormPage';
 
 interface ProcessDefinitionListProps {
   singularProcessLabel: string;
