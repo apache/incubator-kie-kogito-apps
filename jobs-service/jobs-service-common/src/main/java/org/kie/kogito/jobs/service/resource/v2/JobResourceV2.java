@@ -42,7 +42,7 @@ import io.smallrye.mutiny.Uni;
 @ApplicationScoped
 @Path(RestApiConstants.V2 + RestApiConstants.JOBS_PATH)
 public class JobResourceV2 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(org.kie.kogito.jobs.service.resource.JobResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JobResourceV2.class);
     @SuppressWarnings("squid:S1075")
 
     @Inject
