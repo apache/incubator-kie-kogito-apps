@@ -54,7 +54,7 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
 
     public static final Integer MAX_ITEMS_QUERY = 10000;
 
-    private static final String JOB_DETAILS_TABLE = "job_details_v2";
+    private static final String JOB_DETAILS_TABLE = "job_details";
 
     private static final String JOB_DETAILS_COLUMNS = "id, correlation_id, status, last_update, retries, " +
             "execution_counter, scheduled_id, priority, recipient, trigger, fire_time";
