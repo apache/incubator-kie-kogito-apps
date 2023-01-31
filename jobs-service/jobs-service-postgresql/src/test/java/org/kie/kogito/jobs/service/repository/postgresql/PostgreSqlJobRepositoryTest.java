@@ -66,7 +66,7 @@ class PostgreSqlJobRepositoryTest {
 
     public static final String PAYLOAD_TEST = "{\"payload\": \"test\"}";
     public static final String URL = "test";
-    public static final String JOB_DETAILS = "job_details_v2";
+    public static final String JOB_DETAILS = "job_details";
     PostgreSqlJobRepository repository;
 
     PgPool client;
