@@ -16,18 +16,18 @@
 
 package org.kie.kogito.jobs.service.resource;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
 import org.kie.kogito.jobs.service.scheduler.impl.VertxTimerServiceScheduler;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.restassured.http.ContentType;
-import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -84,6 +84,31 @@ public abstract class CommonBaseJobResourceIT {
                 .when()
                 .post(getCreatePath())
                 .then();
+    }
+
+    protected <T> T getJob(String jobId, Class<T> type) {
+       return getJob(jobId, type, 200);
+    }
+    protected <T> T getJob(String jobId, Class<T> type, int code) {
+        try {
+            return objectMapper.readValue(given()
+                    .contentType(ContentType.JSON)
+                    .accept(ContentType.JSON)
+                    .get(getGetJobQuery(jobId))
+                    .then()
+                    .statusCode(code)
+                    .extract().body().asByteArray(), type);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    protected ValidatableResponse deleteJob(String jobId) {
+        return given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .delete(getGetJobQuery(jobId))
+                .then()
+                .statusCode(200);
     }
 
     protected void assertJobHasFinished(String jobId, long atMostTimeoutInSeconds) {
