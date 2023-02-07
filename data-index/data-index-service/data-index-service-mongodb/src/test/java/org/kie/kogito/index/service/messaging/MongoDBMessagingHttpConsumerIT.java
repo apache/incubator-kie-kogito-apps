@@ -16,7 +16,6 @@
 
 package org.kie.kogito.index.service.messaging;
 
-import org.kie.kogito.index.TestUtils;
 import org.kie.kogito.index.service.test.InMemoryMessageTestProfile;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -24,10 +23,6 @@ import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
 @TestProfile(InMemoryMessageTestProfile.class)
-class MongoDomainMessagingHttpConsumerIT extends AbstractDomainMessagingHttpConsumerIT {
+class MongoDBMessagingHttpConsumerIT extends AbstractMessagingHttpConsumerIT {
 
-    @Override
-    protected String getTestProtobufFileContent() throws Exception {
-        return TestUtils.getTravelsProtoBufferFile();
-    }
 }

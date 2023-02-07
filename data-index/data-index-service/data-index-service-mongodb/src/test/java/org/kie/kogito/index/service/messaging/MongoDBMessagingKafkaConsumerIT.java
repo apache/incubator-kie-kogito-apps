@@ -16,13 +16,13 @@
 
 package org.kie.kogito.index.service.messaging;
 
-import org.kie.kogito.index.service.test.InMemoryMessageTestProfile;
+import org.kie.kogito.index.service.test.KafkaMessageTestProfile;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
-@TestProfile(InMemoryMessageTestProfile.class)
-class MongoMessagingHttpConsumerIT extends AbstractMessagingHttpConsumerIT {
+@TestProfile(KafkaMessageTestProfile.class)
+class MongoDBMessagingKafkaConsumerIT extends AbstractMessagingKafkaConsumerIT {
 
 }
