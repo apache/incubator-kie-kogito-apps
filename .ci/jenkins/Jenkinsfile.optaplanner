@@ -1,0 +1,184 @@
+@Library('jenkins-pipeline-shared-libraries')_
+
+import org.kie.jenkins.MavenCommand
+
+droolsRepo = 'drools'
+optaplannerRepo = 'optaplanner'
+kogitoRuntimesRepo = 'kogito-runtimes'
+kogitoAppsRepo = 'kogito-apps'
+
+pipeline {
+    agent {
+        label 'kie-rhel7 && kie-mem16g'
+    }
+    tools {
+        maven env.BUILD_MAVEN_TOOL
+        jdk env.BUILD_JDK_TOOL
+    }
+    options {
+        timestamps()
+        timeout(time: 360, unit: 'MINUTES')
+    }
+    environment {
+        KOGITO_CI_EMAIL_TO = credentials("${JENKINS_EMAIL_CREDS_ID}")
+        MAVEN_OPTS = '-Xms1024m -Xmx6g -XX:PermSize=128m -XX:MaxPermSize=512m'
+    }
+    stages {
+        stage('Initialize') {
+            steps {
+                script {
+                    checkoutDroolsRepo()
+                    checkoutOptaplannerRepo()
+                    checkoutKogitoRepo(kogitoRuntimesRepo)
+                    checkoutKogitoRepo(kogitoAppsRepo)
+                }
+            }
+        }
+        stage('Build Drools') {
+            steps {
+                script {
+                    getMavenCommand(droolsRepo)
+                        .withProperty('quickly')
+                        .run('clean install')
+                }
+            }
+        }
+        stage('Build Optaplanner') {
+            steps {
+                script {
+                    getMavenCommand(optaplannerRepo)
+                        .withProperty('quickly')
+                        .run('clean install')
+                }
+            }
+        }
+        stage('Retrieve optaplanner snapshot version') {
+            steps {
+                script {
+                    dir(optaplannerRepo) {
+                        // query mvn to get the latest version
+                        env.OPTAPLANNER_VERSION = """${sh (
+                                script: 'mvn org.apache.maven.plugins:maven-help-plugin:3.2.0:evaluate -Dexpression=project.version -q -DforceStdout',
+                                returnStdout: true
+                            ).trim()}"""
+                        assert env.OPTAPLANNER_VERSION != ''
+                        echo "Optaplanner version is: ${env.OPTAPLANNER_VERSION}"
+                    }
+                }
+            }
+        }
+        stage('Build Runtimes') {
+            steps {
+                script {
+                    getMavenCommand(kogitoRuntimesRepo)
+                        .withProperty('quickly')
+                        .run('clean install')
+                }
+            }
+        }
+        stage('Build Apps') {
+            steps {
+                script {
+                    getMavenCommand(kogitoAppsRepo)
+                        .withProperty('skipUI')
+                        .withProperty('maven.test.failure.ignore', true)
+                        .withProperty('version.org.optaplanner', env.OPTAPLANNER_VERSION)
+                        .withProperty('optaplanner') // Use specific profile https://github.com/kiegroup/kogito-apps/blob/48a5c8f9a905a2c17b9d0e01cee744902a4824f0/pom.xml#L63
+                        .run('clean install')
+                }
+            }
+            post {
+                always {
+                    script {
+                        archiveArtifacts artifacts: '**/target/*-runner.jar,**/target/*-runner', fingerprint: true, allowEmptyArchive: true
+                        junit testResults: '**/target/surefire-reports/**/*.xml,**/target/failsafe-reports/**/*.xml', allowEmptyResults: true
+                        util.archiveConsoleLog()
+                    }
+                }
+                cleanup {
+                    script {
+                        cleanContainers()
+                    }
+                }
+            }
+        }
+    }
+    post {
+        unsuccessful {
+            sendNotification()
+        }
+        cleanup {
+            script {
+                util.cleanNode('docker')
+            }
+        }
+    }
+}
+
+void sendNotification() {
+    mailer.sendMarkdownTestSummaryNotification("${NOTIFICATION_JOB_NAME}", "[${getBuildBranch()}] Kogito Apps", [env.KOGITO_CI_EMAIL_TO])
+}
+
+void checkoutKogitoRepo(String repo, String dirName=repo) {
+    dir(dirName) {
+        checkout(githubscm.resolveRepository(repo, params.GIT_AUTHOR, getKogitoTargetBranch(), false))
+    }
+}
+
+void checkoutDroolsRepo() {
+    dir(droolsRepo) {
+        checkout(githubscm.resolveRepository(droolsRepo, params.GIT_AUTHOR, getDroolsTargetBranch(), false))
+    }
+}
+
+void checkoutOptaplannerRepo() {
+    dir(optaplannerRepo) {
+        checkout(githubscm.resolveRepository(optaplannerRepo, 'kiegroup', getOptaPlannerBranch(), false))
+    }
+}
+
+
+String getBuildBranch() {
+    return params.BUILD_BRANCH_NAME
+}
+
+String getKogitoTargetBranch() {
+    return getTargetBranch(0)
+}
+
+String getDroolsTargetBranch() {
+    return getTargetBranch(7)
+}
+
+String getTargetBranch(Integer addToMajor) {
+    String targetBranch = getBuildBranch()
+    String [] versionSplit = targetBranch.split("\\.")
+    if (versionSplit.length == 3
+        && versionSplit[0].isNumber()
+        && versionSplit[1].isNumber()
+        && versionSplit[2] == 'x') {
+        targetBranch = "${Integer.parseInt(versionSplit[0]) + addToMajor}.${versionSplit[1]}.x"
+    } else {
+        echo "Cannot parse targetBranch as release branch so going further with current value: ${targetBranch}"
+        }
+    return targetBranch
+}
+
+String getOptaPlannerBranch() {
+    return env['OPTAPLANNER_BRANCH'] ?: 'main'
+}
+
+MavenCommand getMavenCommand(String directory) {
+    return new MavenCommand(this, ['-fae', '-ntp'])
+                .withSettingsXmlId('kogito_release_settings')
+                .withProperty('java.net.preferIPv4Stack', true)
+                .inDirectory(directory)
+}
+
+void cleanContainers() {
+    cloud.cleanContainersAndImages('docker')
+}
+
+String getNativeBuilderImage() {
+    return env.NATIVE_BUILDER_IMAGE
+}

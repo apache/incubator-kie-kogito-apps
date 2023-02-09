@@ -18,7 +18,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { ActionList, Button } from '@patternfly/react-core';
 import FormFooter from '../FormFooter';
-import { FormAction } from '../../utils';
+import { ActionType, FormAction } from '../../utils';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
@@ -116,7 +116,8 @@ describe('Form Footer test', () => {
 
   it('showing empty actions', () => {
     const props = {
-      actions: []
+      actions: [],
+      actionType: ActionType.SUBMIT
     };
 
     const wrapper = mount(<FormFooter {...props} />);
@@ -131,12 +132,14 @@ describe('Form Footer test', () => {
   it('action click', () => {
     const releaseAction = {
       name: 'Release',
-      execute: jest.fn()
+      execute: jest.fn(),
+      actionType: ActionType.SUBMIT
     };
 
     const completeAction = {
       name: 'Complete',
-      execute: jest.fn()
+      execute: jest.fn(),
+      actionType: ActionType.SUBMIT
     };
 
     const props = {
@@ -148,14 +151,14 @@ describe('Form Footer test', () => {
     const wrapper = mount(<FormFooter {...props} />);
 
     const releaseButton = wrapper.findWhere(
-      node => node.key() === 'submit-Release'
+      (node) => node.key() === 'submit-Release'
     );
     releaseButton.props().onClick();
 
     expect(releaseAction.execute).toBeCalledTimes(1);
 
     const completeButton = wrapper.findWhere(
-      node => node.key() === 'submit-Complete'
+      (node) => node.key() === 'submit-Complete'
     );
     completeButton.props().onClick();
 

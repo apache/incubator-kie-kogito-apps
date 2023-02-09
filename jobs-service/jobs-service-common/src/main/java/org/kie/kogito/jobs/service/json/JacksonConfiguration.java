@@ -19,12 +19,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
+import org.kie.kogito.jobs.service.api.event.serialization.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import io.cloudevents.jackson.JsonFormat;
 import io.quarkus.jackson.ObjectMapperCustomizer;
 
 @ApplicationScoped
@@ -39,7 +41,9 @@ public class JacksonConfiguration {
             LOGGER.info("Jackson customization initialized.");
             objectMapper
                     .registerModule(new JavaTimeModule())
-                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                    .registerModule(JsonFormat.getCloudEventJacksonModule());
+            SerializationUtils.registerDescriptors(objectMapper);
         };
     }
 }

@@ -60,9 +60,12 @@ export interface ProcessListChildTableProps {
   onRetryClick: (processInstance: ProcessInstance) => Promise<void>;
   onAbortClick: (processInstance: ProcessInstance) => Promise<void>;
   setSelectableInstances: React.Dispatch<React.SetStateAction<number>>;
+  singularProcessLabel: string;
+  pluralProcessLabel: string;
 }
-const ProcessListChildTable: React.FC<ProcessListChildTableProps &
-  OUIAProps> = ({
+const ProcessListChildTable: React.FC<
+  ProcessListChildTableProps & OUIAProps
+> = ({
   parentProcessId,
   selectedInstances,
   setSelectedInstances,
@@ -73,14 +76,15 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
   onRetryClick,
   onAbortClick,
   setSelectableInstances,
+  singularProcessLabel,
+  pluralProcessLabel,
   ouiaId,
   ouiaSafe
 }) => {
   const [rows, setRows] = useState<(IRow | string[])[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [showNoDataEmptyState, setShowNoDataEmptyState] = useState<boolean>(
-    false
-  );
+  const [showNoDataEmptyState, setShowNoDataEmptyState] =
+    useState<boolean>(false);
   const [error, setError] = useState<string>(undefined);
   const columnNames: string[] = [
     '__Select',
@@ -90,7 +94,7 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
     'Last update',
     '__Actions'
   ];
-  const columns: ICell[] = columnNames.map(it => ({
+  const columns: ICell[] = columnNames.map((it) => ({
     title: it.startsWith('__') ? '' : it
   }));
 
@@ -109,7 +113,8 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
                 childInstance.isSelected = false;
                 setSelectedInstances(
                   selectedInstances.filter(
-                    selectedInstance => selectedInstance.id !== childInstance.id
+                    (selectedInstance) =>
+                      selectedInstance.id !== childInstance.id
                   )
                 );
               } else {
@@ -259,7 +264,7 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
               child.serviceUrl &&
               child.addons.includes('process-management')
             ) {
-              setSelectableInstances(prev => prev + 1);
+              setSelectableInstances((prev) => prev + 1);
             }
           });
           processInstance.childProcessInstances = response;
@@ -298,8 +303,8 @@ const ProcessListChildTable: React.FC<ProcessListChildTableProps &
     return (
       <KogitoEmptyState
         type={KogitoEmptyStateType.Info}
-        title="No child process instances"
-        body="This process has no related sub processes"
+        title={`No child ${singularProcessLabel.toLowerCase()} instances`}
+        body={`This ${singularProcessLabel.toLowerCase()} has no related sub ${pluralProcessLabel.toLowerCase()}`}
       />
     );
   }

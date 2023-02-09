@@ -60,7 +60,10 @@ describe('ProcessListEnvelopeApiImpl tests', () => {
           sortBy: {
             lastUpdate: OrderBy.DESC
           }
-        }
+        },
+        singularProcessLabel: 'Workflow',
+        pluralProcessLabel: 'Workflows',
+        isWorkflow: true
       }
     );
 

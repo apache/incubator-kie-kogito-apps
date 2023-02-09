@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EmbeddedWorkflowForm tests Snapshot 1`] = `
+<ForwardRef
+  driver={
+    Object {
+      "getCustomWorkflowSchema": [MockFunction],
+      "resetBusinessKey": [MockFunction],
+      "startWorkflowCloudEvent": [MockFunction],
+      "startWorkflowRest": [MockFunction],
+    }
+  }
+  targetOrigin="origin"
+  workflowDefinition={null}
+>
+  <ForwardRef>
+    <div />
+  </ForwardRef>
+</ForwardRef>
+`;

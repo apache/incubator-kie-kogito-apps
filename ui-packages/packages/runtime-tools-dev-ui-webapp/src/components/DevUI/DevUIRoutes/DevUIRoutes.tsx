@@ -26,17 +26,25 @@ import FormDetailPage from '../../pages/FormDetailsPage/FormDetailsPage';
 import { TrustyApp } from '@kogito-apps/trusty';
 import ProcessFormPage from '../../pages/ProcessFormPage/ProcessFormPage';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
+import MonitoringPage from '../../pages/MonitoringPage/MonitoringPage';
+import WorkflowFormPage from '../../pages/WorkflowFormPage/WorkflowFormPage';
+import CustomDashboardListPage from '../../pages/CustomDashboardListPage/CustomDashboardListPage';
+import CustomDashboardViewPage from '../../pages/CustomDashboardViewPage/CustomDashboardViewPage';
 
 interface IOwnProps {
   trustyServiceUrl: string;
+  dataIndexUrl: string;
   navigate: string;
 }
 
 type DevUIRoute = { enabled: () => boolean; node: React.ReactNode };
 
-const DevUIRoutes: React.FC<IOwnProps> = ({ trustyServiceUrl, navigate }) => {
+const DevUIRoutes: React.FC<IOwnProps> = ({
+  trustyServiceUrl,
+  dataIndexUrl,
+  navigate
+}) => {
   const { isProcessEnabled, isTracingEnabled } = useDevUIAppContext();
-
   const defaultPath = useMemo(() => {
     if (isProcessEnabled) {
       return '/JobsManagement';
@@ -134,15 +142,48 @@ const DevUIRoutes: React.FC<IOwnProps> = ({ trustyServiceUrl, navigate }) => {
           <Route
             key="8"
             exact
+            path="/WorkflowDefinition/Form/:workflowName"
+            component={WorkflowFormPage}
+          />
+        )
+      },
+      {
+        enabled: () => isProcessEnabled,
+        node: (
+          <Route
+            key="9"
+            exact
+            path="/CustomDashboard"
+            component={CustomDashboardListPage}
+          />
+        )
+      },
+      {
+        enabled: () => isProcessEnabled,
+        node: (
+          <Route
+            key="10"
+            exact
+            path="/CustomDashboard/:customDashboardName"
+            component={CustomDashboardViewPage}
+          />
+        )
+      },
+      {
+        enabled: () => isProcessEnabled,
+        node: (
+          <Route
+            key="11"
+            exact
             path="/TaskDetails/:taskId"
-            render={routeProps => <TaskDetailsPage {...routeProps} />}
+            render={(routeProps) => <TaskDetailsPage {...routeProps} />}
           />
         )
       },
       {
         enabled: () => isTracingEnabled,
         node: (
-          <Route key="9" path="/Audit">
+          <Route key="12" path="/Audit">
             <TrustyApp
               counterfactualEnabled={false}
               explanationEnabled={false}
@@ -158,12 +199,20 @@ const DevUIRoutes: React.FC<IOwnProps> = ({ trustyServiceUrl, navigate }) => {
         )
       },
       {
+        enabled: () => isProcessEnabled,
+        node: (
+          <Route key="13" path="/Monitoring">
+            <MonitoringPage dataIndexUrl={dataIndexUrl} />
+          </Route>
+        )
+      },
+      {
         enabled: () => true,
         node: (
           <Route
-            key="10"
+            key="14"
             path="/NoData"
-            render={_props => (
+            render={(_props) => (
               <NoData
                 {..._props}
                 defaultPath={defaultPath}
@@ -177,9 +226,9 @@ const DevUIRoutes: React.FC<IOwnProps> = ({ trustyServiceUrl, navigate }) => {
         enabled: () => true,
         node: (
           <Route
-            key="11"
+            key="15"
             path="*"
-            render={_props => (
+            render={(_props) => (
               <PageNotFound
                 {..._props}
                 defaultPath={defaultPath}
@@ -193,7 +242,9 @@ const DevUIRoutes: React.FC<IOwnProps> = ({ trustyServiceUrl, navigate }) => {
     [isProcessEnabled, isTracingEnabled]
   );
 
-  return <Switch>{routes.filter(r => r.enabled()).map(r => r.node)}</Switch>;
+  return (
+    <Switch>{routes.filter((r) => r.enabled()).map((r) => r.node)}</Switch>
+  );
 };
 
 export default DevUIRoutes;

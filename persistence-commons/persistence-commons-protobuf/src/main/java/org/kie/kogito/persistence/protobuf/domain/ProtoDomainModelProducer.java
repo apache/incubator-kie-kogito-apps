@@ -91,9 +91,16 @@ public class ProtoDomainModelProducer {
                     return Integer.class.getName();
                 case LONG:
                     return Long.class.getName();
+                case FLOAT:
+                    return Float.class.getName();
+                case DOUBLE:
+                    return Double.class.getName();
                 case BOOLEAN:
                     return Boolean.class.getName();
                 case MESSAGE:
+                    if (fd.getOption("kogito_java_class") != null) {
+                        return fd.getOption("kogito_java_class").getValue().toString();
+                    }
                     return fd.getMessageType().getFullName();
                 default:
                     return String.class.getName();

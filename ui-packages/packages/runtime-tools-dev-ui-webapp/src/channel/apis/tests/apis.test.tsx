@@ -18,6 +18,9 @@ import axios from 'axios';
 import { GraphQL } from '@kogito-apps/consoles-common';
 import wait from 'waait';
 import {
+  getCustomDashboard,
+  getCustomDashboardContent,
+  getCustomWorkflowSchema,
   getFormContent,
   getForms,
   getProcessDefinitionList,
@@ -35,7 +38,8 @@ import {
   handleProcessVariableUpdate,
   jobCancel,
   performMultipleCancel,
-  startProcessInstance
+  startProcessInstance,
+  startWorkflowRest
 } from '../apis';
 import {
   BulkProcessInstanceActionResponse,
@@ -434,7 +438,7 @@ describe('test utility of svg panel', () => {
         .then(() => {
           result = 'success';
         })
-        .catch(error => {
+        .catch((error) => {
           result = error.message;
         });
       expect(result).toEqual('success');
@@ -446,7 +450,7 @@ describe('test utility of svg panel', () => {
         .then(() => {
           result = 'success';
         })
-        .catch(error => {
+        .catch((error) => {
           result = error.message;
         });
       expect(result).toEqual('404 error');
@@ -461,7 +465,7 @@ describe('test utility of svg panel', () => {
         .then(() => {
           result = 'success';
         })
-        .catch(error => {
+        .catch((error) => {
           result = error.message;
         });
       expect(result).toEqual('success');
@@ -473,7 +477,7 @@ describe('test utility of svg panel', () => {
         .then(() => {
           result = 'success';
         })
-        .catch(error => {
+        .catch((error) => {
           result = error.message;
         });
       expect(result).toEqual("Cannot read property 'serviceUrl' of undefined");
@@ -488,7 +492,7 @@ describe('test utility of svg panel', () => {
         .then(() => {
           result = 'success';
         })
-        .catch(error => {
+        .catch((error) => {
           result = error.message;
         });
       expect(result).toEqual('success');
@@ -500,7 +504,7 @@ describe('test utility of svg panel', () => {
         .then(() => {
           result = 'success';
         })
-        .catch(error => {
+        .catch((error) => {
           result = error.message;
         });
       expect(result).toEqual('404 error');
@@ -511,52 +515,40 @@ describe('test utility of svg panel', () => {
 describe('multiple action in process list', () => {
   it('multiple skip test', async () => {
     mockedAxios.post.mockResolvedValue({});
-    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-      processInstances,
-      OperationType.SKIP
-    );
+    const result: BulkProcessInstanceActionResponse =
+      await handleProcessMultipleAction(processInstances, OperationType.SKIP);
     expect(result.successProcessInstances.length).toEqual(1);
   });
   it('multiple skip test', async () => {
     mockedAxios.post.mockRejectedValue({ message: '404 error' });
-    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-      processInstances,
-      OperationType.SKIP
-    );
+    const result: BulkProcessInstanceActionResponse =
+      await handleProcessMultipleAction(processInstances, OperationType.SKIP);
     expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
   });
 
   it('multiple retry test', async () => {
     mockedAxios.post.mockResolvedValue({});
-    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-      processInstances,
-      OperationType.RETRY
-    );
+    const result: BulkProcessInstanceActionResponse =
+      await handleProcessMultipleAction(processInstances, OperationType.RETRY);
     expect(result.successProcessInstances.length).toEqual(1);
   });
   it('multiple retry test', async () => {
     mockedAxios.post.mockRejectedValue({ message: '404 error' });
-    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-      processInstances,
-      OperationType.RETRY
-    );
+    const result: BulkProcessInstanceActionResponse =
+      await handleProcessMultipleAction(processInstances, OperationType.RETRY);
     expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
   });
 
   it('multiple abort test', async () => {
     mockedAxios.delete.mockResolvedValue({});
-    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-      processInstances,
-      OperationType.ABORT
-    );
+    const result: BulkProcessInstanceActionResponse =
+      await handleProcessMultipleAction(processInstances, OperationType.ABORT);
     expect(result.successProcessInstances.length).toEqual(1);
   });
   it('multiple abort test', async () => {
     mockedAxios.delete.mockRejectedValue({ message: '404 error' });
-    const result: BulkProcessInstanceActionResponse = await handleProcessMultipleAction(
-      processInstances,
-      OperationType.ABORT
-    );
+    const result: BulkProcessInstanceActionResponse =
+      await handleProcessMultipleAction(processInstances, OperationType.ABORT);
     expect(result.failedProcessInstances[0].errorMessage).toEqual('404 error');
   });
 });
@@ -652,10 +644,10 @@ describe('test utilities of process variables', () => {
     });
     let result;
     await handleProcessVariableUpdate(processInstance, updateJson)
-      .then(data => {
+      .then((data) => {
         result = data;
       })
-      .catch(error => {
+      .catch((error) => {
         result = error.message;
       });
     expect(result).toEqual(mockData);
@@ -693,10 +685,10 @@ describe('retrieve list of triggerable nodes test', () => {
     });
     let result = null;
     await getTriggerableNodes(processInstance)
-      .then(nodes => {
+      .then((nodes) => {
         result = nodes;
       })
-      .catch(error => {
+      .catch((error) => {
         result = error;
       });
     expect(result).toEqual(mockTriggerableNodes);
@@ -705,10 +697,10 @@ describe('retrieve list of triggerable nodes test', () => {
     mockedAxios.get.mockRejectedValue({ message: '403 error' });
     let result = null;
     await getTriggerableNodes(processInstance)
-      .then(nodes => {
+      .then((nodes) => {
         result = nodes;
       })
-      .catch(error => {
+      .catch((error) => {
         result = error.message;
       });
     expect(result).toEqual('403 error');
@@ -730,7 +722,7 @@ describe('handle node trigger click tests', () => {
       .then(() => {
         result = 'success';
       })
-      .catch(error => {
+      .catch((error) => {
         result = 'error';
       });
     expect(result).toEqual('success');
@@ -743,7 +735,7 @@ describe('handle node trigger click tests', () => {
       .then(() => {
         result = 'success';
       })
-      .catch(error => {
+      .catch((error) => {
         result = 'error';
       });
     expect(result).toEqual('error');
@@ -766,7 +758,7 @@ describe('handle node instance trigger click tests', () => {
       .then(() => {
         result = 'success';
       })
-      .catch(error => {
+      .catch((error) => {
         result = 'error';
       });
     expect(result).toEqual('success');
@@ -779,7 +771,7 @@ describe('handle node instance trigger click tests', () => {
       .then(() => {
         result = 'success';
       })
-      .catch(error => {
+      .catch((error) => {
         result = 'error';
       });
     expect(result).toEqual('error');
@@ -802,7 +794,7 @@ describe('handle node instance cancel', () => {
       .then(() => {
         result = 'success';
       })
-      .catch(error => {
+      .catch((error) => {
         result = 'error';
       });
     expect(result).toEqual('success');
@@ -815,12 +807,14 @@ describe('handle node instance cancel', () => {
       .then(() => {
         result = 'success';
       })
-      .catch(error => {
+      .catch((error) => {
         result = 'error';
       });
     expect(result).toEqual('error');
   });
+});
 
+describe('custom forms section', () => {
   it('get forms query test - success', async () => {
     mockedAxios.get.mockResolvedValue({
       data: [
@@ -889,7 +883,9 @@ describe('handle node instance cancel', () => {
       });
     }
   });
+});
 
+describe('process definitions section', () => {
   it('swager parser success', async () => {
     SwaggerParser.parse['mockImplementation'](() =>
       Promise.resolve({
@@ -934,6 +930,11 @@ describe('handle node instance cancel', () => {
       'AAA',
       processDefinitioData
     );
+    expect(mockedAxios.post).toHaveBeenCalledWith(
+      'http://localhost:8080/hiring?businessKey=AAA',
+      formData,
+      expect.anything()
+    );
     expect(result).toEqual('1234');
   });
 
@@ -966,5 +967,148 @@ describe('handle node instance cancel', () => {
     };
     const result = await getProcessSchema(processDefinitioData);
     expect(result).toStrictEqual(schema);
+  });
+});
+
+describe('custom dashboard section', () => {
+  it('get custom dashboard  query test - success', async () => {
+    mockedAxios.get.mockResolvedValue({
+      data: [
+        {
+          name: 'dashboard.dash.yaml',
+          path: '/user/home',
+          lastModified: new Date(2020, 6, 12)
+        }
+      ]
+    });
+    const result = await getCustomDashboard(['dashboard.dash.yaml']);
+    expect(result).toEqual([
+      {
+        name: 'dashboard.dash.yaml',
+        path: '/user/home',
+        lastModified: new Date(2020, 6, 12)
+      }
+    ]);
+  });
+
+  it('get custom dashboard query test - failure', async () => {
+    mockedAxios.get.mockRejectedValue({ errorMessage: 'failed to load data' });
+    try {
+      await getCustomDashboard(['dashboard.dash.yaml']);
+    } catch (error) {
+      expect(error).toEqual({
+        errorMessage: 'failed to load data'
+      });
+    }
+  });
+
+  it('get custom dashboard content - success', async () => {
+    const value = 'it is a yaml file';
+    mockedAxios.get.mockResolvedValue({ data: value });
+    const result = await getCustomDashboardContent('dashboard.dash.yaml');
+
+    expect(result).toEqual(value);
+  });
+
+  it('get custom dashboard content - failure', async () => {
+    mockedAxios.get.mockRejectedValue({ errorMessage: 'failed to load data' });
+    try {
+      await getCustomDashboardContent('dashboard.dash.yaml');
+    } catch (error) {
+      expect(error).toEqual({
+        errorMessage: 'failed to load data'
+      });
+    }
+  });
+});
+
+describe('swf custom form tests', () => {
+  it('get custom custom workflow schema - success - no workflowdata', async () => {
+    SwaggerParser.parse['mockImplementation'](() =>
+      Promise.resolve({
+        components: {
+          schemas: {
+            // no data
+          }
+        }
+      })
+    );
+    const result = await getCustomWorkflowSchema(
+      'http://localhost:8080',
+      '/q/openapi.json'
+    );
+    expect(result).toEqual(null);
+  });
+
+  it('get custom workflow schema - success - with workflowdata', async () => {
+    const schema = {
+      type: 'object',
+      properties: {
+        name: {
+          type: 'string'
+        }
+      }
+    };
+    const workflowName = 'expression';
+    SwaggerParser.parse['mockImplementation'](() =>
+      Promise.resolve({
+        components: {
+          schemas: {
+            [workflowName]: { ...schema }
+          }
+        }
+      })
+    );
+    const result = await getCustomWorkflowSchema(
+      'http://localhost:8080',
+      '/q/openapi.json',
+      workflowName
+    );
+    expect(result).toEqual(schema);
+  });
+
+  it('get custom custom workflow schema - failure', async () => {
+    SwaggerParser.parse['mockImplementation'](() =>
+      Promise.reject({
+        errorMessage: 'No workflow data'
+      })
+    );
+    const workflowName = 'expression';
+    getCustomWorkflowSchema(
+      'http://localhost:8080',
+      '/q/openapi.json',
+      workflowName
+    ).catch((error) => {
+      expect(error).toEqual({ errorMessage: 'No workflow data' });
+    });
+  });
+
+  it('start workflow test - success', async () => {
+    mockedAxios.post.mockResolvedValue({
+      data: {
+        id: '1234'
+      }
+    });
+    const result = await startWorkflowRest(
+      { name: 'John' },
+      'http://localhost:8080/test',
+      '1234'
+    );
+    expect(result).toEqual('1234');
+  });
+
+  it('start workflow test - failure', async () => {
+    mockedAxios.post.mockRejectedValue({
+      errorMessage: 'Failed to start workflow instance'
+    });
+    startWorkflowRest(
+      { name: 'John' },
+      'http://localhost:8080/test',
+      '1234'
+    ).catch((error) => {
+      expect(error).toEqual({
+        errorMessage: 'Failed to start workflow instance'
+      });
+    });
   });
 });

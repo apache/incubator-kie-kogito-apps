@@ -114,9 +114,9 @@
                   </includes>
                 </resource>
                 <resource>
-                  <directory>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources</directory>
+                  <directory>${project.parent.basedir}/integration-tests-data-index-service-quarkus/src/main/resources</directory>
                   <includes>
-                    <include>data_index_create.sql</include>
+                    <include>**/*.sql</include>
                   </includes>
                 </resource>
               </resources>

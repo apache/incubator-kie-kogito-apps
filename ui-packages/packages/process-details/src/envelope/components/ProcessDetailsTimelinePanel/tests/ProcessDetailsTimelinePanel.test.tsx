@@ -163,7 +163,8 @@ const props1 = {
       nodeInstanceId: '2f588da5-a323-4111-9017-3093ef9319d1'
     }
   ],
-  driver
+  driver,
+  omittedProcessTimelineEvents: []
 };
 
 const props2 = {
@@ -237,7 +238,8 @@ const props2 = {
       endpoint: 'http://localhost:4000'
     }
   ],
-  driver
+  driver,
+  omittedProcessTimelineEvents: []
 };
 
 const props3 = {
@@ -311,7 +313,8 @@ const props3 = {
       endpoint: 'http://localhost:4000'
     }
   ],
-  driver
+  driver,
+  omittedProcessTimelineEvents: ['StartProcess']
 };
 
 const props4 = {
@@ -367,7 +370,8 @@ const props4 = {
     childProcessInstances: []
   },
   jobs: [],
-  driver
+  driver,
+  omittedProcessTimelineEvents: []
 };
 
 describe('ProcessDetailsTimelinePanel component tests', () => {
@@ -398,12 +402,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
       await wait(0);
       wrapper = wrapper.update();
     });
-    expect(
-      wrapper
-        .find(Dropdown)
-        .at(0)
-        .props()['isOpen']
-    ).toBeTruthy();
+    expect(wrapper.find(Dropdown).at(0).props()['isOpen']).toBeTruthy();
     await act(async () => {
       wrapper
         .find(Dropdown)
@@ -414,12 +413,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
       await wait(0);
       wrapper = wrapper.update();
     });
-    expect(
-      wrapper
-        .find(Dropdown)
-        .at(0)
-        .props()['isOpen']
-    ).toBeFalsy();
+    expect(wrapper.find(Dropdown).at(0).props()['isOpen']).toBeFalsy();
   });
 
   describe('handleSkip tests', () => {
@@ -448,10 +442,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
       // await wait(0);
       wrapper = wrapper.update();
       await act(async () => {
-        wrapper
-          .find('DropdownItem')
-          .at(1)
-          .simulate('click');
+        wrapper.find('DropdownItem').at(1).simulate('click');
       });
       // await wait(0);
       wrapper = wrapper.update();
@@ -477,10 +468,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
           .simulate('click');
         await wait(0);
         wrapper = wrapper.update();
-        wrapper
-          .find(DropdownItem)
-          .at(1)
-          .simulate('click');
+        wrapper.find(DropdownItem).at(1).simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });
@@ -513,10 +501,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
         await wait(0);
         wrapper = wrapper.update();
 
-        wrapper
-          .find(DropdownItem)
-          .at(0)
-          .simulate('click');
+        wrapper.find(DropdownItem).at(0).simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });
@@ -543,10 +528,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
           .simulate('click');
         await wait(0);
         wrapper = wrapper.update();
-        wrapper
-          .find(DropdownItem)
-          .at(0)
-          .simulate('click');
+        wrapper.find(DropdownItem).at(0).simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });
@@ -578,10 +560,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
           .simulate('click');
         await wait(0);
         wrapper = wrapper.update();
-        wrapper
-          .find(DropdownItem)
-          .at(1)
-          .simulate('click');
+        wrapper.find(DropdownItem).at(1).simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });
@@ -606,10 +585,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
           .simulate('click');
         await wait(0);
         wrapper = wrapper.update();
-        wrapper
-          .find(DropdownItem)
-          .at(1)
-          .simulate('click');
+        wrapper.find(DropdownItem).at(1).simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });
@@ -635,10 +611,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
           .simulate('click');
         await wait(0);
         wrapper = wrapper.update();
-        wrapper
-          .find(DropdownItem)
-          .at(0)
-          .simulate('click');
+        wrapper.find(DropdownItem).at(0).simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });
@@ -660,10 +633,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
           .simulate('click');
         await wait(0);
         wrapper = wrapper.update();
-        wrapper
-          .find(DropdownItem)
-          .at(0)
-          .simulate('click');
+        wrapper.find(DropdownItem).at(0).simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });
@@ -687,10 +657,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
         wrapper = wrapper.update();
       });
       await act(async () => {
-        wrapper
-          .find('#job-details')
-          .first()
-          .simulate('click');
+        wrapper.find('#job-details').first().simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });
@@ -711,10 +678,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
         wrapper = wrapper.update();
       });
       await act(async () => {
-        wrapper
-          .find('#job-reschedule')
-          .first()
-          .simulate('click');
+        wrapper.find('#job-reschedule').first().simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });
@@ -742,10 +706,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
         wrapper = wrapper.update();
       });
       await act(async () => {
-        wrapper
-          .find('#job-cancel')
-          .first()
-          .simulate('click');
+        wrapper.find('#job-cancel').first().simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });
@@ -773,10 +734,7 @@ describe('ProcessDetailsTimelinePanel component tests', () => {
         wrapper = wrapper.update();
       });
       await act(async () => {
-        wrapper
-          .find('#job-cancel')
-          .first()
-          .simulate('click');
+        wrapper.find('#job-cancel').first().simulate('click');
         await wait(0);
         wrapper = wrapper.update();
       });

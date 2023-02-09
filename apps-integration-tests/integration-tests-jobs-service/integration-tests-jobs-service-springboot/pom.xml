@@ -85,10 +85,10 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.basedir}/src/main/resources</outputDirectory>
+              <outputDirectory>src/main/resources</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${project.parent.basedir}/integration-tests-jobs-service-common/src/main/resources</directory>
+                  <directory>${common.test.resources.dir}</directory>
                   <includes>
                     <include>**/*.bpmn</include>
                   </includes>
@@ -123,6 +123,9 @@
         <artifactId>maven-failsafe-plugin</artifactId>
         <configuration>
           <skip>${skip.springboot}</skip>
+          <systemPropertyVariables>
+            <container.image.jobs-service>org.kie.kogito/jobs-service-common:${project.version}</container.image.jobs-service>
+          </systemPropertyVariables>
         </configuration>
         <executions>
           <execution>

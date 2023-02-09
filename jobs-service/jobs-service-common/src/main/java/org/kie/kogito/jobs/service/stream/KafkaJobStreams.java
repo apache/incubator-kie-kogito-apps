@@ -26,54 +26,27 @@ import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.OnOverflow;
-import org.kie.kogito.jobs.service.events.JobDataEvent;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.ScheduledJobAdapter;
-import org.kie.kogito.jobs.service.resource.JobResource;
-import org.kie.kogito.jobs.service.utils.FunctionsUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.kie.kogito.jobs.service.model.JobDetails;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @ApplicationScoped
-public class KafkaJobStreams {
+public class KafkaJobStreams extends AbstractJobStreams {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaJobStreams.class);
     public static final String PUBLISH_EVENTS_CONFIG_KEY = "kogito.jobs-service.events-support";
-
-    private ObjectMapper objectMapper;
-
-    private Emitter<String> kafkaEmitter;
-
-    private Optional<Boolean> enabled;
-
-    private String url;
 
     @Inject
     public KafkaJobStreams(ObjectMapper objectMapper,
             @ConfigProperty(name = PUBLISH_EVENTS_CONFIG_KEY) Optional<String> config,
             @Channel(AvailableStreams.JOB_STATUS_CHANGE_EVENTS_TOPIC) @OnOverflow(value = OnOverflow.Strategy.LATEST) Emitter<String> emitter,
             @ConfigProperty(name = "kogito.service.url", defaultValue = "http://localhost:8080") String url) {
-        this.objectMapper = objectMapper;
-        this.enabled = config.map(Boolean::valueOf).filter(Boolean.TRUE::equals);
-        this.kafkaEmitter = emitter;
-        this.url = url;
+        super(objectMapper, config.map(Boolean::valueOf).filter(Boolean.TRUE::equals).orElse(false), emitter, url);
     }
 
     @Incoming(AvailableStreams.JOB_STATUS_CHANGE_EVENTS)
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
-    public void jobStatusChangeKafkaPublisher(JobDetails job) {
-        enabled
-                .map(e -> kafkaEmitter)
-                .map(emitter -> {
-                    JobDataEvent event = JobDataEvent
-                            .builder()
-                            .source(url + JobResource.JOBS_PATH)
-                            .data(ScheduledJobAdapter.of(job))
-                            .build();
-                    return emitter.send(FunctionsUtil.unchecked(objectMapper::writeValueAsString).apply(event));
-                })
-                .ifPresent(emitter -> LOGGER.debug("Job Status change published to kafka {}", job));
+    @Override
+    public void jobStatusChange(JobDetails job) {
+        super.jobStatusChange(job);
     }
 }

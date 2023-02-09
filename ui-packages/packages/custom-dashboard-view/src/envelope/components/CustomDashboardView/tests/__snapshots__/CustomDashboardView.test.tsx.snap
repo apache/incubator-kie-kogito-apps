@@ -1,0 +1,316 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Custom Dashboard View tests Snapshot tests with data 1`] = `
+<CustomDashboardView
+  customDashboardName="name"
+  driver={
+    Object {
+      "getCustomDashboardContent": [MockFunction] {
+        "calls": Array [
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+        ],
+      },
+    }
+  }
+  isEnvelopeConnectedToChannel={true}
+>
+  <iframe
+    data-ouia-component-type="customDashboard-view"
+    data-ouia-safe={true}
+    id="db"
+    src="resources/webapp/custom-dashboard-view/dashbuilder/index.html"
+    style={
+      Object {
+        "height": "100%",
+        "padding": "10px",
+        "width": "100%",
+      }
+    }
+  />
+</CustomDashboardView>
+`;
+
+exports[`Custom Dashboard View tests Snapshot tests with data 2`] = `
+<CustomDashboardView
+  customDashboardName="name"
+  driver={
+    Object {
+      "getCustomDashboardContent": [MockFunction] {
+        "calls": Array [
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+        ],
+      },
+    }
+  }
+  isEnvelopeConnectedToChannel={true}
+>
+  <iframe
+    data-ouia-component-type="customDashboard-view"
+    data-ouia-safe={true}
+    id="db"
+    src="resources/webapp/custom-dashboard-view/dashbuilder/index.html"
+    style={
+      Object {
+        "height": "100%",
+        "padding": "10px",
+        "width": "100%",
+      }
+    }
+  />
+</CustomDashboardView>
+`;
+
+exports[`Custom Dashboard View tests Snapshot tests with error 1`] = `
+<CustomDashboardView
+  customDashboardName="name"
+  driver={
+    Object {
+      "getCustomDashboardContent": [MockFunction] {
+        "calls": Array [
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+        ],
+      },
+    }
+  }
+  isEnvelopeConnectedToChannel={true}
+>
+  <iframe
+    data-ouia-component-type="customDashboard-view"
+    data-ouia-safe={true}
+    id="db"
+    src="resources/webapp/custom-dashboard-view/dashbuilder/index.html"
+    style={
+      Object {
+        "height": "100%",
+        "padding": "10px",
+        "width": "100%",
+      }
+    }
+  />
+</CustomDashboardView>
+`;
+
+exports[`Custom Dashboard View tests Snapshot tests with error 2`] = `
+<CustomDashboardView
+  customDashboardName="name"
+  driver={
+    Object {
+      "getCustomDashboardContent": [MockFunction] {
+        "calls": Array [
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+          Array [
+            "name",
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+        ],
+      },
+    }
+  }
+  isEnvelopeConnectedToChannel={true}
+>
+  <iframe
+    data-ouia-component-type="customDashboard-view"
+    data-ouia-safe={true}
+    id="db"
+    src="resources/webapp/custom-dashboard-view/dashbuilder/index.html"
+    style={
+      Object {
+        "height": "100%",
+        "padding": "10px",
+        "width": "100%",
+      }
+    }
+  />
+</CustomDashboardView>
+`;
+
+exports[`Custom Dashboard View tests Snapshot tests with error 3`] = `
+<Card
+  className="kogito-custom-dashboard-view-__card-size"
+>
+  <article
+    className="pf-c-card kogito-custom-dashboard-view-__card-size"
+    data-ouia-component-id="OUIA-Generated-Card-1"
+    data-ouia-component-type="PF4/Card"
+    data-ouia-safe={true}
+    id=""
+  >
+    <Bullseye>
+      <div
+        className="pf-l-bullseye"
+      >
+        <ServerErrors
+          error="network issue"
+          variant="large"
+        >
+          <MockedComponent />
+        </ServerErrors>
+      </div>
+    </Bullseye>
+  </article>
+</Card>
+`;
+
+exports[`Custom Dashboard View tests Snapshot tests with error 4`] = `
+<Bullseye>
+  <div
+    className="pf-l-bullseye"
+  >
+    <ServerErrors
+      error="network issue"
+      variant="large"
+    >
+      <MockedComponent />
+    </ServerErrors>
+  </div>
+</Bullseye>
+`;
+
+exports[`Custom Dashboard View tests Snapshot tests with error 5`] = `
+<ServerErrors
+  error="network issue"
+  variant="large"
+>
+  <MockedComponent />
+</ServerErrors>
+`;

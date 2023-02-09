@@ -16,6 +16,8 @@
 
 import React, { useContext } from 'react';
 import { User } from '@kogito-apps/consoles-common';
+import { CustomLabels } from '../../api/CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 export interface DevUIAppContext {
   isProcessEnabled: boolean;
@@ -26,6 +28,13 @@ export interface DevUIAppContext {
   onUserChange(listener: UserChangeListener): UnSubscribeHandler;
   getDevUIUrl(): string;
   getOpenApiPath(): string;
+  availablePages?: string[];
+  customLabels: CustomLabels;
+  omittedProcessTimelineEvents: string[];
+  diagramPreviewSize?: DiagramPreviewSize;
+  isWorkflow(): boolean;
+  isStunnerEnabled: boolean;
+  getIsStunnerEnabled(): boolean;
 }
 
 export interface UserChangeListener {
@@ -37,21 +46,42 @@ export interface UnSubscribeHandler {
 }
 
 export class DevUIAppContextImpl implements DevUIAppContext {
-  private users: User[];
+  private readonly users?: User[];
   private currentUser: User;
   private readonly userListeners: UserChangeListener[] = [];
   private readonly devUIUrl: string;
   private readonly openApiPath: string;
   readonly isProcessEnabled: boolean;
   readonly isTracingEnabled: boolean;
+  public readonly availablePages: string[];
+  public readonly customLabels: CustomLabels;
+  public readonly omittedProcessTimelineEvents: string[];
+  public readonly diagramPreviewSize?: DiagramPreviewSize;
+  public readonly isStunnerEnabled: boolean;
 
-  constructor(users, url, path, isProcessEnabled, isTracingEnabled) {
+  constructor(
+    users,
+    url,
+    path,
+    isProcessEnabled,
+    isTracingEnabled,
+    availablePages,
+    customLabels,
+    omittedProcessTimelineEvents,
+    diagramPreviewSize,
+    isStunnerEnabled
+  ) {
     this.users = users;
     this.devUIUrl = url;
     this.openApiPath = path;
     this.isProcessEnabled = isProcessEnabled;
     this.isTracingEnabled = isTracingEnabled;
-    if (users.length > 0) {
+    this.availablePages = availablePages;
+    this.customLabels = customLabels;
+    this.omittedProcessTimelineEvents = omittedProcessTimelineEvents;
+    this.diagramPreviewSize = diagramPreviewSize;
+    this.isStunnerEnabled = isStunnerEnabled;
+    if (users?.length > 0) {
       this.currentUser = users[0];
     }
   }
@@ -73,10 +103,10 @@ export class DevUIAppContextImpl implements DevUIAppContext {
   }
 
   switchUser(userId: string): void {
-    const switchedUser = this.users.find(user => user.id === userId);
+    const switchedUser = this.users.find((user) => user.id === userId);
     if (switchedUser) {
       this.currentUser = switchedUser;
-      this.userListeners.forEach(listener =>
+      this.userListeners.forEach((listener) =>
         listener.onUserChange(switchedUser)
       );
     }
@@ -93,6 +123,14 @@ export class DevUIAppContextImpl implements DevUIAppContext {
         }
       }
     };
+  }
+
+  isWorkflow(): boolean {
+    return this.customLabels.singularProcessLabel == 'Workflow';
+  }
+
+  getIsStunnerEnabled(): boolean {
+    return this.isStunnerEnabled;
   }
 }
 

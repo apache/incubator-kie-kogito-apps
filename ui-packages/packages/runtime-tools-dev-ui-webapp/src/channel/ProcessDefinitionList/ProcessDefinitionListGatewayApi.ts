@@ -35,7 +35,8 @@ export interface UnSubscribeHandler {
 }
 
 export class ProcessDefinitionListGatewayApiImpl
-  implements ProcessDefinitionListGatewayApi {
+  implements ProcessDefinitionListGatewayApi
+{
   private readonly listeners: OnOpenProcessFormListener[] = [];
   private readonly devUIUrl: string;
   private readonly openApiPath: string;
@@ -46,19 +47,19 @@ export class ProcessDefinitionListGatewayApiImpl
     this.openApiPath = path;
   }
 
-  getProcessDefinitionFilter = (): Promise<string[]> => {
+  getProcessDefinitionFilter(): Promise<string[]> {
     return Promise.resolve(this.processDefinitonFilter);
-  };
+  }
 
-  setProcessDefinitionFilter = (filter: string[]): Promise<void> => {
+  setProcessDefinitionFilter(filter: string[]): Promise<void> {
     this.processDefinitonFilter = filter;
     return Promise.resolve();
-  };
+  }
 
-  openProcessForm = (processDefinition: ProcessDefinition): Promise<void> => {
-    this.listeners.forEach(listener => listener.onOpen(processDefinition));
+  openProcessForm(processDefinition: ProcessDefinition): Promise<void> {
+    this.listeners.forEach((listener) => listener.onOpen(processDefinition));
     return Promise.resolve();
-  };
+  }
 
   onOpenProcessFormListen(
     listener: OnOpenProcessFormListener
@@ -77,7 +78,7 @@ export class ProcessDefinitionListGatewayApiImpl
     };
   }
 
-  getProcessDefinitionsQuery = (): Promise<ProcessDefinition[]> => {
+  getProcessDefinitionsQuery(): Promise<ProcessDefinition[]> {
     return getProcessDefinitionList(this.devUIUrl, this.openApiPath);
-  };
+  }
 }

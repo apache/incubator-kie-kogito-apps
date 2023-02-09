@@ -10,18 +10,19 @@ export const getColumn = (
   return {
     label: columnLabel,
     path: columnPath,
-    bodyCellTransformer: value => <span>{value}</span>
+    bodyCellTransformer: (value) => <span>{value}</span>
   };
 };
 
 export const getActionColumn = (
-  startProcess: (processDefinition: ProcessDefinition) => void
+  startProcess: (processDefinition: ProcessDefinition) => void,
+  singularProcessLabel: string
 ): DataTableColumn => {
   return {
     label: 'Actions',
     path: 'actions',
     bodyCellTransformer: (value, rowData: ProcessDefinition) => (
-      <Tooltip content="Start new process">
+      <Tooltip content={`Start new ${singularProcessLabel.toLowerCase()}`}>
         <Button onClick={() => startProcess(rowData)} variant="link">
           <PlayIcon />
         </Button>

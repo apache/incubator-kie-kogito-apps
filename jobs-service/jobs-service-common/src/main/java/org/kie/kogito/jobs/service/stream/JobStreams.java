@@ -24,8 +24,8 @@ import org.eclipse.microprofile.reactive.messaging.Emitter;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.OnOverflow;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,7 @@ public class JobStreams {
      */
     @Inject
     @Channel(AvailableStreams.JOB_ERROR)
-    @OnOverflow(value = OnOverflow.Strategy.BUFFER, bufferSize = 10000)
+    @OnOverflow(value = OnOverflow.Strategy.NONE)
     Emitter<JobExecutionResponse> jobErrorEmitter;
 
     /**
@@ -53,6 +53,7 @@ public class JobStreams {
      */
     @Inject
     @Channel(AvailableStreams.JOB_SUCCESS)
+    @OnOverflow(value = OnOverflow.Strategy.NONE)
     Emitter<JobExecutionResponse> jobSuccessEmitter;
 
     /**
@@ -60,6 +61,7 @@ public class JobStreams {
      */
     @Inject
     @Channel(AvailableStreams.JOB_STATUS_CHANGE)
+    @OnOverflow(value = OnOverflow.Strategy.NONE)
     Emitter<JobDetails> jobStatusChangeEmitter;
 
     public JobExecutionResponse publishJobError(JobExecutionResponse response) {

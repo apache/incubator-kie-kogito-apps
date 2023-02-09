@@ -16,6 +16,8 @@
 package org.acme.travels;
 
 import java.io.Serializable;
+import java.time.Instant;
+import java.util.Date;
 
 public class Traveller implements Serializable {
 
@@ -24,6 +26,12 @@ public class Traveller implements Serializable {
     private String email;
     private String nationality;
     private Address address;
+    private Date testDate;
+    private Instant testInstant;
+    private Integer testInteger;
+    private Long testLong;
+    private Float testFloat;
+    private Double testDouble;
 
     private boolean processed;
 
@@ -40,6 +48,23 @@ public class Traveller implements Serializable {
         this.email = email;
         this.nationality = nationality;
         this.address = address;
+    }
+
+    public Traveller(String firstName, String lastName, String email, String nationality, Address address,
+            Date testDate, Instant testInstant, boolean processed, Integer testInteger, Long testLong, Float testFloat,
+            Double testDouble) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.nationality = nationality;
+        this.address = address;
+        this.testDate = testDate;
+        this.testInstant = testInstant;
+        this.processed = processed;
+        this.testInteger = testInteger;
+        this.testLong = testLong;
+        this.testDouble = testDouble;
+        this.testFloat = testFloat;
     }
 
     public String getFirstName() {
@@ -90,10 +115,60 @@ public class Traveller implements Serializable {
         this.processed = processed;
     }
 
+    public Date getTestDate() {
+        return testDate;
+    }
+
+    public void setTestDate(Date testDate) {
+        this.testDate = testDate;
+    }
+
+    public Instant getTestInstant() {
+        return testInstant;
+    }
+
+    public void setTestInstant(Instant testInstant) {
+        this.testInstant = testInstant;
+    }
+
+    public Integer getTestInteger() {
+        return testInteger;
+    }
+
+    public void setTestInteger(Integer testInteger) {
+        this.testInteger = testInteger;
+    }
+
+    public Long getTestLong() {
+        return testLong;
+    }
+
+    public void setTestLong(Long testLong) {
+        this.testLong = testLong;
+    }
+
+    public Float getTestFloat() {
+        return testFloat;
+    }
+
+    public void setTestFloat(Float testFloat) {
+        this.testFloat = testFloat;
+    }
+
+    public Double getTestDouble() {
+        return testDouble;
+    }
+
+    public void setTestDouble(Double testDouble) {
+        this.testDouble = testDouble;
+    }
+
     @Override
     public String toString() {
         return "Traveller [firstName=" + firstName + ", lastName=" + lastName + ", email=" + email + ", nationality=" +
-                nationality + ", address=" + address + ", processed=" + processed + "]";
+                nationality + ", address=" + address + ", processed=" + processed + " testDate=" + testDate +
+                " testInstant=" + testInstant + " testInteger=" + testInteger + " testLong=" + testLong +
+                " testFloat=" + testFloat + " testDouble=" + testDouble + "]";
     }
 
     @Override

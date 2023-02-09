@@ -22,6 +22,8 @@ import {
   User
 } from '../api';
 import { RuntimeToolsDevUIChannelApiImpl } from '../standalone/RuntimeToolsDevUIChannelApiImpl';
+import { CustomLabels } from '../api/CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 export interface StandaloneDevUIApi {
   close: () => void;
@@ -37,8 +39,66 @@ export interface Consoles {
     devUIUrl: string;
     openApiPath: string;
     origin?: string;
+    availablePages?: string[];
+    customLabels?: CustomLabels;
+    omittedProcessTimelineEvents?: string[];
+    diagramPreviewSize?: DiagramPreviewSize;
+    isStunnerEnabled: boolean;
   }) => StandaloneDevUIApi;
 }
+
+const createEnvelopeServer = (
+  iframe: HTMLIFrameElement,
+  isDataIndexAvailable: boolean,
+  isTracingEnabled: boolean,
+  users: User[],
+  dataIndexUrl: string,
+  trustyServiceUrl: string,
+  page: string,
+  devUIUrl: string,
+  openApiPath: string,
+  customLabels: CustomLabels,
+  isStunnerEnabled: boolean,
+  diagramPreviewSize?: DiagramPreviewSize,
+  origin?: string,
+  availablePages?: string[],
+  omittedProcessTimelineEvents?: string[]
+) => {
+  const defaultOrigin =
+    window.location.protocol === 'file:' ? '*' : window.location.origin;
+  return new EnvelopeServer<
+    RuntimeToolsDevUIChannelApi,
+    RuntimeToolsDevUIEnvelopeApi
+  >(
+    {
+      postMessage: (message) => iframe.contentWindow?.postMessage(message, '*')
+    },
+    origin ?? defaultOrigin,
+    (self) => {
+      return self.envelopeApi.requests.runtimeToolsDevUI_initRequest(
+        {
+          origin: self.origin,
+          envelopeServerId: self.id
+        },
+        {
+          isDataIndexAvailable,
+          isTracingEnabled,
+          users,
+          dataIndexUrl,
+          trustyServiceUrl,
+          page,
+          devUIUrl,
+          openApiPath,
+          customLabels,
+          availablePages,
+          omittedProcessTimelineEvents,
+          isStunnerEnabled,
+          diagramPreviewSize
+        }
+      );
+    }
+  );
+};
 
 declare global {
   interface Window {
@@ -63,50 +123,9 @@ export const createDevUI = (
   };
 };
 
-const createEnvelopeServer = (
-  iframe: HTMLIFrameElement,
-  isProcessEnabled: boolean,
-  isTracingEnabled: boolean,
-  users: User[],
-  dataIndexUrl: string,
-  trustyServiceUrl: string,
-  page: string,
-  devUIUrl: string,
-  openApiPath: string,
-  origin?: string
-) => {
-  const defaultOrigin =
-    window.location.protocol === 'file:' ? '*' : window.location.origin;
-  return new EnvelopeServer<
-    RuntimeToolsDevUIChannelApi,
-    RuntimeToolsDevUIEnvelopeApi
-  >(
-    { postMessage: message => iframe.contentWindow?.postMessage(message, '*') },
-    origin ?? defaultOrigin,
-    self => {
-      return self.envelopeApi.requests.runtimeToolsDevUI_initRequest(
-        {
-          origin: self.origin,
-          envelopeServerId: self.id
-        },
-        {
-          isProcessEnabled,
-          isTracingEnabled,
-          users,
-          dataIndexUrl,
-          trustyServiceUrl,
-          page,
-          devUIUrl,
-          openApiPath
-        }
-      );
-    }
-  );
-};
-
 export function open(args: {
   container: Element;
-  isProcessEnabled: boolean;
+  isDataIndexAvailable: boolean;
   isTracingEnabled: boolean;
   users: User[];
   dataIndexUrl: string;
@@ -115,6 +134,11 @@ export function open(args: {
   devUIUrl: string;
   openApiPath: string;
   origin?: string;
+  availablePages?: string[];
+  customLabels?: CustomLabels;
+  omittedProcessTimelineEvents?: string[];
+  isStunnerEnabled: boolean;
+  diagramPreviewSize?: DiagramPreviewSize;
 }): StandaloneDevUIApi {
   const iframe = document.createElement('iframe');
   iframe.srcdoc = devUIEnvelopeIndex; // index coming from webapp
@@ -125,7 +149,7 @@ export function open(args: {
 
   const envelopeServer = createEnvelopeServer(
     iframe,
-    args.isProcessEnabled,
+    args.isDataIndexAvailable,
     args.isTracingEnabled,
     args.users,
     args.dataIndexUrl,
@@ -133,7 +157,15 @@ export function open(args: {
     args.page,
     args.devUIUrl,
     args.openApiPath,
-    args.origin
+    args.customLabels ?? {
+      singularProcessLabel: 'Process',
+      pluralProcessLabel: 'Processes'
+    },
+    args.isStunnerEnabled,
+    args.diagramPreviewSize,
+    args.origin,
+    args.availablePages,
+    args.omittedProcessTimelineEvents ?? []
   );
 
   const listener = (message: MessageEvent) => {

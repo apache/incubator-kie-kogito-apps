@@ -20,10 +20,10 @@ import org.kie.kogito.index.quarkus.DataIndexMongoDBQuarkusTestResource;
 import org.kie.kogito.index.quarkus.MongoDBTestProfile;
 import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.quarkus.test.junit.TestProfile;
 
-@QuarkusTest
+@QuarkusIntegrationTest
 @TestProfile(MongoDBTestProfile.class)
 public class ProcessDataIndexMongoDBIT extends AbstractProcessDataIndexIT {
 
@@ -35,4 +35,8 @@ public class ProcessDataIndexMongoDBIT extends AbstractProcessDataIndexIT {
         return dataIndex;
     }
 
+    @Override
+    public boolean validateGetProcessInstanceSource() {
+        return true;
+    }
 }

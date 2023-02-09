@@ -77,7 +77,9 @@ const props = {
   setSelectedInstances: jest.fn(),
   selectableInstances: 0,
   setSelectableInstances: jest.fn(),
-  setIsAllChecked: jest.fn()
+  setIsAllChecked: jest.fn(),
+  singularProcessLabel: 'Workflow',
+  pluralProcessLabel: 'Workflows'
 };
 describe('ProcessListTable test', () => {
   it('initial render with data', () => {
@@ -110,11 +112,7 @@ describe('ProcessListTable test', () => {
       <ProcessListTable {...{ ...props, expanded: { 0: true } }} />
     ).find('ProcessListTable');
     await act(async () => {
-      wrapper
-        .find('td')
-        .at(0)
-        .find(Button)
-        .simulate('click');
+      wrapper.find('td').at(0).find(Button).simulate('click');
     });
     wrapper = wrapper.update();
     expect(wrapper.find('MockedProcessListChildTable').exists()).toBeTruthy();
@@ -135,11 +133,7 @@ describe('ProcessListTable test', () => {
       </BrowserRouter>
     ).find('ProcessListTable');
     await act(async () => {
-      wrapper
-        .find('CollapseColumn')
-        .at(0)
-        .find(Button)
-        .simulate('click');
+      wrapper.find('CollapseColumn').at(0).find(Button).simulate('click');
     });
     const ProcessListChildTable = wrapper
       .update()
@@ -199,7 +193,7 @@ describe('ProcessListTable test', () => {
       expect(skipSuccessWrapper.find('ProcessInfoModal').exists()).toBeTruthy();
       expect(
         skipSuccessWrapper.find('ProcessInfoModal').props()['modalContent']
-      ).toEqual('The process travels was successfully skipped.');
+      ).toEqual('The workflow travels was successfully skipped.');
     });
   });
 
@@ -224,7 +218,7 @@ describe('ProcessListTable test', () => {
       ).toBeTruthy();
       expect(
         retrySuccessWrapper.find('ProcessInfoModal').props()['modalContent']
-      ).toEqual('The process travels was successfully re-executed.');
+      ).toEqual('The workflow travels was successfully re-executed.');
     });
   });
 
@@ -249,7 +243,7 @@ describe('ProcessListTable test', () => {
       ).toBeTruthy();
       expect(
         abortSuccessWrapper.find('ProcessInfoModal').props()['modalContent']
-      ).toEqual('The process travels was successfully aborted.');
+      ).toEqual('The workflow travels was successfully aborted.');
     });
   });
 });

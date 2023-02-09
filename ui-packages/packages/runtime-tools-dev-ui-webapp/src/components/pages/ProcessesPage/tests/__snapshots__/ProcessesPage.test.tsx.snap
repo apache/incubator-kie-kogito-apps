@@ -42,7 +42,7 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
   }
 >
   <PageSectionHeader
-    titleText="Process Instances"
+    titleText="Workflow Instances"
   >
     <PageSection
       data-ouia-component-type="page-section-header"
@@ -55,7 +55,7 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
         data-ouia-safe={true}
       >
         <PageTitle
-          title="Process Instances"
+          title="Workflow Instances"
         >
           <Flex
             data-ouia-component-type="page-title"
@@ -86,7 +86,7 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
                       data-ouia-component-type="PF4/Title"
                       data-ouia-safe={true}
                     >
-                      Process Instances
+                      Workflow Instances
                     </h1>
                   </Title>
                 </div>
@@ -108,7 +108,6 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
       leftScrollAriaLabel="Scroll left"
       mountOnEnter={false}
       onSelect={[Function]}
-      onToggle={[Function]}
       ouiaSafe={true}
       rightScrollAriaLabel="Scroll right"
       style={
@@ -173,7 +172,8 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
             key=".0"
             title={
               <TabTitleText>
-                Process Instances
+                Workflow
+                 Instances
               </TabTitleText>
             }
           >
@@ -183,7 +183,8 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
               innerRef={null}
               title={
                 <TabTitleText>
-                  Process Instances
+                  Workflow
+                   Instances
                 </TabTitleText>
               }
             >
@@ -208,7 +209,8 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
                       <span
                         className="pf-c-tabs__item-text"
                       >
-                        Process Instances
+                        Workflow
+                         Instances
                       </span>
                     </TabTitleText>
                   </button>
@@ -222,7 +224,8 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
             key=".1"
             title={
               <TabTitleText>
-                Process Definitions
+                Workflow
+                 Definitions
               </TabTitleText>
             }
           >
@@ -232,7 +235,8 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
               innerRef={null}
               title={
                 <TabTitleText>
-                  Process Definitions
+                  Workflow
+                   Definitions
                 </TabTitleText>
               }
             >
@@ -257,7 +261,8 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
                       <span
                         className="pf-c-tabs__item-text"
                       >
-                        Process Definitions
+                        Workflow
+                         Definitions
                       </span>
                     </TabTitleText>
                   </button>
@@ -307,7 +312,8 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
             id="process-list-tab"
             title={
               <TabTitleText>
-                Process Instances
+                Workflow
+                 Instances
               </TabTitleText>
             }
           >
@@ -334,7 +340,8 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
               id="process-list-tab"
               title={
                 <TabTitleText>
-                  Process Instances
+                  Workflow
+                   Instances
                 </TabTitleText>
               }
             >
@@ -398,7 +405,8 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
             id="process-definitions-tab"
             title={
               <TabTitleText>
-                Process Definitions
+                Workflow
+                 Definitions
               </TabTitleText>
             }
           >
@@ -409,7 +417,9 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
               <Card
                 className="Dev-ui__card-size"
               >
-                <MockedProcessDefinitionContainer />
+                <MockedProcessDefinitionContainer
+                  singularProcessLabel="Workflow"
+                />
               </Card>
             </PageSection>
           </Tab>
@@ -425,7 +435,8 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
               id="process-definitions-tab"
               title={
                 <TabTitleText>
-                  Process Definitions
+                  Workflow
+                   Definitions
                 </TabTitleText>
               }
             >
@@ -436,7 +447,9 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
                 <Card
                   className="Dev-ui__card-size"
                 >
-                  <MockedProcessDefinitionContainer />
+                  <MockedProcessDefinitionContainer
+                    singularProcessLabel="Workflow"
+                  />
                 </Card>
               </PageSection>
             </Tab>
@@ -473,7 +486,9 @@ exports[`ProcessesPage tests Snapshot - processList page 1`] = `
                     data-ouia-safe={true}
                     id=""
                   >
-                    <MockedProcessDefinitionContainer />
+                    <MockedProcessDefinitionContainer
+                      singularProcessLabel="Workflow"
+                    />
                   </article>
                 </Card>
               </section>

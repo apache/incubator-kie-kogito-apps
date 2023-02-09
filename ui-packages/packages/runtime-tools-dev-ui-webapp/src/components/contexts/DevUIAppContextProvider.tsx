@@ -19,6 +19,8 @@ import { User } from '@kogito-apps/consoles-common';
 import RuntimeToolsDevUIAppContext, {
   DevUIAppContextImpl
 } from './DevUIAppContext';
+import { CustomLabels } from '../../api/CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
 
 interface IOwnProps {
   users: User[];
@@ -26,6 +28,11 @@ interface IOwnProps {
   openApiPath: string;
   isProcessEnabled: boolean;
   isTracingEnabled: boolean;
+  availablePages: string[];
+  customLabels: CustomLabels;
+  omittedProcessTimelineEvents: string[];
+  diagramPreviewSize: DiagramPreviewSize;
+  isStunnerEnabled: boolean;
 }
 
 const DevUIAppContextProvider: React.FC<IOwnProps> = ({
@@ -34,6 +41,11 @@ const DevUIAppContextProvider: React.FC<IOwnProps> = ({
   openApiPath,
   isProcessEnabled,
   isTracingEnabled,
+  availablePages,
+  customLabels,
+  omittedProcessTimelineEvents,
+  diagramPreviewSize,
+  isStunnerEnabled,
   children
 }) => {
   return (
@@ -44,7 +56,12 @@ const DevUIAppContextProvider: React.FC<IOwnProps> = ({
           devUIUrl,
           openApiPath,
           isProcessEnabled,
-          isTracingEnabled
+          isTracingEnabled,
+          availablePages,
+          customLabels,
+          omittedProcessTimelineEvents,
+          diagramPreviewSize,
+          isStunnerEnabled
         )
       }
     >

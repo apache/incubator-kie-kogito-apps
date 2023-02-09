@@ -23,7 +23,8 @@ import {
   ProcessDetailsApi,
   ProcessDetailsChannelApi,
   ProcessDetailsEnvelopeApi,
-  ProcessDetailsDriver
+  ProcessDetailsDriver,
+  DiagramPreviewSize
 } from '../api';
 import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import { ProcessDetailsChannelApiImpl } from './ProcessDetailsChannelApiImpl';
@@ -32,6 +33,12 @@ export interface Props {
   targetOrigin: string;
   driver: ProcessDetailsDriver;
   processInstance: ProcessInstance;
+  omittedProcessTimelineEvents?: string[];
+  diagramPreviewSize?: DiagramPreviewSize;
+  showSwfDiagram: boolean;
+  isStunnerEnabled?: boolean;
+  singularProcessLabel: string;
+  pluralProcessLabel: string;
 }
 
 export const EmbeddedProcessDetails = React.forwardRef<
@@ -65,7 +72,13 @@ export const EmbeddedProcessDetails = React.forwardRef<
           envelopeServerId: envelopeServer.id
         },
         {
-          processInstance: props.processInstance
+          processInstance: props.processInstance,
+          omittedProcessTimelineEvents: props.omittedProcessTimelineEvents,
+          diagramPreviewSize: props.diagramPreviewSize,
+          showSwfDiagram: props.showSwfDiagram,
+          isStunnerEnabled: props.isStunnerEnabled,
+          singularProcessLabel: props.singularProcessLabel,
+          pluralProcessLabel: props.pluralProcessLabel
         }
       );
     },

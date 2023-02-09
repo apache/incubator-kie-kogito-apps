@@ -7,34 +7,52 @@ const BG_IMAGES_DIRNAME = 'bgimages';
 const CopyPlugin = require("copy-webpack-plugin");
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+const swEditor = require("@kie-tools/serverless-workflow-diagram-editor-assets");
 
 module.exports = {
   entry: {
     standalone: path.resolve(__dirname, 'src', 'standalone', 'standalone.ts'),
     envelope: path.resolve(__dirname, 'src', 'standalone', 'EnvelopeApp.ts'),
-    'resources/form-displayer': './src/resources/form-displayer.ts'
+    'resources/form-displayer': './src/resources/form-displayer.ts',
+    "resources/serverless-workflow-text-editor-envelope": "./src/resources/ServerlessWorkflowTextEditorEnvelopeApp.ts",
+    "resources/serverless-workflow-mermaid-viewer-envelope": "./src/resources/ServerlessWorkflowMermaidViewerEnvelopeApp.ts",
+    "resources/serverless-workflow-combined-editor-envelope": "./src/resources/ServerlessWorkflowCombinedEditorEnvelopeApp.ts",
+    "resources/serverless-workflow-diagram-editor-envelope": "./src/resources/ServerlessWorkflowDiagramEditorEnvelopeApp.ts"
+
   },
   plugins: [
     new MonacoWebpackPlugin({
-      languages: ['typescript', 'html', 'json'],
+      languages: ['typescript', 'html', 'json','yaml'],
       globalAPI: true
     }),
     new webpack.EnvironmentPlugin({
       KOGITO_APP_VERSION: 'DEV',
       KOGITO_APP_NAME: 'Runtime tools dev-ui'
     }),
-    new CopyPlugin({ patterns: [
+    new CopyPlugin({
+      patterns: [
         { from: "./resources", to: "./resources" },
         { from: "./src/static", to: "./static" },
-        { from: "./src/components/styles.css", to: "./components/styles.css" }
-    ]}),
+        { from: "./src/components/styles.css", to: "./components/styles.css" },
+        { from: "../monitoring-webapp/dist/", to: "./monitoring-webapp" },
+        { from: "../custom-dashboard-view/dist/", to: "./custom-dashboard-view" },
+        {
+          from: swEditor.swEditorPath(),
+          to: "./diagram",
+          globOptions: { ignore: ["**/WEB-INF/**/*"] },
+        }
+      ]
+    }),
     new FileManagerPlugin({
       events: {
         onEnd: {
+          mkdir:['./dist/resources/webapp/'],
           copy: [
-            { source: './dist/*.js', destination: './dist/resources/webapp' },
-            { source: './dist/*.map', destination: './dist/resources/webapp' },
-            { source: './dist/fonts', destination: './dist/resources/webapp' }
+            { source: './dist/*.js', destination: './dist/resources/webapp/' },
+            { source: './dist/*.map', destination: './dist/resources/webapp/' },
+            { source: './dist/fonts', destination: './dist/resources/webapp/' },
+            { source: './dist/monitoring-webapp', destination: './dist/resources/webapp/monitoring-webapp' },
+            { source: './dist/custom-dashboard-view', destination: './dist/resources/webapp/custom-dashboard-view' }
           ]
         },
       },
@@ -87,6 +105,9 @@ module.exports = {
             '../../node_modules/@kogito-apps/process-details/dist/static'
           ),
           path.resolve(
+            '../../node_modules/@kogito-apps/custom-dashboard-view/dist/static'
+          ),
+          path.resolve(
             '../../node_modules/@kogito-apps/management-console-shared/dist/static'
           ),
           path.resolve(
@@ -106,6 +127,15 @@ module.exports = {
           ),
           path.resolve(
             '../../node_modules/@kogito-apps/process-definition-list/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/custom-dashboard-view/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/process-monitoring/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/workflow-form/dist/static'
           ),
           path.resolve(
             '../../node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf'
@@ -194,9 +224,19 @@ module.exports = {
             '../../node_modules/@kogito-apps/process-form/dist/static'
           ),
           path.resolve(
+            '../../node_modules/@kogito-apps/process-monitoring/dist/static'
+          ),
+          path.resolve(
             '../../node_modules/@kogito-apps/process-definition-list/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/custom-dashboard-view/dist/static'
+          ),
+          path.resolve(
+            '../../node_modules/@kogito-apps/workflow-form/dist/static'
           )
         ],
+
         use: [
           {
             loader: 'url-loader',

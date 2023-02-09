@@ -21,14 +21,26 @@ import { EmbeddedProcessDetails } from '@kogito-apps/process-details';
 import { ProcessDetailsGatewayApi } from '../../../channel/ProcessDetails';
 import { useProcessDetailsGatewayApi } from '../../../channel/ProcessDetails/ProcessDetailsContext';
 import { useHistory } from 'react-router-dom';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
+import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 
 interface ProcessDetailsContainerProps {
   processInstance: ProcessInstance;
+  omittedProcessTimelineEvents: string[];
+  diagramPreviewSize?: DiagramPreviewSize;
 }
 
-const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
-  OUIAProps> = ({ processInstance, ouiaId, ouiaSafe }) => {
+const ProcessDetailsContainer: React.FC<
+  ProcessDetailsContainerProps & OUIAProps
+> = ({
+  processInstance,
+  omittedProcessTimelineEvents,
+  diagramPreviewSize,
+  ouiaId,
+  ouiaSafe
+}) => {
   const history = useHistory();
+  const appContext = useDevUIAppContext();
   const gatewayApi: ProcessDetailsGatewayApi = useProcessDetailsGatewayApi();
   useEffect(() => {
     const unSubscribeHandler = gatewayApi.onOpenProcessInstanceDetailsListener({
@@ -42,13 +54,18 @@ const ProcessDetailsContainer: React.FC<ProcessDetailsContainerProps &
       unSubscribeHandler.unSubscribe();
     };
   }, [processInstance]);
-
   return (
     <EmbeddedProcessDetails
       {...componentOuiaProps(ouiaId, 'process-details-container', ouiaSafe)}
       driver={gatewayApi}
       targetOrigin={'*'}
       processInstance={processInstance}
+      omittedProcessTimelineEvents={omittedProcessTimelineEvents}
+      diagramPreviewSize={diagramPreviewSize}
+      showSwfDiagram={appContext.isWorkflow()}
+      isStunnerEnabled={appContext.getIsStunnerEnabled()}
+      singularProcessLabel={appContext.customLabels.singularProcessLabel}
+      pluralProcessLabel={appContext.customLabels.pluralProcessLabel}
     />
   );
 };

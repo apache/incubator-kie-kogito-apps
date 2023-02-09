@@ -26,6 +26,11 @@ import ProcessDetailsPage from '../ProcessDetailsPage';
 import { MemoryRouter } from 'react-router-dom';
 import * as ProcessDetailsContext from '../../../../channel/ProcessDetails/ProcessDetailsContext';
 import { ProcessDetailsGatewayApi } from '../../../../channel/ProcessDetails/ProcessDetailsGatewayApi';
+import * as RuntimeToolsDevUIAppContext from '../../../contexts/DevUIAppContext';
+import { User } from '@kogito-apps/consoles-common';
+import { CustomLabels } from '../../../../api/CustomLabels';
+import { UserChangeListener } from '../../../contexts/DevUIAppContext';
+import { UnSubscribeHandler } from '../../../contexts/DevUIAppContext';
 
 describe('WebApp - ProcessDetailsPage tests', () => {
   const props = {
@@ -118,7 +123,7 @@ describe('WebApp - ProcessDetailsPage tests', () => {
     ]
   };
 
-  const getProcessDetails = jest.fn();
+  const getProcessDetails = jest.fn().mockResolvedValue(data);
   const MockProcessDetailsGatewayApi = jest.fn<ProcessDetailsGatewayApi, []>(
     () => ({
       getProcessDiagram: jest.fn(),
@@ -144,15 +149,39 @@ describe('WebApp - ProcessDetailsPage tests', () => {
 
   jest
     .spyOn(ProcessDetailsContext, 'useProcessDetailsGatewayApi')
-    .mockImplementation(() => gatewayApi);
+    .mockImplementation(() => MockProcessDetailsGatewayApi);
+
+  jest
+    .spyOn(RuntimeToolsDevUIAppContext, 'useDevUIAppContext')
+    .mockImplementation(() => {
+      return {
+        isProcessEnabled: true,
+        isTracingEnabled: true,
+        getCurrentUser: jest.fn(),
+        getAllUsers: jest.fn(),
+        switchUser: jest.fn(),
+        onUserChange: jest.fn(),
+        getDevUIUrl: jest.fn(),
+        getOpenApiPath: jest.fn(),
+        omittedProcessTimelineEvents: [],
+        customLabels: {
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        },
+        diagramPreviewSize: {
+          width: 600,
+          height: 600
+        },
+        isStunnerEnabled: false,
+        isWorkflow: jest.fn()
+      };
+    });
 
   beforeEach(() => {
     jest.clearAllMocks();
     gatewayApi = new MockProcessDetailsGatewayApi();
   });
   it('Snapshot test with default values', async () => {
-    // eslint-disable-next-line
-    getProcessDetails.mockReturnValue(data);
     const wrapper = await mount(
       <MemoryRouter initialEntries={['/']} keyLength={0}>
         <ProcessDetailsPage {...props} />

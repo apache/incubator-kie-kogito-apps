@@ -35,7 +35,10 @@ describe('EmbeddedProcessList tests', () => {
         sortBy: {
           lastUpdate: OrderBy.DESC
         }
-      }
+      },
+      singularProcessLabel: 'Workflow',
+      pluralProcessLabel: 'Workflows',
+      isWorkflow: true
     };
 
     const wrapper = mount(<EmbeddedProcessList {...props} />);

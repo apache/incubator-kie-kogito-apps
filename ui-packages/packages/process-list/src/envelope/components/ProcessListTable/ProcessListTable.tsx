@@ -76,6 +76,8 @@ interface ProcessListTableProps {
   selectableInstances: number;
   setSelectableInstances: React.Dispatch<React.SetStateAction<number>>;
   setIsAllChecked: React.Dispatch<React.SetStateAction<boolean>>;
+  singularProcessLabel: string;
+  pluralProcessLabel: string;
 }
 
 const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
@@ -91,6 +93,8 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
   selectableInstances,
   setSelectableInstances,
   setIsAllChecked,
+  singularProcessLabel,
+  pluralProcessLabel,
   driver,
   ouiaId,
   ouiaSafe
@@ -109,9 +113,8 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
   const [modalContent, setModalContent] = useState<string>('');
   const [titleType, setTitleType] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedProcessInstance, setSelectedProcessInstance] = useState<
-    ProcessInstance
-  >(null);
+  const [selectedProcessInstance, setSelectedProcessInstance] =
+    useState<ProcessInstance>(null);
 
   const handleModalToggle = (): void => {
     setIsModalOpen(!isModalOpen);
@@ -136,14 +139,18 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
       await driver.handleProcessSkip(processInstance);
       onShowMessage(
         'Skip operation',
-        `The process ${processInstance.processName} was successfully skipped.`,
+        `The ${singularProcessLabel?.toLowerCase()} ${
+          processInstance.processName
+        } was successfully skipped.`,
         TitleType.SUCCESS,
         processInstance
       );
     } catch (error) {
       onShowMessage(
         'Skip operation',
-        `The process ${processInstance.processName} failed to skip. Message: ${error.message}`,
+        `The ${singularProcessLabel?.toLowerCase()} ${
+          processInstance.processName
+        } failed to skip. Message: ${error.message}`,
         TitleType.FAILURE,
         processInstance
       );
@@ -159,14 +166,18 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
       await driver.handleProcessRetry(processInstance);
       onShowMessage(
         'Retry operation',
-        `The process ${processInstance.processName} was successfully re-executed.`,
+        `The ${singularProcessLabel?.toLowerCase()} ${
+          processInstance.processName
+        } was successfully re-executed.`,
         TitleType.SUCCESS,
         processInstance
       );
     } catch (error) {
       onShowMessage(
         'Retry operation',
-        `The process ${processInstance.processName} failed to re-execute. Message: ${error.message}`,
+        `The ${singularProcessLabel?.toLowerCase()} ${
+          processInstance.processName
+        } failed to re-execute. Message: ${error.message}`,
         TitleType.FAILURE,
         processInstance
       );
@@ -182,11 +193,13 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
       await driver.handleProcessAbort(processInstance);
       onShowMessage(
         'Abort operation',
-        `The process ${processInstance.processName} was successfully aborted.`,
+        `The ${singularProcessLabel?.toLowerCase()} ${
+          processInstance.processName
+        } was successfully aborted.`,
         TitleType.SUCCESS,
         processInstance
       );
-      processInstances.forEach(instance => {
+      processInstances.forEach((instance) => {
         if (instance.id === processInstance.id) {
           instance.state = ProcessInstanceState.Aborted;
         }
@@ -195,7 +208,9 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
     } catch (error) {
       onShowMessage(
         'Abort operation',
-        `Failed to abort process ${processInstance.processName}. Message: ${error.message}`,
+        `Failed to abort ${singularProcessLabel?.toLowerCase()} ${
+          processInstance.processName
+        }. Message: ${error.message}`,
         TitleType.FAILURE,
         processInstance
       );
@@ -313,6 +328,8 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
           selectedInstances={selectedInstances}
           setSelectedInstances={setSelectedInstances}
           setSelectableInstances={setSelectableInstances}
+          singularProcessLabel={singularProcessLabel}
+          pluralProcessLabel={pluralProcessLabel}
           driver={driver}
           onSkipClick={onSkipClick}
           onRetryClick={onRetryClick}
@@ -331,7 +348,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
           instance.isSelected = false;
           setSelectedInstances(
             selectedInstances.filter(
-              selectedInstance => selectedInstance.id !== instance.id
+              (selectedInstance) => selectedInstance.id !== instance.id
             )
           );
         } else {
@@ -351,13 +368,13 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
 
     if (expanded[pairIndex]) {
       const processInstance: ProcessInstance = processInstances.find(
-        instance => instance.id === pair.id
+        (instance) => instance.id === pair.id
       );
       processInstance.childProcessInstances.forEach(
         (childInstance: ProcessInstance) => {
           if (childInstance.isSelected) {
             const index = selectedInstances.findIndex(
-              selectedInstance => selectedInstance.id === childInstance.id
+              (selectedInstance) => selectedInstance.id === childInstance.id
             );
             if (index !== -1) {
               selectedInstances.splice(index, 1);
@@ -373,7 +390,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
               child.serviceUrl &&
               child.addons.includes('process-management')
             ) {
-              setSelectableInstances(prev => prev - 1);
+              setSelectableInstances((prev) => prev - 1);
             }
           });
         }
@@ -381,7 +398,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
     } else {
       const processInstance =
         !_.isEmpty(processInstances) &&
-        processInstances.find(instance => instance.id === pair.id);
+        processInstances.find((instance) => instance.id === pair.id);
       !_.isEmpty(processInstances) &&
         processInstances.forEach((instance: ProcessInstance) => {
           if (processInstance.id === instance.id) {

@@ -21,6 +21,7 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.keycloak.representations.AccessTokenResponse;
 import org.kie.kogito.jobs.api.Job;
@@ -39,8 +40,16 @@ import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
+import static java.util.concurrent.TimeUnit.MINUTES;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.kie.kogito.jobs.service.health.HealthCheckUtils.awaitReadyHealthCheck;
+import static org.kie.kogito.jobs.service.resource.BaseJobResourceIT.NODE_INSTANCE_ID;
+import static org.kie.kogito.jobs.service.resource.BaseJobResourceIT.PRIORITY;
+import static org.kie.kogito.jobs.service.resource.BaseJobResourceIT.PROCESS_ID;
+import static org.kie.kogito.jobs.service.resource.BaseJobResourceIT.PROCESS_INSTANCE_ID;
+import static org.kie.kogito.jobs.service.resource.BaseJobResourceIT.ROOT_PROCESS_ID;
+import static org.kie.kogito.jobs.service.resource.BaseJobResourceIT.ROOT_PROCESS_INSTANCE_ID;
 
 public abstract class BaseKeycloakJobServiceIT {
 
@@ -55,10 +64,16 @@ public abstract class BaseKeycloakJobServiceIT {
     private ObjectMapper objectMapper;
 
     @BeforeAll
-    public static void setup() {
+    public static void setup() throws Exception {
         System.setProperty("quarkus.http.auth.policy.role-policy1.roles-allowed", "confidential");
         System.setProperty("quarkus.http.auth.permission.roles1.paths", "/*");
         System.setProperty("quarkus.http.auth.permission.roles1.policy", "role-policy1");
+    }
+
+    @BeforeEach
+    public void init() throws Exception {
+        //health check - wait to be ready
+        awaitReadyHealthCheck(2, MINUTES);
     }
 
     @Test
@@ -81,7 +96,7 @@ public abstract class BaseKeycloakJobServiceIT {
                 .contentType(ContentType.JSON)
                 .body(body)
                 .when()
-                .post(JobResource.JOBS_PATH)
+                .post(RestApiConstants.JOBS_PATH)
                 .then()
                 .statusCode(statusCode);
     }
@@ -96,7 +111,12 @@ public abstract class BaseKeycloakJobServiceIT {
                 .id(id)
                 .expirationTime(DateUtil.now().plusSeconds(10))
                 .callbackEndpoint("http://localhost:8081/callback")
-                .priority(1)
+                .processId(PROCESS_ID)
+                .processInstanceId(PROCESS_INSTANCE_ID)
+                .rootProcessId(ROOT_PROCESS_ID)
+                .rootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
+                .nodeInstanceId(NODE_INSTANCE_ID)
+                .priority(PRIORITY)
                 .build();
     }
 
@@ -109,20 +129,20 @@ public abstract class BaseKeycloakJobServiceIT {
         createJob(jobToJson(job), getAccessToken("jdoe"), OK_CODE);
         given().pathParam("id", id)
                 .when()
-                .delete(JobResource.JOBS_PATH + "/{id}")
+                .delete(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(FORBIDDEN_CODE);
         given().auth().oauth2(getAccessToken("alice"))
                 .pathParam("id", id)
                 .when()
-                .delete(JobResource.JOBS_PATH + "/{id}")
+                .delete(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(UNAUTHORIZED_CODE);
 
         final ScheduledJob response = given().auth().oauth2(getAccessToken("jdoe"))
                 .pathParam("id", id)
                 .when()
-                .delete(JobResource.JOBS_PATH + "/{id}")
+                .delete(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK_CODE)
                 .contentType(ContentType.JSON)
@@ -138,19 +158,19 @@ public abstract class BaseKeycloakJobServiceIT {
         createJob(jobToJson(job), getAccessToken("jdoe"), OK_CODE);
         given().pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(FORBIDDEN_CODE);
         given().auth().oauth2(getAccessToken("alice"))
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(UNAUTHORIZED_CODE);
         final ScheduledJob scheduledJob = given().auth().oauth2(getAccessToken("jdoe"))
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK_CODE)
                 .contentType(ContentType.JSON)
@@ -167,19 +187,19 @@ public abstract class BaseKeycloakJobServiceIT {
         createJob(jobToJson(job), getAccessToken("jdoe"), OK_CODE);
         given().pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(FORBIDDEN_CODE);
         given().auth().oauth2(getAccessToken("alice"))
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(UNAUTHORIZED_CODE);
         final ScheduledJob scheduledJob = given().auth().oauth2(getAccessToken("jdoe"))
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK_CODE)
                 .contentType(ContentType.JSON)

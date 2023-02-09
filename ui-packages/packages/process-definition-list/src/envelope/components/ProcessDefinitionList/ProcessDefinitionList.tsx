@@ -30,12 +30,22 @@ import { ProcessDefinitionListDriver } from '../../../api/ProcessDefinitionListD
 import { ProcessDefinition } from '../../../api/ProcessDefinitionListEnvelopeApi';
 import { Bullseye, Divider } from '@patternfly/react-core';
 import ProcessDefinitionListToolbar from '../ProcessDefinitionListToolbar/ProcessDefinitionListToolbar';
+
 export interface ProcessDefinitionListProps {
   isEnvelopeConnectedToChannel: boolean;
   driver: ProcessDefinitionListDriver;
+  singularProcessLabel: string;
 }
-const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
-  OUIAProps> = ({ isEnvelopeConnectedToChannel, driver, ouiaId, ouiaSafe }) => {
+
+const ProcessDefinitionList: React.FC<
+  ProcessDefinitionListProps & OUIAProps
+> = ({
+  isEnvelopeConnectedToChannel,
+  driver,
+  singularProcessLabel,
+  ouiaId,
+  ouiaSafe
+}) => {
   const [processDefinitionList, setProcessDefinitionList] = useState<
     ProcessDefinition[]
   >([]);
@@ -66,11 +76,11 @@ const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
     }
   };
   const columns: DataTableColumn[] = [
-    getColumn('processName', 'Process Name'),
+    getColumn('processName', `${singularProcessLabel} Name`),
     getColumn('endpoint', 'Endpoint'),
-    getActionColumn(processDefinition => {
+    getActionColumn((processDefinition) => {
       driver.openProcessForm(processDefinition);
-    })
+    }, singularProcessLabel)
   ];
 
   const applyFilter = async (): Promise<void> => {
@@ -81,7 +91,7 @@ const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
     if (filterProcessNames.length === 0) {
       return processDefinitionList;
     }
-    return processDefinitionList.filter(pd =>
+    return processDefinitionList.filter((pd) =>
       filterProcessNames.includes(pd.processName)
     );
   };
@@ -89,7 +99,7 @@ const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
   const processDefinitionLoadingComponent: JSX.Element = (
     <Bullseye>
       <KogitoSpinner
-        spinnerText="Loading process definitions..."
+        spinnerText={`Loading ${singularProcessLabel.toLowerCase()} definitions...`}
         ouiaId="forms-list-loading-process-definitions"
       />
     </Bullseye>
@@ -111,6 +121,7 @@ const ProcessDefinitionList: React.FC<ProcessDefinitionListProps &
         filterProcessNames={filterProcessNames}
         setFilterProcessNames={setFilterProcessNames}
         applyFilter={applyFilter}
+        singularProcessLabel={singularProcessLabel}
       />
       <Divider />
       <DataTable

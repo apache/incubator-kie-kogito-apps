@@ -34,17 +34,20 @@ interface ProcessDefinitionListToolbarProps {
   filterProcessNames: string[];
   setFilterProcessNames: React.Dispatch<React.SetStateAction<string[]>>;
   applyFilter: () => void;
+  singularProcessLabel: string;
 }
 
 enum Category {
   PROCESS_NAME = 'Process name'
 }
 
-const ProcessDefinitionListToolbar: React.FC<ProcessDefinitionListToolbarProps &
-  OUIAProps> = ({
+const ProcessDefinitionListToolbar: React.FC<
+  ProcessDefinitionListToolbarProps & OUIAProps
+> = ({
   applyFilter,
   filterProcessNames,
   setFilterProcessNames,
+  singularProcessLabel,
   ouiaSafe,
   ouiaId
 }) => {
@@ -105,7 +108,7 @@ const ProcessDefinitionListToolbar: React.FC<ProcessDefinitionListToolbarProps &
               aria-label="process name"
               onChange={setProcessNameInput}
               onKeyPress={onEnterClicked}
-              placeholder="Filter by process name"
+              placeholder={`Filter by ${singularProcessLabel.toLowerCase()} name`}
               value={processNameInput}
             />
           </InputGroup>

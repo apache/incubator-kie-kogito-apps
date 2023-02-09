@@ -28,6 +28,17 @@ export interface Association {
   envelopeServerId: string;
 }
 
+export interface DiagramPreviewSize {
+  width: number;
+  height: number;
+}
+
 export interface ProcessDetailsInitArgs {
   processInstance: ProcessInstance;
+  omittedProcessTimelineEvents?: string[];
+  diagramPreviewSize?: DiagramPreviewSize;
+  showSwfDiagram: boolean;
+  isStunnerEnabled?: boolean;
+  singularProcessLabel: string;
+  pluralProcessLabel: string;
 }

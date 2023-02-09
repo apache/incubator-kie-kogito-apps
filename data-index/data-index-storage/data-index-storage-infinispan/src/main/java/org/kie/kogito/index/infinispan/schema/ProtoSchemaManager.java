@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.infinispan.commons.configuration.XMLStringConfiguration;
 import org.infinispan.query.remote.client.ProtobufMetadataManagerConstants;
-import org.kie.kogito.index.DataIndexStorageService;
+import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.schema.SchemaDescriptor;
 import org.kie.kogito.persistence.api.schema.SchemaRegisteredEvent;
@@ -41,6 +41,7 @@ import static java.util.Collections.emptyList;
 
 @ApplicationScoped
 public class ProtoSchemaManager {
+    private static final String PROTO_BASE_TYPE_STRING = "string";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProtoSchemaManager.class);
 
@@ -63,7 +64,11 @@ public class ProtoSchemaManager {
         if (schemaAcceptor.accept(event.getSchemaType())) {
             SchemaDescriptor schemaDescriptor = event.getSchemaDescriptor();
             Storage<String, String> cache = protobufCacheService.getProtobufCache();
-            cache.put(schemaDescriptor.getName(), schemaDescriptor.getSchemaContent());
+            cache.put(schemaDescriptor.getName(),
+                    schemaDescriptor.getSchemaContent()
+                            .replaceAll("kogito.Date", PROTO_BASE_TYPE_STRING)
+                            .replaceAll("kogito.Instant", PROTO_BASE_TYPE_STRING)
+                            .replaceAll("kogito.Serializable", PROTO_BASE_TYPE_STRING));
             schemaDescriptor.getProcessDescriptor().ifPresent(processDescriptor -> {
                 cacheManager.getProcessIdModelCache().put(processDescriptor.getProcessId(), processDescriptor.getProcessType());
                 //Initialize domain cache

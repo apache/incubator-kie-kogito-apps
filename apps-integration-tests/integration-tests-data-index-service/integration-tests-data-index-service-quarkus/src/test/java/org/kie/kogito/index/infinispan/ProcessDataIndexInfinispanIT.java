@@ -20,10 +20,10 @@ import org.kie.kogito.index.quarkus.DataIndexInfinispanQuarkusTestResource;
 import org.kie.kogito.index.quarkus.InfinispanTestProfile;
 import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.quarkus.test.junit.TestProfile;
 
-@QuarkusTest
+@QuarkusIntegrationTest
 @TestProfile(InfinispanTestProfile.class)
 public class ProcessDataIndexInfinispanIT extends AbstractProcessDataIndexIT {
 
@@ -35,4 +35,8 @@ public class ProcessDataIndexInfinispanIT extends AbstractProcessDataIndexIT {
         return dataIndex;
     }
 
+    @Override
+    public boolean validateGetProcessInstanceSource() {
+        return true;
+    }
 }

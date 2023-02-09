@@ -25,7 +25,7 @@ import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { FormAction, lookupValidator, ModelConversionTool } from '../utils';
 import FormFooter from '../FormFooter/FormFooter';
 import '../styles.css';
-import { DoResetAction } from '../../types/types';
+import { FormRendererApi } from '../../types/types';
 interface IOwnProps {
   formSchema: any;
   model?: any;
@@ -34,7 +34,7 @@ interface IOwnProps {
   readOnly: boolean;
 }
 
-const FormRenderer = React.forwardRef<DoResetAction, IOwnProps & OUIAProps>(
+const FormRenderer = React.forwardRef<FormRendererApi, IOwnProps & OUIAProps>(
   (
     { formSchema, model, onSubmit, formActions, readOnly, ouiaId, ouiaSafe },
     forwardedRef
@@ -54,7 +54,7 @@ const FormRenderer = React.forwardRef<DoResetAction, IOwnProps & OUIAProps>(
       [formApiRef]
     );
 
-    const bridge = new JSONSchemaBridge(formSchema, formModel => {
+    const bridge = new JSONSchemaBridge(formSchema, (formModel) => {
       // Converting back all the JS Dates into String before validating the model
       const newModel = ModelConversionTool.convertDateToString(
         formModel,
@@ -73,13 +73,13 @@ const FormRenderer = React.forwardRef<DoResetAction, IOwnProps & OUIAProps>(
     return (
       <React.Fragment>
         <AutoForm
-          ref={ref => setFormApiRef(ref)}
+          ref={(ref) => setFormApiRef(ref)}
           placeholder
           model={formData}
           disabled={readOnly}
           schema={bridge}
           showInlineError={true}
-          onSubmit={data => onSubmit(data)}
+          onSubmit={(data) => onSubmit(data)}
           {...componentOuiaProps(ouiaId, 'form-renderer', ouiaSafe)}
         >
           <ErrorsField />

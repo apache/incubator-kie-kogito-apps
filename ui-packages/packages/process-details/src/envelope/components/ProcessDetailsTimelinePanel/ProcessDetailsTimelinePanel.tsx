@@ -39,7 +39,7 @@ import {
   OnRunningIcon,
   OutlinedClockIcon
 } from '@patternfly/react-icons';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import '../styles.css';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import {
@@ -68,6 +68,7 @@ export interface IOwnProps {
   >;
   driver: ProcessDetailsDriver;
   jobs: Job[];
+  omittedProcessTimelineEvents?: string[];
 }
 enum TitleType {
   SUCCESS = 'success',
@@ -77,6 +78,7 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
   data,
   jobs,
   driver,
+  omittedProcessTimelineEvents,
   ouiaId,
   ouiaSafe
 }) => {
@@ -88,9 +90,8 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
   const [modalContent, setModalContent] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [isDetailsModalOpen, setIsDetailsModalOpen] = useState<boolean>(false);
-  const [isRescheduleModalOpen, setIsRescheduleModalOpen] = useState<boolean>(
-    false
-  );
+  const [isRescheduleModalOpen, setIsRescheduleModalOpen] =
+    useState<boolean>(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState<boolean>(false);
   const [selectedJob, setSelectedJob] = useState<any>({});
   const ignoredNodeTypes = ['Join', 'Split', 'EndNode'];
@@ -105,7 +106,7 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
     }
   };
 
-  const onDropdownSelect = id => {
+  const onDropdownSelect = (id) => {
     const tempKebabArray = [...kebabOpenArray];
     const index = tempKebabArray.indexOf(id);
     tempKebabArray.splice(index, 1);
@@ -169,7 +170,7 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
 
   const renderJobActions = (id, options) => {
     if (jobs.length > 0) {
-      return jobs.map(job => {
+      return jobs.map((job) => {
         if (
           id === job.nodeInstanceId &&
           editableJobStatus.includes(job.status)
@@ -355,7 +356,7 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
           onSelect={() => onDropdownSelect('timeline-kebab-toggle-' + index)}
           toggle={
             <KebabToggle
-              onToggle={isOpen =>
+              onToggle={(isOpen) =>
                 onKebabToggle(isOpen, 'timeline-kebab-toggle-' + index)
               }
               id={'timeline-kebab-toggle-' + index}
@@ -410,6 +411,24 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
     </Button>
   ];
 
+  const compareNodes = useCallback((nodeA, nodeB) => {
+    if (nodeA?.enter < nodeB?.enter) {
+      return -1;
+    } else if (nodeA?.enter > nodeB?.enter) {
+      return 1;
+    } else if (nodeA?.exit < nodeB?.exit) {
+      return -1;
+    } else if (nodeA?.exit > nodeB?.exit) {
+      return 1;
+    } else if (nodeA?.id < nodeB?.id) {
+      return -1;
+    } else if (nodeA?.id > nodeB?.id) {
+      return 1;
+    }
+
+    return 0;
+  }, []);
+
   return (
     <Card
       {...componentOuiaProps(ouiaId ? ouiaId : data.id, 'timeline', ouiaSafe)}
@@ -428,73 +447,80 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
       <CardBody>
         <Stack hasGutter className="kogito-process-details--timeline">
           {data.nodes &&
-            data.nodes.map((content, idx) => {
-              return (
-                <Split
-                  hasGutter
-                  className={'kogito-process-details--timeline-item'}
-                  key={content.id}
-                >
-                  <SplitItem>
-                    {
-                      <>
-                        {data.error &&
-                        content.definitionId === data.error.nodeDefinitionId ? (
-                          <Tooltip content={data.error.message}>
-                            <ErrorCircleOIcon
-                              color="var(--pf-global--danger-color--100)"
-                              className="kogito-process-details--timeline-status"
-                            />
-                          </Tooltip>
-                        ) : content.exit === null ? (
-                          <Tooltip content={'Active'}>
-                            <OnRunningIcon className="kogito-process-details--timeline-status" />
-                          </Tooltip>
-                        ) : (
-                          <Tooltip content={'Completed'}>
-                            <CheckCircleIcon
-                              color="var(--pf-global--success-color--100)"
-                              className="kogito-process-details--timeline-status"
-                            />
-                          </Tooltip>
-                        )}
-                      </>
-                    }
-                  </SplitItem>
-                  <SplitItem isFilled>
-                    <TextContent>
-                      <Text component={TextVariants.p}>
-                        {content.name}
-                        <span>
-                          {content.type === 'HumanTaskNode' && (
-                            <Tooltip content={'Human task'}>
-                              <UserIcon
-                                className="pf-u-ml-sm"
-                                color="var(--pf-global--icon--Color--light)"
+            data.nodes
+              .filter(
+                (content) =>
+                  !omittedProcessTimelineEvents?.includes(content.name)
+              )
+              .sort(compareNodes)
+              .map((content, idx) => {
+                return (
+                  <Split
+                    hasGutter
+                    className={'kogito-process-details--timeline-item'}
+                    key={content.id}
+                  >
+                    <SplitItem>
+                      {
+                        <>
+                          {data.error &&
+                          content.definitionId ===
+                            data.error.nodeDefinitionId ? (
+                            <Tooltip content={data.error.message}>
+                              <ErrorCircleOIcon
+                                color="var(--pf-global--danger-color--100)"
+                                className="kogito-process-details--timeline-status"
+                              />
+                            </Tooltip>
+                          ) : content.exit === null ? (
+                            <Tooltip content={'Active'}>
+                              <OnRunningIcon className="kogito-process-details--timeline-status" />
+                            </Tooltip>
+                          ) : (
+                            <Tooltip content={'Completed'}>
+                              <CheckCircleIcon
+                                color="var(--pf-global--success-color--100)"
+                                className="kogito-process-details--timeline-status"
                               />
                             </Tooltip>
                           )}
-                          {renderTimerIcon(content.id)}
-                        </span>
+                        </>
+                      }
+                    </SplitItem>
+                    <SplitItem isFilled>
+                      <TextContent>
+                        <Text component={TextVariants.p}>
+                          {content.name}
+                          <span>
+                            {content.type === 'HumanTaskNode' && (
+                              <Tooltip content={'Human task'}>
+                                <UserIcon
+                                  className="pf-u-ml-sm"
+                                  color="var(--pf-global--icon--Color--light)"
+                                />
+                              </Tooltip>
+                            )}
+                            {renderTimerIcon(content.id)}
+                          </span>
 
-                        <Text component={TextVariants.small}>
-                          {content.exit === null ? (
-                            'Active'
-                          ) : (
-                            <Moment fromNow>
-                              {new Date(`${content.exit}`)}
-                            </Moment>
-                          )}
+                          <Text component={TextVariants.small}>
+                            {content.exit === null ? (
+                              'Active'
+                            ) : (
+                              <Moment fromNow>
+                                {new Date(`${content.exit}`)}
+                              </Moment>
+                            )}
+                          </Text>
                         </Text>
-                      </Text>
-                    </TextContent>
-                  </SplitItem>
-                  <SplitItem>
-                    {processManagementKebabButtons(content, idx)}
-                  </SplitItem>
-                </Split>
-              );
-            })}
+                      </TextContent>
+                    </SplitItem>
+                    <SplitItem>
+                      {processManagementKebabButtons(content, idx)}
+                    </SplitItem>
+                  </Split>
+                );
+              })}
         </Stack>
       </CardBody>
       <JobsDetailsModal

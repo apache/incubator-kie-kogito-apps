@@ -53,7 +53,7 @@ const ProcessVariables: React.FC<ProcessVariablesProps & OUIAProps> = ({
   updateJson,
   processInstance
 }) => {
-  const handleVariablesChange = e => {
+  const handleVariablesChange = (e) => {
     setUpdateJson({ ...updateJson, ...e.updated_src });
     setDisplayLabel(true);
   };
@@ -67,7 +67,7 @@ const ProcessVariables: React.FC<ProcessVariablesProps & OUIAProps> = ({
     <Card {...componentOuiaProps(ouiaId, 'process-variables', ouiaSafe)}>
       <CardHeader>
         <Title headingLevel="h3" size="xl">
-          Process Variables
+          Variables
         </Title>
         {displayLabel && (
           <Label color="orange" icon={<InfoCircleIcon />}>

@@ -17,13 +17,13 @@
 import * as React from 'react';
 import { useImperativeHandle, useState } from 'react';
 import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
-import { ProcessListChannelApi, ProcessListState } from '../api';
+import { ProcessListChannelApi, ProcessListInitArgs } from '../api';
 import ProcessList from './components/ProcessList/ProcessList';
 import ProcessListEnvelopeViewDriver from './ProcessListEnvelopeViewDriver';
 import '@patternfly/patternfly/patternfly.css';
 
 export interface ProcessListEnvelopeViewApi {
-  initialize: (initalState?: ProcessListState) => void;
+  initialize: (initialState?: ProcessListInitArgs) => void;
 }
 interface Props {
   channelApi: MessageBusClientApi<ProcessListChannelApi>;
@@ -33,17 +33,14 @@ export const ProcessListEnvelopeView = React.forwardRef<
   ProcessListEnvelopeViewApi,
   Props
 >((props, forwardedRef) => {
-  const [
-    isEnvelopeConnectedToChannel,
-    setEnvelopeConnectedToChannel
-  ] = useState<boolean>(false);
-  const [processInitialState, setProcessInitialState] = useState<
-    ProcessListState
-  >({} as ProcessListState);
+  const [isEnvelopeConnectedToChannel, setEnvelopeConnectedToChannel] =
+    useState<boolean>(false);
+  const [processInitialState, setProcessInitialState] =
+    useState<ProcessListInitArgs>({} as ProcessListInitArgs);
   useImperativeHandle(
     forwardedRef,
     () => ({
-      initialize: initialState => {
+      initialize: (initialState) => {
         setEnvelopeConnectedToChannel(false);
         setProcessInitialState(initialState);
         setEnvelopeConnectedToChannel(true);
@@ -57,7 +54,10 @@ export const ProcessListEnvelopeView = React.forwardRef<
       <ProcessList
         isEnvelopeConnectedToChannel={isEnvelopeConnectedToChannel}
         driver={new ProcessListEnvelopeViewDriver(props.channelApi)}
-        initialState={processInitialState}
+        initialState={processInitialState.initialState}
+        singularProcessLabel={processInitialState.singularProcessLabel}
+        pluralProcessLabel={processInitialState.pluralProcessLabel}
+        isWorkflow={processInitialState.isWorkflow}
       />
     </React.Fragment>
   );

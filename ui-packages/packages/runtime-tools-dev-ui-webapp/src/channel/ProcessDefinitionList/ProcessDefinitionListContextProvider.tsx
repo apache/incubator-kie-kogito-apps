@@ -26,16 +26,16 @@ interface ProcessDefinitionListContextProviderProps {
   children;
 }
 
-const ProcessDefinitionListContextProvider: React.FC<ProcessDefinitionListContextProviderProps> = ({
-  children
-}) => {
-  const runTimeToolsApi: DevUIAppContext = useDevUIAppContext();
+const ProcessDefinitionListContextProvider: React.FC<
+  ProcessDefinitionListContextProviderProps
+> = ({ children }) => {
+  const runtimeToolsApi: DevUIAppContext = useDevUIAppContext();
   return (
     <ProcessDefinitionListContext.Provider
       value={
         new ProcessDefinitionListGatewayApiImpl(
-          runTimeToolsApi.getDevUIUrl(),
-          runTimeToolsApi.getOpenApiPath()
+          runtimeToolsApi.getDevUIUrl(),
+          runtimeToolsApi.getOpenApiPath()
         )
       }
     >

@@ -29,6 +29,10 @@ describe('DevUINav tests::Process and Tracing enabled', () => {
         openApiPath="http://openApiPath"
         isProcessEnabled={true}
         isTracingEnabled={true}
+        customLabels={{
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        }}
       >
         <MemoryRouter>
           <DevUINav pathname={'/Processes'} />
@@ -39,7 +43,7 @@ describe('DevUINav tests::Process and Tracing enabled', () => {
     expect(wrapper.find('DevUINav')).toMatchSnapshot();
 
     const DevUINavWrapper = wrapper.findWhere(
-      nested => nested.key() === 'processes-nav'
+      (nested) => nested.key() === 'processes-nav'
     );
 
     expect(DevUINavWrapper.exists()).toBeTruthy();
@@ -54,6 +58,10 @@ describe('DevUINav tests::Process and Tracing enabled', () => {
         openApiPath="http://openApiPath"
         isProcessEnabled={true}
         isTracingEnabled={true}
+        customLabels={{
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        }}
       >
         <MemoryRouter>
           <DevUINav pathname={'/JobsManagement'} />
@@ -64,7 +72,7 @@ describe('DevUINav tests::Process and Tracing enabled', () => {
     expect(wrapper.find('DevUINav')).toMatchSnapshot();
 
     const DevUINavWrapper = wrapper.findWhere(
-      nested => nested.key() === 'jobs-management-nav'
+      (nested) => nested.key() === 'jobs-management-nav'
     );
 
     expect(DevUINavWrapper.exists()).toBeTruthy();
@@ -79,6 +87,10 @@ describe('DevUINav tests::Process and Tracing enabled', () => {
         openApiPath="http://openApiPath"
         isProcessEnabled={true}
         isTracingEnabled={true}
+        customLabels={{
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        }}
       >
         <MemoryRouter>
           <DevUINav pathname={'/Forms'} />
@@ -89,7 +101,7 @@ describe('DevUINav tests::Process and Tracing enabled', () => {
     expect(wrapper.find('DevUINav')).toMatchSnapshot();
 
     const DevUINavWrapper = wrapper.findWhere(
-      nested => nested.key() === 'forms-list-nav'
+      (nested) => nested.key() === 'forms-list-nav'
     );
 
     expect(DevUINavWrapper.exists()).toBeTruthy();
@@ -104,6 +116,10 @@ describe('DevUINav tests::Process and Tracing enabled', () => {
         openApiPath="http://openApiPath"
         isProcessEnabled={true}
         isTracingEnabled={true}
+        customLabels={{
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        }}
       >
         <MemoryRouter>
           <DevUINav pathname={'/Audit'} />
@@ -114,7 +130,7 @@ describe('DevUINav tests::Process and Tracing enabled', () => {
     expect(wrapper.find('DevUINav')).toMatchSnapshot();
 
     const DevUINavWrapper = wrapper.findWhere(
-      nested => nested.key() === 'audit-nav'
+      (nested) => nested.key() === 'audit-nav'
     );
 
     expect(DevUINavWrapper.exists()).toBeTruthy();
@@ -131,6 +147,10 @@ describe('DevUINav tests::Sections disabled', () => {
         openApiPath="http://openApiPath"
         isProcessEnabled={true}
         isTracingEnabled={false}
+        customLabels={{
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        }}
       >
         <MemoryRouter>
           <DevUINav pathname={'/Processes'} />
@@ -165,6 +185,10 @@ describe('DevUINav tests::Sections disabled', () => {
         openApiPath="http://openApiPath"
         isProcessEnabled={true}
         isTracingEnabled={false}
+        customLabels={{
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        }}
       >
         <MemoryRouter>
           <DevUINav pathname={'/JobsManagement'} />
@@ -199,6 +223,10 @@ describe('DevUINav tests::Sections disabled', () => {
         openApiPath="http://openApiPath"
         isProcessEnabled={true}
         isTracingEnabled={false}
+        customLabels={{
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        }}
       >
         <MemoryRouter>
           <DevUINav pathname={'/Forms'} />
@@ -233,6 +261,10 @@ describe('DevUINav tests::Sections disabled', () => {
         openApiPath="http://openApiPath"
         isProcessEnabled={false}
         isTracingEnabled={true}
+        customLabels={{
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        }}
       >
         <MemoryRouter>
           <DevUINav pathname={'/Audit'} />

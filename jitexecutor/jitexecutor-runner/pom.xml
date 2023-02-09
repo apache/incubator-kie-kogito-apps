@@ -24,6 +24,10 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
+      <artifactId>jitexecutor-bpmn</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
       <artifactId>jitexecutor-dmn</artifactId>
     </dependency>
     <dependency>
@@ -31,6 +35,12 @@
       <artifactId>quarkus-smallrye-health</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>jitexecutor-bpmn</artifactId>
+      <scope>test</scope>
+      <type>test-jar</type>
+    </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>jitexecutor-dmn</artifactId>
@@ -104,9 +114,6 @@
                   <goal>verify</goal>
                 </goals>
                 <configuration combine.self="override">
-                  <includes>
-                    <include>**/Native*IT.java</include>
-                  </includes>
                   <systemProperties>
                     <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
                   </systemProperties>

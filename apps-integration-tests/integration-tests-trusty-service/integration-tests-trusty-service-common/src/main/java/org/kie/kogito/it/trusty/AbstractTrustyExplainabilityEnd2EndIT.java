@@ -86,7 +86,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
     private static final String KEYCLOAK_ALIAS = "keycloak";
     private static final String KEYCLOAK_DB_VENDOR_VARIABLE = "DB_VENDOR";
     private static final String KEYCLOAK_DB_VENDOR_VALUE = "h2";
-    private static final String KEYCLOAK_ACCESS_TOKEN_PATH = "/auth/realms/kogito/protocol/openid-connect/token";
+    private static final String KEYCLOAK_ACCESS_TOKEN_PATH = "/realms/kogito/protocol/openid-connect/token";
     private static final String KEYCLOAK_GRANT_TYPE_PARAM_NAME = "grant_type";
     private static final String KEYCLOAK_GRANT_TYPE_PARAM_VALUE = "password";
     private static final String KEYCLOAK_USERNAME_PARAM_NAME = "username";
@@ -218,18 +218,16 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                     .atLeast(5, SECONDS)
                     .atMost(60, SECONDS)
                     .with().pollInterval(5, SECONDS)
-                    .untilAsserted(() -> {
-                        executionIds.forEach(executionId -> {
-                            SalienciesResponse salienciesResponse = given()
-                                    .port(trustyService.getFirstMappedPort())
-                                    .auth().oauth2(accessToken)
-                                    .when().get("/executions/decisions/" + executionId + "/explanations/saliencies")
-                                    .then().statusCode(200)
-                                    .extract().as(SalienciesResponse.class);
+                    .untilAsserted(() -> executionIds.forEach(executionId -> {
+                        SalienciesResponse salienciesResponse = given()
+                                .port(trustyService.getFirstMappedPort())
+                                .auth().oauth2(accessToken)
+                                .when().get("/executions/decisions/" + executionId + "/explanations/saliencies")
+                                .then().statusCode(200)
+                                .extract().as(SalienciesResponse.class);
 
-                            assertEquals("SUCCEEDED", salienciesResponse.getStatus());
-                        });
-                    });
+                        assertEquals("SUCCEEDED", salienciesResponse.getStatus());
+                    }));
 
             LOGGER.info("Request Counterfactuals for each execution and check responses generated...");
             executionIds.forEach(executionId -> {

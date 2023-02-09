@@ -31,7 +31,11 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-addons-quarkus-events-smallrye</artifactId>
+      <artifactId>kogito-addons-quarkus-source-files</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-addons-quarkus-events-process</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -99,9 +103,9 @@
                   </includes>
                 </resource>
                 <resource>
-                  <directory>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources</directory>
+                  <directory>${project.parent.basedir}/integration-tests-data-index-service-quarkus/src/main/resources</directory>
                   <includes>
-                    <include>data_index_create.sql</include>
+                    <include>**/*.sql</include>
                   </includes>
                 </resource>
               </resources>
@@ -140,5 +144,17 @@
       </plugin>
     </plugins>
   </build>
-
+  <profiles>
+    <profile>
+      <id>native</id>
+      <activation>
+        <property>
+          <name>native</name>
+        </property>
+      </activation>
+      <properties>
+        <failsafe.include>**/*IT.java</failsafe.include>
+      </properties>
+    </profile>
+  </profiles>
 </project>

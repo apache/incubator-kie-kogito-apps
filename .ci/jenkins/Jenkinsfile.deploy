@@ -8,12 +8,12 @@ deployProperties = [:]
 
 pipeline {
     agent {
-        label 'kie-rhel7 && kie-mem16g'
+        label 'kie-rhel7 && kie-mem16g && !built-in'
     }
 
     tools {
-        maven 'kie-maven-3.8.1'
-        jdk 'kie-jdk11'
+        maven env.BUILD_MAVEN_TOOL
+        jdk env.BUILD_JDK_TOOL
     }
 
     options {
@@ -50,7 +50,6 @@ pipeline {
                     if (isRelease() || isCreatePr()) {
                         // Verify version is set
                         assert getProjectVersion()
-                        assert getOptaPlannerVersion()
 
                         if (isRelease()) {
                             // Verify if on right release branch
@@ -68,7 +67,6 @@ pipeline {
                         setDeployPropertyIfNeeded('git.author', getGitAuthor())
                         setDeployPropertyIfNeeded('project.version', getProjectVersion())
                         setDeployPropertyIfNeeded('release', isRelease())
-                        setDeployPropertyIfNeeded('optaplanner.version', getOptaPlannerVersion())
                     }
                 }
             }
@@ -89,8 +87,6 @@ pipeline {
             steps {
                 script {
                     maven.mvnVersionsUpdateParentAndChildModules(getMavenCommand(), getProjectVersion(), !isRelease())
-                    // Update Optaplanner version
-                    maven.mvnSetVersionProperty(getMavenCommand(), 'version.org.optaplanner', getOptaPlannerVersion())
                 }
             }
         }
@@ -269,10 +265,6 @@ String getProjectVersion() {
     return params.PROJECT_VERSION
 }
 
-String getOptaPlannerVersion() {
-    return params.OPTAPLANNER_VERSION
-}
-
 String getBotBranch() {
     return "${getProjectVersion()}-${env.BOT_BRANCH_HASH}"
 }
@@ -311,7 +303,9 @@ void runMavenDeploy(boolean skipTests = true, boolean localDeployment = false) {
         mvnCmd.withDeployRepository(env.MAVEN_DEPLOY_REPOSITORY)
     }
 
-    mvnCmd.withProperty('maven.test.failure.ignore', true).skipTests(skipTests).run('clean deploy')
+    mvnCmd.withProperty('maven.test.failure.ignore', true)
+        .skipTests(skipTests)
+        .run('clean deploy')
 }
 
 void runMavenStage() {

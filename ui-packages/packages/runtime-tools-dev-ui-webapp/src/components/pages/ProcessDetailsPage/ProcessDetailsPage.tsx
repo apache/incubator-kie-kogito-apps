@@ -33,22 +33,21 @@ import { StaticContext, useHistory } from 'react-router';
 import * as H from 'history';
 import '../../styles.css';
 import { ProcessInstance } from 'packages/management-console-shared';
+import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 
 interface MatchProps {
   instanceID: string;
 }
 
-const ProcessDetailsPage: React.FC<RouteComponentProps<
-  MatchProps,
-  StaticContext,
-  H.LocationState
-> &
-  OUIAProps> = ({ ouiaId, ouiaSafe, ...props }) => {
+const ProcessDetailsPage: React.FC<
+  RouteComponentProps<MatchProps, StaticContext, H.LocationState> & OUIAProps
+> = ({ ouiaId, ouiaSafe, ...props }) => {
   useEffect(() => {
     return ouiaPageTypeAndObjectId('process-details');
   });
 
   const gatewayApi: ProcessDetailsGatewayApi = useProcessDetailsGatewayApi();
+  const appContext = useDevUIAppContext();
 
   const history = useHistory();
   const processId = props.match.params.instanceID;
@@ -58,7 +57,6 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [fetchError, setFetchError] = useState<string>('');
   let currentPage = JSON.parse(window.localStorage.getItem('state'));
-
   useEffect(() => {
     window.onpopstate = () => {
       props.history.push({ state: Object.assign({}, props.location.state) });
@@ -67,22 +65,28 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
 
   async function fetchDetails() {
     let response: ProcessInstance = {} as ProcessInstance;
+    let responseError: string = '';
     try {
       setIsLoading(true);
       response = await gatewayApi.processDetailsQuery(processId);
       setProcessInstance(response);
     } catch (error) {
+      responseError = error;
       setFetchError(error);
     } finally {
       setIsLoading(false);
       /* istanbul ignore else */
-      if (fetchError.length === 0 && Object.keys(response).length === 0) {
+      if (
+        responseError.length === 0 &&
+        fetchError.length === 0 &&
+        Object.keys(response).length === 0
+      ) {
         let prevPath;
         /* istanbul ignore else */
         if (currentPage) {
           currentPage = Object.assign({}, currentPage, props.location.state);
           const tempPath = currentPage.prev.split('/');
-          prevPath = tempPath.filter(item => item);
+          prevPath = tempPath.filter((item) => item);
         }
         history.push({
           pathname: '/NoData',
@@ -117,7 +121,13 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
           {processInstance &&
           Object.keys(processInstance).length > 0 &&
           !fetchError ? (
-            <ProcessDetailsContainer processInstance={processInstance} />
+            <ProcessDetailsContainer
+              processInstance={processInstance}
+              omittedProcessTimelineEvents={
+                appContext.omittedProcessTimelineEvents
+              }
+              diagramPreviewSize={appContext.diagramPreviewSize}
+            />
           ) : (
             <>
               {fetchError.length > 0 && (
@@ -142,7 +152,10 @@ const ProcessDetailsPage: React.FC<RouteComponentProps<
 
   return (
     <>
-      <PageSectionHeader titleText="Process Details" ouiaId={ouiaId} />
+      <PageSectionHeader
+        titleText={`${appContext.customLabels.singularProcessLabel} Details`}
+        ouiaId={ouiaId}
+      />
       <PageSection
         {...componentOuiaProps(
           ouiaId,

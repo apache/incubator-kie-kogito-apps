@@ -21,10 +21,36 @@ import ProcessDetailsContainer from '../ProcessDetailsContainer';
 import * as ProcessDetailsContext from '../../../../channel/ProcessDetails/ProcessDetailsContext';
 import { ProcessDetailsGatewayApiImpl } from '../../../../channel/ProcessDetails/ProcessDetailsGatewayApi';
 import { ProcessDetailsQueries } from '../../../../channel/ProcessDetails/ProcessDetailsQueries';
+import * as RuntimeToolsDevUIAppContext from '../../../contexts/DevUIAppContext';
+
+const getJobsMock = jest.fn();
+const getProcessDetailsMock = jest.fn();
+const handleProcessSkipMock = jest.fn();
+const handleProcessAbortMock = jest.fn();
+const handleProcessRetryMock = jest.fn();
+const getSVGMock = jest.fn();
+const jobCancelMock = jest.fn();
+const rescheduleJobMock = jest.fn();
+const getTriggerableNodesMock = jest.fn();
+const handleNodeTriggerMock = jest.fn();
+const handleProcessVariableUpdateMock = jest.fn();
+const handleNodeInstanceCancelMock = jest.fn();
+const handleNodeInstanceRetriggerMock = jest.fn();
 
 const MockQueries = jest.fn<ProcessDetailsQueries, []>(() => ({
-  getProcessDetails: jest.fn(),
-  getJobs: jest.fn()
+  getProcessDetails: getProcessDetailsMock,
+  getJobs: getJobsMock,
+  handleProcessSkip: handleProcessSkipMock,
+  handleProcessAbort: handleProcessAbortMock,
+  handleProcessRetry: handleProcessRetryMock,
+  getSVG: getSVGMock,
+  jobCancel: jobCancelMock,
+  rescheduleJob: rescheduleJobMock,
+  getTriggerableNodes: getTriggerableNodesMock,
+  handleNodeTrigger: handleNodeTriggerMock,
+  handleProcessVariableUpdate: handleProcessVariableUpdateMock,
+  handleNodeInstanceCancel: handleNodeInstanceCancelMock,
+  handleNodeInstanceRetrigger: handleNodeInstanceRetriggerMock
 }));
 
 jest
@@ -32,6 +58,19 @@ jest
   .mockImplementation(
     () => new ProcessDetailsGatewayApiImpl(new MockQueries())
   );
+
+jest
+  .spyOn(RuntimeToolsDevUIAppContext, 'useDevUIAppContext')
+  .mockImplementation(() => {
+    return {
+      isWorkflow: jest.fn(),
+      getIsStunnerEnabled: jest.fn(),
+      customLabels: {
+        singularProcessLabel: 'workflow',
+        pluralProcessLabel: 'workflows'
+      }
+    };
+  });
 
 const processInstance: ProcessInstance = {} as ProcessInstance;
 

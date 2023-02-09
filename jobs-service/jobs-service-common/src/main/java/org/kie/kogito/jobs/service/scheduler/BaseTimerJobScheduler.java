@@ -26,12 +26,14 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
+import org.kie.kogito.jobs.service.exception.InvalidScheduleTimeException;
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
-import org.kie.kogito.jobs.service.model.job.ManageableJobHandle;
+import org.kie.kogito.jobs.service.model.ManageableJobHandle;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.JobHandle;
@@ -40,6 +42,8 @@ import org.kie.kogito.timer.impl.PointInTimeTrigger;
 import org.reactivestreams.Publisher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.smallrye.mutiny.Uni;
 
 /**
  * Base reactive Job Scheduler that performs the fundamental operations and let to the concrete classes to
@@ -73,7 +77,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
         this(null, 0, 0, 0, null);
     }
 
-    public BaseTimerJobScheduler(ReactiveJobRepository jobRepository,
+    protected BaseTimerJobScheduler(ReactiveJobRepository jobRepository,
             long backoffRetryMillis,
             long maxIntervalLimitToRetryMillis,
             long schedulerChunkInMinutes,
@@ -93,11 +97,11 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
                 //check if the job is already scheduled and persisted
                 .fromCompletionStage(jobRepository.exists(job.getId()))
                 .flatMap(exists -> Boolean.TRUE.equals(exists)
-                        ? handleExistingJob(job)
-                        : ReactiveStreams.of(job))
-                .flatMap(j -> isOnCurrentSchedulerChunk(job)
+                        ? handleExistingJob(job).map(existingJob -> Pair.of(exists, existingJob))
+                        : ReactiveStreams.of(Pair.of(exists, job)))
+                .flatMap(pair -> isOnCurrentSchedulerChunk(job)
                         //in case the job is on the current bulk, proceed with scheduling process
-                        ? doJobScheduling(job)
+                        ? doJobScheduling(job, pair.getLeft())
                         //in case the job is not on the current bulk, just save it to be scheduled later
                         : ReactiveStreams.fromCompletionStage(jobRepository.save(jobWithStatus(job, JobStatus.SCHEDULED))))
                 .buildRs();
@@ -125,7 +129,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
      * @param job to be scheduled
      * @return
      */
-    private PublisherBuilder<JobDetails> doJobScheduling(JobDetails job) {
+    private PublisherBuilder<JobDetails> doJobScheduling(JobDetails job, boolean exists) {
         return ReactiveStreams.of(job)
                 //calculate the delay (when the job should be executed)
                 .map(current -> job.getTrigger().hasNextFireTime())
@@ -134,11 +138,16 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
                 .peek(delay -> Optional
                         .of(delay.isNegative())
                         .filter(Boolean.FALSE::equals)
-                        .orElseThrow(() -> new RuntimeException("The expirationTime should be greater than current " +
+                        .orElseThrow(() -> new InvalidScheduleTimeException("The expirationTime should be greater than current " +
                                 "time")))
+                // new jobs in current bulk must be stored in the repository before we proceed to schedule, the same as
+                // way as we do with new jobs that aren't. In this way we provide the same pattern for both cases.
+                // https://issues.redhat.com/browse/KOGITO-8513
+                .flatMap(delay -> !exists
+                        ? ReactiveStreams.fromCompletionStage(jobRepository.save(jobWithStatus(job, JobStatus.SCHEDULED)))
+                        : ReactiveStreams.fromCompletionStage(CompletableFuture.completedFuture(job)))
                 //schedule the job on the scheduler
-                .map(delay -> scheduleRegistering(job, Optional.empty()))
-                .flatMap(p -> p)
+                .flatMap(j -> scheduleRegistering(job, Optional.empty()))
                 .map(handle -> jobWithStatusAndHandle(job, JobStatus.SCHEDULED, handle))
                 .map(scheduledJob -> jobRepository.save(scheduledJob))
                 .flatMapCompletionStage(p -> p);
@@ -196,7 +205,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
                 .flatMap(job -> Optional
                         .ofNullable(job.getTrigger())
                         .filter(trigger -> Objects.nonNull(trigger.hasNextFireTime()))
-                        .map(time -> doJobScheduling(job))
+                        .map(time -> doJobScheduling(job, true))
                         //in case the job should not be executed anymore (there is no nextFireTime)
                         .orElseGet(() -> ReactiveStreams.of(jobWithStatus(job, JobStatus.EXECUTED))))
                 //final state EXECUTED, removing the job, it is not kept on the repository
@@ -293,20 +302,16 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
     }
 
     public CompletionStage<JobDetails> cancel(CompletionStage<JobDetails> futureJob) {
-        return ReactiveStreams
-                .fromCompletionStageNullable(futureJob)
-                .peek(job -> LOGGER.debug("Cancel Job Scheduling {}", job))
-                .flatMap(scheduledJob -> Optional.ofNullable(scheduledJob.getScheduledId())
-                        .map(id -> ReactiveStreams
-                                .fromPublisher(this.doCancel(scheduledJob))
-                                .map(b -> scheduledJob))
-                        .orElse(ReactiveStreams.of(scheduledJob)))
+        return Uni.createFrom().completionStage(futureJob)
+                .onItem().invoke(job -> LOGGER.debug("Cancel Job Scheduling {}", job))
+                .chain(scheduledJob -> Optional.ofNullable(scheduledJob.getScheduledId())
+                        .map(id -> Uni.createFrom().publisher(this.doCancel(scheduledJob))
+                                .onItem().transform(b -> scheduledJob))
+                        .orElse(Uni.createFrom().item(scheduledJob)))
                 //final state, removing the job
-                .flatMapCompletionStage(jobRepository::delete)
-                .peek(this::unregisterScheduledJob)
-                .findFirst()
-                .run()
-                .thenApply(job -> job.orElse(null));
+                .chain(job -> Uni.createFrom().completionStage(jobRepository.delete(job)))
+                .onItem().invoke(this::unregisterScheduledJob)
+                .convert().toCompletionStage();
     }
 
     @Override

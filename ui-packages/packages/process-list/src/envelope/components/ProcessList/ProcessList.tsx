@@ -37,26 +37,42 @@ import {
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import { ISortBy } from '@patternfly/react-table';
 import _ from 'lodash';
-import { alterOrderByObj } from '../utils/ProcessListUtils';
+import {
+  alterOrderByObj,
+  processListDefaultStatusFilter,
+  workflowListDefaultStatusFilter
+} from '../utils/ProcessListUtils';
 
 import '../styles.css';
+
 interface ProcessListProps {
   isEnvelopeConnectedToChannel: boolean;
   driver: ProcessListDriver;
   initialState: ProcessListState;
+  singularProcessLabel: string;
+  pluralProcessLabel: string;
+  isWorkflow: boolean;
 }
 const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
   driver,
   isEnvelopeConnectedToChannel,
   initialState,
+  singularProcessLabel,
+  pluralProcessLabel,
+  isWorkflow,
   ouiaId,
   ouiaSafe
 }) => {
+  const defaultStatusFilter =
+    singularProcessLabel == 'Process'
+      ? processListDefaultStatusFilter
+      : workflowListDefaultStatusFilter;
+
   const defaultFilters: ProcessInstanceFilter =
     initialState && initialState.filters
       ? { ...initialState.filters }
       : {
-          status: [ProcessInstanceState.Active],
+          status: defaultStatusFilter,
           businessKey: []
         };
   const defaultOrderBy: any =
@@ -76,9 +92,8 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
   );
   const [error, setError] = useState<string>(undefined);
   const [filters, setFilters] = useState<ProcessInstanceFilter>(defaultFilters);
-  const [processStates, setProcessStates] = useState<ProcessInstanceState[]>([
-    ProcessInstanceState.Active
-  ]);
+  const [processStates, setProcessStates] =
+    useState<ProcessInstanceState[]>(defaultStatusFilter);
   const [expanded, setExpanded] = React.useState<{ [key: number]: boolean }>(
     {}
   );
@@ -121,7 +136,7 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
         processInstance.serviceUrl &&
         processInstance.addons.includes('process-management')
       ) {
-        setSelectableInstances(prev => prev + 1);
+        setSelectableInstances((prev) => prev + 1);
       }
     });
   };
@@ -200,11 +215,11 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
 
   const doResetFilters = (): void => {
     const resetFilter = {
-      status: [ProcessInstanceState.Active],
+      status: defaultStatusFilter,
       businessKey: []
     };
     setIsLoading(true);
-    setProcessStates([ProcessInstanceState.Active]);
+    setProcessStates(defaultStatusFilter);
     setFilters(resetFilter);
     applyFilter(resetFilter);
   };
@@ -218,7 +233,6 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
   if (error) {
     return <ServerErrors error={error} variant={'large'} />;
   }
-
   return (
     <div
       {...componentOuiaProps(
@@ -241,6 +255,10 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
         isAllChecked={isAllChecked}
         setIsAllChecked={setIsAllChecked}
         driver={driver}
+        defaultStatusFilter={defaultStatusFilter}
+        singularProcessLabel={singularProcessLabel}
+        pluralProcessLabel={pluralProcessLabel}
+        isWorkflow={isWorkflow}
       />
       {filters.status.length > 0 ? (
         <>
@@ -258,6 +276,8 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
             selectableInstances={selectableInstances}
             setSelectableInstances={setSelectableInstances}
             setIsAllChecked={setIsAllChecked}
+            singularProcessLabel={singularProcessLabel}
+            pluralProcessLabel={pluralProcessLabel}
           />
           {mustShowLoadMore && (
             <LoadMore

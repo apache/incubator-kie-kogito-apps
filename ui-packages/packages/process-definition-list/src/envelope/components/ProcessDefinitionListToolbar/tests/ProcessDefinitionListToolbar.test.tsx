@@ -27,6 +27,7 @@ describe('ProcessDefinition list toolbar tests', () => {
         applyFilter={jest.fn()}
         setFilterProcessNames={jest.fn()}
         filterProcessNames={[]}
+        singularProcessLabel={'Workflow'}
       />
     );
     expect(wrapper).toMatchSnapshot();
@@ -39,6 +40,7 @@ describe('ProcessDefinition list toolbar tests', () => {
         applyFilter={applyFilter}
         setFilterProcessNames={jest.fn()}
         filterProcessNames={[]}
+        singularProcessLabel={'Workflow'}
       />
     );
     act(() => {
@@ -51,10 +53,7 @@ describe('ProcessDefinition list toolbar tests', () => {
           }
         } as any);
     });
-    wrapper
-      .find('#apply-filter')
-      .find('button')
-      .simulate('click');
+    wrapper.find('#apply-filter').find('button').simulate('click');
     expect(applyFilter).toHaveBeenCalled();
   });
 
@@ -65,13 +64,11 @@ describe('ProcessDefinition list toolbar tests', () => {
         applyFilter={applyFilter}
         setFilterProcessNames={jest.fn()}
         filterProcessNames={[]}
+        singularProcessLabel={'Workflow'}
       />
     );
     act(() => {
-      wrapper
-        .find('Toolbar')
-        .props()
-        ['clearAllFilters']();
+      wrapper.find('Toolbar').props()['clearAllFilters']();
     });
     expect(applyFilter).toHaveBeenCalled();
   });
@@ -83,13 +80,11 @@ describe('ProcessDefinition list toolbar tests', () => {
         applyFilter={applyFilter}
         setFilterProcessNames={jest.fn()}
         filterProcessNames={[]}
+        singularProcessLabel={'Workflow'}
       />
     );
     act(() => {
-      wrapper
-        .find(Tooltip)
-        .find(Button)
-        .simulate('click');
+      wrapper.find(Tooltip).find(Button).simulate('click');
     });
     expect(applyFilter).toHaveBeenCalled();
   });
@@ -101,6 +96,7 @@ describe('ProcessDefinition list toolbar tests', () => {
         applyFilter={applyFilter}
         setFilterProcessNames={jest.fn()}
         filterProcessNames={[]}
+        singularProcessLabel={'Workflow'}
       />
     );
     act(() => {
@@ -114,10 +110,7 @@ describe('ProcessDefinition list toolbar tests', () => {
           }
         } as any);
     });
-    wrapper
-      .find('#apply-filter')
-      .find('button')
-      .simulate('click');
+    wrapper.find('#apply-filter').find('button').simulate('click');
     expect(applyFilter).toHaveBeenCalled();
   });
 
@@ -128,6 +121,7 @@ describe('ProcessDefinition list toolbar tests', () => {
         applyFilter={applyFilter}
         setFilterProcessNames={jest.fn()}
         filterProcessNames={['process1']}
+        singularProcessLabel={'Workflow'}
       />
     );
     act(() => {

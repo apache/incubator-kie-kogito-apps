@@ -31,6 +31,11 @@ import FormDetailsContextProvider from '../../../channel/FormDetails/FormDetails
 import DevUIAppContextProvider from '../../contexts/DevUIAppContextProvider';
 import ProcessDefinitionListContextProvider from '../../../channel/ProcessDefinitionList/ProcessDefinitionListContextProvider';
 import ProcessFormContextProvider from '../../../channel/ProcessForm/ProcessFormContextProvider';
+import { CustomLabels } from '../../../api/CustomLabels';
+import { DiagramPreviewSize } from '@kogito-apps/process-details/dist/api';
+import WorkflowFormContextProvider from '../../../channel/WorkflowForm/WorkflowFormContextProvider';
+import CustomDashboardListContextProvider from '../../../channel/CustomDashboardList/CustomDashboardListContextProvider';
+import { CustomDashboardViewContextProvider } from '../../../channel/CustomDashboardView';
 
 interface IOwnProps {
   apolloClient: ApolloClient<any>;
@@ -40,6 +45,11 @@ interface IOwnProps {
   children: React.ReactElement;
   devUIUrl: string;
   openApiPath: string;
+  availablePages?: string[];
+  customLabels: CustomLabels;
+  omittedProcessTimelineEvents?: string[];
+  diagramPreviewSize?: DiagramPreviewSize;
+  isStunnerEnabled: boolean;
 }
 
 const DevUILayout: React.FC<IOwnProps> = ({
@@ -49,9 +59,14 @@ const DevUILayout: React.FC<IOwnProps> = ({
   users,
   devUIUrl,
   openApiPath,
+  availablePages,
+  customLabels,
+  omittedProcessTimelineEvents,
+  diagramPreviewSize,
+  isStunnerEnabled,
   children
 }) => {
-  const renderPage = routeProps => {
+  const renderPage = (routeProps) => {
     return (
       <PageLayout
         pageNavOpen={true}
@@ -71,6 +86,11 @@ const DevUILayout: React.FC<IOwnProps> = ({
         openApiPath={openApiPath}
         isProcessEnabled={isProcessEnabled}
         isTracingEnabled={isTracingEnabled}
+        availablePages={availablePages}
+        customLabels={customLabels}
+        omittedProcessTimelineEvents={omittedProcessTimelineEvents}
+        diagramPreviewSize={diagramPreviewSize}
+        isStunnerEnabled={isStunnerEnabled}
       >
         <TaskConsoleContextsProvider apolloClient={apolloClient}>
           <TaskFormContextProvider>
@@ -79,15 +99,21 @@ const DevUILayout: React.FC<IOwnProps> = ({
                 <JobsManagementContextProvider apolloClient={apolloClient}>
                   <ProcessDefinitionListContextProvider>
                     <FormsListContextProvider>
-                      <FormDetailsContextProvider>
-                        <ProcessFormContextProvider>
-                          <MemoryRouter>
-                            <Switch>
-                              <Route path="/" render={renderPage} />
-                            </Switch>
-                          </MemoryRouter>
-                        </ProcessFormContextProvider>
-                      </FormDetailsContextProvider>
+                      <CustomDashboardListContextProvider>
+                        <CustomDashboardViewContextProvider>
+                          <FormDetailsContextProvider>
+                            <ProcessFormContextProvider>
+                              <WorkflowFormContextProvider>
+                                <MemoryRouter>
+                                  <Switch>
+                                    <Route path="/" render={renderPage} />
+                                  </Switch>
+                                </MemoryRouter>
+                              </WorkflowFormContextProvider>
+                            </ProcessFormContextProvider>
+                          </FormDetailsContextProvider>
+                        </CustomDashboardViewContextProvider>
+                      </CustomDashboardListContextProvider>
                     </FormsListContextProvider>
                   </ProcessDefinitionListContextProvider>
                 </JobsManagementContextProvider>

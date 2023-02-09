@@ -3,6 +3,11 @@
 exports[`ProcessListToolbar test Snapshot tests 1`] = `
 <ProcessListToolbar
   applyFilter={[MockFunction]}
+  defaultStatusFilter={
+    Array [
+      "ACTIVE",
+    ]
+  }
   driver={null}
   filters={
     Object {
@@ -15,6 +20,8 @@ exports[`ProcessListToolbar test Snapshot tests 1`] = `
     }
   }
   isAllChecked={false}
+  isWorkflow={true}
+  pluralProcessLabel="Workflows"
   processInstances={
     Array [
       Object {
@@ -210,6 +217,7 @@ exports[`ProcessListToolbar test Snapshot tests 1`] = `
   setProcessInstances={[MockFunction]}
   setProcessStates={[MockFunction]}
   setSelectedInstances={[MockFunction]}
+  singularProcessLabel="Workflow"
 >
   <ProcessInfoModal
     handleModalToggle={[Function]}
@@ -829,12 +837,10 @@ exports[`ProcessListToolbar test Snapshot tests 1`] = `
                               favorites={Array []}
                               favoritesLabel="Favorites"
                               hasInlineFilter={false}
-                              hasPlaceholderStyle={false}
                               id="status-select"
                               inlineFilterPlaceholderText={null}
                               inputIdPrefix=""
                               isCreatable={false}
-                              isCreateSelectOptionObject={false}
                               isDisabled={false}
                               isGrouped={false}
                               isInputValuePersisted={false}
@@ -850,7 +856,6 @@ exports[`ProcessListToolbar test Snapshot tests 1`] = `
                               onTypeaheadInputChanged={null}
                               ouiaSafe={true}
                               placeholderText="Status"
-                              position="left"
                               removeSelectionAriaLabel="Remove"
                               selections={
                                 Array [
@@ -881,7 +886,6 @@ exports[`ProcessListToolbar test Snapshot tests 1`] = `
                                     handleTypeaheadKeys={[Function]}
                                     hasClearButton={false}
                                     hasFooter={false}
-                                    hasPlaceholderStyle={false}
                                     id="pf-select-toggle-id-1"
                                     isActive={false}
                                     isDisabled={false}

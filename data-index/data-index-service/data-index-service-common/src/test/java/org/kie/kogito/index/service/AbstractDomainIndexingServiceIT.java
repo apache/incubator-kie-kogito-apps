@@ -29,6 +29,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.UserTaskInstanceDataEvent;
+import org.kie.kogito.index.TestUtils;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
 
 import io.restassured.http.ContentType;
@@ -43,23 +44,23 @@ import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.kie.kogito.index.DateTimeUtils.formatDateTime;
 import static org.kie.kogito.index.DateTimeUtils.formatOffsetDateTime;
-import static org.kie.kogito.index.GraphQLUtils.getDealsByTaskId;
-import static org.kie.kogito.index.GraphQLUtils.getDealsByTaskIdNoActualOwner;
-import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceById;
-import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByIdAndErrorNode;
-import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByIdAndState;
-import static org.kie.kogito.index.GraphQLUtils.getProcessInstanceByParentProcessInstanceId;
-import static org.kie.kogito.index.GraphQLUtils.getTravelsByProcessInstanceId;
-import static org.kie.kogito.index.GraphQLUtils.getTravelsByUserTaskId;
-import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceById;
-import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdAndActualOwner;
-import static org.kie.kogito.index.GraphQLUtils.getUserTaskInstanceByIdNoActualOwner;
 import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
 import static org.kie.kogito.index.TestUtils.getProcessInstanceVariablesMap;
 import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
 import static org.kie.kogito.index.model.ProcessInstanceState.ACTIVE;
 import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
 import static org.kie.kogito.index.model.ProcessInstanceState.ERROR;
+import static org.kie.kogito.index.service.GraphQLUtils.getDealsByTaskId;
+import static org.kie.kogito.index.service.GraphQLUtils.getDealsByTaskIdNoActualOwner;
+import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceById;
+import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByIdAndErrorNode;
+import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByIdAndState;
+import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByParentProcessInstanceId;
+import static org.kie.kogito.index.service.GraphQLUtils.getTravelsByProcessInstanceId;
+import static org.kie.kogito.index.service.GraphQLUtils.getTravelsByUserTaskId;
+import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceById;
+import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdAndActualOwner;
+import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdNoActualOwner;
 
 public abstract class AbstractDomainIndexingServiceIT extends AbstractIndexingServiceIT {
 
@@ -74,6 +75,9 @@ public abstract class AbstractDomainIndexingServiceIT extends AbstractIndexingSe
         }
         if (cacheService.getDomainModelCache("deals") != null) {
             cacheService.getDomainModelCache("deals").clear();
+        }
+        if (cacheService.getDomainModelCache("books") != null) {
+            cacheService.getDomainModelCache("books").clear();
         }
     }
 
@@ -119,6 +123,16 @@ public abstract class AbstractDomainIndexingServiceIT extends AbstractIndexingSe
             assertThat(ex.getMessage()).isEqualTo(
                     "Could not find message with name: org.demo.traveller in proto file, e, please review option kogito_model");
         }
+    }
+
+    @Test //Reproducer for KOGITO-7690
+    void testProtoWithoutSortingAttribute() throws Exception {
+        String proto = TestUtils.readFileContent("books.proto");
+        protobufService.registerProtoBufferType(proto);
+        given().contentType(ContentType.JSON)
+                .body("{ \"query\" : \"{Books{ id, book { authors { name } }, metadata { processInstances { id } } } }\" }")
+                .when().post("/graphql")
+                .then().log().ifValidationFails().statusCode(200).body("data.Books", isA(Collection.class));
     }
 
     @Test //Reproducer for KOGITO-172
@@ -252,8 +266,8 @@ public abstract class AbstractDomainIndexingServiceIT extends AbstractIndexingSe
                 .body("data.Travels[0].traveller.locations[0].zipCode", is("zc1"))
                 .body("data.Travels[0].hotel.name", is("Meriton"))
                 .body("data.Travels[0].flight.flightNumber", is("MX555"))
-                .body("data.Travels[0].flight.arrival", is("2019-08-20T22:12:57.340Z"))
-                .body("data.Travels[0].flight.departure", is("2019-08-20T07:12:57.340Z"));
+                .body("data.Travels[0].flight.arrival", is("2019-08-20T22:12:57.34Z"))
+                .body("data.Travels[0].flight.departure", is("2019-08-20T07:12:57.34Z"));
 
         ProcessInstanceDataEvent endEvent = getProcessCloudEvent(processId, processInstanceId, COMPLETED, null, null, null);
         indexProcessCloudEvent(endEvent);
@@ -306,8 +320,8 @@ public abstract class AbstractDomainIndexingServiceIT extends AbstractIndexingSe
                 .body("data.Travels[0].traveller.firstName", is("Maciej"))
                 .body("data.Travels[0].hotel.name", is("Meriton"))
                 .body("data.Travels[0].flight.flightNumber", is("MX555"))
-                .body("data.Travels[0].flight.arrival", is("2019-08-20T22:12:57.340Z"))
-                .body("data.Travels[0].flight.departure", is("2019-08-20T07:12:57.340Z"));
+                .body("data.Travels[0].flight.arrival", is("2019-08-20T22:12:57.34Z"))
+                .body("data.Travels[0].flight.departure", is("2019-08-20T07:12:57.34Z"));
 
         UserTaskInstanceDataEvent secondUserTaskEvent = getUserTaskCloudEvent(secondTaskId, processId, processInstanceId, null,
                 null, state);
@@ -364,8 +378,8 @@ public abstract class AbstractDomainIndexingServiceIT extends AbstractIndexingSe
                 .body("data.Travels[0].traveller.firstName", is("Maciej"))
                 .body("data.Travels[0].hotel.name", is("Meriton"))
                 .body("data.Travels[0].flight.flightNumber", is("MX555"))
-                .body("data.Travels[0].flight.arrival", is("2019-08-20T22:12:57.340Z"))
-                .body("data.Travels[0].flight.departure", is("2019-08-20T07:12:57.340Z"));
+                .body("data.Travels[0].flight.arrival", is("2019-08-20T22:12:57.34Z"))
+                .body("data.Travels[0].flight.departure", is("2019-08-20T07:12:57.34Z"));
     }
 
     @Test

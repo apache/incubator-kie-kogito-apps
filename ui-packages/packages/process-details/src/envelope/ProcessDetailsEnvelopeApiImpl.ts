@@ -24,7 +24,8 @@ import {
 } from '../api';
 import { ProcessDetailsEnvelopeContext } from './ProcessDetailsEnvelopeContext';
 export class ProcessDetailsEnvelopeApiImpl
-  implements ProcessDetailsEnvelopeApi {
+  implements ProcessDetailsEnvelopeApi
+{
   private capturedInitRequestYet = false;
   constructor(
     private readonly args: EnvelopeApiFactoryArgs<
@@ -56,6 +57,6 @@ export class ProcessDetailsEnvelopeApiImpl
     }
 
     this.ackCapturedInitRequest();
-    this.args.view().initialize(initArgs.processInstance);
+    this.args.view().initialize(initArgs);
   };
 }

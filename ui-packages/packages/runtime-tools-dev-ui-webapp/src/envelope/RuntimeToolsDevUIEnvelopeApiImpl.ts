@@ -25,7 +25,8 @@ import { RuntimeToolsDevUIEnvelopeContextType } from './RuntimeToolsDevUIEnvelop
 import { RuntimeToolsDevUIEnvelopeViewApi } from './RuntimeToolsDevUIEnvelopeViewApi';
 
 export class RuntimeToolsDevUIEnvelopeApiImpl
-  implements RuntimeToolsDevUIEnvelopeApi {
+  implements RuntimeToolsDevUIEnvelopeApi
+{
   private capturedInitRequestYet = false;
 
   constructor(
@@ -68,10 +69,21 @@ export class RuntimeToolsDevUIEnvelopeApiImpl
       this.args.view().setDevUIUrl(initArgs.devUIUrl);
     this.args.view().setOpenApiPath &&
       this.args.view().setOpenApiPath(initArgs.openApiPath);
-
+    this.args.view().setAvailablePages &&
+      this.args.view().setAvailablePages(initArgs.availablePages);
+    this.args.view().setCustomLabels &&
+      this.args.view().setCustomLabels(initArgs.customLabels);
+    this.args.view().setOmittedProcessTimelineEvents &&
+      this.args
+        .view()
+        .setOmittedProcessTimelineEvents(initArgs.omittedProcessTimelineEvents);
+    this.args.view().setDiagramPreviewSize &&
+      this.args.view().setDiagramPreviewSize(initArgs.diagramPreviewSize);
+    this.args.view().setIsStunnerEnabled &&
+      this.args.view().setIsStunnerEnabled(initArgs.isStunnerEnabled);
     // Ensure these are set last. This is a workaround to ensure views are corrected configured with other properties
     // from the DevUIAppContext before they are rendered. i.e. use of DevUIAppContext is not responsive to updates.
-    this.args.view().setProcessEnabled(initArgs.isProcessEnabled);
+    this.args.view().setProcessEnabled(initArgs.isDataIndexAvailable);
     this.args.view().setTracingEnabled(initArgs.isTracingEnabled);
   };
 }

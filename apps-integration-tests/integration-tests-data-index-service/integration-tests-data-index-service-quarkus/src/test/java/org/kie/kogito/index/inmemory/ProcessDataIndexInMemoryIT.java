@@ -20,10 +20,10 @@ import org.kie.kogito.index.quarkus.DataIndexInMemoryQuarkusTestResource;
 import org.kie.kogito.index.quarkus.InMemoryTestProfile;
 import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.quarkus.test.junit.TestProfile;
 
-@QuarkusTest
+@QuarkusIntegrationTest
 @TestProfile(InMemoryTestProfile.class)
 public class ProcessDataIndexInMemoryIT extends AbstractProcessDataIndexIT {
 
@@ -38,5 +38,10 @@ public class ProcessDataIndexInMemoryIT extends AbstractProcessDataIndexIT {
     @Override
     public boolean validateDomainData() {
         return false;
+    }
+
+    @Override
+    public boolean validateGetProcessInstanceSource() {
+        return true;
     }
 }

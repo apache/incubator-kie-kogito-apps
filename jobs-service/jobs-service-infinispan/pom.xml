@@ -39,10 +39,6 @@
         <!-- Needs to be declared as Jobs service doesn't leverage persistence-commons-infinispan. -->
         <dependency>
             <groupId>org.infinispan</groupId>
-            <artifactId>infinispan-commons-jdk11</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.infinispan</groupId>
             <artifactId>infinispan-query-dsl</artifactId>
         </dependency>
         <dependency>
@@ -94,6 +90,11 @@
         <dependency>
             <groupId>org.keycloak</groupId>
             <artifactId>keycloak-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.tomakehurst</groupId>
+            <artifactId>wiremock-jre8</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

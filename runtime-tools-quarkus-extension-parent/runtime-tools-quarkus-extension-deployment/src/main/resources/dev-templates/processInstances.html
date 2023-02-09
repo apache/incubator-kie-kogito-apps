@@ -33,14 +33,15 @@
 <script>
     const devUI = RuntimeToolsDevUI.open({
         container: document.getElementById("envelope-app"),
-        isProcessEnabled: {info:isProcessEnabled},
+        isDataIndexAvailable: {info:isProcessEnabled},
         isTracingEnabled: {info:isTracingEnabled},
         users: {info:userInfo.arrayRepresentation.raw},
         dataIndexUrl: "{config:property('kogito.data-index.url') ?: 'http://localhost:8180'}/graphql",
         trustyServiceUrl: "{config:property('kogito.trusty.http.url') ?: 'http://localhost:1336'}",
         page: "Processes",
         devUIUrl: "http://localhost:{config:property('quarkus.http.port') or '8080'}",
-        openApiPath: "{config:property('quarkus.smallrye-openapi.path') or '/q/openapi.json'}"
+        openApiPath: "{config:property('quarkus.smallrye-openapi.path') or '/q/openapi.json'}",
+        availablePages: ["Processes", "Jobs", "Tasks", "Forms"]
     })
 </script>
 {/body}

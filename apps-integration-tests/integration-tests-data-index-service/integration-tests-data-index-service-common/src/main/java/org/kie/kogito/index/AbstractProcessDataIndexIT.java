@@ -16,6 +16,10 @@
 package org.kie.kogito.index;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -28,7 +32,9 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.config.JsonConfig;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.config.JsonPathConfig;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
@@ -49,6 +55,9 @@ public abstract class AbstractProcessDataIndexIT {
 
     static {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        JsonConfig jsonConfig = JsonConfig.jsonConfig().numberReturnType(JsonPathConfig.NumberReturnType.DOUBLE);
+
+        RestAssured.config = RestAssured.config().jsonConfig(jsonConfig);
     }
 
     RequestSpecification spec;
@@ -59,6 +68,10 @@ public abstract class AbstractProcessDataIndexIT {
 
     public boolean validateDomainData() {
         return true;
+    }
+
+    public boolean validateGetProcessInstanceSource() {
+        return false;
     }
 
     public RequestSpecification dataIndexSpec() {
@@ -72,7 +85,11 @@ public abstract class AbstractProcessDataIndexIT {
     public void testProcessInstanceEvents() throws IOException {
         String pId = given()
                 .contentType(ContentType.JSON)
-                .body("{\"traveller\" : {\"firstName\" : \"Darth\",\"lastName\" : \"Vader\",\"email\" : \"darth.vader@deathstar.com\",\"nationality\" : \"Tatooine\"}}")
+                .body("{\"traveller\" : {\"firstName\" : \"Darth\",\"lastName\" : \"Vader\",\"email\" : \"darth.vader@deathstar.com\",\"nationality\" : \"Tatooine\", " +
+                        "\"testDate\" : \"2022-03-09T23:00:00Z\", " + "    \"testInstant\": \"2022-03-10T16:15:50Z\", " +
+                        " \"testInteger\":  2147483641 ," + " \"testLong\": 8223372036854775802," +
+                        " \"testFloat\": 12028234663852423984636272836465776.837366," +
+                        " \"testDouble\" : 21348234663852886984636272864657746.234566" + "}}")
                 .when()
                 .post("/approvals")
                 .then()
@@ -97,16 +114,25 @@ public abstract class AbstractProcessDataIndexIT {
                 .path("[0].id");
 
         if (validateDomainData()) {
+
             await()
                     .atMost(TIMEOUT)
                     .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                            .body("{ \"query\" : \"{Approvals{ id, traveller { firstName, lastName }, metadata { processInstances { id, state }, userTasks { id, name, state } } } }\" }")
+                            .body("{ \"query\" : \"{Approvals{ id, traveller { firstName, lastName, testDate, " +
+                                    "testInstant, testInteger, testLong, testFloat, testDouble}, " +
+                                    "metadata { processInstances { id, state }, userTasks { id, name, state } } } }\" }")
                             .when().post("/graphql")
                             .then().statusCode(200)
                             .body("data.Approvals.size()", is(1))
                             .body("data.Approvals[0].id", is(pId))
                             .body("data.Approvals[0].traveller.firstName", is("Darth"))
                             .body("data.Approvals[0].traveller.lastName", is("Vader"))
+                            .body("data.Approvals[0].traveller.testDate", is("2022-03-09T23:00:00Z"))
+                            .body("data.Approvals[0].traveller.testInstant", is("2022-03-10T16:15:50Z"))
+                            .body("data.Approvals[0].traveller.testInteger", is(2147483641))
+                            .body("data.Approvals[0].traveller.testLong", is(Long.valueOf("8223372036854775802")))
+                            .body("data.Approvals[0].traveller.testFloat", is(1.2028235E34))
+                            .body("data.Approvals[0].traveller.testDouble", is(2.134823466385289E34))
                             .body("data.Approvals[0].metadata.processInstances", is(notNullValue()))
                             .body("data.Approvals[0].metadata.processInstances.size()", is(1))
                             .body("data.Approvals[0].metadata.processInstances[0].id", is(pId))
@@ -238,6 +264,17 @@ public abstract class AbstractProcessDataIndexIT {
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> getProcessInstanceById(pId2, "ACTIVE"));
+
+        if (validateGetProcessInstanceSource()) {
+            await()
+                    .atMost(TIMEOUT)
+                    .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                            .body("{ \"query\" : \"{ ProcessInstances (where: { id: {equal: \\\"" + pId2 + "\\\"}}) { source } }\"}")
+                            .when().post("/graphql")
+                            .then()
+                            .statusCode(200)
+                            .body("data.ProcessInstances[0].source", is(getTestFileContentByFilename("approval.bpmn"))));
+        }
 
         await()
                 .atMost(TIMEOUT)
@@ -641,7 +678,7 @@ public abstract class AbstractProcessDataIndexIT {
         assertEquals(2, schemaJsonNode.at("/$defs").size());
 
         assertEquals("object", schemaJsonNode.at("/$defs/Traveller/type").asText());
-        assertEquals(6, schemaJsonNode.at("/$defs/Traveller/properties").size());
+        assertEquals(12, schemaJsonNode.at("/$defs/Traveller/properties").size());
         assertEquals("#/$defs/Address", schemaJsonNode.at("/$defs/Traveller/properties/address/$ref").asText());
         assertEquals("string",
                 schemaJsonNode.at("/$defs/Traveller/properties/email/type").asText());
@@ -664,5 +701,14 @@ public abstract class AbstractProcessDataIndexIT {
         assertEquals("string",
                 schemaJsonNode.at("/$defs/Address/properties/zipCode/type").asText());
 
+    }
+
+    public static String readFileContent(String file) throws URISyntaxException, IOException {
+        Path path = Paths.get(Thread.currentThread().getContextClassLoader().getResource(file).toURI());
+        return Files.readString(path);
+    }
+
+    public String getTestFileContentByFilename(String fileName) throws Exception {
+        return readFileContent(fileName);
     }
 }

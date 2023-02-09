@@ -16,19 +16,19 @@
     "test:it": "lerna run test:it --stream --concurrency=1 --no-bail --",
     "locktt": "locktt",
     "test:e2e:trusty": "lerna run --scope @kogito-apps/trusty test:e2e:trusty --",
-    "format:all": "lerna run format --stream --"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lerna run --concurrency 1 --stream precommit --since HEAD",
-      "post-commit": "git update-index --again"
-    }
+    "format:all": "lerna run format --stream --",
+    "build:prod:swf": "lerna run --scope='@kogito-apps/runtime-tools-dev-ui-webapp' build:prod --include-dependencies --stream --",
+    "test:swf": "lerna run --scope='@kogito-apps/runtime-tools-dev-ui-webapp' test --include-dependencies --stream --",
+    "prepare": "cd .. && husky install"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
+    "@kie-tools-core/editor": "0.24.0",
+    "@kie-tools-core/envelope": "0.24.0",
+    "@kie-tools-core/envelope-bus": "0.24.0",
+    "@kie-tools/serverless-workflow-combined-editor": "0.24.0",
+    "@kie-tools/serverless-workflow-diagram-editor-assets": "0.24.0",
     "@kogito-apps/management-console": "file:packages/management-console",
-    "@kogito-tooling/envelope": "0.11.0",
-    "@kogito-tooling/envelope-bus": "0.11.0",
     "apollo-boost": "^0.4.4",
     "apollo-link-context": "^1.0.20",
     "axios": "^0.21.1",
@@ -39,11 +39,13 @@
     "lower-case": "^1.1.4",
     "monaco-editor": "0.27.0",
     "monaco-editor-webpack-plugin": "4.1.2",
+    "monaco-yaml": "3.0.0",
     "no-case": "^2.3.2",
     "react-apollo": "^3.1.3",
     "react-apollo-hooks": "^0.5.0",
     "react-datetime-picker": "^3.0.4",
     "react-inlinesvg": "^2.1.1",
+    "react-json-view": "^1.21.3",
     "react-monaco-editor": "^0.41.2",
     "react-router": "^5.0.1",
     "react-router-dom": "^5.1.2",
@@ -67,6 +69,7 @@
     "@graphql-codegen/typescript": "^2.2.2",
     "@graphql-codegen/typescript-operations": "^2.1.4",
     "@graphql-codegen/typescript-react-apollo": "^3.1.4",
+    "@kie-tools/dashbuilder-client": "^0.23.0",
     "@kogito-apps/cypress-ouia": "^1.0.0",
     "@kogito-apps/ouia-tools": "^1.0.0",
     "@testing-library/jest-dom": "^5.12.0",
@@ -86,8 +89,8 @@
     "babel-jest": "^25.1.0",
     "babel-loader": "^8.2.2",
     "concurrently": "^5.1.0",
-    "copyfiles": "^2.4.1",
     "copy-webpack-plugin": "^6.0.3",
+    "copyfiles": "^2.4.1",
     "css-loader": "^3.2.0",
     "cypress": "^9.6.1",
     "enzyme": "^3.11.0",
@@ -103,7 +106,7 @@
     "file-loader": "^5.0.2",
     "filemanager-webpack-plugin": "^6.1.4",
     "html-webpack-plugin": "^3.2.0",
-    "husky": "^4.2.3",
+    "husky": "^8.0.3",
     "identity-obj-proxy": "^3.0.0",
     "imagemin": "^7.0.0",
     "jest": "^26.6.3",
@@ -114,13 +117,16 @@
     "mini-css-extract-plugin": "^0.9.0",
     "mockdate": "^3.0.5",
     "nodemon": "^2.0.2",
-    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
     "postinstall-postinstall": "^2.1.0",
-    "prettier": "^1.18.2",
+    "prettier": "^2.8.1",
+    "pretty-quick": "^3.1.3",
     "raw-loader": "^4.0.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-test-renderer": "^16.10.2",
+    "sass": "^1.54.5",
+    "sass-loader": "^10.3.1",
     "start-server-and-test": "^1.12.0",
     "strip-ansi": "^6.0.0",
     "style-loader": "^1.0.0",
@@ -141,6 +147,13 @@
   },
   "resolutions": {
     "@types/express-serve-static-core": "^4.17.21",
-    "axios": "0.21.2"
+    "axios": "0.21.2",
+    "@patternfly/react-core": "4.157.3"
+  },
+  "lint-staged": {
+    "packages/**/*.{js,ts,tsx}": [
+      "yarn run pretty-quick --staged",
+      "eslint --fix"
+    ]
   }
 }
