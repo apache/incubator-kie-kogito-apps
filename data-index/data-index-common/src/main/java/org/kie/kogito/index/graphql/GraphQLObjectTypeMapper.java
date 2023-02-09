@@ -34,7 +34,7 @@ import graphql.schema.GraphQLSchema;
 import graphql.schema.GraphQLType;
 
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
-import static org.kie.kogito.index.Constants.KOGITO_DOMAIN_ATTRIBUTE;
+import static org.kie.kogito.index.storage.Constants.KOGITO_DOMAIN_ATTRIBUTE;
 
 public class GraphQLObjectTypeMapper implements Function<DomainDescriptor, GraphQLObjectType> {
 
@@ -83,7 +83,15 @@ public class GraphQLObjectTypeMapper implements Function<DomainDescriptor, Graph
                         type = Scalars.GraphQLInt;
                         break;
                     case "java.lang.Long":
-                        type = ExtendedScalars.GraphQLLong;
+                        field.setTypeName("Long");
+                        type = getGraphQLType(field, schema, additionalTypes, allTypes);
+                        break;
+                    case "java.lang.Float":
+                        type = Scalars.GraphQLFloat;
+                        break;
+                    case "java.lang.Double":
+                        field.setTypeName("BigDecimal");
+                        type = getGraphQLType(field, schema, additionalTypes, allTypes);
                         break;
                     case "java.lang.String":
                         type = Scalars.GraphQLString;

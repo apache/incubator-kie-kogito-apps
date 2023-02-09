@@ -20,81 +20,39 @@ import java.time.temporal.ChronoUnit;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
-
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.api.Job;
 import org.kie.kogito.jobs.api.JobBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
-import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
-import org.kie.kogito.jobs.service.scheduler.impl.VertxTimerServiceScheduler;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
-import static java.util.concurrent.TimeUnit.MINUTES;
-import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public abstract class BaseJobResourceIT {
+public abstract class BaseJobResourceIT extends CommonBaseJobResourceIT {
 
-    public static final String HEALTH_ENDPOINT = "/q/health";
-    private static final String CALLBACK_ENDPOINT = "http://localhost:%d/callback";
-    public static final String PROCESS_ID = "processId";
-    public static final String PROCESS_INSTANCE_ID = "processInstanceId";
-    public static final String ROOT_PROCESS_ID = "rootProcessId";
-    public static final String ROOT_PROCESS_INSTANCE_ID = "rootProcessInstanceId";
-    public static final String NODE_INSTANCE_ID = "nodeInstanceId";
-    public static final int PRIORITY = 1;
-    public static final int BAD_REQUEST = 400;
-    public static final int OK = 200;
-
-    @ConfigProperty(name = "quarkus.http.test-port")
-    int port;
-
-    @Inject
-    ObjectMapper objectMapper;
-
-    @Inject
-    TimerDelegateJobScheduler scheduler;
-
-    @Inject
-    VertxTimerServiceScheduler timer;
-
-    @BeforeEach
-    void init() {
-        //health check - wait to be ready
-        await()
-                .atMost(1, MINUTES)
-                .pollInterval(1, SECONDS)
-                .untilAsserted(() -> given()
-                        .contentType(ContentType.JSON)
-                        .accept(ContentType.JSON)
-                        .get(HEALTH_ENDPOINT)
-                        .then()
-                        .statusCode(OK));
+    @Override
+    protected String getCreatePath() {
+        return RestApiConstants.JOBS_PATH;
     }
 
-    @AfterEach
-    void tearDown() {
-        scheduler.setForceExecuteExpiredJobs(false);
+    @Override
+    protected String getGetJobQuery(String jobId) {
+        return String.format(RestApiConstants.JOBS_PATH + "/%s", jobId);
     }
 
     @Test
     void create() throws Exception {
-        final Job job = getJob("1");
+        final Job job = buildJob("1");
         final ScheduledJob response = create(jobToJson(job))
                 .statusCode(OK)
                 .extract()
@@ -113,28 +71,15 @@ public abstract class BaseJobResourceIT {
                 .statusCode(BAD_REQUEST);
     }
 
-    private String getCallbackEndpoint() {
-        return String.format(CALLBACK_ENDPOINT, port);
-    }
-
-    private ValidatableResponse create(String body) {
-        return given()
-                .contentType(ContentType.JSON)
-                .body(body)
-                .when()
-                .post(JobResource.JOBS_PATH)
-                .then();
-    }
-
     private String jobToJson(Job job) throws JsonProcessingException {
         return objectMapper.writeValueAsString(job);
     }
 
-    private Job getJob(String id) {
-        return getJob(id, DateUtil.now().plusSeconds(10));
+    private Job buildJob(String id) {
+        return buildJob(id, DateUtil.now().plusSeconds(10));
     }
 
-    private Job getJob(String id, ZonedDateTime expirationTime, Integer repeatLimit, Long repeatInterval) {
+    private Job buildJob(String id, ZonedDateTime expirationTime, Integer repeatLimit, Long repeatInterval) {
         return JobBuilder
                 .builder()
                 .id(id)
@@ -151,18 +96,18 @@ public abstract class BaseJobResourceIT {
                 .build();
     }
 
-    private Job getJob(String id, ZonedDateTime expirationTime) {
-        return getJob(id, expirationTime, null, null);
+    private Job buildJob(String id, ZonedDateTime expirationTime) {
+        return buildJob(id, expirationTime, null, null);
     }
 
     @Test
     void deleteAfterCreate() throws Exception {
         final String id = "2";
-        final Job job = getJob(id);
+        final Job job = buildJob(id);
         create(jobToJson(job));
         final ScheduledJob response = given().pathParam("id", id)
                 .when()
-                .delete(JobResource.JOBS_PATH + "/{id}")
+                .delete(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK)
                 .contentType(ContentType.JSON)
@@ -174,7 +119,7 @@ public abstract class BaseJobResourceIT {
     @Test
     void getAfterCreate() throws Exception {
         final String id = "3";
-        final Job job = getJob(id);
+        final Job job = buildJob(id);
         create(jobToJson(job));
         assertGetScheduledJob(id);
     }
@@ -182,7 +127,7 @@ public abstract class BaseJobResourceIT {
     @Test
     void executeTest() throws Exception {
         final String id = "4";
-        final Job job = getJob(id);
+        final Job job = buildJob(id);
         create(jobToJson(job));
         final ScheduledJob scheduledJob = assertGetScheduledJob(id);
         assertEquals(scheduledJob.getId(), job.getId());
@@ -194,7 +139,7 @@ public abstract class BaseJobResourceIT {
     @Test
     void cancelRunningNonPeriodicJobTest() throws Exception {
         final String id = UUID.randomUUID().toString();
-        final Job job = getJob(id, DateUtil.now().plus(10, ChronoUnit.SECONDS));
+        final Job job = buildJob(id, DateUtil.now().plus(10, ChronoUnit.SECONDS));
         create(jobToJson(job));
 
         assertGetScheduledJob(id);
@@ -218,7 +163,7 @@ public abstract class BaseJobResourceIT {
     void cancelRunningPeriodicJobTest() throws Exception {
         final String id = UUID.randomUUID().toString();
         int timeMillis = 1000;
-        final Job job = getJob(id, DateUtil.now().plus(timeMillis, ChronoUnit.MILLIS), 10, 500l);
+        final Job job = buildJob(id, DateUtil.now().plus(timeMillis, ChronoUnit.MILLIS), 10, 500l);
         create(jobToJson(job));
 
         //check the job was created
@@ -256,7 +201,7 @@ public abstract class BaseJobResourceIT {
         given()
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(404);
     }
@@ -265,7 +210,7 @@ public abstract class BaseJobResourceIT {
         ScheduledJob scheduledJob = given()
                 .pathParam("id", id)
                 .when()
-                .delete(JobResource.JOBS_PATH + "/{id}")
+                .delete(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK)
                 .contentType(ContentType.JSON)
@@ -287,7 +232,7 @@ public abstract class BaseJobResourceIT {
         ScheduledJob scheduledJob = given()
                 .pathParam("id", id)
                 .when()
-                .get(JobResource.JOBS_PATH + "/{id}")
+                .get(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(OK)
                 .contentType(ContentType.JSON)
@@ -343,24 +288,12 @@ public abstract class BaseJobResourceIT {
     @Test
     void patchInvalidAttributesTest() throws Exception {
         final String id = UUID.randomUUID().toString();
-        final Job job = getJob(id);
+        final Job job = buildJob(id);
         create(jobToJson(job));
 
         final String newCallbackEndpoint = "http://localhost/newcallback";
         Job toPatch = JobBuilder.builder().callbackEndpoint(newCallbackEndpoint).build();
 
-        assertPatch(id, toPatch, BAD_REQUEST);
-
-        toPatch = JobBuilder.builder().processId(UUID.randomUUID().toString()).build();
-        assertPatch(id, toPatch, BAD_REQUEST);
-
-        toPatch = JobBuilder.builder().rootProcessId(UUID.randomUUID().toString()).build();
-        assertPatch(id, toPatch, BAD_REQUEST);
-
-        toPatch = JobBuilder.builder().rootProcessInstanceId(UUID.randomUUID().toString()).build();
-        assertPatch(id, toPatch, BAD_REQUEST);
-
-        toPatch = JobBuilder.builder().processInstanceId(UUID.randomUUID().toString()).build();
         assertPatch(id, toPatch, BAD_REQUEST);
 
         toPatch = JobBuilder.builder().priority(10).build();
@@ -376,7 +309,7 @@ public abstract class BaseJobResourceIT {
                 .contentType(ContentType.JSON)
                 .body(jobToJson(toPatch))
                 .when()
-                .patch(JobResource.JOBS_PATH + "/{id}")
+                .patch(RestApiConstants.JOBS_PATH + "/{id}")
                 .then()
                 .statusCode(i);
     }
@@ -384,7 +317,7 @@ public abstract class BaseJobResourceIT {
     @Test
     void patchInvalidIdPathTest() throws Exception {
         final String id = UUID.randomUUID().toString();
-        final Job job = getJob(id);
+        final Job job = buildJob(id);
         create(jobToJson(job));
 
         Job toPatch = JobBuilder.builder().expirationTime(DateUtil.now()).build();
@@ -400,7 +333,7 @@ public abstract class BaseJobResourceIT {
     @Test
     void patchReschedulingTest() throws Exception {
         final String id = UUID.randomUUID().toString();
-        final Job job = getJob(id, DateUtil.now().plusHours(1));
+        final Job job = buildJob(id, DateUtil.now().plusHours(1));
         create(jobToJson(job));
 
         assertGetScheduledJob(id, false);

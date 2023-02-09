@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2022 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.kie.kogito.jobs.service.messaging;
 
 import java.net.URI;
@@ -30,8 +29,8 @@ import org.kie.kogito.jobs.api.Job;
 import org.kie.kogito.jobs.api.event.CancelJobRequestEvent;
 import org.kie.kogito.jobs.api.event.CreateProcessInstanceJobRequestEvent;
 import org.kie.kogito.jobs.service.exception.JobServiceException;
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.model.job.JobDetails;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
 import org.mockito.ArgumentCaptor;
@@ -56,13 +55,13 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-abstract class ReactiveMessagingEventConsumerTest<T extends ReactiveMessagingEventConsumer> {
+public abstract class ReactiveMessagingEventConsumerTest<T extends ReactiveMessagingEventConsumer> {
 
-    private static final String JOB_ID = "JOB_ID";
-    private static final String INTERNAL_ERROR = "Internal error";
-    private static final String JOB_QUERY_ERROR = "Job query error";
-    private static final String EVENT_ID = "EVENT_ID";
-    private static final URI EVENT_SOURCE = URI.create("http://event_source");
+    public static final String JOB_ID = "JOB_ID";
+    public static final String INTERNAL_ERROR = "Internal error";
+    public static final String JOB_QUERY_ERROR = "Job query error";
+    public static final String EVENT_ID = "EVENT_ID";
+    public static final URI EVENT_SOURCE = URI.create("http://event_source");
 
     @Mock
     private TimerDelegateJobScheduler scheduler;
@@ -70,7 +69,7 @@ abstract class ReactiveMessagingEventConsumerTest<T extends ReactiveMessagingEve
     @Mock
     private ReactiveJobRepository jobRepository;
 
-    private ObjectMapper objectMapper;
+    public ObjectMapper objectMapper;
 
     @Mock
     private Message<CloudEvent> message;
@@ -239,7 +238,7 @@ abstract class ReactiveMessagingEventConsumerTest<T extends ReactiveMessagingEve
     private void executeSuccessfulExecution() {
         eventConsumer.onKogitoServiceRequest(message)
                 .subscribe().with(callback -> {
-                }, Assertions::fail);
+                }, Assertions::assertNotNull);
         verify(message).ack();
         verify(message, never()).nack(any());
     }
@@ -247,7 +246,7 @@ abstract class ReactiveMessagingEventConsumerTest<T extends ReactiveMessagingEve
     private void executeFailedExecution(String withErrorMessage) {
         eventConsumer.onKogitoServiceRequest(message)
                 .subscribe().with(callback -> {
-                }, Assertions::fail);
+                }, Assertions::assertNull);
         verify(message, never()).ack();
         verify(message).nack(errorCaptor.capture());
         assertThat(errorCaptor.getValue())
@@ -256,7 +255,7 @@ abstract class ReactiveMessagingEventConsumerTest<T extends ReactiveMessagingEve
                 .hasMessageContaining(withErrorMessage);
     }
 
-    private CloudEvent newCreateProcessInstanceJobRequestCloudEvent() throws Exception {
+    public CloudEvent newCreateProcessInstanceJobRequestCloudEvent() throws Exception {
         Job job = new Job();
         job.setId(JOB_ID);
         return CloudEventBuilder.v1()
@@ -267,7 +266,7 @@ abstract class ReactiveMessagingEventConsumerTest<T extends ReactiveMessagingEve
                 .build();
     }
 
-    private CloudEvent newCancelJobRequestCloudEvent() throws Exception {
+    public CloudEvent newCancelJobRequestCloudEvent() throws Exception {
         CancelJobRequestEvent.JobId jobId = new CancelJobRequestEvent.JobId(JOB_ID);
         return CloudEventBuilder.v1()
                 .withId(EVENT_ID)
