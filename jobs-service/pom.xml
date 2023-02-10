@@ -22,6 +22,7 @@
     <module>jobs-service-postgresql</module>
     <module>jobs-service-mongodb</module>
     <module>jobs-service-inmemory</module>
+    <module>kogito-addons-jobs-service</module>
   </modules>
 
   <dependencyManagement>
@@ -46,6 +47,11 @@
       <dependency>
         <groupId>org.kie.kogito</groupId>
         <artifactId>job-http-recipient</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>job-http-recipient-deployment</artifactId>
         <version>${project.version}</version>
       </dependency>
       <dependency>
