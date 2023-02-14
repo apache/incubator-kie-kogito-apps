@@ -15,16 +15,22 @@
  */
 package org.kie.kogito.addons.quarkus.jobs.service.embedded.deployment;
 
+import java.net.InetAddress;
+
+import org.eclipse.microprofile.config.ConfigProvider;
+import org.kie.kogito.quarkus.addons.common.deployment.KogitoCapability;
+import org.kie.kogito.quarkus.addons.common.deployment.OneOfCapabilityKogitoAddOnProcessor;
+
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
-import io.quarkus.deployment.builditem.IndexDependencyBuildItem;
-import org.kie.kogito.quarkus.addons.common.deployment.KogitoCapability;
-import org.kie.kogito.quarkus.addons.common.deployment.OneOfCapabilityKogitoAddOnProcessor;
+import io.quarkus.deployment.builditem.SystemPropertyBuildItem;
 
 class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKogitoAddOnProcessor {
 
     private static final String FEATURE = "kogito-addons-quarkus-jobs-service-embedded";
+    private static final String JOBS_SERVICE_URL = "kogito.jobs-service.url";
+    private static final String SERVICE_URL = "kogito.service.url";
 
     KogitoAddonsQuarkusJobsServiceEmbeddedProcessor() {
         super(KogitoCapability.SERVERLESS_WORKFLOW, KogitoCapability.PROCESSES);
@@ -36,7 +42,13 @@ class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKog
     }
 
     @BuildStep
-    void addDependencies(BuildProducer<IndexDependencyBuildItem> indexDependency) {
-        indexDependency.produce(new IndexDependencyBuildItem("org.kie.kogito", "jobs-service-common"));
+    void buildServiceConfiguration(BuildProducer<SystemPropertyBuildItem> systemProperties) {
+        Integer port = ConfigProvider.getConfig().getOptionalValue("quarkus.http.port", Integer.class)
+                .orElse(8080);
+        String host = ConfigProvider.getConfig().getOptionalValue("quarkus.http.host", String.class)
+                .orElseGet(() -> InetAddress.getLoopbackAddress().getHostAddress());
+        String url = "http://" + host + ":" + port;
+        systemProperties.produce(new SystemPropertyBuildItem(JOBS_SERVICE_URL, url));
+        systemProperties.produce(new SystemPropertyBuildItem(SERVICE_URL, url));
     }
 }

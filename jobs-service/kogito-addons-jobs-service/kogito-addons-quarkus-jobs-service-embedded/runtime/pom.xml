@@ -15,6 +15,7 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc</artifactId>
     </dependency>
+    <!-- adding resteasy classic to be aligned with kogito runtimes that does not support the reactive -->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-resteasy-mutiny</artifactId>
@@ -24,10 +25,15 @@
       <artifactId>quarkus-resteasy-jackson</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus.http</groupId>
+      <artifactId>quarkus-http-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>jobs-service-common</artifactId>
       <version>${project.version}</version>
       <exclusions>
+        <!-- excluding resteasy-reactive since kogito runtimes uses the classic -->
         <exclusion>
           <groupId>io.quarkus</groupId>
           <artifactId>quarkus-resteasy-reactive</artifactId>
@@ -41,6 +47,14 @@
           <artifactId>quarkus-container-image-jib</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-quarkus-processes</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-addons-quarkus-jobs-management</artifactId>
     </dependency>
   </dependencies>
   <build>
