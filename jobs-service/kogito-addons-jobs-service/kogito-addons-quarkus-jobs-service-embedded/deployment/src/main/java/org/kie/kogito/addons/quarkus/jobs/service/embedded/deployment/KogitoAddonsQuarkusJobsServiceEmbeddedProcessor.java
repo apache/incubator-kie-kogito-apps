@@ -15,9 +15,6 @@
  */
 package org.kie.kogito.addons.quarkus.jobs.service.embedded.deployment;
 
-import java.net.InetAddress;
-
-import org.eclipse.microprofile.config.ConfigProvider;
 import org.kie.kogito.quarkus.addons.common.deployment.KogitoCapability;
 import org.kie.kogito.quarkus.addons.common.deployment.OneOfCapabilityKogitoAddOnProcessor;
 
@@ -42,13 +39,9 @@ class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKog
     }
 
     @BuildStep
-    void buildServiceConfiguration(BuildProducer<SystemPropertyBuildItem> systemProperties) {
-        Integer port = ConfigProvider.getConfig().getOptionalValue("quarkus.http.port", Integer.class)
-                .orElse(8080);
-        String host = ConfigProvider.getConfig().getOptionalValue("quarkus.http.host", String.class)
-                .orElseGet(() -> InetAddress.getLoopbackAddress().getHostAddress());
-        String url = "http://" + host + ":" + port;
-        systemProperties.produce(new SystemPropertyBuildItem(JOBS_SERVICE_URL, url));
-        systemProperties.produce(new SystemPropertyBuildItem(SERVICE_URL, url));
+    void buildConfiguration(BuildProducer<SystemPropertyBuildItem> systemProperties) {
+        systemProperties.produce(new SystemPropertyBuildItem(SERVICE_URL, "http://${quarkus.http.host}:${quarkus.http.port}"));
+        systemProperties.produce(new SystemPropertyBuildItem(JOBS_SERVICE_URL, "${" + SERVICE_URL + "}"));
+
     }
 }
