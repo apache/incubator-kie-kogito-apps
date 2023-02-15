@@ -15,8 +15,6 @@
  */
 package org.kie.kogito.job.http.recipient;
 
-import java.util.Optional;
-
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
@@ -29,18 +27,17 @@ public class HttpRecipientValidator implements RecipientValidator {
 
     @Override
     public boolean accept(Recipient<?> recipient) {
-        return HttpRecipient.class.isInstance(recipient);
+        return recipient instanceof HttpRecipient;
     }
 
     @Override
     public boolean validate(Recipient<?> recipient) {
-        HttpRecipient httpRecipient = Optional.ofNullable(recipient)
-                .filter(HttpRecipient.class::isInstance)
-                .map(HttpRecipient.class::cast)
-                .orElseThrow(() -> new IllegalArgumentException());
+        if (!(recipient instanceof HttpRecipient)) {
+            throw new IllegalArgumentException("Recipient must be a non-null instance of: " + HttpRecipient.class);
+        }
 
-        if (StringUtils.isBlank(httpRecipient.getUrl())) {
-            throw new IllegalArgumentException();
+        if (StringUtils.isBlank(((HttpRecipient<?>) recipient).getUrl())) {
+            throw new IllegalArgumentException("HttpRecipient url must have a non empty value.");
         }
 
         return true;

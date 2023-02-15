@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2023 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.job.http.recipient;
+package org.kie.kogito.job.recipient.common.http;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.StringJoiner;
 
 public class HTTPRequestCallback {
@@ -38,9 +37,9 @@ public class HTTPRequestCallback {
     private HTTPMethod method;
     private Map<String, String> headers;
     private Map<String, String> queryParams;
-    private Optional<Object> body;
+    private Object body;
 
-    public HTTPRequestCallback(String url, HTTPMethod method, Map<String, String> headers, Optional<Object> body, Map<String, String> queryParams) {
+    private HTTPRequestCallback(String url, HTTPMethod method, Map<String, String> headers, Object body, Map<String, String> queryParams) {
         this.url = url;
         this.method = method;
         this.headers = headers;
@@ -60,7 +59,7 @@ public class HTTPRequestCallback {
         return headers;
     }
 
-    public Optional<Object> getBody() {
+    public Object getBody() {
         return body;
     }
 
@@ -108,7 +107,7 @@ public class HTTPRequestCallback {
         private String url;
         private HTTPMethod method;
         private Map<String, String> headers = new HashMap<>();
-        private Optional<Object> body = Optional.empty();
+        private Object body;
         private Map<String, String> queryParams = new HashMap<>();
 
         public Builder url(String url) {
@@ -131,8 +130,13 @@ public class HTTPRequestCallback {
             return this;
         }
 
+        public Builder addHeader(String name, String value) {
+            headers.put(name, value);
+            return this;
+        }
+
         public Builder body(Object body) {
-            this.body = Optional.ofNullable(body);
+            this.body = body;
             return this;
         }
 
