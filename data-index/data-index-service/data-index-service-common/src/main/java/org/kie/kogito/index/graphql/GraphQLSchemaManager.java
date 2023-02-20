@@ -51,6 +51,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
+import graphql.scalars.ExtendedScalars;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLInputObjectType;
@@ -162,6 +163,7 @@ public class GraphQLSchemaManager {
                     return builder;
                 })
                 .scalar(qlDateTimeScalarType)
+                .scalar(ExtendedScalars.GraphQLLong)
                 .build();
 
         SchemaGenerator schemaGenerator = new SchemaGenerator();

@@ -1,4 +1,5 @@
 scalar DateTime
+scalar Long
 
 schema {
     query: Query
