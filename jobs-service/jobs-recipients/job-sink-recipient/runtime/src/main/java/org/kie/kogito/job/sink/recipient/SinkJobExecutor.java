@@ -24,7 +24,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.job.recipient.common.http.HTTPRequestCallback;
+import org.kie.kogito.job.recipient.common.http.HTTPRequest;
 import org.kie.kogito.job.recipient.common.http.HTTPRequestExecutor;
 import org.kie.kogito.jobs.service.api.recipient.sink.SinkRecipient;
 import org.kie.kogito.jobs.service.executor.JobExecutor;
@@ -81,17 +81,17 @@ public class SinkJobExecutor extends HTTPRequestExecutor<SinkRecipient<?>> imple
     }
 
     @Override
-    protected HTTPRequestCallback buildCallbackRequest(SinkRecipient<?> recipient, String limit) {
+    protected HTTPRequest buildRequest(SinkRecipient<?> recipient, String limit) {
         String resolvedSinkUrl = recipient.getSinkUrl();
         if (recipient.getContentMode() == SinkRecipient.ContentMode.STRUCTURED) {
-            return buildStructuredCallbackRequest(recipient, resolvedSinkUrl, HTTPRequestCallback.HTTPMethod.POST, limit);
+            return buildStructuredRequest(recipient, resolvedSinkUrl, HTTPRequest.HTTPMethod.POST, limit);
         } else {
-            return buildBinaryCallbackRequest(recipient, resolvedSinkUrl, HTTPRequestCallback.HTTPMethod.POST, limit);
+            return buildBinaryRequest(recipient, resolvedSinkUrl, HTTPRequest.HTTPMethod.POST, limit);
         }
     }
 
-    private HTTPRequestCallback buildBinaryCallbackRequest(SinkRecipient<?> recipient, String sinkUrl, HTTPRequestCallback.HTTPMethod method, String limit) {
-        HTTPRequestCallback.Builder builder = HTTPRequestCallback.builder()
+    private HTTPRequest buildBinaryRequest(SinkRecipient<?> recipient, String sinkUrl, HTTPRequest.HTTPMethod method, String limit) {
+        HTTPRequest.Builder builder = HTTPRequest.builder()
                 .url(sinkUrl)
                 .method(method)
                 .addHeader(HttpHeaders.CONTENT_TYPE.toString(), recipient.getCeDataContentType())
@@ -115,8 +115,8 @@ public class SinkJobExecutor extends HTTPRequestExecutor<SinkRecipient<?>> imple
         return builder.build();
     }
 
-    private HTTPRequestCallback buildStructuredCallbackRequest(SinkRecipient<?> recipient, String sinkUrl, HTTPRequestCallback.HTTPMethod method, String limit) {
-        HTTPRequestCallback.Builder requestBuilder = HTTPRequestCallback.builder()
+    private HTTPRequest buildStructuredRequest(SinkRecipient<?> recipient, String sinkUrl, HTTPRequest.HTTPMethod method, String limit) {
+        HTTPRequest.Builder requestBuilder = HTTPRequest.builder()
                 .url(sinkUrl)
                 .method(method)
                 .addHeader(HttpHeaders.CONTENT_TYPE.toString(), JsonFormat.CONTENT_TYPE);

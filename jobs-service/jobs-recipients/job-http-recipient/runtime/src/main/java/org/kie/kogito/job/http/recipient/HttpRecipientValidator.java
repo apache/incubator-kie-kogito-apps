@@ -21,6 +21,10 @@ import org.apache.commons.lang3.StringUtils;
 import org.kie.kogito.jobs.service.api.Recipient;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.validator.RecipientValidator;
+import org.kie.kogito.jobs.service.validator.ValidationException;
+
+import java.net.MalformedURLException;
+import java.net.URL;
 
 @ApplicationScoped
 public class HttpRecipientValidator implements RecipientValidator {
@@ -35,11 +39,15 @@ public class HttpRecipientValidator implements RecipientValidator {
         if (!(recipient instanceof HttpRecipient)) {
             throw new IllegalArgumentException("Recipient must be a non-null instance of: " + HttpRecipient.class);
         }
-
-        if (StringUtils.isBlank(((HttpRecipient<?>) recipient).getUrl())) {
+        HttpRecipient<?> httpRecipient = (HttpRecipient<?>) recipient;
+        if (StringUtils.isBlank(httpRecipient.getUrl())) {
             throw new IllegalArgumentException("HttpRecipient url must have a non empty value.");
         }
-
+        try {
+            new URL(httpRecipient.getUrl());
+        } catch (MalformedURLException e) {
+            throw new ValidationException("HttpRecipient must have a valid url.", e);
+        }
         return true;
     }
 }

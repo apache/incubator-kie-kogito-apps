@@ -80,8 +80,8 @@ public abstract class HTTPRequestExecutor<R extends Recipient<?>> {
                 .chain(job -> {
                     final R recipient = getRecipient(job);
                     final String limit = getLimit(job);
-                    final HTTPRequestCallback callback = buildCallbackRequest(recipient, limit);
-                    return executeCallback(callback)
+                    final HTTPRequest request = buildRequest(recipient, limit);
+                    return executeRequest(request)
                             .onItem().transform(response -> JobExecutionResponse.builder()
                                     .message(response.bodyAsString())
                                     .code(String.valueOf(response.statusCode()))
@@ -94,10 +94,10 @@ public abstract class HTTPRequestExecutor<R extends Recipient<?>> {
 
     protected abstract R getRecipient(JobDetails job);
 
-    protected abstract HTTPRequestCallback buildCallbackRequest(R recipient, String limit);
+    protected abstract HTTPRequest buildRequest(R recipient, String limit);
 
-    protected Uni<HttpResponse<Buffer>> executeCallback(HTTPRequestCallback request) {
-        LOGGER.debug("Executing callback {}", request);
+    protected Uni<HttpResponse<Buffer>> executeRequest(HTTPRequest request) {
+        LOGGER.debug("Executing request {}", request);
         final URI uri = URIBuilder.toURI(request.getUrl());
         final HttpRequest<Buffer> clientRequest = client.request(HttpConverters.convertHttpMethod(request.getMethod()),
                 uri.getPort(),
@@ -128,7 +128,7 @@ public abstract class HTTPRequestExecutor<R extends Recipient<?>> {
     }
 
     protected <T extends JobExecutionResponse> Uni<T> handleResponse(T response) {
-        LOGGER.debug("handle response {}", response);
+        LOGGER.debug("Handle response {}", response);
         return Uni.createFrom().item(response)
                 .onItem().transform(JobExecutionResponse::getCode)
                 .onItem().transform(Integer::valueOf)

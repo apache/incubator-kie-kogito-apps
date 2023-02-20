@@ -20,7 +20,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.job.recipient.common.http.HTTPRequestCallback;
+import org.kie.kogito.job.recipient.common.http.HTTPRequest;
 import org.kie.kogito.job.recipient.common.http.HTTPRequestExecutor;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.executor.JobExecutor;
@@ -60,8 +60,8 @@ public class HttpJobExecutor extends HTTPRequestExecutor<HttpRecipient<?>> imple
     }
 
     @Override
-    protected HTTPRequestCallback buildCallbackRequest(HttpRecipient<?> recipient, String limit) {
-        return HTTPRequestCallback.builder()
+    protected HTTPRequest buildRequest(HttpRecipient<?> recipient, String limit) {
+        return HTTPRequest.builder()
                 .url(recipient.getUrl())
                 .method(recipient.getMethod())
                 .headers(recipient.getHeaders())

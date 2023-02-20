@@ -23,7 +23,7 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.kie.kogito.job.http.recipient.HttpJobExecutor;
-import org.kie.kogito.job.recipient.common.http.HTTPRequestCallback.HTTPMethod;
+import org.kie.kogito.job.recipient.common.http.HTTPRequest.HTTPMethod;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;

@@ -13,18 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.job.recipient.common.http.converters;
 
-import org.kie.kogito.job.recipient.common.http.HTTPRequest;
+package org.kie.kogito.jobs.service.validator;
 
-import io.vertx.core.http.HttpMethod;
+public class ValidationException extends RuntimeException {
 
-public class HttpConverters {
-
-    private HttpConverters() {
+    public ValidationException(String message) {
+        super(message);
     }
 
-    public static HttpMethod convertHttpMethod(HTTPRequest.HTTPMethod method) {
-        return HttpMethod.valueOf(method.name());
+    public ValidationException(String message, Throwable cause) {
+        super(message, cause);
     }
 }
