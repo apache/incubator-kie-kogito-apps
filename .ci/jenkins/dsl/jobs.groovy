@@ -29,7 +29,7 @@ Map getMultijobPRConfig(JenkinsFolder jobFolder) {
                 env : [
                     // Sonarcloud analysis only on main branch
                     // As we have only Community edition
-                    DISABLE_SONARCLOUD: !Utils.isMainBranch(this),
+                    ENABLE_SONARCLOUD: EnvUtils.isDefaultEnvironment(this, jobFolder.getEnvironmentName()) && Utils.isMainBranch(this),
                     BUILD_MVN_OPTS_CURRENT: jobFolder.getEnvironmentName() ? '' : '-Dvalidate-formatting', // Validate formatting only for default env
                 ]
             ], [
@@ -78,17 +78,13 @@ KogitoJobUtils.createAllEnvironmentsPerRepoPRJobs(this) { jobFolder -> getMultij
 createSetupBranchJob()
 
 // Nightly jobs
-setupSonarCloudJob()
 KogitoJobUtils.createNightlyBuildChainBuildAndDeployJobForCurrentRepo(this, '', true)
-
-// Environment nightlies
+setupSpecificBuildChainNightlyJob('sonarcloud')
 setupSpecificBuildChainNightlyJob('native')
-
-// Jobs with integration branch
-setupQuarkusIntegrationJob('quarkus-main')
-setupQuarkusIntegrationJob('quarkus-branch')
-setupQuarkusIntegrationJob('quarkus-lts')
-setupQuarkusIntegrationJob('native-lts')
+setupNightlyQuarkusIntegrationJob('quarkus-main')
+setupNightlyQuarkusIntegrationJob('quarkus-branch')
+setupNightlyQuarkusIntegrationJob('quarkus-lts')
+setupNightlyQuarkusIntegrationJob('native-lts')
 
 // Release jobs
 setupDeployJob(JobType.RELEASE)
@@ -108,7 +104,7 @@ if (Utils.isMainBranch(this)) {
 // Methods
 /////////////////////////////////////////////////////////////////
 
-void setupQuarkusIntegrationJob(String envName) {
+void setupNightlyQuarkusIntegrationJob(String envName) {
     KogitoJobUtils.createNightlyBuildChainIntegrationJob(this, envName, Utils.getRepoName(this), true)
 }
 
