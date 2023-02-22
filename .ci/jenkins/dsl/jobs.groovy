@@ -112,22 +112,6 @@ void setupSpecificBuildChainNightlyJob(String envName) {
     KogitoJobUtils.createNightlyBuildChainBuildAndTestJobForCurrentRepo(this, envName, true)
 }
 
-void setupSonarCloudJob() {
-    def jobParams = JobParamsUtils.getBasicJobParamsWithEnv(this, 'kogito-apps', JobType.NIGHTLY, 'sonarcloud', "${jenkins_path}/Jenkinsfile.sonarcloud", 'Kogito Apps Daily Sonar')
-    JobParamsUtils.setupJobParamsDefaultMavenConfiguration(this, jobParams)
-    jobParams.triggers = [ cron : 'H 20 * * 1-5' ]
-    jobParams.env.putAll([
-        JENKINS_EMAIL_CREDS_ID: "${JENKINS_EMAIL_CREDS_ID}",
-        NOTIFICATION_JOB_NAME: 'Sonarcloud check',
-    ])
-    KogitoJobTemplate.createPipelineJob(this, jobParams)?.with {
-        parameters {
-            stringParam('BUILD_BRANCH_NAME', "${GIT_BRANCH}", 'Set the Git branch to checkout')
-            stringParam('GIT_AUTHOR', "${GIT_AUTHOR_NAME}", 'Set the Git author to checkout')
-        }
-    }
-}
-
 void setupOptaplannerJob(String optaplannerBranch) {
     def jobParams = JobParamsUtils.getBasicJobParamsWithEnv(this, 'kogito-apps-optaplanner-snapshot', JobType.NIGHTLY, 'ecosystem', "${jenkins_path}/Jenkinsfile.optaplanner", 'Kogito Apps Testing against Optaplanner snapshot')
     JobParamsUtils.setupJobParamsDefaultMavenConfiguration(this, jobParams)
