@@ -15,6 +15,9 @@
  */
 package org.kie.kogito.job.http.recipient;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+
 import javax.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.lang3.StringUtils;
@@ -22,9 +25,6 @@ import org.kie.kogito.jobs.service.api.Recipient;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.validator.RecipientValidator;
 import org.kie.kogito.jobs.service.validator.ValidationException;
-
-import java.net.MalformedURLException;
-import java.net.URL;
 
 @ApplicationScoped
 public class HttpRecipientValidator implements RecipientValidator {

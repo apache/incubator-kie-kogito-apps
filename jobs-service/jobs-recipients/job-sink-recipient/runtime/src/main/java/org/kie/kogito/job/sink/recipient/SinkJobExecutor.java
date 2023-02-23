@@ -109,7 +109,6 @@ public class SinkJobExecutor extends HTTPRequestExecutor<SinkRecipient<?>> imple
         }
         filterEntries(recipient.getCeExtensions())
                 .forEach((key, value) -> builder.addHeader(ceHeader(key), value.toString()));
-        //TODO double check if we keep this name as we have in V1
         builder.addHeader(ceHeader("limit"), limit);
         builder.body(recipient.getPayload().getData());
         return builder.build();
@@ -138,7 +137,6 @@ public class SinkJobExecutor extends HTTPRequestExecutor<SinkRecipient<?>> imple
         }
         filterEntries(recipient.getCeExtensions())
                 .forEach((key, value) -> eventBuilder.withExtension(key, value.toString()));
-        //TODO double check if we keep this name as we have in V1
         if (limit != null) {
             eventBuilder.withExtension("limit", limit);
         }
