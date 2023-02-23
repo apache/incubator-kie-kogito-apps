@@ -58,8 +58,6 @@
 
         <!-- Explainability Toolkit version -->
         <version.explainability-core>1.22.1.Final</version.explainability-core>
-        
-        <version.io.quarkiverse.embedded.postgresql>0.0.1</version.io.quarkiverse.embedded.postgresql>
     </properties>
 
     <build>
@@ -94,7 +92,7 @@
                             <container.image.redis>${container.image.redis}</container.image.redis>
                             <container.image.data-index-service-postgresql>${container.image.data-index-service-postgresql}</container.image.data-index-service-postgresql>
                             <container.image.data-index-service-oracle>${container.image.data-index-service-oracle}</container.image.data-index-service-oracle>
-                            <container.image.data-index-service-inmemory>${conversion.io.quarkiverse.embedded.postgresqltainer.image.data-index-service-inmemory}</container.image.data-index-service-inmemory>
+                            <container.image.data-index-service-inmemory>${container.image.data-index-service-inmemory}</container.image.data-index-service-inmemory>
                             <container.image.data-index-service-infinispan>${container.image.data-index-service-infinispan}</container.image.data-index-service-infinispan>
                             <container.image.data-index-service-mongodb>${container.image.data-index-service-mongodb}</container.image.data-index-service-mongodb>
                             <container.image.jobs-service>${container.image.jobs-service}</container.image.jobs-service>
@@ -181,16 +179,6 @@
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>explainability-core</artifactId>
                 <version>${version.explainability-core}</version>
-            </dependency>
-            <dependency>
-              <groupId>io.quarkiverse.embedded.postgresql</groupId>
-              <artifactId>quarkus-embedded-postgresql</artifactId>
-              <version>${version.io.quarkiverse.embedded.postgresql}</version>
-            </dependency>
-            <dependency>
-              <groupId>io.quarkiverse.embedded.postgresql</groupId>
-              <artifactId>quarkus-embedded-postgresql-deployment</artifactId>
-              <version>${version.io.quarkiverse.embedded.postgresql}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
