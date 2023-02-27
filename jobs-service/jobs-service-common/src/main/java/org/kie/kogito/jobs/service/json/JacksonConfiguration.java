@@ -17,14 +17,16 @@ package org.kie.kogito.jobs.service.json;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.cloudevents.jackson.JsonFormat;
-import io.quarkus.jackson.ObjectMapperCustomizer;
 import org.kie.kogito.jobs.service.api.event.serialization.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import io.cloudevents.jackson.JsonFormat;
+import io.quarkus.jackson.ObjectMapperCustomizer;
 
 @ApplicationScoped
 public class JacksonConfiguration implements ObjectMapperCustomizer {
