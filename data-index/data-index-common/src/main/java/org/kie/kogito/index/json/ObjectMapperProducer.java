@@ -16,17 +16,15 @@
 package org.kie.kogito.index.json;
 
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Singleton;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.quarkus.jackson.ObjectMapperCustomizer;
 
 @ApplicationScoped
-public class ObjectMapperProducer {
+public class ObjectMapperProducer implements ObjectMapperCustomizer {
 
-    @Singleton
-    @Produces
-    public ObjectMapper objectMapper() {
-        return JsonUtils.getObjectMapper();
+    @Override
+    public void customize(ObjectMapper objectMapper) {
+        JsonUtils.configure(objectMapper);
     }
 }
