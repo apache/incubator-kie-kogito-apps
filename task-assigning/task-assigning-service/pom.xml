@@ -8,7 +8,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>task-assigning</artifactId>
-    <version>1.35.0-SNAPSHOT</version>
+    <version>1.35.0.Final</version>
   </parent>
   <artifactId>task-assigning-service</artifactId>
   <name>Kogito Apps :: Task Assigning Service</name>
