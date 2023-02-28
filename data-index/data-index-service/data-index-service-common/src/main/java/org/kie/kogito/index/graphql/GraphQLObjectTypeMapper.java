@@ -81,7 +81,8 @@ public class GraphQLObjectTypeMapper implements Function<DomainDescriptor, Graph
                         type = Scalars.GraphQLInt;
                         break;
                     case "java.lang.Long":
-                        type = Scalars.GraphQLLong;
+                        field.setTypeName("Long");
+                        type = getGraphQLType(field, schema, additionalTypes, allTypes);
                         break;
                     case "java.lang.String":
                     case "java.util.Date":

@@ -39,7 +39,6 @@ import org.kie.kogito.trusty.storage.api.model.DecisionOutcome;
 import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.containers.KafkaContainer;
 import org.testcontainers.containers.Network;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 
@@ -115,7 +114,7 @@ public abstract class AbstractTrustyExplainabilityEnd2EndIT {
                         .withNetwork(network)
                         .withNetworkAliases(INFINISPAN_ALIAS);
 
-                final KafkaContainer kafka = new KogitoKafkaContainer()
+                final KogitoKafkaContainer kafka = new KogitoKafkaContainer()
                         .withNetwork(network)
                         .withNetworkAliases(KAFKA_ALIAS);
 
