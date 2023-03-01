@@ -28,7 +28,9 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
+import io.restassured.config.JsonConfig;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.config.JsonPathConfig;
 import io.restassured.response.ValidatableResponse;
 import io.restassured.specification.RequestSpecification;
 
@@ -49,6 +51,9 @@ public abstract class AbstractProcessDataIndexIT {
 
     static {
         RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        JsonConfig jsonConfig = JsonConfig.jsonConfig().numberReturnType(JsonPathConfig.NumberReturnType.DOUBLE);
+
+        RestAssured.config = RestAssured.config().jsonConfig(jsonConfig);
     }
 
     RequestSpecification spec;
