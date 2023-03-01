@@ -15,31 +15,32 @@
  */
 package org.kie.kogito.jobs.service.json;
 
-import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Produces;
+import javax.inject.Singleton;
 
-import org.kie.kogito.jobs.service.api.event.serialization.SerializationUtils;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.cloudevents.jackson.JsonFormat;
+import io.quarkus.jackson.ObjectMapperCustomizer;
+import org.kie.kogito.jobs.service.api.serlialization.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-
-import io.cloudevents.jackson.JsonFormat;
-import io.quarkus.jackson.ObjectMapperCustomizer;
-
-@ApplicationScoped
-public class JacksonConfiguration implements ObjectMapperCustomizer {
+public class JacksonConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JacksonConfiguration.class);
 
-    @Override
-    public void customize(ObjectMapper objectMapper) {
-        LOGGER.info("Jackson customization initialized.");
-        objectMapper
-                .registerModule(new JavaTimeModule())
-                .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                .registerModule(JsonFormat.getCloudEventJacksonModule());
-        SerializationUtils.registerDescriptors(objectMapper);
+    @Singleton
+    @Produces
+    public ObjectMapperCustomizer customizer() {
+        return objectMapper -> {
+            LOGGER.info("Jackson customization initialized.");
+            objectMapper
+                    .registerModule(new JavaTimeModule())
+                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                    .registerModule(JsonFormat.getCloudEventJacksonModule());
+            SerializationUtils.registerDescriptors(objectMapper);
+        };
     }
 }
+
