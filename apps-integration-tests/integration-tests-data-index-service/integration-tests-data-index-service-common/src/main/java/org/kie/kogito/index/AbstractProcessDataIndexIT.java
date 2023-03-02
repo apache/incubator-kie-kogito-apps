@@ -416,7 +416,7 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("$.size", is(1))
                         .body("[0].content", is(commentContent)));
 
-        Map commentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+        Map<String, String> commentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
                         "id description priority potentialGroups comments {id content updatedBy updatedAt} } }\"}")
                 .when().post("/graphql")
@@ -428,13 +428,13 @@ public abstract class AbstractProcessDataIndexIT {
                 .body("data.UserTaskInstances[0].comments.size()", is(1))
                 .extract().jsonPath().getMap("data.UserTaskInstances[0].comments[0]");
         checkExpectedCreatedItemData(commentCreationResult, commentMap);
-        String newCommentContent = "newCommentContent";
+        String commentNewContent = "commentNewContent";
         String commentUpdateResult = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"mutation { UserTaskInstanceCommentUpdate ( " +
                         "user: \\\"manager\\\", " +
                         "groups: [\\\"managers\\\", \\\"users\\\", \\\"IT\\\"], " +
                         "commentId:  \\\"" + commentMap.get("id") + "\\\"" +
-                        "comment:  \\\"" + newCommentContent + "\\\"" +
+                        "comment:  \\\"" + commentNewContent + "\\\"" +
                         ")}\"}")
                 .when().post("/graphql")
                 .then()
@@ -442,7 +442,17 @@ public abstract class AbstractProcessDataIndexIT {
                 .body("errors", nullValue())
                 .extract().path("data.UserTaskInstanceCommentUpdate");
 
-        Map comment2Map = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                                "comments {id content updatedBy updatedAt} } }\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.UserTaskInstances[0].comments[0].content", equalTo(commentNewContent)));
+
+        Map<String, String> comment2Map = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
                         "comments {id content updatedBy updatedAt} } }\"}")
                 .when().post("/graphql")
@@ -464,13 +474,15 @@ public abstract class AbstractProcessDataIndexIT {
                 .statusCode(200)
                 .body("errors", nullValue());
 
-        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
-                        "comments {id} } }\"}")
-                .when().post("/graphql")
-                .then()
-                .statusCode(200)
-                .body("data.UserTaskInstances[0].comments.size()", is(0));
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                                "comments {id} } }\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.UserTaskInstances[0].comments.size()", is(0)));
     }
 
     public void testProcessGatewayAPIAttachments(String taskId, String processInstanceId) throws IOException {
@@ -502,7 +514,7 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("$.size", is(1))
                         .body("[0].name", is(attachmentName)));
 
-        Map attachmentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+        Map<String, String> attachmentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
                         "id description priority potentialGroups attachments {id name content updatedBy updatedAt} } }\"}")
                 .when().post("/graphql")
@@ -533,7 +545,17 @@ public abstract class AbstractProcessDataIndexIT {
                 .body("errors", nullValue())
                 .extract().path("data.UserTaskInstanceAttachmentUpdate");
 
-        Map attachmentMap2 = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                                "attachments {id name content updatedBy updatedAt} } }\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.UserTaskInstances[0].attachments[0].content", equalTo(updatedAttachmentUri)));
+
+        Map<String, String> attachmentMap2 = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
                         "attachments {id name content updatedBy updatedAt} } }\"}")
                 .when().post("/graphql")
@@ -556,13 +578,15 @@ public abstract class AbstractProcessDataIndexIT {
                 .statusCode(200)
                 .body("errors", nullValue());
 
-        given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
-                        "attachments {id} } }\"}")
-                .when().post("/graphql")
-                .then()
-                .statusCode(200)
-                .body("data.UserTaskInstances[0].attachments.size()", is(0));
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                                "attachments {id} } }\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.UserTaskInstances[0].attachments.size()", is(0)));
     }
 
     protected String createTestProcessInstance() {
