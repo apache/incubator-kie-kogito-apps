@@ -18,13 +18,15 @@ package org.kie.kogito.jobs.service.json;
 import javax.enterprise.inject.Produces;
 import javax.inject.Singleton;
 
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import io.cloudevents.jackson.JsonFormat;
-import io.quarkus.jackson.ObjectMapperCustomizer;
 import org.kie.kogito.jobs.service.api.serlialization.SerializationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import io.cloudevents.jackson.JsonFormat;
+import io.quarkus.jackson.ObjectMapperCustomizer;
 
 public class JacksonConfiguration {
 
@@ -43,4 +45,3 @@ public class JacksonConfiguration {
         };
     }
 }
-

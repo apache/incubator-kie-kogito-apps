@@ -42,6 +42,5 @@ class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKog
     void buildConfiguration(BuildProducer<SystemPropertyBuildItem> systemProperties) {
         systemProperties.produce(new SystemPropertyBuildItem(SERVICE_URL, "http://${quarkus.http.host}:${quarkus.http.port}"));
         systemProperties.produce(new SystemPropertyBuildItem(JOBS_SERVICE_URL, "${" + SERVICE_URL + "}"));
-        systemProperties.produce(new SystemPropertyBuildItem("quarkus.http.cors", "false"));
     }
 }
