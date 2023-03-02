@@ -12,6 +12,18 @@
   <artifactId>integration-tests-data-index-service-quarkus</artifactId>
   <name>Kogito Apps :: Integration Tests :: Data Index :: Quarkus</name>
 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>kogito-bom</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
@@ -31,7 +43,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-addons-quarkus-events-smallrye</artifactId>
+      <artifactId>kogito-addons-quarkus-events-process</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -47,7 +59,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-addons-persistence-filesystem</artifactId>
+      <artifactId>kogito-addons-quarkus-persistence-filesystem</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
@@ -140,5 +152,17 @@
       </plugin>
     </plugins>
   </build>
-
+  <profiles>
+    <profile>
+      <id>native</id>
+      <activation>
+        <property>
+          <name>native</name>
+        </property>
+      </activation>
+      <properties>
+        <failsafe.include>**/*IT.java</failsafe.include>
+      </properties>
+    </profile>
+  </profiles>
 </project>

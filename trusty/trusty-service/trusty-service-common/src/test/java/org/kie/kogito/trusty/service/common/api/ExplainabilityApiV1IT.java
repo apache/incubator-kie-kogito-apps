@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 
 import javax.ws.rs.core.MediaType;
 
+import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.tracing.typedvalue.TypedValue;
 import org.kie.kogito.trusty.service.common.TrustyService;
@@ -42,7 +43,6 @@ import org.kie.kogito.trusty.storage.api.model.LIMEExplainabilityResult;
 import org.kie.kogito.trusty.storage.api.model.SaliencyModel;
 import org.kie.kogito.trusty.storage.api.model.TypedVariableWithValue;
 import org.mockito.ArgumentCaptor;
-import org.testcontainers.shaded.org.apache.commons.lang.builder.CompareToBuilder;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

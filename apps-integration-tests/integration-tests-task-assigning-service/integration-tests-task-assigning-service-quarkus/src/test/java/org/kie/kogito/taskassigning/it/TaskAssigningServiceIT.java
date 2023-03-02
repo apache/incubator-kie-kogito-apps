@@ -37,6 +37,7 @@ import org.kie.kogito.taskassigning.index.service.client.graphql.UserTaskInstanc
 import org.kie.kogito.taskassigning.process.service.client.ProcessServiceClient;
 import org.kie.kogito.taskassigning.process.service.client.ProcessServiceClientConfig;
 import org.kie.kogito.taskassigning.resources.TaskAssigningServiceQuarkusTestResource;
+import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -84,10 +85,10 @@ class TaskAssigningServiceIT {
 
     private static final Predicate<String> IS_UP = "UP"::equals;
 
-    @ConfigProperty(name = TaskAssigningServiceQuarkusTestResource.KOGITO_TASK_ASSIGNING_SERVICE_URL)
+    @QuarkusTestProperty(name = TaskAssigningServiceQuarkusTestResource.KOGITO_TASK_ASSIGNING_SERVICE_URL)
     private String taskAssigningServiceUrl;
 
-    @ConfigProperty(name = TaskAssigningServiceQuarkusTestResource.KOGITO_DATA_INDEX_SERVICE_URL)
+    @QuarkusTestProperty(name = TaskAssigningServiceQuarkusTestResource.KOGITO_DATA_INDEX_SERVICE_URL)
     private String dataIndexServiceUrl;
 
     @ConfigProperty(name = TaskAssigningServiceQuarkusTestResource.KOGITO_PROCESSES_SERVICE_URL)

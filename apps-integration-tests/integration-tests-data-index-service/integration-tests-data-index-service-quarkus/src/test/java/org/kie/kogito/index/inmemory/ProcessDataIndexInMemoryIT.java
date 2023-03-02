@@ -15,19 +15,19 @@
  */
 package org.kie.kogito.index.inmemory;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.index.AbstractProcessDataIndexIT;
 import org.kie.kogito.index.quarkus.DataIndexInMemoryQuarkusTestResource;
 import org.kie.kogito.index.quarkus.InMemoryTestProfile;
+import org.kie.kogito.test.quarkus.QuarkusTestProperty;
 
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.QuarkusIntegrationTest;
 import io.quarkus.test.junit.TestProfile;
 
-@QuarkusTest
+@QuarkusIntegrationTest
 @TestProfile(InMemoryTestProfile.class)
 public class ProcessDataIndexInMemoryIT extends AbstractProcessDataIndexIT {
 
-    @ConfigProperty(name = DataIndexInMemoryQuarkusTestResource.KOGITO_DATA_INDEX_SERVICE_URL)
+    @QuarkusTestProperty(name = DataIndexInMemoryQuarkusTestResource.KOGITO_DATA_INDEX_SERVICE_URL)
     String dataIndex;
 
     @Override

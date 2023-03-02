@@ -40,6 +40,8 @@ import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.WebSocket;
+import io.vertx.core.http.WebSocketConnectOptions;
+import io.vertx.core.http.WebsocketVersion;
 import io.vertx.core.json.JsonObject;
 
 import static io.restassured.RestAssured.given;
@@ -224,8 +226,8 @@ public abstract class AbstractWebSocketSubscriptionIT extends AbstractIndexingIT
         CompletableFuture<JsonObject> cf = new CompletableFuture<>();
         CompletableFuture<Void> wsFuture = new CompletableFuture<>();
         JsonObject terminate = new JsonObject().put("type", CONNECTION_TERMINATE.getText());
-        instrumentation.setFuture(wsFuture);
-        httpClient.webSocket("/graphql", websocketRes -> {
+        WebSocketConnectOptions options = new WebSocketConnectOptions().setURI("/graphql").setVersion(WebsocketVersion.V08);
+        httpClient.webSocket(options, websocketRes -> {
             if (websocketRes.succeeded()) {
                 WebSocket webSocket = websocketRes.result();
                 webSocket.handler(message -> {
@@ -242,7 +244,7 @@ public abstract class AbstractWebSocketSubscriptionIT extends AbstractIndexingIT
                                 .put("id", String.valueOf(counter.getAndIncrement()))
                                 .put("type", START.getText())
                                 .put("payload", new JsonObject().put("query", subscription));
-                        webSocket.write(init.toBuffer());
+                        webSocket.write(init.toBuffer()).onSuccess(v -> wsFuture.complete(null));
                     } else if (CONNECTION_KEEP_ALIVE.getText().equals(type)) {
                         //Ignore
                     } else {

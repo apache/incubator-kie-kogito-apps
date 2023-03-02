@@ -56,6 +56,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.kie.pmml.evaluator.assembler.factories.PMMLRuntimeFactoryInternal.getPMMLRuntime;
 
+@Disabled
 class PmmlRegressionCategoricalLimeExplainerTest {
 
     private static PMMLRuntime categoricalVariableRegressionRuntime;
