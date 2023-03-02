@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>job-http-recipient-parent</artifactId>
-    <version>1.35.0-SNAPSHOT</version>
+    <version>1.35.0.Final</version>
   </parent>
   <artifactId>job-http-recipient</artifactId>
   <name>Job Http Recipient - Runtime</name>
