@@ -15,7 +15,6 @@
  */
 package org.kie.kogito.jobs.service.adapter;
 
-import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -30,6 +29,7 @@ import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.IntervalTrigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
+import org.kie.kogito.timer.impl.SimpleTimerTrigger;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -79,17 +79,8 @@ public class ScheduledJobAdapter {
                                 .map(HttpRecipient.class::cast)
                                 .map(HttpRecipient::getUrl)
                                 .orElse(null))
-                        .repeatLimit(Optional.ofNullable(jobDetails.getTrigger())
-                                .filter(IntervalTrigger.class::isInstance)
-                                .map(IntervalTrigger.class::cast)
-                                .map(IntervalTrigger::getRepeatLimit)
-                                .map(i -> i + 1)
-                                .orElse(null))
-                        .repeatInterval(Optional.ofNullable(jobDetails.getTrigger())
-                                .filter(IntervalTrigger.class::isInstance)
-                                .map(IntervalTrigger.class::cast)
-                                .map(IntervalTrigger::getPeriod)
-                                .orElse(null))
+                        .repeatLimit(extractRepeatLimit(jobDetails.getTrigger()))
+                        .repeatInterval(extractRepeatInterval(jobDetails.getTrigger()))
                         .rootProcessId(payload.getRootProcessId())
                         .rootProcessInstanceId(payload.getRootProcessInstanceId())
                         .processId(payload.getProcessId())
@@ -150,8 +141,29 @@ public class ScheduledJobAdapter {
                 .orElse(null);
     }
 
-    public static IntervalTrigger intervalTrigger(ZonedDateTime start, int repeatLimit, int intervalMillis) {
-        return new IntervalTrigger(0, DateUtil.toDate(start.toOffsetDateTime()), null, repeatLimit, 0, intervalMillis, null, null);
+    private static Integer extractRepeatLimit(Trigger trigger) {
+        if (trigger instanceof SimpleTimerTrigger) {
+            return ((SimpleTimerTrigger) trigger).getRepeatCount();
+        }
+        if (trigger instanceof IntervalTrigger) {
+            return ((IntervalTrigger) trigger).getRepeatLimit();
+        }
+        return null;
+    }
+
+    private static Long extractRepeatInterval(Trigger trigger) {
+        if (trigger instanceof SimpleTimerTrigger) {
+            SimpleTimerTrigger simpleTimerTrigger = (SimpleTimerTrigger) trigger;
+            // external services right now expect intervals in milliseconds.
+            return simpleTimerTrigger.getPeriodUnit()
+                    .getDuration()
+                    .multipliedBy(simpleTimerTrigger.getPeriod())
+                    .toMillis();
+        }
+        if (trigger instanceof IntervalTrigger) {
+            return ((IntervalTrigger) trigger).getPeriod();
+        }
+        return null;
     }
 
     public final static class ProcessPayload {

@@ -71,7 +71,7 @@ class ScheduledJobAdapterTest {
 
         ScheduledJob scheduledJob = ScheduledJobAdapter.of(jobDetails);
         assertScheduledJob(scheduledJob);
-        assertThat(scheduledJob.getRepeatLimit()).isEqualTo(REPEAT_LIMIT + 1);
+        assertThat(scheduledJob.getRepeatLimit()).isEqualTo(REPEAT_LIMIT);
         assertThat(scheduledJob.getRepeatInterval()).isEqualTo(INTERVAL);
     }
 
