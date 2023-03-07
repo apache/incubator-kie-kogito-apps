@@ -37,24 +37,21 @@ Map getMultijobPRConfig(JenkinsFolder jobFolder) {
                 repository: 'kogito-examples',
                 dependsOn: 'kogito-apps',
                 env : [
-                    KOGITO_EXAMPLES_SUBFOLDER_POM: 'kogito-quarkus-examples/',
-                    BUILD_MVN_OPTS_CURRENT: isQuarkusLTS(jobFolder) ? '' : isNative(jobFolder) ? '-Pkogito-apps-downstream-native' : '-Pkogito-apps-downstream'
+                    KOGITO_EXAMPLES_SUBFOLDER_POM: 'kogito-quarkus-examples/'
                 ],
             ], [
                 id: 'kogito-springboot-examples',
                 repository: 'kogito-examples',
                 dependsOn: 'kogito-apps',
                 env : [
-                    KOGITO_EXAMPLES_SUBFOLDER_POM: 'kogito-springboot-examples/',
-                    BUILD_MVN_OPTS_CURRENT: isQuarkusLTS(jobFolder) ? '' : isNative(jobFolder) ? '-Pkogito-apps-downstream-native' : '-Pkogito-apps-downstream'
+                    KOGITO_EXAMPLES_SUBFOLDER_POM: 'kogito-springboot-examples/'
                 ],
             ], [
                 id: 'serverless-workflow-examples',
                 repository: 'kogito-examples',
                 dependsOn: 'kogito-apps',
                 env : [
-                    KOGITO_EXAMPLES_SUBFOLDER_POM: 'serverless-workflow-examples/',
-                    BUILD_MVN_OPTS_CURRENT: isQuarkusLTS(jobFolder) ? '' : isNative(jobFolder) ? '-Pkogito-apps-downstream-native' : '-Pkogito-apps-downstream'
+                    KOGITO_EXAMPLES_SUBFOLDER_POM: 'serverless-workflow-examples/'
                 ],
             ]
         ]
