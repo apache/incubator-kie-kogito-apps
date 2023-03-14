@@ -17,6 +17,11 @@ package org.kie.kogito.addons.quarkus.jobs.service.embedded.deployment;
 
 import javax.sql.DataSource;
 
+import org.jboss.jandex.AnnotationTarget;
+import org.jboss.jandex.AnnotationValue;
+import org.kie.kogito.quarkus.addons.common.deployment.KogitoCapability;
+import org.kie.kogito.quarkus.addons.common.deployment.OneOfCapabilityKogitoAddOnProcessor;
+
 import io.quarkus.arc.deployment.AnnotationsTransformerBuildItem;
 import io.quarkus.arc.processor.AnnotationsTransformer;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -25,10 +30,6 @@ import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.SystemPropertyBuildItem;
 import io.quarkus.reactive.datasource.ReactiveDataSource;
 import io.vertx.mutiny.sqlclient.SqlClient;
-import org.jboss.jandex.AnnotationTarget;
-import org.jboss.jandex.AnnotationValue;
-import org.kie.kogito.quarkus.addons.common.deployment.KogitoCapability;
-import org.kie.kogito.quarkus.addons.common.deployment.OneOfCapabilityKogitoAddOnProcessor;
 
 import static org.kie.kogito.addons.quarkus.jobs.service.embedded.runtime.DataSourceConfigSourceFactory.DATA_SOURCE_NAME;
 
@@ -51,6 +52,9 @@ class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKog
     void buildConfiguration(BuildProducer<SystemPropertyBuildItem> systemProperties) {
         systemProperties.produce(new SystemPropertyBuildItem(SERVICE_URL, "http://${quarkus.http.host}:${quarkus.http.port}"));
         systemProperties.produce(new SystemPropertyBuildItem(JOBS_SERVICE_URL, "${" + SERVICE_URL + "}"));
+        systemProperties.produce(new SystemPropertyBuildItem("quarkus.flyway.\"" + DATA_SOURCE_NAME + "\".locations", "db/migration"));
+        systemProperties.produce(new SystemPropertyBuildItem("quarkus.datasource.devservices.enabled", "false"));
+        //systemProperties.produce(new SystemPropertyBuildItem("quarkus.flyway.locations", "db/empty" ));
     }
 
     @BuildStep
@@ -69,10 +73,10 @@ class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKog
                     if (SqlClient.class.isAssignableFrom(Class.forName(context.getTarget().asField().type().name().toString()))) {
                         context.transform().add(ReactiveDataSource.class, AnnotationValue.createStringValue("value", DATA_SOURCE_NAME)).done();
                     } else if (DataSource.class.isAssignableFrom(Class.forName(context.getTarget().asField().type().name().toString()))) {
-                        context.transform().add(io.quarkus.agroal.DataSource.class, AnnotationValue.createStringValue("value", "jobs-service")).done();
+                        context.transform().add(io.quarkus.agroal.DataSource.class, AnnotationValue.createStringValue("value", DATA_SOURCE_NAME)).done();
                     }
                 } catch (ClassNotFoundException exception) {
-                    throw new RuntimeException("Error adding DataSource annotation", exception);
+                    //throw new RuntimeException("Error adding DataSource annotation", exception);
                 }
             }
         });

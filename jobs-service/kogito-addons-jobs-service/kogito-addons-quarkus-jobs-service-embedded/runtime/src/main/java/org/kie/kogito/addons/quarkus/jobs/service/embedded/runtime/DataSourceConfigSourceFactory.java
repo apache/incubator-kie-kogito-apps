@@ -18,14 +18,16 @@ package org.kie.kogito.addons.quarkus.jobs.service.embedded.runtime;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.microprofile.config.spi.ConfigSource;
+
 import io.quarkus.runtime.configuration.DefaultsConfigSource;
 import io.smallrye.config.ConfigSourceContext;
 import io.smallrye.config.ConfigSourceFactory;
-import org.eclipse.microprofile.config.spi.ConfigSource;
 
 public class DataSourceConfigSourceFactory implements ConfigSourceFactory {
 
-    public static final String DATA_SOURCE_NAME = "jobs-service";
+    public static final String DATA_SOURCE_NAME = "jobs_service";
+
     @Override
     public Iterable<ConfigSource> getConfigSources(ConfigSourceContext configSourceContext) {
         Map<String, String> configs = Map.of(
