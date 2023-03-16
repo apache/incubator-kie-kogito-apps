@@ -47,13 +47,12 @@
       <groupId>org.kie.kogito</groupId>
       <artifactId>integration-tests-jobs-service-common</artifactId>
     </dependency>
-    <!--  keep build order in place -->
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-addons-quarkus-jobs-service-embedded</artifactId>
-      <type>test-jar</type>
-      <scope>test</scope>
+        <artifactId>integration-tests-jobs-service-common-quarkus</artifactId>
+        <type>test-jar</type>
     </dependency>
+    <!--  keep build order in place -->
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>integration-tests-jobs-service-common-quarkus</artifactId>
