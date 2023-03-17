@@ -15,9 +15,13 @@
  */
 package org.kie.kogito.addons.quarkus.jobs.service.embedded.deployment;
 
-import javax.inject.Named;
-import javax.sql.DataSource;
+import org.jboss.jandex.AnnotationTarget;
+import org.jboss.jandex.AnnotationValue;
+import org.jboss.jandex.DotName;
+import org.kie.kogito.quarkus.addons.common.deployment.KogitoCapability;
+import org.kie.kogito.quarkus.addons.common.deployment.OneOfCapabilityKogitoAddOnProcessor;
 
+import io.agroal.api.AgroalDataSource;
 import io.quarkus.arc.deployment.AnnotationsTransformerBuildItem;
 import io.quarkus.arc.processor.AnnotationsTransformer;
 import io.quarkus.deployment.annotations.BuildProducer;
@@ -25,10 +29,7 @@ import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.SystemPropertyBuildItem;
-import org.jboss.jandex.AnnotationTarget;
-import org.jboss.jandex.AnnotationValue;
-import org.kie.kogito.quarkus.addons.common.deployment.KogitoCapability;
-import org.kie.kogito.quarkus.addons.common.deployment.OneOfCapabilityKogitoAddOnProcessor;
+import io.quarkus.reactive.datasource.ReactiveDataSource;
 
 class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKogitoAddOnProcessor {
 
@@ -63,22 +64,20 @@ class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKog
             }
 
             public void transform(TransformationContext context) {
-                try {
-                    if (!(context.getTarget().kind() == AnnotationTarget.Kind.FIELD)) {
-                        return;
-                    }
-                    if (indexBuildItem.getIndex().getClassByName(context.getTarget().asField().type().name().toString()) == null) {
-                        return;
-                    }
-                    if (io.vertx.mutiny.pgclient.PgPool.class.isAssignableFrom(Class.forName(context.getTarget().asField().type().name().toString()))) {
-                        context.transform().removeAll().add(Named.class, AnnotationValue.createStringValue("value", DATA_SOURCE_NAME)).done();
-                    } else if (DataSource.class.isAssignableFrom(Class.forName(context.getTarget().asField().type().name().toString()))) {
-                        context.transform().add(io.quarkus.agroal.DataSource.class, AnnotationValue.createStringValue("value", DATA_SOURCE_NAME)).done();
-                    }
-                } catch (Exception exception) {
-                    throw new RuntimeException("Error adding DataSource annotation", exception);
+                if (!(context.getTarget().kind() == AnnotationTarget.Kind.FIELD)) {
+                    return;
+                }
+                if (indexBuildItem.getIndex().getClassByName(context.getTarget().asField().type().name().toString()) == null) {
+                    return;
+                }
+
+                if (context.getTarget().asField().type().name().equals(DotName.createSimple(io.vertx.mutiny.pgclient.PgPool.class))) {
+                    context.transform().add(ReactiveDataSource.class, AnnotationValue.createStringValue("value", DATA_SOURCE_NAME)).done();
+                } else if (context.getTarget().asField().type().name().equals(DotName.createSimple(AgroalDataSource.class))) {
+                    context.transform().add(io.quarkus.agroal.DataSource.class, AnnotationValue.createStringValue("value", DATA_SOURCE_NAME)).done();
                 }
             }
+
         });
     }
 }
