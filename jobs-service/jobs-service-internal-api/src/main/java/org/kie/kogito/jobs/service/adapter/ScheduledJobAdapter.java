@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.jobs.service.adapter;
 
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -28,7 +30,6 @@ import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.IntervalTrigger;
-import org.kie.kogito.timer.impl.PointInTimeTrigger;
 import org.kie.kogito.timer.impl.SimpleTimerTrigger;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -125,20 +126,22 @@ public class ScheduledJobAdapter {
     }
 
     public static Trigger triggerAdapter(ScheduledJob scheduledJob) {
-        return Optional.ofNullable(scheduledJob)
-                .filter(job -> Objects.nonNull(job.getExpirationTime()))
-                .map(job -> job.hasInterval()
-                        .<Trigger> map(interval -> new IntervalTrigger(0l,
-                                DateUtil.toDate(scheduledJob.getExpirationTime().toOffsetDateTime()),
-                                null,
-                                scheduledJob.getRepeatLimit(),
-                                0,
-                                interval,
-                                null,
-                                null))
-                        .orElse(new PointInTimeTrigger(scheduledJob.getExpirationTime().toInstant().toEpochMilli(),
-                                null, null)))
-                .orElse(null);
+        if (scheduledJob.getExpirationTime() == null) { //keep v1 criteria to check if the trigger can be created.
+            return null;
+        }
+        Date startTime = DateUtil.toDate(scheduledJob.getExpirationTime().toOffsetDateTime());
+        String zoneId = scheduledJob.getExpirationTime().toOffsetDateTime().getOffset().getId();
+        long period = 0;
+        ChronoUnit periodUnit = ChronoUnit.MILLIS;
+        int repeatCount = 0;
+        if (scheduledJob.hasInterval().isPresent()) { //keep v1 criteria to detect IntervalTrigger
+            //shift the IntervalTrigger repetitions to the SimpleTimerRepeat repetitions
+            if (scheduledJob.getRepeatLimit() != null && scheduledJob.getRepeatLimit() > 1) {
+                repeatCount = scheduledJob.getRepeatLimit() - 1;
+            }
+            period = repeatCount != 0 ? scheduledJob.hasInterval().get() : 0;
+        }
+        return new SimpleTimerTrigger(startTime, period, periodUnit, repeatCount, zoneId);
     }
 
     private static Integer extractRepeatLimit(Trigger trigger) {
