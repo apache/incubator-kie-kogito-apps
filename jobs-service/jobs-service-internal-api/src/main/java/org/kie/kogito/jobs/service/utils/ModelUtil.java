@@ -17,6 +17,7 @@
 package org.kie.kogito.jobs.service.utils;
 
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 import org.kie.kogito.jobs.service.adapter.JobDetailsAdapter;
 import org.kie.kogito.jobs.service.api.Job;
@@ -27,6 +28,7 @@ public class ModelUtil {
     }
 
     public static Long getExecutionTimeoutInMillis(Job job) {
+        Objects.requireNonNull(job, "A Job is required to calculate the execution timeout in milliseconds.");
         if (job.getExecutionTimeout() == null) {
             return null;
         }

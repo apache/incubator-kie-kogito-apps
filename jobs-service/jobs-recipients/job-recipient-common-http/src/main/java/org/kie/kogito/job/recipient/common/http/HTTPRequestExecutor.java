@@ -82,7 +82,7 @@ public abstract class HTTPRequestExecutor<R extends Recipient<?>> {
                     final R recipient = getRecipient(job);
                     final String limit = getLimit(job);
                     final HTTPRequest request = buildRequest(recipient, limit);
-                    final long requestTimeout = getTimeout(job);
+                    final long requestTimeout = getTimeoutInMillis(job);
                     return executeRequest(request, requestTimeout)
                             .onFailure().transform(unexpected -> new JobExecutionException(job.getId(),
                                     "Unexpected error when executing HTTP request for job: " + jobDetails.getId() + ". " + unexpected.getMessage()))
@@ -162,7 +162,7 @@ public abstract class HTTPRequestExecutor<R extends Recipient<?>> {
         return "0";
     }
 
-    protected long getTimeout(JobDetails job) {
+    protected long getTimeoutInMillis(JobDetails job) {
         if (job.getExecutionTimeout() == null) {
             return timeout;
         }
