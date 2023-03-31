@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.kie.kogito</groupId>
         <artifactId>apps-integration-tests</artifactId>
-        <version>1.36.1.Final</version>
+        <version>1.36.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>integration-tests-trusty-audit</artifactId>
