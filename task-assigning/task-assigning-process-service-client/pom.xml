@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>task-assigning</artifactId>
-    <version>1.36.1-SNAPSHOT</version>
+    <version>1.36.1.Final</version>
   </parent>
   <artifactId>task-assigning-process-service-client</artifactId>
   <name>Kogito Apps :: Task Assigning Process Service Client</name>
