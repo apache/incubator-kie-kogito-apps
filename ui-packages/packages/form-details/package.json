@@ -28,13 +28,18 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@kogito-apps/components-common": "^1.0.0",
-    "@kogito-apps/form-displayer": "^1.0.0",
-    "@kogito-apps/forms-list": "^1.0.0"
+    "@kogito-apps/components-common": "workspace:*",
+    "@kogito-apps/form-displayer": "workspace:*",
+    "@kogito-apps/forms-list": "workspace:*",
+    "@kogito-tooling/envelope": "0.10.0",
+    "@kogito-tooling/envelope-bus": "0.10.0",
+    "@patternfly/react-core": "4.157.3",
+    "@patternfly/react-icons": "4.11.17",
+    "@patternfly/react-code-editor": "4.2.92"
   },
   "devDependencies": {
-    "@kogito-apps/ouia-tools": "^1.0.0",
-    "@kogito-apps/patternfly-base": "^1.0.0"
+    "@kogito-apps/ouia-tools": "workspace:*",
+    "rimraf": "^3.0.2"
   },
   "jest": {
     "setupFiles": [

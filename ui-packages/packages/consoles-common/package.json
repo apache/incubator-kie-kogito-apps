@@ -29,12 +29,19 @@
     "codegen": "graphql-codegen"
   },
   "dependencies": {
-    "@kogito-apps/components-common": "^1.0.0",
-    "@kogito-apps/patternfly-base": "^1.0.0",
+    "@kogito-apps/components-common": "workspace:*",
+    "@kogito-apps/ouia-tools": "workspace:*",
+    "@patternfly/react-core": "4.157.3",
+    "@patternfly/react-icons": "4.11.17",
+    "@patternfly/react-styles": "4.18.8",
+    "gql-query-builder": "3.1.3",
+    "graphql-tag": "2.0.0",
+    "history": "^4.9.0",
     "keycloak-js": "^13.0.1"
   },
   "devDependencies": {
-    "@kogito-apps/ouia-tools": "^1.0.0"
+    "@apollo/react-common": "3.1.4",
+    "rimraf": "^3.0.2"
   },
   "jest": {
     "setupFiles": [
@@ -52,7 +59,14 @@
       "./src/graphql",
       "dist/"
     ],
-    "coverageReporters": [["lcov", { "projectRoot": "../../" }]],
+    "coverageReporters": [
+      [
+        "lcov",
+        {
+          "projectRoot": "../../"
+        }
+      ]
+    ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],

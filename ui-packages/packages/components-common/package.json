@@ -28,16 +28,19 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@kogito-apps/patternfly-base": "^1.0.0",
+    "@patternfly/react-core": "4.157.3",
+    "@patternfly/react-icons": "4.11.17",
+    "@patternfly/react-table": "4.29.0",
     "ajv": "^6.12.6",
     "uniforms": "^3.5.5",
     "uniforms-bridge-json-schema": "^3.5.5",
     "uniforms-patternfly": "^4.7.3"
   },
   "devDependencies": {
-    "@kogito-apps/ouia-tools": "^1.0.0",
+    "@kogito-apps/ouia-tools": "workspace:*",
+    "@types/json-schema": "7.0.7",
     "babel-loader": "8.1.0",
-    "@types/json-schema": "7.0.7"
+    "rimraf": "^3.0.2"
   },
   "jest": {
     "setupFiles": [

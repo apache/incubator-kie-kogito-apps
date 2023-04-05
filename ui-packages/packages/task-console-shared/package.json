@@ -28,7 +28,8 @@
     "clean": "rimraf dist"
   },
   "devDependencies": {
-    "@kogito-apps/ouia-tools": "^1.0.0"
+    "@kogito-apps/ouia-tools": "workspace:*",
+    "rimraf": "^3.0.2"
   },
   "jest": {
     "setupFiles": [
@@ -46,7 +47,14 @@
       "./src/graphql",
       "dist/"
     ],
-    "coverageReporters": [["lcov", { "projectRoot": "../../" }]],
+    "coverageReporters": [
+      [
+        "lcov",
+        {
+          "projectRoot": "../../"
+        }
+      ]
+    ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],
@@ -69,6 +77,8 @@
   },
   "dependencies": {
     "@kogito-apps/components-common": "^1.0.0",
-    "@kogito-apps/patternfly-base": "^1.0.0"
+    "@kogito-apps/patternfly-base": "^1.0.0",
+    "@patternfly/react-core": "4.157.3",
+    "@patternfly/react-icons": "4.11.7"
   }
 }

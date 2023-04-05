@@ -28,11 +28,15 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@kogito-apps/components-common": "^1.0.0",
-    "@kogito-apps/task-console-shared": "^1.0.0"
+    "@kogito-apps/components-common": "workspace:*",
+    "@kogito-apps/task-console-shared": "workspace:*",
+    "@kogito-tooling/envelope": "0.10.0",
+    "@kogito-tooling/envelope-bus": "0.10.0",
+    "@patternfly/react-core": "4.157.3"
   },
   "devDependencies": {
-    "@kogito-apps/ouia-tools": "^1.0.0"
+    "@kogito-apps/ouia-tools": "workspace:*",
+    "rimraf": "^3.0.2"
   },
   "jest": {
     "setupFiles": [
@@ -50,7 +54,14 @@
       "dist/",
       "./src/envelope/ProcessFormEnvelope.tsx"
     ],
-    "coverageReporters": [["lcov", { "projectRoot": "../../" }]],
+    "coverageReporters": [
+      [
+        "lcov",
+        {
+          "projectRoot": "../../"
+        }
+      ]
+    ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],
