@@ -27,5 +27,8 @@
       "yarn run format",
       "yarn run lint"
     ]
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2"
   }
 }

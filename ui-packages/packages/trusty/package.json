@@ -5,14 +5,15 @@
   "types": "dist/index.d.ts",
   "author": "",
   "license": "Apache-2.0",
-  "files": ["dist/"],
+  "files": [
+    "dist/"
+  ],
   "private": true,
   "repository": {
     "type": "git",
     "url": "https://github.com/kiegroup/kogito-apps.git"
   },
   "dependencies": {
-    "@kogito-apps/patternfly-base": "^1.0.0",
     "@kogito-tooling/kie-editors-standalone": "^0.10.0",
     "@testing-library/react": "^10.4.7",
     "@testing-library/react-hooks": "^3.3.0",
@@ -43,10 +44,11 @@
     "test:e2e:trusty": "yarn cypress:run:e2e && echo"
   },
   "devDependencies": {
+    "@kogito-apps/cypress-ouia": "workspace:*",
+    "@kogito-apps/ouia-tools": "workspace:*",
     "faker": "^4.1.0",
     "json-server": "^0.16.1",
-    "@kogito-apps/cypress-ouia": "^1.0.0",
-    "@kogito-apps/ouia-tools": "^1.0.0",
+    "rimraf": "^3.0.2",
     "serve": "^12.0.1"
   },
   "jest": {
@@ -61,7 +63,14 @@
       "tsx",
       "js"
     ],
-    "coverageReporters": [["lcov", { "projectRoot": "../../" }]],
+    "coverageReporters": [
+      [
+        "lcov",
+        {
+          "projectRoot": "../../"
+        }
+      ]
+    ],
     "globals": {
       "ts-jest": {
         "isolatedModules": true

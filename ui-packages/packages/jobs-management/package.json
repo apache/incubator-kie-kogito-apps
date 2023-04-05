@@ -28,12 +28,18 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@kogito-apps/components-common": "^1.0.0",
-    "@kogito-apps/management-console-shared": "^1.0.0",
-    "@kogito-apps/patternfly-base": "^1.0.0"
+    "@kogito-apps/components-common": "workspace:*",
+    "@kogito-apps/management-console-shared": "workspace:*",
+    "@patternfly/react-core": "4.157.3",
+    "@patternfly/react-icons": "4.11.17",
+    "@patternfly/react-table": "4.29.0",
+    "react-moment": "0.9.7",
+    "@kogito-tooling/envelope": "0.10.0",
+    "@kogito-tooling/envelope-bus": "0.10.0"
   },
   "devDependencies": {
-    "@kogito-apps/ouia-tools": "^1.0.0"
+    "@kogito-apps/ouia-tools": "workspace:*",
+    "rimraf": "^3.0.2"
   },
   "jest": {
     "setupFiles": [
@@ -55,7 +61,14 @@
       "./src/envelope/contexts/",
       "./src/envelope/index.ts"
     ],
-    "coverageReporters": [["lcov", { "projectRoot": "../../" }]],
+    "coverageReporters": [
+      [
+        "lcov",
+        {
+          "projectRoot": "../../"
+        }
+      ]
+    ],
     "snapshotSerializers": [
       "enzyme-to-json/serializer"
     ],

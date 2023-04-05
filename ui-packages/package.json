@@ -3,10 +3,6 @@
   "version": "0.0.0",
   "license": "Apache-2.0",
   "private": true,
-  "workspaces": [
-    "packages/*",
-    "examples/*"
-  ],
   "scripts": {
     "init": "lerna bootstrap",
     "build": "lerna run build --stream --",
@@ -23,17 +19,12 @@
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.3",
-    "@kie-tools-core/editor": "0.29.0",
-    "@kie-tools-core/envelope": "0.29.0",
-    "@kie-tools-core/envelope-bus": "0.29.0",
-    "@kie-tools/serverless-workflow-combined-editor": "0.29.0",
-    "@kie-tools/serverless-workflow-diagram-editor-assets": "0.29.0",
-    "@kogito-apps/management-console": "file:packages/management-console",
+    "@kie-tools/serverless-workflow-combined-editor": "0.24.0",
+    "@kie-tools/serverless-workflow-diagram-editor-assets": "0.24.0",
     "apollo-boost": "^0.4.4",
     "apollo-link-context": "^1.0.20",
     "axios": "^0.21.1",
     "camel-case": "^3.0.0",
-    "graphql": "^15.5.3",
     "jsonpath": "^1.0.2",
     "lodash": "^4.17.15",
     "lower-case": "^1.1.4",
