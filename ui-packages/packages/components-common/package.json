@@ -37,6 +37,7 @@
     "uniforms-patternfly": "^4.7.3"
   },
   "devDependencies": {
+    "@kogito-apps/ouia-tools": "workspace:*",
     "@types/json-schema": "7.0.7",
     "babel-loader": "8.1.0"
   },
