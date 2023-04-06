@@ -10,26 +10,26 @@
   },
   "scripts": {
     "precommit": "lint-staged",
-    "build:prod": "yarn run lint && webpack --config webpack.prod.js && locktt",
+    "build:prod": "pnpm run lint && webpack --config webpack.prod.js && locktt",
     "start": "webpack-dev-server --color --config webpack.dev.js",
-    "test:report": "yarn test --ci --reporters=jest-junit",
+    "test:report": "pnpm test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "rimraf coverage && yarn test --coverage",
+    "test:coverage": "rimraf coverage && pnpm test --coverage",
     "dev:restServer": "nodemon ./server/restServer.js",
     "dev:server": "nodemon ./server/app.js",
-    "dev": "concurrently 'yarn  start' 'yarn run dev:server'",
-    "dev-remote-dataindex": "yarn start --env KOGITO_DATAINDEX_HTTP_URL='http://localhost:8180/graphql'",
+    "dev": "concurrently 'pnpm  start' 'pnpm run dev:server'",
+    "dev-remote-dataindex": "pnpm start --env KOGITO_DATAINDEX_HTTP_URL='http://localhost:8180/graphql'",
     "lint": "eslint './{src,cypress}/**/*.ts{,x}'",
     "format": "prettier --config ../../.prettierrc --check --write './{src,cypress}/**/*.{tsx,ts,js}'",
     "build:bundle-profile": "webpack --config webpack.prod.js --profile --json > stats.json",
-    "bundle-profile:analyze": "yarn build:bundle-profile && webpack-bundle-analyzer ./stats.json",
+    "bundle-profile:analyze": "pnpm build:bundle-profile && webpack-bundle-analyzer ./stats.json",
     "clean": "rimraf dist",
     "codegen": "graphql-codegen",
     "cypress:run": "cypress run",
     "cypress:open": "cypress open",
-    "start:it": "concurrently 'webpack --config webpack.it.js && yarn serve -p 9000 -c ../serve.json ./dist-it/' 'yarn run dev:server'",
-    "test:it": "start-server-and-test 'yarn start:it' 9000 'yarn cypress:run' && echo"
+    "start:it": "concurrently 'webpack --config webpack.it.js && pnpm serve -p 9000 -c ../serve.json ./dist-it/' 'pnpm run dev:server'",
+    "test:it": "start-server-and-test 'pnpm start:it' 9000 'pnpm cypress:run' && echo"
   },
   "dependencies": {
     "@kogito-apps/components-common": "^1.0.0",
@@ -96,8 +96,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn run format",
-      "yarn run lint"
+      "pnpm run format",
+      "pnpm run lint"
     ]
   }
 }

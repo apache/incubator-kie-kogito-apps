@@ -17,12 +17,12 @@
   "scripts": {
     "precommit": "lint-staged",
     "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css,svg,png}\" dist/",
-    "build": "rimraf dist && tsc -m commonjs -p tsconfig.json && yarn run copy:css",
-    "build:prod": "yarn run clean && yarn run lint && yarn run build",
-    "test:report": "yarn test --ci --reporters=jest-junit",
+    "build": "rimraf dist && tsc -m commonjs -p tsconfig.json && pnpm run copy:css",
+    "build:prod": "pnpm run clean && pnpm run lint && pnpm run build",
+    "test:report": "pnpm test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "rimraf coverage && yarn test --coverage",
+    "test:coverage": "rimraf coverage && pnpm test --coverage",
     "lint": "eslint './src/**/*.ts{,x}'",
     "format": "prettier --config ../../.prettierrc --check --write './src/**/*.{tsx,ts,js}'",
     "clean": "rimraf dist",
@@ -35,10 +35,6 @@
     "graphql": "14.3.1",
     "react-apollo": "3.1.3",
     "react-apollo-hooks": "0.5.0"
-  },
-  "devDependencies": {
-    "@kogito-apps/ouia-tools": "workspace:*",
-    "rimraf": "^3.0.2"
   },
   "jest": {
     "setupFiles": [
@@ -82,8 +78,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn run format",
-      "yarn run lint"
+      "pnpm run format",
+      "pnpm run lint"
     ]
   }
 }

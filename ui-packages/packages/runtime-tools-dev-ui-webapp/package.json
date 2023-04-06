@@ -12,20 +12,20 @@
     "precommit": "lint-staged",
     "build": "tsc -m commonjs --outDir ./dist && webpack --config webpack.prod.js && locktt",
     "build:watch": "tsc -m commonjs --outDir ./dist -w && webpack --config webpack.dev.js --watch",
-    "build:prod": "yarn run clean && yarn run lint && yarn run build",
+    "build:prod": "pnpm run clean && pnpm run lint && pnpm run build",
     "start": "webpack-dev-server --color --config webpack.dev.js",
-    "test:report": "yarn test --ci --reporters=jest-junit",
+    "test:report": "pnpm test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "rimraf coverage && yarn test --coverage",
+    "test:coverage": "rimraf coverage && pnpm test --coverage",
     "dev:restServer": "nodemon ./server/restServer.js",
     "dev:server": "nodemon ./server/app.js",
-    "dev": "concurrently 'yarn start' 'yarn run dev:server' 'yarn workspace @kogito-apps/trusty mock-server'",
-    "dev-remote-dataindex": "yarn start --env KOGITO_DATAINDEX_HTTP_URL='http://localhost:8180/graphql'",
+    "dev": "concurrently 'pnpm start' 'pnpm run dev:server' 'pnpm workspace @kogito-apps/trusty mock-server'",
+    "dev-remote-dataindex": "pnpm start --env KOGITO_DATAINDEX_HTTP_URL='http://localhost:8180/graphql'",
     "lint": "eslint './{src,cypress}/**/*.ts{,x}'",
     "format": "prettier --config ../../.prettierrc --check --write './{src,cypress}/**/*.{tsx,ts,js}'",
     "build:bundle-profile": "webpack --config webpack.prod.js --profile --json > stats.json",
-    "bundle-profile:analyze": "yarn build:bundle-profile && webpack-bundle-analyzer ./stats.json",
+    "bundle-profile:analyze": "pnpm build:bundle-profile && webpack-bundle-analyzer ./stats.json",
     "clean": "rimraf dist",
     "codegen": "graphql-codegen",
     "cypress:run": "cypress run",
@@ -51,7 +51,6 @@
     "@kogito-apps/management-console-shared": "workspace:*",
     "@kogito-apps/monitoring": "workspace:*",
     "@kogito-apps/monitoring-webapp": "workspace:*",
-    "@kogito-apps/ouia-tools": "workspace:*",
     "@kogito-apps/process-definition-list": "workspace:*",
     "@kogito-apps/process-details": "workspace:*",
     "@kogito-apps/process-form": "workspace:*",
@@ -78,7 +77,6 @@
   "devDependencies": {
     "core-js": "3.6.5",
     "openapi-types": "^9.3.1",
-    "rimraf": "^3.0.2",
     "swagger-ui-express": "4.3.0"
   },
   "jest": {
@@ -129,8 +127,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn run format",
-      "yarn run lint"
+      "pnpm run format",
+      "pnpm run lint"
     ]
   }
 }

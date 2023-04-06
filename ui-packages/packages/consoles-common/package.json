@@ -17,12 +17,12 @@
   "scripts": {
     "precommit": "lint-staged",
     "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css,svg,png}\" dist/",
-    "build": "rimraf dist && tsc -m commonjs -p tsconfig.json && yarn run copy:css",
-    "build:prod": "yarn run clean && yarn run lint && yarn run build",
-    "test:report": "yarn test --ci --reporters=jest-junit",
+    "build": "rimraf dist && tsc -m commonjs -p tsconfig.json && pnpm run copy:css",
+    "build:prod": "pnpm run clean && pnpm run lint && pnpm run build",
+    "test:report": "pnpm test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "rimraf coverage && yarn test --coverage",
+    "test:coverage": "rimraf coverage && pnpm test --coverage",
     "lint": "eslint './src/**/*.ts{,x}'",
     "format": "prettier --config ../../.prettierrc --check --write './src/**/*.{tsx,ts,js}'",
     "clean": "rimraf dist",
@@ -30,7 +30,6 @@
   },
   "dependencies": {
     "@kogito-apps/components-common": "workspace:*",
-    "@kogito-apps/ouia-tools": "workspace:*",
     "@patternfly/react-core": "4.157.3",
     "@patternfly/react-icons": "4.11.17",
     "@patternfly/react-styles": "4.18.8",
@@ -40,8 +39,7 @@
     "keycloak-js": "^13.0.1"
   },
   "devDependencies": {
-    "@apollo/react-common": "3.1.4",
-    "rimraf": "^3.0.2"
+    "@apollo/react-common": "3.1.4"
   },
   "jest": {
     "setupFiles": [
@@ -85,8 +83,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn run format",
-      "yarn run lint"
+      "pnpm run format",
+      "pnpm run lint"
     ]
   }
 }
