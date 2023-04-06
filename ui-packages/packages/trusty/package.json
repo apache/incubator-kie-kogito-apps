@@ -28,27 +28,24 @@
   "scripts": {
     "start": "webpack-dev-server --hot --color --progress --stats verbose --config ./dev-webapp/webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "build:prod": "yarn lint && rimraf dist && rimraf dist-standalone && yarn build && yarn build:standalone",
+    "build:prod": "pnpm lint && rimraf dist && rimraf dist-standalone && pnpm build && pnpm build:standalone",
     "build:standalone": "webpack --config ./dev-webapp/webpack.prod.js && locktt",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
-    "test:coverage": "rimraf coverage && yarn test --coverage",
+    "test:coverage": "rimraf coverage && pnpm test --coverage",
     "test:watch": "jest --watch",
     "lint": "eslint './src/**/*.ts{,x}'",
     "mock-server": "json-server api-mock/db.js --routes api-mock/routes.json --port 1336 --delay 1000 --id executionId --middlewares api-mock/filterSingular.js  api-mock/counterfactualPoll.js",
-    "start:it": "concurrently 'yarn serve -p 9000 -c ../cypress/serve.json ./dist-standalone/' 'yarn run mock-server'",
-    "cypress:open:it": "yarn run cypress open --project cypress --config-file cypress.it.json",
-    "cypress:run:it": "yarn run cypress run --project cypress --config-file cypress.it.json",
-    "cypress:open:e2e": "yarn run cypress open --project cypress --config-file cypress.e2e.json",
-    "cypress:run:e2e": "yarn run cypress run --project cypress --config-file cypress.e2e.json",
-    "test:it": "start-server-and-test 'yarn start:it' http://0.0.0.0:9000 'yarn cypress:run:it' && echo",
-    "test:e2e:trusty": "yarn cypress:run:e2e && echo"
+    "start:it": "concurrently 'pnpm serve -p 9000 -c ../cypress/serve.json ./dist-standalone/' 'pnpm run mock-server'",
+    "cypress:open:it": "pnpm run cypress open --project cypress --config-file cypress.it.json",
+    "cypress:run:it": "pnpm run cypress run --project cypress --config-file cypress.it.json",
+    "cypress:open:e2e": "pnpm run cypress open --project cypress --config-file cypress.e2e.json",
+    "cypress:run:e2e": "pnpm run cypress run --project cypress --config-file cypress.e2e.json",
+    "test:it": "start-server-and-test 'pnpm start:it' http://0.0.0.0:9000 'pnpm cypress:run:it' && echo",
+    "test:e2e:trusty": "pnpm cypress:run:e2e && echo"
   },
   "devDependencies": {
-    "@kogito-apps/cypress-ouia": "workspace:*",
-    "@kogito-apps/ouia-tools": "workspace:*",
     "faker": "^4.1.0",
     "json-server": "^0.16.1",
-    "rimraf": "^3.0.2",
     "serve": "^12.0.1"
   },
   "jest": {
@@ -92,8 +89,8 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
-      "yarn run format",
-      "yarn run lint"
+      "pnpm run format",
+      "pnpm run lint"
     ]
   }
 }
