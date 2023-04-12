@@ -1,6 +1,6 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CopyPlugin = require("copy-webpack-plugin");
+const CopyPlugin = require('copy-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require('webpack');
 const BG_IMAGES_DIRNAME = 'bgimages';
@@ -21,15 +21,14 @@ module.exports = {
       KOGITO_APP_NAME: 'Task Console',
       KOGITO_TASK_STATES_LIST: 'Ready,Reserved,Completed,Aborted,Skipped',
       KOGITO_TASK_ACTIVE_STATES_LIST: 'Ready,Reserved'
-    }),
+    })
   ],
   module: {
     rules: [
       {
         test: /\.(tsx|ts)?$/,
-        include: [
-          path.resolve(__dirname, 'src')
-        ],
+        include: [path.resolve(__dirname, 'src')],
+        exclude: path.resolve(__dirname, 'node_modules'),
         use: [
           {
             loader: 'ts-loader',
@@ -62,9 +61,7 @@ module.exports = {
           path.resolve(
             '../../node_modules/@kogito-apps/form-displayer/dist/static'
           ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/task-form/dist/static'
-          ),
+          path.resolve('../../node_modules/@kogito-apps/task-form/dist/static'),
           path.resolve('./src/static')
         ],
         use: {
@@ -79,7 +76,7 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        include: input => input.indexOf('background-filter.svg') > 1,
+        include: (input) => input.indexOf('background-filter.svg') > 1,
         use: [
           {
             loader: 'url-loader',
@@ -93,7 +90,7 @@ module.exports = {
       },
       {
         test: /\.svg$/,
-        include: input => input.indexOf(BG_IMAGES_DIRNAME) > -1,
+        include: (input) => input.indexOf(BG_IMAGES_DIRNAME) > -1,
         use: {
           loader: 'svg-url-loader',
           options: {}
@@ -125,9 +122,7 @@ module.exports = {
           path.resolve(
             '../../node_modules/@kogito-apps/form-displayer/dist/static'
           ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/task-form/dist/static'
-          ),
+          path.resolve('../../node_modules/@kogito-apps/task-form/dist/static'),
           path.resolve(
             '../../node_modules/@kogito-apps/components-common/dist/static'
           )

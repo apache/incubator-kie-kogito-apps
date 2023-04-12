@@ -7,7 +7,6 @@ const CopyPlugin = require('copy-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const swEditor = require('@kie-tools/serverless-workflow-diagram-editor-assets');
-const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -68,32 +67,14 @@ module.exports = {
           ]
         }
       }
-    }),
-    // Remove this replacement after upgrading envelope and patternfly with kie-tools
-    new ReplaceInFileWebpackPlugin([
-      {
-        dir: 'dist',
-        test: [/\.js/],
-        rules: [
-          {
-            search:
-              '[class*=pf-c-],[class*=pf-c-]::before,[class*=pf-c-]::after{padding:0;margin:0;background-color:rgba(0,0,0,0)}',
-            replace: ''
-          },
-          {
-            search:
-              '[class*=pf-c-],\n[class*=pf-c-]::before,\n[class*=pf-c-]::after {\n  padding: 0;\n  margin: 0;\n  background-color: transparent;\n}',
-            replace: ''
-          }
-        ]
-      }
-    ])
+    })
   ],
   module: {
     rules: [
       {
         test: /\.(tsx|ts)?$/,
         include: [path.resolve(__dirname, 'src')],
+        exclude: path.resolve(__dirname, 'node_modules'),
         use: [
           {
             loader: 'ts-loader',
@@ -107,19 +88,15 @@ module.exports = {
       {
         test: /\.(svg|ttf|eot|woff|woff2)$/,
         include: [
-          path.resolve('../../node_modules/patternfly/dist/fonts'),
+          path.resolve('./node_modules/patternfly/dist/fonts'),
           path.resolve(
-            '../../node_modules/@patternfly/react-core/dist/styles/assets/fonts'
+            './node_modules/@patternfly/react-core/dist/styles/assets/fonts'
           ),
           path.resolve(
-            '../../node_modules/@patternfly/react-core/dist/styles/assets/pficon'
+            './node_modules/@patternfly/react-core/dist/styles/assets/pficon'
           ),
-          path.resolve(
-            '../../node_modules/@patternfly/patternfly/assets/fonts'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/patternfly/assets/pficon'
-          ),
+          path.resolve('./node_modules/@patternfly/patternfly/assets/fonts'),
+          path.resolve('./node_modules/@patternfly/patternfly/assets/pficon'),
           path.resolve('./src/static/'),
           path.resolve(
             '../../node_modules/@kogito-apps/consoles-common/dist/static'
@@ -205,61 +182,51 @@ module.exports = {
         include: [
           path.resolve(__dirname, 'src'),
           path.resolve('../../node_modules/patternfly'),
+          path.resolve('./node_modules/@patternfly/patternfly/assets/images'),
           path.resolve(
-            '../../node_modules/@patternfly/patternfly/assets/images'
+            './node_modules/@patternfly/react-styles/css/assets/images'
           ),
           path.resolve(
-            '../../node_modules/@patternfly/react-styles/css/assets/images'
+            './node_modules/@patternfly/react-core/dist/styles/assets/images'
           ),
           path.resolve(
-            '../../node_modules/@patternfly/react-core/dist/styles/assets/images'
+            './node_modules/@patternfly/react-core/node_modules/@patternfly/react-styles/css/assets/images'
           ),
           path.resolve(
-            '../../node_modules/@patternfly/react-core/node_modules/@patternfly/react-styles/css/assets/images'
+            './node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css/assets/images'
           ),
           path.resolve(
-            '../../node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css/assets/images'
+            './node_modules/@kogito-apps/consoles-common/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/consoles-common/dist/static'
+            './node_modules/@kogito-apps/components-common/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/components-common/dist/static'
+            './node_modules/@kogito-apps/jobs-management/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/jobs-management/dist/static'
+            './node_modules/@kogito-apps/process-details/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/process-details/dist/static'
+            './node_modules/@kogito-apps/management-console-shared/dist/static'
+          ),
+          path.resolve('./node_modules/@kogito-apps/process-list/dist/static'),
+          path.resolve('./node_modules/@kogito-apps/form-details/dist/static'),
+          path.resolve(
+            './node_modules/@kogito-apps/form-displayer/dist/static'
+          ),
+          path.resolve('./node_modules/@kogito-apps/task-form/dist/static'),
+          path.resolve('./node_modules/@kogito-apps/process-form/dist/static'),
+          path.resolve(
+            './node_modules/@kogito-apps/process-monitoring/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/management-console-shared/dist/static'
+            './node_modules/@kogito-apps/process-definition-list/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/process-list/dist/static'
+            './node_modules/@kogito-apps/custom-dashboard-view/dist/static'
           ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/form-details/dist/static'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/form-displayer/dist/static'
-          ),
-          path.resolve('../../node_modules/@kogito-apps/task-form/dist/static'),
-          path.resolve(
-            '../../node_modules/@kogito-apps/process-form/dist/static'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/process-monitoring/dist/static'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/process-definition-list/dist/static'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/custom-dashboard-view/dist/static'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/workflow-form/dist/static'
-          )
+          path.resolve('./node_modules/@kogito-apps/workflow-form/dist/static')
         ],
 
         use: [
