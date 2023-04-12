@@ -15,6 +15,8 @@
  */
 package org.kie.kogito.addons.quarkus.jobs.service.embedded.deployment;
 
+import java.util.function.BooleanSupplier;
+
 import org.jboss.jandex.AnnotationTarget;
 import org.jboss.jandex.AnnotationValue;
 import org.jboss.jandex.DotName;
@@ -23,6 +25,7 @@ import org.kie.kogito.quarkus.addons.common.deployment.OneOfCapabilityKogitoAddO
 
 import io.agroal.api.AgroalDataSource;
 import io.quarkus.arc.deployment.AnnotationsTransformerBuildItem;
+import io.quarkus.arc.deployment.ExcludedTypeBuildItem;
 import io.quarkus.arc.processor.AnnotationsTransformer;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
@@ -33,8 +36,9 @@ import io.quarkus.deployment.builditem.nativeimage.NativeImageResourcePatternsBu
 import io.quarkus.deployment.pkg.steps.NativeOrNativeSourcesBuild;
 import io.quarkus.reactive.datasource.ReactiveDataSource;
 
-class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKogitoAddOnProcessor {
+import static org.kie.kogito.addons.quarkus.jobs.service.embedded.stream.EventPublisherJobStreams.DATA_INDEX_EVENT_PUBLISHER;
 
+class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKogitoAddOnProcessor {
     private static final String FEATURE = "kogito-addons-quarkus-jobs-service-embedded";
     private static final String JOBS_SERVICE_URL = "kogito.jobs-service.url";
     private static final String SERVICE_URL = "kogito.service.url";
@@ -86,5 +90,22 @@ class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKog
     @BuildStep(onlyIf = NativeOrNativeSourcesBuild.class)
     public void inMemoryNativeResources(BuildProducer<NativeImageResourcePatternsBuildItem> resource) {
         resource.produce(NativeImageResourcePatternsBuildItem.builder().includeGlob("postgres-*.txz").build());
+    }
+
+    @BuildStep(onlyIf = DataIndexAddonNotPresent.class)
+    public void excludeEventPublisherJobStreams(BuildProducer<ExcludedTypeBuildItem> excludedBeans) {
+        excludedBeans.produce(new ExcludedTypeBuildItem(DATA_INDEX_EVENT_PUBLISHER));
+    }
+
+    public static class DataIndexAddonNotPresent implements BooleanSupplier {
+        @Override
+        public boolean getAsBoolean() {
+            try {
+                Class.forName(DATA_INDEX_EVENT_PUBLISHER);
+                return false;
+            } catch (ClassNotFoundException e) {
+                return true;
+            }
+        }
     }
 }
