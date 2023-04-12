@@ -15,8 +15,6 @@
  */
 package org.kie.kogito.addons.quarkus.jobs.service.embedded.deployment;
 
-import java.util.function.BooleanSupplier;
-
 import org.jboss.jandex.AnnotationTarget;
 import org.jboss.jandex.AnnotationValue;
 import org.jboss.jandex.DotName;
@@ -92,20 +90,10 @@ class KogitoAddonsQuarkusJobsServiceEmbeddedProcessor extends OneOfCapabilityKog
         resource.produce(NativeImageResourcePatternsBuildItem.builder().includeGlob("postgres-*.txz").build());
     }
 
-    @BuildStep(onlyIf = DataIndexAddonNotPresent.class)
-    public void excludeEventPublisherJobStreams(BuildProducer<ExcludedTypeBuildItem> excludedBeans) {
-        excludedBeans.produce(new ExcludedTypeBuildItem(DATA_INDEX_EVENT_PUBLISHER));
-    }
-
-    public static class DataIndexAddonNotPresent implements BooleanSupplier {
-        @Override
-        public boolean getAsBoolean() {
-            try {
-                Class.forName(DATA_INDEX_EVENT_PUBLISHER);
-                return false;
-            } catch (ClassNotFoundException e) {
-                return true;
-            }
+    @BuildStep
+    public void excludeEventPublisherJobStreams(CombinedIndexBuildItem indexBuildItem, BuildProducer<ExcludedTypeBuildItem> excludedBeans) {
+        if (indexBuildItem.getIndex().getClassByName(DATA_INDEX_EVENT_PUBLISHER) == null) {
+            excludedBeans.produce(new ExcludedTypeBuildItem(DATA_INDEX_EVENT_PUBLISHER));
         }
     }
 }
