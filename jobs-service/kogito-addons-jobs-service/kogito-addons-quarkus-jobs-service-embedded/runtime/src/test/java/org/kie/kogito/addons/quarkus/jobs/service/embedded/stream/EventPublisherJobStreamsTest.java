@@ -117,7 +117,10 @@ class EventPublisherJobStreamsTest {
         assertThat(event.getKogitoRootProcessId()).isEqualTo(ROOT_PROCESS_ID);
         assertThat(event.getData()).isNotEmpty();
 
-        JsonNode jsonNode = objectMapper.readTree(event.getData());
+        assertData(objectMapper.readTree(event.getData()));
+    }
+
+    private void assertData(JsonNode jsonNode) {
         assertThat(jsonNode).hasSize(17);
         assertHasField(jsonNode, "id", JOB_ID);
         assertHasField(jsonNode, "expirationTime", EXPIRATION_TIME.toString());
