@@ -17,7 +17,6 @@ package org.kie.kogito.addons.quarkus.jobs.service.embedded.deployment;
 
 import java.util.List;
 
-import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import org.jboss.jandex.IndexView;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,6 +28,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.quarkus.arc.deployment.ExcludedTypeBuildItem;
 import io.quarkus.deployment.annotations.BuildProducer;
+import io.quarkus.deployment.builditem.CombinedIndexBuildItem;
 import io.quarkus.deployment.builditem.FeatureBuildItem;
 import io.quarkus.deployment.builditem.SystemPropertyBuildItem;
 
