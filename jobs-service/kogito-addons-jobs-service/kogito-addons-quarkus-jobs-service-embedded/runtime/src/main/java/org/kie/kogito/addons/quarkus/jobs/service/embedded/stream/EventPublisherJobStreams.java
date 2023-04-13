@@ -31,8 +31,12 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.resource.RestApiConstants;
 import org.kie.kogito.jobs.service.stream.AvailableStreams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import io.smallrye.reactive.messaging.annotations.Blocking;
 
 import static org.kie.kogito.jobs.service.events.JobDataEvent.JOB_EVENT_TYPE;
 
@@ -44,6 +48,8 @@ import static org.kie.kogito.jobs.service.events.JobDataEvent.JOB_EVENT_TYPE;
 public class EventPublisherJobStreams {
 
     public static final String DATA_INDEX_EVENT_PUBLISHER = "org.kie.kogito.index.addon.DataIndexEventPublisher";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(EventPublisherJobStreams.class);
 
     private final String url;
 
@@ -65,6 +71,7 @@ public class EventPublisherJobStreams {
 
     @Incoming(AvailableStreams.JOB_STATUS_CHANGE_EVENTS)
     @Acknowledgment(Acknowledgment.Strategy.PRE_PROCESSING)
+    @Blocking
     public void onJobStatusChange(JobDetails jobDetails) {
         if (eventPublisher != null) {
             ScheduledJob scheduledJob = ScheduledJobAdapter.of(jobDetails);
@@ -81,7 +88,11 @@ public class EventPublisherJobStreams {
                     scheduledJob.getRootProcessInstanceId(),
                     scheduledJob.getProcessId(),
                     scheduledJob.getRootProcessId());
-            eventPublisher.publish(event);
+            try {
+                eventPublisher.publish(event);
+            } catch (Exception e) {
+                LOGGER.error("Job status change propagation has failed at eventPublisher: " + eventPublisher.getClass() + " execution.", e);
+            }
         }
     }
 
