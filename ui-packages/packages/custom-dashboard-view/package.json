@@ -32,9 +32,17 @@
     "@kogito-apps/components-common": "workspace:*",
     "@kogito-tooling/envelope": "0.10.0",
     "@kogito-tooling/envelope-bus": "0.10.0",
-    "@patternfly/react-core": "4.157.3"
+    "@patternfly/react-core": "4.157.3",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-router-dom": "^5.1.2"
   },
-
+  "devDependencies": {
+    "@types/react-dom": "^17.0.5",
+    "@types/react-router-dom": "^5.1.7",
+    "rimraf": "^3.0.2",
+    "copyfiles": "^2.4.1"
+  },
   "jest": {
     "setupFiles": [
       "../../config/Jest-config/test-shim.js",

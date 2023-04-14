@@ -27,6 +27,10 @@
     "format": "prettier --config ../../.prettierrc --check --write './src/**/*.{tsx,ts,js}'",
     "clean": "rimraf dist"
   },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "copyfiles": "^2.4.1"
+  },
   "jest": {
     "setupFiles": [
       "../../config/Jest-config/test-shim.js",

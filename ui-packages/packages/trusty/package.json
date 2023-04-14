@@ -23,7 +23,13 @@
     "react-custom-scrollbars": "^4.2.1",
     "sass": "^1.26.10",
     "sass-loader": "^9.0.2",
-    "use-react-router-breadcrumbs": "^1.0.4"
+    "use-react-router-breadcrumbs": "^1.0.4",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "axios": "^0.21.1",
+    "lodash": "^4.17.15",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.1.2"
   },
   "scripts": {
     "start": "webpack-dev-server --hot --color --progress --stats verbose --config ./dev-webapp/webpack.dev.js",
@@ -46,7 +52,32 @@
   "devDependencies": {
     "faker": "^4.1.0",
     "json-server": "^0.16.1",
-    "serve": "^12.0.1"
+    "serve": "^12.0.1",
+    "rimraf": "^3.0.2",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.8.0",
+    "webpack-merge": "^5.8.0",
+    "uuid": "^3.3.3",
+    "url-loader": "^4.1.1",
+    "svg-url-loader": "^4.0.0",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^9.4.2",
+    "sass-loader": "^12.3.0",
+    "file-loader": "^6.2.0",
+    "css-loader": "^5.2.6",
+    "copy-webpack-plugin": "^6.0.3",
+    "mini-css-extract-plugin": "^0.9.0",
+    "optimize-css-assets-webpack-plugin": "^6.0.1",
+    "concurrently": "^5.1.0",
+    "react-test-renderer": "^16.10.2",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.5",
+    "@types/react-router": "^5.1.14",
+    "@types/react-router-dom": "^5.1.7",
+    "cypress": "^9.6.1",
+    "@types/webpack": "^4.39.1",
+    "start-server-and-test": "^1.12.0"
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-ts",

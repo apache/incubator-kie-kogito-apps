@@ -102,47 +102,47 @@ module.exports = {
             '../../node_modules/@kogito-apps/consoles-common/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/components-common/dist/static'
+            './node_modules/@kogito-apps/components-common/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/jobs-management/dist/static'
+            './node_modules/@kogito-apps/jobs-management/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/process-details/dist/static'
+            './node_modules/@kogito-apps/process-details/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/custom-dashboard-view/dist/static'
+            './node_modules/@kogito-apps/custom-dashboard-view/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/management-console-shared/dist/static'
+            './node_modules/@kogito-apps/management-console-shared/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/process-list/dist/static'
+            './node_modules/@kogito-apps/process-list/dist/static'
           ),
-          path.resolve('../../node_modules/@kogito-apps/task-form/dist/static'),
+          path.resolve('./node_modules/@kogito-apps/task-form/dist/static'),
           path.resolve(
-            '../../node_modules/@kogito-apps/form-details/dist/static'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/form-displayer/dist/static'
+            './node_modules/@kogito-apps/form-details/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/process-form/dist/static'
+            './node_modules/@kogito-apps/form-displayer/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/process-definition-list/dist/static'
+            './node_modules/@kogito-apps/process-form/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/custom-dashboard-view/dist/static'
+            './node_modules/@kogito-apps/process-definition-list/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/process-monitoring/dist/static'
+            './node_modules/@kogito-apps/custom-dashboard-view/dist/static'
           ),
           path.resolve(
-            '../../node_modules/@kogito-apps/workflow-form/dist/static'
+            './node_modules/@kogito-apps/process-monitoring/dist/static'
           ),
           path.resolve(
-            '../../node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf'
+            './node_modules/@kogito-apps/workflow-form/dist/static'
+          ),
+          path.resolve(
+            './node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf'
           )
         ],
         use: {
@@ -257,7 +257,6 @@ module.exports = {
         configFile: path.resolve(__dirname, './tsconfig.json')
       })
     ],
-    symlinks: false,
     cacheWithContext: false
   }
 };
