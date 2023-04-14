@@ -34,7 +34,17 @@
     "@patternfly/react-core": "4.157.3",
     "@patternfly/react-icons": "4.11.17",
     "@patternfly/react-table": "4.29.0",
-    "react-moment": "0.9.7"
+    "react-moment": "0.9.7",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "react-datetime-picker": "^3.0.4"
+  },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "mockdate": "^3.0.5",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.5",
+    "copyfiles": "^2.4.1"
   },
   "jest": {
     "setupFiles": [

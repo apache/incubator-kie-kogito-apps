@@ -16,6 +16,10 @@
     "build": "rimraf dist && pnpm run copy:dashbuilder",
     "build:prod": "pnpm run build"
   },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "copyfiles": "^2.4.1"
+  },
   "babel": {
     "presets": [
       [

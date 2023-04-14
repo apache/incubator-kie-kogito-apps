@@ -1,5 +1,5 @@
 const path = require('path');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -71,7 +71,7 @@ module.exports = merge(common, {
             '../../node_modules/@kie-tools-core/editor/dist/envelope'
           )
         ],
-        loaders: ['style-loader', 'css-loader', 'sass-loader']
+        use: ['style-loader', 'css-loader','sass-loader']
       }
     ]
   }

@@ -11,7 +11,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "lib": ["es6", "dom", "es2018.promise", "es2019"],
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "skipLibCheck": true,
   },
   "exclude": ["node_modules"]
 }

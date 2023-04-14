@@ -27,6 +27,12 @@
     "format": "prettier --config ../../.prettierrc --check --write './src/**/*.{tsx,ts,js}'",
     "clean": "rimraf dist"
   },
+  "devDependencies": {
+    "rimraf": "^3.0.2",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.5",
+    "copyfiles": "^2.4.1"
+  },
   "jest": {
     "setupFiles": [
       "../../config/Jest-config/test-shim.js",
@@ -75,6 +81,9 @@
     "@kogito-apps/components-common": "^1.0.0",
     "@kogito-apps/patternfly-base": "^1.0.0",
     "@patternfly/react-core": "4.157.3",
-    "@patternfly/react-icons": "4.11.7"
+    "@patternfly/react-icons": "4.11.7",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "lodash": "^4.17.15"
   }
 }

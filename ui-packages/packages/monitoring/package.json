@@ -28,12 +28,17 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@kogito-apps/components-common": "^1.0.0",
-    "@kogito-apps/management-console-shared": "^1.0.0",
-    "@kogito-apps/patternfly-base": "^1.0.0"
+    "@kogito-apps/components-common": "workspace:*",
+    "@kogito-apps/management-console-shared": "workspace:*",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0"
   },
   "devDependencies": {
-    "@kogito-apps/ouia-tools": "^1.0.0"
+    "@kogito-apps/ouia-tools": "workspace:*",
+    "rimraf": "^3.0.2",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.5",
+    "copyfiles": "^2.4.1"
   },
   "jest": {
     "setupFiles": [

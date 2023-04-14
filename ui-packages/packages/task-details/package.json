@@ -34,10 +34,17 @@
     "@kogito-tooling/envelope": "0.10.0",
     "@kogito-tooling/envelope-bus": "0.10.0",
     "@patternfly/react-core": "4.157.3",
-    "react-moment": "0.9.7"
+    "react-moment": "0.9.7",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
-    "@kogito-apps/ouia-tools": "^1.0.0"
+    "@kogito-apps/ouia-tools": "^1.0.0",
+    "rimraf": "^3.0.2",
+    "@types/react": "^17.0.5",
+    "@types/react-dom": "^17.0.5",
+    "copyfiles": "^2.4.1"
   },
   "jest": {
     "setupFiles": [
