@@ -4,7 +4,7 @@
   <parent>
     <artifactId>jitexecutor</artifactId>
     <groupId>org.kie.kogito</groupId>
-    <version>1.37.0.Final</version>
+    <version>1.37.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>jitexecutor-dmn</artifactId>
