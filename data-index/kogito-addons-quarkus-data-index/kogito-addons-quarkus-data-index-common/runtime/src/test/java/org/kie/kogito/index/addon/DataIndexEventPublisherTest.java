@@ -23,14 +23,18 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.event.AbstractDataEvent;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.index.model.Job;
+import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.service.IndexingService;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
+import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
@@ -62,6 +66,19 @@ public class DataIndexEventPublisherTest {
     }
 
     @Test
+    void onProcessInstanceEvent() throws Exception {
+        ArgumentCaptor<ProcessInstance> eventCaptor = ArgumentCaptor.forClass(ProcessInstance.class);
+        ProcessInstance pi = new ProcessInstance();
+        byte[] jsonContent = getObjectMapper().writeValueAsBytes(pi);
+        ProcessInstanceDataEvent event = getProcessCloudEvent(PROCESS_ID, PROCESS_INSTANCE_ID, COMPLETED,
+                ROOT_PROCESS_INSTANCE_ID, ROOT_PROCESS_ID, ROOT_PROCESS_INSTANCE_ID);
+
+        dataIndexEventPublisher.publish(event);
+
+        verify(indexingService).indexProcessInstance(eventCaptor.capture());
+    }
+
+    @Test
     void onJobEvent() throws Exception {
         ArgumentCaptor<Job> eventCaptor = ArgumentCaptor.forClass(Job.class);
 
@@ -81,8 +98,8 @@ public class DataIndexEventPublisherTest {
         assertThat(eventCaptor.getValue().getRootProcessInstanceId()).isEqualTo(ROOT_PROCESS_INSTANCE_ID);
         assertThat(eventCaptor.getValue().getExpirationTime()).isEqualTo(EXPIRATION_TIME);
         assertThat(eventCaptor.getValue().getPriority()).isEqualTo(PRIORITY);
-        assertThat(eventCaptor.getValue().getRepeatInterval()).isEqualTo(0);
-        assertThat(eventCaptor.getValue().getRepeatLimit()).isEqualTo(0);
+        assertThat(eventCaptor.getValue().getRepeatInterval()).isZero();
+        assertThat(eventCaptor.getValue().getRepeatLimit()).isZero();
         assertThat(eventCaptor.getValue().getScheduledId()).isEqualTo(SCHEDULE_ID);
         assertThat(eventCaptor.getValue().getRetries()).isEqualTo(RETRIES);
         assertThat(eventCaptor.getValue().getStatus()).isEqualTo(STATUS);
