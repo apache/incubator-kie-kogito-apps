@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.MediaType;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.kie.kogito.dashboard.model.CustomDashboardInfo;
 import org.kie.kogito.index.api.KogitoRuntimeClient;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.Node;
@@ -77,6 +78,12 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
     public static final String CREATE_USER_TASK_INSTANCE_ATTACHMENT_PATH = "/%s/%s/%s/%s/attachments";
     public static final String UPDATE_USER_TASK_INSTANCE_ATTACHMENT_PATH = "/%s/%s/%s/%s/attachments/%s";
     public static final String DELETE_USER_TASK_INSTANCE_ATTACHMENT_PATH = "/%s/%s/%s/%s/attachments/%s";
+
+    public static final String GET_CUSTOM_DASHBOARD_COUNT_PATH = "/customDashboard/count";
+
+    public static final String GET_CUSTOM_DASHBOARD_LIST_PATH = "/customDashboard/list";
+
+    public static final String GET_CUSTOM_DASHBOARD_CONTENT_PATH = "/customDashboard/{name:\\S+}";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KogitoRuntimeClientImpl.class);
     private Vertx vertx;
@@ -377,5 +384,23 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
             return "Bearer " + identity.getCredential(TokenCredential.class).getToken();
         }
         return "";
+    }
+
+    @Override
+    public CompletableFuture<Integer> getCustomDashboardCount(String serviceURL) {
+        String requestURI = format(GET_CUSTOM_DASHBOARD_COUNT_PATH);
+        return sendGetClientRequest(getWebClient(serviceURL), requestURI, "Get Custom Dashboard Count: ", Integer.class);
+    }
+
+    @Override
+    public CompletableFuture<List<CustomDashboardInfo>> getCustomDashboards(String serviceURL, String names) {
+        String requestURI = format(GET_CUSTOM_DASHBOARD_LIST_PATH, names);
+        return sendGetClientRequest(getWebClient(serviceURL), requestURI, "Get Custom Dashboard List with name filter: ", List.class);
+    }
+
+    @Override
+    public CompletableFuture<String> getCustomDashboardContent(String serviceURL, String name) {
+        String requestURI = format(GET_CUSTOM_DASHBOARD_CONTENT_PATH);
+        return sendGetClientRequest(getWebClient(serviceURL), requestURI, "Get Custom Dashboard Content with name: ", String.class);
     }
 }

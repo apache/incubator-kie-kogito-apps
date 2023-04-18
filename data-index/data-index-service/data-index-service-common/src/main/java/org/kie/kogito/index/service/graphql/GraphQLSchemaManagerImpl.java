@@ -25,6 +25,7 @@ import java.util.function.Supplier;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 
+import org.kie.kogito.dashboard.model.CustomDashboardInfo;
 import org.kie.kogito.index.graphql.AbstractGraphQLSchemaManager;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
 import org.kie.kogito.index.json.DataIndexParsingException;
@@ -90,6 +91,10 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
                     builder.dataFetcher("ProcessInstances", this::getProcessInstancesValues);
                     builder.dataFetcher("UserTaskInstances", this::getUserTaskInstancesValues);
                     builder.dataFetcher("Jobs", this::getJobsValues);
+
+                    builder.dataFetcher("CustomDashboards", this::getCustomDashboards);
+                    builder.dataFetcher("CustomDashboardCount", this::getCustomDashboardCount);
+                    builder.dataFetcher("CustomDashboardContent", this::getCustomDashboardContent);
                     return builder;
                 })
                 .type("Mutation", builder -> {
@@ -353,6 +358,23 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
                 }
             }).collect(toList());
         };
+    }
+
+    protected CompletableFuture<Integer> getCustomDashboardCount(DataFetchingEnvironment env) {
+        String serverUrl = env.getArgument("serverUrl");
+        return getDataIndexApiExecutor().getCustomDashboardCount(serverUrl);
+    }
+
+    protected CompletableFuture<List<CustomDashboardInfo>> getCustomDashboards(DataFetchingEnvironment env) {
+        String serverUrl = env.getArgument("serverUrl");
+        String names = env.getArgument("names");
+        return getDataIndexApiExecutor().getCustomDashboards(serverUrl, names);
+    }
+
+    protected CompletableFuture<String> getCustomDashboardContent(DataFetchingEnvironment env) {
+        String serverUrl = env.getArgument("serverUrl");
+        String name = env.getArgument("name");
+        return getDataIndexApiExecutor().getCustomDashboardContent(serverUrl, name);
     }
 
 }

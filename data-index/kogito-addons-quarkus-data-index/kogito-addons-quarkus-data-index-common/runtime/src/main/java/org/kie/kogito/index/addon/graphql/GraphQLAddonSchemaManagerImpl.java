@@ -15,12 +15,18 @@
  */
 package org.kie.kogito.index.addon.graphql;
 
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+
 import javax.enterprise.context.ApplicationScoped;
 
+import org.kie.kogito.dashboard.model.CustomDashboardInfo;
 import org.kie.kogito.index.graphql.AbstractGraphQLSchemaManager;
 import org.kie.kogito.index.model.ProcessInstanceState;
 
 import graphql.scalars.ExtendedScalars;
+import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
@@ -37,6 +43,10 @@ public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager 
                 .type("Query", builder -> {
                     builder.dataFetcher("ProcessInstances", this::getProcessInstancesValues);
                     builder.dataFetcher("UserTaskInstances", this::getUserTaskInstancesValues);
+
+                    builder.dataFetcher("CustomDashboards", this::getCustomDashboards);
+                    builder.dataFetcher("CustomDashboardCount", this::getCustomDashboardCount);
+                    builder.dataFetcher("CustomDashboardContent", this::getCustomDashboardContent);
                     return builder;
                 })
                 .type("ProcessInstance", builder -> {
@@ -61,4 +71,21 @@ public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager 
         return schemaGenerator.makeExecutableSchema(typeDefinitionRegistry, runtimeWiring);
     }
 
+    protected CompletableFuture<Integer> getCustomDashboardCount(DataFetchingEnvironment env) {
+        String serverUrl = env.getArgument("serverUrl");
+        CompletableFuture<Map> result = new CompletableFuture<>();
+        return getDataIndexApiExecutor().getCustomDashboardCount(serverUrl);
+    }
+
+    protected CompletableFuture<List<CustomDashboardInfo>> getCustomDashboards(DataFetchingEnvironment env) {
+        String serverUrl = env.getArgument("serverUrl");
+        String names = env.getArgument("names");
+        return getDataIndexApiExecutor().getCustomDashboards(serverUrl, names);
+    }
+
+    protected CompletableFuture<String> getCustomDashboardContent(DataFetchingEnvironment env) {
+        String serverUrl = env.getArgument("serverUrl");
+        String name = env.getArgument("name");
+        return getDataIndexApiExecutor().getCustomDashboardContent(serverUrl, name);
+    }
 }

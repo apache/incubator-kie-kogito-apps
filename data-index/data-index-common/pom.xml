@@ -56,6 +56,10 @@
       <artifactId>json-unit-assertj</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-addons-dashboard</artifactId>
+    </dependency>
   </dependencies>
 
   <build>

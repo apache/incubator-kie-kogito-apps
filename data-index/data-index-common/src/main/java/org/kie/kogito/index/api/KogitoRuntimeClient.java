@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import org.kie.kogito.dashboard.model.CustomDashboardInfo;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -74,4 +75,10 @@ public interface KogitoRuntimeClient {
 
     CompletableFuture<String> deleteUserTaskInstanceAttachment(String serviceURL, UserTaskInstance userTaskInstance, String user,
             List<String> groups, String attachmentId);
+
+    CompletableFuture<Integer> getCustomDashboardCount(String serviceURL);
+
+    CompletableFuture<List<CustomDashboardInfo>> getCustomDashboards(String serviceURL, String names);
+
+    CompletableFuture<String> getCustomDashboardContent(String serviceURL, String name);
 }

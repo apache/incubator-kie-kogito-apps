@@ -19,6 +19,7 @@ package org.kie.kogito.index.addon.api;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
@@ -28,6 +29,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.kie.kogito.addon.source.files.SourceFilesProvider;
+import org.kie.kogito.dashboard.impl.CustomDashboardStorageService;
+import org.kie.kogito.dashboard.model.CustomDashboardFilter;
+import org.kie.kogito.dashboard.model.CustomDashboardInfo;
 import org.kie.kogito.index.api.KogitoRuntimeClient;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.Node;
@@ -52,6 +56,13 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
 
     @Inject
     Processes processes;
+
+    private CustomDashboardStorageService storage;
+
+    @Inject
+    public void setStorage(CustomDashboardStorageService storage) {
+        this.storage = storage;
+    }
 
     static <T> CompletableFuture<T> throwUnsupportedException() {
         return CompletableFuture.failedFuture(new UnsupportedOperationException());
@@ -186,5 +197,24 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
     @Override
     public CompletableFuture<String> deleteUserTaskInstanceAttachment(String serviceURL, UserTaskInstance userTaskInstance, String user, List<String> groups, String attachmentId) {
         return throwUnsupportedException();
+    }
+
+    public CompletableFuture<Integer> getCustomDashboardCount(String serviceURL) {
+        return CompletableFuture.completedFuture(storage.getCustomDashboardFilesCount().get());
+    }
+
+    @Override
+    public CompletableFuture<List<CustomDashboardInfo>> getCustomDashboards(String serviceURL, String names) {
+        CustomDashboardFilter filter = new CustomDashboardFilter(Arrays.asList(names.split(",")));
+        return CompletableFuture.completedFuture(storage.getCustomDashboardFiles(filter).get().stream().collect(Collectors.toList()));
+    }
+
+    @Override
+    public CompletableFuture<String> getCustomDashboardContent(String serviceURL, String name) {
+        try {
+            return CompletableFuture.completedFuture(storage.getCustomDashboardFileContent(name).get());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
