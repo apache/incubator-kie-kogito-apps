@@ -33,6 +33,7 @@
     "@kogito-tooling/envelope": "0.10.0",
     "@kogito-tooling/envelope-bus": "0.10.0",
     "@patternfly/react-core": "4.157.3",
+    "@patternfly/patternfly": "^4.108.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0"
   },

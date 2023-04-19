@@ -34,6 +34,7 @@
     "@patternfly/react-code-editor": "4.2.92",
     "@patternfly/react-core": "4.157.3",
     "@patternfly/react-icons": "4.11.17",
+    "@patternfly/patternfly": "^4.108.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "lodash": "^4.17.15"

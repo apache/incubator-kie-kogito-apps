@@ -31,6 +31,7 @@
     "@patternfly/react-core": "4.157.3",
     "@patternfly/react-icons": "4.11.17",
     "@patternfly/react-table": "4.29.0",
+    "@patternfly/patternfly": "^4.108.2",
     "ajv": "^6.12.6",
     "uniforms": "^3.5.5",
     "uniforms-bridge-json-schema": "^3.5.5",

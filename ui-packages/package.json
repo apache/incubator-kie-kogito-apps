@@ -11,6 +11,7 @@
     "prepare": "cd .. && husky install"
   },
   "dependencies": {
+    "@kogito-apps/ouia-tools": "workspace:*",
     "monaco-yaml": "3.0.0",
     "react-monaco-editor": "^0.41.2"
   },
@@ -21,7 +22,6 @@
     "@babel/preset-react": "^7.13.13",
     "@kie-tools/dashbuilder-client": "^0.23.0",
     "@kogito-apps/cypress-ouia": "workspace:*",
-    "@kogito-apps/ouia-tools": "workspace:*",
     "@testing-library/jest-dom": "^5.12.0",
     "@types/enzyme": "^3.10.8",
     "@types/enzyme-adapter-react-16": "^1.0.6",
@@ -65,7 +65,7 @@
   },
   "lint-staged": {
     "packages/**/*.{ts,tsx}": [
-      "yarn run pretty-quick --staged",
+      "pnpm run pretty-quick --staged",
       "eslint --fix"
     ]
   },
