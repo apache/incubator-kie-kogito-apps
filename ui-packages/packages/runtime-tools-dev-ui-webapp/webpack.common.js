@@ -73,7 +73,7 @@ module.exports = {
     rules: [
       {
         test: /\.(tsx|ts)?$/,
-        include: [path.resolve(__dirname, 'src')],
+        include: [path.resolve('./src')],
         exclude: path.resolve(__dirname, 'node_modules'),
         use: [
           {
@@ -87,71 +87,13 @@ module.exports = {
       },
       {
         test: /\.(svg|ttf|eot|woff|woff2)$/,
-        include: [
-          path.resolve('./node_modules/patternfly/dist/fonts'),
-          path.resolve(
-            './node_modules/@patternfly/react-core/dist/styles/assets/fonts'
-          ),
-          path.resolve(
-            './node_modules/@patternfly/react-core/dist/styles/assets/pficon'
-          ),
-          path.resolve('./node_modules/@patternfly/patternfly/assets/fonts'),
-          path.resolve('./node_modules/@patternfly/patternfly/assets/pficon'),
-          path.resolve('./src/static/'),
-          path.resolve(
-            '../../node_modules/@kogito-apps/consoles-common/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/components-common/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/jobs-management/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/process-details/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/custom-dashboard-view/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/management-console-shared/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/process-list/dist/static'
-          ),
-          path.resolve('./node_modules/@kogito-apps/task-form/dist/static'),
-          path.resolve(
-            './node_modules/@kogito-apps/form-details/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/form-displayer/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/process-form/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/process-definition-list/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/custom-dashboard-view/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/process-monitoring/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/workflow-form/dist/static'
-          ),
-          path.resolve(
-            './node_modules/monaco-editor/esm/vs/base/browser/ui/codicons/codicon/codicon.ttf'
-          )
-        ],
         use: {
           loader: 'file-loader',
           options: {
             // Limit at 50k. larger files emited into separate files
             limit: 5000,
             outputPath: 'fonts',
-            name: '[name].[ext]'
+            name: '[id].[name].[ext]'
           }
         }
       },
@@ -179,56 +121,6 @@ module.exports = {
       },
       {
         test: /\.(jpg|jpeg|png|gif)$/i,
-        include: [
-          path.resolve(__dirname, 'src'),
-          path.resolve('../../node_modules/patternfly'),
-          path.resolve('./node_modules/@patternfly/patternfly/assets/images'),
-          path.resolve(
-            './node_modules/@patternfly/react-styles/css/assets/images'
-          ),
-          path.resolve(
-            './node_modules/@patternfly/react-core/dist/styles/assets/images'
-          ),
-          path.resolve(
-            './node_modules/@patternfly/react-core/node_modules/@patternfly/react-styles/css/assets/images'
-          ),
-          path.resolve(
-            './node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css/assets/images'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/consoles-common/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/components-common/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/jobs-management/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/process-details/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/management-console-shared/dist/static'
-          ),
-          path.resolve('./node_modules/@kogito-apps/process-list/dist/static'),
-          path.resolve('./node_modules/@kogito-apps/form-details/dist/static'),
-          path.resolve(
-            './node_modules/@kogito-apps/form-displayer/dist/static'
-          ),
-          path.resolve('./node_modules/@kogito-apps/task-form/dist/static'),
-          path.resolve('./node_modules/@kogito-apps/process-form/dist/static'),
-          path.resolve(
-            './node_modules/@kogito-apps/process-monitoring/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/process-definition-list/dist/static'
-          ),
-          path.resolve(
-            './node_modules/@kogito-apps/custom-dashboard-view/dist/static'
-          ),
-          path.resolve('./node_modules/@kogito-apps/workflow-form/dist/static')
-        ],
-
         use: [
           {
             loader: 'url-loader',
@@ -246,12 +138,18 @@ module.exports = {
     path: path.resolve(__dirname, 'dist')
   },
   resolve: {
+    fallback: {
+      https: require.resolve('https-browserify'),
+      path: require.resolve('path-browserify'),
+      http: require.resolve('stream-http'),
+      os: require.resolve('os-browserify/browser'),
+      fs: false,
+      child_process: false,
+      net: false,
+      buffer: require.resolve('buffer/')
+    },
     extensions: ['.ts', '.tsx', '.js'],
-    modules: [
-      path.resolve('../../node_modules'),
-      path.resolve('./node_modules'),
-      path.resolve('./src')
-    ],
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     plugins: [
       new TsconfigPathsPlugin({
         configFile: path.resolve(__dirname, './tsconfig.json')

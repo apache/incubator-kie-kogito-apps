@@ -36,6 +36,7 @@
     "@patternfly/react-core": "4.157.3",
     "@patternfly/react-icons": "4.11.17",
     "@patternfly/react-table": "4.29.0",
+    "@patternfly/patternfly": "^4.108.2",
     "react-moment": "0.9.7",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
