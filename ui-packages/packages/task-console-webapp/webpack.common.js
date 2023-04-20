@@ -28,7 +28,6 @@ module.exports = {
       {
         test: /\.(tsx|ts)?$/,
         include: [path.resolve(__dirname, 'src')],
-        exclude: path.resolve(__dirname, 'node_modules'),
         use: [
           {
             loader: 'ts-loader',
@@ -41,29 +40,6 @@ module.exports = {
       },
       {
         test: /\.(svg|ttf|eot|woff|woff2)$/,
-        include: [
-          path.resolve('../../node_modules/patternfly/dist/fonts'),
-          path.resolve(
-            '../../node_modules/@patternfly/react-core/dist/styles/assets/fonts'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/react-core/dist/styles/assets/pficon'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/patternfly/assets/fonts'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/patternfly/assets/pficon'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/consoles-common/dist/static'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/form-displayer/dist/static'
-          ),
-          path.resolve('../../node_modules/@kogito-apps/task-form/dist/static'),
-          path.resolve('./src/static')
-        ],
         use: {
           loader: 'file-loader',
           options: {
@@ -97,36 +73,7 @@ module.exports = {
         }
       },
       {
-        test: /\.(jpg|jpeg|png|gif)$/i,
-        include: [
-          path.resolve(__dirname, 'src'),
-          path.resolve('../../node_modules/patternfly'),
-          path.resolve(
-            '../../node_modules/@patternfly/patternfly/assets/images'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/react-styles/css/assets/images'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/react-core/dist/styles/assets/images'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/react-core/node_modules/@patternfly/react-styles/css/assets/images'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css/assets/images'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/consoles-common/dist/static'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/form-displayer/dist/static'
-          ),
-          path.resolve('../../node_modules/@kogito-apps/task-form/dist/static'),
-          path.resolve(
-            '../../node_modules/@kogito-apps/components-common/dist/static'
-          )
-        ],
+        test: /\.(jpg|jpeg|png|gif)$/i,  
         use: [
           {
             loader: 'url-loader',
@@ -147,17 +94,12 @@ module.exports = {
   },
   resolve: {
     extensions: ['.ts', '.tsx', '.js'],
-    modules: [
-      path.resolve('../../node_modules'),
-      path.resolve('./node_modules'),
-      path.resolve('./src')
-    ],
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     plugins: [
       new TsconfigPathsPlugin({
         configFile: path.resolve(__dirname, './tsconfig.json')
       })
     ],
-    symlinks: false,
     cacheWithContext: false
   }
 };

@@ -1899,6 +1899,9 @@ importers:
       '@kogito-apps/form-displayer':
         specifier: workspace:*
         version: link:../form-displayer
+      '@kogito-apps/task-console-shared':
+        specifier: workspace:*
+        version: link:../task-console-shared
       '@kogito-apps/task-details':
         specifier: workspace:*
         version: link:../task-details
@@ -1914,12 +1917,33 @@ importers:
       '@kogito-tooling/envelope-bus':
         specifier: 0.10.0
         version: 0.10.0
+      '@patternfly/patternfly':
+        specifier: ^4.108.2
+        version: 4.224.2
+      '@patternfly/react-core':
+        specifier: 4.157.3
+        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+      apollo-cache-inmemory:
+        specifier: 1.6.6
+        version: 1.6.6
+      apollo-client:
+        specifier: 2.6.10
+        version: 2.6.10
       apollo-link-context:
         specifier: ^1.0.20
         version: 1.0.20
+      apollo-link-error:
+        specifier: 1.1.13
+        version: 1.1.13
+      apollo-link-http:
+        specifier: 1.5.17
+        version: 1.5.17
       axios:
         specifier: 0.21.2
         version: 0.21.2
+      history:
+        specifier: ^4.9.0
+        version: 4.10.1
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
