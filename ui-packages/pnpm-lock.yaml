@@ -2233,6 +2233,18 @@ importers:
       '@kogito-tooling/kie-editors-standalone':
         specifier: ^0.10.0
         version: 0.10.0(react-dom@16.14.0)(react@16.14.0)
+      '@patternfly/react-charts':
+        specifier: ^6.14.29
+        version: 6.94.18(react-dom@16.14.0)(react@16.14.0)
+      '@patternfly/react-core':
+        specifier: 4.157.3
+        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+      '@patternfly/react-icons':
+        specifier: 4.11.17
+        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+      '@patternfly/react-table':
+        specifier: 4.29.0
+        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
       '@testing-library/react':
         specifier: ^10.4.7
         version: 10.4.9(react-dom@16.14.0)(react@16.14.0)
@@ -2254,6 +2266,9 @@ importers:
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
+      query-string:
+        specifier: 4.3.4
+        version: 4.3.4
       react:
         specifier: ^16.9.0
         version: 16.14.0
@@ -6670,6 +6685,37 @@ packages:
       victory-tooltip: 36.6.8
       victory-voronoi-container: 36.6.8
       victory-zoom-container: 36.6.8
+    dev: false
+
+  /@patternfly/react-charts@6.94.18(react-dom@16.14.0)(react@16.14.0):
+    resolution: {integrity: sha512-56WxnZYC3blRX41mW67JaPxJ3YhXViLvwGpEsZrYCccla/rTV8JgKK0gjHnqtzPQiVBfpn+3ewOyNCOR5uRoSw==}
+    peerDependencies:
+      react: ^16.8 || ^17 || ^18
+      react-dom: ^16.8 || ^17 || ^18
+    dependencies:
+      '@patternfly/react-styles': 4.92.6
+      '@patternfly/react-tokens': 4.94.6
+      hoist-non-react-statics: 3.3.2
+      lodash: 4.17.21
+      react: 16.14.0
+      react-dom: 16.14.0(react@16.14.0)
+      tslib: 2.5.0
+      victory-area: 36.6.8(react@16.14.0)
+      victory-axis: 36.6.8(react@16.14.0)
+      victory-bar: 36.6.8(react@16.14.0)
+      victory-chart: 36.6.8(react@16.14.0)
+      victory-core: 36.6.8(react@16.14.0)
+      victory-create-container: 36.6.8(react@16.14.0)
+      victory-cursor-container: 36.6.8(react@16.14.0)
+      victory-group: 36.6.8(react@16.14.0)
+      victory-legend: 36.6.8(react@16.14.0)
+      victory-line: 36.6.8(react@16.14.0)
+      victory-pie: 36.6.8(react@16.14.0)
+      victory-scatter: 36.6.8(react@16.14.0)
+      victory-stack: 36.6.8(react@16.14.0)
+      victory-tooltip: 36.6.8(react@16.14.0)
+      victory-voronoi-container: 36.6.8(react@16.14.0)
+      victory-zoom-container: 36.6.8(react@16.14.0)
     dev: false
 
   /@patternfly/react-code-editor@4.2.92:
@@ -20096,7 +20142,6 @@ packages:
     dependencies:
       object-assign: 4.1.1
       strict-uri-encode: 1.1.0
-    dev: true
 
   /querystring-es3@0.2.1:
     resolution: {integrity: sha512-773xhDQnZBMFobEiztv8LIl70ch5MSF/jUQVlhwFyBILqq96anmoctVIYz+ZRp0qbCKATTn6ev02M3r7Ga5vqA==}
@@ -22254,7 +22299,6 @@ packages:
   /strict-uri-encode@1.1.0:
     resolution: {integrity: sha512-R3f198pcvnB+5IpnBlRkphuE9n46WyVl8I39W/ZUTZLz4nqSP/oLYUrcnJrw462Ds8he4YKMov2efsTIw1BDGQ==}
     engines: {node: '>=0.10.0'}
-    dev: true
 
   /string-argv@0.3.1:
     resolution: {integrity: sha512-a1uQGz7IyVy9YwhqjZIZu1c8JO8dNIe20xBmSS6qu9kv++k3JGzCVmprbNN5Kn+BgzD5E7YYwg1CcjuJMRNsvg==}
@@ -23780,6 +23824,18 @@ packages:
       victory-vendor: 36.6.8
     dev: false
 
+  /victory-area@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-aIyMuzUqiDcpTCB7FUOYDJvqiDPiluEXLOw6Lh1vrUYmV7CNqMDOIBtTau2vI41Ao0o0YJdCAcyzBib9e3UYbw==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
+      victory-vendor: 36.6.8
+    dev: false
+
   /victory-axis@36.6.8:
     resolution: {integrity: sha512-tClVJEay1YOJAh9rRyyLx8pei7Sr1/xTz04bJmfzFoAxFoPBtvgfFwXhfZ1YjGIl7m5Wh2CiYMY3figueLzYtg==}
     peerDependencies:
@@ -23788,6 +23844,17 @@ packages:
       lodash: 4.17.21
       prop-types: 15.8.1
       victory-core: 36.6.8
+    dev: false
+
+  /victory-axis@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-tClVJEay1YOJAh9rRyyLx8pei7Sr1/xTz04bJmfzFoAxFoPBtvgfFwXhfZ1YjGIl7m5Wh2CiYMY3figueLzYtg==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
     dev: false
 
   /victory-bar@36.6.8:
@@ -23801,6 +23868,18 @@ packages:
       victory-vendor: 36.6.8
     dev: false
 
+  /victory-bar@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-jLLPm3IW8/2uSLPvQD9bxzXnTraUYBIDTkbZPZy7oHP01OVzP1sj+MMHcINCWcUbyUyLZDL3u8CvViXjS273JQ==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
+      victory-vendor: 36.6.8
+    dev: false
+
   /victory-brush-container@36.6.8:
     resolution: {integrity: sha512-PN5zQ6kjVwZca1qV41WlV6J2IEyQh+2hykRe6c/wERDotVVbSrX3sJVAzUbN+7x2rrK0CL6a/XUI8jDsWTMM2A==}
     peerDependencies:
@@ -23810,6 +23889,18 @@ packages:
       prop-types: 15.8.1
       react-fast-compare: 3.2.0
       victory-core: 36.6.8
+    dev: false
+
+  /victory-brush-container@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-PN5zQ6kjVwZca1qV41WlV6J2IEyQh+2hykRe6c/wERDotVVbSrX3sJVAzUbN+7x2rrK0CL6a/XUI8jDsWTMM2A==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      react-fast-compare: 3.2.0
+      victory-core: 36.6.8(react@16.14.0)
     dev: false
 
   /victory-chart@36.6.8:
@@ -23826,6 +23917,21 @@ packages:
       victory-shared-events: 36.6.8
     dev: false
 
+  /victory-chart@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-kC1jL63PAmqUrvZNOfwAXNuaIwz4nvXYUuEPu59WRBCOIGDGRgv2wJ1O7O0xYXqDkI57EtAYf9KUK+miEn/Btg==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      react-fast-compare: 3.2.0
+      victory-axis: 36.6.8(react@16.14.0)
+      victory-core: 36.6.8(react@16.14.0)
+      victory-polar-axis: 36.6.8(react@16.14.0)
+      victory-shared-events: 36.6.8(react@16.14.0)
+    dev: false
+
   /victory-core@36.6.8:
     resolution: {integrity: sha512-SkyEszZKGyxjqfptfFWYdI22CvCuE9LhkaDpikzIhT2gcE3SuOBO5fk/740XMYE2ZUsJ4Fu/Vy4+8jZi17y44A==}
     peerDependencies:
@@ -23833,6 +23939,18 @@ packages:
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
+      react-fast-compare: 3.2.0
+      victory-vendor: 36.6.8
+    dev: false
+
+  /victory-core@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-SkyEszZKGyxjqfptfFWYdI22CvCuE9LhkaDpikzIhT2gcE3SuOBO5fk/740XMYE2ZUsJ4Fu/Vy4+8jZi17y44A==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
       react-fast-compare: 3.2.0
       victory-vendor: 36.6.8
     dev: false
@@ -23851,6 +23969,21 @@ packages:
       victory-zoom-container: 36.6.8
     dev: false
 
+  /victory-create-container@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-H2BsdTbJ/RxxcEg5lzk3TDlihtOs7I/5KaIBP3yosPs702i40mL2qndkRkj08QeiZhkaKfQ2GOUvyP+t7DSdmg==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      react: 16.14.0
+      victory-brush-container: 36.6.8(react@16.14.0)
+      victory-core: 36.6.8(react@16.14.0)
+      victory-cursor-container: 36.6.8(react@16.14.0)
+      victory-selection-container: 36.6.8(react@16.14.0)
+      victory-voronoi-container: 36.6.8(react@16.14.0)
+      victory-zoom-container: 36.6.8(react@16.14.0)
+    dev: false
+
   /victory-cursor-container@36.6.8:
     resolution: {integrity: sha512-3WIBRl+7jnZok6syLfW8RK23nliDcoD/JUTN0YZo6bKBqHeFc4+ur3mlwCfghH7sGoxJRYuOJxTd9x2MwM5HQQ==}
     peerDependencies:
@@ -23859,6 +23992,17 @@ packages:
       lodash: 4.17.21
       prop-types: 15.8.1
       victory-core: 36.6.8
+    dev: false
+
+  /victory-cursor-container@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-3WIBRl+7jnZok6syLfW8RK23nliDcoD/JUTN0YZo6bKBqHeFc4+ur3mlwCfghH7sGoxJRYuOJxTd9x2MwM5HQQ==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
     dev: false
 
   /victory-group@36.6.8:
@@ -23873,6 +24017,19 @@ packages:
       victory-shared-events: 36.6.8
     dev: false
 
+  /victory-group@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-CiupDIGPPWVgwif3ayd8glSlR41mVbuT0Nl0ay9q42w2fiM32syiJAoifIw47X4tL8ow/DXH+/5Pd8eEyA2trA==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      react-fast-compare: 3.2.0
+      victory-core: 36.6.8(react@16.14.0)
+      victory-shared-events: 36.6.8(react@16.14.0)
+    dev: false
+
   /victory-legend@36.6.8:
     resolution: {integrity: sha512-OnkzB82Mvt5/1LYNsrfZQoXaVvgfp1rCsFRI3imq257Sh/UPy0/eZehCMQs/SVbU0z0EuIpXokhZb3BBdoJgpw==}
     peerDependencies:
@@ -23883,6 +24040,17 @@ packages:
       victory-core: 36.6.8
     dev: false
 
+  /victory-legend@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-OnkzB82Mvt5/1LYNsrfZQoXaVvgfp1rCsFRI3imq257Sh/UPy0/eZehCMQs/SVbU0z0EuIpXokhZb3BBdoJgpw==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
+    dev: false
+
   /victory-line@36.6.8:
     resolution: {integrity: sha512-MozOejQRZPdzFaru5zUfqVB4TEff6nZjtQhOs+F5yyhXjLgM89zGX30r3jK5cjVdAPbTu4KPUrwktvlw+AkPRA==}
     peerDependencies:
@@ -23891,6 +24059,18 @@ packages:
       lodash: 4.17.21
       prop-types: 15.8.1
       victory-core: 36.6.8
+      victory-vendor: 36.6.8
+    dev: false
+
+  /victory-line@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-MozOejQRZPdzFaru5zUfqVB4TEff6nZjtQhOs+F5yyhXjLgM89zGX30r3jK5cjVdAPbTu4KPUrwktvlw+AkPRA==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
       victory-vendor: 36.6.8
     dev: false
 
@@ -23905,6 +24085,18 @@ packages:
       victory-vendor: 36.6.8
     dev: false
 
+  /victory-pie@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-dUHWiiKd60dlt7OjFa+YYwanHAkP/T0abzy6O3SFxGre52oeqd8px1EoVhlLKpn4ao8L35koG9mvz6/pGyr8Dw==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
+      victory-vendor: 36.6.8
+    dev: false
+
   /victory-polar-axis@36.6.8:
     resolution: {integrity: sha512-aU+Wp5six21POhI9oXeREnZHljpqcmwFHHnliVGrwgRsuc7TAjfXPWVOX9guEFfh6zQW6IZWWWTTLAN/PIEm9w==}
     peerDependencies:
@@ -23913,6 +24105,17 @@ packages:
       lodash: 4.17.21
       prop-types: 15.8.1
       victory-core: 36.6.8
+    dev: false
+
+  /victory-polar-axis@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-aU+Wp5six21POhI9oXeREnZHljpqcmwFHHnliVGrwgRsuc7TAjfXPWVOX9guEFfh6zQW6IZWWWTTLAN/PIEm9w==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
     dev: false
 
   /victory-scatter@36.6.8:
@@ -23925,6 +24128,17 @@ packages:
       victory-core: 36.6.8
     dev: false
 
+  /victory-scatter@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-GKSNneBxIWLsF3eBSTW5IwT5S4YdsfFl4PVCP3/wTa2myfS5DIS9FufEnJp/FEZGalEXYWxeR47rlWqABxAj5A==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
+    dev: false
+
   /victory-selection-container@36.6.8:
     resolution: {integrity: sha512-kudYbSX+o7fr64oeN7+EG/c+lqO22aypxVdCwa6BagAGoqqLR4jXxTqqIdp8tvxCgfCCXxopnTKYr46nubypGw==}
     peerDependencies:
@@ -23933,6 +24147,17 @@ packages:
       lodash: 4.17.21
       prop-types: 15.8.1
       victory-core: 36.6.8
+    dev: false
+
+  /victory-selection-container@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-kudYbSX+o7fr64oeN7+EG/c+lqO22aypxVdCwa6BagAGoqqLR4jXxTqqIdp8tvxCgfCCXxopnTKYr46nubypGw==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
     dev: false
 
   /victory-shared-events@36.6.8:
@@ -23947,6 +24172,19 @@ packages:
       victory-core: 36.6.8
     dev: false
 
+  /victory-shared-events@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-hWPOVqMD3Sv6Rl1iyO6ibQrwYF9/eLCnRo0T59/Hsid6On0AJJjL9gv0oEIM5fqz7R7zx9PJmMk877IctEOemw==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      json-stringify-safe: 5.0.1
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      react-fast-compare: 3.2.0
+      victory-core: 36.6.8(react@16.14.0)
+    dev: false
+
   /victory-stack@36.6.8:
     resolution: {integrity: sha512-Pkux46IqAealOi0KvqQpaJKKKpHCfZ/sh5IeUKYFy+QKWAjiQjG6hFZeHgr2YaS7OfdbvHhoAdvp03KntWzpbw==}
     peerDependencies:
@@ -23959,6 +24197,19 @@ packages:
       victory-shared-events: 36.6.8
     dev: false
 
+  /victory-stack@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-Pkux46IqAealOi0KvqQpaJKKKpHCfZ/sh5IeUKYFy+QKWAjiQjG6hFZeHgr2YaS7OfdbvHhoAdvp03KntWzpbw==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      react-fast-compare: 3.2.0
+      victory-core: 36.6.8(react@16.14.0)
+      victory-shared-events: 36.6.8(react@16.14.0)
+    dev: false
+
   /victory-tooltip@36.6.8:
     resolution: {integrity: sha512-9P+QeAGyDpP0trJnQ1NtnbDhpoJB0Ghc2boYEehvL12p0OzolY9/Nq5SDP0tu5i1BBujwFXtnoCDqt+mOH25fA==}
     peerDependencies:
@@ -23967,6 +24218,17 @@ packages:
       lodash: 4.17.21
       prop-types: 15.8.1
       victory-core: 36.6.8
+    dev: false
+
+  /victory-tooltip@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-9P+QeAGyDpP0trJnQ1NtnbDhpoJB0Ghc2boYEehvL12p0OzolY9/Nq5SDP0tu5i1BBujwFXtnoCDqt+mOH25fA==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
     dev: false
 
   /victory-vendor@36.6.8:
@@ -24001,6 +24263,20 @@ packages:
       victory-tooltip: 36.6.8
     dev: false
 
+  /victory-voronoi-container@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-x9/OOZdMm4dh38jNhSfBYT0nG6ribsINU0/WNzIn3QcDXFBInsJ7jRySxYmdmk45OdXfbDRwDMqVHk72sWQyUw==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      delaunay-find: 0.0.6
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      react-fast-compare: 3.2.0
+      victory-core: 36.6.8(react@16.14.0)
+      victory-tooltip: 36.6.8(react@16.14.0)
+    dev: false
+
   /victory-zoom-container@36.6.8:
     resolution: {integrity: sha512-gxX5iJUaxrFFZ2IGS0sQnUI+3Mhj6bVLqtOlQd3Krld+9f/ieuUbxl+P+eIyhQU/VyHSlirIZeOGOXJeYcU9jQ==}
     peerDependencies:
@@ -24009,6 +24285,17 @@ packages:
       lodash: 4.17.21
       prop-types: 15.8.1
       victory-core: 36.6.8
+    dev: false
+
+  /victory-zoom-container@36.6.8(react@16.14.0):
+    resolution: {integrity: sha512-gxX5iJUaxrFFZ2IGS0sQnUI+3Mhj6bVLqtOlQd3Krld+9f/ieuUbxl+P+eIyhQU/VyHSlirIZeOGOXJeYcU9jQ==}
+    peerDependencies:
+      react: '>=16.6.0'
+    dependencies:
+      lodash: 4.17.21
+      prop-types: 15.8.1
+      react: 16.14.0
+      victory-core: 36.6.8(react@16.14.0)
     dev: false
 
   /vm-browserify@1.1.2:

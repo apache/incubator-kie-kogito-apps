@@ -29,7 +29,12 @@
     "axios": "^0.21.1",
     "lodash": "^4.17.15",
     "react-router": "^5.0.1",
-    "react-router-dom": "^5.1.2"
+    "react-router-dom": "^5.1.2",
+    "@patternfly/react-core": "4.157.3",
+    "@patternfly/react-icons": "4.11.17",
+    "@patternfly/react-charts": "^6.14.29",
+    "@patternfly/react-table": "4.29.0",
+    "query-string": "4.3.4"
   },
   "scripts": {
     "start": "webpack-dev-server --hot --color --progress --stats verbose --config ./dev-webapp/webpack.dev.js",
