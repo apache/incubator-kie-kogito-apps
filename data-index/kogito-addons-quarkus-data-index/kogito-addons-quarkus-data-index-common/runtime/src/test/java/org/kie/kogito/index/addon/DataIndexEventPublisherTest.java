@@ -36,6 +36,7 @@ import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 
 @ExtendWith(MockitoExtension.class)
 public class DataIndexEventPublisherTest {
@@ -106,6 +107,17 @@ public class DataIndexEventPublisherTest {
         assertThat(eventCaptor.getValue().getLastUpdate()).isEqualTo(LAST_UPDATE);
         assertThat(eventCaptor.getValue().getCallbackEndpoint()).isEqualTo(CALLBACK_ENDPOINT);
         assertThat(eventCaptor.getValue().getExecutionCounter()).isEqualTo(EXECUTION_COUNTER);
+    }
+
+    @Test
+    void onMalformedJobEvent() throws Exception {
+        byte[] jsonContent = getObjectMapper().writeValueAsBytes("MalformedJob");
+
+        DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
+                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID);
+        dataIndexEventPublisher.publish(event);
+
+        verifyNoInteractions(indexingService);
     }
 
     public static class TestingDataEvent extends AbstractDataEvent<byte[]> {

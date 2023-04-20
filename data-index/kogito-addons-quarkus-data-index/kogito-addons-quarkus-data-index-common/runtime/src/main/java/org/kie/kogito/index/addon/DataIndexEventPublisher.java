@@ -57,7 +57,7 @@ public class DataIndexEventPublisher implements EventPublisher {
                 try {
                     indexingService.indexJob(getObjectMapper().readValue(new String((byte[]) event.getData()), Job.class));
                 } catch (IOException e) {
-                    LOGGER.error("Error mapping JobEvent", e);
+                    LOGGER.debug("Error mapping JobEvent", e);
                 }
                 break;
             default:
