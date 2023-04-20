@@ -15,7 +15,7 @@
  */
 
 const path = require('path');
-const merge = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -42,40 +42,7 @@ module.exports = merge(common, {
     rules: [
       {
         test: /\.css$/,
-        include: [
-          path.resolve(__dirname, 'src'),
-          path.resolve('../../node_modules/patternfly'),
-          path.resolve('../../node_modules/@patternfly/patternfly'),
-          path.resolve('../../node_modules/@patternfly/react-styles/css'),
-          path.resolve(
-            '../../node_modules/@patternfly/react-core/dist/styles/base.css'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/react-core/dist/esm/@patternfly/patternfly'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/react-core/node_modules/@patternfly/react-styles/css'
-          ),
-          path.resolve(
-            '../../node_modules/@patternfly/react-table/node_modules/@patternfly/react-styles/css'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/components-common/dist/components/styles.css'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/consoles-common/dist/components/styles.css'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/task-console-shared/dist/envelope/styles.css'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/form-displayer/dist/envelope/components/styles.css'
-          ),
-          path.resolve(
-            '../../node_modules/@kogito-apps/task-form/dist/envelope/styles.css'
-          )
-        ],
-        loaders: ['style-loader', 'css-loader']
+        use: [require.resolve('style-loader'), require.resolve('css-loader')]
       }
     ]
   }
