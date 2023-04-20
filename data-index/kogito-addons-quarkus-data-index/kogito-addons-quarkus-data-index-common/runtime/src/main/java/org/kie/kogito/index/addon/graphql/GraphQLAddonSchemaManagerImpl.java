@@ -16,7 +16,6 @@
 package org.kie.kogito.index.addon.graphql;
 
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -46,7 +45,10 @@ public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager 
 
                     builder.dataFetcher("CustomDashboards", this::getCustomDashboards);
                     builder.dataFetcher("CustomDashboardCount", this::getCustomDashboardCount);
-                    builder.dataFetcher("CustomDashboardContent", this::getCustomDashboardContent);
+                    return builder;
+                })
+                .type("CustomDashboardInfo", builder -> {
+                    builder.dataFetcher("content", this::getCustomDashboardContent);
                     return builder;
                 })
                 .type("ProcessInstance", builder -> {
@@ -73,7 +75,6 @@ public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager 
 
     protected CompletableFuture<Integer> getCustomDashboardCount(DataFetchingEnvironment env) {
         String serverUrl = env.getArgument("serverUrl");
-        CompletableFuture<Map> result = new CompletableFuture<>();
         return getDataIndexApiExecutor().getCustomDashboardCount(serverUrl);
     }
 
@@ -84,8 +85,7 @@ public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager 
     }
 
     protected CompletableFuture<String> getCustomDashboardContent(DataFetchingEnvironment env) {
-        String serverUrl = env.getArgument("serverUrl");
-        String name = env.getArgument("name");
-        return getDataIndexApiExecutor().getCustomDashboardContent(serverUrl, name);
+        CustomDashboardInfo customDashboardInfo = env.getSource();
+        return getDataIndexApiExecutor().getCustomDashboardContent(customDashboardInfo.getServerUrl(), customDashboardInfo.getName());
     }
 }

@@ -17,6 +17,7 @@ package org.kie.kogito.index.service.graphql;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -71,6 +72,8 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
     private static final String COMMENT_ID = "commentId";
     private static final String ATTACHMENT_ID = "attachmentId";
 
+    private static final String SERVER_URL = "kogito.service.url";
+
     @Override
     @PostConstruct
     public void setup() {
@@ -94,7 +97,6 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
 
                     builder.dataFetcher("CustomDashboards", this::getCustomDashboards);
                     builder.dataFetcher("CustomDashboardCount", this::getCustomDashboardCount);
-                    builder.dataFetcher("CustomDashboardContent", this::getCustomDashboardContent);
                     return builder;
                 })
                 .type("Mutation", builder -> {
@@ -114,6 +116,10 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
                     builder.dataFetcher("UserTaskInstanceCommentDelete", this::deleteUserTaskComment);
                     builder.dataFetcher("UserTaskInstanceAttachmentUpdate", this::updateUserTaskAttachment);
                     builder.dataFetcher("UserTaskInstanceAttachmentDelete", this::deleteUserTaskAttachment);
+                    return builder;
+                })
+                .type("CustomDashboardInfo", builder -> {
+                    builder.dataFetcher("content", this::getCustomDashboardContent);
                     return builder;
                 })
                 .type("ProcessInstance", builder -> {
@@ -372,9 +378,8 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
     }
 
     protected CompletableFuture<String> getCustomDashboardContent(DataFetchingEnvironment env) {
-        String serverUrl = env.getArgument("serverUrl");
-        String name = env.getArgument("name");
-        return getDataIndexApiExecutor().getCustomDashboardContent(serverUrl, name);
+        LinkedHashMap<String, String> customDashboardInfo = env.getSource();
+        return getDataIndexApiExecutor().getCustomDashboardContent(customDashboardInfo.get("serverUrl"), customDashboardInfo.get("name"));
     }
 
 }

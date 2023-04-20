@@ -20,8 +20,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -200,19 +203,27 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
     }
 
     public CompletableFuture<Integer> getCustomDashboardCount(String serviceURL) {
-        return CompletableFuture.completedFuture(storage.getCustomDashboardFilesCount().get());
+        Optional<Integer> count = storage.getCustomDashboardFilesCount();
+        return CompletableFuture.completedFuture(count.isPresent() ? count.get() : 0);
     }
 
     @Override
     public CompletableFuture<List<CustomDashboardInfo>> getCustomDashboards(String serviceURL, String names) {
-        CustomDashboardFilter filter = new CustomDashboardFilter(Arrays.asList(names.split(",")));
-        return CompletableFuture.completedFuture(storage.getCustomDashboardFiles(filter).get().stream().collect(Collectors.toList()));
+        CustomDashboardFilter filter;
+        if (names != null) {
+            filter = new CustomDashboardFilter(Arrays.asList(names.split(",")));
+        } else {
+            filter = null;
+        }
+        Optional<Collection<CustomDashboardInfo>> customDashboardInfosOptional = storage.getCustomDashboardFiles(filter);
+        return CompletableFuture.completedFuture(customDashboardInfosOptional.isPresent() ? (List<CustomDashboardInfo>) customDashboardInfosOptional.get() : Collections.emptyList());
     }
 
     @Override
     public CompletableFuture<String> getCustomDashboardContent(String serviceURL, String name) {
         try {
-            return CompletableFuture.completedFuture(storage.getCustomDashboardFileContent(name).get());
+            Optional<String> content = storage.getCustomDashboardFileContent(name);
+            return CompletableFuture.completedFuture(content.isPresent() ? content.get() : "");
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

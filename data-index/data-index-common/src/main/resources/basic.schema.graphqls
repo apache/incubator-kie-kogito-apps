@@ -9,15 +9,15 @@ schema {
 type Query {
     ProcessInstances(where: ProcessInstanceArgument, orderBy: ProcessInstanceOrderBy, pagination: Pagination): [ProcessInstance]
     UserTaskInstances(where: UserTaskInstanceArgument, orderBy: UserTaskInstanceOrderBy, pagination: Pagination):  [UserTaskInstance]
-        CustomDashboards(names: String, serverUrl: String): [CustomDashboardInfo]
-        CustomDashboardCount(serverUrl: String): Int
-        CustomDashboardContent(name: String, serverUrl: String): String
+    CustomDashboards(names: String, serverUrl: String): [CustomDashboardInfo]
+    CustomDashboardCount(serverUrl: String): Int
 }
 
 type CustomDashboardInfo {
     name: String!
     path: String
     localDateTime: DateTime
+    content: String
 }
 
 type ProcessInstance {

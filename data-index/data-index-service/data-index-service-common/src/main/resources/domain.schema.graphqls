@@ -5,15 +5,6 @@ extend schema {
 
 extend type Query {
     Jobs(where: JobArgument, orderBy: JobOrderBy, pagination: Pagination):  [Job]
-    CustomDashboards(names: String, serverUrl: String): [CustomDashboardInfo]
-    CustomDashboardCount(serverUrl: String): Int
-    CustomDashboardContent(name: String, serverUrl: String): String
-}
-
-type CustomDashboardInfo {
-    name: String!
-    path: String
-    localDateTime: DateTime
 }
 
 type Mutation {

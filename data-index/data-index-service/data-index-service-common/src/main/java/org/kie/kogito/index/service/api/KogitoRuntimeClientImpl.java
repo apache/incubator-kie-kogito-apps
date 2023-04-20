@@ -81,9 +81,9 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
 
     public static final String GET_CUSTOM_DASHBOARD_COUNT_PATH = "/customDashboard/count";
 
-    public static final String GET_CUSTOM_DASHBOARD_LIST_PATH = "/customDashboard/list";
+    public static final String GET_CUSTOM_DASHBOARD_LIST_PATH = "/customDashboard/list?names=%s&serverURL=%s";
 
-    public static final String GET_CUSTOM_DASHBOARD_CONTENT_PATH = "/customDashboard/{name:\\S+}";
+    public static final String GET_CUSTOM_DASHBOARD_CONTENT_PATH = "/customDashboard/%s";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(KogitoRuntimeClientImpl.class);
     private Vertx vertx;
@@ -394,13 +394,13 @@ public class KogitoRuntimeClientImpl implements KogitoRuntimeClient {
 
     @Override
     public CompletableFuture<List<CustomDashboardInfo>> getCustomDashboards(String serviceURL, String names) {
-        String requestURI = format(GET_CUSTOM_DASHBOARD_LIST_PATH, names);
+        String requestURI = format(GET_CUSTOM_DASHBOARD_LIST_PATH, names, serviceURL);
         return sendGetClientRequest(getWebClient(serviceURL), requestURI, "Get Custom Dashboard List with name filter: ", List.class);
     }
 
     @Override
     public CompletableFuture<String> getCustomDashboardContent(String serviceURL, String name) {
-        String requestURI = format(GET_CUSTOM_DASHBOARD_CONTENT_PATH);
-        return sendGetClientRequest(getWebClient(serviceURL), requestURI, "Get Custom Dashboard Content with name: ", String.class);
+        String requestURI = format(GET_CUSTOM_DASHBOARD_CONTENT_PATH, name);
+        return sendGetClientRequest(getWebClient(serviceURL), requestURI, "Get Custom Dashboard Content with name: ", null);
     }
 }
