@@ -3,7 +3,7 @@
   "compilerOptions": {
     "lib": ["es6", "dom", "es2018.promise", "es2019", "esnext"],
     "target": "es5",
-    "declarationMap": true,
+    "baseUrl": "./",
     "sourceMap": true,
     "noImplicitAny": false,
     "noImplicitThis": true,
