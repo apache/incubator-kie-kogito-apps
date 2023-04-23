@@ -216,7 +216,7 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
             filter = null;
         }
         Optional<Collection<CustomDashboardInfo>> customDashboardInfosOptional = storage.getCustomDashboardFiles(filter);
-        return CompletableFuture.completedFuture(customDashboardInfosOptional.isPresent() ? (List<CustomDashboardInfo>) customDashboardInfosOptional.get() : Collections.emptyList());
+        return CompletableFuture.completedFuture(customDashboardInfosOptional.isPresent() ? customDashboardInfosOptional.get().stream().collect(Collectors.toList()) : Collections.emptyList());
     }
 
     @Override

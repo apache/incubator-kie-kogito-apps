@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
+import io.vertx.core.http.HttpMethod;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,6 +57,8 @@ import static org.junit.jupiter.api.Assertions.fail;
 import static org.kie.kogito.index.service.api.KogitoRuntimeClientImpl.ABORT_PROCESS_INSTANCE_PATH;
 import static org.kie.kogito.index.service.api.KogitoRuntimeClientImpl.CANCEL_JOB_PATH;
 import static org.kie.kogito.index.service.api.KogitoRuntimeClientImpl.CANCEL_NODE_INSTANCE_PATH;
+import static org.kie.kogito.index.service.api.KogitoRuntimeClientImpl.GET_CUSTOM_DASHBOARD_CONTENT_PATH;
+import static org.kie.kogito.index.service.api.KogitoRuntimeClientImpl.GET_CUSTOM_DASHBOARD_LIST_PATH;
 import static org.kie.kogito.index.service.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_DIAGRAM_PATH;
 import static org.kie.kogito.index.service.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_NODE_DEFINITIONS_PATH;
 import static org.kie.kogito.index.service.api.KogitoRuntimeClientImpl.GET_PROCESS_INSTANCE_SOURCE_PATH;
@@ -596,6 +599,48 @@ public class KogitoRuntimeClientTest {
         assertThat(token).isEqualTo("");
     }
 
+    @Test
+    public void testGetCustomDashboardCount() {
+        setupIdentityMock();
+        when(webClientMock.get(anyString())).thenReturn(httpRequestMock);
+
+        client.getCustomDashboardCount(SERVICE_URL);
+        verify(client).sendGetClientRequest(webClientMock, format("/customDashboard/count"), "Get Custom Dashboard Count: ", Integer.class);
+
+        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
+        verify(httpRequestMock).send(handlerCaptor.capture());
+        verify(httpRequestMock).putHeader(eq("Authorization"), eq("Bearer " + AUTHORIZED_TOKEN));
+        checkResponseHandlingWithJSON(handlerCaptor.getValue(), Integer.class);
+    }
+
+    @Test
+    public void testGetCustomDashboards() {
+        setupIdentityMock();
+        when(webClientMock.get(anyString())).thenReturn(httpRequestMock);
+
+        client.getCustomDashboards(SERVICE_URL, "test-names");
+        verify(client).sendGetClientRequest(webClientMock, format(GET_CUSTOM_DASHBOARD_LIST_PATH, "test-names", SERVICE_URL), "Get Custom Dashboard List with name filter: ", List.class);
+
+        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
+        verify(httpRequestMock).send(handlerCaptor.capture());
+        verify(httpRequestMock).putHeader(eq("Authorization"), eq("Bearer " + AUTHORIZED_TOKEN));
+        checkResponseHandlingWithJSON(handlerCaptor.getValue(), List.class);
+    }
+
+    @Test
+    public void testGetCustomDashboardContent() {
+        setupIdentityMock();
+        when(webClientMock.get(anyString())).thenReturn(httpRequestMock);
+
+        client.getCustomDashboardContent(SERVICE_URL, "test-name");
+        verify(client).sendGetClientRequest(webClientMock, format(GET_CUSTOM_DASHBOARD_CONTENT_PATH, "test-name", SERVICE_URL), "Get Custom Dashboard Content with name: ", null);
+
+        ArgumentCaptor<Handler> handlerCaptor = ArgumentCaptor.forClass(Handler.class);
+        verify(httpRequestMock).send(handlerCaptor.capture());
+        verify(httpRequestMock).putHeader(eq("Authorization"), eq("Bearer " + AUTHORIZED_TOKEN));
+        checkResponseHandling(handlerCaptor.getValue());
+    }
+
     private AsyncResult createResponseMocks(HttpResponse response, boolean succeed, int statusCode) {
         AsyncResult asyncResultMock = mock(AsyncResult.class);
         when(asyncResultMock.succeeded()).thenReturn(succeed);
@@ -629,6 +674,21 @@ public class KogitoRuntimeClientTest {
         verify(responseWithoutError, never()).statusMessage();
         verify(responseWithoutError, never()).body();
         verify(responseWithoutError).bodyAsString();
+    }
+
+    protected void checkResponseHandlingWithJSON(Handler<AsyncResult<HttpResponse<Buffer>>> handler, Class type) {
+        HttpResponse response = mock(HttpResponse.class);
+        HttpResponse responseWithoutError = mock(HttpResponse.class);
+
+        handler.handle(createResponseMocks(response, false, 404));
+        verify(response).statusMessage();
+        verify(response).body();
+        verify(response, never()).bodyAsString();
+
+        handler.handle(createResponseMocks(responseWithoutError, true, 200));
+        verify(responseWithoutError, never()).statusMessage();
+        verify(responseWithoutError, never()).body();
+        verify(responseWithoutError).bodyAsJson(type);
     }
 
     protected void setupIdentityMock() {
