@@ -55,8 +55,8 @@
     "history": "^4.9.0"
   },
   "devDependencies": {
-    "@kogito-apps/cypress-ouia": "^1.0.0",
-    "@kogito-apps/ouia-tools": "^1.0.0",
+    "@kogito-apps/cypress-ouia": "workspace:*",
+    "@kogito-apps/ouia-tools": "workspace:*",
     "@kogito-apps/patternfly-base": "^1.0.0",
     "core-js": "3.6.5",
     "serve": "^12.0.1",
@@ -93,13 +93,27 @@
     "@graphql-codegen/typescript-operations": "^2.1.4",
     "@graphql-codegen/typescript-react-apollo": "^3.1.4",
     "apollo-server-express": "^2.14.2",
-    "start-server-and-test": "^1.12.0"
+    "start-server-and-test": "^1.12.0",
+    "typescript": "^4.4.2",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "ts-jest": "^26.5.6",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
+    "jest-junit": "^10.0.0",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/jest": "^26.0.23",
+    "@testing-library/jest-dom": "^5.12.0",
+    "@types/enzyme": "^3.10.8",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "enzyme-to-json": "^3.6.1",
+    "babel-jest": "^25.1.0"
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-ts",
     "setupFiles": [
-      "../../config/Jest-config/test-shim.js",
-      "../../config/Jest-config/test-setup.js",
+      "./config/Jest-config/test-shim.js",
+      "./config/Jest-config/test-setup.js",
       "core-js"
     ],
     "coveragePathIgnorePatterns": [
@@ -130,9 +144,9 @@
     ],
     "transformIgnorePatterns": [],
     "transform": {
-      "^.+\\.jsx?$": "../../config/Jest-config/babel-jest-wrapper.js",
+      "^.+\\.jsx?$": "./config/Jest-config/babel-jest-wrapper.js",
       "^.+\\.(ts|tsx)$": "ts-jest",
-      "\\.(jpg|jpeg|png|svg)$": "../../config/Jest-config/fileMocks.js"
+      "\\.(jpg|jpeg|png|svg)$": "./config/Jest-config/fileMocks.js"
     },
     "testMatch": [
       "**/tests/*.(ts|tsx)"
