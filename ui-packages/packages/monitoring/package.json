@@ -39,12 +39,25 @@
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.5",
     "@patternfly/patternfly": "^4.108.2",
-    "copyfiles": "^2.4.1"
+    "copyfiles": "^2.4.1",
+    "typescript": "^4.4.2",
+    "ts-jest": "^26.5.6",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^26.6.3",
+    "jest-junit": "^10.0.0",
+    "@types/enzyme-adapter-react-16": "^1.0.6",
+    "@types/jest": "^26.0.23",
+    "@testing-library/jest-dom": "^5.12.0",
+    "@types/enzyme": "^3.10.8",
+    "enzyme": "^3.11.0",
+    "enzyme-adapter-react-16": "^1.15.6",
+    "enzyme-to-json": "^3.6.1",
+    "babel-jest": "^25.1.0"
   },
   "jest": {
     "setupFiles": [
-      "../../config/Jest-config/test-shim.js",
-      "../../config/Jest-config/test-setup.js",
+      "./config/Jest-config/test-shim.js",
+      "./config/Jest-config/test-setup.js",
       "core-js"
     ],
     "moduleFileExtensions": [
@@ -74,9 +87,9 @@
     ],
     "transformIgnorePatterns": [],
     "transform": {
-      "^.+\\.jsx?$": "../../config/Jest-config/babel-jest-wrapper.js",
+      "^.+\\.jsx?$": "./config/Jest-config/babel-jest-wrapper.js",
       "^.+\\.(ts|tsx)$": "ts-jest",
-      "\\.(jpg|jpeg|png|svg)$": "../../config/Jest-config/fileMocks.js"
+      "\\.(jpg|jpeg|png|svg)$": "./config/Jest-config/fileMocks.js"
     },
     "testMatch": [
       "**/tests/*.(ts|tsx|js)"

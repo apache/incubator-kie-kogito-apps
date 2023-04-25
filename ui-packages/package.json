@@ -5,36 +5,25 @@
   "private": true,
   "scripts": {
     "init": "pnpm bootstrap:root",
+    "build:prod": "pnpm -r build:prod",
     "bootstrap:root": "pnpm install --use-lockfile-v6 --workspace-root --strict-peer-dependencies=false -F kogito-apps...",
     "locktt": "locktt",
-    "format:all": "pnpm run format --stream --",
+    "format:all": "pnpm -r format --stream --",
+    "test:swf": "pnpm -r -F @kogito-apps/runtime-tools-dev-ui-webapp... test",
     "prepare": "cd .. && husky install"
   },
   "dependencies": {
-    "@kogito-apps/ouia-tools": "workspace:*",
     "monaco-yaml": "3.0.0",
     "react-monaco-editor": "^0.41.2"
   },
   "devDependencies": {
-    "@apollo/react-testing": "^3.1.3",
     "@babel/core": "^7.14.0",
     "@babel/preset-env": "^7.14.1",
     "@babel/preset-react": "^7.13.13",
     "@kie-tools/dashbuilder-client": "^0.23.0",
-    "@kogito-apps/cypress-ouia": "workspace:*",
-    "@testing-library/jest-dom": "^5.12.0",
-    "@types/enzyme": "^3.10.8",
-    "@types/enzyme-adapter-react-16": "^1.0.6",
-    "@types/jest": "^26.0.23",
     "@types/node": "^18.15.11",
-    "@types/react-scrollbar": "^0.5.1",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
     "@typescript-eslint/parser": "^4.24.0",
-    "babel-jest": "^25.1.0",
-    "babel-loader": "^8.2.2",
-    "enzyme": "^3.11.0",
-    "enzyme-adapter-react-16": "^1.15.6",
-    "enzyme-to-json": "^3.6.1",
     "eslint": "^7.7.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-cypress": "^2.11.2",
@@ -42,16 +31,10 @@
     "eslint-plugin-react": "^7.20.6",
     "eslint-plugin-react-hooks": "^4.1.0",
     "husky": "^8.0.3",
-    "identity-obj-proxy": "^3.0.0",
-    "jest": "^26.6.3",
-    "jest-junit": "^10.0.0",
     "lint-staged": "^10.0.7",
     "lock-treatment-tool": "^0.4.1",
     "prettier": "^2.8.1",
-    "pretty-quick": "^3.1.3",
-    "ts-jest": "^26.5.6",
-    "tsconfig-paths-webpack-plugin": "^3.2.0",
-    "typescript": "^4.2.4"
+    "pretty-quick": "^3.1.3"
   },
   "resolutions": {
     "@patternfly/react-core": "4.157.3",
@@ -74,7 +57,7 @@
   },
   "lint-staged": {
     "packages/**/*.{ts,tsx}": [
-      "pnpm run pretty-quick --staged",
+      "pnpm pretty-quick --staged",
       "eslint --fix"
     ]
   },
