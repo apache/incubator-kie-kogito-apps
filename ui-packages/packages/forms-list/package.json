@@ -22,7 +22,7 @@
     "test:report": "pnpm run test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "pnpm test --coverage",
+    "test:coverage": "rimraf coverage && pnpm run test --coverage",
     "lint": "eslint './src/**/*.ts{,x}'",
     "format": "prettier --config ../../.prettierrc --check --write './src/**/*.{tsx,ts,js}'",
     "clean": "rimraf dist"
@@ -59,7 +59,8 @@
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.6",
     "enzyme-to-json": "^3.6.1",
-    "babel-jest": "^25.1.0"
+    "babel-jest": "^25.1.0",
+    "@babel/core": "^7.14.0"
   },
   "jest": {
     "setupFiles": [

@@ -24,7 +24,7 @@ module.exports = {
   },
   plugins: [
     new MonacoWebpackPlugin({
-      languages: ['typescript', 'html', 'json', 'yaml'],
+      languages: ['typescript', 'json'],
       globalAPI: true
     }),
     new webpack.EnvironmentPlugin({

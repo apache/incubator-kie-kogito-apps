@@ -22,7 +22,6 @@
     "test:report": "pnpm run test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "rimraf coverage && pnpm run test --coverage",
     "storybook": "start-storybook -p 9001 -c .storybook",
     "lint": "eslint './src/**/*.ts{,x}'",
     "format": "prettier --config ../../.prettierrc --check --write './src/**/*.{tsx,ts,js}'",
@@ -118,6 +117,7 @@
       "enzyme-to-json/serializer"
     ],
     "transform": {
+      "^.+\\.jsx?$": "./config/Jest-config/babel-jest-wrapper.js",
       "^.+\\.(ts|tsx)$": "ts-jest",
       "\\.(jpg|jpeg|png|svg)$": "./config/Jest-config/fileMocks.js"
     },

@@ -43,7 +43,8 @@
     "enzyme-adapter-react-16": "^1.15.6",
     "enzyme-to-json": "^3.6.1",
     "babel-jest": "^25.1.0",
-    "react": "^16.9.0"
+    "react": "^16.9.0",
+    "@babel/core": "^7.14.0"
   },
   "jest": {
     "setupFiles": [

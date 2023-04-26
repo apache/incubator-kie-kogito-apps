@@ -23,10 +23,7 @@ module.exports = merge(common, {
     hot: true,
     open: true,
     client: {
-      overlay: {
-        warnings: false,
-        errors: true
-      },
+      overlay: false,
       progress: true
     },
     proxy: [

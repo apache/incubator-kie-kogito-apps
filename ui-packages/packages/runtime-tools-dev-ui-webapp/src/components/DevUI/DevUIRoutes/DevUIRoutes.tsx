@@ -23,7 +23,7 @@ import TaskInboxPage from '../../pages/TaskInboxPage/TaskInboxPage';
 import TaskDetailsPage from '../../pages/TaskDetailsPage/TaskDetailsPage';
 import FormsListPage from '../../pages/FormsListPage/FormsListPage';
 import FormDetailPage from '../../pages/FormDetailsPage/FormDetailsPage';
-// import { TrustyApp } from '@kogito-apps/trusty';
+import { TrustyApp } from '@kogito-apps/trusty';
 import ProcessFormPage from '../../pages/ProcessFormPage/ProcessFormPage';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 import MonitoringPage from '../../pages/MonitoringPage/MonitoringPage';
@@ -186,7 +186,7 @@ const DevUIRoutes: React.FC<IOwnProps> = ({
         enabled: () => context.isTracingEnabled,
         node: (
           <Route key="12" path="/Audit">
-            {/* <TrustyApp
+            <TrustyApp
               counterfactualEnabled={false}
               explanationEnabled={false}
               containerConfiguration={{
@@ -196,7 +196,7 @@ const DevUIRoutes: React.FC<IOwnProps> = ({
                 excludeReactRouter: true,
                 useHrefLinks: false
               }}
-            /> */}
+            />
           </Route>
         )
       },

@@ -44,6 +44,7 @@
     "build:standalone": "webpack --config ./dev-webapp/webpack.prod.js && locktt",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "test:coverage": "rimraf coverage && pnpm run test --coverage",
+    "update-snapshot": "jest --updateSnapshot",
     "test:watch": "jest --watch",
     "clean": "rimraf dist",
     "lint": "eslint './src/**/*.ts{,x}'",
@@ -52,12 +53,15 @@
     "cypress:open:it": "pnpm run cypress open --project cypress --config-file cypress.it.json",
     "cypress:run:it": "pnpm run cypress run --project cypress --config-file cypress.it.json",
     "cypress:open:e2e": "pnpm run cypress open --project cypress --config-file cypress.e2e.json",
-    "cypress:run:e2e": "pnpm run cypress run --project cypress --config-file cypress.e2e.json",
+    "cypress:run:e2e": "pnpm cypress run --project cypress --config-file cypress.e2e.json",
     "test:it": "start-server-and-test 'pnpm start:it' http://0.0.0.0:9000 'pnpm cypress:run:it' && echo",
-    "test:e2e:trusty": "pnpm cypress:run:e2e && echo"
+    "test:e2e:trusty": "pnpm run cypress:run:e2e && echo"
   },
   "devDependencies": {
     "@kogito-apps/ouia-tools": "workspace:*",
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.1",
+    "@babel/preset-react": "^7.13.13",
     "@testing-library/jest-dom": "^5.12.0",
     "@types/enzyme": "^3.10.8",
     "@types/enzyme-adapter-react-16": "^1.0.6",

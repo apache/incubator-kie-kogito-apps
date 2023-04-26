@@ -5,25 +5,19 @@
   "private": true,
   "scripts": {
     "init": "pnpm bootstrap",
-    "bootstrap": "pnpm install --use-lockfile-v6 --workspace-root --strict-peer-dependencies=false",
+    "bootstrap": "pnpm install --use-lockfile-v6 --config.strict-peer-dependencies=false",
     "build:prod": "pnpm --filter \"./packages/**\" build:prod",
     "test": "pnpm run --filter \"./packages/**\" test:coverage",
     "test:it": "pnpm run --filter \"./packages/**\" test:it",
     "locktt": "locktt",
-    "test:e2e:trusty": "pnpm run --filter @kogito-apps/trusty... test:e2e:trusty --",
+    "test:e2e:trusty": "pnpm -r -F @kogito-apps/trusty test:e2e:trusty",
     "format:all": "pnpm -r format --stream --",
     "format:check": "prettier --check .",
+    "build:prod:swf": "pnpm -r -F @kogito-apps/runtime-tools-dev-ui-webapp... build:prod",
     "test:swf": "pnpm --filter @kogito-apps/runtime-tools-dev-ui-webapp... test",
     "prepare": "cd .. && husky install"
   },
-  "dependencies": {
-    "monaco-yaml": "3.0.0",
-    "react-monaco-editor": "^0.41.2"
-  },
   "devDependencies": {
-    "@babel/core": "^7.14.0",
-    "@babel/preset-env": "^7.14.1",
-    "@babel/preset-react": "^7.13.13",
     "@kie-tools/dashbuilder-client": "^0.23.0",
     "@types/node": "^18.15.11",
     "@typescript-eslint/eslint-plugin": "^4.24.0",

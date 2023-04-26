@@ -15,7 +15,6 @@
     "test:report": "pnpm run test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "rimraf coverage && pnpm run test --coverage",
     "dev:restServer": "nodemon ./server/restServer.js",
     "dev:server": "nodemon ./server/app.js",
     "dev": "concurrently 'pnpm start' 'pnpm run dev:server'",
@@ -111,7 +110,9 @@
     "url-loader": "^4.1.1",
     "uuid": "^3.3.3",
     "waait": "^1.0.5",
-    "webpack": "^5.36.2"
+    "webpack": "^5.36.2",
+    "webpack-dev-server": "^4.8.0",
+    "@babel/core": "^7.14.0"
   },
   "jest": {
     "preset": "ts-jest/presets/js-with-ts",

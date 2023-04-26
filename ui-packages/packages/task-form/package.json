@@ -43,6 +43,9 @@
   },
   "devDependencies": {
     "@kogito-apps/ouia-tools": "workspace:*",
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.1",
+    "@babel/preset-react": "^7.13.13",
     "rimraf": "^3.0.2",
     "waait": "^1.0.5",
     "uuid": "^3.3.3",

@@ -92,6 +92,16 @@ module.exports = {
     publicPath: '/'
   },
   resolve: {
+    fallback: {
+      https: require.resolve('https-browserify'),
+      path: require.resolve('path-browserify'),
+      http: require.resolve('stream-http'),
+      os: require.resolve('os-browserify/browser'),
+      fs: false,
+      child_process: false,
+      net: false,
+      buffer: require.resolve('buffer/')
+    },
     extensions: ['.ts', '.tsx', '.js'],
     modules: [path.resolve(__dirname, 'src'), 'node_modules'],
     plugins: [

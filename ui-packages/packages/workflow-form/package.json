@@ -37,10 +37,15 @@
     "@patternfly/patternfly": "^4.108.2",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "monaco-yaml": "3.0.0",
+    "react-monaco-editor": "^0.41.2"
   },
   "devDependencies": {
     "@kogito-apps/ouia-tools": "workspace:*",
+    "@babel/core": "^7.14.0",
+    "@babel/preset-env": "^7.14.1",
+    "@babel/preset-react": "^7.13.13",
     "rimraf": "^3.0.2",
     "waait": "^1.0.5",
     "@types/react": "^17.0.5",
