@@ -16,6 +16,7 @@
 
 package org.kie.kogito.index.addon;
 
+import java.io.UncheckedIOException;
 import java.time.ZonedDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -32,6 +33,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
@@ -115,8 +117,7 @@ public class DataIndexEventPublisherTest {
 
         DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
                 PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID);
-        dataIndexEventPublisher.publish(event);
-
+        assertThrows(UncheckedIOException.class, () -> dataIndexEventPublisher.publish(event));
         verifyNoInteractions(indexingService);
     }
 

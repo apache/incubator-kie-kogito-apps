@@ -17,6 +17,7 @@
 package org.kie.kogito.index.addon;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Collection;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -57,7 +58,7 @@ public class DataIndexEventPublisher implements EventPublisher {
                 try {
                     indexingService.indexJob(getObjectMapper().readValue(new String((byte[]) event.getData()), Job.class));
                 } catch (IOException e) {
-                    LOGGER.debug("Error mapping JobEvent", e);
+                    throw new UncheckedIOException(e);
                 }
                 break;
             default:
