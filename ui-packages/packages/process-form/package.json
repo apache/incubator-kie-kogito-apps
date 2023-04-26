@@ -19,10 +19,10 @@
     "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css,svg,png}\" dist/",
     "build": "rimraf dist && tsc -m commonjs -p tsconfig.json && pnpm run copy:css",
     "build:prod": "pnpm run clean && pnpm run lint && pnpm run build",
-    "test:report": "pnpm test --ci --reporters=jest-junit",
+    "test:report": "pnpm run test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "rimraf coverage && pnpm test --coverage",
+    "test:coverage": "rimraf coverage && pnpm run test --coverage",
     "lint": "eslint './src/**/*.ts{,x}'",
     "format": "prettier --config ../../.prettierrc --check --write './src/**/*.{tsx,ts,js}'",
     "clean": "rimraf dist"

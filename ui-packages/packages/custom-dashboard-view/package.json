@@ -20,10 +20,10 @@
     "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css,svg,png}\" dist/",
     "build": "rimraf dist  && tsc -m commonjs -p tsconfig.json && pnpm run copy:dashbuilder && pnpm run copy:css ",
     "build:prod": "pnpm run build",
-    "test:report": "pnpm test --ci --reporters=jest-junit",
+    "test:report": "pnpm run test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",
-    "test:coverage": "rimraf coverage && pnpm test --coverage",
+    "test:coverage": "rimraf coverage && pnpm run test --coverage",
     "lint": "eslint './src/**/*.ts{,x}'",
     "format": "prettier --config ../../.prettierrc --check --write './src/**/*.{tsx,ts,js}'",
     "clean": "rimraf dist"
@@ -39,6 +39,7 @@
     "react-router-dom": "^5.1.2"
   },
   "devDependencies": {
+    "@kogito-apps/ouia-tools": "workspace:*",
     "@kie-tools/dashbuilder-client": "^0.23.0",
     "@types/react-dom": "^17.0.5",
     "@types/react-router-dom": "^5.1.7",

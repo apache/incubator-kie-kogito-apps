@@ -4,12 +4,16 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "init": "pnpm bootstrap:root",
-    "build:prod": "pnpm -r build:prod",
-    "bootstrap:root": "pnpm install --use-lockfile-v6 --workspace-root --strict-peer-dependencies=false -F kogito-apps...",
+    "init": "pnpm bootstrap",
+    "bootstrap": "pnpm install --use-lockfile-v6 --workspace-root --strict-peer-dependencies=false",
+    "build:prod": "pnpm --filter \"./packages/**\" build:prod",
+    "test": "pnpm run --filter \"./packages/**\" test:coverage",
+    "test:it": "pnpm run --filter \"./packages/**\" test:it",
     "locktt": "locktt",
+    "test:e2e:trusty": "pnpm run --filter @kogito-apps/trusty... test:e2e:trusty --",
     "format:all": "pnpm -r format --stream --",
-    "test:swf": "pnpm -r -F @kogito-apps/runtime-tools-dev-ui-webapp... test",
+    "format:check": "prettier --check .",
+    "test:swf": "pnpm --filter @kogito-apps/runtime-tools-dev-ui-webapp... test",
     "prepare": "cd .. && husky install"
   },
   "dependencies": {
