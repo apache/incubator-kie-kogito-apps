@@ -147,7 +147,7 @@
           <workingDirectory>${path.to.root}</workingDirectory>
         </configuration>
         <executions>
-          <execution>
+        <execution>
             <id>install-node-and-npm</id>
             <goals>
               <goal>install-node-and-npm</goal>

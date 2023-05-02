@@ -29,7 +29,7 @@
     "cypress:run": "cypress run",
     "cypress:open": "cypress open",
     "start:it": "concurrently 'webpack --config webpack.it.js && pnpm serve -p 9000 -c ../serve.json ./dist-it/' 'pnpm run dev:server'",
-    "test:it": "start-server-and-test 'pnpm start:it' 9000 'pnpm cypress:run' && echo"
+    "test:it": "start-server-and-test 'pnpm run start:it' 9000 'pnpm run cypress:run' && echo"
   },
   "dependencies": {
     "@kogito-apps/components-common": "workspace:*",
