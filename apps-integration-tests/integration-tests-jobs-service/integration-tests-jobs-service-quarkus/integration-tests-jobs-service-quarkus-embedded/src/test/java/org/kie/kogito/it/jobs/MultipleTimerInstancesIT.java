@@ -16,18 +16,14 @@
 
 package org.kie.kogito.it.jobs;
 
-import org.kie.kogito.test.resources.JobServiceTestResource;
-
 import io.quarkus.test.junit.QuarkusIntegrationTest;
-
-import static org.kie.kogito.test.resources.JobServiceCompositeQuarkusTestResource.JOBS_SERVICE_URL;
+import io.restassured.RestAssured;
 
 @QuarkusIntegrationTest
-@JobServiceTestResource(knativeEventingEnabled = true)
-class Kogito9007IT extends BaseKogito9007QuarkusIT {
+class MultipleTimerInstancesIT extends BaseMultipleTimerInstancesQuarkusIT {
 
     @Override
     public String jobServiceUrl() {
-        return System.getProperty(JOBS_SERVICE_URL);
+        return RestAssured.baseURI;
     }
 }

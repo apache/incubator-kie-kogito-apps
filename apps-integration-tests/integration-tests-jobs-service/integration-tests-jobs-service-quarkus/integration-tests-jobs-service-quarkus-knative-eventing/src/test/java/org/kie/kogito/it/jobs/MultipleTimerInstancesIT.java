@@ -23,8 +23,8 @@ import io.quarkus.test.junit.QuarkusIntegrationTest;
 import static org.kie.kogito.test.resources.JobServiceCompositeQuarkusTestResource.JOBS_SERVICE_URL;
 
 @QuarkusIntegrationTest
-@JobServiceTestResource(kafkaEnabled = true)
-class Kogito9007IT extends BaseKogito9007QuarkusIT {
+@JobServiceTestResource(knativeEventingEnabled = true)
+class MultipleTimerInstancesIT extends BaseMultipleTimerInstancesQuarkusIT {
 
     @Override
     public String jobServiceUrl() {

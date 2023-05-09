@@ -32,7 +32,7 @@ import static org.kie.kogito.test.resources.JobServiceSpringBootTestResource.JOB
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT, classes = { KogitoApplication.class })
 @ContextConfiguration(initializers = { KogitoServiceRandomPortSpringBootTestResource.class, JobServiceSpringBootTestResource.class })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
-class Kogito9007IT extends BaseKogito9007IT {
+class MultipleTimerInstancesIT extends BaseMultipleTimerInstancesIT {
 
     @Value("${server.port}")
     private int httpPort;

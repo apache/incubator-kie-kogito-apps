@@ -23,12 +23,12 @@ import io.restassured.RestAssured;
 import static org.kie.kogito.test.utils.ProcessInstancesRESTTestUtils.assertProcessInstanceHasFinished;
 import static org.kie.kogito.test.utils.ProcessInstancesRESTTestUtils.newProcessInstanceAndGetId;
 
-public abstract class BaseKogito9007IT implements JobServiceHealthAware {
+public abstract class BaseMultipleTimerInstancesIT implements JobServiceHealthAware {
 
-    private static final String KOGITO_9007_BOUNDARY_TIMER_EVENT_URL = "/Kogito9007BoundaryTimerEvent";
-    private static final String KOGITO_9007_BOUNDARY_TIMER_EVENT_URL_GET_BY_ID_URL = KOGITO_9007_BOUNDARY_TIMER_EVENT_URL + "/{id}";
-    private static final String KOGITO_9007_TIMER_EVENT_URL = "/Kogito9007TimerEvent";
-    private static final String KOGITO_9007_TIMER_EVENT_URL_GET_BY_ID_URL = KOGITO_9007_TIMER_EVENT_URL + "/{id}";
+    private static final String MULTIPLE_TIMER_INSTANCES_BOUNDARY_TIMER_EVENT_URL = "/MultipleTimerInstancesBoundaryTimerEvent";
+    private static final String MULTIPLE_TIMER_INSTANCES_BOUNDARY_TIMER_EVENT_GET_BY_ID_URL = MULTIPLE_TIMER_INSTANCES_BOUNDARY_TIMER_EVENT_URL + "/{id}";
+    private static final String MULTIPLE_TIMER_INSTANCES_TIMER_EVENT_URL = "/MultipleTimerInstancesTimerEvent";
+    private static final String MULTIPLE_TIMER_INSTANCES_TIMER_EVENT_GET_BY_ID_URL = MULTIPLE_TIMER_INSTANCES_TIMER_EVENT_URL + "/{id}";
     private static final String EMPTY_DATA = "{}";
     private static final int AT_LEAST_SECONDS = 1;
     private static final int AT_MOST_SECONDS = 120;
@@ -39,15 +39,15 @@ public abstract class BaseKogito9007IT implements JobServiceHealthAware {
 
     @Test
     void boundaryTimerEvent() {
-        executeInstancesAndEnsureTermination(KOGITO_9007_BOUNDARY_TIMER_EVENT_URL,
-                KOGITO_9007_BOUNDARY_TIMER_EVENT_URL_GET_BY_ID_URL,
+        executeInstancesAndEnsureTermination(MULTIPLE_TIMER_INSTANCES_BOUNDARY_TIMER_EVENT_URL,
+                MULTIPLE_TIMER_INSTANCES_BOUNDARY_TIMER_EVENT_GET_BY_ID_URL,
                 EMPTY_DATA);
     }
 
     @Test
     void timerEvent() {
-        executeInstancesAndEnsureTermination(KOGITO_9007_TIMER_EVENT_URL,
-                KOGITO_9007_TIMER_EVENT_URL_GET_BY_ID_URL,
+        executeInstancesAndEnsureTermination(MULTIPLE_TIMER_INSTANCES_TIMER_EVENT_URL,
+                MULTIPLE_TIMER_INSTANCES_TIMER_EVENT_GET_BY_ID_URL,
                 EMPTY_DATA);
     }
 
