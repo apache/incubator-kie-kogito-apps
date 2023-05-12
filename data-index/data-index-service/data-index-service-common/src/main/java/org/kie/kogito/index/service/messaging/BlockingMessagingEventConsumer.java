@@ -22,9 +22,11 @@ import javax.transaction.Transactional;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.process.NodeInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
+import org.kie.kogito.index.event.NodeInstanceEventMapper;
 import org.kie.kogito.index.event.ProcessInstanceEventMapper;
 import org.kie.kogito.index.event.UserTaskInstanceEventMapper;
 import org.kie.kogito.index.service.IndexingService;
@@ -35,6 +37,7 @@ import io.quarkus.arc.properties.IfBuildProperty;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_JOBS_EVENTS;
+import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_NODEINSTANCES_EVENTS;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_PROCESSINSTANCES_EVENTS;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_USERTASKINSTANCES_EVENTS;
 
@@ -49,6 +52,15 @@ public class BlockingMessagingEventConsumer {
 
     @Inject
     IndexingService indexingService;
+
+    @Incoming(KOGITO_NODEINSTANCES_EVENTS)
+    @Blocking
+    @Transactional
+    public void onNodeInstanceEvent(NodeInstanceDataEvent event) {
+        LOGGER.debug("Node instance consumer received NodeInstanceDataEvent: \n{}", event);
+        indexingService.indexNodeInstance(new NodeInstanceEventMapper().apply(event));
+        eventPublisher.fire(event);
+    }
 
     @Incoming(KOGITO_PROCESSINSTANCES_EVENTS)
     @Blocking

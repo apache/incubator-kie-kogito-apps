@@ -20,6 +20,7 @@ public final class Constants {
     private Constants() {
     }
 
+    public static final String NODE_INSTANCES_DOMAIN_ATTRIBUTE = "nodeInstances";
     public static final String PROCESS_INSTANCES_DOMAIN_ATTRIBUTE = "processInstances";
     public static final String USER_TASK_INSTANCES_DOMAIN_ATTRIBUTE = "userTasks";
     public static final String KOGITO_DOMAIN_ATTRIBUTE = "metadata";
@@ -28,6 +29,7 @@ public final class Constants {
     public static final String PROCESS_NAME = "processName";
     public static final String ID = "id";
 
+    public static final String NODE_INSTANCES_STORAGE = "nodeinstances";
     public static final String PROCESS_INSTANCES_STORAGE = "processinstances";
     public static final String USER_TASK_INSTANCES_STORAGE = "usertaskinstances";
     public static final String JOBS_STORAGE = "jobs";

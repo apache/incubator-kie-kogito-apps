@@ -15,7 +15,8 @@
  */
 package org.kie.kogito.index.service;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Optional;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -33,7 +34,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 import static org.kie.kogito.index.storage.Constants.ID;
 import static org.kie.kogito.index.storage.Constants.KOGITO_DOMAIN_ATTRIBUTE;
@@ -50,12 +50,33 @@ public class IndexingService {
     @Inject
     DataIndexStorageService manager;
 
+    public void indexNodeInstance(NodeInstance ni) {
+        LOGGER.info("before trying to index {}", ni);
+        // if it does not exist we merged with the current process instance
+        ProcessInstance currentProcessInstance = manager.getProcessInstancesCache().get(ni.getProcessInstanceId());
+        currentProcessInstance.setNodes(currentProcessInstance.getNodes() != null ? currentProcessInstance.getNodes() : new ArrayList<>());
+        currentProcessInstance.getNodes().add(ni);
+
+        Optional<NodeInstance> nodeInstanceFound = currentProcessInstance.getNodes().stream().filter(e -> e.getId().equals(ni.getId())).findFirst();
+
+        if (nodeInstanceFound.isPresent()) {
+            // the event does only have the time of this event not the prior information so we merge
+            ni.setEnter(nodeInstanceFound.get().getEnter());
+            currentProcessInstance.getNodes().remove(nodeInstanceFound.get());
+        }
+        currentProcessInstance.getNodes().add(ni);
+        LOGGER.info("after trying to index {}", ni);
+        manager.getProcessInstancesCache().put(ni.getProcessInstanceId(), currentProcessInstance);
+    }
+
     public void indexProcessInstance(ProcessInstance pi) {
+        LOGGER.info("before trying to index {}", pi);
         ProcessInstance previousPI = manager.getProcessInstancesCache().get(pi.getId());
         if (previousPI != null) {
-            List<NodeInstance> nodes = previousPI.getNodes().stream().filter(n -> !pi.getNodes().contains(n)).collect(toList());
-            pi.getNodes().addAll(nodes);
+            pi.setNodes(previousPI.getNodes());
+            // pi.setStart(previousPI.getStart()); <- this should work but test fails for some reason
         }
+        LOGGER.info("after trying to index {}", pi);
         manager.getProcessInstancesCache().put(pi.getId(), pi);
     }
 

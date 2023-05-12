@@ -21,9 +21,11 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.process.NodeInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
+import org.kie.kogito.index.event.NodeInstanceEventMapper;
 import org.kie.kogito.index.event.ProcessInstanceEventMapper;
 import org.kie.kogito.index.event.UserTaskInstanceEventMapper;
 import org.kie.kogito.index.service.IndexingService;
@@ -39,6 +41,7 @@ public class ReactiveMessagingEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveMessagingEventConsumer.class);
 
+    public static final String KOGITO_NODEINSTANCES_EVENTS = "kogito-nodeinstances-events";
     public static final String KOGITO_PROCESSINSTANCES_EVENTS = "kogito-processinstances-events";
     public static final String KOGITO_USERTASKINSTANCES_EVENTS = "kogito-usertaskinstances-events";
     public static final String KOGITO_JOBS_EVENTS = "kogito-jobs-events";
@@ -48,6 +51,17 @@ public class ReactiveMessagingEventConsumer {
 
     @Inject
     Event<DataEvent> eventPublisher;
+
+    @Incoming(KOGITO_NODEINSTANCES_EVENTS)
+    public Uni<Void> onNodeInstanceEvent(NodeInstanceDataEvent event) {
+        LOGGER.debug("Node instance consumer received ProcessInstanceDataEvent: \n{}", event);
+        return Uni.createFrom().item(event)
+                .invoke(e -> indexingService.indexNodeInstance(new NodeInstanceEventMapper().apply(e)))
+                .invoke(e -> eventPublisher.fire(e))
+                .onFailure()
+                .invoke(t -> LOGGER.error("Error processing process instance ProInstanceDataEvent: {}", t.getMessage(), t))
+                .onItem().ignore().andContinueWithNull();
+    }
 
     @Incoming(KOGITO_PROCESSINSTANCES_EVENTS)
     public Uni<Void> onProcessInstanceEvent(ProcessInstanceDataEvent event) {

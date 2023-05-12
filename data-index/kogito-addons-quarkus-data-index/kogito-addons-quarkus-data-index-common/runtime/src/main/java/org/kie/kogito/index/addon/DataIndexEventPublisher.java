@@ -25,8 +25,10 @@ import javax.inject.Inject;
 
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.EventPublisher;
+import org.kie.kogito.event.process.NodeInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.UserTaskInstanceDataEvent;
+import org.kie.kogito.index.event.NodeInstanceEventMapper;
 import org.kie.kogito.index.event.ProcessInstanceEventMapper;
 import org.kie.kogito.index.event.UserTaskInstanceEventMapper;
 import org.kie.kogito.index.model.Job;
@@ -48,6 +50,9 @@ public class DataIndexEventPublisher implements EventPublisher {
     public void publish(DataEvent<?> event) {
         LOGGER.debug("Sending event to embedded data index: {}", event);
         switch (event.getType()) {
+            case "NodeInstanceEvent":
+                indexingService.indexNodeInstance(new NodeInstanceEventMapper().apply((NodeInstanceDataEvent) event));
+                break;
             case "ProcessInstanceEvent":
                 indexingService.indexProcessInstance(new ProcessInstanceEventMapper().apply((ProcessInstanceDataEvent) event));
                 break;

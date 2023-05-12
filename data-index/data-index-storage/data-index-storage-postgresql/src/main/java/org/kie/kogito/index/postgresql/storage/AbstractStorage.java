@@ -34,11 +34,11 @@ public abstract class AbstractStorage<E extends AbstractEntity, V> implements St
 
     private static final String LISTENER_NOT_AVAILABLE_IN_POSTGRES_SQL = "Listener not available in PostgresSQL";
 
-    private PanacheRepositoryBase<E, String> repository;
+    protected PanacheRepositoryBase<E, String> repository;
     private Class<V> modelClass;
     private Class<E> entityClass;
-    private Function<E, V> mapToModel;
-    private Function<V, E> mapToEntity;
+    protected Function<E, V> mapToModel;
+    protected Function<V, E> mapToEntity;
 
     protected AbstractStorage() {
     }

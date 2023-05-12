@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class NodeInstance extends Node {
 
+    private String processInstanceId;
     private String id;
     private String nodeId;
 
@@ -28,6 +29,14 @@ public class NodeInstance extends Node {
     private ZonedDateTime enter;
     @JsonProperty("leaveTime")
     private ZonedDateTime exit;
+
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
+    }
+
+    public String getProcessInstanceId() {
+        return processInstanceId;
+    }
 
     public String getId() {
         return id;
@@ -83,6 +92,7 @@ public class NodeInstance extends Node {
     @Override
     public String toString() {
         return "NodeInstance{" +
+                "processInstanceId='" + processInstanceId + '\'' +
                 "id='" + id + '\'' +
                 ", name='" + getName() + '\'' +
                 ", nodeId='" + nodeId + '\'' +
@@ -92,4 +102,5 @@ public class NodeInstance extends Node {
                 ", definitionId='" + getDefinitionId() + '\'' +
                 '}';
     }
+
 }

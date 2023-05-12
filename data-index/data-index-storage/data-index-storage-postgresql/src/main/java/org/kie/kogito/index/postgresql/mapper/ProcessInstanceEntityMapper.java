@@ -40,7 +40,9 @@ public interface ProcessInstanceEntityMapper {
 
     @AfterMapping
     default void afterMapping(@MappingTarget ProcessInstanceEntity entity) {
-        entity.getNodes().forEach(n -> n.setProcessInstance(entity));
+        if (entity.getNodes() != null) {
+            entity.getNodes().forEach(n -> n.setProcessInstance(entity));
+        }
         entity.getMilestones().forEach(m -> m.setProcessInstance(entity));
     }
 }

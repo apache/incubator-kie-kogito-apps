@@ -20,10 +20,8 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.kie.kogito.event.process.MilestoneEventBody;
-import org.kie.kogito.event.process.NodeInstanceEventBody;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.index.model.Milestone;
-import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
 
@@ -49,7 +47,6 @@ public class ProcessInstanceEventMapper implements Function<ProcessInstanceDataE
         pi.setParentProcessInstanceId(event.getData().getParentInstanceId());
         pi.setRoles(event.getData().getRoles());
         pi.setVariables(getObjectMapper().valueToTree(event.getData().getVariables()));
-        pi.setNodes(event.getData().getNodeInstances().stream().map(nodeInstance()).collect(toList()));
         pi.setState(event.getData().getState());
         pi.setStart(toZonedDateTime(event.getData().getStartDate()));
         pi.setEnd(toZonedDateTime(event.getData().getEndDate()));
@@ -62,20 +59,6 @@ public class ProcessInstanceEventMapper implements Function<ProcessInstanceDataE
         pi.setEndpoint(event.getSource() == null ? null : event.getSource().toString());
         pi.setLastUpdate(toZonedDateTime(event.getTime()));
         return pi;
-    }
-
-    private Function<NodeInstanceEventBody, NodeInstance> nodeInstance() {
-        return nib -> {
-            NodeInstance ni = new NodeInstance();
-            ni.setId(nib.getId());
-            ni.setEnter(toZonedDateTime(nib.getTriggerTime()));
-            ni.setName(nib.getNodeName());
-            ni.setType(nib.getNodeType());
-            ni.setNodeId(nib.getNodeId());
-            ni.setDefinitionId(nib.getNodeDefinitionId());
-            ni.setExit(toZonedDateTime(nib.getLeaveTime()));
-            return ni;
-        };
     }
 
     private Function<MilestoneEventBody, Milestone> milestone() {

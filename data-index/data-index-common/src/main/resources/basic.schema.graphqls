@@ -62,6 +62,7 @@ type Node {
 }
 
 type NodeInstance {
+    processInstanceId : String!
     id: String!
     name: String!
     type: String!

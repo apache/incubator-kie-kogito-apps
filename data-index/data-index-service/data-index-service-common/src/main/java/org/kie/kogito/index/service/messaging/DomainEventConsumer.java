@@ -22,8 +22,10 @@ import javax.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.process.NodeInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.UserTaskInstanceDataEvent;
+import org.kie.kogito.index.json.NodeInstanceMetaMapper;
 import org.kie.kogito.index.json.ProcessInstanceMetaMapper;
 import org.kie.kogito.index.json.UserTaskInstanceMetaMapper;
 import org.kie.kogito.index.service.IndexingService;
@@ -58,6 +60,9 @@ public class DomainEventConsumer {
     }
 
     private ObjectNode getDomainData(DataEvent event) {
+        if (event instanceof NodeInstanceDataEvent) {
+            return new NodeInstanceMetaMapper().apply((NodeInstanceDataEvent) event);
+        }
         if (event instanceof ProcessInstanceDataEvent) {
             return new ProcessInstanceMetaMapper().apply((ProcessInstanceDataEvent) event);
         }

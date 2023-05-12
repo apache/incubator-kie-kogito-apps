@@ -37,7 +37,6 @@ import org.eclipse.microprofile.config.ConfigProvider;
 import org.kie.kogito.event.process.AttachmentEventBody;
 import org.kie.kogito.event.process.CommentEventBody;
 import org.kie.kogito.event.process.MilestoneEventBody;
-import org.kie.kogito.event.process.NodeInstanceEventBody;
 import org.kie.kogito.event.process.ProcessErrorEventBody;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceEventBody;
@@ -117,15 +116,6 @@ public final class TestUtils {
                                 .status(MilestoneStatus.AVAILABLE.name())
                                 .build()))
                 .roles("admin")
-                .nodeInstance(NodeInstanceEventBody.create()
-                        .id(processInstanceId + "-1")
-                        .triggerTime(new Date())
-                        .nodeName("Start")
-                        .nodeType("StartNode")
-                        .nodeId("1")
-                        .nodeDefinitionId("StartEvent_1")
-                        .leaveTime(status == ProcessInstanceState.COMPLETED ? Date.from(Instant.now().plus(1, ChronoUnit.HOURS)) : null)
-                        .build())
                 .error(status == ProcessInstanceState.ERROR ? ProcessErrorEventBody.create()
                         .nodeDefinitionId("StartEvent_1")
                         .errorMessage("Something went wrong")
