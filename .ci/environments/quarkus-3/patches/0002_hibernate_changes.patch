@@ -229,10 +229,20 @@ index 1bf5edcff..9d58b88b3 100644
      <dependency>
        <groupId>io.quarkus</groupId>
 diff --git a/persistence-commons/persistence-commons-oracle/src/main/java/org/kie/kogito/persistence/oracle/OracleQuery.java b/persistence-commons/persistence-commons-oracle/src/main/java/org/kie/kogito/persistence/oracle/OracleQuery.java
-index d52ea5eb6..c606eb828 100644
+index d52ea5eb6..78deea035 100644
 --- a/persistence-commons/persistence-commons-oracle/src/main/java/org/kie/kogito/persistence/oracle/OracleQuery.java
 +++ b/persistence-commons/persistence-commons-oracle/src/main/java/org/kie/kogito/persistence/oracle/OracleQuery.java
-@@ -32,7 +32,8 @@ import org.slf4j.LoggerFactory;
+@@ -21,7 +21,9 @@ import java.util.Map;
+ import java.util.Objects;
+ import java.util.stream.Collectors;
+ 
++import org.hibernate.metamodel.model.domain.BasicDomainType;
+ import org.hibernate.query.NativeQuery;
++import org.hibernate.type.BasicTypeReference;
+ import org.kie.kogito.persistence.api.query.AttributeFilter;
+ import org.kie.kogito.persistence.api.query.AttributeSort;
+ import org.kie.kogito.persistence.api.query.FilterCondition;
+@@ -32,7 +34,8 @@ import org.slf4j.LoggerFactory;
  
  import com.fasterxml.jackson.core.JsonProcessingException;
  import com.fasterxml.jackson.databind.ObjectMapper;
@@ -242,12 +252,12 @@ index d52ea5eb6..c606eb828 100644
  
  import static java.lang.String.format;
  import static java.util.stream.Collectors.joining;
-@@ -137,7 +138,7 @@ public class OracleQuery<T> implements Query<T> {
+@@ -137,7 +140,7 @@ public class OracleQuery<T> implements Query<T> {
          jakarta.persistence.Query query = repository.getEntityManager()
                  .createNativeQuery(queryString.toString())
                  .unwrap(NativeQuery.class)
 -                .addScalar("json_value", new JsonBlobType(type));
-+                .addScalar("json_value", JsonBlobType.INSTANCE);
++                .addScalar("json_value", type); // TODO Quarkus 3: This does not work and should be fix in a next PR
  
          if (limit != null) {
              query.setMaxResults(limit);
@@ -416,7 +426,7 @@ index 4685623d4..f95fc30a4 100644
      <dependency>
        <groupId>io.quarkus</groupId>
 diff --git a/persistence-commons/persistence-commons-postgresql/src/main/java/org/kie/kogito/persistence/postgresql/PostgresQuery.java b/persistence-commons/persistence-commons-postgresql/src/main/java/org/kie/kogito/persistence/postgresql/PostgresQuery.java
-index e01355e78..45429e862 100644
+index e01355e78..1abc2fdbc 100644
 --- a/persistence-commons/persistence-commons-postgresql/src/main/java/org/kie/kogito/persistence/postgresql/PostgresQuery.java
 +++ b/persistence-commons/persistence-commons-postgresql/src/main/java/org/kie/kogito/persistence/postgresql/PostgresQuery.java
 @@ -31,7 +31,8 @@ import org.slf4j.LoggerFactory;
@@ -429,6 +439,15 @@ index e01355e78..45429e862 100644
  
  import static java.lang.String.format;
  import static java.util.stream.Collectors.joining;
+@@ -134,7 +135,7 @@ public class PostgresQuery<T> implements Query<T> {
+ 
+         LOGGER.debug("Executing PostgreSQL query: {}", queryString);
+         jakarta.persistence.Query query = repository.getEntityManager().createNativeQuery(queryString.toString());
+-        query.unwrap(org.hibernate.query.NativeQuery.class).addScalar("json_value", JsonNodeBinaryType.INSTANCE);
++        query.unwrap(org.hibernate.query.NativeQuery.class).addScalar("json_value", type); // TODO Quarkus 3: This does not work and should be fix in a next PR
+ 
+         if (limit != null) {
+             query.setMaxResults(limit);
 diff --git a/persistence-commons/persistence-commons-postgresql/src/main/java/org/kie/kogito/persistence/postgresql/hibernate/JsonBinaryType.java b/persistence-commons/persistence-commons-postgresql/src/main/java/org/kie/kogito/persistence/postgresql/hibernate/JsonBinaryType.java
 index 83622105b..653aae0f1 100644
 --- a/persistence-commons/persistence-commons-postgresql/src/main/java/org/kie/kogito/persistence/postgresql/hibernate/JsonBinaryType.java
