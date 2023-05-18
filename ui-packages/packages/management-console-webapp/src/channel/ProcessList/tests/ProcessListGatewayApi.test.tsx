@@ -29,12 +29,6 @@ import {
   ProcessListGatewayApiImpl
 } from '../ProcessListGatewayApi';
 import { ProcessListQueries } from '../ProcessListQueries';
-import {
-  handleProcessAbort,
-  handleProcessMultipleAction,
-  handleProcessRetry,
-  handleProcessSkip
-} from '../../../apis/apis';
 
 export const processInstance: ProcessInstance = {
   id: 'a1e139d5-4e77-48c9-84ae-34578e904e5a',
@@ -71,7 +65,7 @@ export const processInstance: ProcessInstance = {
   childProcessInstances: []
 };
 
-jest.mock('../../../apis/apis', () => ({
+jest.mock('@kogito-apps/runtime-gateway-api', () => ({
   handleProcessSkip: jest.fn(),
   handleProcessRetry: jest.fn(),
   handleProcessAbort: jest.fn(),
@@ -80,10 +74,18 @@ jest.mock('../../../apis/apis', () => ({
 
 const getProcessInstancesMock = jest.fn();
 const getChildProcessInstancesMock = jest.fn();
+const handleProcessSkipMock = jest.fn();
+const handleProcessAbortMock = jest.fn();
+const handleProcessRetryMock = jest.fn();
+const handleProcessMultipleActionMock = jest.fn();
 
 const MockProcessListQueries = jest.fn<ProcessListQueries, []>(() => ({
   getProcessInstances: getProcessInstancesMock,
-  getChildProcessInstances: getChildProcessInstancesMock
+  getChildProcessInstances: getChildProcessInstancesMock,
+  handleProcessSkip: handleProcessSkipMock,
+  handleProcessAbort: handleProcessAbortMock,
+  handleProcessMultipleAction: handleProcessMultipleActionMock,
+  handleProcessRetry: handleProcessRetryMock
 }));
 
 let queries: ProcessListQueries;
@@ -101,6 +103,9 @@ describe('ProcessListChannelApiImpl tests', () => {
     gatewayApi = new ProcessListGatewayApiImpl(queries);
     getProcessInstancesMock.mockReturnValue(Promise.resolve([]));
     getChildProcessInstancesMock.mockReturnValue(Promise.resolve([]));
+    handleProcessSkipMock.mockReturnValue(Promise.resolve());
+    handleProcessAbortMock.mockReturnValue(Promise.resolve());
+    handleProcessMultipleActionMock.mockReturnValue(Promise.resolve());
   });
 
   it('Initial load', () => {
@@ -125,17 +130,17 @@ describe('ProcessListChannelApiImpl tests', () => {
 
   it('handleProcessSkip', async () => {
     await gatewayApi.handleProcessSkip(processInstance);
-    expect(handleProcessSkip).toHaveBeenCalledWith(processInstance);
+    expect(handleProcessSkipMock).toHaveBeenCalledWith(processInstance);
   });
 
   it('handleProcessRetry', async () => {
     await gatewayApi.handleProcessRetry(processInstance);
-    expect(handleProcessRetry).toHaveBeenCalledWith(processInstance);
+    expect(handleProcessRetryMock).toHaveBeenCalledWith(processInstance);
   });
 
   it('handleProcessAbort', async () => {
     await gatewayApi.handleProcessAbort(processInstance);
-    expect(handleProcessAbort).toHaveBeenCalledWith(processInstance);
+    expect(handleProcessAbortMock).toHaveBeenCalledWith(processInstance);
   });
 
   it('handle multi action', async () => {
@@ -143,7 +148,7 @@ describe('ProcessListChannelApiImpl tests', () => {
       [processInstance],
       OperationType.ABORT
     );
-    expect(handleProcessMultipleAction).toHaveBeenCalledWith(
+    expect(handleProcessMultipleActionMock).toHaveBeenCalledWith(
       [processInstance],
       OperationType.ABORT
     );
