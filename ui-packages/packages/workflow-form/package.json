@@ -35,8 +35,8 @@
     "@patternfly/react-core": "4.157.3",
     "@patternfly/react-icons": "4.11.17",
     "@patternfly/patternfly": "^4.108.2",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "lodash": "^4.17.15",
     "monaco-yaml": "3.0.0",
     "react-monaco-editor": "^0.41.2"

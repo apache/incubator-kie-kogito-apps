@@ -35,8 +35,8 @@
     "@patternfly/react-icons": "4.11.17",
     "@patternfly/react-table": "4.29.0",
     "react-moment": "0.9.7",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-datetime-picker": "^3.0.4"
   },
   "devDependencies": {

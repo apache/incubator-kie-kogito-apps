@@ -72,13 +72,13 @@ importers:
         version: 4.224.2
       '@patternfly/react-code-editor':
         specifier: 4.2.92
-        version: 4.2.92(react-dom@16.14.0)(react-monaco-editor@0.41.2)(react@16.14.0)
+        version: 4.2.92(react-dom@17.0.2)(react-monaco-editor@0.41.2)(react@17.0.2)
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
@@ -86,14 +86,14 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-monaco-editor:
         specifier: ^0.41.2
-        version: 0.41.2(@types/react@17.0.5)(react@16.14.0)
+        version: 0.41.2(@types/react@17.0.5)(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -130,7 +130,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -166,16 +166,16 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-styles':
         specifier: 4.18.8
         version: 4.18.8
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       apollo-boost:
         specifier: ^0.4.4
         version: 0.4.9
@@ -198,33 +198,33 @@ importers:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-apollo:
         specifier: 3.1.3
-        version: 3.1.3(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+        version: 3.1.3(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(react@16.14.0)
+        version: 0.9.7(react@17.0.2)
       react-router:
         specifier: ^5.0.1
-        version: 5.3.4(react@16.14.0)
+        version: 5.3.4(react@17.0.2)
       react-router-dom:
-        specifier: ^5.1.2
-        version: 5.3.4(react@16.14.0)
+        specifier: ^5.2.1
+        version: 5.3.4(react@17.0.2)
     devDependencies:
       '@apollo/react-common':
         specifier: 3.1.4
-        version: 3.1.4(@types/react@17.0.5)(react@16.14.0)
+        version: 3.1.4(@types/react@17.0.5)(react@17.0.2)
       '@apollo/react-hooks':
         specifier: ^3.1.3
-        version: 3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+        version: 3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@apollo/react-testing':
         specifier: ^3.1.3
-        version: 3.1.4(@types/react@17.0.5)(react@16.14.0)
+        version: 3.1.4(@types/react@17.0.5)(react@17.0.2)
       '@graphql-codegen/add':
         specifier: ^3.1.0
         version: 3.2.3
@@ -248,31 +248,31 @@ importers:
         version: link:../ouia-tools
       '@storybook/addon-a11y':
         specifier: 6.4.22
-        version: 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+        version: 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@storybook/addon-console':
         specifier: 1.2.3
         version: 1.2.3
       '@storybook/addon-controls':
         specifier: 6.4.22
-        version: 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+        version: 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/addon-essentials':
         specifier: 6.4.22
-        version: 6.4.22(@storybook/react@6.4.22)(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+        version: 6.4.22(@storybook/react@6.4.22)(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/addon-interactions':
         specifier: 6.4.22
-        version: 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+        version: 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/addon-links':
         specifier: 6.4.22
-        version: 6.4.22(react-dom@16.14.0)(react@16.14.0)
+        version: 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/addon-storysource':
         specifier: 6.4.22
-        version: 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+        version: 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@storybook/react':
         specifier: 6.4.22
-        version: 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+        version: 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/source-loader':
         specifier: 6.4.22
-        version: 6.4.22(react-dom@16.14.0)(react@16.14.0)
+        version: 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@testing-library/jest-dom':
         specifier: ^5.12.0
         version: 5.16.5
@@ -305,7 +305,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -344,13 +344,13 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       ajv:
         specifier: ^6.12.6
         version: 6.12.6
@@ -364,24 +364,24 @@ importers:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       uniforms:
         specifier: ^3.5.5
-        version: 3.10.2(react@16.14.0)
+        version: 3.10.2(react@17.0.2)
       uniforms-bridge-json-schema:
         specifier: ^3.5.5
-        version: 3.10.2(react@16.14.0)
+        version: 3.10.2(react@17.0.2)
       uniforms-patternfly:
         specifier: ^4.7.3
-        version: 4.7.9(@patternfly/react-core@4.157.3)(@patternfly/react-icons@4.11.17)(react@16.14.0)
+        version: 4.7.9(@patternfly/react-core@4.157.3)(@patternfly/react-icons@4.11.17)(react@17.0.2)
     devDependencies:
       '@apollo/react-testing':
         specifier: ^3.1.3
-        version: 3.1.4(@types/react@17.0.5)(react@16.14.0)
+        version: 3.1.4(@types/react@17.0.5)(react@17.0.2)
       '@babel/core':
         specifier: ^7.14.0
         version: 7.21.0
@@ -423,7 +423,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -456,10 +456,10 @@ importers:
         version: link:../components-common
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-styles':
         specifier: 4.18.8
         version: 4.18.8
@@ -479,24 +479,24 @@ importers:
         specifier: ^13.0.1
         version: 13.0.1
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-router:
         specifier: ^5.0.1
-        version: 5.3.4(react@16.14.0)
+        version: 5.3.4(react@17.0.2)
       react-router-dom:
-        specifier: ^5.1.2
-        version: 5.3.4(react@16.14.0)
+        specifier: ^5.2.1
+        version: 5.3.4(react@17.0.2)
     devDependencies:
       '@apollo/react-common':
         specifier: 3.1.4
-        version: 3.1.4(@types/react@17.0.5)(react@16.14.0)
+        version: 3.1.4(@types/react@17.0.5)(react@17.0.2)
       '@apollo/react-hooks':
         specifier: ^3.1.3
-        version: 3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+        version: 3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@babel/core':
         specifier: ^7.14.0
         version: 7.21.0
@@ -556,7 +556,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -595,25 +595,25 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(react@16.14.0)
+        version: 0.9.7(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -650,7 +650,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -692,16 +692,16 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-router-dom:
-        specifier: ^5.1.2
-        version: 5.3.4(react@16.14.0)
+        specifier: ^5.2.1
+        version: 5.3.4(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -741,7 +741,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -801,13 +801,13 @@ importers:
         version: 4.224.2
       '@patternfly/react-code-editor':
         specifier: 4.2.92
-        version: 4.2.92(react-dom@16.14.0)(react-monaco-editor@0.41.2)(react@16.14.0)
+        version: 4.2.92(react-dom@17.0.2)(react-monaco-editor@0.41.2)(react@17.0.2)
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
@@ -815,14 +815,14 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-monaco-editor:
         specifier: ^0.41.2
-        version: 0.41.2(@types/react@17.0.5)(react@16.14.0)
+        version: 0.41.2(@types/react@17.0.5)(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -859,7 +859,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -904,28 +904,28 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       dangerously-set-html-content:
         specifier: ^1.0.9
-        version: 1.0.13(react@16.14.0)
+        version: 1.0.13(react@17.0.2)
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-helmet:
         specifier: ^6.1.0
-        version: 6.1.0(react@16.14.0)
+        version: 6.1.0(react@17.0.2)
       react-pure-loaders:
         specifier: ^3.0.1
-        version: 3.0.1(react@16.14.0)
+        version: 3.0.1(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -962,7 +962,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -1004,25 +1004,25 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(react@16.14.0)
+        version: 0.9.7(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -1059,7 +1059,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -1104,13 +1104,13 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       axios:
         specifier: 0.21.2
         version: 0.21.2
@@ -1118,14 +1118,14 @@ importers:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(react@16.14.0)
+        version: 0.9.7(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -1162,7 +1162,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -1192,7 +1192,7 @@ importers:
     dependencies:
       '@apollo/react-testing':
         specifier: ^3.1.3
-        version: 3.1.4(@types/react@17.0.5)(apollo-cache-inmemory@1.6.6)(apollo-client@2.6.10)(react@16.14.0)
+        version: 3.1.4(@types/react@17.0.5)(apollo-cache-inmemory@1.6.6)(apollo-client@2.6.10)(react@17.0.2)
       '@kogito-apps/common':
         specifier: workspace:*
         version: link:../common
@@ -1201,13 +1201,13 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       apollo-cache-inmemory:
         specifier: 1.6.6
         version: 1.6.6
@@ -1239,41 +1239,41 @@ importers:
         specifier: ^2.29.4
         version: 2.29.4
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-apollo:
         specifier: ^3.1.3
-        version: 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0)
+        version: 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2)
       react-apollo-hooks:
         specifier: ^0.5.0
-        version: 0.5.0(apollo-client@2.6.10)(react@16.14.0)
+        version: 0.5.0(apollo-client@2.6.10)(react@17.0.2)
       react-datetime-picker:
         specifier: ^3.0.4
-        version: 3.5.0(react-dom@16.14.0)(react@16.14.0)
+        version: 3.5.0(react-dom@17.0.2)(react@17.0.2)
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-inlinesvg:
         specifier: ^2.1.1
-        version: 2.3.0(react@16.14.0)
+        version: 2.3.0(react@17.0.2)
       react-json-view:
         specifier: ^1.21.3
-        version: 1.21.3(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.21.3(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(moment@2.29.4)(react@16.14.0)
+        version: 0.9.7(moment@2.29.4)(react@17.0.2)
       react-router:
         specifier: ^5.0.1
-        version: 5.3.4(react@16.14.0)
+        version: 5.3.4(react@17.0.2)
       react-router-dom:
-        specifier: ^5.1.2
-        version: 5.3.4(react@16.14.0)
+        specifier: ^5.2.1
+        version: 5.3.4(react@17.0.2)
       react-svg-pan-zoom:
         specifier: ^3.8.0
         version: 3.12.1
       react-svg-pan-zoom-loader:
         specifier: ^1.4.1
-        version: 1.4.1(react-dom@16.14.0)(react@16.14.0)
+        version: 1.4.1(react-dom@17.0.2)(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -1355,7 +1355,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -1445,25 +1445,25 @@ importers:
         version: link:../components-common
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-datetime-picker:
         specifier: ^3.0.4
-        version: 3.5.0(react-dom@16.14.0)(react@16.14.0)
+        version: 3.5.0(react-dom@17.0.2)(react@17.0.2)
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(react@16.14.0)
+        version: 0.9.7(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -1500,7 +1500,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -1551,7 +1551,7 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       apollo-cache-inmemory:
         specifier: 1.6.6
         version: 1.6.6
@@ -1574,23 +1574,23 @@ importers:
         specifier: ^4.9.0
         version: 4.10.1
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-apollo:
         specifier: ^3.1.3
-        version: 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0)
+        version: 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2)
       react-apollo-hooks:
         specifier: ^0.5.0
-        version: 0.5.0(apollo-client@2.6.10)(react@16.14.0)
+        version: 0.5.0(apollo-client@2.6.10)(react@17.0.2)
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-router:
         specifier: ^5.0.1
-        version: 5.3.4(react@16.14.0)
+        version: 5.3.4(react@17.0.2)
       react-router-dom:
-        specifier: ^5.1.2
-        version: 5.3.4(react@16.14.0)
+        specifier: ^5.2.1
+        version: 5.3.4(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -1672,7 +1672,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -1764,11 +1764,11 @@ importers:
         specifier: workspace:*
         version: link:../management-console-shared
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
         specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        version: 16.14.0(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -1808,7 +1808,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -1871,7 +1871,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -1885,8 +1885,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       rimraf:
         specifier: ^3.0.2
         version: 3.0.2
@@ -1965,19 +1965,19 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -2014,7 +2014,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -2062,34 +2062,34 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-inlinesvg:
         specifier: ^2.1.1
-        version: 2.3.0(react@16.14.0)
+        version: 2.3.0(react@17.0.2)
       react-json-view:
         specifier: ^1.21.3
-        version: 1.21.3(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.21.3(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(react@16.14.0)
+        version: 0.9.7(react@17.0.2)
       react-svg-pan-zoom:
         specifier: ^3.8.0
         version: 3.12.1
       react-svg-pan-zoom-loader:
         specifier: ^1.4.1
-        version: 1.4.1(react-dom@16.14.0)(react@16.14.0)
+        version: 1.4.1(react-dom@17.0.2)(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -2132,7 +2132,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -2177,13 +2177,13 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@16.14.0)(react@17.0.2)
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
         specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        version: 16.14.0(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -2226,7 +2226,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -2274,13 +2274,13 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       axios:
         specifier: 0.21.2
         version: 0.21.2
@@ -2288,17 +2288,17 @@ importers:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(react@16.14.0)
+        version: 0.9.7(react@17.0.2)
       react-router-dom:
-        specifier: ^5.1.2
-        version: 5.3.4(react@16.14.0)
+        specifier: ^5.2.1
+        version: 5.3.4(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -2344,7 +2344,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -2389,7 +2389,7 @@ importers:
         version: 14.3.1
       react-apollo:
         specifier: 3.1.3
-        version: 3.1.3(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0)
+        version: 3.1.3(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2)
       react-apollo-hooks:
         specifier: 0.5.0
         version: 0.5.0(apollo-client@2.6.10)(graphql@14.3.1)
@@ -2435,7 +2435,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -2449,8 +2449,8 @@ importers:
         specifier: ^10.0.0
         version: 10.0.0
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       rimraf:
         specifier: ^3.0.2
         version: 3.0.2
@@ -2573,16 +2573,16 @@ importers:
         version: 4.224.2
       '@patternfly/react-code-editor':
         specifier: 4.2.92
-        version: 4.2.92(monaco-editor-webpack-plugin@4.1.2)(monaco-editor@0.27.0)(react-dom@16.14.0)(react-monaco-editor@0.41.2)(react@16.14.0)
+        version: 4.2.92(monaco-editor-webpack-plugin@4.1.2)(monaco-editor@0.27.0)(react-dom@17.0.2)(react-monaco-editor@0.41.2)(react@17.0.2)
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       apollo-cache-inmemory:
         specifier: 1.6.6
         version: 1.6.6
@@ -2614,29 +2614,29 @@ importers:
         specifier: 3.0.0
         version: 3.0.0(monaco-editor@0.27.0)
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-apollo:
         specifier: ^3.1.3
-        version: 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0)
+        version: 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2)
       react-apollo-hooks:
         specifier: ^0.5.0
-        version: 0.5.0(apollo-client@2.6.10)(react@16.14.0)
+        version: 0.5.0(apollo-client@2.6.10)(react@17.0.2)
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(react@16.14.0)
+        version: 0.9.7(react@17.0.2)
       react-monaco-editor:
         specifier: ^0.41.2
-        version: 0.41.2(@types/react@17.0.5)(react@16.14.0)
+        version: 0.41.2(@types/react@17.0.5)(react@17.0.2)
       react-router:
         specifier: ^5.0.1
-        version: 5.3.4(react@16.14.0)
+        version: 5.3.4(react@17.0.2)
       react-router-dom:
-        specifier: ^5.1.2
-        version: 5.3.4(react@16.14.0)
+        specifier: ^5.2.1
+        version: 5.3.4(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -2721,7 +2721,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -2820,19 +2820,19 @@ importers:
         version: link:../components-common
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@16.14.0)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.7
-        version: 4.11.7(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.7(react-dom@16.14.0)(react@17.0.2)
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
         specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        version: 16.14.0(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -2875,7 +2875,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -2932,7 +2932,7 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       apollo-cache-inmemory:
         specifier: 1.6.6
         version: 1.6.6
@@ -2958,17 +2958,17 @@ importers:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-router:
         specifier: ^5.0.1
-        version: 5.3.4(react@16.14.0)
+        version: 5.3.4(react@17.0.2)
       react-router-dom:
-        specifier: ^5.1.2
-        version: 5.3.4(react@16.14.0)
+        specifier: ^5.2.1
+        version: 5.3.4(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -3053,7 +3053,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -3146,19 +3146,19 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(react@16.14.0)
+        version: 0.9.7(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -3201,7 +3201,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -3246,10 +3246,10 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       json-schema:
         specifier: 0.4.0
         version: 0.4.0
@@ -3257,11 +3257,11 @@ importers:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -3304,7 +3304,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -3352,22 +3352,22 @@ importers:
         version: 4.224.2
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-moment:
         specifier: 0.9.7
-        version: 0.9.7(react@16.14.0)
+        version: 0.9.7(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -3410,7 +3410,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -3425,7 +3425,7 @@ importers:
         version: 10.0.0
       react-test-renderer:
         specifier: ^16.10.2
-        version: 16.14.0(react@16.14.0)
+        version: 16.14.0(react@17.0.2)
       rimraf:
         specifier: ^3.0.2
         version: 3.0.2
@@ -3443,25 +3443,25 @@ importers:
     dependencies:
       '@kogito-tooling/kie-editors-standalone':
         specifier: ^0.10.0
-        version: 0.10.0(react-dom@16.14.0)(react@16.14.0)
+        version: 0.10.0(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-charts':
         specifier: ^6.14.29
-        version: 6.94.18(react-dom@16.14.0)(react@16.14.0)
+        version: 6.94.18(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-table':
         specifier: 4.29.0
-        version: 4.29.0(react-dom@16.14.0)(react@16.14.0)
+        version: 4.29.0(react-dom@17.0.2)(react@17.0.2)
       '@testing-library/react':
         specifier: ^10.4.7
-        version: 10.4.9(react-dom@16.14.0)(react@16.14.0)
+        version: 10.4.9(react-dom@17.0.2)(react@17.0.2)
       '@testing-library/react-hooks':
         specifier: ^3.3.0
-        version: 3.7.0(react-test-renderer@16.14.0)(react@16.14.0)
+        version: 3.7.0(react-test-renderer@16.14.0)(react@17.0.2)
       '@types/react-custom-scrollbars':
         specifier: ^4.0.7
         version: 4.0.10
@@ -3481,20 +3481,20 @@ importers:
         specifier: 4.3.4
         version: 4.3.4
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-custom-scrollbars:
         specifier: ^4.2.1
-        version: 4.2.1(react-dom@16.14.0)(react@16.14.0)
+        version: 4.2.1(react-dom@17.0.2)(react@17.0.2)
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-router:
         specifier: ^5.0.1
-        version: 5.3.4(react@16.14.0)
+        version: 5.3.4(react@17.0.2)
       react-router-dom:
-        specifier: ^5.1.2
-        version: 5.3.4(react@16.14.0)
+        specifier: ^5.2.1
+        version: 5.3.4(react@17.0.2)
       sass:
         specifier: ^1.26.10
         version: 1.58.3
@@ -3503,7 +3503,7 @@ importers:
         version: 9.0.3(sass@1.58.3)(webpack@5.79.0)
       use-react-router-breadcrumbs:
         specifier: ^1.0.4
-        version: 1.0.5(react-router@5.3.4)(react@16.14.0)
+        version: 1.0.5(react-router@5.3.4)(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -3576,7 +3576,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -3603,7 +3603,7 @@ importers:
         version: 2.7.5(webpack@5.79.0)
       react-test-renderer:
         specifier: ^16.10.2
-        version: 16.14.0(react@16.14.0)
+        version: 16.14.0(react@17.0.2)
       rimraf:
         specifier: ^3.0.2
         version: 3.0.2
@@ -3666,13 +3666,13 @@ importers:
         version: 4.224.2
       '@patternfly/react-code-editor':
         specifier: 4.2.92
-        version: 4.2.92(react-dom@16.14.0)(react-monaco-editor@0.41.2)(react@16.14.0)
+        version: 4.2.92(react-dom@17.0.2)(react-monaco-editor@0.41.2)(react@17.0.2)
       '@patternfly/react-core':
         specifier: 4.157.3
-        version: 4.157.3(react-dom@16.14.0)(react@16.14.0)
+        version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons':
         specifier: 4.11.17
-        version: 4.11.17(react-dom@16.14.0)(react@16.14.0)
+        version: 4.11.17(react-dom@17.0.2)(react@17.0.2)
       lodash:
         specifier: ^4.17.15
         version: 4.17.21
@@ -3680,14 +3680,14 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
       react:
-        specifier: ^16.9.0
-        version: 16.14.0
+        specifier: ^17.0.2
+        version: 17.0.2
       react-dom:
-        specifier: ^16.9.0
-        version: 16.14.0(react@16.14.0)
+        specifier: ^17.0.2
+        version: 17.0.2(react@17.0.2)
       react-monaco-editor:
         specifier: ^0.41.2
-        version: 0.41.2(@types/react@17.0.5)(react@16.14.0)
+        version: 0.41.2(@types/react@17.0.5)(react@17.0.2)
     devDependencies:
       '@babel/core':
         specifier: ^7.14.0
@@ -3730,7 +3730,7 @@ importers:
         version: 3.11.0
       enzyme-adapter-react-16:
         specifier: ^1.15.6
-        version: 1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0)
+        version: 1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       enzyme-to-json:
         specifier: ^3.6.1
         version: 3.6.2(enzyme@3.11.0)
@@ -3822,7 +3822,7 @@ packages:
       long: 4.0.0
     dev: true
 
-  /@apollo/react-common@3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@16.14.0):
+  /@apollo/react-common@3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@17.0.2):
     resolution: {integrity: sha512-X5Kyro73bthWSCBJUC5XYQqMnG0dLWuDZmVkzog9dynovhfiVCV4kPSdgSIkqnb++cwCzOVuQ4rDKVwo2XRzQA==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -3833,12 +3833,12 @@ packages:
     dependencies:
       '@types/react': 17.0.5
       apollo-client: 2.6.10
-      react: 16.14.0
+      react: 17.0.2
       ts-invariant: 0.4.4
       tslib: 1.14.1
     dev: false
 
-  /@apollo/react-common@3.1.4(@types/react@17.0.5)(react@16.14.0):
+  /@apollo/react-common@3.1.4(@types/react@17.0.5)(react@17.0.2):
     resolution: {integrity: sha512-X5Kyro73bthWSCBJUC5XYQqMnG0dLWuDZmVkzog9dynovhfiVCV4kPSdgSIkqnb++cwCzOVuQ4rDKVwo2XRzQA==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -3848,7 +3848,7 @@ packages:
       react: ^16.8.0
     dependencies:
       '@types/react': 17.0.5
-      react: 16.14.0
+      react: 17.0.2
       ts-invariant: 0.4.4
       tslib: 1.14.1
 
@@ -3867,7 +3867,7 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /@apollo/react-components@3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0):
+  /@apollo/react-components@3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-c82VyUuE9VBnJB7bnX+3dmwpIPMhyjMwyoSLyQWPHxz8jK4ak30XszJtqFf4eC4hwvvLYa+Ou6X73Q8V8e2/jg==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -3879,18 +3879,18 @@ packages:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@16.14.0)
-      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@17.0.2)
+      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2)
       '@types/react': 17.0.5
       apollo-client: 2.6.10
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       ts-invariant: 0.4.4
       tslib: 1.14.1
     dev: false
 
-  /@apollo/react-components@3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@apollo/react-components@3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-c82VyUuE9VBnJB7bnX+3dmwpIPMhyjMwyoSLyQWPHxz8jK4ak30XszJtqFf4eC4hwvvLYa+Ou6X73Q8V8e2/jg==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -3902,17 +3902,17 @@ packages:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@16.14.0)
-      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@17.0.2)
+      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@types/react': 17.0.5
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       ts-invariant: 0.4.4
       tslib: 1.14.1
     dev: false
 
-  /@apollo/react-components@3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0):
+  /@apollo/react-components@3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2):
     resolution: {integrity: sha512-c82VyUuE9VBnJB7bnX+3dmwpIPMhyjMwyoSLyQWPHxz8jK4ak30XszJtqFf4eC4hwvvLYa+Ou6X73Q8V8e2/jg==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -3925,16 +3925,16 @@ packages:
       react-dom: ^16.8.0
     dependencies:
       '@apollo/react-common': 3.1.4(apollo-client@2.6.10)(graphql@14.3.1)
-      '@apollo/react-hooks': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0)
+      '@apollo/react-hooks': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2)
       apollo-client: 2.6.10(graphql@14.3.1)
       graphql: 14.3.1
       prop-types: 15.8.1
-      react-dom: 16.14.0
+      react-dom: 17.0.2
       ts-invariant: 0.4.4
       tslib: 1.14.1
     dev: false
 
-  /@apollo/react-hoc@3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0):
+  /@apollo/react-hoc@3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-jlZ2pvEnRevLa54H563BU0/xrYSgWQ72GksarxUzCHQW85nmn9wQln0kLBX7Ua7SBt9WgiuYQXQVechaaCulfQ==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -3943,13 +3943,13 @@ packages:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@16.14.0)
-      '@apollo/react-components': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@17.0.2)
+      '@apollo/react-components': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2)
       '@types/react': 17.0.5
       apollo-client: 2.6.10
       hoist-non-react-statics: 3.3.2
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       ts-invariant: 0.4.4
       tslib: 1.14.1
     transitivePeerDependencies:
@@ -3958,7 +3958,7 @@ packages:
       - apollo-utilities
     dev: false
 
-  /@apollo/react-hoc@3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@apollo/react-hoc@3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-jlZ2pvEnRevLa54H563BU0/xrYSgWQ72GksarxUzCHQW85nmn9wQln0kLBX7Ua7SBt9WgiuYQXQVechaaCulfQ==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -3967,12 +3967,12 @@ packages:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@16.14.0)
-      '@apollo/react-components': 3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@17.0.2)
+      '@apollo/react-components': 3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@types/react': 17.0.5
       hoist-non-react-statics: 3.3.2
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       ts-invariant: 0.4.4
       tslib: 1.14.1
     transitivePeerDependencies:
@@ -3981,7 +3981,7 @@ packages:
       - apollo-utilities
     dev: false
 
-  /@apollo/react-hoc@3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0):
+  /@apollo/react-hoc@3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2):
     resolution: {integrity: sha512-jlZ2pvEnRevLa54H563BU0/xrYSgWQ72GksarxUzCHQW85nmn9wQln0kLBX7Ua7SBt9WgiuYQXQVechaaCulfQ==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -3991,11 +3991,11 @@ packages:
       react-dom: ^16.8.0
     dependencies:
       '@apollo/react-common': 3.1.4(apollo-client@2.6.10)(graphql@14.3.1)
-      '@apollo/react-components': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0)
+      '@apollo/react-components': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2)
       apollo-client: 2.6.10(graphql@14.3.1)
       graphql: 14.3.1
       hoist-non-react-statics: 3.3.2
-      react-dom: 16.14.0
+      react-dom: 17.0.2
       ts-invariant: 0.4.4
       tslib: 1.14.1
     transitivePeerDependencies:
@@ -4004,7 +4004,7 @@ packages:
       - apollo-utilities
     dev: false
 
-  /@apollo/react-hooks@3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0):
+  /@apollo/react-hooks@3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-y0CJ393DLxIIkksRup4nt+vSjxalbZBXnnXxYbviq/woj+zKa431zy0yT4LqyRKpFy9ahMIwxBnBwfwIoupqLQ==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -4013,19 +4013,19 @@ packages:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@17.0.2)
       '@types/react': 17.0.5
       '@wry/equality': 0.1.11
       apollo-client: 2.6.10
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       ts-invariant: 0.4.4
       tslib: 1.14.1
     transitivePeerDependencies:
       - apollo-utilities
     dev: false
 
-  /@apollo/react-hooks@3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@apollo/react-hooks@3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-y0CJ393DLxIIkksRup4nt+vSjxalbZBXnnXxYbviq/woj+zKa431zy0yT4LqyRKpFy9ahMIwxBnBwfwIoupqLQ==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -4034,17 +4034,17 @@ packages:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@17.0.2)
       '@types/react': 17.0.5
       '@wry/equality': 0.1.11
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       ts-invariant: 0.4.4
       tslib: 1.14.1
     transitivePeerDependencies:
       - apollo-utilities
 
-  /@apollo/react-hooks@3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0):
+  /@apollo/react-hooks@3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2):
     resolution: {integrity: sha512-y0CJ393DLxIIkksRup4nt+vSjxalbZBXnnXxYbviq/woj+zKa431zy0yT4LqyRKpFy9ahMIwxBnBwfwIoupqLQ==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -4057,23 +4057,23 @@ packages:
       '@wry/equality': 0.1.11
       apollo-client: 2.6.10(graphql@14.3.1)
       graphql: 14.3.1
-      react-dom: 16.14.0
+      react-dom: 17.0.2
       ts-invariant: 0.4.4
       tslib: 1.14.1
     transitivePeerDependencies:
       - apollo-utilities
     dev: false
 
-  /@apollo/react-ssr@3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0):
+  /@apollo/react-ssr@3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-wuLPkKlctNn3u8EU8rlECyktpOUCeekFfb0KhIKknpGY6Lza2Qu0bThx7D9MIbVEzhKadNNrzLcpk0Y8/5UuWg==}
     peerDependencies:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@16.14.0)
-      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0)
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@17.0.2)
+      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       tslib: 1.14.1
     transitivePeerDependencies:
       - '@types/react'
@@ -4082,16 +4082,16 @@ packages:
       - graphql
     dev: false
 
-  /@apollo/react-ssr@3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@apollo/react-ssr@3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-wuLPkKlctNn3u8EU8rlECyktpOUCeekFfb0KhIKknpGY6Lza2Qu0bThx7D9MIbVEzhKadNNrzLcpk0Y8/5UuWg==}
     peerDependencies:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@16.14.0)
-      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@17.0.2)
+      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       tslib: 1.14.1
     transitivePeerDependencies:
       - '@types/react'
@@ -4100,15 +4100,15 @@ packages:
       - graphql
     dev: false
 
-  /@apollo/react-ssr@3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0):
+  /@apollo/react-ssr@3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2):
     resolution: {integrity: sha512-wuLPkKlctNn3u8EU8rlECyktpOUCeekFfb0KhIKknpGY6Lza2Qu0bThx7D9MIbVEzhKadNNrzLcpk0Y8/5UuWg==}
     peerDependencies:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
       '@apollo/react-common': 3.1.4(apollo-client@2.6.10)(graphql@14.3.1)
-      '@apollo/react-hooks': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0)
-      react-dom: 16.14.0
+      '@apollo/react-hooks': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2)
+      react-dom: 17.0.2
       tslib: 1.14.1
     transitivePeerDependencies:
       - '@types/react'
@@ -4117,7 +4117,7 @@ packages:
       - graphql
     dev: false
 
-  /@apollo/react-testing@3.1.4(@types/react@17.0.5)(apollo-cache-inmemory@1.6.6)(apollo-client@2.6.10)(react@16.14.0):
+  /@apollo/react-testing@3.1.4(@types/react@17.0.5)(apollo-cache-inmemory@1.6.6)(apollo-client@2.6.10)(react@17.0.2):
     resolution: {integrity: sha512-1eKjN36UfIAnBVmfLbl12vQ/eCjTqYdaU95chGIQzT2uHd5BnasJu0z+MwXBrEs57A9WY9mFvLZxdjzQJXaacA==}
     peerDependencies:
       apollo-cache-inmemory: ^1.6.2
@@ -4127,17 +4127,17 @@ packages:
       graphql: ^14.3.1
       react: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@17.0.2)
       apollo-cache-inmemory: 1.6.6
       apollo-client: 2.6.10
       fast-json-stable-stringify: 2.1.0
-      react: 16.14.0
+      react: 17.0.2
       tslib: 1.14.1
     transitivePeerDependencies:
       - '@types/react'
     dev: false
 
-  /@apollo/react-testing@3.1.4(@types/react@17.0.5)(react@16.14.0):
+  /@apollo/react-testing@3.1.4(@types/react@17.0.5)(react@17.0.2):
     resolution: {integrity: sha512-1eKjN36UfIAnBVmfLbl12vQ/eCjTqYdaU95chGIQzT2uHd5BnasJu0z+MwXBrEs57A9WY9mFvLZxdjzQJXaacA==}
     peerDependencies:
       apollo-cache-inmemory: ^1.6.2
@@ -4147,9 +4147,9 @@ packages:
       graphql: ^14.3.1
       react: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@17.0.2)
       fast-json-stable-stringify: 2.1.0
-      react: 16.14.0
+      react: 17.0.2
       tslib: 1.14.1
     transitivePeerDependencies:
       - '@types/react'
@@ -5980,7 +5980,7 @@ packages:
       '@emotion/weak-memoize': 0.2.5
     dev: true
 
-  /@emotion/core@10.3.1(react@16.14.0):
+  /@emotion/core@10.3.1(react@17.0.2):
     resolution: {integrity: sha512-447aUEjPIm0MnE6QYIaFz9VQOHSXf4Iu6EWOIqq11EAPqinkSZmfymPTmlOE3QjLv846lH4JVZBUOtwGbuQoww==}
     peerDependencies:
       react: '>=16.3.0'
@@ -5991,7 +5991,7 @@ packages:
       '@emotion/serialize': 0.11.16
       '@emotion/sheet': 0.9.4
       '@emotion/utils': 0.11.3
-      react: 16.14.0
+      react: 17.0.2
     dev: true
 
   /@emotion/css@10.0.27:
@@ -6030,30 +6030,30 @@ packages:
     resolution: {integrity: sha512-zM9PFmgVSqBw4zL101Q0HrBVTGmpAxFZH/pYx/cjJT5advXguvcgjHFTCaIO3enL/xr89vK2bh0Mfyj9aa0ANA==}
     dev: true
 
-  /@emotion/styled-base@10.3.0(@emotion/core@10.3.1)(react@16.14.0):
+  /@emotion/styled-base@10.3.0(@emotion/core@10.3.1)(react@17.0.2):
     resolution: {integrity: sha512-PBRqsVKR7QRNkmfH78hTSSwHWcwDpecH9W6heujWAcyp2wdz/64PP73s7fWS1dIPm8/Exc8JAzYS8dEWXjv60w==}
     peerDependencies:
       '@emotion/core': ^10.0.28
       react: '>=16.3.0'
     dependencies:
       '@babel/runtime': 7.21.0
-      '@emotion/core': 10.3.1(react@16.14.0)
+      '@emotion/core': 10.3.1(react@17.0.2)
       '@emotion/is-prop-valid': 0.8.8
       '@emotion/serialize': 0.11.16
       '@emotion/utils': 0.11.3
-      react: 16.14.0
+      react: 17.0.2
     dev: true
 
-  /@emotion/styled@10.3.0(@emotion/core@10.3.1)(react@16.14.0):
+  /@emotion/styled@10.3.0(@emotion/core@10.3.1)(react@17.0.2):
     resolution: {integrity: sha512-GgcUpXBBEU5ido+/p/mCT2/Xx+Oqmp9JzQRuC+a4lYM4i4LBBn/dWvc0rQ19N9ObA8/T4NWMrPNe79kMBDJqoQ==}
     peerDependencies:
       '@emotion/core': ^10.0.27
       react: '>=16.3.0'
     dependencies:
-      '@emotion/core': 10.3.1(react@16.14.0)
-      '@emotion/styled-base': 10.3.0(@emotion/core@10.3.1)(react@16.14.0)
+      '@emotion/core': 10.3.1(react@17.0.2)
+      '@emotion/styled-base': 10.3.0(@emotion/core@10.3.1)(react@17.0.2)
       babel-plugin-emotion: 10.2.2
-      react: 16.14.0
+      react: 17.0.2
     dev: true
 
   /@emotion/stylis@0.8.5:
@@ -8010,13 +8010,13 @@ packages:
     resolution: {integrity: sha512-HFJmkpqmNKtOtmF84/S3omk6wycvweuB/7/u6P5am6zH6rKPOmqf3/kUHYfcElIdYsI0CJdio/79fFu8mSdKRQ==}
     dev: false
 
-  /@kogito-tooling/editor@0.10.0(react-dom@16.14.0)(react@16.14.0):
+  /@kogito-tooling/editor@0.10.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-ej4ykvXjsRcS7oSBTcZcWoxClNgtrcoWi6e46r1OCzLTq1b66otSlmoCAj64kb4VGevHArHmyjRjvkNl0xXUfQ==}
     dependencies:
       '@kogito-tooling/backend': 0.10.0
       '@kogito-tooling/envelope': 0.10.0
       '@kogito-tooling/envelope-bus': 0.10.0
-      '@kogito-tooling/guided-tour': 0.10.0(react-dom@16.14.0)(react@16.14.0)
+      '@kogito-tooling/guided-tour': 0.10.0(react-dom@17.0.2)(react@17.0.2)
       '@kogito-tooling/i18n': 0.10.0
       '@kogito-tooling/keyboard-shortcuts': 0.10.0
       '@kogito-tooling/notifications': 0.10.0
@@ -8045,7 +8045,7 @@ packages:
       glob: 7.2.3
     dev: false
 
-  /@kogito-tooling/guided-tour@0.10.0(react-dom@16.14.0)(react@16.14.0):
+  /@kogito-tooling/guided-tour@0.10.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-eG98HFvMDh9yM/Uyza3UG0O/spwJDdJ4KB1oOP8v5iR2jLorpWwvCAMFuUYTkjXX2ALcj7vKARD/gE0CtrTuAA==}
     peerDependencies:
       react: 16.12.0
@@ -8054,8 +8054,8 @@ packages:
       '@kogito-tooling/envelope-bus': 0.10.0
       '@kogito-tooling/i18n': 0.10.0
       '@kogito-tooling/i18n-common-dictionary': 0.10.0
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     dev: false
 
   /@kogito-tooling/i18n-common-dictionary@0.10.0:
@@ -8075,11 +8075,11 @@ packages:
       '@kogito-tooling/envelope-bus': 0.10.0
     dev: false
 
-  /@kogito-tooling/kie-bc-editors@0.10.0(react-dom@16.14.0)(react@16.14.0):
+  /@kogito-tooling/kie-bc-editors@0.10.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-/u/xL+iPnEYHM6EaoRfRFxaVof7/s9eGjESjTh7hyJPjODgJa7+A31REhlF+qwCEInSSFsD1vS7oiwMRaYRAqA==}
     dependencies:
       '@kogito-tooling/backend': 0.10.0
-      '@kogito-tooling/editor': 0.10.0(react-dom@16.14.0)(react@16.14.0)
+      '@kogito-tooling/editor': 0.10.0(react-dom@17.0.2)(react@17.0.2)
       '@kogito-tooling/i18n': 0.10.0
       '@kogito-tooling/pmml-editor-marshaller': 0.10.0
     transitivePeerDependencies:
@@ -8089,13 +8089,13 @@ packages:
       - supports-color
     dev: false
 
-  /@kogito-tooling/kie-editors-standalone@0.10.0(react-dom@16.14.0)(react@16.14.0):
+  /@kogito-tooling/kie-editors-standalone@0.10.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-bgtpsMJodiI4kGtpKloi8GAzU7nka8OR8SD4qDTQVC0EW9E8C/mvXN1HenrW3VmbTOzYAV6esP5j2Z3g+GKk4g==}
     dependencies:
-      '@kogito-tooling/editor': 0.10.0(react-dom@16.14.0)(react@16.14.0)
+      '@kogito-tooling/editor': 0.10.0(react-dom@17.0.2)(react@17.0.2)
       '@kogito-tooling/external-assets-base': 0.10.0
       '@kogito-tooling/i18n': 0.10.0
-      '@kogito-tooling/kie-bc-editors': 0.10.0(react-dom@16.14.0)(react@16.14.0)
+      '@kogito-tooling/kie-bc-editors': 0.10.0(react-dom@17.0.2)(react@17.0.2)
     transitivePeerDependencies:
       - debug
       - react
@@ -8127,11 +8127,11 @@ packages:
   /@leichtgewicht/ip-codec@2.0.4:
     resolution: {integrity: sha512-Hcv+nVC0kZnQ3tD9GVu5xSMR4VVYOteQIr/hwFPVEvPdlXqgGEuRjiheChHgdM+JyqdgNcmzZOX/tnl0JOiI7A==}
 
-  /@mdx-js/loader@1.6.22(react@16.14.0):
+  /@mdx-js/loader@1.6.22(react@17.0.2):
     resolution: {integrity: sha512-9CjGwy595NaxAYp0hF9B/A0lH6C8Rms97e2JS9d3jVUtILn6pT5i5IV965ra3lIWc7Rs1GG1tBdVF7dCowYe6Q==}
     dependencies:
       '@mdx-js/mdx': 1.6.22
-      '@mdx-js/react': 1.6.22(react@16.14.0)
+      '@mdx-js/react': 1.6.22(react@17.0.2)
       loader-utils: 2.0.0
     transitivePeerDependencies:
       - react
@@ -8164,12 +8164,12 @@ packages:
       - supports-color
     dev: true
 
-  /@mdx-js/react@1.6.22(react@16.14.0):
+  /@mdx-js/react@1.6.22(react@17.0.2):
     resolution: {integrity: sha512-TDoPum4SHdfPiGSAaRBw7ECyI8VaHpK8GJugbJIJuqyh6kzw9ZLJZW3HGL3NNrJGxcAixUvqROm+YuQOo5eXtg==}
     peerDependencies:
       react: ^16.13.1 || ^17.0.0
     dependencies:
-      react: 16.14.0
+      react: 17.0.2
     dev: true
 
   /@mdx-js/util@1.6.22:
@@ -8258,7 +8258,7 @@ packages:
       victory-zoom-container: 36.6.8
     dev: false
 
-  /@patternfly/react-charts@6.94.18(react-dom@16.14.0)(react@16.14.0):
+  /@patternfly/react-charts@6.94.18(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-56WxnZYC3blRX41mW67JaPxJ3YhXViLvwGpEsZrYCccla/rTV8JgKK0gjHnqtzPQiVBfpn+3ewOyNCOR5uRoSw==}
     peerDependencies:
       react: ^16.8 || ^17 || ^18
@@ -8268,25 +8268,25 @@ packages:
       '@patternfly/react-tokens': 4.94.6
       hoist-non-react-statics: 3.3.2
       lodash: 4.17.21
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       tslib: 2.5.0
-      victory-area: 36.6.8(react@16.14.0)
-      victory-axis: 36.6.8(react@16.14.0)
-      victory-bar: 36.6.8(react@16.14.0)
-      victory-chart: 36.6.8(react@16.14.0)
-      victory-core: 36.6.8(react@16.14.0)
-      victory-create-container: 36.6.8(react@16.14.0)
-      victory-cursor-container: 36.6.8(react@16.14.0)
-      victory-group: 36.6.8(react@16.14.0)
-      victory-legend: 36.6.8(react@16.14.0)
-      victory-line: 36.6.8(react@16.14.0)
-      victory-pie: 36.6.8(react@16.14.0)
-      victory-scatter: 36.6.8(react@16.14.0)
-      victory-stack: 36.6.8(react@16.14.0)
-      victory-tooltip: 36.6.8(react@16.14.0)
-      victory-voronoi-container: 36.6.8(react@16.14.0)
-      victory-zoom-container: 36.6.8(react@16.14.0)
+      victory-area: 36.6.8(react@17.0.2)
+      victory-axis: 36.6.8(react@17.0.2)
+      victory-bar: 36.6.8(react@17.0.2)
+      victory-chart: 36.6.8(react@17.0.2)
+      victory-core: 36.6.8(react@17.0.2)
+      victory-create-container: 36.6.8(react@17.0.2)
+      victory-cursor-container: 36.6.8(react@17.0.2)
+      victory-group: 36.6.8(react@17.0.2)
+      victory-legend: 36.6.8(react@17.0.2)
+      victory-line: 36.6.8(react@17.0.2)
+      victory-pie: 36.6.8(react@17.0.2)
+      victory-scatter: 36.6.8(react@17.0.2)
+      victory-stack: 36.6.8(react@17.0.2)
+      victory-tooltip: 36.6.8(react@17.0.2)
+      victory-voronoi-container: 36.6.8(react@17.0.2)
+      victory-zoom-container: 36.6.8(react@17.0.2)
     dev: false
 
   /@patternfly/react-code-editor@4.2.92:
@@ -8305,7 +8305,7 @@ packages:
       tslib: 1.13.0
     dev: false
 
-  /@patternfly/react-code-editor@4.2.92(monaco-editor-webpack-plugin@4.1.2)(monaco-editor@0.27.0)(react-dom@16.14.0)(react-monaco-editor@0.41.2)(react@16.14.0):
+  /@patternfly/react-code-editor@4.2.92(monaco-editor-webpack-plugin@4.1.2)(monaco-editor@0.27.0)(react-dom@17.0.2)(react-monaco-editor@0.41.2)(react@17.0.2):
     resolution: {integrity: sha512-HF2dHIOkSXxllyty/KIYLYFL+oieu3gUpcji64AC859bFPn4hkfBYPJRgLSUkRyZ604dPFk2G5gq1MwBt79Y7Q==}
     peerDependencies:
       monaco-editor: ^0.21.3
@@ -8314,19 +8314,19 @@ packages:
       react-dom: ^16.8.0 || ^17.0.0
       react-monaco-editor: ^0.41.2
     dependencies:
-      '@patternfly/react-core': 4.157.3(react-dom@16.14.0)(react@16.14.0)
-      '@patternfly/react-icons': 4.93.6(react-dom@16.14.0)(react@16.14.0)
+      '@patternfly/react-core': 4.157.3(react-dom@17.0.2)(react@17.0.2)
+      '@patternfly/react-icons': 4.93.6(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-styles': 4.92.6
       monaco-editor: 0.27.0
       monaco-editor-webpack-plugin: 4.1.2(monaco-editor@0.27.0)(webpack@5.79.0)
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-dropzone: 9.0.0(react@16.14.0)
-      react-monaco-editor: 0.41.2(@types/react@17.0.5)(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-dropzone: 9.0.0(react@17.0.2)
+      react-monaco-editor: 0.41.2(@types/react@17.0.5)(react@17.0.2)
       tslib: 1.13.0
     dev: false
 
-  /@patternfly/react-code-editor@4.2.92(react-dom@16.14.0)(react-monaco-editor@0.41.2)(react@16.14.0):
+  /@patternfly/react-code-editor@4.2.92(react-dom@17.0.2)(react-monaco-editor@0.41.2)(react@17.0.2):
     resolution: {integrity: sha512-HF2dHIOkSXxllyty/KIYLYFL+oieu3gUpcji64AC859bFPn4hkfBYPJRgLSUkRyZ604dPFk2G5gq1MwBt79Y7Q==}
     peerDependencies:
       monaco-editor: ^0.21.3
@@ -8335,13 +8335,13 @@ packages:
       react-dom: ^16.8.0 || ^17.0.0
       react-monaco-editor: ^0.41.2
     dependencies:
-      '@patternfly/react-core': 4.157.3(react-dom@16.14.0)(react@16.14.0)
-      '@patternfly/react-icons': 4.93.6(react-dom@16.14.0)(react@16.14.0)
+      '@patternfly/react-core': 4.157.3(react-dom@17.0.2)(react@17.0.2)
+      '@patternfly/react-icons': 4.93.6(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-styles': 4.92.6
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-dropzone: 9.0.0(react@16.14.0)
-      react-monaco-editor: 0.41.2(@types/react@17.0.5)(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-dropzone: 9.0.0(react@17.0.2)
+      react-monaco-editor: 0.41.2(@types/react@17.0.5)(react@17.0.2)
       tslib: 1.13.0
     dev: false
 
@@ -8360,19 +8360,19 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@patternfly/react-core@4.157.3(react-dom@16.14.0)(react@16.14.0):
+  /@patternfly/react-core@4.157.3(react-dom@16.14.0)(react@17.0.2):
     resolution: {integrity: sha512-vP4/lZLTy0U4jmVP7ZO8I7EX1qSyVyFFbay01Pj1pVGHo74gP7yaUFwMvAvURGYmNeWdAhxgIBfYV8VimkSwLg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      '@patternfly/react-icons': 4.93.6(react-dom@16.14.0)(react@16.14.0)
+      '@patternfly/react-icons': 4.93.6(react-dom@16.14.0)(react@17.0.2)
       '@patternfly/react-styles': 4.92.6
       '@patternfly/react-tokens': 4.94.6
       focus-trap: 6.2.2
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-dropzone: 9.0.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 16.14.0(react@17.0.2)
+      react-dropzone: 9.0.0(react@17.0.2)
       tippy.js: 5.1.2
       tslib: 2.5.0
     dev: false
@@ -8401,24 +8401,24 @@ packages:
       react-dom: ^16.8.0 || ^17.0.0
     dev: false
 
-  /@patternfly/react-icons@4.11.17(react-dom@16.14.0)(react@16.14.0):
+  /@patternfly/react-icons@4.11.17(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-T6HriEy2SgVxlQxPL0FTHQqBYdPbaMeEiK4CzIAPQvCuCT3kRUEEGNyG+VVEvc+XU8ndSiTJdOkHaq08onFvsg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     dev: false
 
-  /@patternfly/react-icons@4.11.7(react-dom@16.14.0)(react@16.14.0):
+  /@patternfly/react-icons@4.11.7(react-dom@16.14.0)(react@17.0.2):
     resolution: {integrity: sha512-ZogGLvdM4qkIMblKDWYDEvgTzRN4b1OBKCDdz7fCsCykJSxX9Uvf5H6PAmpy+q8btztCmX8JBBuqvJDfR3693g==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 16.14.0(react@17.0.2)
     dev: false
 
   /@patternfly/react-icons@4.93.6:
@@ -8428,14 +8428,14 @@ packages:
       react-dom: ^16.8 || ^17 || ^18
     dev: false
 
-  /@patternfly/react-icons@4.93.6(react-dom@16.14.0)(react@16.14.0):
+  /@patternfly/react-icons@4.93.6(react-dom@16.14.0)(react@17.0.2):
     resolution: {integrity: sha512-ZrXegc/81oiuTIeWvoHb3nG/eZODbB4rYmekBEsrbiysyO7m/sUFoi/RLvgFINrRoh6YCJqL5fj06Jg6d7jX1g==}
     peerDependencies:
       react: ^16.8 || ^17 || ^18
       react-dom: ^16.8 || ^17 || ^18
     dependencies:
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 16.14.0(react@17.0.2)
     dev: false
 
   /@patternfly/react-icons@4.93.6(react-dom@17.0.2)(react@17.0.2):
@@ -8470,19 +8470,19 @@ packages:
       tslib: 1.13.0
     dev: false
 
-  /@patternfly/react-table@4.29.0(react-dom@16.14.0)(react@16.14.0):
+  /@patternfly/react-table@4.29.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-VJL/Y9MKO2YfCZRTK7ZIaDT8ow6pGwNFkkNsuZWN1Fkk/s5Z7M0bkceNo+kHDUGV/pnWFl8vsDYp9yXU1qXktg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      '@patternfly/react-core': 4.157.3(react-dom@16.14.0)(react@16.14.0)
-      '@patternfly/react-icons': 4.93.6(react-dom@16.14.0)(react@16.14.0)
+      '@patternfly/react-core': 4.157.3(react-dom@17.0.2)(react@17.0.2)
+      '@patternfly/react-icons': 4.93.6(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-styles': 4.92.6
       '@patternfly/react-tokens': 4.94.6
       lodash: 4.17.21
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       tslib: 1.13.0
     dev: false
 
@@ -8687,7 +8687,7 @@ packages:
     resolution: {integrity: sha512-sXXKG+uL9IrKqViTtao2Ws6dy0znu9sOaP1di/jKGW1M6VssO8vlpXCQcpZ+jisQ1tTFAC5Jo/EOzFbggBagFQ==}
     dev: false
 
-  /@storybook/addon-a11y@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/addon-a11y@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-y125LDx5VR6JmiHB6/0RHWudwhe9QcFXqoAqGqWIj4zRv0kb9AyDPDtWvtDOSImCDXIPRmd8P05xTOnYH0ET3w==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -8698,20 +8698,20 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/channels': 6.4.22
       '@storybook/client-logger': 6.4.22
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       axe-core: 4.6.3
       core-js: 3.29.0
       global: 4.4.0
       lodash: 4.17.21
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       react-sizeme: 3.0.2
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
@@ -8720,7 +8720,7 @@ packages:
       - '@types/react'
     dev: true
 
-  /@storybook/addon-actions@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/addon-actions@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-t2w3iLXFul+R/1ekYxIEzUOZZmvEa7EzUAVAuCHP4i6x0jBnTTZ7sAIUVRaxVREPguH5IqI/2OklYhKanty2Yw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -8731,21 +8731,21 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       core-js: 3.29.0
       fast-deep-equal: 3.1.3
       global: 4.4.0
       lodash: 4.17.21
       polished: 4.2.2
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-inspector: 5.1.1(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-inspector: 5.1.1(react@17.0.2)
       regenerator-runtime: 0.13.11
       telejson: 5.3.3
       ts-dedent: 2.2.0
@@ -8755,7 +8755,7 @@ packages:
       - '@types/react'
     dev: true
 
-  /@storybook/addon-backgrounds@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/addon-backgrounds@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-xQIV1SsjjRXP7P5tUoGKv+pul1EY8lsV7iBXQb5eGbp4AffBj3qoYBSZbX4uiazl21o0MQiQoeIhhaPVaFIIGg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -8766,18 +8766,18 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       core-js: 3.29.0
       global: 4.4.0
       memoizerific: 1.11.3
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
       util-deprecate: 1.0.2
@@ -8793,7 +8793,7 @@ packages:
       global: 4.4.0
     dev: true
 
-  /@storybook/addon-controls@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/addon-controls@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-f/M/W+7UTEUnr/L6scBMvksq+ZA8GTfh3bomE5FtWyOyaFppq9k8daKAvdYNlzXAOrUUsoZVJDgpb20Z2VBiSQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -8804,19 +8804,19 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/core-common': 6.4.22(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/core-common': 6.4.22(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/csf': 0.0.2--canary.87bc651.0
       '@storybook/node-logger': 6.4.22
-      '@storybook/store': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/store': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       core-js: 3.29.0
       lodash: 4.17.21
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       ts-dedent: 2.2.0
     transitivePeerDependencies:
       - '@types/react'
@@ -8828,7 +8828,7 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/addon-docs@6.4.22(@storybook/react@6.4.22)(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/addon-docs@6.4.22(@storybook/react@6.4.22)(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-9j+i+W+BGHJuRe4jUrqk6ubCzP4fc1xgFS2o8pakRiZgPn5kUQPdkticmsyh1XeEJifwhqjKJvkEDrcsleytDA==}
     peerDependencies:
       '@storybook/angular': 6.4.22
@@ -8881,25 +8881,25 @@ packages:
       '@babel/plugin-transform-react-jsx': 7.21.0(@babel/core@7.21.0)
       '@babel/preset-env': 7.20.2(@babel/core@7.21.0)
       '@jest/transform': 26.6.2
-      '@mdx-js/loader': 1.6.22(react@16.14.0)
+      '@mdx-js/loader': 1.6.22(react@17.0.2)
       '@mdx-js/mdx': 1.6.22
-      '@mdx-js/react': 1.6.22(react@16.14.0)
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/builder-webpack4': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+      '@mdx-js/react': 1.6.22(react@17.0.2)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/builder-webpack4': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/client-logger': 6.4.22
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/core': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/core': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
       '@storybook/csf-tools': 6.4.22
       '@storybook/node-logger': 6.4.22
       '@storybook/postinstall': 6.4.22
-      '@storybook/preview-web': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/react': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
-      '@storybook/source-loader': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/store': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/preview-web': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/react': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
+      '@storybook/source-loader': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/store': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       acorn: 7.4.1
       acorn-jsx: 5.3.2(acorn@7.4.1)
       acorn-walk: 7.2.0
@@ -8916,9 +8916,9 @@ packages:
       p-limit: 3.1.0
       prettier: 2.3.0
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-element-to-jsx-string: 14.3.4(react-dom@16.14.0)(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-element-to-jsx-string: 14.3.4(react-dom@17.0.2)(react@17.0.2)
       regenerator-runtime: 0.13.11
       remark-external-links: 8.0.0
       remark-slug: 6.1.0
@@ -8940,7 +8940,7 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/addon-essentials@6.4.22(@storybook/react@6.4.22)(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/addon-essentials@6.4.22(@storybook/react@6.4.22)(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-GTv291fqvWq2wzm7MruBvCGuWaCUiuf7Ca3kzbQ/WqWtve7Y/1PDsqRNQLGZrQxkXU0clXCqY1XtkTrtA3WGFQ==}
     peerDependencies:
       '@babel/core': ^7.9.6
@@ -8965,20 +8965,20 @@ packages:
       webpack:
         optional: true
     dependencies:
-      '@storybook/addon-actions': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/addon-backgrounds': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/addon-controls': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
-      '@storybook/addon-docs': 6.4.22(@storybook/react@6.4.22)(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
-      '@storybook/addon-measure': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/addon-outline': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/addon-toolbars': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/addon-viewport': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addon-actions': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/addon-backgrounds': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/addon-controls': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
+      '@storybook/addon-docs': 6.4.22(@storybook/react@6.4.22)(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
+      '@storybook/addon-measure': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/addon-outline': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/addon-toolbars': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/addon-viewport': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/node-logger': 6.4.22
       core-js: 3.29.0
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
     transitivePeerDependencies:
@@ -9005,7 +9005,7 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/addon-interactions@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/addon-interactions@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-Po/iQLCw1Fw3jkm+twflX1IzVfOHdMBB3fPT8Hx6LZnMmWZk8wwQ3xKW0vT42qVF6Qt4QmxJBZNhYJ4jwpZQRA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9016,19 +9016,19 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/core-common': 6.4.22(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/core-common': 6.4.22(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/instrumenter': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/instrumenter': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       global: 4.4.0
       jest-mock: 27.5.1
       polished: 4.2.2
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       ts-dedent: 2.2.0
     transitivePeerDependencies:
       - '@types/react'
@@ -9040,7 +9040,7 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/addon-links@6.4.22(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/addon-links@6.4.22(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-OSOyDnTXnmcplJHlXTYUTMkrfpLqxtHp2R69IXfAyI1e8WNDb79mXflrEXDA/RSNEliLkqYwCyYby7gDMGds5Q==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9051,23 +9051,23 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/router': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/router': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@types/qs': 6.9.7
       core-js: 3.29.0
       global: 4.4.0
       prop-types: 15.8.1
       qs: 6.11.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
     dev: true
 
-  /@storybook/addon-measure@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/addon-measure@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-CjDXoCNIXxNfXfgyJXPc0McjCcwN1scVNtHa9Ckr+zMjiQ8pPHY7wDZCQsG69KTqcWHiVfxKilI82456bcHYhQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9078,21 +9078,21 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
       core-js: 3.29.0
       global: 4.4.0
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     transitivePeerDependencies:
       - '@types/react'
     dev: true
 
-  /@storybook/addon-outline@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/addon-outline@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-VIMEzvBBRbNnupGU7NV0ahpFFb6nKVRGYWGREjtABdFn2fdKr1YicOHFe/3U7hRGjb5gd+VazSvyUvhaKX9T7Q==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9103,23 +9103,23 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
       core-js: 3.29.0
       global: 4.4.0
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
     transitivePeerDependencies:
       - '@types/react'
     dev: true
 
-  /@storybook/addon-storysource@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/addon-storysource@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-BFZ+/+CytET1CQzRe5qbg6Ca7pUKHa7C+pMQkq8M+tFG1f0Ov2Np5OvqXmZQcJeOpK1HDF0EaJv2ESg0CH8ytw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9130,27 +9130,27 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/router': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/source-loader': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/router': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/source-loader': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       core-js: 3.29.0
       estraverse: 5.3.0
       loader-utils: 2.0.4
       prettier: 2.3.0
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-syntax-highlighter: 13.5.3(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-syntax-highlighter: 13.5.3(react@17.0.2)
       regenerator-runtime: 0.13.11
     transitivePeerDependencies:
       - '@types/react'
     dev: true
 
-  /@storybook/addon-toolbars@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/addon-toolbars@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-FFyj6XDYpBBjcUu6Eyng7R805LUbVclEfydZjNiByAoDVyCde9Hb4sngFxn/T4fKAfBz/32HKVXd5iq4AHYtLg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9161,19 +9161,19 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       core-js: 3.29.0
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
     transitivePeerDependencies:
       - '@types/react'
     dev: true
 
-  /@storybook/addon-viewport@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/addon-viewport@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-6jk0z49LemeTblez5u2bYXYr6U+xIdLbywe3G283+PZCBbEDE6eNYy2d2HDL+LbCLbezJBLYPHPalElphjJIcw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9184,45 +9184,45 @@ packages:
       react-dom:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@storybook/core-events': 6.4.22
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       core-js: 3.29.0
       global: 4.4.0
       memoizerific: 1.11.3
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
     transitivePeerDependencies:
       - '@types/react'
     dev: true
 
-  /@storybook/addons@6.4.22(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/addons@6.4.22(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-P/R+Jsxh7pawKLYo8MtE3QU/ilRFKbtCewV/T1o5U/gm8v7hKQdFz3YdRMAra4QuCY8bQIp7MKd2HrB5aH5a1A==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/channels': 6.4.22
       '@storybook/client-logger': 6.4.22
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/router': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/router': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@types/webpack-env': 1.18.0
       core-js: 3.29.0
       global: 4.4.0
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
     dev: true
 
-  /@storybook/api@6.4.22(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/api@6.4.22(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-lAVI3o2hKupYHXFTt+1nqFct942up5dHH6YD7SZZJGyW21dwKC3HK1IzCsTawq3fZAKkgWFgmOO649hKk60yKg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9232,16 +9232,16 @@ packages:
       '@storybook/client-logger': 6.4.22
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/router': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/router': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/semver': 7.3.2
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       core-js: 3.29.0
       fast-deep-equal: 3.1.3
       global: 4.4.0
       lodash: 4.17.21
       memoizerific: 1.11.3
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       store2: 2.14.2
       telejson: 5.3.3
@@ -9249,7 +9249,7 @@ packages:
       util-deprecate: 1.0.2
     dev: true
 
-  /@storybook/builder-webpack4@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/builder-webpack4@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-A+GgGtKGnBneRFSFkDarUIgUTI8pYFdLmUVKEAGdh2hL+vLXAz9A46sEY7C8LQ85XWa8TKy3OTDxqR4+4iWj3A==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9280,22 +9280,22 @@ packages:
       '@babel/preset-env': 7.20.2(@babel/core@7.21.0)
       '@babel/preset-react': 7.18.6(@babel/core@7.21.0)
       '@babel/preset-typescript': 7.21.0(@babel/core@7.21.0)
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/channel-postmessage': 6.4.22
       '@storybook/channels': 6.4.22
-      '@storybook/client-api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/client-api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/core-common': 6.4.22(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/core-common': 6.4.22(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/core-events': 6.4.22
       '@storybook/node-logger': 6.4.22
-      '@storybook/preview-web': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/router': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/preview-web': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/router': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/semver': 7.3.2
-      '@storybook/store': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/ui': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/store': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/ui': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@types/node': 14.18.37
       '@types/webpack': 4.41.33
       autoprefixer: 9.8.8
@@ -9317,8 +9317,8 @@ packages:
       postcss-flexbugs-fixes: 4.2.1
       postcss-loader: 4.3.0(postcss@7.0.39)(webpack@4.46.0)
       raw-loader: 4.0.2(webpack@4.46.0)
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       stable: 0.1.8
       style-loader: 1.3.0(webpack@4.46.0)
       terser-webpack-plugin: 4.2.3(webpack@4.46.0)
@@ -9371,19 +9371,19 @@ packages:
       util-deprecate: 1.0.2
     dev: true
 
-  /@storybook/client-api@6.4.22(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/client-api@6.4.22(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-sO6HJNtrrdit7dNXQcZMdlmmZG1k6TswH3gAyP/DoYajycrTwSJ6ovkarzkO+0QcJ+etgra4TEdTIXiGHBMe/A==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/channel-postmessage': 6.4.22
       '@storybook/channels': 6.4.22
       '@storybook/client-logger': 6.4.22
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/store': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/store': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@types/qs': 6.9.7
       '@types/webpack-env': 1.18.0
       core-js: 3.29.0
@@ -9392,8 +9392,8 @@ packages:
       lodash: 4.17.21
       memoizerific: 1.11.3
       qs: 6.11.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       store2: 2.14.2
       synchronous-promise: 2.0.17
@@ -9408,7 +9408,7 @@ packages:
       global: 4.4.0
     dev: true
 
-  /@storybook/components@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/components@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-dCbXIJF9orMvH72VtAfCQsYbe57OP7fAADtR6YTwfCw9Sm1jFuZr8JbblQ1HcrXEoJG21nOyad3Hm5EYVb/sBw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9417,7 +9417,7 @@ packages:
       '@popperjs/core': 2.11.6
       '@storybook/client-logger': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@types/color-convert': 2.0.0
       '@types/overlayscrollbars': 1.12.1
       '@types/react-syntax-highlighter': 11.0.5
@@ -9426,17 +9426,17 @@ packages:
       fast-deep-equal: 3.1.3
       global: 4.4.0
       lodash: 4.17.21
-      markdown-to-jsx: 7.1.9(react@16.14.0)
+      markdown-to-jsx: 7.1.9(react@17.0.2)
       memoizerific: 1.11.3
       overlayscrollbars: 1.13.3
       polished: 4.2.2
       prop-types: 15.8.1
-      react: 16.14.0
-      react-colorful: 5.6.1(react-dom@16.14.0)(react@16.14.0)
-      react-dom: 16.14.0(react@16.14.0)
-      react-popper-tooltip: 3.1.1(react-dom@16.14.0)(react@16.14.0)
-      react-syntax-highlighter: 13.5.3(react@16.14.0)
-      react-textarea-autosize: 8.4.0(@types/react@17.0.5)(react@16.14.0)
+      react: 17.0.2
+      react-colorful: 5.6.1(react-dom@17.0.2)(react@17.0.2)
+      react-dom: 17.0.2(react@17.0.2)
+      react-popper-tooltip: 3.1.1(react-dom@17.0.2)(react@17.0.2)
+      react-syntax-highlighter: 13.5.3(react@17.0.2)
+      react-textarea-autosize: 8.4.0(@types/react@17.0.5)(react@17.0.2)
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
       util-deprecate: 1.0.2
@@ -9444,7 +9444,7 @@ packages:
       - '@types/react'
     dev: true
 
-  /@storybook/core-client@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/core-client@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-uHg4yfCBeM6eASSVxStWRVTZrAnb4FT6X6v/xDqr4uXCpCttZLlBzrSDwPBLNNLtCa7ntRicHM8eGKIOD5lMYQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9455,24 +9455,24 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/channel-postmessage': 6.4.22
       '@storybook/channel-websocket': 6.4.22
-      '@storybook/client-api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/client-api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/preview-web': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/store': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/ui': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/preview-web': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/store': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/ui': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       airbnb-js-shims: 2.2.1
       ansi-to-html: 0.6.15
       core-js: 3.29.0
       global: 4.4.0
       lodash: 4.17.21
       qs: 6.11.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
       typescript: 4.9.5
@@ -9482,7 +9482,7 @@ packages:
       - '@types/react'
     dev: true
 
-  /@storybook/core-client@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)(webpack@4.46.0):
+  /@storybook/core-client@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)(webpack@4.46.0):
     resolution: {integrity: sha512-uHg4yfCBeM6eASSVxStWRVTZrAnb4FT6X6v/xDqr4uXCpCttZLlBzrSDwPBLNNLtCa7ntRicHM8eGKIOD5lMYQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9493,24 +9493,24 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/channel-postmessage': 6.4.22
       '@storybook/channel-websocket': 6.4.22
-      '@storybook/client-api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/client-api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/preview-web': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/store': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/ui': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/preview-web': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/store': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/ui': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       airbnb-js-shims: 2.2.1
       ansi-to-html: 0.6.15
       core-js: 3.29.0
       global: 4.4.0
       lodash: 4.17.21
       qs: 6.11.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       ts-dedent: 2.2.0
       typescript: 4.9.5
@@ -9521,7 +9521,7 @@ packages:
       - '@types/react'
     dev: true
 
-  /@storybook/core-common@6.4.22(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/core-common@6.4.22(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-PD3N/FJXPNRHeQS2zdgzYFtqPLdi3MLwAicbnw+U3SokcsspfsAuyYHZOYZgwO8IAEKy6iCc7TpBdiSJZ/vAKQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9574,8 +9574,8 @@ packages:
       picomatch: 2.3.1
       pkg-dir: 5.0.0
       pretty-hrtime: 1.0.3
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       resolve-from: 5.0.0
       slash: 3.0.0
       telejson: 5.3.3
@@ -9597,7 +9597,7 @@ packages:
       core-js: 3.29.0
     dev: true
 
-  /@storybook/core-server@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/core-server@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-wFh3e2fa0un1d4+BJP+nd3FVWUO7uHTqv3OGBfOmzQMKp4NU1zaBNdSQG7Hz6mw0fYPBPZgBjPfsJRwIYLLZyw==}
     peerDependencies:
       '@storybook/builder-webpack5': 6.4.22
@@ -9614,16 +9614,16 @@ packages:
         optional: true
     dependencies:
       '@discoveryjs/json-ext': 0.5.7
-      '@storybook/builder-webpack4': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
-      '@storybook/core-client': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)(webpack@4.46.0)
-      '@storybook/core-common': 6.4.22(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+      '@storybook/builder-webpack4': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
+      '@storybook/core-client': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)(webpack@4.46.0)
+      '@storybook/core-common': 6.4.22(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
       '@storybook/csf-tools': 6.4.22
-      '@storybook/manager-webpack4': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+      '@storybook/manager-webpack4': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/node-logger': 6.4.22
       '@storybook/semver': 7.3.2
-      '@storybook/store': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/store': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@types/node': 14.18.37
       '@types/node-fetch': 2.6.2
       '@types/pretty-hrtime': 1.0.1
@@ -9646,8 +9646,8 @@ packages:
       node-fetch: 2.6.9
       pretty-hrtime: 1.0.3
       prompts: 2.4.2
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       serve-favicon: 2.5.0
       slash: 3.0.0
@@ -9671,7 +9671,7 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/core@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/core@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-KZYJt7GM5NgKFXbPRZZZPEONZ5u/tE/cRbMdkn/zWN3He8+VP+65/tz8hbriI/6m91AWVWkBKrODSkeq59NgRA==}
     peerDependencies:
       '@storybook/builder-webpack5': 6.4.22
@@ -9685,10 +9685,10 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@storybook/core-client': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
-      '@storybook/core-server': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      '@storybook/core-client': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
+      '@storybook/core-server': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       typescript: 4.9.5
     transitivePeerDependencies:
       - '@storybook/manager-webpack5'
@@ -9704,7 +9704,7 @@ packages:
       - webpack-command
     dev: true
 
-  /@storybook/core@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)(webpack@4.46.0):
+  /@storybook/core@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)(webpack@4.46.0):
     resolution: {integrity: sha512-KZYJt7GM5NgKFXbPRZZZPEONZ5u/tE/cRbMdkn/zWN3He8+VP+65/tz8hbriI/6m91AWVWkBKrODSkeq59NgRA==}
     peerDependencies:
       '@storybook/builder-webpack5': 6.4.22
@@ -9718,10 +9718,10 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@storybook/core-client': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)(webpack@4.46.0)
-      '@storybook/core-server': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      '@storybook/core-client': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)(webpack@4.46.0)
+      '@storybook/core-server': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       typescript: 4.9.5
       webpack: 4.46.0
     transitivePeerDependencies:
@@ -9768,10 +9768,10 @@ packages:
       lodash: 4.17.21
     dev: true
 
-  /@storybook/instrumenter@6.4.22(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/instrumenter@6.4.22(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-lPIdS24nZy6Bi733ECAGFKgZV4tkR2jNlJhV1iFwByiH8fBjwRNZYZQXKR7mbvQIt6/P7Yr90Ab38yiDh/22Ow==}
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
       '@storybook/core-events': 6.4.22
       global: 4.4.0
@@ -9780,7 +9780,7 @@ packages:
       - react-dom
     dev: true
 
-  /@storybook/manager-webpack4@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/manager-webpack4@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-nzhDMJYg0vXdcG0ctwE6YFZBX71+5NYaTGkxg3xT7gbgnP1YFXn9gVODvgq3tPb3gcRapjyOIxUa20rV+r8edA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9793,12 +9793,12 @@ packages:
       '@babel/core': 7.21.0
       '@babel/plugin-transform-template-literals': 7.18.9(@babel/core@7.21.0)
       '@babel/preset-react': 7.18.6(@babel/core@7.21.0)
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/core-client': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)(webpack@4.46.0)
-      '@storybook/core-common': 6.4.22(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/core-client': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)(webpack@4.46.0)
+      '@storybook/core-common': 6.4.22(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/node-logger': 6.4.22
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/ui': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/ui': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@types/node': 14.18.37
       '@types/webpack': 4.41.33
       babel-loader: 8.3.0(@babel/core@7.21.0)(webpack@4.46.0)
@@ -9814,8 +9814,8 @@ packages:
       html-webpack-plugin: 4.5.2(webpack@4.46.0)
       node-fetch: 2.6.9
       pnp-webpack-plugin: 1.6.4(typescript@4.9.5)
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       read-pkg-up: 7.0.1
       regenerator-runtime: 0.13.11
       resolve-from: 5.0.0
@@ -9856,25 +9856,25 @@ packages:
       core-js: 3.29.0
     dev: true
 
-  /@storybook/preview-web@6.4.22(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/preview-web@6.4.22(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-sWS+sgvwSvcNY83hDtWUUL75O2l2LY/GTAS0Zp2dh3WkObhtuJ/UehftzPZlZmmv7PCwhb4Q3+tZDKzMlFxnKQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/channel-postmessage': 6.4.22
       '@storybook/client-logger': 6.4.22
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
-      '@storybook/store': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/store': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       ansi-to-html: 0.6.15
       core-js: 3.29.0
       global: 4.4.0
       lodash: 4.17.21
       qs: 6.11.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       synchronous-promise: 2.0.17
       ts-dedent: 2.2.0
@@ -9901,7 +9901,7 @@ packages:
       - supports-color
     dev: true
 
-  /@storybook/react@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5):
+  /@storybook/react@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5):
     resolution: {integrity: sha512-5BFxtiguOcePS5Ty/UoH7C6odmvBYIZutfiy4R3Ua6FYmtxac5vP9r5KjCz1IzZKT8mCf4X+PuK1YvDrPPROgQ==}
     engines: {node: '>=10.13.0'}
     hasBin: true
@@ -9919,14 +9919,14 @@ packages:
       '@babel/preset-flow': 7.18.6
       '@babel/preset-react': 7.18.6
       '@pmmmwh/react-refresh-webpack-plugin': 0.5.10(react-refresh@0.11.0)(webpack@4.46.0)
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/core': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)(webpack@4.46.0)
-      '@storybook/core-common': 6.4.22(react-dom@16.14.0)(react@16.14.0)(typescript@4.9.5)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/core': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)(webpack@4.46.0)
+      '@storybook/core-common': 6.4.22(react-dom@17.0.2)(react@17.0.2)(typescript@4.9.5)
       '@storybook/csf': 0.0.2--canary.87bc651.0
       '@storybook/node-logger': 6.4.22
       '@storybook/react-docgen-typescript-plugin': 1.0.2-canary.253f8c1.0(typescript@4.9.5)(webpack@4.46.0)
       '@storybook/semver': 7.3.2
-      '@storybook/store': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/store': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@types/webpack-env': 1.18.0
       babel-plugin-add-react-displayname: 0.0.5
       babel-plugin-named-asset-import: 0.3.8
@@ -9935,8 +9935,8 @@ packages:
       global: 4.4.0
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       react-refresh: 0.11.0
       read-pkg-up: 7.0.1
       regenerator-runtime: 0.13.11
@@ -9964,7 +9964,7 @@ packages:
       - webpack-plugin-serve
     dev: true
 
-  /@storybook/router@6.4.22(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/router@6.4.22(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-zeuE8ZgFhNerQX8sICQYNYL65QEi3okyzw7ynF58Ud6nRw4fMxSOHcj2T+nZCIU5ufozRL4QWD/Rg9P2s/HtLw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
@@ -9978,10 +9978,10 @@ packages:
       lodash: 4.17.21
       memoizerific: 1.11.3
       qs: 6.11.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-router: 6.8.2(react@16.14.0)
-      react-router-dom: 6.8.2(react-dom@16.14.0)(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-router: 6.8.2(react@17.0.2)
+      react-router-dom: 6.8.2(react-dom@17.0.2)(react@17.0.2)
       ts-dedent: 2.2.0
     dev: true
 
@@ -9994,13 +9994,13 @@ packages:
       find-up: 4.1.0
     dev: true
 
-  /@storybook/source-loader@6.4.22(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/source-loader@6.4.22(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-O4RxqPgRyOgAhssS6q1Rtc8LiOvPBpC1EqhCYWRV3K+D2EjFarfQMpjgPj18hC+QzpUSfzoBZYqsMECewEuLNw==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
       core-js: 3.29.0
@@ -10009,18 +10009,18 @@ packages:
       loader-utils: 2.0.4
       lodash: 4.17.21
       prettier: 2.3.0
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
     dev: true
 
-  /@storybook/store@6.4.22(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/store@6.4.22(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-lrmcZtYJLc2emO+1l6AG4Txm9445K6Pyv9cGAuhOJ9Kks0aYe0YtvMkZVVry0RNNAIv6Ypz72zyKc/QK+tZLAQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
       '@storybook/core-events': 6.4.22
       '@storybook/csf': 0.0.2--canary.87bc651.0
@@ -10029,8 +10029,8 @@ packages:
       global: 4.4.0
       lodash: 4.17.21
       memoizerific: 1.11.3
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       regenerator-runtime: 0.13.11
       slash: 3.0.0
       stable: 0.1.8
@@ -10039,60 +10039,60 @@ packages:
       util-deprecate: 1.0.2
     dev: true
 
-  /@storybook/theming@6.4.22(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/theming@6.4.22(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-NVMKH/jxSPtnMTO4VCN1k47uztq+u9fWv4GSnzq/eezxdGg9ceGL4/lCrNGoNajht9xbrsZ4QvsJ/V2sVGM8wA==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      '@emotion/core': 10.3.1(react@16.14.0)
+      '@emotion/core': 10.3.1(react@17.0.2)
       '@emotion/is-prop-valid': 0.8.8
-      '@emotion/styled': 10.3.0(@emotion/core@10.3.1)(react@16.14.0)
+      '@emotion/styled': 10.3.0(@emotion/core@10.3.1)(react@17.0.2)
       '@storybook/client-logger': 6.4.22
       core-js: 3.29.0
       deep-object-diff: 1.1.9
-      emotion-theming: 10.3.0(@emotion/core@10.3.1)(react@16.14.0)
+      emotion-theming: 10.3.0(@emotion/core@10.3.1)(react@17.0.2)
       global: 4.4.0
       memoizerific: 1.11.3
       polished: 4.2.2
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       resolve-from: 5.0.0
       ts-dedent: 2.2.0
     dev: true
 
-  /@storybook/ui@6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /@storybook/ui@6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-UVjMoyVsqPr+mkS1L7m30O/xrdIEgZ5SCWsvqhmyMUok3F3tRB+6M+OA5Yy+cIVfvObpA7MhxirUT1elCGXsWQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
     dependencies:
-      '@emotion/core': 10.3.1(react@16.14.0)
-      '@storybook/addons': 6.4.22(react-dom@16.14.0)(react@16.14.0)
-      '@storybook/api': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@emotion/core': 10.3.1(react@17.0.2)
+      '@storybook/addons': 6.4.22(react-dom@17.0.2)(react@17.0.2)
+      '@storybook/api': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/channels': 6.4.22
       '@storybook/client-logger': 6.4.22
-      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/components': 6.4.22(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@storybook/core-events': 6.4.22
-      '@storybook/router': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/router': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       '@storybook/semver': 7.3.2
-      '@storybook/theming': 6.4.22(react-dom@16.14.0)(react@16.14.0)
+      '@storybook/theming': 6.4.22(react-dom@17.0.2)(react@17.0.2)
       copy-to-clipboard: 3.3.3
       core-js: 3.29.0
       core-js-pure: 3.29.0
-      downshift: 6.1.12(react@16.14.0)
-      emotion-theming: 10.3.0(@emotion/core@10.3.1)(react@16.14.0)
+      downshift: 6.1.12(react@17.0.2)
+      emotion-theming: 10.3.0(@emotion/core@10.3.1)(react@17.0.2)
       fuse.js: 3.6.1
       global: 4.4.0
       lodash: 4.17.21
-      markdown-to-jsx: 7.1.9(react@16.14.0)
+      markdown-to-jsx: 7.1.9(react@17.0.2)
       memoizerific: 1.11.3
       polished: 4.2.2
       qs: 6.11.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-draggable: 4.4.5(react-dom@16.14.0)(react@16.14.0)
-      react-helmet-async: 1.3.0(react-dom@16.14.0)(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-draggable: 4.4.5(react-dom@17.0.2)(react@17.0.2)
+      react-helmet-async: 1.3.0(react-dom@17.0.2)(react@17.0.2)
       react-sizeme: 3.0.2
       regenerator-runtime: 0.13.11
       resolve-from: 5.0.0
@@ -10137,7 +10137,7 @@ packages:
       redent: 3.0.0
     dev: true
 
-  /@testing-library/react-hooks@3.7.0(react-test-renderer@16.14.0)(react@16.14.0):
+  /@testing-library/react-hooks@3.7.0(react-test-renderer@16.14.0)(react@17.0.2):
     resolution: {integrity: sha512-TwfbY6BWtWIHitjT05sbllyLIProcysC0dF0q1bbDa7OHLC6A6rJOYJwZ13hzfz3O4RtOuInmprBozJRyyo7/g==}
     peerDependencies:
       react: '>=16.9.0'
@@ -10145,11 +10145,11 @@ packages:
     dependencies:
       '@babel/runtime': 7.21.0
       '@types/testing-library__react-hooks': 3.4.1
-      react: 16.14.0
-      react-test-renderer: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-test-renderer: 16.14.0(react@17.0.2)
     dev: false
 
-  /@testing-library/react@10.4.9(react-dom@16.14.0)(react@16.14.0):
+  /@testing-library/react@10.4.9(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-pHZKkqUy0tmiD81afs8xfiuseXfU/N7rAX3iKjeZYje86t9VaB0LrxYVa+OOsvkrveX5jCK3IjajVn2MbePvqA==}
     engines: {node: '>=10'}
     peerDependencies:
@@ -10158,8 +10158,8 @@ packages:
     dependencies:
       '@babel/runtime': 7.21.0
       '@testing-library/dom': 7.31.2
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     dev: false
 
   /@tootallnate/once@1.1.2:
@@ -11350,7 +11350,7 @@ packages:
       react-is: 16.13.1
     dev: true
 
-  /airbnb-prop-types@2.16.0(react@16.14.0):
+  /airbnb-prop-types@2.16.0(react@17.0.2):
     resolution: {integrity: sha512-7WHOFolP/6cS96PhKNrslCLMYAI8yB1Pp6u6XmxozQOiZbsI5ycglZr5cHhBFfuRcQQjzCMith5ZPZdYiJCxUg==}
     peerDependencies:
       react: ^0.14 || ^15.0.0 || ^16.0.0-alpha
@@ -11363,7 +11363,7 @@ packages:
       object.entries: 1.1.6
       prop-types: 15.8.1
       prop-types-exact: 1.2.0
-      react: 16.14.0
+      react: 17.0.2
       react-is: 16.13.1
     dev: true
 
@@ -14608,13 +14608,13 @@ packages:
       lodash-es: 4.17.21
     dev: false
 
-  /dangerously-set-html-content@1.0.13(react@16.14.0):
+  /dangerously-set-html-content@1.0.13(react@17.0.2):
     resolution: {integrity: sha512-C/6Rm8L3BgjFX0ugETpWS3MyrRqTycVbqlSKDhqeoMaZAfCw2Xx1qcj4CYGnZnn61tCJ3JZdHnWCcNEXvhh4sA==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^18.2.0
     dependencies:
-      react: 16.14.0
+      react: 17.0.2
     dev: false
 
   /dashdash@1.14.1:
@@ -15127,7 +15127,7 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /downshift@6.1.12(react@16.14.0):
+  /downshift@6.1.12(react@17.0.2):
     resolution: {integrity: sha512-7XB/iaSJVS4T8wGFT3WRXmSF1UlBHAA40DshZtkrIscIN+VC+Lh363skLxFTvJwtNgHxAMDGEHT4xsyQFWL+UA==}
     peerDependencies:
       react: '>=16.12.0'
@@ -15135,7 +15135,7 @@ packages:
       '@babel/runtime': 7.21.0
       compute-scroll-into-view: 1.0.20
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-is: 17.0.2
       tslib: 2.5.0
     dev: true
@@ -15219,17 +15219,17 @@ packages:
     resolution: {integrity: sha512-/kyM18EfinwXZbno9FyUGeFh87KC8HRQBQGildHZbEuRyWFOmv1U10o9BBp8XVZDVNNuQKyIGIu5ZYAAXJ0V2Q==}
     engines: {node: '>= 4'}
 
-  /emotion-theming@10.3.0(@emotion/core@10.3.1)(react@16.14.0):
+  /emotion-theming@10.3.0(@emotion/core@10.3.1)(react@17.0.2):
     resolution: {integrity: sha512-mXiD2Oj7N9b6+h/dC6oLf9hwxbtKHQjoIqtodEyL8CpkN4F3V4IK/BT4D0C7zSs4BBFOu4UlPJbvvBLa88SGEA==}
     peerDependencies:
       '@emotion/core': ^10.0.27
       react: '>=16.3.0'
     dependencies:
       '@babel/runtime': 7.21.0
-      '@emotion/core': 10.3.1(react@16.14.0)
+      '@emotion/core': 10.3.1(react@17.0.2)
       '@emotion/weak-memoize': 0.2.5
       hoist-non-react-statics: 3.3.2
-      react: 16.14.0
+      react: 17.0.2
     dev: true
 
   /encodeurl@1.0.2:
@@ -15287,7 +15287,28 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
 
-  /enzyme-adapter-react-16@1.15.7(enzyme@3.11.0)(react-dom@16.14.0):
+  /enzyme-adapter-react-16@1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@17.0.2):
+    resolution: {integrity: sha512-LtjKgvlTc/H7adyQcj+aq0P0H07LDL480WQl1gU512IUyaDo/sbOaNDdZsJXYW2XaoPqrLLE9KbZS+X2z6BASw==}
+    peerDependencies:
+      enzyme: ^3.0.0
+      react: ^16.0.0-0
+      react-dom: ^16.0.0-0
+    dependencies:
+      enzyme: 3.11.0
+      enzyme-adapter-utils: 1.14.1(react@17.0.2)
+      enzyme-shallow-equal: 1.0.5
+      has: 1.0.3
+      object.assign: 4.1.4
+      object.values: 1.1.6
+      prop-types: 15.8.1
+      react: 17.0.2
+      react-dom: 16.14.0(react@17.0.2)
+      react-is: 16.13.1
+      react-test-renderer: 16.14.0(react@17.0.2)
+      semver: 5.7.1
+    dev: true
+
+  /enzyme-adapter-react-16@1.15.7(enzyme@3.11.0)(react-dom@17.0.2):
     resolution: {integrity: sha512-LtjKgvlTc/H7adyQcj+aq0P0H07LDL480WQl1gU512IUyaDo/sbOaNDdZsJXYW2XaoPqrLLE9KbZS+X2z6BASw==}
     peerDependencies:
       enzyme: ^3.0.0
@@ -15301,13 +15322,13 @@ packages:
       object.assign: 4.1.4
       object.values: 1.1.6
       prop-types: 15.8.1
-      react-dom: 16.14.0
+      react-dom: 17.0.2
       react-is: 16.13.1
       react-test-renderer: 16.14.0
       semver: 5.7.1
     dev: true
 
-  /enzyme-adapter-react-16@1.15.7(enzyme@3.11.0)(react-dom@16.14.0)(react@16.14.0):
+  /enzyme-adapter-react-16@1.15.7(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-LtjKgvlTc/H7adyQcj+aq0P0H07LDL480WQl1gU512IUyaDo/sbOaNDdZsJXYW2XaoPqrLLE9KbZS+X2z6BASw==}
     peerDependencies:
       enzyme: ^3.0.0
@@ -15315,20 +15336,20 @@ packages:
       react-dom: ^16.0.0-0
     dependencies:
       enzyme: 3.11.0
-      enzyme-adapter-utils: 1.14.1(react@16.14.0)
+      enzyme-adapter-utils: 1.14.1(react@17.0.2)
       enzyme-shallow-equal: 1.0.5
       has: 1.0.3
       object.assign: 4.1.4
       object.values: 1.1.6
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       react-is: 16.13.1
-      react-test-renderer: 16.14.0(react@16.14.0)
+      react-test-renderer: 16.14.0(react@17.0.2)
       semver: 5.7.1
     dev: true
 
-  /enzyme-adapter-react-16@1.15.7(enzyme@3.11.0)(react@16.14.0):
+  /enzyme-adapter-react-16@1.15.7(enzyme@3.11.0)(react@17.0.2):
     resolution: {integrity: sha512-LtjKgvlTc/H7adyQcj+aq0P0H07LDL480WQl1gU512IUyaDo/sbOaNDdZsJXYW2XaoPqrLLE9KbZS+X2z6BASw==}
     peerDependencies:
       enzyme: ^3.0.0
@@ -15336,15 +15357,15 @@ packages:
       react-dom: ^16.0.0-0
     dependencies:
       enzyme: 3.11.0
-      enzyme-adapter-utils: 1.14.1(react@16.14.0)
+      enzyme-adapter-utils: 1.14.1(react@17.0.2)
       enzyme-shallow-equal: 1.0.5
       has: 1.0.3
       object.assign: 4.1.4
       object.values: 1.1.6
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-is: 16.13.1
-      react-test-renderer: 16.14.0(react@16.14.0)
+      react-test-renderer: 16.14.0(react@17.0.2)
       semver: 5.7.1
     dev: true
 
@@ -15362,18 +15383,18 @@ packages:
       semver: 5.7.1
     dev: true
 
-  /enzyme-adapter-utils@1.14.1(react@16.14.0):
+  /enzyme-adapter-utils@1.14.1(react@17.0.2):
     resolution: {integrity: sha512-JZgMPF1QOI7IzBj24EZoDpaeG/p8Os7WeBZWTJydpsH7JRStc7jYbHE4CmNQaLqazaGFyLM8ALWA3IIZvxW3PQ==}
     peerDependencies:
       react: 0.13.x || 0.14.x || ^15.0.0-0 || ^16.0.0-0
     dependencies:
-      airbnb-prop-types: 2.16.0(react@16.14.0)
+      airbnb-prop-types: 2.16.0(react@17.0.2)
       function.prototype.name: 1.1.5
       has: 1.0.3
       object.assign: 4.1.4
       object.fromentries: 2.0.6
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       semver: 5.7.1
     dev: true
 
@@ -16398,14 +16419,14 @@ packages:
       readable-stream: 2.3.8
     dev: true
 
-  /flux@4.0.4(react@16.14.0):
+  /flux@4.0.4(react@17.0.2):
     resolution: {integrity: sha512-NCj3XlayA2UsapRpM7va6wU1+9rE5FIL7qoMcmxWHRzbp0yujihMBm9BBHZ1MDIk5h5o2Bl6eGiCe8rYELAmYw==}
     peerDependencies:
       react: ^15.0.2 || ^16.0.0 || ^17.0.0
     dependencies:
       fbemitter: 3.0.0
       fbjs: 3.0.4
-      react: 16.14.0
+      react: 17.0.2
     transitivePeerDependencies:
       - encoding
     dev: false
@@ -19636,13 +19657,13 @@ packages:
     resolution: {integrity: sha512-8z4efJYk43E0upd0NbVXwgSTQs6cT3T06etieCMEg7dRbzCbxUCK/GHlX8mhHRDcp+OLlHkPKsvqQTCvsRl2cg==}
     dev: true
 
-  /markdown-to-jsx@7.1.9(react@16.14.0):
+  /markdown-to-jsx@7.1.9(react@17.0.2):
     resolution: {integrity: sha512-x4STVIKIJR0mGgZIZ5RyAeQD7FEZd5tS8m/htbcVGlex32J+hlSLj+ExrHCxP6nRKF1EKbcO7i6WhC1GtOpBlA==}
     engines: {node: '>= 10'}
     peerDependencies:
       react: '>= 0.14.0'
     dependencies:
-      react: 16.14.0
+      react: 17.0.2
     dev: true
 
   /md5.js@1.3.5:
@@ -21670,16 +21691,6 @@ packages:
       warning: 4.0.3
     dev: false
 
-  /prop-types-extra@1.1.1(react@16.14.0):
-    resolution: {integrity: sha512-59+AHNnHYCdiC+vMwY52WmvP5dM3QLeoumYuEyceQDi9aEhtwN9zIQ2ZNo25sMyXnbh32h+P1ezDsUpUH3JAew==}
-    peerDependencies:
-      react: '>=0.14.0'
-    dependencies:
-      react: 16.14.0
-      react-is: 16.13.1
-      warning: 4.0.3
-    dev: false
-
   /prop-types-extra@1.1.1(react@17.0.2):
     resolution: {integrity: sha512-59+AHNnHYCdiC+vMwY52WmvP5dM3QLeoumYuEyceQDi9aEhtwN9zIQ2ZNo25sMyXnbh32h+P1ezDsUpUH3JAew==}
     peerDependencies:
@@ -21967,7 +21978,7 @@ packages:
       lodash: 4.17.21
     dev: false
 
-  /react-apollo-hooks@0.5.0(apollo-client@2.6.10)(react@16.14.0):
+  /react-apollo-hooks@0.5.0(apollo-client@2.6.10)(react@17.0.2):
     resolution: {integrity: sha512-Us5KqFe7/c6vY1NaiyfhnD2Pz4lPLTojQXLppShaBVYU/vYvJrRjmj4MzIPXnExXaSfnQ+K2bWDr4lP4efbsRQ==}
     peerDependencies:
       apollo-client: ^2.6.0
@@ -21976,10 +21987,10 @@ packages:
     dependencies:
       apollo-client: 2.6.10
       lodash: 4.17.21
-      react: 16.14.0
+      react: 17.0.2
     dev: false
 
-  /react-apollo@3.1.3(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /react-apollo@3.1.3(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-orCZNoAkgveaK5b75y7fw1MSqSHOU/Wuu9rRFOGmRQBSQVZjvV4DI+hj604rHmuN9+WDABxb5W48wTa0F/xNZQ==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -21988,21 +21999,21 @@ packages:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@16.14.0)
-      '@apollo/react-components': 3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@apollo/react-hoc': 3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
-      '@apollo/react-ssr': 3.1.5(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(react@17.0.2)
+      '@apollo/react-components': 3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@apollo/react-hoc': 3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
+      '@apollo/react-ssr': 3.1.5(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2)
       '@types/react': 17.0.5
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     transitivePeerDependencies:
       - apollo-cache
       - apollo-link
       - apollo-utilities
     dev: false
 
-  /react-apollo@3.1.3(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0):
+  /react-apollo@3.1.3(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2):
     resolution: {integrity: sha512-orCZNoAkgveaK5b75y7fw1MSqSHOU/Wuu9rRFOGmRQBSQVZjvV4DI+hj604rHmuN9+WDABxb5W48wTa0F/xNZQ==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -22012,20 +22023,20 @@ packages:
       react-dom: ^16.8.0
     dependencies:
       '@apollo/react-common': 3.1.4(apollo-client@2.6.10)(graphql@14.3.1)
-      '@apollo/react-components': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0)
-      '@apollo/react-hoc': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0)
-      '@apollo/react-hooks': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0)
-      '@apollo/react-ssr': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@16.14.0)
+      '@apollo/react-components': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2)
+      '@apollo/react-hoc': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2)
+      '@apollo/react-hooks': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2)
+      '@apollo/react-ssr': 3.1.5(apollo-client@2.6.10)(graphql@14.3.1)(react-dom@17.0.2)
       apollo-client: 2.6.10(graphql@14.3.1)
       graphql: 14.3.1
-      react-dom: 16.14.0
+      react-dom: 17.0.2
     transitivePeerDependencies:
       - apollo-cache
       - apollo-link
       - apollo-utilities
     dev: false
 
-  /react-apollo@3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0):
+  /react-apollo@3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-xOxMqxORps+WHrUYbjVHPliviomefOpu5Sh35oO3osuOyPTxvrljdfTLGCggMhcXBsDljtS5Oy4g+ijWg3D4JQ==}
     peerDependencies:
       '@types/react': ^16.8.0
@@ -22034,15 +22045,15 @@ packages:
       react: ^16.8.0
       react-dom: ^16.8.0
     dependencies:
-      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@16.14.0)
-      '@apollo/react-components': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0)
-      '@apollo/react-hoc': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0)
-      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0)
-      '@apollo/react-ssr': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@16.14.0)(react@16.14.0)
+      '@apollo/react-common': 3.1.4(@types/react@17.0.5)(apollo-client@2.6.10)(react@17.0.2)
+      '@apollo/react-components': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2)
+      '@apollo/react-hoc': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2)
+      '@apollo/react-hooks': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2)
+      '@apollo/react-ssr': 3.1.5(@types/react@17.0.5)(apollo-client@2.6.10)(react-dom@17.0.2)(react@17.0.2)
       '@types/react': 17.0.5
       apollo-client: 2.6.10
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     transitivePeerDependencies:
       - apollo-cache
       - apollo-link
@@ -22058,7 +22069,7 @@ packages:
       pure-color: 1.3.0
     dev: false
 
-  /react-calendar@3.9.0(react-dom@16.14.0)(react@16.14.0):
+  /react-calendar@3.9.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-g6RJCEaPovHTiV2bMhBUfm0a1YoMj4bOUpL8hQSLmR1Glhc7lgRLtZBd4mcC4jkoGsb+hv9uA/QH4pZcm5l9lQ==}
     peerDependencies:
       react: ^16.3.0 || ^17.0.0 || ^18.0.0
@@ -22068,11 +22079,11 @@ packages:
       get-user-locale: 1.5.1
       merge-class-names: 1.4.2
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     dev: false
 
-  /react-clock@3.1.0(react-dom@16.14.0)(react@16.14.0):
+  /react-clock@3.1.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-KLV3pDBcETc7lHPPqK6EpRaPS8NA3STAes+zIdfr7IY67vYgYc3brOAnGC9IcgA4X4xNPnLZwwaLJXmHrQ/MnQ==}
     peerDependencies:
       react: ^15.5.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
@@ -22082,21 +22093,21 @@ packages:
       get-user-locale: 1.5.1
       merge-class-names: 1.4.2
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     dev: false
 
-  /react-colorful@5.6.1(react-dom@16.14.0)(react@16.14.0):
+  /react-colorful@5.6.1(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-1exovf0uGTGyq5mXQT0zgQ80uvj2PCwvF8zY1RN9/vbJVSjSo3fsB/4L3ObbF7u70NduSiK4xu4Y6q1MHoUGEw==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
     dependencies:
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     dev: true
 
-  /react-custom-scrollbars@4.2.1(react-dom@16.14.0)(react@16.14.0):
+  /react-custom-scrollbars@4.2.1(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-VtJTUvZ7kPh/auZWIbBRceGPkE30XBYe+HktFxuMWBR2eVQQ+Ur6yFJMoaYcNpyGq22uYJ9Wx4UAEcC0K+LNPQ==}
     peerDependencies:
       react: ^0.14.0 || ^15.0.0 || ^16.0.0
@@ -22105,11 +22116,11 @@ packages:
       dom-css: 2.1.0
       prop-types: 15.8.1
       raf: 3.4.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     dev: false
 
-  /react-date-picker@8.4.0(react-dom@16.14.0)(react@16.14.0):
+  /react-date-picker@8.4.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-zocntugDUyiHmV2Nq1qnsk4kDQuhBLUsDTz7akfIEJ0jVX925w0K5Ai5oZzWFNQOzXL/ITxafmDMuSbzlpBt/A==}
     peerDependencies:
       react: ^16.3.0 || ^17.0.0 || ^18.0.0
@@ -22122,14 +22133,14 @@ packages:
       merge-class-names: 1.4.2
       merge-refs: 1.1.3
       prop-types: 15.8.1
-      react: 16.14.0
-      react-calendar: 3.9.0(react-dom@16.14.0)(react@16.14.0)
-      react-dom: 16.14.0(react@16.14.0)
-      react-fit: 1.5.1(react-dom@16.14.0)(react@16.14.0)
+      react: 17.0.2
+      react-calendar: 3.9.0(react-dom@17.0.2)(react@17.0.2)
+      react-dom: 17.0.2(react@17.0.2)
+      react-fit: 1.5.1(react-dom@17.0.2)(react@17.0.2)
       update-input-width: 1.3.1
     dev: false
 
-  /react-datetime-picker@3.5.0(react-dom@16.14.0)(react@16.14.0):
+  /react-datetime-picker@3.5.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-Df5HQbzUmT+a8IlH4veVZylDgHLbUxjTS+Tv1YoWsJ7La/7K/mAycaSC++bV7myVlfMUrMUPPULavakAsiIFAQ==}
     peerDependencies:
       react: ^16.3.0 || ^17.0.0 || ^18.0.0
@@ -22140,13 +22151,13 @@ packages:
       make-event-props: 1.4.2
       merge-class-names: 1.4.2
       prop-types: 15.8.1
-      react: 16.14.0
-      react-calendar: 3.9.0(react-dom@16.14.0)(react@16.14.0)
-      react-clock: 3.1.0(react-dom@16.14.0)(react@16.14.0)
-      react-date-picker: 8.4.0(react-dom@16.14.0)(react@16.14.0)
-      react-dom: 16.14.0(react@16.14.0)
-      react-fit: 1.5.1(react-dom@16.14.0)(react@16.14.0)
-      react-time-picker: 4.5.0(react-dom@16.14.0)(react@16.14.0)
+      react: 17.0.2
+      react-calendar: 3.9.0(react-dom@17.0.2)(react@17.0.2)
+      react-clock: 3.1.0(react-dom@17.0.2)(react@17.0.2)
+      react-date-picker: 8.4.0(react-dom@17.0.2)(react@17.0.2)
+      react-dom: 17.0.2(react@17.0.2)
+      react-fit: 1.5.1(react-dom@17.0.2)(react@17.0.2)
+      react-time-picker: 4.5.0(react-dom@17.0.2)(react@17.0.2)
     dev: false
 
   /react-docgen-typescript@2.2.2(typescript@4.9.5):
@@ -22176,7 +22187,7 @@ packages:
       - supports-color
     dev: true
 
-  /react-dom@16.14.0:
+  /react-dom@16.14.0(react@17.0.2):
     resolution: {integrity: sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==}
     peerDependencies:
       react: ^16.14.0
@@ -22184,18 +22195,17 @@ packages:
       loose-envify: 1.4.0
       object-assign: 4.1.1
       prop-types: 15.8.1
+      react: 17.0.2
       scheduler: 0.19.1
 
-  /react-dom@16.14.0(react@16.14.0):
-    resolution: {integrity: sha512-1gCeQXDLoIqMgqD3IO2Ah9bnf0w9kzhwN5q4FGnHZ67hBm9yePzB5JJAIQCc8x3pFnNlwFq4RidZggNAAkzWWw==}
+  /react-dom@17.0.2:
+    resolution: {integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==}
     peerDependencies:
-      react: ^16.14.0
+      react: 17.0.2
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
-      prop-types: 15.8.1
-      react: 16.14.0
-      scheduler: 0.19.1
+      scheduler: 0.20.2
 
   /react-dom@17.0.2(react@17.0.2):
     resolution: {integrity: sha512-s4h96KtLDUQlsENhMn1ar8t2bEa+q/YAtj8pPPdIjPDGBDIVNsrD9aXNWqspUe6AzKCIG0C1HZZLqLV7qpOBGA==}
@@ -22206,9 +22216,8 @@ packages:
       object-assign: 4.1.1
       react: 17.0.2
       scheduler: 0.20.2
-    dev: false
 
-  /react-draggable@4.4.5(react-dom@16.14.0)(react@16.14.0):
+  /react-draggable@4.4.5(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-OMHzJdyJbYTZo4uQE393fHcqqPYsEtkjfMgvCHr6rejT+Ezn4OZbNyGH50vv+SunC1RMvwOTSWkEODQLzw1M9g==}
     peerDependencies:
       react: '>= 16.3.0'
@@ -22216,8 +22225,8 @@ packages:
     dependencies:
       clsx: 1.2.1
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
     dev: true
 
   /react-dropzone@9.0.0:
@@ -22230,19 +22239,6 @@ packages:
       file-selector: 0.1.19
       prop-types: 15.8.1
       prop-types-extra: 1.1.1
-    dev: false
-
-  /react-dropzone@9.0.0(react@16.14.0):
-    resolution: {integrity: sha512-wZ2o9B2qkdE3RumWhfyZT9swgJYJPeU5qHEcMU8weYpmLex1eeWX0CC32/Y0VutB+BBi2D+iePV/YZIiB4kZGw==}
-    engines: {node: '>= 6'}
-    peerDependencies:
-      react: '>=0.14.0'
-    dependencies:
-      attr-accept: 1.1.3
-      file-selector: 0.1.19
-      prop-types: 15.8.1
-      prop-types-extra: 1.1.1(react@16.14.0)
-      react: 16.14.0
     dev: false
 
   /react-dropzone@9.0.0(react@17.0.2):
@@ -22258,7 +22254,7 @@ packages:
       react: 17.0.2
     dev: false
 
-  /react-element-to-jsx-string@14.3.4(react-dom@16.14.0)(react@16.14.0):
+  /react-element-to-jsx-string@14.3.4(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-t4ZwvV6vwNxzujDQ+37bspnLwA4JlgUPWhLjBJWsNIDceAf6ZKUTCjdm08cN6WeZ5pTMKiCJkmAYnpmR4Bm+dg==}
     peerDependencies:
       react: ^0.14.8 || ^15.0.1 || ^16.0.0 || ^17.0.1
@@ -22266,15 +22262,15 @@ packages:
     dependencies:
       '@base2/pretty-print-object': 1.0.1
       is-plain-object: 5.0.0
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       react-is: 17.0.2
     dev: true
 
   /react-fast-compare@3.2.0:
     resolution: {integrity: sha512-rtGImPZ0YyLrscKI9xTpV8psd6I8VAtjKCzQDlzyDvqJA8XOW78TXYQwNRNd8g8JZnDu8q9Fu/1v4HPAVwVdHA==}
 
-  /react-fit@1.5.1(react-dom@16.14.0)(react@16.14.0):
+  /react-fit@1.5.1(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-r86m/6GuJa7j6dLYjC7kENBQRBaDMLTU0mBBoqnh42d/Iil9rmWEeOtdB2KEQEUyDQ8rZXojIx8u+gNFJ+9y1w==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
@@ -22284,20 +22280,20 @@ packages:
       '@types/react-dom': 17.0.19
       detect-element-overflow: 1.3.1
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       tiny-warning: 1.0.3
     dev: false
 
-  /react-from-dom@0.6.2(react@16.14.0):
+  /react-from-dom@0.6.2(react@17.0.2):
     resolution: {integrity: sha512-qvWWTL/4xw4k/Dywd41RBpLQUSq97csuv15qrxN+izNeLYlD9wn5W8LspbfYe5CWbaSdkZ72BsaYBPQf2x4VbQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      react: 16.14.0
+      react: 17.0.2
     dev: false
 
-  /react-helmet-async@1.3.0(react-dom@16.14.0)(react@16.14.0):
+  /react-helmet-async@1.3.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-9jZ57/dAn9t3q6hneQS0wukqC2ENOBgMNVEhb/ZG9ZSxUetzVIw4iAmEU38IaVg3QGYauQPhSeUTuIUtFglWpg==}
     peerDependencies:
       react: ^16.6.0 || ^17.0.0 || ^18.0.0
@@ -22306,35 +22302,35 @@ packages:
       '@babel/runtime': 7.21.0
       invariant: 2.2.4
       prop-types: 15.8.1
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       react-fast-compare: 3.2.0
       shallowequal: 1.1.0
     dev: true
 
-  /react-helmet@6.1.0(react@16.14.0):
+  /react-helmet@6.1.0(react@17.0.2):
     resolution: {integrity: sha512-4uMzEY9nlDlgxr61NL3XbKRy1hEkXmKNXhjbAIOVw5vcFrsdYbH2FEwcNyWvWinl103nXgzYNlns9ca+8kFiWw==}
     peerDependencies:
       react: '>=16.3.0'
     dependencies:
       object-assign: 4.1.1
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-fast-compare: 3.2.0
-      react-side-effect: 2.1.2(react@16.14.0)
+      react-side-effect: 2.1.2(react@17.0.2)
     dev: false
 
-  /react-inlinesvg@2.3.0(react@16.14.0):
+  /react-inlinesvg@2.3.0(react@17.0.2):
     resolution: {integrity: sha512-fEGOdDf4k4bcveArbEpj01pJcH8pOCKLxmSj2POFdGvEk5YK0NZVnH6BXpW/PzACHPRsuh1YKAhNZyFnD28oxg==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0
     dependencies:
       exenv: 1.2.2
-      react: 16.14.0
-      react-from-dom: 0.6.2(react@16.14.0)
+      react: 17.0.2
+      react-from-dom: 0.6.2(react@17.0.2)
     dev: false
 
-  /react-inspector@5.1.1(react@16.14.0):
+  /react-inspector@5.1.1(react@17.0.2):
     resolution: {integrity: sha512-GURDaYzoLbW8pMGXwYPDBIv6nqei4kK7LPRZ9q9HCZF54wqXz/dnylBp/kfE9XmekBhHvLDdcYeyIwSrvtOiWg==}
     peerDependencies:
       react: ^16.8.4 || ^17.0.0
@@ -22342,7 +22338,7 @@ packages:
       '@babel/runtime': 7.21.0
       is-dom: 1.1.0
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
     dev: true
 
   /react-is@16.13.1:
@@ -22351,18 +22347,18 @@ packages:
   /react-is@17.0.2:
     resolution: {integrity: sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==}
 
-  /react-json-view@1.21.3(@types/react@17.0.5)(react-dom@16.14.0)(react@16.14.0):
+  /react-json-view@1.21.3(@types/react@17.0.5)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-13p8IREj9/x/Ye4WI/JpjhoIwuzEgUAtgJZNBJckfzJt1qyh24BdTm6UQNGnyTq9dapQdrqvquZTo3dz1X6Cjw==}
     peerDependencies:
       react: ^17.0.0 || ^16.3.0 || ^15.5.4
       react-dom: ^17.0.0 || ^16.3.0 || ^15.5.4
     dependencies:
-      flux: 4.0.4(react@16.14.0)
-      react: 16.14.0
+      flux: 4.0.4(react@17.0.2)
+      react: 17.0.2
       react-base16-styling: 0.6.0
-      react-dom: 16.14.0(react@16.14.0)
+      react-dom: 17.0.2(react@17.0.2)
       react-lifecycles-compat: 3.0.4
-      react-textarea-autosize: 8.4.0(@types/react@17.0.5)(react@16.14.0)
+      react-textarea-autosize: 8.4.0(@types/react@17.0.5)(react@17.0.2)
     transitivePeerDependencies:
       - '@types/react'
       - encoding
@@ -22372,7 +22368,7 @@ packages:
     resolution: {integrity: sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==}
     dev: false
 
-  /react-moment@0.9.7(moment@2.29.4)(react@16.14.0):
+  /react-moment@0.9.7(moment@2.29.4)(react@17.0.2):
     resolution: {integrity: sha512-ifzUrUGF6KRsUN2pRG5k56kO0mJBr8kRkWb0wNvtFIsBIxOuPxhUpL1YlXwpbQCbHq23hUu6A0VEk64HsFxk9g==}
     peerDependencies:
       moment: ^2.24.0
@@ -22380,20 +22376,20 @@ packages:
       react: ^15.6.0 || ^16.0.0
     dependencies:
       moment: 2.29.4
-      react: 16.14.0
+      react: 17.0.2
     dev: false
 
-  /react-moment@0.9.7(react@16.14.0):
+  /react-moment@0.9.7(react@17.0.2):
     resolution: {integrity: sha512-ifzUrUGF6KRsUN2pRG5k56kO0mJBr8kRkWb0wNvtFIsBIxOuPxhUpL1YlXwpbQCbHq23hUu6A0VEk64HsFxk9g==}
     peerDependencies:
       moment: ^2.24.0
       prop-types: ^15.7.2
       react: ^15.6.0 || ^16.0.0
     dependencies:
-      react: 16.14.0
+      react: 17.0.2
     dev: false
 
-  /react-monaco-editor@0.41.2(@types/react@17.0.5)(react@16.14.0):
+  /react-monaco-editor@0.41.2(@types/react@17.0.5)(react@17.0.2):
     resolution: {integrity: sha512-0nNqkkSLtUQDHtcCASv3ccYukD+P2uvFzcFZGh6iWg9RZF3Rj9/+jqsTNo2cl4avkX8JVGC/qnZr/g7hxXTBTQ==}
     peerDependencies:
       '@types/react': ^17.x
@@ -22402,10 +22398,10 @@ packages:
       '@types/react': 17.0.5
       monaco-editor: 0.33.0
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
     dev: false
 
-  /react-motion@0.5.2(react@16.14.0):
+  /react-motion@0.5.2(react@17.0.2):
     resolution: {integrity: sha512-9q3YAvHoUiWlP3cK0v+w1N5Z23HXMj4IF4YuvjvWegWqNPfLXsOBE/V7UvQGpXxHFKRQQcNcVQE31g9SB/6qgQ==}
     peerDependencies:
       react: ^0.14.9 || ^15.3.0 || ^16.0.0
@@ -22413,10 +22409,10 @@ packages:
       performance-now: 0.2.0
       prop-types: 15.8.1
       raf: 3.4.1
-      react: 16.14.0
+      react: 17.0.2
     dev: false
 
-  /react-move@2.9.1(react@16.14.0):
+  /react-move@2.9.1(react@17.0.2):
     resolution: {integrity: sha512-5qKYsJrKKpSypEaaYyR2HBbBgX65htRqKDa8o5OGDkq2VfklmTCbLawtYFpdmcJRqbz4jCYpzo2Rrsazq9HA8Q==}
     peerDependencies:
       react: ^15.4.0 || ^16.0.0
@@ -22425,11 +22421,11 @@ packages:
       d3-interpolate: 1.4.0
       d3-timer: 1.0.10
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-lifecycles-compat: 3.0.4
     dev: false
 
-  /react-popper-tooltip@3.1.1(react-dom@16.14.0)(react@16.14.0):
+  /react-popper-tooltip@3.1.1(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-EnERAnnKRptQBJyaee5GJScWNUKQPDD2ywvzZyUjst/wj5U64C8/CnSYLNEmP2hG0IJ3ZhtDxE8oDN+KOyavXQ==}
     peerDependencies:
       react: ^16.6.0 || ^17.0.0
@@ -22437,12 +22433,12 @@ packages:
     dependencies:
       '@babel/runtime': 7.21.0
       '@popperjs/core': 2.11.6
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-popper: 2.3.0(@popperjs/core@2.11.6)(react-dom@16.14.0)(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-popper: 2.3.0(@popperjs/core@2.11.6)(react-dom@17.0.2)(react@17.0.2)
     dev: true
 
-  /react-popper@2.3.0(@popperjs/core@2.11.6)(react-dom@16.14.0)(react@16.14.0):
+  /react-popper@2.3.0(@popperjs/core@2.11.6)(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-e1hj8lL3uM+sgSR4Lxzn5h1GxBlpa4CQz0XLF8kx4MDrDRWY0Ena4c97PUeSX9i5W3UAfDP0z0FXCTQkoXUl3Q==}
     peerDependencies:
       '@popperjs/core': ^2.0.0
@@ -22450,19 +22446,19 @@ packages:
       react-dom: ^16.8.0 || ^17 || ^18
     dependencies:
       '@popperjs/core': 2.11.6
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
       react-fast-compare: 3.2.0
       warning: 4.0.3
     dev: true
 
-  /react-pure-loaders@3.0.1(react@16.14.0):
+  /react-pure-loaders@3.0.1(react@17.0.2):
     resolution: {integrity: sha512-FwJy+NNCGS0ojtslaY0ubhzayw1zgYCY3nGKLEAMjNhIH5p/ld+MOe/JIdh50dUaYf3rqH4TNlJLPl/iy9UOLA==}
     peerDependencies:
       '@emotion/core': '>=10.0.17'
       react: '>=16'
     dependencies:
-      react: 16.14.0
+      react: 17.0.2
     dev: false
 
   /react-refresh@0.11.0:
@@ -22470,7 +22466,7 @@ packages:
     engines: {node: '>=0.10.0'}
     dev: true
 
-  /react-router-dom@5.3.4(react@16.14.0):
+  /react-router-dom@5.3.4(react@17.0.2):
     resolution: {integrity: sha512-m4EqFMHv/Ih4kpcBCONHbkT68KoAeHN4p3lAGoNryfHi0dMy0kCzEZakiKRsvg5wHZ/JLrLW8o8KomWiz/qbYQ==}
     peerDependencies:
       react: '>=15'
@@ -22479,13 +22475,13 @@ packages:
       history: 4.10.1
       loose-envify: 1.4.0
       prop-types: 15.8.1
-      react: 16.14.0
-      react-router: 5.3.4(react@16.14.0)
+      react: 17.0.2
+      react-router: 5.3.4(react@17.0.2)
       tiny-invariant: 1.3.1
       tiny-warning: 1.0.3
     dev: false
 
-  /react-router-dom@6.8.2(react-dom@16.14.0)(react@16.14.0):
+  /react-router-dom@6.8.2(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-N/oAF1Shd7g4tWy+75IIufCGsHBqT74tnzHQhbiUTYILYF0Blk65cg+HPZqwC+6SqEyx033nKqU7by38v3lBZg==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -22493,12 +22489,12 @@ packages:
       react-dom: '>=16.8'
     dependencies:
       '@remix-run/router': 1.3.3
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-router: 6.8.2(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-router: 6.8.2(react@17.0.2)
     dev: true
 
-  /react-router@5.3.4(react@16.14.0):
+  /react-router@5.3.4(react@17.0.2):
     resolution: {integrity: sha512-Ys9K+ppnJah3QuaRiLxk+jDWOR1MekYQrlytiXxC1RyfbdsZkS5pvKAzCCr031xHixZwpnsYNT5xysdFHQaYsA==}
     peerDependencies:
       react: '>=15'
@@ -22509,28 +22505,28 @@ packages:
       loose-envify: 1.4.0
       path-to-regexp: 1.8.0
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-is: 16.13.1
       tiny-invariant: 1.3.1
       tiny-warning: 1.0.3
     dev: false
 
-  /react-router@6.8.2(react@16.14.0):
+  /react-router@6.8.2(react@17.0.2):
     resolution: {integrity: sha512-lF7S0UmXI5Pd8bmHvMdPKI4u4S5McxmHnzJhrYi9ZQ6wE+DA8JN5BzVC5EEBuduWWDaiJ8u6YhVOCmThBli+rw==}
     engines: {node: '>=14'}
     peerDependencies:
       react: '>=16.8'
     dependencies:
       '@remix-run/router': 1.3.3
-      react: 16.14.0
+      react: 17.0.2
     dev: true
 
-  /react-side-effect@2.1.2(react@16.14.0):
+  /react-side-effect@2.1.2(react@17.0.2):
     resolution: {integrity: sha512-PVjOcvVOyIILrYoyGEpDN3vmYNLdy1CajSFNt4TDsVQC5KpTijDvWVoR+/7Rz2xT978D8/ZtFceXxzsPwZEDvw==}
     peerDependencies:
       react: ^16.3.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      react: 16.14.0
+      react: 17.0.2
     dev: false
 
   /react-sizeme@3.0.2:
@@ -22542,15 +22538,15 @@ packages:
       throttle-debounce: 3.0.1
     dev: true
 
-  /react-svg-pan-zoom-loader@1.4.1(react-dom@16.14.0)(react@16.14.0):
+  /react-svg-pan-zoom-loader@1.4.1(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-C29S/HsHIZMBtSTaIigbYICpPlEYRB19kwIo6K+oGmWDNpM/fYKXWPs+CYS/KoQJZ0FQc/ZlW39Dzb3KXa8Iew==}
     peerDependencies:
       prop-types: ^15.6.2
       react: '>=16.0.0'
     dependencies:
-      react: 16.14.0
+      react: 17.0.2
       react-svg-pan-zoom: 3.12.1
-      react-svgmt: 1.2.0(react-dom@16.14.0)(react@16.14.0)
+      react-svgmt: 1.2.0(react-dom@17.0.2)(react@17.0.2)
     transitivePeerDependencies:
       - react-dom
     dev: false
@@ -22562,7 +22558,7 @@ packages:
       transformation-matrix: 2.15.0
     dev: false
 
-  /react-svgmt@1.2.0(react-dom@16.14.0)(react@16.14.0):
+  /react-svgmt@1.2.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-V+yGwHWAA/fC0OCY1DMGZAjNVRQmQC4g4fpD8nrVTUmKUkhjL3xqorc8B0Z0Vnnx0MRnxenbJ0gfyw1GDdnzdw==}
     peerDependencies:
       prop-types: ^15.6.0
@@ -22570,13 +22566,13 @@ packages:
       react-dom: ^17.0.0
     dependencies:
       d3-ease: 1.0.7
-      react: 16.14.0
-      react-dom: 16.14.0(react@16.14.0)
-      react-motion: 0.5.2(react@16.14.0)
-      react-move: 2.9.1(react@16.14.0)
+      react: 17.0.2
+      react-dom: 17.0.2(react@17.0.2)
+      react-motion: 0.5.2(react@17.0.2)
+      react-move: 2.9.1(react@17.0.2)
     dev: false
 
-  /react-syntax-highlighter@13.5.3(react@16.14.0):
+  /react-syntax-highlighter@13.5.3(react@17.0.2):
     resolution: {integrity: sha512-crPaF+QGPeHNIblxxCdf2Lg936NAHKhNhuMzRL3F9ct6aYXL3NcZtCL0Rms9+qVo6Y1EQLdXGypBNSbPL/r+qg==}
     peerDependencies:
       react: '>= 0.14.0'
@@ -22585,7 +22581,7 @@ packages:
       highlight.js: 10.7.3
       lowlight: 1.20.0
       prismjs: 1.29.0
-      react: 16.14.0
+      react: 17.0.2
       refractor: 3.6.0
     dev: true
 
@@ -22600,31 +22596,31 @@ packages:
       scheduler: 0.19.1
     dev: true
 
-  /react-test-renderer@16.14.0(react@16.14.0):
+  /react-test-renderer@16.14.0(react@17.0.2):
     resolution: {integrity: sha512-L8yPjqPE5CZO6rKsKXRO/rVPiaCOy0tQQJbC+UjPNlobl5mad59lvPjwFsQHTvL03caVDIVr9x9/OSgDe6I5Eg==}
     peerDependencies:
       react: ^16.14.0
     dependencies:
       object-assign: 4.1.1
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-is: 16.13.1
       scheduler: 0.19.1
 
-  /react-textarea-autosize@8.4.0(@types/react@17.0.5)(react@16.14.0):
+  /react-textarea-autosize@8.4.0(@types/react@17.0.5)(react@17.0.2):
     resolution: {integrity: sha512-YrTFaEHLgJsi8sJVYHBzYn+mkP3prGkmP2DKb/tm0t7CLJY5t1Rxix8070LAKb0wby7bl/lf2EeHkuMihMZMwQ==}
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
       '@babel/runtime': 7.21.0
-      react: 16.14.0
-      use-composed-ref: 1.3.0(react@16.14.0)
-      use-latest: 1.2.1(@types/react@17.0.5)(react@16.14.0)
+      react: 17.0.2
+      use-composed-ref: 1.3.0(react@17.0.2)
+      use-latest: 1.2.1(@types/react@17.0.5)(react@17.0.2)
     transitivePeerDependencies:
       - '@types/react'
 
-  /react-time-picker@4.5.0(react-dom@16.14.0)(react@16.14.0):
+  /react-time-picker@4.5.0(react-dom@17.0.2)(react@17.0.2):
     resolution: {integrity: sha512-06ViW8t3hGmkrwGvUtaoZ5ud/uSlQwMexn86eL3uoTV6FnIeRhKq0H944L4bA1ne4xIndO4Fro5tGUMmWUA9gw==}
     peerDependencies:
       react: ^16.3.0 || ^17.0.0 || ^18.0.0
@@ -22636,20 +22632,12 @@ packages:
       merge-class-names: 1.4.2
       merge-refs: 1.1.3
       prop-types: 15.8.1
-      react: 16.14.0
-      react-clock: 3.1.0(react-dom@16.14.0)(react@16.14.0)
-      react-dom: 16.14.0(react@16.14.0)
-      react-fit: 1.5.1(react-dom@16.14.0)(react@16.14.0)
+      react: 17.0.2
+      react-clock: 3.1.0(react-dom@17.0.2)(react@17.0.2)
+      react-dom: 17.0.2(react@17.0.2)
+      react-fit: 1.5.1(react-dom@17.0.2)(react@17.0.2)
       update-input-width: 1.3.1
     dev: false
-
-  /react@16.14.0:
-    resolution: {integrity: sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==}
-    engines: {node: '>=0.10.0'}
-    dependencies:
-      loose-envify: 1.4.0
-      object-assign: 4.1.1
-      prop-types: 15.8.1
 
   /react@17.0.2:
     resolution: {integrity: sha512-gnhPt75i/dq/z3/6q/0asP78D0u592D5L1pd7M8P+dck6Fu/jJeL6iVVK23fptSUZj8Vjf++7wXA8UNclGQcbA==}
@@ -22657,7 +22645,6 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
-    dev: false
 
   /read-pkg-up@7.0.1:
     resolution: {integrity: sha512-zK0TB7Xd6JpCLmlLmufqykGE+/TlOePD6qKClNW7hHDKFh/J7/7gCWGR7joEQEW1bKq3a3yUZSObOoWLFQ4ohg==}
@@ -23295,7 +23282,6 @@ packages:
     dependencies:
       loose-envify: 1.4.0
       object-assign: 4.1.1
-    dev: false
 
   /schema-utils@1.0.0:
     resolution: {integrity: sha512-i27Mic4KovM/lnGsy8whRCHhc7VicJajAjTrYg11K9zfZXnYIt4k5F+kZkwjnrhKzLic/HLU4j11mjsz2G/75g==}
@@ -25011,18 +24997,18 @@ packages:
       vfile: 4.2.1
     dev: true
 
-  /uniforms-bridge-json-schema@3.10.2(react@16.14.0):
+  /uniforms-bridge-json-schema@3.10.2(react@17.0.2):
     resolution: {integrity: sha512-J2RG0WQrMH39M9124lhopXnbR/ycuLJk9IkA/ix9Dxpk1dQ7EuHLg/CeXTeZTeQiF2KZrKMYXxUswEmFh7kIMQ==}
     dependencies:
       invariant: 2.2.4
       lodash: 4.17.21
       tslib: 2.5.0
-      uniforms: 3.10.2(react@16.14.0)
+      uniforms: 3.10.2(react@17.0.2)
     transitivePeerDependencies:
       - react
     dev: false
 
-  /uniforms-patternfly@4.7.9(@patternfly/react-core@4.157.3)(@patternfly/react-icons@4.11.17)(react@16.14.0):
+  /uniforms-patternfly@4.7.9(@patternfly/react-core@4.157.3)(@patternfly/react-icons@4.11.17)(react@17.0.2):
     resolution: {integrity: sha512-HnxiGr/mkBwDoJCX/kAY6pNu6d5rbXG8IkC2zAUCkW3msoEwUB/mKzAXmMSQ76nnBE+O1vj6F28lOuW4n7UFzA==}
     engines: {npm: '>=5.0.0'}
     peerDependencies:
@@ -25030,24 +25016,24 @@ packages:
       '@patternfly/react-icons': ^4.11.0
       react: ^17.0.0 || ^16.8.0
     dependencies:
-      '@patternfly/react-core': 4.157.3(react-dom@16.14.0)(react@16.14.0)
-      '@patternfly/react-icons': 4.11.17(react-dom@16.14.0)(react@16.14.0)
+      '@patternfly/react-core': 4.157.3(react-dom@17.0.2)(react@17.0.2)
+      '@patternfly/react-icons': 4.11.17(react-dom@17.0.2)(react@17.0.2)
       classnames: 2.3.2
       invariant: 2.2.4
       lodash: 4.17.21
-      react: 16.14.0
+      react: 17.0.2
       tslib: 2.5.0
-      uniforms: 3.10.2(react@16.14.0)
+      uniforms: 3.10.2(react@17.0.2)
     dev: false
 
-  /uniforms@3.10.2(react@16.14.0):
+  /uniforms@3.10.2(react@17.0.2):
     resolution: {integrity: sha512-5FIqpAqyWDmDhaNkmXOxuz8dJ09jPg0gTpn13O6WiqtCY+nmVtHK4yGSpFU1UIjwBt9KfbRPFFmCAbYlCyV4bw==}
     peerDependencies:
       react: ^18.0.0 || ^17.0.0 || ^16.8.0
     dependencies:
       invariant: 2.2.4
       lodash: 4.17.21
-      react: 16.14.0
+      react: 17.0.2
       tslib: 2.5.0
     dev: false
 
@@ -25309,14 +25295,14 @@ packages:
       braces: 3.0.2
     dev: true
 
-  /use-composed-ref@1.3.0(react@16.14.0):
+  /use-composed-ref@1.3.0(react@17.0.2):
     resolution: {integrity: sha512-GLMG0Jc/jiKov/3Ulid1wbv3r54K9HlMW29IWcDFPEqFkSO2nS0MuefWgMJpeHQ9YJeXDL3ZUF+P3jdXlZX/cQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
-      react: 16.14.0
+      react: 17.0.2
 
-  /use-isomorphic-layout-effect@1.1.2(@types/react@17.0.5)(react@16.14.0):
+  /use-isomorphic-layout-effect@1.1.2(@types/react@17.0.5)(react@17.0.2):
     resolution: {integrity: sha512-49L8yCO3iGT/ZF9QttjwLF/ZD9Iwto5LnH5LmEdk/6cFmXddqi2ulF0edxTwjj+7mqvpVVGQWvbXZdn32wRSHA==}
     peerDependencies:
       '@types/react': '*'
@@ -25326,9 +25312,9 @@ packages:
         optional: true
     dependencies:
       '@types/react': 17.0.5
-      react: 16.14.0
+      react: 17.0.2
 
-  /use-latest@1.2.1(@types/react@17.0.5)(react@16.14.0):
+  /use-latest@1.2.1(@types/react@17.0.5)(react@17.0.2):
     resolution: {integrity: sha512-xA+AVm/Wlg3e2P/JiItTziwS7FK92LWrDB0p+hgXloIMuVCeJJ8v6f0eeHyPZaJrM+usM1FkFfbNCrJGs8A/zw==}
     peerDependencies:
       '@types/react': '*'
@@ -25338,17 +25324,17 @@ packages:
         optional: true
     dependencies:
       '@types/react': 17.0.5
-      react: 16.14.0
-      use-isomorphic-layout-effect: 1.1.2(@types/react@17.0.5)(react@16.14.0)
+      react: 17.0.2
+      use-isomorphic-layout-effect: 1.1.2(@types/react@17.0.5)(react@17.0.2)
 
-  /use-react-router-breadcrumbs@1.0.5(react-router@5.3.4)(react@16.14.0):
+  /use-react-router-breadcrumbs@1.0.5(react-router@5.3.4)(react@17.0.2):
     resolution: {integrity: sha512-NDMgWr5MdksqnATRvp84RtZ0ABfuztlsgR4VWlsBV0D3TVV6xhbmkhTdV3cWnyRIZqNlMXZhwJhyRHoC6fbAsQ==}
     peerDependencies:
       react: '>=16.8'
       react-router: '>=5.1.0'
     dependencies:
-      react: 16.14.0
-      react-router: 5.3.4(react@16.14.0)
+      react: 17.0.2
+      react-router: 5.3.4(react@17.0.2)
     dev: false
 
   /use@3.1.1:
@@ -25491,15 +25477,15 @@ packages:
       victory-vendor: 36.6.8
     dev: false
 
-  /victory-area@36.6.8(react@16.14.0):
+  /victory-area@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-aIyMuzUqiDcpTCB7FUOYDJvqiDPiluEXLOw6Lh1vrUYmV7CNqMDOIBtTau2vI41Ao0o0YJdCAcyzBib9e3UYbw==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
       victory-vendor: 36.6.8
     dev: false
 
@@ -25513,15 +25499,15 @@ packages:
       victory-core: 36.6.8
     dev: false
 
-  /victory-axis@36.6.8(react@16.14.0):
+  /victory-axis@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-tClVJEay1YOJAh9rRyyLx8pei7Sr1/xTz04bJmfzFoAxFoPBtvgfFwXhfZ1YjGIl7m5Wh2CiYMY3figueLzYtg==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-bar@36.6.8:
@@ -25535,15 +25521,15 @@ packages:
       victory-vendor: 36.6.8
     dev: false
 
-  /victory-bar@36.6.8(react@16.14.0):
+  /victory-bar@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-jLLPm3IW8/2uSLPvQD9bxzXnTraUYBIDTkbZPZy7oHP01OVzP1sj+MMHcINCWcUbyUyLZDL3u8CvViXjS273JQ==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
       victory-vendor: 36.6.8
     dev: false
 
@@ -25558,16 +25544,16 @@ packages:
       victory-core: 36.6.8
     dev: false
 
-  /victory-brush-container@36.6.8(react@16.14.0):
+  /victory-brush-container@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-PN5zQ6kjVwZca1qV41WlV6J2IEyQh+2hykRe6c/wERDotVVbSrX3sJVAzUbN+7x2rrK0CL6a/XUI8jDsWTMM2A==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-fast-compare: 3.2.0
-      victory-core: 36.6.8(react@16.14.0)
+      victory-core: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-chart@36.6.8:
@@ -25584,19 +25570,19 @@ packages:
       victory-shared-events: 36.6.8
     dev: false
 
-  /victory-chart@36.6.8(react@16.14.0):
+  /victory-chart@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-kC1jL63PAmqUrvZNOfwAXNuaIwz4nvXYUuEPu59WRBCOIGDGRgv2wJ1O7O0xYXqDkI57EtAYf9KUK+miEn/Btg==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-fast-compare: 3.2.0
-      victory-axis: 36.6.8(react@16.14.0)
-      victory-core: 36.6.8(react@16.14.0)
-      victory-polar-axis: 36.6.8(react@16.14.0)
-      victory-shared-events: 36.6.8(react@16.14.0)
+      victory-axis: 36.6.8(react@17.0.2)
+      victory-core: 36.6.8(react@17.0.2)
+      victory-polar-axis: 36.6.8(react@17.0.2)
+      victory-shared-events: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-core@36.6.8:
@@ -25610,14 +25596,14 @@ packages:
       victory-vendor: 36.6.8
     dev: false
 
-  /victory-core@36.6.8(react@16.14.0):
+  /victory-core@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-SkyEszZKGyxjqfptfFWYdI22CvCuE9LhkaDpikzIhT2gcE3SuOBO5fk/740XMYE2ZUsJ4Fu/Vy4+8jZi17y44A==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-fast-compare: 3.2.0
       victory-vendor: 36.6.8
     dev: false
@@ -25636,19 +25622,19 @@ packages:
       victory-zoom-container: 36.6.8
     dev: false
 
-  /victory-create-container@36.6.8(react@16.14.0):
+  /victory-create-container@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-H2BsdTbJ/RxxcEg5lzk3TDlihtOs7I/5KaIBP3yosPs702i40mL2qndkRkj08QeiZhkaKfQ2GOUvyP+t7DSdmg==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
-      react: 16.14.0
-      victory-brush-container: 36.6.8(react@16.14.0)
-      victory-core: 36.6.8(react@16.14.0)
-      victory-cursor-container: 36.6.8(react@16.14.0)
-      victory-selection-container: 36.6.8(react@16.14.0)
-      victory-voronoi-container: 36.6.8(react@16.14.0)
-      victory-zoom-container: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-brush-container: 36.6.8(react@17.0.2)
+      victory-core: 36.6.8(react@17.0.2)
+      victory-cursor-container: 36.6.8(react@17.0.2)
+      victory-selection-container: 36.6.8(react@17.0.2)
+      victory-voronoi-container: 36.6.8(react@17.0.2)
+      victory-zoom-container: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-cursor-container@36.6.8:
@@ -25661,15 +25647,15 @@ packages:
       victory-core: 36.6.8
     dev: false
 
-  /victory-cursor-container@36.6.8(react@16.14.0):
+  /victory-cursor-container@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-3WIBRl+7jnZok6syLfW8RK23nliDcoD/JUTN0YZo6bKBqHeFc4+ur3mlwCfghH7sGoxJRYuOJxTd9x2MwM5HQQ==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-group@36.6.8:
@@ -25684,17 +25670,17 @@ packages:
       victory-shared-events: 36.6.8
     dev: false
 
-  /victory-group@36.6.8(react@16.14.0):
+  /victory-group@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-CiupDIGPPWVgwif3ayd8glSlR41mVbuT0Nl0ay9q42w2fiM32syiJAoifIw47X4tL8ow/DXH+/5Pd8eEyA2trA==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-fast-compare: 3.2.0
-      victory-core: 36.6.8(react@16.14.0)
-      victory-shared-events: 36.6.8(react@16.14.0)
+      victory-core: 36.6.8(react@17.0.2)
+      victory-shared-events: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-legend@36.6.8:
@@ -25707,15 +25693,15 @@ packages:
       victory-core: 36.6.8
     dev: false
 
-  /victory-legend@36.6.8(react@16.14.0):
+  /victory-legend@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-OnkzB82Mvt5/1LYNsrfZQoXaVvgfp1rCsFRI3imq257Sh/UPy0/eZehCMQs/SVbU0z0EuIpXokhZb3BBdoJgpw==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-line@36.6.8:
@@ -25729,15 +25715,15 @@ packages:
       victory-vendor: 36.6.8
     dev: false
 
-  /victory-line@36.6.8(react@16.14.0):
+  /victory-line@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-MozOejQRZPdzFaru5zUfqVB4TEff6nZjtQhOs+F5yyhXjLgM89zGX30r3jK5cjVdAPbTu4KPUrwktvlw+AkPRA==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
       victory-vendor: 36.6.8
     dev: false
 
@@ -25752,15 +25738,15 @@ packages:
       victory-vendor: 36.6.8
     dev: false
 
-  /victory-pie@36.6.8(react@16.14.0):
+  /victory-pie@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-dUHWiiKd60dlt7OjFa+YYwanHAkP/T0abzy6O3SFxGre52oeqd8px1EoVhlLKpn4ao8L35koG9mvz6/pGyr8Dw==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
       victory-vendor: 36.6.8
     dev: false
 
@@ -25774,15 +25760,15 @@ packages:
       victory-core: 36.6.8
     dev: false
 
-  /victory-polar-axis@36.6.8(react@16.14.0):
+  /victory-polar-axis@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-aU+Wp5six21POhI9oXeREnZHljpqcmwFHHnliVGrwgRsuc7TAjfXPWVOX9guEFfh6zQW6IZWWWTTLAN/PIEm9w==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-scatter@36.6.8:
@@ -25795,15 +25781,15 @@ packages:
       victory-core: 36.6.8
     dev: false
 
-  /victory-scatter@36.6.8(react@16.14.0):
+  /victory-scatter@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-GKSNneBxIWLsF3eBSTW5IwT5S4YdsfFl4PVCP3/wTa2myfS5DIS9FufEnJp/FEZGalEXYWxeR47rlWqABxAj5A==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-selection-container@36.6.8:
@@ -25816,15 +25802,15 @@ packages:
       victory-core: 36.6.8
     dev: false
 
-  /victory-selection-container@36.6.8(react@16.14.0):
+  /victory-selection-container@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-kudYbSX+o7fr64oeN7+EG/c+lqO22aypxVdCwa6BagAGoqqLR4jXxTqqIdp8tvxCgfCCXxopnTKYr46nubypGw==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-shared-events@36.6.8:
@@ -25839,7 +25825,7 @@ packages:
       victory-core: 36.6.8
     dev: false
 
-  /victory-shared-events@36.6.8(react@16.14.0):
+  /victory-shared-events@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-hWPOVqMD3Sv6Rl1iyO6ibQrwYF9/eLCnRo0T59/Hsid6On0AJJjL9gv0oEIM5fqz7R7zx9PJmMk877IctEOemw==}
     peerDependencies:
       react: '>=16.6.0'
@@ -25847,9 +25833,9 @@ packages:
       json-stringify-safe: 5.0.1
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-fast-compare: 3.2.0
-      victory-core: 36.6.8(react@16.14.0)
+      victory-core: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-stack@36.6.8:
@@ -25864,17 +25850,17 @@ packages:
       victory-shared-events: 36.6.8
     dev: false
 
-  /victory-stack@36.6.8(react@16.14.0):
+  /victory-stack@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-Pkux46IqAealOi0KvqQpaJKKKpHCfZ/sh5IeUKYFy+QKWAjiQjG6hFZeHgr2YaS7OfdbvHhoAdvp03KntWzpbw==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-fast-compare: 3.2.0
-      victory-core: 36.6.8(react@16.14.0)
-      victory-shared-events: 36.6.8(react@16.14.0)
+      victory-core: 36.6.8(react@17.0.2)
+      victory-shared-events: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-tooltip@36.6.8:
@@ -25887,15 +25873,15 @@ packages:
       victory-core: 36.6.8
     dev: false
 
-  /victory-tooltip@36.6.8(react@16.14.0):
+  /victory-tooltip@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-9P+QeAGyDpP0trJnQ1NtnbDhpoJB0Ghc2boYEehvL12p0OzolY9/Nq5SDP0tu5i1BBujwFXtnoCDqt+mOH25fA==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-vendor@36.6.8:
@@ -25930,7 +25916,7 @@ packages:
       victory-tooltip: 36.6.8
     dev: false
 
-  /victory-voronoi-container@36.6.8(react@16.14.0):
+  /victory-voronoi-container@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-x9/OOZdMm4dh38jNhSfBYT0nG6ribsINU0/WNzIn3QcDXFBInsJ7jRySxYmdmk45OdXfbDRwDMqVHk72sWQyUw==}
     peerDependencies:
       react: '>=16.6.0'
@@ -25938,10 +25924,10 @@ packages:
       delaunay-find: 0.0.6
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
+      react: 17.0.2
       react-fast-compare: 3.2.0
-      victory-core: 36.6.8(react@16.14.0)
-      victory-tooltip: 36.6.8(react@16.14.0)
+      victory-core: 36.6.8(react@17.0.2)
+      victory-tooltip: 36.6.8(react@17.0.2)
     dev: false
 
   /victory-zoom-container@36.6.8:
@@ -25954,15 +25940,15 @@ packages:
       victory-core: 36.6.8
     dev: false
 
-  /victory-zoom-container@36.6.8(react@16.14.0):
+  /victory-zoom-container@36.6.8(react@17.0.2):
     resolution: {integrity: sha512-gxX5iJUaxrFFZ2IGS0sQnUI+3Mhj6bVLqtOlQd3Krld+9f/ieuUbxl+P+eIyhQU/VyHSlirIZeOGOXJeYcU9jQ==}
     peerDependencies:
       react: '>=16.6.0'
     dependencies:
       lodash: 4.17.21
       prop-types: 15.8.1
-      react: 16.14.0
-      victory-core: 36.6.8(react@16.14.0)
+      react: 17.0.2
+      victory-core: 36.6.8(react@17.0.2)
     dev: false
 
   /vm-browserify@1.1.2:

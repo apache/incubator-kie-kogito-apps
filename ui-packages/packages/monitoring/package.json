@@ -30,7 +30,7 @@
   "dependencies": {
     "@kogito-apps/components-common": "workspace:*",
     "@kogito-apps/management-console-shared": "workspace:*",
-    "react": "^16.9.0",
+    "react": "^17.0.2",
     "react-dom": "^16.9.0"
   },
   "devDependencies": {

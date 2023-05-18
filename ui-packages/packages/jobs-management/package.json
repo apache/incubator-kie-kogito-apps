@@ -37,8 +37,8 @@
     "react-moment": "0.9.7",
     "@kogito-tooling/envelope": "0.10.0",
     "@kogito-tooling/envelope-bus": "0.10.0",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "axios": "^0.21.1",
     "lodash": "^4.17.15"
   },
