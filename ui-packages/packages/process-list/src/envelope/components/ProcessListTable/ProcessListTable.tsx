@@ -514,7 +514,7 @@ const ProcessListTable: React.FC<ProcessListTableProps & OUIAProps> = ({
                     key={`${pair.id}-parent-${columns[++cellIndex]}`}
                     dataLabel={columns[cellIndex]}
                     {...componentOuiaProps(
-                      columns[cellIndex].toLowerCase(),
+                      columns[cellIndex + 1].toLowerCase(),
                       'process-list-cell',
                       true
                     )}
