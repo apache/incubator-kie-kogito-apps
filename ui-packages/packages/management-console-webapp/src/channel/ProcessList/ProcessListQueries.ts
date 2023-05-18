@@ -21,13 +21,13 @@ import {
   OperationType,
   ProcessInstance
 } from '@kogito-apps/management-console-shared';
-import { GraphQL } from '@kogito-apps/consoles-common';
-import { buildProcessListWhereArgument } from '../../utils/QueryUtils';
 import {
   handleProcessAbort,
   handleProcessMultipleAction,
   handleProcessSkip,
-  handleProcessRetry
+  handleProcessRetry,
+  getProcessInstances,
+  getChildProcessInstances
 } from '@kogito-apps/runtime-gateway-api';
 
 export interface ProcessListQueries {
@@ -64,41 +64,13 @@ export class GraphQLProcessListQueries implements ProcessListQueries {
     filters: ProcessInstanceFilter,
     sortBy: SortBy
   ): Promise<ProcessInstance[]> {
-    return new Promise<ProcessInstance[]>((resolve, reject) => {
-      this.client
-        .query({
-          query: GraphQL.GetProcessInstancesDocument,
-          variables: {
-            where: buildProcessListWhereArgument(filters),
-            offset: offset,
-            limit: limit,
-            orderBy: sortBy
-          },
-          fetchPolicy: 'network-only'
-        })
-        .then((value) => {
-          resolve(value.data.ProcessInstances);
-        })
-        .catch((reason) => reject(reason));
-    });
+    return getProcessInstances(offset, limit, filters, sortBy, this.client);
   }
 
   getChildProcessInstances(
     rootProcessInstanceId: string
   ): Promise<ProcessInstance[]> {
-    return new Promise<ProcessInstance[]>((resolve, reject) => {
-      this.client
-        .query({
-          query: GraphQL.GetChildInstancesDocument,
-          variables: {
-            rootProcessInstanceId
-          }
-        })
-        .then((value) => {
-          resolve(value.data.ProcessInstances);
-        })
-        .catch((reason) => reject(reason));
-    });
+    return getChildProcessInstances(rootProcessInstanceId, this.client);
   }
 
   async handleProcessSkip(processInstance: ProcessInstance): Promise<void> {

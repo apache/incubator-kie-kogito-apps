@@ -24,6 +24,53 @@ import {
   TriggerableNode
 } from '@kogito-apps/management-console-shared';
 import { ApolloClient } from 'apollo-client';
+import { ProcessInstanceFilter, SortBy } from '@kogito-apps/process-list';
+import { buildProcessListWhereArgument } from './QueryUtils';
+
+export const getProcessInstances = async (
+  offset: number,
+  limit: number,
+  filters: ProcessInstanceFilter,
+  sortBy: SortBy,
+  client: ApolloClient<any>
+): Promise<ProcessInstance[]> => {
+  return new Promise<ProcessInstance[]>((resolve, reject) => {
+    client
+      .query({
+        query: GraphQL.GetProcessInstancesDocument,
+        variables: {
+          where: buildProcessListWhereArgument(filters),
+          offset: offset,
+          limit: limit,
+          orderBy: sortBy
+        },
+        fetchPolicy: 'network-only'
+      })
+      .then((value) => {
+        resolve(value.data.ProcessInstances);
+      })
+      .catch((reason) => reject(reason));
+  });
+};
+
+export const getChildProcessInstances = async (
+  rootProcessInstanceId: string,
+  client: ApolloClient<any>
+): Promise<ProcessInstance[]> => {
+  return new Promise<ProcessInstance[]>((resolve, reject) => {
+    client
+      .query({
+        query: GraphQL.GetChildInstancesDocument,
+        variables: {
+          rootProcessInstanceId
+        }
+      })
+      .then((value) => {
+        resolve(value.data.ProcessInstances);
+      })
+      .catch((reason) => reject(reason));
+  });
+};
 
 //Rest Api to Cancel multiple Jobs
 export const performMultipleCancel = async (

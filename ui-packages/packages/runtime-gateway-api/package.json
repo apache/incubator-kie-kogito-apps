@@ -29,6 +29,7 @@
     "codegen": "graphql-codegen"
   },
   "dependencies": {
+<<<<<<< HEAD
     "@kogito-apps/consoles-common": "workspace:*",
     "@kogito-apps/management-console-shared": "workspace:*",
     "apollo-client": "2.6.10",
@@ -36,6 +37,11 @@
     "graphql": "14.3.1",
     "react-apollo": "3.1.3",
     "react-apollo-hooks": "0.5.0"
+=======
+    "@kogito-apps/consoles-common": "^1.0.0",
+    "@kogito-apps/management-console-shared": "^1.0.0",
+    "@kogito-apps/process-list": "^1.0.0"
+>>>>>>> f07614922 (move getProcessInstances getChildProcessInstances to runtime-gateway-api)
   },
   "devDependencies": {
     "@graphql-codegen/add": "^3.1.0",
