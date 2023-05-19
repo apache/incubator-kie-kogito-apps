@@ -13,6 +13,9 @@ importers:
       '@kie-tools/dashbuilder-client':
         specifier: ^0.23.0
         version: 0.23.0
+      '@kie/lock-treatment-tool':
+        specifier: ^0.2.4
+        version: 0.2.4
       '@types/node':
         specifier: ^18.15.11
         version: 18.15.11
@@ -46,9 +49,9 @@ importers:
       lint-staged:
         specifier: ^10.0.7
         version: 10.5.4
-      lock-treatment-tool:
-        specifier: ^0.4.1
-        version: 0.4.2
+      pnpm:
+        specifier: 7.26.3
+        version: 7.26.3
       prettier:
         specifier: ^2.8.1
         version: 2.8.4
@@ -147,7 +150,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       uuid:
         specifier: ^3.3.3
@@ -319,7 +322,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       uuid:
         specifier: ^3.3.3
@@ -434,7 +437,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       uuid:
         specifier: ^3.3.3
@@ -655,7 +658,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       waait:
         specifier: ^1.0.5
@@ -743,7 +746,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       waait:
         specifier: ^1.0.5
@@ -758,7 +761,7 @@ importers:
         specifier: ^3.0.2
         version: 3.0.2
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
 
   packages/form-details:
@@ -858,7 +861,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       uuid:
         specifier: ^3.3.3
@@ -958,7 +961,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       uuid:
         specifier: ^3.3.3
@@ -1052,7 +1055,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       waait:
         specifier: ^1.0.5
@@ -1152,7 +1155,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       waait:
         specifier: ^1.0.5
@@ -1381,7 +1384,7 @@ importers:
         specifier: ^3.2.0
         version: 3.5.2
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       url-loader:
         specifier: ^4.1.1
@@ -1692,7 +1695,7 @@ importers:
         specifier: ^3.2.0
         version: 3.5.2
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       url-loader:
         specifier: ^4.1.1
@@ -2101,7 +2104,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       waait:
         specifier: ^1.0.5
@@ -2195,7 +2198,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       waait:
         specifier: ^1.0.5
@@ -2307,7 +2310,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       waait:
         specifier: ^1.0.5
@@ -2729,7 +2732,7 @@ importers:
         specifier: ^3.2.0
         version: 3.5.2
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       url-loader:
         specifier: ^4.1.1
@@ -3037,7 +3040,7 @@ importers:
         specifier: ^3.2.0
         version: 3.5.2
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       url-loader:
         specifier: ^4.1.1
@@ -3252,7 +3255,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       uuid:
         specifier: ^3.3.3
@@ -3358,7 +3361,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       waait:
         specifier: ^1.0.5
@@ -3551,7 +3554,7 @@ importers:
         specifier: ^3.2.0
         version: 3.5.2
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       url-loader:
         specifier: ^4.1.1
@@ -3669,7 +3672,7 @@ importers:
         specifier: ^26.5.6
         version: 26.5.6(jest@26.6.3)(typescript@4.9.5)
       typescript:
-        specifier: ^4.4.2
+        specifier: ^4.6.2
         version: 4.9.5
       waait:
         specifier: ^1.0.5
@@ -7908,6 +7911,15 @@ packages:
       - debug
       - supports-color
     dev: false
+
+  /@kie/lock-treatment-tool@0.2.4:
+    resolution: {integrity: sha512-6hf/5AgpVehOC96MwYyn0ZZjE6wfACctVocbEYwZN/v8/asfusry1Ci10OW+5LkvTEyuUWt86hulNohBI7sJPg==}
+    engines: {node: '>=12.13.0'}
+    hasBin: true
+    dependencies:
+      line-reader: 0.4.0
+      yargs: 17.7.1
+    dev: true
 
   /@kogito-tooling/backend@0.10.0:
     resolution: {integrity: sha512-rj7ZuHQBS+gmKxVPleXmxf/Dp5e3SDHJX2zu4fka6xxrxzZJzFJz7BSeZUbQ27J/hZ6UkxNsf5h1XcqF35evJw==}
@@ -14018,7 +14030,7 @@ packages:
       postcss-value-parser: 4.2.0
       schema-utils: 3.1.1
       semver: 7.3.8
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
     dev: true
 
   /css-minimizer-webpack-plugin@5.0.0(webpack@5.79.0):
@@ -14052,7 +14064,7 @@ packages:
       schema-utils: 4.0.0
       serialize-javascript: 6.0.1
       source-map: 0.6.1
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
     dev: true
 
   /css-select@4.3.0:
@@ -16095,7 +16107,7 @@ packages:
     dependencies:
       loader-utils: 1.4.2
       schema-utils: 2.7.1
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
     dev: true
 
   /file-loader@6.2.0:
@@ -16127,7 +16139,7 @@ packages:
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.1.1
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
     dev: true
 
   /file-selector@0.1.19:
@@ -17273,7 +17285,7 @@ packages:
       lodash: 4.17.21
       pretty-error: 4.0.0
       tapable: 2.2.1
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
     dev: true
 
   /htmlparser2@6.1.0:
@@ -19144,8 +19156,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /line-reader@0.3.1:
-    resolution: {integrity: sha512-LKJFUlyMHwXI58F6OsCE764y4uF5WyVOmDOrDix//GVcHf+RGs0hZiLHRF+SuX/XjVMo0A3dglFe3wvMoImNbw==}
+  /line-reader@0.4.0:
+    resolution: {integrity: sha512-AYJ8g+eE7v+Ba4s/cuYqzuNulH/WbjdKQ55fvx8fNVn8WQzTpioY6vI1MoxTuMgcHYX3VlmZWbVvnkIqkyJbCA==}
     dev: true
 
   /lines-and-columns@1.2.4:
@@ -19277,16 +19289,6 @@ packages:
     engines: {node: '>=10'}
     dependencies:
       p-locate: 5.0.0
-    dev: true
-
-  /lock-treatment-tool@0.4.2:
-    resolution: {integrity: sha512-+2SOnldKBY346zD7kIFm0GdlJCZ77SbbA6/ND0eArrTtSnZo9mvB2Ry5d9Hm47lOAq6Ws++8Ot+2a0a36cNkaw==}
-    engines: {node: '>=7.6.0'}
-    deprecated: Package no longer supported. Please use @kie/lock-treatment-tool instead.
-    hasBin: true
-    dependencies:
-      line-reader: 0.3.1
-      yargs: 14.2.3
     dev: true
 
   /lodash-es@4.17.21:
@@ -19779,7 +19781,7 @@ packages:
       webpack: ^5.0.0
     dependencies:
       schema-utils: 4.0.0
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
     dev: true
 
   /minimalistic-assert@1.0.1:
@@ -20965,6 +20967,12 @@ packages:
       ts-pnp: 1.2.0(typescript@4.9.5)
     transitivePeerDependencies:
       - typescript
+    dev: true
+
+  /pnpm@7.26.3:
+    resolution: {integrity: sha512-Q/McJBmWoVmHMn5Nzf8Ty3gCPeOqq4fFbIP07Cg4Ygkvk01yu9LdXagydEHuvYIq0c/yU9+7EKeppUuuw1OX6Q==}
+    engines: {node: '>=14.6'}
+    hasBin: true
     dev: true
 
   /polished@4.2.2:
@@ -23138,7 +23146,7 @@ packages:
     dependencies:
       klona: 2.0.6
       neo-async: 2.6.2
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
     dev: true
 
   /sass-loader@9.0.3(sass@1.58.3)(webpack@5.79.0):
@@ -24093,7 +24101,7 @@ packages:
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.1.1
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
     dev: true
 
   /style-to-object@0.3.0:
@@ -24381,7 +24389,7 @@ packages:
       schema-utils: 3.1.1
       serialize-javascript: 6.0.1
       terser: 5.16.5
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
 
   /terser@4.8.1:
     resolution: {integrity: sha512-4GnLC0x667eJG0ewJTa6z/yXrbLGv80D9Ru6HIpCQmO+Q4PfEtBFi0ObSckqwL6VyQv/7ENJieXHo2ANmdQwgw==}
@@ -24670,7 +24678,7 @@ packages:
       micromatch: 4.0.5
       semver: 7.3.8
       typescript: 4.9.5
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
     dev: true
 
   /ts-log@2.2.5:
@@ -25197,7 +25205,7 @@ packages:
       loader-utils: 2.0.4
       mime-types: 2.1.35
       schema-utils: 3.1.1
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
     dev: true
 
   /url-parse-lax@3.0.0:
@@ -26102,7 +26110,7 @@ packages:
       mime-types: 2.1.35
       range-parser: 1.2.1
       schema-utils: 4.0.0
-      webpack: 5.79.0(webpack-cli@4.10.0)
+      webpack: 5.79.0
 
   /webpack-dev-server@4.13.2(webpack-cli@4.10.0)(webpack@5.79.0):
     resolution: {integrity: sha512-5i6TrGBRxG4vnfDpB6qSQGfnB6skGBXNL5/542w2uRGLimX6qeE5BQMLrzIC3JYV/xlGOv+s+hTleI9AZKUQNw==}
@@ -26335,7 +26343,6 @@ packages:
       - '@swc/core'
       - esbuild
       - uglify-js
-    dev: true
 
   /webpack@5.79.0(webpack-cli@4.10.0):
     resolution: {integrity: sha512-3mN4rR2Xq+INd6NnYuL9RC9GAmc1ROPKJoHhrZ4pAjdMFEkJJWrsPw8o2JjCIyQyTu7rTXYn4VG6OpyB3CobZg==}
@@ -26657,13 +26664,6 @@ packages:
       decamelize: 1.2.0
     dev: true
 
-  /yargs-parser@15.0.3:
-    resolution: {integrity: sha512-/MVEVjTXy/cGAjdtQf8dW3V9b97bPN7rNn8ETj6BmAQL7ibC7O1Q9SPJbGjgh3SlwoBNXMzj/ZGIj8mBgl12YA==}
-    dependencies:
-      camelcase: 5.3.1
-      decamelize: 1.2.0
-    dev: true
-
   /yargs-parser@18.1.3:
     resolution: {integrity: sha512-o50j0JeToy/4K6OZcaQmW6lyXXKhq7csREXcDwk2omFPJEwUNOVtJKvmDr9EI1fAJZUyZcRF7kxGBWmRXudrCQ==}
     engines: {node: '>=6'}
@@ -26695,22 +26695,6 @@ packages:
       which-module: 2.0.0
       y18n: 4.0.3
       yargs-parser: 13.1.2
-    dev: true
-
-  /yargs@14.2.3:
-    resolution: {integrity: sha512-ZbotRWhF+lkjijC/VhmOT9wSgyBQ7+zr13+YLkhfsSiTriYsMzkTUFP18pFhWwBeMa5gUc1MzbhrO6/VB7c9Xg==}
-    dependencies:
-      cliui: 5.0.0
-      decamelize: 1.2.0
-      find-up: 3.0.0
-      get-caller-file: 2.0.5
-      require-directory: 2.1.1
-      require-main-filename: 2.0.0
-      set-blocking: 2.0.0
-      string-width: 3.1.0
-      which-module: 2.0.0
-      y18n: 4.0.3
-      yargs-parser: 15.0.3
     dev: true
 
   /yargs@15.4.1:
