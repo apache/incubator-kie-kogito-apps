@@ -1,7 +1,7 @@
 import React from 'react';
 import { configure, mount, shallow } from 'enzyme';
 import DomainExplorerManageColumns from '../DomainExplorerManageColumns';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 import reactApollo from 'react-apollo';
 import { act } from 'react-dom/test-utils';
 
