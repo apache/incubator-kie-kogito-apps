@@ -48,12 +48,15 @@ export const getProcessInstances = async (
           limit: limit,
           orderBy: sortBy
         },
-        fetchPolicy: 'network-only'
+        fetchPolicy: 'network-only',
+        errorPolicy: 'all'
       })
       .then((value) => {
         resolve(value.data.ProcessInstances);
       })
-      .catch((reason) => reject(reason));
+      .catch((reason) => {
+        reject({ errorMessage: JSON.stringify(reason) });
+      });
   });
 };
 
