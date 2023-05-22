@@ -15,13 +15,14 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { ProcessListDriver, ProcessListState } from '../../../api';
+import { ProcessListDriver } from '../../../api';
 import {
   ProcessInstance,
   ProcessInstanceState,
   OrderBy,
   ProcessInstanceFilter,
-  SortBy
+  ProcessListSortBy,
+  ProcessListState
 } from '@kogito-apps/management-console-shared';
 import ProcessListTable from '../ProcessListTable/ProcessListTable';
 import ProcessListToolbar from '../ProcessListToolbar/ProcessListToolbar';
@@ -96,7 +97,9 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
   const [expanded, setExpanded] = React.useState<{ [key: number]: boolean }>(
     {}
   );
-  const [sortBy, setSortBy] = useState<SortBy | ISortBy>(defaultOrderBy);
+  const [sortBy, setSortBy] = useState<ProcessListSortBy | ISortBy>(
+    defaultOrderBy
+  );
   const [selectedInstances, setSelectedInstances] = useState<ProcessInstance[]>(
     []
   );

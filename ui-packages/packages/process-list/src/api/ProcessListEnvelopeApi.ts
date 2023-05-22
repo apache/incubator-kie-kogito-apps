@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-import {
-  SortBy,
-  ProcessInstanceFilter
-} from '@kogito-apps/management-console-shared';
+import { ProcessListState } from '@kogito-apps/management-console-shared';
 export interface ProcessListEnvelopeApi {
   processList__init(
     association: Association,
@@ -35,10 +32,10 @@ export interface QueryPage {
   limit: number;
 }
 
-export interface ProcessListState {
-  filters: ProcessInstanceFilter;
-  sortBy: SortBy;
-}
+// export interface ProcessListState {
+//   filters: ProcessInstanceFilter;
+//   sortBy: ProcessListSortBy;
+// }
 
 export interface ProcessListInitArgs {
   initialState: ProcessListState;

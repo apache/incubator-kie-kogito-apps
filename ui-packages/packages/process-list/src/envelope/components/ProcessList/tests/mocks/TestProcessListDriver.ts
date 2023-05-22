@@ -22,7 +22,7 @@ import {
 import {
   ProcessInstanceFilter,
   ProcessListDriver,
-  SortBy
+  ProcessListSortBy
 } from '../../../../../api';
 
 export default class TestProcessListDriver implements ProcessListDriver {

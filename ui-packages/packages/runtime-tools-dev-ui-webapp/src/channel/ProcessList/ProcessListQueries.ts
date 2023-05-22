@@ -19,7 +19,7 @@ import {
   BulkProcessInstanceActionResponse,
   OperationType,
   ProcessInstance,
-  SortBy,
+  ProcessListSortBy,
   ProcessInstanceFilter
 } from '@kogito-apps/management-console-shared';
 import {
@@ -36,7 +36,7 @@ export interface ProcessListQueries {
     start: number,
     end: number,
     filters: ProcessInstanceFilter,
-    sortBy: SortBy
+    sortBy: ProcessListSortBy
   ): Promise<ProcessInstance[]>;
   getChildProcessInstances(
     rootProcessInstanceId: string
@@ -62,7 +62,7 @@ export class GraphQLProcessListQueries implements ProcessListQueries {
     offset: number,
     limit: number,
     filters: ProcessInstanceFilter,
-    sortBy: SortBy
+    sortBy: ProcessListSortBy
   ): Promise<ProcessInstance[]> {
     return getProcessInstances(offset, limit, filters, sortBy, this.client);
   }

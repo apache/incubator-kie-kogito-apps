@@ -23,7 +23,10 @@ import {
   ProcessInstance,
   TriggerableNode,
   ProcessInstanceFilter,
-  SortBy
+  ProcessListSortBy,
+  JobStatus,
+  Job,
+  JobsSortBy
 } from '@kogito-apps/management-console-shared';
 import { ApolloClient } from 'apollo-client';
 import { buildProcessListWhereArgument } from './QueryUtils';
@@ -32,7 +35,7 @@ export const getProcessInstances = async (
   offset: number,
   limit: number,
   filters: ProcessInstanceFilter,
-  sortBy: SortBy,
+  sortBy: ProcessListSortBy,
   client: ApolloClient<any>
 ): Promise<ProcessInstance[]> => {
   return new Promise<ProcessInstance[]>((resolve, reject) => {
@@ -454,4 +457,28 @@ export const getTriggerableNodes = async (
     .catch((reason) => {
       return reason;
     });
+};
+
+export const getJobsWithFilters = async (
+  offset: number,
+  limit: number,
+  filters: JobStatus[],
+  orderBy: JobsSortBy,
+  client: ApolloClient<any>
+): Promise<Job[]> => {
+  try {
+    const response = await client.query({
+      query: GraphQL.GetJobsWithFiltersDocument,
+      variables: {
+        values: filters,
+        offset: offset,
+        limit: limit,
+        orderBy
+      },
+      fetchPolicy: 'network-only'
+    });
+    return Promise.resolve(response.data.Jobs);
+  } catch (error) {
+    return Promise.reject(error);
+  }
 };

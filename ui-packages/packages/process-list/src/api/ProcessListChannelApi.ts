@@ -19,16 +19,16 @@ import {
   OperationType,
   ProcessInstance,
   ProcessInstanceFilter,
-  SortBy
+  ProcessListSortBy
 } from '@kogito-apps/management-console-shared';
 export interface ProcessListChannelApi {
   processList__initialLoad(
     filter: ProcessInstanceFilter,
-    sortBy: SortBy
+    sortBy: ProcessListSortBy
   ): Promise<void>;
   processList__openProcess(process: ProcessInstance): Promise<void>;
   processList__applyFilter(filter: ProcessInstanceFilter): Promise<void>;
-  processList__applySorting(sortBy: SortBy): Promise<void>;
+  processList__applySorting(sortBy: ProcessListSortBy): Promise<void>;
   processList__handleProcessSkip(
     processInstance: ProcessInstance
   ): Promise<void>;

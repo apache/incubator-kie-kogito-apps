@@ -20,7 +20,7 @@ import {
   OperationType,
   ProcessInstance,
   ProcessInstanceFilter,
-  SortBy
+  ProcessListSortBy
 } from '@kogito-apps/management-console-shared';
 import { ProcessListChannelApi, ProcessListDriver } from '../api';
 
@@ -30,7 +30,10 @@ export default class ProcessListEnvelopeViewDriver
   constructor(
     private readonly channelApi: MessageBusClientApi<ProcessListChannelApi>
   ) {}
-  initialLoad(filter: ProcessInstanceFilter, sortBy: SortBy): Promise<void> {
+  initialLoad(
+    filter: ProcessInstanceFilter,
+    sortBy: ProcessListSortBy
+  ): Promise<void> {
     return this.channelApi.requests.processList__initialLoad(filter, sortBy);
   }
   openProcess(process: ProcessInstance): Promise<void> {
@@ -39,7 +42,7 @@ export default class ProcessListEnvelopeViewDriver
   applyFilter(filter: ProcessInstanceFilter): Promise<void> {
     return this.channelApi.requests.processList__applyFilter(filter);
   }
-  applySorting(sortBy: SortBy): Promise<void> {
+  applySorting(sortBy: ProcessListSortBy): Promise<void> {
     return this.channelApi.requests.processList__applySorting(sortBy);
   }
   handleProcessSkip(processInstance: ProcessInstance): Promise<void> {

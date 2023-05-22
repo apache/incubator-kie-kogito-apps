@@ -18,16 +18,19 @@ import {
   OperationType,
   ProcessInstance,
   ProcessInstanceFilter,
-  SortBy
+  ProcessListSortBy
 } from '@kogito-apps/management-console-shared';
 import { ProcessListQueries } from './ProcessListQueries';
 
 export interface ProcessListGatewayApi {
   processListState: ProcessListState;
-  initialLoad: (filter: ProcessInstanceFilter, sortBy: SortBy) => Promise<void>;
+  initialLoad: (
+    filter: ProcessInstanceFilter,
+    sortBy: ProcessListSortBy
+  ) => Promise<void>;
   openProcess: (process: ProcessInstance) => Promise<void>;
   applyFilter: (filter: ProcessInstanceFilter) => Promise<void>;
-  applySorting: (SortBy: SortBy) => Promise<void>;
+  applySorting: (SortBy: ProcessListSortBy) => Promise<void>;
   handleProcessSkip: (processInstance: ProcessInstance) => Promise<void>;
   handleProcessRetry: (processInstance: ProcessInstance) => Promise<void>;
   handleProcessAbort: (processInstance: ProcessInstance) => Promise<void>;
@@ -45,7 +48,7 @@ export interface ProcessListGatewayApi {
 
 export interface ProcessListState {
   filters: ProcessInstanceFilter;
-  sortBy: SortBy;
+  sortBy: ProcessListSortBy;
 }
 
 export interface OnOpenProcessListener {
@@ -82,7 +85,7 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
 
   initialLoad = (
     filter: ProcessInstanceFilter,
-    sortBy: SortBy
+    sortBy: ProcessListSortBy
   ): Promise<void> => {
     this._ProcessListState.filters = filter;
     this._ProcessListState.sortBy = sortBy;
@@ -94,7 +97,7 @@ export class ProcessListGatewayApiImpl implements ProcessListGatewayApi {
     return Promise.resolve();
   };
 
-  applySorting = (sortBy: SortBy) => {
+  applySorting = (sortBy: ProcessListSortBy) => {
     this._ProcessListState.sortBy = sortBy;
     return Promise.resolve();
   };
