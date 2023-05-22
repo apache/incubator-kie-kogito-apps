@@ -18,14 +18,11 @@ import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
 import {
   BulkProcessInstanceActionResponse,
   OperationType,
-  ProcessInstance
-} from '@kogito-apps/management-console-shared';
-import {
+  ProcessInstance,
   ProcessInstanceFilter,
-  ProcessListChannelApi,
-  ProcessListDriver,
   SortBy
-} from '../api';
+} from '@kogito-apps/management-console-shared';
+import { ProcessListChannelApi, ProcessListDriver } from '../api';
 
 export default class ProcessListEnvelopeViewDriver
   implements ProcessListDriver

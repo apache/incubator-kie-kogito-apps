@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ProcessInstanceFilter, SortBy } from '@kogito-apps/process-list';
 import {
   BulkProcessInstanceActionResponse,
   OperationType,
-  ProcessInstance
+  ProcessInstance,
+  ProcessInstanceFilter,
+  SortBy
 } from '@kogito-apps/management-console-shared';
 import { ProcessListQueries } from './ProcessListQueries';
 

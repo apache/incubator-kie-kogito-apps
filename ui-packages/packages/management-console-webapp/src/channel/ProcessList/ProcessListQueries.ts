@@ -15,11 +15,12 @@
  */
 
 import { ApolloClient } from 'apollo-client';
-import { SortBy, ProcessInstanceFilter } from '@kogito-apps/process-list';
 import {
   BulkProcessInstanceActionResponse,
   OperationType,
-  ProcessInstance
+  ProcessInstance,
+  SortBy,
+  ProcessInstanceFilter
 } from '@kogito-apps/management-console-shared';
 import {
   handleProcessAbort,

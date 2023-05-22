@@ -15,16 +15,13 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import {
-  OrderBy,
-  ProcessInstanceFilter,
-  ProcessListDriver,
-  ProcessListState,
-  SortBy
-} from '../../../api';
+import { ProcessListDriver, ProcessListState } from '../../../api';
 import {
   ProcessInstance,
-  ProcessInstanceState
+  ProcessInstanceState,
+  OrderBy,
+  ProcessInstanceFilter,
+  SortBy
 } from '@kogito-apps/management-console-shared';
 import ProcessListTable from '../ProcessListTable/ProcessListTable';
 import ProcessListToolbar from '../ProcessListToolbar/ProcessListToolbar';

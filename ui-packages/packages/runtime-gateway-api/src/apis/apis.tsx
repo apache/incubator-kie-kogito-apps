@@ -21,10 +21,11 @@ import {
   NodeInstance,
   OperationType,
   ProcessInstance,
-  TriggerableNode
+  TriggerableNode,
+  ProcessInstanceFilter,
+  SortBy
 } from '@kogito-apps/management-console-shared';
 import { ApolloClient } from 'apollo-client';
-import { ProcessInstanceFilter, SortBy } from '@kogito-apps/process-list';
 import { buildProcessListWhereArgument } from './QueryUtils';
 
 export const getProcessInstances = async (

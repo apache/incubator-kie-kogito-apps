@@ -15,14 +15,12 @@
  */
 
 import {
+  OperationType,
+  ProcessInstance,
+  ProcessInstanceState,
   OrderBy,
   ProcessInstanceFilter,
   SortBy
-} from '@kogito-apps/process-list';
-import {
-  OperationType,
-  ProcessInstance,
-  ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
 import {
   ProcessListGatewayApi,

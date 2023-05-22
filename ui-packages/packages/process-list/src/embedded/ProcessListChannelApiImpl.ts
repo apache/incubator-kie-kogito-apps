@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-import {
-  ProcessListChannelApi,
-  ProcessInstanceFilter,
-  ProcessListDriver,
-  SortBy
-} from '../api';
+import { ProcessListChannelApi, ProcessListDriver } from '../api';
 import {
   BulkProcessInstanceActionResponse,
   OperationType,
-  ProcessInstance
+  ProcessInstance,
+  ProcessInstanceFilter,
+  SortBy
 } from '@kogito-apps/management-console-shared';
 
 export class ProcessListChannelApiImpl implements ProcessListChannelApi {

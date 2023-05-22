@@ -65,6 +65,18 @@ export enum ProcessInstanceState {
   Error = 'ERROR'
 }
 
+export interface ProcessInstanceFilter {
+  status: ProcessInstanceState[];
+  businessKey?: string[];
+}
+
+export interface SortBy {
+  processName?: OrderBy;
+  state?: OrderBy;
+  start?: OrderBy;
+  lastUpdate?: OrderBy;
+}
+
 export enum TitleType {
   SUCCESS = 'success',
   FAILURE = 'failure'
@@ -146,12 +158,14 @@ export enum OrderBy {
   ASC = 'ASC',
   DESC = 'DESC'
 }
+
 export interface SortBy {
   processName?: OrderBy;
   state?: OrderBy;
   start?: OrderBy;
   lastUpdate?: OrderBy;
 }
+
 export interface ProcessListState {
   filters: ProcessInstanceFilter;
   sortBy: SortBy;

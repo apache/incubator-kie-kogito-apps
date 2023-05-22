@@ -14,7 +14,10 @@
  * limitations under the License.
  */
 
-import { ProcessInstanceState } from '@kogito-apps/management-console-shared';
+import {
+  SortBy,
+  ProcessInstanceFilter
+} from '@kogito-apps/management-console-shared';
 export interface ProcessListEnvelopeApi {
   processList__init(
     association: Association,
@@ -22,26 +25,11 @@ export interface ProcessListEnvelopeApi {
   ): Promise<void>;
 }
 
-export interface ProcessInstanceFilter {
-  status: ProcessInstanceState[];
-  businessKey?: string[];
-}
-
 export interface Association {
   origin: string;
   envelopeServerId: string;
 }
 
-export enum OrderBy {
-  ASC = 'ASC',
-  DESC = 'DESC'
-}
-export interface SortBy {
-  processName?: OrderBy;
-  state?: OrderBy;
-  start?: OrderBy;
-  lastUpdate?: OrderBy;
-}
 export interface QueryPage {
   offset: number;
   limit: number;

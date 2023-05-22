@@ -17,9 +17,10 @@
 import {
   BulkProcessInstanceActionResponse,
   OperationType,
-  ProcessInstance
+  ProcessInstance,
+  ProcessInstanceFilter,
+  SortBy
 } from '@kogito-apps/management-console-shared';
-import { ProcessInstanceFilter, SortBy } from './ProcessListEnvelopeApi';
 export interface ProcessListChannelApi {
   processList__initialLoad(
     filter: ProcessInstanceFilter,

@@ -39,9 +39,13 @@
     "react-apollo-hooks": "0.5.0"
 =======
     "@kogito-apps/consoles-common": "^1.0.0",
+<<<<<<< HEAD
     "@kogito-apps/management-console-shared": "^1.0.0",
     "@kogito-apps/process-list": "^1.0.0"
 >>>>>>> f07614922 (move getProcessInstances getChildProcessInstances to runtime-gateway-api)
+=======
+    "@kogito-apps/management-console-shared": "^1.0.0"
+>>>>>>> 79ac9c9aa (move OrderBy,ProcessInstanceFilter,SortBy to management-console-sharedC)
   },
   "devDependencies": {
     "@graphql-codegen/add": "^3.1.0",

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ProcessInstanceFilter } from '@kogito-apps/process-list';
+import { ProcessInstanceFilter } from '@kogito-apps/management-console-shared';
 
 const formatSearchWords = (searchWords: string[]) => {
   const tempSearchWordsArray = [];
