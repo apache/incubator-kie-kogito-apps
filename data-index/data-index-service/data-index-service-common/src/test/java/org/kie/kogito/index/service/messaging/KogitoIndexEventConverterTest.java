@@ -26,11 +26,14 @@ import org.kie.kogito.event.process.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.event.ProcessInstanceEventMapper;
 import org.kie.kogito.index.event.UserTaskInstanceEventMapper;
+import org.kie.kogito.index.json.ObjectMapperProducer;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkus.reactivemessaging.http.runtime.IncomingHttpMetadata;
 import io.vertx.core.MultiMap;
@@ -44,7 +47,8 @@ import static org.mockito.Mockito.lenient;
 @ExtendWith(MockitoExtension.class)
 class KogitoIndexEventConverterTest {
 
-    private static final String BINARY_PROCESS_INSTANCE_CLOUD_EVENT_DATA = "binary_process_instance_event_data.json";
+    private static final String BINARY_PROCESS_INSTANCE_CLOUD_EVENT_DATA = "process_instance_event.json";
+    private static final String BINARY_PROCESS_INSTANCE_CLOUD_EVENT_BODY_DATA = "binary_process_instance_event_data.json";
     private static final String BINARY_USER_TASK_INSTANCE_CLOUD_EVENT_DATA = "binary_user_task_instance_event_data.json";
     private static final String BINARY_KOGITO_JOB_CLOUD_EVENT_DATA = "binary_job_event_data.json";
     @Mock
@@ -53,12 +57,16 @@ class KogitoIndexEventConverterTest {
     private MultiMap headers;
 
     private KogitoIndexEventConverter converter;
+    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
         headers = MultiMap.caseInsensitiveMultiMap();
         lenient().doReturn(headers).when(httpMetadata).getHeaders();
         converter = new KogitoIndexEventConverter();
+        objectMapper = new ObjectMapper();
+        new ObjectMapperProducer().customize(objectMapper);
+        converter.setObjectMapper(objectMapper);
     }
 
     @Test
@@ -81,8 +89,8 @@ class KogitoIndexEventConverterTest {
     }
 
     @Test
-    void convertBinaryCloudProcessInstanceEvent() throws Exception {
-        Buffer buffer = Buffer.buffer(readFileContent(BINARY_PROCESS_INSTANCE_CLOUD_EVENT_DATA));
+    void convertBinaryCloudProcessInstanceEventBody() throws Exception {
+        Buffer buffer = Buffer.buffer(readFileContent(BINARY_PROCESS_INSTANCE_CLOUD_EVENT_BODY_DATA));
         Message<?> message = Message.of(buffer, Metadata.of(httpMetadata));
         Message<?> result = converter.convert(message, ProcessInstanceDataEvent.class);
         assertThat(result.getPayload()).isInstanceOf(ProcessInstanceDataEvent.class);
@@ -92,12 +100,32 @@ class KogitoIndexEventConverterTest {
         assertThat(pi.getId()).isEqualTo("5f8b1a48-4d37-4bd2-a1a6-9b8f6097cfdd");
         assertThat(pi.getProcessId()).isEqualTo("subscription_flow");
         assertThat(pi.getProcessName()).isEqualTo("workflow");
-        assertThat(pi.getVariables().size()).isEqualTo(1);
-        assertThat(pi.getNodes().size()).isEqualTo(14);
+        assertThat(pi.getVariables()).hasSize(1);
+        assertThat(pi.getNodes()).hasSize(14);
         assertThat(pi.getState()).isEqualTo(1);
         assertThat(pi.getStart()).isEqualTo("2023-05-24T10:41:14.911Z");
         assertThat(pi.getEnd()).isNull();
-        assertThat(pi.getMilestones().size()).isEqualTo(0);
+        assertThat(pi.getMilestones()).isEmpty();
+    }
+
+    @Test
+    void convertBinaryCloudProcessInstanceEvent() throws Exception {
+        Buffer buffer = Buffer.buffer(readFileContent(BINARY_PROCESS_INSTANCE_CLOUD_EVENT_DATA));
+        Message<?> message = Message.of(buffer, Metadata.of(httpMetadata));
+        Message<?> result = converter.convert(message, ProcessInstanceDataEvent.class);
+        assertThat(result.getPayload()).isInstanceOf(ProcessInstanceDataEvent.class);
+        ProcessInstanceDataEvent cloudEvent = (ProcessInstanceDataEvent) result.getPayload();
+
+        ProcessInstance pi = new ProcessInstanceEventMapper().apply(cloudEvent);
+        assertThat(pi.getId()).isEqualTo("2308e23d-9998-47e9-a772-a078cf5b891b");
+        assertThat(pi.getProcessId()).isEqualTo("travels");
+        assertThat(pi.getProcessName()).isEqualTo("travels");
+        assertThat(pi.getVariables()).hasSize(3);
+        assertThat(pi.getNodes()).hasSize(5);
+        assertThat(pi.getState()).isEqualTo(1);
+        assertThat(pi.getStart()).isEqualTo("2022-03-18T05:32:21.887Z");
+        assertThat(pi.getEnd()).isNull();
+        assertThat(pi.getMilestones()).isEmpty();
     }
 
     @Test
@@ -135,6 +163,7 @@ class KogitoIndexEventConverterTest {
         assertThat(userTaskInstance.getName()).isEqualTo("VisaApplication");
         assertThat(userTaskInstance.getState()).isEqualTo("Completed");
     }
+
     @Test
     void convertFailureBinaryUnexpectedBufferContent() throws Exception {
         Buffer buffer = Buffer.buffer("unexpected Content");
