@@ -57,9 +57,7 @@ describe('TaskInboxContainer tests', () => {
         users={[{ id: 'John snow', groups: ['admin'] }]}
         {...appContextProps}
       >
-        {/* <TaskInboxContextProvider> */}
         <TaskInboxContainer />
-        {/* </TaskInboxContextProvider> */}
       </DevUIAppContextProvider>
     ).find('TaskInboxContainer');
 
