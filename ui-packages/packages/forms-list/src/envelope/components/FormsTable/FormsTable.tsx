@@ -89,7 +89,7 @@ const FormsTable: React.FC<FormsTableProps & OUIAProps> = ({
       }).map((key) => key),
       _.values({
         [sortObj.property]: sortObj.direction
-      }).map((value) => value.toLowerCase())
+      }).map((value) => value.toLowerCase()) as ['asc' | 'desc']
     );
     setFormsData(sortedData);
     setSortBy(sortObj);

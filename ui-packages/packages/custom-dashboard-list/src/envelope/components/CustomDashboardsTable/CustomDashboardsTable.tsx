@@ -92,7 +92,7 @@ const CustomDashboardsTable: React.FC<
       }).map((key) => key),
       _.values({
         [sortObj.property]: sortObj.direction
-      }).map((value) => value.toLowerCase())
+      }).map((value) => value.toLowerCase()) as ['asc' | 'desc']
     );
     setDashboardsData(sortedData);
     setSortBy(sortObj);
