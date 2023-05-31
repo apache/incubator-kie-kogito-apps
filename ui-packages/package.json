@@ -76,6 +76,7 @@
     "@types/enzyme": "^3.10.8",
     "@types/enzyme-adapter-react-16": "^1.0.6",
     "@types/jest": "^26.0.23",
+    "@types/minimatch": "^3.0.5",
     "@types/node": "^15.0.2",
     "@types/react": "^17.0.5",
     "@types/react-dom": "^17.0.5",
@@ -115,6 +116,7 @@
     "lint-staged": "^10.0.7",
     "lock-treatment-tool": "^0.4.1",
     "mini-css-extract-plugin": "^0.9.0",
+    "minimatch": "^3.0.5",
     "mockdate": "^3.0.5",
     "nodemon": "^2.0.2",
     "optimize-css-assets-webpack-plugin": "^6.0.1",
@@ -147,12 +149,14 @@
     "replace-in-file-webpack-plugin": "1.0.6"
   },
   "resolutions": {
-    "@types/express-serve-static-core": "^4.17.21",
-    "axios": "0.21.2",
     "@patternfly/react-core": "4.157.3",
+    "@types/express-serve-static-core": "^4.17.21",
+    "@types/minimatch": "^3.0.5",
+    "axios": "0.21.2",
     "d3": "^7.0.0",
     "d3-ease": "^3.0.1",
-    "d3-interpolate":"^3.0.1"
+    "d3-interpolate":"^3.0.1",
+    "minimatch": "^3.0.5"
   },
   "lint-staged": {
     "packages/**/*.{ts,tsx}": [
