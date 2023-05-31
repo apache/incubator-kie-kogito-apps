@@ -36,7 +36,7 @@
         isDataIndexAvailable: {info:isProcessEnabled},
         isTracingEnabled: {info:isTracingEnabled},
         users: {info:userInfo.arrayRepresentation.raw},
-        dataIndexUrl: "{config:property('kogito.data-index.url') ?: 'http://localhost:8180'}/graphql",
+        dataIndexUrl: "{config:property('kogito.data-index.url') ?: ''}/graphql",
         trustyServiceUrl: "{config:property('kogito.trusty.http.url') ?: 'http://localhost:1336'}",
         page: "Audit",
         devUIUrl: "http://localhost:{config:property('quarkus.http.port') or '8080'}",

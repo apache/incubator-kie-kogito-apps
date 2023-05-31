@@ -34,7 +34,7 @@
     const devUI = RuntimeToolsDevUI.open({
         container: document.getElementById("envelope-app"),
         isDataIndexAvailable: {info:isDataIndexAvailable},
-        dataIndexUrl: "{config:property('kogito.data-index.url') ?: 'http://localhost:8180'}/graphql",
+        dataIndexUrl: {#if config:property('kogito.data-index.url')}{"config:property('kogito.data-index.url')/graphql"}{#else}window.location.origin + "/graphql"{/if},
         page: "Monitoring",
         devUIUrl: "{#if config:property('kogito.dev-ui.url')}{config:property('kogito.dev-ui.url')}{#else}http://localhost:{config:property('quarkus.http.port') or '8080'}{/if}",
         openApiPath: "q/openapi.json",
