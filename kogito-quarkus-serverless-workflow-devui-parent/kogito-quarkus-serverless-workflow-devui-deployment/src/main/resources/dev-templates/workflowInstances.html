@@ -36,7 +36,7 @@
         isDataIndexAvailable: {info:isDataIndexAvailable},
         dataIndexUrl: "{config:property('kogito.data-index.url') ?: ''}/graphql",
         page: "Processes",
-        devUIUrl: "{#if config:property('kogito.dev-ui.url')}{config:property('kogito.dev-ui.url')}{#else}http://localhost:{config:property('quarkus.http.port') or '8080'}{/if}",
+        devUIUrl: {#if config:property('kogito.dev-ui.url')}"{config:property('kogito.dev-ui.url')}"{#else}window.location.origin{/if},
         openApiPath: "q/openapi.json",
         availablePages: ["Processes", "Monitoring", "CustomDashboard"],
         customLabels: {

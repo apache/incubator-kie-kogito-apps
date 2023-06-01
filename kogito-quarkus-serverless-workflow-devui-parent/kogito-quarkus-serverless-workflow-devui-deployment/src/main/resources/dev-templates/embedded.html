@@ -29,23 +29,27 @@
 {/if}
 {#if info:isDataIndexAvailable}
 <script>
-    const fillCount = () => {
-        fetch("{config:property('kogito.data-index.url') ?: ''}/graphql", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-            },
-            body: JSON.stringify({query: "query getAllProcessesIds{  ProcessInstances{ id } }"}),
-        })
-            .then(r => r.json())
-            .then(json => $("#workflowInstancesCount").text(json.data.ProcessInstances.length))
-            .catch(error => {
-                console.log("Error while trying to fetch workflow instances count.");
-                console.error(error);
-            });
-    };
+    const graphqlUrl = "{config:property('kogito.data-index.url') ?: ''}/graphql";
 
-    fillCount();
+    {|
+        const fillCount = () => {
+            fetch(graphqlUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+                body: JSON.stringify({query: "query getAllProcessesIds{  ProcessInstances{ id } }"}),
+            })
+                .then(r => r.json())
+                .then(json => $("#workflowInstancesCount").text(json.data.ProcessInstances.length))
+                .catch(error => {
+                    console.log("Error while trying to fetch workflow instances count.");
+                    console.error(error);
+                });
+        };
+
+        fillCount();
+    |}
 </script>
 {/if}
