@@ -56,6 +56,11 @@ const props2 = {
   variant: 'small'
 };
 
+const props3 = {
+  error: 'error occured',
+  variant: 'small'
+};
+
 describe('ServerErrors component tests', () => {
   it('snapshot testing ', () => {
     const wrapper = mount(<ServerErrors {...props} />).find('ServerErrors');
@@ -114,5 +119,15 @@ describe('ServerErrors component tests', () => {
     expect(wrapper.find('pre').props()['children']).toEqual(
       '{"name":"ServerError"}'
     );
+  });
+
+  it('display error button click with small variant and not full error message ', () => {
+    let wrapper = mount(<ServerErrors {...props3} />).find('ServerErrors');
+
+    wrapper.find('#display-error').first().simulate('click');
+
+    wrapper = wrapper.update();
+
+    expect(wrapper.find('pre').props()['children']).toEqual('error occured');
   });
 });

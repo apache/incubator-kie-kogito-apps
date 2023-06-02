@@ -43,15 +43,31 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
 }) => {
   const [displayError, setDisplayError] = useState(false);
 
-  const errorObject = JSON.parse(props.error);
-
   const getErrorTitle = () => {
-    if (errorObject.graphQLErrors && errorObject.graphQLErrors.size > 0) {
+    try {
+      const errorObject = JSON.parse(props.error);
+      if (errorObject.graphQLErrors && errorObject.graphQLErrors.size > 0) {
+        return 'Error fetching data';
+      } else if (errorObject.networkError && errorObject.networkError.name) {
+        return 'It is possible the data index is still being loaded, please try again in a few moments';
+      } else {
+        return 'Error fetching data';
+      }
+    } catch (error) {
       return 'Error fetching data';
-    } else if (errorObject.networkError && errorObject.networkError.name) {
-      return 'It is possible the data index is still being loaded, please try again in a few moments';
-    } else {
-      return 'Error fetching data';
+    }
+  };
+
+  const getErrorContent = () => {
+    try {
+      const errorObject = JSON.parse(props.error);
+      return errorObject.networkError
+        ? JSON.stringify(errorObject.networkError)
+        : errorObject.graphQLErrors
+        ? JSON.stringify(errorObject.graphQLErrors)
+        : JSON.stringify(props.error);
+    } catch (error) {
+      return props.error;
     }
   };
 
@@ -84,11 +100,7 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
               isExpanded={true}
               className="pf-u-text-align-left"
             >
-              {errorObject.networkError
-                ? JSON.stringify(errorObject.networkError)
-                : errorObject.graphQLErrors
-                ? JSON.stringify(errorObject.graphQLErrors)
-                : JSON.stringify(props.error)}
+              {getErrorContent()}
             </ClipboardCopy>
           </EmptyStateBody>
         )}
