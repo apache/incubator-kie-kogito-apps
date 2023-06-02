@@ -3143,10 +3143,10 @@
   dependencies:
     "@kie-tools-core/operating-system" "0.24.0"
 
-"@kie-tools/dashbuilder-client@^0.28.0":
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/@kie-tools/dashbuilder-client/-/dashbuilder-client-0.28.0.tgz#501603f2b7e2244f67db4001ef8e4a2c1af08f58"
-  integrity sha512-xbvzxS1n3OzrGYWeY9e7L8cfAREIWQsg9DVhZMKypuJhlRTaZn/t/yXydO2AktPZrmqrK4O4x8oYCflCYA7QxA==
+"@kie-tools/dashbuilder-client@^0.29.0":
+  version "0.29.0"
+  resolved "https://registry.yarnpkg.com/@kie-tools/dashbuilder-client/-/dashbuilder-client-0.29.0.tgz#101da374e0c3f58182e980aaeef8e69be8944858"
+  integrity sha512-xHQZQQIqrsLRyudPA4ekajSBbONG/z4TSKcfG2CISS83698QnB2oLrzC9fiFVM/1G0MFFRbf37vBEWPvqk7w0A==
 
 "@kie-tools/kie-bc-editors@0.24.0":
   version "0.24.0"
