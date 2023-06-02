@@ -52,7 +52,7 @@ interface ProcessListProps {
   singularProcessLabel: string;
   pluralProcessLabel: string;
   isWorkflow: boolean;
-  isTriggerCloudEventEnabled?: boolean,
+  isTriggerCloudEventEnabled?: boolean;
 }
 const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
   driver,
@@ -152,7 +152,6 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
   ): Promise<void> => {
     setIsLoadingMore(_loadMore);
     setSelectableInstances(0);
-    setSelectedInstances([]);
     try {
       const response: ProcessInstance[] = await driver.query(_offset, _limit);
       setLimit(response.length);
@@ -168,7 +167,7 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
         setOffset(_offset);
       }
     } catch (err) {
-      setError(err);
+      setError(err.errorMessage);
     } finally {
       setIsLoading(false);
       setIsLoadingMore(false);

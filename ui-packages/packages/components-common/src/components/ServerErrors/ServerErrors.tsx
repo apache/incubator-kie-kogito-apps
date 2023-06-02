@@ -43,6 +43,18 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
 }) => {
   const [displayError, setDisplayError] = useState(false);
 
+  const errorObject = JSON.parse(props.error);
+
+  const getErrorTitle = () => {
+    if (errorObject.graphQLErrors && errorObject.graphQLErrors.size > 0) {
+      return 'Error fetching data';
+    } else if (errorObject.networkError && errorObject.networkError.name) {
+      return 'It is possible the data index is still being loaded, please try again in a few moments';
+    } else {
+      return 'Error fetching data';
+    }
+  };
+
   const renderContent = () => (
     <Bullseye {...componentOuiaProps(ouiaId, 'server-errors', ouiaSafe)}>
       <EmptyState variant={EmptyStateVariant.full}>
@@ -51,7 +63,7 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
           color="var(--pf-global--danger-color--100)"
         />
         <Title headingLevel="h1" size="4xl">
-          Error fetching data
+          {getErrorTitle()}
         </Title>
         <EmptyStateBody>
           An error occurred while accessing data.{' '}
@@ -72,7 +84,11 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
               isExpanded={true}
               className="pf-u-text-align-left"
             >
-              {JSON.stringify(props.error)}
+              {errorObject.networkError
+                ? JSON.stringify(errorObject.networkError)
+                : errorObject.graphQLErrors
+                ? JSON.stringify(errorObject.graphQLErrors)
+                : JSON.stringify(props.error)}
             </ClipboardCopy>
           </EmptyStateBody>
         )}
