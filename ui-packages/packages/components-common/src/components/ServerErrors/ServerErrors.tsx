@@ -46,9 +46,14 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
   const getErrorTitle = () => {
     try {
       const errorObject = JSON.parse(props.error);
-      if (errorObject.graphQLErrors && errorObject.graphQLErrors.size > 0) {
-        return 'Error fetching data';
-      } else if (errorObject.networkError && errorObject.networkError.name) {
+      if (
+        (errorObject.networkError && errorObject.networkError.name) ||
+        (errorObject.networkError &&
+          !errorObject.networkError.name &&
+          errorObject.graphQLErrors &&
+          !(errorObject.graphQLErrors.size > 0) &&
+          errorObject.message === 'Network error: Failed to fetch')
+      ) {
         return 'It is possible the data index is still being loaded, please try again in a few moments';
       } else {
         return 'Error fetching data';
@@ -61,9 +66,9 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
   const getErrorContent = () => {
     try {
       const errorObject = JSON.parse(props.error);
-      return errorObject.networkError
+      return errorObject.networkError && errorObject.networkError.name
         ? JSON.stringify(errorObject.networkError)
-        : errorObject.graphQLErrors
+        : errorObject.graphQLErrors && errorObject.graphQLErrors.size > 0
         ? JSON.stringify(errorObject.graphQLErrors)
         : JSON.stringify(props.error);
     } catch (error) {
@@ -78,7 +83,7 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
           icon={ExclamationCircleIcon}
           color="var(--pf-global--danger-color--100)"
         />
-        <Title headingLevel="h1" size="4xl">
+        <Title id="error-title" headingLevel="h1" size="4xl">
           {getErrorTitle()}
         </Title>
         <EmptyStateBody>
