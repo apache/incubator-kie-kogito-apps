@@ -32,7 +32,7 @@ EditorEnvelope.initCustom<
   container: document.getElementById('swf-combined-editor-envelope-app')!,
   bus: {
     postMessage: (message, _targetOrigin, _) =>
-      window.parent.postMessage(message, '*', _)
+      window.parent.postMessage(message, window.location.origin, _)
   },
   apiImplFactory: {
     create: (args) =>
