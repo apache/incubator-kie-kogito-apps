@@ -189,7 +189,7 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
               {
                 nodeNames: [errorNode.name],
                 color: 'red', // can decide the color
-                colorConnectedEnds: false
+                colorConnectedEnds
               }
             );
           }
