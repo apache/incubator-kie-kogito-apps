@@ -2,7 +2,7 @@
 * This file is describing all the Jenkins jobs in the DSL format (see https://plugins.jenkins.io/job-dsl/)
 * needed by the Kogito pipelines.
 *
-* The main part of Jenkins job generation is defined into the https://github.com/kiegroup/kogito-pipelines repository.
+* The main part of Jenkins job generation is defined into the https://github.com/kiegroup/kogito-pipelines repository.${it.env.BUILD_MVN_OPTS_CURRENT} -DskipUI
 *
 * This file is making use of shared libraries defined in
 * https://github.com/kiegroup/kogito-pipelines/tree/main/dsl/seed/src/main/groovy/org/kie/jenkins/jobdsl.
@@ -66,6 +66,7 @@ Map getMultijobPRConfig(JenkinsFolder jobFolder) {
         jobConfig.jobs.retainAll { it.id == 'kogito-apps' }
         jobConfig.jobs.each {
             it.env.put('BUILD_MVN_OPTS_CURRENT', "${it.env.BUILD_MVN_OPTS_CURRENT} -DskipUI")
+            it.env.put('ADDITIONAL_TIMEOUT', "720")
         }
     }
 
