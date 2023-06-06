@@ -37,7 +37,6 @@ import {
   SwfFeatureToggleChannelApiImpl,
   SwfPreviewOptionsChannelApiImpl
 } from '@kie-tools/serverless-workflow-combined-editor/dist/impl';
-import { KogitoSpinner } from '@kogito-apps/components-common';
 import { useController } from '../../../hooks/useController';
 import { ProcessInstance } from '@kogito-apps/management-console-shared';
 import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
@@ -61,7 +60,6 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
   const { source, nodes, error } = workflowInstance;
   const [editor, editorRef] = useController<EmbeddedEditorRef>();
   const [isReady, setReady] = useState<boolean>(false);
-  const isEditorReady = useMemo(() => editor?.isReady, [editor]);
 
   const getFileContent = useCallback(() => {
     const arr = new Uint8Array(source.length);
@@ -212,9 +210,6 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
     }
   }, [editor, nodes, embeddedFile]);
 
-  if (!isEditorReady) {
-    return <KogitoSpinner spinnerText="Loading diagram..." />;
-  }
   return (
     <Card
       style={{ height: height, width: width }}
