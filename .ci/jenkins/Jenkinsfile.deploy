@@ -59,6 +59,8 @@ pipeline {
                     }
 
                     checkoutRepo()
+
+                    setupCypressEnv('9.7.0')
                 }
             }
             post {
@@ -184,6 +186,16 @@ pipeline {
                 util.cleanNode('docker')
             }
         }
+    }
+}
+
+void setupCypressEnv(String cypressVersion) {
+    try {
+        withCredentials([string(credentialsId: "CYPRESS_BINARY_URL", variable: 'CYPRESS_BINARY_URL')]) {
+            env.CYPRESS_INSTALL_BINARY = "${CYPRESS_BINARY_URL}/cypress-${cypressVersion}.zip"
+        }
+    } catch(err) {
+        echo 'Cannot set the `CYPRESS_INSTALL_BINARY` string because the `CYPRESS_BINARY_URL` credential does not exist'
     }
 }
 
