@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { Button } from '@patternfly/react-core';
+import { Button, EmptyStateBody } from '@patternfly/react-core';
 import ServerErrors from '../ServerErrors';
 
 const errorMessage1 =
@@ -74,8 +74,8 @@ describe('ServerErrors component tests', () => {
   it('snapshot testing ', () => {
     const wrapper = mount(<ServerErrors {...props} />).find('ServerErrors');
 
-    expect(wrapper.find('#error-title').first().text()).toEqual(
-      'It is possible the data index is still being loaded, please try again in a few moments'
+    expect(wrapper.find(EmptyStateBody).first().text()).toEqual(
+      'An error occurred while accessing data. It is possible the data index is still being loaded, please try again in a few moments. See more details'
     );
 
     expect(wrapper).toMatchSnapshot();
@@ -141,8 +141,8 @@ describe('ServerErrors component tests', () => {
   it('display error button click with small variant and not full error message ', () => {
     let wrapper = mount(<ServerErrors {...props3} />).find('ServerErrors');
 
-    expect(wrapper.find('#error-title').first().text()).toEqual(
-      'Error fetching data'
+    expect(wrapper.find(EmptyStateBody).first().text()).toEqual(
+      'An error occurred while accessing data. See more details'
     );
 
     wrapper.find('#display-error').first().simulate('click');
@@ -155,8 +155,8 @@ describe('ServerErrors component tests', () => {
   it('display error title ', () => {
     let wrapper = mount(<ServerErrors {...props4} />).find('ServerErrors');
 
-    expect(wrapper.find('#error-title').first().text()).toEqual(
-      'It is possible the data index is still being loaded, please try again in a few moments'
+    expect(wrapper.find(EmptyStateBody).first().text()).toEqual(
+      'An error occurred while accessing data. It is possible the data index is still being loaded, please try again in a few moments. See more details'
     );
 
     wrapper.find('#display-error').first().simulate('click');

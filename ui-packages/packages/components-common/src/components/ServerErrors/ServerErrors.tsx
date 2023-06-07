@@ -43,7 +43,7 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
 }) => {
   const [displayError, setDisplayError] = useState(false);
 
-  const getErrorTitle = () => {
+  const getErrorSubTitle = () => {
     try {
       const errorObject = JSON.parse(props.error);
       if (
@@ -54,12 +54,12 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
           !(errorObject.graphQLErrors.size > 0) &&
           errorObject.message === 'Network error: Failed to fetch')
       ) {
-        return 'It is possible the data index is still being loaded, please try again in a few moments';
+        return 'An error occurred while accessing data. It is possible the data index is still being loaded, please try again in a few moments.';
       } else {
-        return 'Error fetching data';
+        return 'An error occurred while accessing data.';
       }
     } catch (error) {
-      return 'Error fetching data';
+      return 'An error occurred while accessing data.';
     }
   };
 
@@ -83,11 +83,11 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
           icon={ExclamationCircleIcon}
           color="var(--pf-global--danger-color--100)"
         />
-        <Title id="error-title" headingLevel="h1" size="4xl">
-          {getErrorTitle()}
+        <Title headingLevel="h1" size="4xl">
+          Error fetching data
         </Title>
         <EmptyStateBody>
-          An error occurred while accessing data.{' '}
+          {getErrorSubTitle()}{' '}
           <Button
             variant="link"
             isInline

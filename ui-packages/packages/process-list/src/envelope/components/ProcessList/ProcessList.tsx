@@ -152,6 +152,7 @@ const ProcessList: React.FC<ProcessListProps & OUIAProps> = ({
   ): Promise<void> => {
     setIsLoadingMore(_loadMore);
     setSelectableInstances(0);
+    setSelectedInstances([]);
     try {
       const response: ProcessInstance[] = await driver.query(_offset, _limit);
       setLimit(response.length);
