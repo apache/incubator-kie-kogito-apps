@@ -212,7 +212,6 @@
               <arguments>${pnpm.build.script}</arguments>
               <environmentVariables>
                 <KOGITO_APP_VERSION>${project.version}</KOGITO_APP_VERSION>
-                <NODE_OPTIONS>--max_old_space_size=4096</NODE_OPTIONS>
               </environmentVariables>
             </configuration>
           </execution>

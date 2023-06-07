@@ -45,7 +45,7 @@ module.exports = {
             // Limit at 50k. larger files emited into separate files
             limit: 5000,
             outputPath: 'fonts',
-            name: '[name].[ext]'
+            name: '[path][name].[ext]'
           }
         }
       },

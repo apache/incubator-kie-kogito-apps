@@ -8,6 +8,7 @@ const FileManagerPlugin = require('filemanager-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
 const swEditor = require('@kie-tools/serverless-workflow-diagram-editor-assets');
+const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -69,7 +70,26 @@ module.exports = {
         }
       }
     }),
-    new NodePolyfillPlugin()
+    new NodePolyfillPlugin(),
+      // Remove this replacement after upgrading envelope and patternfly with kie-tools
+      new ReplaceInFileWebpackPlugin([
+        {
+          dir: 'dist',
+          test: [/\.js/],
+          rules: [
+            {
+              search:
+                /\[class\*=pf-c-\]\,\[class\*=pf-c-\]\:\:before\,\[class\*=pf-c-\]\:\:after\{padding\:0\;margin\:0\;background-color\:rgba\(0\,0\,0\,0\)\}/g,
+              replace: ''
+            },
+            {
+              search:
+                /\[class\*=pf-c-\],\\n\[class\*=pf-c-\]\:\:before\,\\n\[class\*=pf-c-\]\:\:after \{\\n  padding\: 0\;\\n  margin\: 0\;\\n  background-color\: transparent\;\\n\}/g,
+              replace: ''
+            }
+          ]
+        }
+      ]),
   ],
   module: {
     rules: [
@@ -133,6 +153,12 @@ module.exports = {
             }
           }
         ]
+      },
+      {
+        test: /\.m?js/,
+        resolve: {
+          fullySpecified: false
+        }
       }
     ]
   },
