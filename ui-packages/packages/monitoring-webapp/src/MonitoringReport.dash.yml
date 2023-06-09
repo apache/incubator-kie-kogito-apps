@@ -1,5 +1,5 @@
 properties:
-  dataIndexUrl: http://localhost:8180
+  dataIndexUrl: http://localhost:8180/graphql
   # seconds
   refresh: 10
 
