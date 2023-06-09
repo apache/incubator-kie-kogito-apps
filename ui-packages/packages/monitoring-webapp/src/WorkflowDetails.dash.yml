@@ -1,5 +1,5 @@
 properties:
-  dataIndexUrl:
+  dataIndexUrl: http://localhost:8180
   # charts size
   chartsWidth: 95%
   chartsHeight: 450px
