@@ -126,4 +126,44 @@ describe('WorkflowForm Test', () => {
     expect(wrapper).toMatchSnapshot();
     expect(driver.startWorkflow).not.toHaveBeenCalled();
   });
+
+  it('Workflow Form - loading', async () => {
+    jest.spyOn(window, 'setTimeout');
+    jest.useFakeTimers();
+
+    const driver = new MockedWorkflowFormDriver();
+    startWorkflowSpy = jest.spyOn(driver, 'startWorkflow');
+    startWorkflowSpy.mockReturnValue(
+      new Promise((resolve) => setTimeout(() => resolve(null), 1000))
+    );
+    props.driver = driver;
+
+    validateWorkflowDataSpy.mockReturnValue(true);
+
+    let wrapper;
+    act(() => {
+      wrapper = getWorkflowFormWrapper();
+    });
+
+    const workflowForm = wrapper.find('Form');
+
+    act(() => {
+      workflowForm.find('Button[variant="primary"]').props().onClick();
+    });
+
+    expect(driver.startWorkflow).toHaveBeenCalled();
+
+    expect(wrapper.update()).toMatchSnapshot();
+
+    await act(async () => {
+      Promise.resolve().then(() => jest.advanceTimersByTime(2000));
+      new Promise((resolve) => {
+        setTimeout(resolve, 2000);
+      });
+    });
+
+    expect(wrapper.update()).toMatchSnapshot();
+
+    jest.useRealTimers();
+  });
 });

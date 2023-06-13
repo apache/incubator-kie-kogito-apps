@@ -20,6 +20,7 @@ import { WorkflowDefinition, WorkflowFormDriver } from '../../../api';
 import {
   ActionGroup,
   Alert,
+  Bullseye,
   Button,
   Form,
   FormGroup,
@@ -32,6 +33,7 @@ import HelpIcon from '@patternfly/react-icons/dist/esm/icons/help-icon';
 import { CodeEditor, Language } from '@patternfly/react-code-editor';
 import ExclamationCircleIcon from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
 import { validateWorkflowData } from './validateWorkflowData';
+import { KogitoSpinner } from '@kogito-apps/components-common';
 
 export interface WorkflowFormProps {
   workflowDefinition: WorkflowDefinition;
@@ -46,6 +48,7 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
 }) => {
   const [data, setData] = useState<string>('');
   const [isValid, setIsValid] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const resetForm = useCallback(() => {
     driver.resetBusinessKey();
@@ -62,13 +65,26 @@ const WorkflowForm: React.FC<WorkflowFormProps & OUIAProps> = ({
       return;
     }
 
+    setIsLoading(true);
     await driver.startWorkflow(
       workflowDefinition.endpoint,
       data.trim() ? JSON.parse(data) : {}
     );
 
+    setIsLoading(false);
     resetForm();
   }, [driver, data]);
+
+  if (isLoading) {
+    return (
+      <Bullseye>
+        <KogitoSpinner
+          spinnerText="Starting workflow..."
+          ouiaId="workflow-form-loading"
+        />
+      </Bullseye>
+    );
+  }
 
   return (
     <div {...componentOuiaProps(ouiaId, 'workflow-form', ouiaSafe)}>
