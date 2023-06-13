@@ -25,7 +25,7 @@ import {
 } from '@kogito-apps/components-common';
 import { WorkflowFormDriver } from '../../../api/WorkflowFormDriver';
 import { WorkflowDefinition } from '../../../api';
-import { Bullseye } from '@patternfly/react-core';
+import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
 
 export interface CustomWorkflowFormProps {
   customFormSchema: Record<string, any>;
