@@ -8,6 +8,7 @@ overrides:
   d3: ^7.0.0
   d3-ease: ^3.0.1
   d3-interpolate: ^3.0.1
+  fast-xml-parser: ^4.2.4
   minimatch: ^3.0.5
   '@types/react': 17.0.5
 
@@ -7991,7 +7992,7 @@ packages:
       '@kogito-tooling/workspace': 0.10.0
       '@types/semver': 7.3.13
       axios: 0.21.2
-      fast-xml-parser: 3.21.1
+      fast-xml-parser: 4.2.4
       portfinder: 1.0.32
     transitivePeerDependencies:
       - debug
@@ -16042,13 +16043,6 @@ packages:
     dependencies:
       punycode: 1.4.1
     dev: true
-
-  /fast-xml-parser@3.21.1:
-    resolution: {integrity: sha512-FTFVjYoBOZTJekiUsawGsSYV9QL0A+zDYCRj7y34IO6Jg+2IMYEtQa+bbictpdpV8dHxXywqU7C0gRDEOFtBFg==}
-    hasBin: true
-    dependencies:
-      strnum: 1.0.5
-    dev: false
 
   /fast-xml-parser@4.2.4:
     resolution: {integrity: sha512-fbfMDvgBNIdDJLdLOwacjFAPYt67tr31H9ZhWSm45CDAxvd0I6WTlSOUo7K2P/K5sA5JgMKG64PI3DMcaFdWpQ==}
