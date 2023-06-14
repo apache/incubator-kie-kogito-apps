@@ -14,6 +14,8 @@
 
     <modules>
         <module>kogito-addons-quarkus-jobs-service-embedded</module>
+        <module>kogito-addons-quarkus-jobs-service-embedded-arm64</module>
     </modules>
+
 
 </project>

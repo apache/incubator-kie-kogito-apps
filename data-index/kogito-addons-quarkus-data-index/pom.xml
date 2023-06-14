@@ -14,6 +14,7 @@
   <modules>
     <module>kogito-addons-quarkus-data-index-common</module>
     <module>kogito-addons-quarkus-data-index-inmemory</module>
+    <module>kogito-addons-quarkus-data-index-inmemory-arm64</module>
     <module>kogito-addons-quarkus-data-index-postgresql</module>
   </modules>
 
