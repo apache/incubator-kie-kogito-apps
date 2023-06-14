@@ -23,7 +23,6 @@ import java.util.Optional;
 import org.kie.kogito.quarkus.extensions.spi.deployment.KogitoDataIndexServiceAvailableBuildItem;
 
 import io.quarkus.deployment.Capabilities;
-import io.quarkus.deployment.IsDevelopment;
 import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
@@ -44,7 +43,7 @@ public class DevConsoleProcessor {
     private static final String BASE_RELATIVE_URL = "/q/dev/org.kie.kogito.kogito-quarkus-serverless-workflow-devui";
     private static final String DATA_INDEX_CAPABILITY = "org.kie.kogito.data-index";
 
-    @BuildStep(onlyIf = IsDevelopment.class)
+    @BuildStep(onlyIf = DevUIConfiguration.Enabled.class)
     @Record(ExecutionTime.RUNTIME_INIT)
     public void deployStaticResources(final DevConsoleRecorder recorder,
             final CurateOutcomeBuildItem curateOutcomeBuildItem,
@@ -52,6 +51,7 @@ public class DevConsoleProcessor {
             final LaunchModeBuildItem launchMode,
             final ShutdownContextBuildItem shutdownContext,
             final BuildProducer<RouteBuildItem> routeBuildItemBuildProducer) throws IOException {
+
         ResolvedDependency devConsoleResourcesArtifact = WebJarUtil.getAppArtifact(curateOutcomeBuildItem,
                 "org.kie.kogito",
                 "kogito-quarkus-serverless-workflow-devui-deployment");
@@ -78,7 +78,7 @@ public class DevConsoleProcessor {
     }
 
     @SuppressWarnings("unused")
-    @BuildStep(onlyIf = IsDevelopment.class)
+    @BuildStep(onlyIf = DevUIConfiguration.Enabled.class)
     public void isDataIndexAvailable(BuildProducer<DevConsoleTemplateInfoBuildItem> devConsoleTemplateInfoBuildItemBuildProducer,
             Optional<KogitoDataIndexServiceAvailableBuildItem> dataIndexServiceAvailableBuildItem,
             Capabilities capabilities) {
