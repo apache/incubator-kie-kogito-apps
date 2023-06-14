@@ -35,8 +35,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class CustomDashboardStorageTest {
 
-    private static String[] DASHBOARD_NAMES = { "age.dash.yaml", "products.dash.yaml" };
-    private static String DASHBOARD_NAME = "age.dash.yaml";
+    private static String[] DASHBOARD_NAMES = { "age.dash.yml", "products.dash.yaml" };
+    private static String DASHBOARD_NAME = "age.dash.yml";
 
     private CustomDashboardStorage customDashboardStorage;
 
