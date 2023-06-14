@@ -42,7 +42,7 @@ public class CustomDashboardStorageTest {
 
     @BeforeAll
     public void init() {
-        URL tempFolder = Thread.currentThread().getContextClassLoader().getResource("custom/dashboard/");
+        URL tempFolder = Thread.currentThread().getContextClassLoader().getResource("custom/dashboards/");
 
         customDashboardStorage = new CustomDashboardStorageImpl(tempFolder);
     }
