@@ -23,6 +23,10 @@
       <artifactId>quarkus-embedded-postgresql</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.zonky.test.postgres</groupId>
+      <artifactId>embedded-postgres-binaries-linux-arm64v8</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-vertx-graphql</artifactId>
     </dependency>
