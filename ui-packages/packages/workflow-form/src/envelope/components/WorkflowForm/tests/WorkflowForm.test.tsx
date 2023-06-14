@@ -26,18 +26,40 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@patternfly/react-core', () =>
-  Object.assign({}, jest.requireActual('@patternfly/react-core'), {
-    Alert: () => {
-      return <MockedComponent />;
-    },
-    Popover: () => {
-      return <MockedComponent />;
-    },
-    Popper: () => {
-      return <MockedComponent />;
+jest.mock('@patternfly/react-core/dist/js/components/Alert', () =>
+  Object.assign(
+    {},
+    jest.requireActual('@patternfly/react-core/dist/js/components/Alert'),
+    {
+      Alert: () => {
+        return <MockedComponent />;
+      }
     }
-  })
+  )
+);
+
+jest.mock('@patternfly/react-core/dist/js/components/Popover', () =>
+  Object.assign(
+    {},
+    jest.requireActual('@patternfly/react-core/dist/js/components/Popover'),
+    {
+      Popover: () => {
+        return <MockedComponent />;
+      }
+    }
+  )
+);
+
+jest.mock('@patternfly/react-core/dist/js/helpers', () =>
+  Object.assign(
+    {},
+    jest.requireActual('@patternfly/react-core/dist/js/helpers'),
+    {
+      Popper: () => {
+        return <MockedComponent />;
+      }
+    }
+  )
 );
 
 jest.mock('@patternfly/react-code-editor', () =>
