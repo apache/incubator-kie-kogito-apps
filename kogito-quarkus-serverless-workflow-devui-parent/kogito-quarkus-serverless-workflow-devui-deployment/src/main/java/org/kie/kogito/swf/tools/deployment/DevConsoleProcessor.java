@@ -16,10 +16,14 @@
 
 package org.kie.kogito.swf.tools.deployment;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.eclipse.microprofile.config.ConfigProvider;
 import org.kie.kogito.quarkus.extensions.spi.deployment.KogitoDataIndexServiceAvailableBuildItem;
 
 import io.quarkus.deployment.Capabilities;
@@ -28,6 +32,7 @@ import io.quarkus.deployment.annotations.BuildProducer;
 import io.quarkus.deployment.annotations.BuildStep;
 import io.quarkus.deployment.annotations.ExecutionTime;
 import io.quarkus.deployment.annotations.Record;
+import io.quarkus.deployment.builditem.HotDeploymentWatchedFileBuildItem;
 import io.quarkus.deployment.builditem.LaunchModeBuildItem;
 import io.quarkus.deployment.builditem.LiveReloadBuildItem;
 import io.quarkus.deployment.builditem.ShutdownContextBuildItem;
@@ -44,6 +49,9 @@ public class DevConsoleProcessor {
     private static final String BASE_RELATIVE_URL = "/q/dev/org.kie.kogito.kogito-quarkus-serverless-workflow-devui";
     private static final String DATA_INDEX_CAPABILITY = "org.kie.kogito.data-index";
 
+    private static final String PROJECT_CUSTOM_DASHBOARD_STORAGE_PROP = "quarkus.kogito-runtime-tools.custom.dashboard.folder";
+    private static final String CUSTOM_DASHBOARD_STORAGE_PATH = "/dashboards/";
+
     @BuildStep(onlyIf = IsDevelopment.class)
     @Record(ExecutionTime.RUNTIME_INIT)
     public void deployStaticResources(final DevConsoleRecorder recorder,
@@ -51,7 +59,8 @@ public class DevConsoleProcessor {
             final LiveReloadBuildItem liveReloadBuildItem,
             final LaunchModeBuildItem launchMode,
             final ShutdownContextBuildItem shutdownContext,
-            final BuildProducer<RouteBuildItem> routeBuildItemBuildProducer) throws IOException {
+            final BuildProducer<RouteBuildItem> routeBuildItemBuildProducer,
+            final BuildProducer<HotDeploymentWatchedFileBuildItem> hotDeploymentWatchedFiles) throws IOException {
         ResolvedDependency devConsoleResourcesArtifact = WebJarUtil.getAppArtifact(curateOutcomeBuildItem,
                 "org.kie.kogito",
                 "kogito-quarkus-serverless-workflow-devui-deployment");
@@ -75,6 +84,12 @@ public class DevConsoleProcessor {
                 .handler(recorder.devConsoleHandler(devConsoleStaticResourcesDeploymentPath.toString(),
                         shutdownContext))
                 .build());
+
+        String customDashboardStorageUrl = getCustomDashboardStoragePath();
+        File file = new File(customDashboardStorageUrl);
+        (Arrays.stream(file.listFiles()).filter(f -> f.isDirectory()).collect(Collectors.toList()))
+                .forEach(dashboardFolder -> hotDeploymentWatchedFiles.produce(new HotDeploymentWatchedFileBuildItem(dashboardFolder.getAbsolutePath())));
+        hotDeploymentWatchedFiles.produce(new HotDeploymentWatchedFileBuildItem(customDashboardStorageUrl));
     }
 
     @SuppressWarnings("unused")
@@ -84,5 +99,11 @@ public class DevConsoleProcessor {
             Capabilities capabilities) {
         devConsoleTemplateInfoBuildItemBuildProducer.produce(new DevConsoleTemplateInfoBuildItem("isDataIndexAvailable",
                 dataIndexServiceAvailableBuildItem.isPresent() || capabilities.isPresent(DATA_INDEX_CAPABILITY)));
+    }
+
+    private String getCustomDashboardStoragePath() {
+        return ConfigProvider.getConfig()
+                .getOptionalValue(PROJECT_CUSTOM_DASHBOARD_STORAGE_PROP, String.class)
+                .orElseGet(() -> Thread.currentThread().getContextClassLoader().getResource(CUSTOM_DASHBOARD_STORAGE_PATH).getFile());
     }
 }
