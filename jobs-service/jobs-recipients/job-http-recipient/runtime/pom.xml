@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>job-http-recipient-parent</artifactId>
-    <version>1.40.2-SNAPSHOT</version>
+    <version>1.40.3-SNAPSHOT</version>
   </parent>
   <artifactId>job-http-recipient</artifactId>
   <name>Kogito Apps :: Jobs Service :: Job Http Recipient - Runtime</name>
