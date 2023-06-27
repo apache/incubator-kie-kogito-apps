@@ -6,9 +6,8 @@ const BG_IMAGES_DIRNAME = 'bgimages';
 const CopyPlugin = require('copy-webpack-plugin');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-const NodePolyfillPlugin = require("node-polyfill-webpack-plugin");
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 const swEditor = require('@kie-tools/serverless-workflow-diagram-editor-assets');
-const ReplaceInFileWebpackPlugin = require('replace-in-file-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -29,13 +28,13 @@ module.exports = {
       languages: ['typescript', 'json'],
       customLanguages: [
         {
-          label: "yaml",
-          entry: ["monaco-yaml", "vs/basic-languages/yaml/yaml.contribution"],
+          label: 'yaml',
+          entry: ['monaco-yaml', 'vs/basic-languages/yaml/yaml.contribution'],
           worker: {
-            id: "monaco-yaml/yamlWorker",
-            entry: "../../monaco-yaml/yaml.worker.js",
-          },
-        },
+            id: 'monaco-yaml/yamlWorker',
+            entry: '../../monaco-yaml/yaml.worker.js'
+          }
+        }
       ],
       globalAPI: true
     }),
@@ -80,26 +79,7 @@ module.exports = {
         }
       }
     }),
-    new NodePolyfillPlugin(),
-      // Remove this replacement after upgrading envelope and patternfly with kie-tools
-      new ReplaceInFileWebpackPlugin([
-        {
-          dir: 'dist',
-          test: [/\.js/],
-          rules: [
-            {
-              search:
-                /\[class\*=pf-c-\]\,\[class\*=pf-c-\]\:\:before\,\[class\*=pf-c-\]\:\:after\{padding\:0\;margin\:0\;background-color\:rgba\(0\,0\,0\,0\)\}/g,
-              replace: ''
-            },
-            {
-              search:
-                /\[class\*=pf-c-\],\\n\[class\*=pf-c-\]\:\:before\,\\n\[class\*=pf-c-\]\:\:after \{\\n  padding\: 0\;\\n  margin\: 0\;\\n  background-color\: transparent\;\\n\}/g,
-              replace: ''
-            }
-          ]
-        }
-      ]),
+    new NodePolyfillPlugin()
   ],
   module: {
     rules: [
