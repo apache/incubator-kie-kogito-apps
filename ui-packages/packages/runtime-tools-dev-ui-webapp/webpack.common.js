@@ -27,6 +27,16 @@ module.exports = {
   plugins: [
     new MonacoWebpackPlugin({
       languages: ['typescript', 'json'],
+      customLanguages: [
+        {
+          label: "yaml",
+          entry: ["monaco-yaml", "vs/basic-languages/yaml/yaml.contribution"],
+          worker: {
+            id: "monaco-yaml/yamlWorker",
+            entry: "../../monaco-yaml/yaml.worker.js",
+          },
+        },
+      ],
       globalAPI: true
     }),
     new webpack.EnvironmentPlugin({

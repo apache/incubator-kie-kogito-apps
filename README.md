@@ -20,19 +20,19 @@ git clone git@github.com:kiegroup/kogito-apps.git
 
 See detailed instructions [here](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) for your OS.
 
-- Install [Pnpm](https://pnpm.io/)
+- Install [pnpm](https://pnpm.io/)
 ```bash
 cd kogito-apps/ui-packages
 npm install -g pnpm
 ```
 
-- Install projects dependencies using Pnpm
+- Install projects dependencies using pnpm
 ```bash
 cd kogito-apps/ui-packages
 pnpm install
 ```
 
-- Build with Pnpm:
+- Build with pnpm:
 ```bash
 cd kogito-apps/ui-packages
 pnpm run init
@@ -53,7 +53,7 @@ For detailed instructions on how to develop and run the Management Console, plea
 
 ## `ui-packages` dependencies
 
-`ui-packages` are managed with [Pnpm Workspaces](https://pnpm.io/workspaces). Dependencies shared between packages are listed in the top-level [`package.json`](./ui-packages/package.json).
+`ui-packages` are managed with [pnpm Workspaces](https://pnpm.io/workspaces). Dependencies shared between packages are listed in the top-level [`package.json`](./ui-packages/package.json).
 
 A `locktt` npm script relying on [lock-treatment-tool](https://github.com/Ginxo/lock-treatment-tool) is available to allow the usage of a private npm registry during building.
 

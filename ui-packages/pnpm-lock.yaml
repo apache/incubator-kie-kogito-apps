@@ -339,9 +339,6 @@ importers:
 
   packages/components-common:
     dependencies:
-      '@kogito-apps/task-console-shared':
-        specifier: workspace:*
-        version: link:../task-console-shared
       '@patternfly/patternfly':
         specifier: ^4.108.2
         version: 4.224.2
@@ -803,8 +800,8 @@ importers:
         specifier: ^4.17.15
         version: 4.17.21
       monaco-yaml:
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: ^4.0.0
+        version: 4.0.4
       react:
         specifier: ^17.0.2
         version: 17.0.2
@@ -2531,7 +2528,7 @@ importers:
         version: 4.224.2
       '@patternfly/react-code-editor':
         specifier: 4.2.92
-        version: 4.2.92(monaco-editor-webpack-plugin@4.1.2)(monaco-editor@0.27.0)(react-dom@17.0.2)(react-monaco-editor@0.41.2)(react@17.0.2)
+        version: 4.2.92(monaco-editor-webpack-plugin@7.0.1)(monaco-editor@0.33.0)(react-dom@17.0.2)(react-monaco-editor@0.41.2)(react@17.0.2)
       '@patternfly/react-core':
         specifier: 4.157.3
         version: 4.157.3(react-dom@17.0.2)(react@17.0.2)
@@ -2563,14 +2560,14 @@ importers:
         specifier: ^4.17.15
         version: 4.17.21
       monaco-editor:
-        specifier: 0.27.0
-        version: 0.27.0
+        specifier: ^0.33.0
+        version: 0.33.0
       monaco-editor-webpack-plugin:
-        specifier: 4.1.2
-        version: 4.1.2(monaco-editor@0.27.0)(webpack@5.79.0)
+        specifier: ^7.0.1
+        version: 7.0.1(monaco-editor@0.33.0)(webpack@5.79.0)
       monaco-yaml:
-        specifier: 3.0.0
-        version: 3.0.0(monaco-editor@0.27.0)
+        specifier: ^4.0.0
+        version: 4.0.4(monaco-editor@0.33.0)
       react:
         specifier: ^17.0.2
         version: 17.0.2
@@ -3620,8 +3617,8 @@ importers:
         specifier: ^4.17.15
         version: 4.17.21
       monaco-yaml:
-        specifier: 3.0.0
-        version: 3.0.0
+        specifier: ^4.0.0
+        version: 4.0.4
       react:
         specifier: ^17.0.2
         version: 17.0.2
@@ -8298,7 +8295,7 @@ packages:
       tslib: 1.13.0
     dev: false
 
-  /@patternfly/react-code-editor@4.2.92(monaco-editor-webpack-plugin@4.1.2)(monaco-editor@0.27.0)(react-dom@17.0.2)(react-monaco-editor@0.41.2)(react@17.0.2):
+  /@patternfly/react-code-editor@4.2.92(monaco-editor-webpack-plugin@7.0.1)(monaco-editor@0.33.0)(react-dom@17.0.2)(react-monaco-editor@0.41.2)(react@17.0.2):
     resolution: {integrity: sha512-HF2dHIOkSXxllyty/KIYLYFL+oieu3gUpcji64AC859bFPn4hkfBYPJRgLSUkRyZ604dPFk2G5gq1MwBt79Y7Q==}
     peerDependencies:
       monaco-editor: ^0.21.3
@@ -8310,8 +8307,8 @@ packages:
       '@patternfly/react-core': 4.157.3(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-icons': 4.93.6(react-dom@17.0.2)(react@17.0.2)
       '@patternfly/react-styles': 4.92.6
-      monaco-editor: 0.27.0
-      monaco-editor-webpack-plugin: 4.1.2(monaco-editor@0.27.0)(webpack@5.79.0)
+      monaco-editor: 0.33.0
+      monaco-editor-webpack-plugin: 7.0.1(monaco-editor@0.33.0)(webpack@5.79.0)
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
       react-dropzone: 9.0.0(react@17.0.2)
@@ -19922,23 +19919,25 @@ packages:
     resolution: {integrity: sha512-5LC9SOxjSc2HF6vO2CyuTDNivEdoz2IvyJJGj6X8DJ0eFyfszE0QiEd+iXmBvUP3WHxSjFH/vIsA0EN00cgr8w==}
     dev: false
 
-  /monaco-editor-webpack-plugin@4.1.2(monaco-editor@0.27.0)(webpack@5.79.0):
-    resolution: {integrity: sha512-snmHecygICKT0UlHhva+Cs2WaLPpxy3111xbvInhjjTr5m0xQTFHlmJ2QQDcB14Vzmm7f07uc1TtbvOpmL50BA==}
+  /monaco-editor-webpack-plugin@7.0.1(monaco-editor@0.33.0)(webpack@5.79.0):
+    resolution: {integrity: sha512-M8qIqizltrPlIbrb73cZdTWfU9sIsUVFvAZkL3KGjAHmVWEJ0hZKa/uad14JuOckc0GwnCaoGHvMoYtJjVyCzw==}
     peerDependencies:
-      monaco-editor: 0.25.x || 0.26.x || 0.27.x
+      monaco-editor: '>= 0.31.0'
       webpack: ^4.5.0 || 5.x
     dependencies:
       loader-utils: 2.0.4
-      monaco-editor: 0.27.0
+      monaco-editor: 0.33.0
       webpack: 5.79.0(webpack-cli@4.10.0)
-    dev: false
-
-  /monaco-editor@0.27.0:
-    resolution: {integrity: sha512-UhwP78Wb8w0ZSYoKXQNTV/0CHObp6NS3nCt51QfKE6sKyBo5PBsvuDOHoI2ooBakc6uIwByRLHVeT7+yXQe2fQ==}
     dev: false
 
   /monaco-editor@0.33.0:
     resolution: {integrity: sha512-VcRWPSLIUEgQJQIE0pVT8FcGBIgFoxz7jtqctE+IiCxWugD0DwgyQBcZBhdSrdMC84eumoqMZsGl2GTreOzwqw==}
+    dev: false
+
+  /monaco-marker-data-provider@1.1.1:
+    resolution: {integrity: sha512-PGB7TJSZE5tmHzkxv/OEwK2RGNC2A7dcq4JRJnnj31CUAsfmw0Gl+1QTrH0W0deKhcQmQM0YVPaqgQ+0wCt8Mg==}
+    peerDependencies:
+      monaco-editor: '>=0.30.0'
     dev: false
 
   /monaco-marker-data-provider@1.1.1(monaco-editor@0.33.0):
@@ -19947,6 +19946,12 @@ packages:
       monaco-editor: '>=0.30.0'
     dependencies:
       monaco-editor: 0.33.0
+    dev: false
+
+  /monaco-worker-manager@2.0.1:
+    resolution: {integrity: sha512-kdPL0yvg5qjhKPNVjJoym331PY/5JC11aPJXtCZNwWRvBr6jhkIamvYAyiY5P1AWFmNOy0aRDRoMdZfa71h8kg==}
+    peerDependencies:
+      monaco-editor: '>=0.30.0'
     dev: false
 
   /monaco-worker-manager@2.0.1(monaco-editor@0.33.0):
@@ -19967,15 +19972,21 @@ packages:
       yaml-ast-parser-custom-tags: 0.0.43
     dev: false
 
-  /monaco-yaml@3.0.0(monaco-editor@0.27.0):
-    resolution: {integrity: sha512-WkgdfjCj0L2VPPwPoiwc4l8+B78FyVpSsMoufEWqe3ukm8+WygKUtmtCFOFnehmMih6tSqhy4DUtoAhfnicyZA==}
+  /monaco-yaml@4.0.4:
+    resolution: {integrity: sha512-qbM36fY1twpDUs4lhhxoXDQGUPVyYAFCPJi3E0JKgLioD8wzsD/pawgauFFXSzpMa09z8wbt/DTLXjXEehnVFA==}
     peerDependencies:
-      monaco-editor: '>=0.22'
+      monaco-editor: '>=0.30'
     dependencies:
       '@types/json-schema': 7.0.11
-      js-yaml: 3.14.1
-      monaco-editor: 0.27.0
-      yaml-ast-parser-custom-tags: 0.0.43
+      jsonc-parser: 3.2.0
+      monaco-marker-data-provider: 1.1.1
+      monaco-worker-manager: 2.0.1
+      path-browserify: 1.0.1
+      prettier: 2.8.4
+      vscode-languageserver-textdocument: 1.0.8
+      vscode-languageserver-types: 3.17.3
+      vscode-uri: 3.0.7
+      yaml: 2.2.1
     dev: false
 
   /monaco-yaml@4.0.4(monaco-editor@0.33.0):

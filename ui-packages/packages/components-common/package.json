@@ -28,7 +28,6 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@kogito-apps/task-console-shared": "workspace:*",
     "@patternfly/patternfly": "^4.108.2",
     "@patternfly/react-core": "4.157.3",
     "@patternfly/react-icons": "4.11.17",

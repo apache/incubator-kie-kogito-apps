@@ -18,7 +18,7 @@
     "precommit": "lint-staged",
     "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css,svg,png}\" dist/",
     "build": "rimraf dist && tsc -m commonjs -p tsconfig.json && pnpm run copy:css",
-    "build:prod": "pnpm run clean && pnpm run lint && pnpm -r -F @kogito-apps/components-common build:prod && pnpm run build",
+    "build:prod": "pnpm run clean && pnpm run lint && pnpm run build",
     "test:report": "pnpm run test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
     "update-snapshot": "jest --updateSnapshot",

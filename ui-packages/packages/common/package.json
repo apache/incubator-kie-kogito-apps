@@ -17,7 +17,7 @@
   "scripts": {
     "precommit": "lint-staged",
     "copy:css": "copyfiles -u 1 \"src/**/*.{sass,scss,css,svg,png}\" dist/",
-    "build": "pnpm clean && pnpm run copy:css && tsc -m commonjs -p tsconfig.json ",
+    "build": "pnpm clean && tsc -m commonjs -p tsconfig.json && pnpm run copy:css",
     "build:prod": "pnpm run lint && pnpm run build",
     "test:report": "pnpm run test --ci --reporters=jest-junit",
     "test": "jest --runInBand --ci --reporters=default --reporters=jest-junit",
