@@ -20,8 +20,12 @@ import JobsManagementTable from '../JobsManagementTable';
 import { KogitoSpinner } from '@kogito-apps/components-common';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
-import { Dropdown, DropdownItem, KebabToggle } from '@patternfly/react-core';
-import { SelectColumn } from '@patternfly/react-table';
+import {
+  Dropdown,
+  DropdownItem,
+  KebabToggle
+} from '@patternfly/react-core/dist/js/components/Dropdown';
+import { SelectColumn } from '@patternfly/react-table/components/Table';
 import { JobStatus } from '@kogito-apps/management-console-shared';
 import { MockedJobsManagementDriver } from '../../../../api/mocks/MockedJobsManagementDriver';
 import wait from 'waait';

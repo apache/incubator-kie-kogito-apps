@@ -18,7 +18,9 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import FormErrorsWrapper from '../FormErrorsWrapper';
-import { EmptyState, Button, ClipboardCopy } from '@patternfly/react-core';
+import { EmptyState } from '@patternfly/react-core/dist/js/components/EmptyState';
+import { Button } from '@patternfly/react-core/dist/js/components/Button';
+import { ClipboardCopy } from '@patternfly/react-core/dist/js/components/ClipboardCopy';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;

@@ -18,7 +18,7 @@ import {
   MockedEnvelopeBusController,
   MockedFormDisplayerEnvelopeViewApi
 } from './mocks/Mocks';
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
 import {
   FormDisplayerChannelApi,
   FormDisplayerEnvelopeApi,

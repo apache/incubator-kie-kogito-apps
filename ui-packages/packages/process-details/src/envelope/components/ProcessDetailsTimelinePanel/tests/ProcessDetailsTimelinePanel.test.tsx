@@ -22,7 +22,11 @@ import {
   ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
 import { act } from 'react-dom/test-utils';
-import { Dropdown, DropdownItem, KebabToggle } from '@patternfly/react-core';
+import {
+  Dropdown,
+  DropdownItem,
+  KebabToggle
+} from '@patternfly/react-core/dist/js/components/Dropdown';
 import wait from 'waait';
 import * as Utils from '../../../../utils/Utils';
 import TestProcessDetailsDriver from '../../../tests/mocks/TestProcessDetailsDriver';

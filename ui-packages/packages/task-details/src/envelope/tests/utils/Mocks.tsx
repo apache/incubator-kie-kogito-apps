@@ -16,10 +16,10 @@
 
 import { TaskDetailsChannelApi, TaskDetailsEnvelopeApi } from '../../../api';
 import { TaskDetailsEnvelopeViewApi } from '../../TaskDetailsEnvelopeView';
-import { MessageBusServer } from '@kogito-tooling/envelope-bus/dist/api';
-import { EnvelopeBusMessageManager } from '@kogito-tooling/envelope-bus/dist/common';
-import { EnvelopeBusController } from '@kogito-tooling/envelope-bus/dist/envelope';
-import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
+import { MessageBusServer } from '@kie-tools-core/envelope-bus/dist/api';
+import { EnvelopeBusMessageManager } from '@kie-tools-core/envelope-bus/dist/common';
+import { EnvelopeBusController } from '@kie-tools-core/envelope-bus/dist/envelope';
+import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 
 export const userTask: UserTaskInstance = {

@@ -18,14 +18,14 @@ import {
   MessageBusClientApi,
   RequestPropertyNames,
   NotificationPropertyNames
-} from '@kogito-tooling/envelope-bus/dist/api';
+} from '@kie-tools-core/envelope-bus/dist/api';
 import {
   FormDisplayerChannelApi,
   FormDisplayerEnvelopeApi
 } from '../../../api';
-import { MessageBusServer } from '@kogito-tooling/envelope-bus/dist/api';
-import { EnvelopeBusMessageManager } from '@kogito-tooling/envelope-bus/dist/common';
-import { EnvelopeBusController } from '@kogito-tooling/envelope-bus/dist/envelope';
+import { MessageBusServer } from '@kie-tools-core/envelope-bus/dist/api';
+import { EnvelopeBusMessageManager } from '@kie-tools-core/envelope-bus/dist/common';
+import { EnvelopeBusController } from '@kie-tools-core/envelope-bus/dist/envelope';
 import { FormDisplayerEnvelopeViewApi } from '../../FormDisplayerEnvelopeView';
 
 export const MockedApiRequests = jest.fn<

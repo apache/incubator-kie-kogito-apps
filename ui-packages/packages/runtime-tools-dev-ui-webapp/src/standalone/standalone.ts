@@ -15,7 +15,7 @@
  */
 
 import devUIEnvelopeIndex from '!!raw-loader!../../resources/iframe.html';
-import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
+import { EnvelopeServer } from '@kie-tools-core/envelope-bus/dist/channel';
 import {
   RuntimeToolsDevUIChannelApi,
   RuntimeToolsDevUIEnvelopeApi,

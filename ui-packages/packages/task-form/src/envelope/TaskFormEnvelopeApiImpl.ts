@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
 import { TaskFormEnvelopeViewApi } from './TaskFormEnvelopeView';
 import {
   Association,
@@ -28,6 +28,7 @@ import { TaskFormEnvelopeContext } from './TaskFormEnvelopeContext';
  * Implementation of the TaskFormEnvelopeApi
  */
 export class TaskFormEnvelopeApiImpl implements TaskFormEnvelopeApi {
+  private view: () => TaskFormEnvelopeViewApi;
   private capturedInitRequestYet = false;
   constructor(
     private readonly args: EnvelopeApiFactoryArgs<
@@ -50,7 +51,7 @@ export class TaskFormEnvelopeApiImpl implements TaskFormEnvelopeApi {
     association: Association,
     initArgs: TaskFormInitArgs
   ): Promise<void> => {
-    this.args.envelopeBusController.associate(
+    this.args.envelopeClient.associate(
       association.origin,
       association.envelopeServerId
     );
@@ -60,6 +61,7 @@ export class TaskFormEnvelopeApiImpl implements TaskFormEnvelopeApi {
     }
 
     this.ackCapturedInitRequest();
-    this.args.view().initialize(initArgs);
+    this.view = await this.args.viewDelegate();
+    this.view().initialize(initArgs);
   };
 }

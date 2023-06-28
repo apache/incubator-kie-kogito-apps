@@ -19,7 +19,7 @@ import {
   MockedFormDetailsEnvelopeViewApi
 } from './mocks/Mocks';
 import { FormType } from '@kogito-apps/forms-list';
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
 import { FormDetailsChannelApi, FormDetailsEnvelopeApi } from '../../api';
 import { FormDetailsEnvelopeApiImpl } from '../FormDetailsEnvelopeApiImpl';
 import { FormDetailsEnvelopeViewApi } from '../FormDetailsEnvelopeView';

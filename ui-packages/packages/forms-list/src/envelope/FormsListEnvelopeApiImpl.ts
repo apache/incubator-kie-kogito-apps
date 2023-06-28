@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
 import { FormsListEnvelopeViewApi } from './FormsListEnvelopeView';
 import { Association, FormsListChannelApi, FormsListEnvelopeApi } from '../api';
 import { FormsListEnvelopeContext } from './FormsListEnvelopeContext';

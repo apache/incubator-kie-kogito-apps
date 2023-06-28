@@ -18,8 +18,8 @@ import {
   MockedCloudEventFormEnvelopeViewApi,
   MockedEnvelopeBusControllerDefinition
 } from './mocks/Mocks';
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
-import { EnvelopeBusController } from '@kogito-tooling/envelope-bus/dist/envelope';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
+import { EnvelopeBusController } from '@kie-tools-core/envelope-bus/dist/envelope';
 import { CloudEventFormChannelApi, CloudEventFormEnvelopeApi } from '../../api';
 import { CloudEventFormEnvelopeViewApi } from '../CloudEventFormEnvelopeView';
 import { CloudEventFormEnvelopeApiImpl } from '../CloudEventFormEnvelopeApiImpl';

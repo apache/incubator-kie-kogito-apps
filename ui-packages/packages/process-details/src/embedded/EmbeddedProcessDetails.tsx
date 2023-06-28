@@ -15,9 +15,9 @@
  */
 
 import React, { useCallback, useMemo } from 'react';
-import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
-import { EmbeddedEnvelopeFactory } from '@kogito-tooling/envelope/dist/embedded';
-import { ContainerType } from '@kogito-tooling/envelope/dist/api';
+import { EnvelopeServer } from '@kie-tools-core/envelope-bus/dist/channel';
+import { EmbeddedEnvelopeFactory } from '@kie-tools-core/envelope/dist/embedded';
+import { ContainerType } from '@kie-tools-core/envelope/dist/api';
 import { init } from '../envelope';
 import {
   ProcessDetailsApi,

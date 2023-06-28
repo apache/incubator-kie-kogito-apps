@@ -20,7 +20,8 @@ import { act } from 'react-dom/test-utils';
 import CloudEventCustomHeadersEditor, {
   CloudEventCustomHeadersEditorApi
 } from '../CloudEventCustomHeadersEditor';
-import { Grid, TextInput } from '@patternfly/react-core';
+import { TextInput } from '@patternfly/react-core/dist/js/components/TextInput';
+import { Grid } from '@patternfly/react-core/dist/js/layouts/Grid';
 
 jest.mock('uuid', () => {
   let count = 0;

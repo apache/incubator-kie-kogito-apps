@@ -18,15 +18,15 @@ import {
   MessageBusClientApi,
   NotificationPropertyNames,
   RequestPropertyNames
-} from '@kogito-tooling/envelope-bus/dist/api';
+} from '@kie-tools-core/envelope-bus/dist/api';
 import {
   JobsManagementChannelApi,
   JobsManagementEnvelopeApi
 } from '../../../api';
 import { Job, JobStatus } from '@kogito-apps/management-console-shared';
-import { MessageBusServer } from '@kogito-tooling/envelope-bus/dist/api';
-import { EnvelopeBusMessageManager } from '@kogito-tooling/envelope-bus/dist/common';
-import { EnvelopeBusController } from '@kogito-tooling/envelope-bus/dist/envelope';
+import { MessageBusServer } from '@kie-tools-core/envelope-bus/dist/api';
+import { EnvelopeBusMessageManager } from '@kie-tools-core/envelope-bus/dist/common';
+import { EnvelopeBusController } from '@kie-tools-core/envelope-bus/dist/envelope';
 import { JobsManagementEnvelopeViewApi } from '../../JobsManagementEnvelopeView';
 
 export const Jobs: Job = {

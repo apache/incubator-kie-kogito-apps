@@ -20,7 +20,7 @@ import React, {
   useImperativeHandle,
   useState
 } from 'react';
-import { MessageBusClientApi } from '@kogito-tooling/envelope-bus/dist/api';
+import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { TaskFormChannelApi, TaskFormInitArgs, User } from '../api';
 import { Bullseye } from '@patternfly/react-core';

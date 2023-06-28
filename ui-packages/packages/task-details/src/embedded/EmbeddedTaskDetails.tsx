@@ -20,10 +20,10 @@ import {
   TaskDetailsChannelApi,
   TaskDetailsEnvelopeApi
 } from '../api';
-import { ContainerType } from '@kogito-tooling/envelope/dist/api';
-import { EnvelopeServer } from '@kogito-tooling/envelope-bus/dist/channel';
-import { EmbeddedEnvelopeFactory } from '@kogito-tooling/envelope/dist/embedded';
-import { EnvelopeBusMessage } from '@kogito-tooling/envelope-bus/dist/api';
+import { ContainerType } from '@kie-tools-core/envelope/dist/api';
+import { EnvelopeServer } from '@kie-tools-core/envelope-bus/dist/channel';
+import { EmbeddedEnvelopeFactory } from '@kie-tools-core/envelope/dist/embedded';
+import { EnvelopeBusMessage } from '@kie-tools-core/envelope-bus/dist/api';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { init } from '../envelope';
 

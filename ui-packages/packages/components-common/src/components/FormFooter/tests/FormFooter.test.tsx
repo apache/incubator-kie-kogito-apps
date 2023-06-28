@@ -16,7 +16,8 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { ActionList, Button } from '@patternfly/react-core';
+import { ActionList } from '@patternfly/react-core/dist/js/components/ActionList';
+import { Button } from '@patternfly/react-core/dist/js/components/Button';
 import FormFooter from '../FormFooter';
 import { ActionType, FormAction } from '../../utils';
 

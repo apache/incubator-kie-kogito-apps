@@ -18,7 +18,7 @@ import { TaskDetailsChannelApi, TaskDetailsEnvelopeApi } from '../../api';
 
 import { TaskDetailsEnvelopeViewApi } from '../TaskDetailsEnvelopeView';
 import { TaskDetailsEnvelopeContext } from '../TaskDetailsEnvelopeContext';
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
 import { TaskDetailsEnvelopeApiImpl } from '../TaskDetailsEnvelopeApiImpl';
 import {
   MockedEnvelopeBusController,

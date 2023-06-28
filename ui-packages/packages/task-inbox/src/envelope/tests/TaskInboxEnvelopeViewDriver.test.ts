@@ -18,7 +18,7 @@ import {
   MessageBusClientApi,
   RequestPropertyNames,
   NotificationPropertyNames
-} from '@kogito-tooling/envelope-bus/dist/api';
+} from '@kie-tools-core/envelope-bus/dist/api';
 import { MockedMessageBusClientApi, userTask } from './mocks/Mocks';
 import TaskInboxEnvelopeViewDriver from '../TaskInboxEnvelopeViewDriver';
 import {

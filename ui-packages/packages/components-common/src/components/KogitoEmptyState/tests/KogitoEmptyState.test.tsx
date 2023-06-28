@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { mount } from 'enzyme';
-import { Button } from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core/dist/js/components/Button';
 import { KogitoEmptyState, KogitoEmptyStateType } from '../KogitoEmptyState';
 
 const MockedComponent = (): React.ReactElement => {

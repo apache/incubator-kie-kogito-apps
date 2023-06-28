@@ -18,12 +18,12 @@ import {
   MessageBusClientApi,
   NotificationPropertyNames,
   RequestPropertyNames
-} from '@kogito-tooling/envelope-bus/dist/api';
+} from '@kie-tools-core/envelope-bus/dist/api';
 import {
   RuntimeToolsDevUIChannelApi,
   RuntimeToolsDevUIEnvelopeApi
 } from '../../../api';
-import { EnvelopeBusController } from '@kogito-tooling/envelope-bus/dist/envelope';
+import { EnvelopeBusController } from '@kie-tools-core/envelope-bus/dist/envelope';
 import { RuntimeToolsDevUIEnvelopeViewApi } from '../../RuntimeToolsDevUIEnvelopeViewApi';
 
 export const MockedApiRequests = jest.fn<

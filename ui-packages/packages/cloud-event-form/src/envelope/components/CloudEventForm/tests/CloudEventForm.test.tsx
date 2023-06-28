@@ -21,7 +21,7 @@ import { CloudEventFormDriver } from '../../../../api';
 import CloudEventCustomHeadersEditor, {
   CloudEventCustomHeadersEditorApi
 } from '../../CloudEventCustomHeadersEditor/CloudEventCustomHeadersEditor';
-import { CodeEditor } from '@patternfly/react-code-editor';
+import { CodeEditor } from '@patternfly/react-code-editor/dist/js/components/CodeEditor';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';
 

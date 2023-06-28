@@ -29,7 +29,8 @@ import TaskFormContainer from '../../../containers/TaskFormContainer/TaskFormCon
 import DevUIAppContextProvider from '../../../contexts/DevUIAppContextProvider';
 import { DefaultUser, User } from '@kogito-apps/consoles-common';
 
-import { Button, DrawerPanelContent } from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core/dist/js/components/Button';
+import { DrawerPanelContent } from '@patternfly/react-core/dist/js/components/Drawer';
 
 const userTask: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',

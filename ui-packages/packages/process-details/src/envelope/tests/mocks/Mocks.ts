@@ -19,7 +19,7 @@ import {
   NotificationPropertyNames,
   RequestPropertyNames,
   MessageBusServer
-} from '@kogito-tooling/envelope-bus/dist/api';
+} from '@kie-tools-core/envelope-bus/dist/api';
 import {
   ProcessDetailsChannelApi,
   ProcessDetailsEnvelopeApi
@@ -28,8 +28,8 @@ import {
   ProcessInstanceState,
   MilestoneStatus
 } from '@kogito-apps/management-console-shared';
-import { EnvelopeBusMessageManager } from '@kogito-tooling/envelope-bus/dist/common';
-import { EnvelopeBusController } from '@kogito-tooling/envelope-bus/dist/envelope';
+import { EnvelopeBusMessageManager } from '@kie-tools-core/envelope-bus/dist/common';
+import { EnvelopeBusController } from '@kie-tools-core/envelope-bus/dist/envelope';
 import { ProcessDetailsEnvelopeViewApi } from '../../ProcessDetailsEnvelopeView';
 
 export const ProcessDetails = {

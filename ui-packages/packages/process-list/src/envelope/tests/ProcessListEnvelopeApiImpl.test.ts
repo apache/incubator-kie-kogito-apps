@@ -18,8 +18,11 @@ import {
   MockedEnvelopeBusController,
   MockedProcessListEnvelopeViewApi
 } from './mocks/Mocks';
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
-import { ProcessListChannelApi, ProcessListEnvelopeApi } from '../../api';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
+import {
+  ProcessListChannelApi,
+  ProcessListEnvelopeApi
+} from '../../api';
 import { ProcessListEnvelopeApiImpl } from '../ProcessListEnvelopeApiImpl';
 import { ProcessListEnvelopeViewApi } from '../ProcessListEnvelopeView';
 import { ProcessListEnvelopeContext } from '../ProcessListEnvelopeContext';

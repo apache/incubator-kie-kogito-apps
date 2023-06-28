@@ -18,7 +18,7 @@ import {
   MockedEnvelopeBusController,
   MockedProcessDetailsEnvelopeViewApi
 } from './mocks/Mocks';
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
 import { ProcessDetailsChannelApi, ProcessDetailsEnvelopeApi } from '../../api';
 import { ProcessDetailsEnvelopeApiImpl } from '../ProcessDetailsEnvelopeApiImpl';
 import { ProcessDetailsEnvelopeViewApi } from '../ProcessDetailsEnvelopeView';

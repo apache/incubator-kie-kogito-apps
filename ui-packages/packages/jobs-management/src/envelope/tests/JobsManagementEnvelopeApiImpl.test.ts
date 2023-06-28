@@ -18,7 +18,7 @@ import {
   MockedEnvelopeBusController,
   MockedJobsManagementEnvelopeViewApi
 } from './mocks/Mocks';
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
 import { JobsManagementChannelApi, JobsManagementEnvelopeApi } from '../../api';
 import { JobsManagementEnvelopeApiImpl } from '../JobsManagementEnvelopeApiImpl';
 import { JobsManagementEnvelopeViewApi } from '../JobsManagementEnvelopeView';

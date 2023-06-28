@@ -18,7 +18,7 @@ import {
   MockedEnvelopeBusController,
   MockedCustomDashboardViewEnvelopeViewApi
 } from './mocks/Mocks';
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
 import {
   CustomDashboardViewChannelApi,
   CustomDashboardViewEnvelopeApi

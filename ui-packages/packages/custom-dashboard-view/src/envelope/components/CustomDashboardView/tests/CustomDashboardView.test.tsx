@@ -21,7 +21,8 @@ import CustomDashboardView, {
   CustomDashboardViewProps
 } from '../CustomDashboardView';
 import { act } from 'react-dom/test-utils';
-import { Bullseye, Card } from '@patternfly/react-core';
+import { Card } from '@patternfly/react-core/dist/js/components/Card';
+import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
 import { BrowserRouter } from 'react-router-dom';
 import { MockedCustomDashboardViewDriver } from '../../../../embedded/tests/utils/Mocks';
 import wait from 'waait';

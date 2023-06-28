@@ -18,7 +18,7 @@ import {
   MockedEnvelopeBusController,
   MockedTaskInboxEnvelopeViewApi
 } from './mocks/Mocks';
-import { EnvelopeApiFactoryArgs } from '@kogito-tooling/envelope';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
 import { TaskInboxChannelApi, TaskInboxEnvelopeApi } from '../../api';
 import { TaskInboxEnvelopeApiImpl } from '../TaskInboxEnvelopeApiImpl';
 import { TaskInboxEnvelopeViewApi } from '../TaskInboxEnvelopeView';
