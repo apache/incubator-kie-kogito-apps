@@ -171,20 +171,19 @@ index 485218875..58b366a3e 100644
              settings.put(Environment.USER, postgresql.getUsername());
              settings.put(Environment.PASS, postgresql.getPassword());
 diff --git a/kogito-apps-build-parent/pom.xml b/kogito-apps-build-parent/pom.xml
-index 40cee9ed4..4dcbf73e7 100644
+index bb7dc287a..9ef5fe1c1 100644
 --- a/kogito-apps-build-parent/pom.xml
 +++ b/kogito-apps-build-parent/pom.xml
-@@ -47,7 +47,8 @@
+@@ -47,7 +47,7 @@
          <!-- OptaPlanner version -->
-         <version.org.optaplanner>9.38.0.Final</version.org.optaplanner>
+         <version.org.optaplanner>9.40.0.Final</version.org.optaplanner>
  
 -        <version.com.vladmihalcea.hibernate-types-55>2.12.1</version.com.vladmihalcea.hibernate-types-55>
 +        <version.org.hibernate>6.2.0.Final</version.org.hibernate> <!-- Aligned with Quarkus bom -->
-+        <version.io.hypersistence.hypersistence-utils-hibernate-62>3.3.2</version.io.hypersistence.hypersistence-utils-hibernate-62>
          <version.org.apache.opennlp>1.9.2</version.org.apache.opennlp>
          <version.org.apache.commons.csv>1.8</version.org.apache.commons.csv>
          <version.org.jredisearch>2.0.0</version.org.jredisearch>
-@@ -137,6 +138,11 @@
+@@ -137,6 +137,11 @@
                  <type>pom</type>
                  <scope>import</scope>
              </dependency>
@@ -196,19 +195,18 @@ index 40cee9ed4..4dcbf73e7 100644
              <dependency>
                  <groupId>com.redislabs</groupId>
                  <artifactId>jredisearch</artifactId>
-@@ -164,9 +170,9 @@
+@@ -163,11 +168,6 @@
+                 <version>${version.org.skyscreamer}</version>
                  <scope>test</scope>
              </dependency>
-             <dependency>
+-            <dependency>
 -                <groupId>com.vladmihalcea</groupId>
 -                <artifactId>hibernate-types-55</artifactId>
 -                <version>${version.com.vladmihalcea.hibernate-types-55}</version>
-+                <groupId>io.hypersistence</groupId>
-+                <artifactId>hypersistence-utils-hibernate-62</artifactId>
-+                <version>${version.io.hypersistence.hypersistence-utils-hibernate-62}</version>
-             </dependency>
+-            </dependency>
              <dependency>
                  <groupId>com.graphql-java</groupId>
+                 <artifactId>graphql-java-extended-scalars</artifactId>
 diff --git a/persistence-commons/persistence-commons-oracle/pom.xml b/persistence-commons/persistence-commons-oracle/pom.xml
 index c4ac717bb..d032b4016 100644
 --- a/persistence-commons/persistence-commons-oracle/pom.xml
