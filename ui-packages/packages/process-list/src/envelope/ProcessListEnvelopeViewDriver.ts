@@ -81,7 +81,7 @@ export default class ProcessListEnvelopeViewDriver
   }
 
   openTriggerCloudEvent(processInstance?: ProcessInstance): void {
-    this.channelApi.notifications.processList__openTriggerCloudEvent(
+    this.channelApi.notifications.processList__openTriggerCloudEvent.send(
       processInstance
     );
   }

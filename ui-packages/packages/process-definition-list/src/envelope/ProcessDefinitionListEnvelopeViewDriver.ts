@@ -49,6 +49,6 @@ export default class ProcessDefinitionListEnvelopeViewDriver
   }
 
   openTriggerCloudEvent(): void {
-    this.channelApi.notifications.processDefinitionsList__openTriggerCloudEvent();
+    this.channelApi.notifications.processDefinitionsList__openTriggerCloudEvent.send();
   }
 }
