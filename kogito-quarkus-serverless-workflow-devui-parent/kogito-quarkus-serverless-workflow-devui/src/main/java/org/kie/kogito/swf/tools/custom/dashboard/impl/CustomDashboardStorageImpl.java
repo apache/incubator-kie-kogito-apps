@@ -95,7 +95,7 @@ public class CustomDashboardStorageImpl implements CustomDashboardStorage {
         }
     }
 
-    private String getStorageUrl(URL classLoaderCustomDashboardUrl) {
+    protected String getStorageUrl(URL classLoaderCustomDashboardUrl) {
         String storageUrl = ConfigProvider.getConfig()
                 .getOptionalValue(PROJECT_CUSTOM_DASHBOARD_STORAGE_PROP, String.class)
                 .orElseGet(() -> classLoaderCustomDashboardUrl.getFile());
@@ -216,7 +216,10 @@ public class CustomDashboardStorageImpl implements CustomDashboardStorage {
                     }
                     key.reset();
                 }
-            } catch (Throwable ex) {
+            } catch (InterruptedException e) {
+                LOGGER.warn("Exception in custom dashboard folder watcher for folder: {}, message: {}", folder, e.getMessage(), e);
+                Thread.currentThread().interrupt();
+            } catch (IOException ex) {
                 LOGGER.warn("Exception in custom dashboard folder watcher for folder: {}, message: {}", folder, ex.getMessage(), ex);
             }
         }
