@@ -36,11 +36,6 @@ const props: CustomDashboardViewProps = {
 const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
-jest.mock('@kogito-apps/components-common', () =>
-  Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
-    ServerErrors: () => <MockedComponent />
-  })
-);
 
 describe('Custom Dashboard View tests', () => {
   it('Snapshot tests with data', async () => {
@@ -87,7 +82,6 @@ describe('Custom Dashboard View tests', () => {
 
     const bullseyeWrapper = wrapper.update().find(Card);
     expect(bullseyeWrapper.find(Bullseye)).toMatchSnapshot();
-
     const serverErrorsWrapper = wrapper.update().find(ServerErrors);
     expect(serverErrorsWrapper.find(ServerErrors)).toMatchSnapshot();
     expect(props.driver.getCustomDashboardContent).toHaveBeenCalled();

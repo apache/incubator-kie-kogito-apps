@@ -87,8 +87,8 @@ function addHeader(
 
   if (header && valueField) {
     act(() => {
-      headerField.props().onChange(header);
-      valueField.props().onChange(headerValue);
+      headerField.at(0).props().onChange(header);
+      valueField.at(0).props().onChange(headerValue);
     });
   }
 

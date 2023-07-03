@@ -21,7 +21,7 @@ import {
 import { FormDetailsChannelApi, FormDetailsEnvelopeApi } from '../../../api';
 import { MessageBusServer } from '@kie-tools-core/envelope-bus/dist/api';
 import { EnvelopeBusMessageManager } from '@kie-tools-core/envelope-bus/dist/common';
-import { EnvelopeBusController } from '@kie-tools-core/envelope-bus/dist/envelope';
+import { EnvelopeClient } from '@kie-tools-core/envelope-bus/dist/envelope';
 import { FormDetailsEnvelopeViewApi } from '../../FormDetailsEnvelopeView';
 
 export const MockedApiRequests = jest.fn<
@@ -39,7 +39,8 @@ export const MockedMessageBusClientApi = jest.fn<
   requests: new MockedApiRequests(),
   notifications: jest.fn(),
   subscribe: jest.fn(),
-  unsubscribe: jest.fn()
+  unsubscribe: jest.fn(),
+  shared: jest.fn()
 }));
 
 export const MockedMessageBusServer = jest.fn<
@@ -75,8 +76,8 @@ export const MockedEnvelopeBusMessageManager = jest.fn<
   getNextRequestId: jest.fn()
 }));
 
-export const MockedEnvelopeBusControllerDefinition = jest.fn<
-  Partial<EnvelopeBusController<FormDetailsEnvelopeApi, FormDetailsChannelApi>>,
+export const MockedEnvelopeClientDefinition = jest.fn<
+  Partial<EnvelopeClient<FormDetailsEnvelopeApi, FormDetailsChannelApi>>,
   []
 >(() => ({
   bus: jest.fn(),
@@ -92,8 +93,8 @@ export const MockedEnvelopeBusControllerDefinition = jest.fn<
   receive: jest.fn()
 }));
 
-export const MockedEnvelopeBusController =
-  new MockedEnvelopeBusControllerDefinition() as EnvelopeBusController<
+export const MockedEnvelopeClient =
+  new MockedEnvelopeClientDefinition() as EnvelopeClient<
     FormDetailsEnvelopeApi,
     FormDetailsChannelApi
   >;

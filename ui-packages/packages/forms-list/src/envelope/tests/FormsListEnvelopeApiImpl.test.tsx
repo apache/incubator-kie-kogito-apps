@@ -15,7 +15,7 @@
  */
 
 import {
-  MockedEnvelopeBusController,
+  MockedEnvelopeClient,
   MockedFormsListEnvelopeViewApi
 } from './mocks/Mocks';
 import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope';
@@ -25,8 +25,8 @@ import { FormsListEnvelopeViewApi } from '../FormsListEnvelopeView';
 import { FormsListEnvelopeContext } from '../FormsListEnvelopeContext';
 
 describe('FormsListEnvelopeApiImpl tests', () => {
-  it('initialize', () => {
-    const envelopeBusController = MockedEnvelopeBusController;
+  it('initialize', async () => {
+    const envelopeClient = MockedEnvelopeClient;
     const view = new MockedFormsListEnvelopeViewApi();
     const args: EnvelopeApiFactoryArgs<
       FormsListEnvelopeApi,
@@ -34,9 +34,9 @@ describe('FormsListEnvelopeApiImpl tests', () => {
       FormsListEnvelopeViewApi,
       FormsListEnvelopeContext
     > = {
-      envelopeBusController,
+      envelopeClient,
       envelopeContext: {},
-      view: () => view
+      viewDelegate: () => Promise.resolve(() => view)
     };
 
     const envelopeApi = new FormsListEnvelopeApiImpl(args);
@@ -46,10 +46,11 @@ describe('FormsListEnvelopeApiImpl tests', () => {
       origin: 'origin'
     });
 
-    expect(envelopeBusController.associate).toHaveBeenCalledWith(
+    expect(MockedEnvelopeClient.associate).toHaveBeenCalledWith(
       'origin',
       'envelopeServerId'
     );
-    expect(view.initialize).toHaveBeenCalled();
+    const calledView = await view.initialize;
+    expect(calledView).toHaveBeenCalled();
   });
 });

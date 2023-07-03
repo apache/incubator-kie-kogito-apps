@@ -25,21 +25,16 @@ import {
 } from '../../../api';
 import { MessageBusServer } from '@kie-tools-core/envelope-bus/dist/api';
 import { EnvelopeBusMessageManager } from '@kie-tools-core/envelope-bus/dist/common';
-import { EnvelopeBusController } from '@kie-tools-core/envelope-bus/dist/envelope';
+import { EnvelopeClient } from '@kie-tools-core/envelope-bus/dist/envelope';
 import { FormDisplayerEnvelopeViewApi } from '../../FormDisplayerEnvelopeView';
+import { EnvelopeApiFactoryArgs } from '@kie-tools-core/envelope/dist/EnvelopeApiFactory';
 
 export const MockedApiRequests = jest.fn<
   Pick<FormDisplayerChannelApi, RequestPropertyNames<FormDisplayerChannelApi>>,
   []
 >(() => ({}));
 
-export const MockedApiNotifications = jest.fn<
-  Pick<
-    FormDisplayerChannelApi,
-    NotificationPropertyNames<FormDisplayerChannelApi>
-  >,
-  []
->(() => ({
+export const MockedApiNotifications = jest.fn<any, []>(() => ({
   notifyOnOpenForm: jest.fn()
 }));
 
@@ -50,7 +45,8 @@ export const MockedMessageBusClientApi = jest.fn<
   requests: new MockedApiRequests(),
   notifications: new MockedApiNotifications(),
   subscribe: jest.fn(),
-  unsubscribe: jest.fn()
+  unsubscribe: jest.fn(),
+  shared: jest.fn()
 }));
 
 export const MockedMessageBusServer = jest.fn<
@@ -86,10 +82,8 @@ export const MockedEnvelopeBusMessageManager = jest.fn<
   getNextRequestId: jest.fn()
 }));
 
-export const MockedEnvelopeBusControllerDefinition = jest.fn<
-  Partial<
-    EnvelopeBusController<FormDisplayerEnvelopeApi, FormDisplayerChannelApi>
-  >,
+export const MockedEnvelopeClientDefinition = jest.fn<
+  Partial<EnvelopeClient<FormDisplayerEnvelopeApi, FormDisplayerChannelApi>>,
   []
 >(() => ({
   bus: jest.fn(),
@@ -105,8 +99,8 @@ export const MockedEnvelopeBusControllerDefinition = jest.fn<
   receive: jest.fn()
 }));
 
-export const MockedEnvelopeBusController =
-  new MockedEnvelopeBusControllerDefinition() as EnvelopeBusController<
+export const MockedEnvelopeClient =
+  new MockedEnvelopeClientDefinition() as EnvelopeClient<
     FormDisplayerEnvelopeApi,
     FormDisplayerChannelApi
   >;

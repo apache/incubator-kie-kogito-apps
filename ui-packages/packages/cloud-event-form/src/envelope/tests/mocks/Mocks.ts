@@ -26,7 +26,7 @@ import {
 } from '../../../api';
 import { MessageBusServer } from '@kie-tools-core/envelope-bus/dist/api';
 import { EnvelopeBusMessageManager } from '@kie-tools-core/envelope-bus/dist/common';
-import { EnvelopeBusController } from '@kie-tools-core/envelope-bus/dist/envelope';
+import { EnvelopeClient } from '@kie-tools-core/envelope-bus/dist/envelope';
 import { CloudEventFormEnvelopeViewApi } from '../../CloudEventFormEnvelopeView';
 
 export class MockedCloudEventFormDriver implements CloudEventFormDriver {
@@ -52,7 +52,8 @@ export const MockedMessageBusClientApi = jest.fn<
   requests: new MockedApiRequests(),
   notifications: jest.fn(),
   subscribe: jest.fn(),
-  unsubscribe: jest.fn()
+  unsubscribe: jest.fn(),
+  shared: jest.fn()
 }));
 
 export const MockedMessageBusServer = jest.fn<
@@ -91,10 +92,8 @@ export const MockedEnvelopeBusMessageManager = jest.fn<
   getNextRequestId: jest.fn()
 }));
 
-export const MockedEnvelopeBusControllerDefinition = jest.fn<
-  Partial<
-    EnvelopeBusController<CloudEventFormEnvelopeApi, CloudEventFormChannelApi>
-  >,
+export const MockedEnvelopeClientDefinition = jest.fn<
+  Partial<EnvelopeClient<CloudEventFormEnvelopeApi, CloudEventFormChannelApi>>,
   []
 >(() => ({
   bus: jest.fn(),

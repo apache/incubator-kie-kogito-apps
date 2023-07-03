@@ -52,7 +52,7 @@ export class CustomDashboardViewEnvelopeApiImpl
     association: Association,
     dashboardName: string
   ): Promise<void> => {
-    this.args.envelopeClient.associate(
+    this.args.envelopeClient?.associate(
       association.origin,
       association.envelopeServerId
     );
