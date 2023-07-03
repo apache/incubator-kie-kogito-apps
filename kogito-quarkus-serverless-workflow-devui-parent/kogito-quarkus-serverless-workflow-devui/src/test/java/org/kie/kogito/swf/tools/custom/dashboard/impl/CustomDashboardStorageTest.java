@@ -19,7 +19,6 @@ package org.kie.kogito.swf.tools.custom.dashboard.impl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -71,7 +70,7 @@ public class CustomDashboardStorageTest {
     }
 
     @Test
-    public void testReloading() throws IOException, InterruptedException {
+    public void testHotReloading() throws IOException {
         String storageUrl = Thread.currentThread().getContextClassLoader().getResource("custom/dashboards/").getFile();
         File srcFile = new File(storageUrl + "products.dash.yaml");
         File targetFile = new File(storageUrl + "copy.dash.yml");
