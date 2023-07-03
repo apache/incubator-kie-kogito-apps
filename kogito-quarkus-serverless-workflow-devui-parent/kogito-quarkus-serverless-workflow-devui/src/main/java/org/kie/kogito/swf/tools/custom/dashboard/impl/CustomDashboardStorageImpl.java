@@ -96,10 +96,9 @@ public class CustomDashboardStorageImpl implements CustomDashboardStorage {
     }
 
     protected String getStorageUrl(URL classLoaderCustomDashboardUrl) {
-        String storageUrl = ConfigProvider.getConfig()
+        return ConfigProvider.getConfig()
                 .getOptionalValue(PROJECT_CUSTOM_DASHBOARD_STORAGE_PROP, String.class)
                 .orElseGet(() -> classLoaderCustomDashboardUrl.getFile());
-        return storageUrl;
     }
 
     private URL getCustomDashboardStorageUrl(URL classLoaderCustomDashboardUrl) {
@@ -157,7 +156,7 @@ public class CustomDashboardStorageImpl implements CustomDashboardStorage {
 
     private void init(Collection<File> files) {
         customDashboardInfoMap.clear();
-        readCustomDashboardResources().stream()
+        files.stream()
                 .forEach(file -> {
                     LocalDateTime lastModified = LocalDateTime.ofInstant(Instant.ofEpochMilli(file.lastModified()), TimeZone.getDefault().toZoneId());
                     customDashboardInfoMap.put(file.getName(),
@@ -175,13 +174,7 @@ public class CustomDashboardStorageImpl implements CustomDashboardStorage {
     }
 
     private Consumer<Collection<File>> reload() {
-        return files -> {
-            init(files);
-        };
-    }
-
-    private String getRelativePath(File file) {
-        return classLoaderCustomDashboardUrl.getPath() + file.getName();
+        return this::init;
     }
 
     private class DashboardFilesWatcher implements Runnable {

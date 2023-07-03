@@ -19,9 +19,11 @@ package org.kie.kogito.swf.tools.custom.dashboard.impl;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,6 +33,7 @@ import org.kie.kogito.swf.tools.custom.dashboard.CustomDashboardStorage;
 import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
 import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardInfo;
 
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -72,19 +75,35 @@ public class CustomDashboardStorageTest {
         String storageUrl = Thread.currentThread().getContextClassLoader().getResource("custom/dashboards/").getFile();
         File srcFile = new File(storageUrl + "products.dash.yaml");
         File targetFile = new File(storageUrl + "copy.dash.yml");
-        assertEquals(targetFile.exists(), false);
+
+        assertEquals(false, targetFile.exists());
         FileUtils.copyFile(srcFile, targetFile);
-        assertEquals(targetFile.exists(), true);
-        Thread.sleep(10000);
+        assertEquals(true, targetFile.exists());
+        await().atMost(20, TimeUnit.SECONDS).until(() -> testBeforeDelete());
         Collection<CustomDashboardInfo> customDashboardInfoFilterAllBeforeDelete = customDashboardStorage.getCustomDashboardFiles(null);
         assertEquals(3, customDashboardInfoFilterAllBeforeDelete.size());
 
-        assertEquals(targetFile.exists(), true);
+        assertEquals(true, targetFile.exists());
         FileUtils.delete(targetFile);
-        Thread.sleep(10000);
-        assertEquals(targetFile.exists(), false);
+        assertEquals(false, targetFile.exists());
+        await().atMost(20, TimeUnit.SECONDS).until(() -> testAfterDelete());
+
         Collection<CustomDashboardInfo> customDashboardInfoFilterAllAfterDelete = customDashboardStorage.getCustomDashboardFiles(null);
         assertEquals(2, customDashboardInfoFilterAllAfterDelete.size());
+    }
+
+    private boolean testBeforeDelete() {
+        if (customDashboardStorage.getCustomDashboardFiles(null).size() == 3) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean testAfterDelete() {
+        if (customDashboardStorage.getCustomDashboardFiles(null).size() == 2) {
+            return true;
+        }
+        return false;
     }
 
     @Test
