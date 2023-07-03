@@ -358,11 +358,9 @@ describe('TaskDetailsPage tests', () => {
     wrapper.update();
     // open details drawer
     await act(async () => {
-      const button = wrapper
-        .find(Button)
-        .findWhere((node) => node.props().id === 'view-details');
+      const button = wrapper.find(Button).at(0);
 
-      button.props().onClick();
+      button.simulate('click');
     });
     wrapper = wrapper.update();
 

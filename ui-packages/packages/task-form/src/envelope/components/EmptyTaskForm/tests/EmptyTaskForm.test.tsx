@@ -16,11 +16,8 @@
 
 import React from 'react';
 import _ from 'lodash';
-import {
-  Button,
-  EmptyState,
-  EmptyStateSecondaryActions
-} from '@patternfly/react-core';
+import { Button } from '@patternfly/react-core/dist/js/components/Button';
+import { EmptyState, EmptyStateSecondaryActions } from '@patternfly/react-core';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import EmptyTaskForm from '../EmptyTaskForm';
 import { ApplyForVisaForm } from '../../utils/tests/mocks/ApplyForVisa';

@@ -62,13 +62,15 @@
     "rimraf": "^3.0.2",
     "ts-jest": "^26.5.6",
     "typescript": "^4.6.2",
-    "waait": "^1.0.5"
+    "waait": "^1.0.5",
+    "jest-canvas-mock": "2.5.2"
   },
   "jest": {
     "setupFiles": [
       "./config/Jest-config/test-shim.js",
       "./config/Jest-config/test-setup.js",
-      "core-js"
+      "core-js",
+      "jest-canvas-mock"
     ],
     "moduleFileExtensions": [
       "ts",

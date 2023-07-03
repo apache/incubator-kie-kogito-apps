@@ -17,7 +17,8 @@
 import {
   MessageBusClientApi,
   RequestPropertyNames,
-  NotificationPropertyNames
+  NotificationPropertyNames,
+  ApiNotificationConsumers
 } from '@kie-tools-core/envelope-bus/dist/api';
 import { MockedMessageBusClientApi, userTask } from './mocks/Mocks';
 import TaskInboxEnvelopeViewDriver from '../TaskInboxEnvelopeViewDriver';
@@ -33,10 +34,7 @@ let requests: Pick<
   TaskInboxChannelApi,
   RequestPropertyNames<TaskInboxChannelApi>
 >;
-let notifications: Pick<
-  TaskInboxChannelApi,
-  NotificationPropertyNames<TaskInboxChannelApi>
->;
+let notifications: ApiNotificationConsumers<TaskInboxChannelApi>;
 let driver: TaskInboxEnvelopeViewDriver;
 
 describe('TaskInboxEnvelopeViewDriver tests', () => {
@@ -103,7 +101,9 @@ describe('TaskInboxEnvelopeViewDriver tests', () => {
     it('openTask', () => {
       driver.openTask(userTask);
 
-      expect(notifications.taskInbox__openTask).toHaveBeenCalledWith(userTask);
+      expect(notifications.taskInbox__openTask.send).toHaveBeenCalledWith(
+        userTask
+      );
     });
   });
 });

@@ -16,9 +16,10 @@
 
 import {
   MessageBusClientApi,
-  NotificationPropertyNames,
   RequestPropertyNames,
-  MessageBusServer
+  MessageBusServer,
+  ApiNotificationConsumers,
+  ApiSharedValueConsumers
 } from '@kie-tools-core/envelope-bus/dist/api';
 import {
   ProcessDetailsChannelApi,
@@ -29,7 +30,7 @@ import {
   MilestoneStatus
 } from '@kogito-apps/management-console-shared';
 import { EnvelopeBusMessageManager } from '@kie-tools-core/envelope-bus/dist/common';
-import { EnvelopeBusController } from '@kie-tools-core/envelope-bus/dist/envelope';
+import { EnvelopeClient } from '@kie-tools-core/envelope-bus/dist/envelope';
 import { ProcessDetailsEnvelopeViewApi } from '../../ProcessDetailsEnvelopeView';
 
 export const ProcessDetails = {
@@ -136,16 +137,33 @@ export const MockedApiRequests = jest.fn<
   processDetails__handleNodeInstanceRetrigger: jest.fn()
 }));
 
+const mockNotificationConsumer = {
+  subscribe: jest.fn(),
+  unsubscribe: jest.fn(),
+  send: jest.fn()
+};
+
+const mockSharedConsumer = {
+  subscribe: jest.fn(),
+  unsubscribe: jest.fn(),
+  send: jest.fn(),
+  set: jest.fn()
+};
+
 export const MockedApiNotifications = jest.fn<
-  Pick<
-    ProcessDetailsChannelApi,
-    NotificationPropertyNames<ProcessDetailsChannelApi>
-  >,
+  ApiNotificationConsumers<ProcessDetailsChannelApi>,
   []
 >(() => ({
-  jobList__sortBy: jest.fn(),
-  processDetails__handleProcessVariableUpdate: jest.fn(),
-  processDetails__openProcessDetails: jest.fn()
+  jobList__sortBy: mockNotificationConsumer,
+  processDetails__handleProcessVariableUpdate: mockNotificationConsumer,
+  processDetails__openProcessDetails: mockNotificationConsumer
+}));
+
+export const MockedApiSharedValueConsumers = jest.fn<
+  ApiSharedValueConsumers<ProcessDetailsChannelApi>,
+  []
+>(() => ({
+  processDetails__handleProcessVariableUpdate: mockSharedConsumer
 }));
 
 export const MockedMessageBusClientApi = jest.fn<
@@ -154,6 +172,7 @@ export const MockedMessageBusClientApi = jest.fn<
 >(() => ({
   requests: new MockedApiRequests(),
   notifications: new MockedApiNotifications(),
+  shared: new MockedApiSharedValueConsumers(),
   subscribe: jest.fn(),
   unsubscribe: jest.fn()
 }));
@@ -195,9 +214,7 @@ export const MockedEnvelopeBusMessageManager = jest.fn<
 }));
 
 export const MockedEnvelopeBusControllerDefinition = jest.fn<
-  Partial<
-    EnvelopeBusController<ProcessDetailsEnvelopeApi, ProcessDetailsChannelApi>
-  >,
+  Partial<EnvelopeClient<ProcessDetailsEnvelopeApi, ProcessDetailsChannelApi>>,
   []
 >(() => ({
   bus: jest.fn(),
@@ -213,8 +230,8 @@ export const MockedEnvelopeBusControllerDefinition = jest.fn<
   receive: jest.fn()
 }));
 
-export const MockedEnvelopeBusController =
-  new MockedEnvelopeBusControllerDefinition() as EnvelopeBusController<
+export const MockedEnvelopeClient =
+  new MockedEnvelopeBusControllerDefinition() as EnvelopeClient<
     ProcessDetailsEnvelopeApi,
     ProcessDetailsChannelApi
   >;

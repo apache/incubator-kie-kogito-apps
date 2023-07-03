@@ -3213,6 +3213,9 @@ importers:
       jest:
         specifier: ^26.6.3
         version: 26.6.3
+      jest-canvas-mock:
+        specifier: 2.5.2
+        version: 2.5.2
       jest-junit:
         specifier: ^14.0.0
         version: 14.0.1
@@ -13335,6 +13338,13 @@ packages:
       }
     dev: true
 
+  /cssfontparser@1.2.1:
+    resolution:
+      {
+        integrity: sha512-6tun4LoZnj7VN6YeegOVb67KBX/7JJsqvj+pv3ZA7F878/eN33AbGa5b/S/wXxS/tcp8nc40xRUrsPlxIyNUPg==
+      }
+    dev: true
+
   /cssnano-preset-default@6.0.0(postcss@8.4.21):
     resolution:
       {
@@ -18212,6 +18222,16 @@ packages:
         integrity: sha512-QZ9qOMdF+QLHxy1QIpUHUU1D5pS2CG2P69LF6L6CPjPYA/XMOmKV3PZpawHoAjHNyB0swdVTRxdYT4tbBbxqwg==
       }
 
+  /jest-canvas-mock@2.5.2:
+    resolution:
+      {
+        integrity: sha512-vgnpPupjOL6+L5oJXzxTxFrlGEIbHdZqFU+LFNdtLxZ3lRDCl17FlTMM7IatoRQkrcyOTMlDinjUguqmQ6bR2A==
+      }
+    dependencies:
+      cssfontparser: 1.2.1
+      moo-color: 1.0.3
+    dev: true
+
   /jest-changed-files@26.6.2:
     resolution:
       {
@@ -20331,6 +20351,15 @@ packages:
       vscode-uri: 3.0.7
       yaml: 2.3.1
     dev: false
+
+  /moo-color@1.0.3:
+    resolution:
+      {
+        integrity: sha512-i/+ZKXMDf6aqYtBhuOcej71YSlbjT3wCO/4H1j8rPvxDJEifdwgg5MaFyu6iYAT8GBZJg2z0dkgK4YMzvURALQ==
+      }
+    dependencies:
+      color-name: 1.1.4
+    dev: true
 
   /moo@0.5.2:
     resolution:

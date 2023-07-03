@@ -397,11 +397,16 @@ exports[`TaskDetailsPage tests Error notification 1`] = `
                 <DrawerPanelContent
                   className="kogito-task-console__full-size"
                 >
-                  <div
-                    className="pf-c-drawer__panel kogito-task-console__full-size"
-                    hidden={true}
-                    onTransitionEnd={[Function]}
-                  />
+                  <GenerateId
+                    prefix="pf-drawer-panel-"
+                  >
+                    <div
+                      className="pf-c-drawer__panel kogito-task-console__full-size"
+                      hidden={true}
+                      id="pf-drawer-panel-3"
+                      onTransitionEnd={[Function]}
+                    />
+                  </GenerateId>
                 </DrawerPanelContent>
               </div>
             </DrawerMain>
@@ -697,11 +702,16 @@ exports[`TaskDetailsPage tests Error notification 2`] = `
                 <DrawerPanelContent
                   className="kogito-task-console__full-size"
                 >
-                  <div
-                    className="pf-c-drawer__panel kogito-task-console__full-size"
-                    hidden={true}
-                    onTransitionEnd={[Function]}
-                  />
+                  <GenerateId
+                    prefix="pf-drawer-panel-"
+                  >
+                    <div
+                      className="pf-c-drawer__panel kogito-task-console__full-size"
+                      hidden={true}
+                      id="pf-drawer-panel-3"
+                      onTransitionEnd={[Function]}
+                    />
+                  </GenerateId>
                 </DrawerPanelContent>
               </div>
             </DrawerMain>
@@ -1091,11 +1101,16 @@ exports[`TaskDetailsPage tests Normal State 1`] = `
                 <DrawerPanelContent
                   className="kogito-task-console__full-size"
                 >
-                  <div
-                    className="pf-c-drawer__panel kogito-task-console__full-size"
-                    hidden={true}
-                    onTransitionEnd={[Function]}
-                  />
+                  <GenerateId
+                    prefix="pf-drawer-panel-"
+                  >
+                    <div
+                      className="pf-c-drawer__panel kogito-task-console__full-size"
+                      hidden={true}
+                      id="pf-drawer-panel-0"
+                      onTransitionEnd={[Function]}
+                    />
+                  </GenerateId>
                 </DrawerPanelContent>
               </div>
             </DrawerMain>
@@ -1409,11 +1424,16 @@ exports[`TaskDetailsPage tests Success notification 1`] = `
                 <DrawerPanelContent
                   className="kogito-task-console__full-size"
                 >
-                  <div
-                    className="pf-c-drawer__panel kogito-task-console__full-size"
-                    hidden={true}
-                    onTransitionEnd={[Function]}
-                  />
+                  <GenerateId
+                    prefix="pf-drawer-panel-"
+                  >
+                    <div
+                      className="pf-c-drawer__panel kogito-task-console__full-size"
+                      hidden={true}
+                      id="pf-drawer-panel-1"
+                      onTransitionEnd={[Function]}
+                    />
+                  </GenerateId>
                 </DrawerPanelContent>
               </div>
             </DrawerMain>
@@ -1709,11 +1729,16 @@ exports[`TaskDetailsPage tests Success notification 2`] = `
                 <DrawerPanelContent
                   className="kogito-task-console__full-size"
                 >
-                  <div
-                    className="pf-c-drawer__panel kogito-task-console__full-size"
-                    hidden={true}
-                    onTransitionEnd={[Function]}
-                  />
+                  <GenerateId
+                    prefix="pf-drawer-panel-"
+                  >
+                    <div
+                      className="pf-c-drawer__panel kogito-task-console__full-size"
+                      hidden={true}
+                      id="pf-drawer-panel-1"
+                      onTransitionEnd={[Function]}
+                    />
+                  </GenerateId>
                 </DrawerPanelContent>
               </div>
             </DrawerMain>

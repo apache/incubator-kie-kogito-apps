@@ -120,6 +120,7 @@ describe('CounterfactualAnalysis', () => {
       .find(
         'CounterfactualTable Tbody Tr:first-child Td:first-child SelectColumn'
       )
+      .find('input')
       .simulate('change');
 
     wrapper
@@ -518,6 +519,7 @@ describe('CounterfactualAnalysis', () => {
       .find(
         'CounterfactualTable Tbody Tr:first-child Td:first-child SelectColumn'
       )
+      .find('input')
       .simulate('change');
 
     wrapper
@@ -525,7 +527,7 @@ describe('CounterfactualAnalysis', () => {
       .at(2)
       .find('Button')
       .simulate('click');
-    console.log('test', wrapper.debug());
+
     expect(wrapper.find('CounterfactualInputDomainEdit')).toHaveLength(1);
     expect(wrapper.find('CounterfactualNumericalDomainEdit')).toHaveLength(1);
 

@@ -17,7 +17,7 @@ import React from 'react';
 import { act } from 'react-dom/test-utils';
 import { ProcessInstances } from './mocks/Mocks';
 import { mount } from 'enzyme';
-import ProcessListTable from '../ProcessListTable';
+import ProcessListTable, { ProcessListTableProps } from '../ProcessListTable';
 import { Button } from '@patternfly/react-core/dist/js/components/Button';
 import { Checkbox } from '@patternfly/react-core/dist/js/components/Checkbox';
 import _ from 'lodash';
@@ -113,7 +113,7 @@ describe('ProcessListTable test', () => {
       <ProcessListTable {...{ ...props, expanded: { 0: true } }} />
     ).find('ProcessListTable');
     await act(async () => {
-      wrapper.find('td').at(0).find(Button).simulate('click');
+      wrapper.find('td').at(0).find('Button').simulate('click');
     });
     wrapper = wrapper.update();
     expect(wrapper.find('MockedProcessListChildTable').exists()).toBeTruthy();
@@ -134,7 +134,7 @@ describe('ProcessListTable test', () => {
       </BrowserRouter>
     ).find('ProcessListTable');
     await act(async () => {
-      wrapper.find('CollapseColumn').at(0).find(Button).simulate('click');
+      wrapper.find('CollapseColumn').at(0).find('Button').simulate('click');
     });
     const ProcessListChildTable = wrapper
       .update()
