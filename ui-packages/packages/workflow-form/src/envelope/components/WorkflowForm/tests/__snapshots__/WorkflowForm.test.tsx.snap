@@ -256,123 +256,17 @@ exports[`WorkflowForm Test Workflow Form - loading 2`] = `
                           className="pf-c-form__group-control"
                         >
                           <CodeEditor
-                            className=""
                             code=""
-                            copyButtonAriaLabel="Copy code to clipboard"
-                            copyButtonSuccessTooltipText="Content added to clipboard"
-                            copyButtonToolTipText="Copy to clipboard"
-                            customControls={null}
-                            downloadButtonAriaLabel="Download code"
-                            downloadButtonToolTipText="Download"
-                            downloadFileName="1688401716990"
-                            emptyState=""
-                            emptyStateBody="Drag and drop a file or upload one."
-                            emptyStateButton="Browse"
-                            emptyStateLink="Start from scratch"
-                            emptyStateTitle="Start editing"
-                            headerMainContent=""
                             height="400px"
                             isCopyEnabled={false}
                             isDarkTheme={false}
-                            isDownloadEnabled={false}
                             isLanguageLabelVisible={false}
                             isLineNumbersVisible={true}
                             isMinimapVisible={true}
                             isReadOnly={false}
-                            isUploadEnabled={false}
-                            language="json"
-                            loading=""
                             onChange={[Function]}
-                            onCodeChange={[Function]}
-                            onEditorDidMount={[Function]}
-                            options={Object {}}
-                            overrideServices={Object {}}
-                            shortcutsPopoverButtonText="View Shortcuts"
-                            shortcutsPopoverProps={
-                              Object {
-                                "aria-label": "Keyboard Shortcuts",
-                                "bodyContent": "",
-                              }
-                            }
-                            showEditor={true}
-                            toolTipCopyExitDelay={1600}
-                            toolTipDelay={300}
-                            toolTipMaxWidth="100px"
-                            toolTipPosition="top"
-                            uploadButtonAriaLabel="Upload code"
-                            uploadButtonToolTipText="Upload"
-                            width=""
                           >
-                            <t
-                              disabled={false}
-                              getDataTransferItems={[Function]}
-                              maxSize={Infinity}
-                              minSize={0}
-                              multiple={false}
-                              onDropAccepted={[Function]}
-                              onDropRejected={[Function]}
-                              preventDropOnDocument={true}
-                            >
-                              <div
-                                className="pf-c-code-editor"
-                              >
-                                <div
-                                  className="pf-c-code-editor__header"
-                                >
-                                  <div
-                                    className="pf-c-code-editor__controls"
-                                  />
-                                  <div
-                                    className="pf-c-code-editor__header-main"
-                                  />
-                                </div>
-                                <div
-                                  className="pf-c-code-editor__main"
-                                >
-                                  <div
-                                    className="pf-c-code-editor__code"
-                                    tabIndex={0}
-                                  >
-                                    <MonacoEditor
-                                      className={null}
-                                      defaultValue=""
-                                      editorDidMount={[Function]}
-                                      editorWillMount={[Function]}
-                                      editorWillUnmount={[Function]}
-                                      height="400px"
-                                      language="json"
-                                      onChange={[Function]}
-                                      options={
-                                        Object {
-                                          "cursorStyle": "line",
-                                          "lineNumbers": "on",
-                                          "minimap": Object {
-                                            "enabled": true,
-                                          },
-                                          "readOnly": false,
-                                          "scrollBeyondLastLine": true,
-                                          "tabIndex": -1,
-                                        }
-                                      }
-                                      overrideServices={Object {}}
-                                      theme="vs-light"
-                                      value=""
-                                      width=""
-                                    >
-                                      <div
-                                        className="react-monaco-editor-container"
-                                        style={
-                                          Object {
-                                            "height": "400px",
-                                            "width": "",
-                                          }
-                                        }
-                                      />
-                                    </MonacoEditor>
-                                  </div>
-                                </div>
-                              </div>
-                            </t>
+                            <MockedComponent />
                           </CodeEditor>
                         </div>
                       </div>
@@ -586,123 +480,17 @@ exports[`WorkflowForm Test Workflow Form - rendering 1`] = `
                           className="pf-c-form__group-control"
                         >
                           <CodeEditor
-                            className=""
                             code=""
-                            copyButtonAriaLabel="Copy code to clipboard"
-                            copyButtonSuccessTooltipText="Content added to clipboard"
-                            copyButtonToolTipText="Copy to clipboard"
-                            customControls={null}
-                            downloadButtonAriaLabel="Download code"
-                            downloadButtonToolTipText="Download"
-                            downloadFileName="1688401716990"
-                            emptyState=""
-                            emptyStateBody="Drag and drop a file or upload one."
-                            emptyStateButton="Browse"
-                            emptyStateLink="Start from scratch"
-                            emptyStateTitle="Start editing"
-                            headerMainContent=""
                             height="400px"
                             isCopyEnabled={false}
                             isDarkTheme={false}
-                            isDownloadEnabled={false}
                             isLanguageLabelVisible={false}
                             isLineNumbersVisible={true}
                             isMinimapVisible={true}
                             isReadOnly={false}
-                            isUploadEnabled={false}
-                            language="json"
-                            loading=""
                             onChange={[Function]}
-                            onCodeChange={[Function]}
-                            onEditorDidMount={[Function]}
-                            options={Object {}}
-                            overrideServices={Object {}}
-                            shortcutsPopoverButtonText="View Shortcuts"
-                            shortcutsPopoverProps={
-                              Object {
-                                "aria-label": "Keyboard Shortcuts",
-                                "bodyContent": "",
-                              }
-                            }
-                            showEditor={true}
-                            toolTipCopyExitDelay={1600}
-                            toolTipDelay={300}
-                            toolTipMaxWidth="100px"
-                            toolTipPosition="top"
-                            uploadButtonAriaLabel="Upload code"
-                            uploadButtonToolTipText="Upload"
-                            width=""
                           >
-                            <t
-                              disabled={false}
-                              getDataTransferItems={[Function]}
-                              maxSize={Infinity}
-                              minSize={0}
-                              multiple={false}
-                              onDropAccepted={[Function]}
-                              onDropRejected={[Function]}
-                              preventDropOnDocument={true}
-                            >
-                              <div
-                                className="pf-c-code-editor"
-                              >
-                                <div
-                                  className="pf-c-code-editor__header"
-                                >
-                                  <div
-                                    className="pf-c-code-editor__controls"
-                                  />
-                                  <div
-                                    className="pf-c-code-editor__header-main"
-                                  />
-                                </div>
-                                <div
-                                  className="pf-c-code-editor__main"
-                                >
-                                  <div
-                                    className="pf-c-code-editor__code"
-                                    tabIndex={0}
-                                  >
-                                    <MonacoEditor
-                                      className={null}
-                                      defaultValue=""
-                                      editorDidMount={[Function]}
-                                      editorWillMount={[Function]}
-                                      editorWillUnmount={[Function]}
-                                      height="400px"
-                                      language="json"
-                                      onChange={[Function]}
-                                      options={
-                                        Object {
-                                          "cursorStyle": "line",
-                                          "lineNumbers": "on",
-                                          "minimap": Object {
-                                            "enabled": true,
-                                          },
-                                          "readOnly": false,
-                                          "scrollBeyondLastLine": true,
-                                          "tabIndex": -1,
-                                        }
-                                      }
-                                      overrideServices={Object {}}
-                                      theme="vs-light"
-                                      value=""
-                                      width=""
-                                    >
-                                      <div
-                                        className="react-monaco-editor-container"
-                                        style={
-                                          Object {
-                                            "height": "400px",
-                                            "width": "",
-                                          }
-                                        }
-                                      />
-                                    </MonacoEditor>
-                                  </div>
-                                </div>
-                              </div>
-                            </t>
+                            <MockedComponent />
                           </CodeEditor>
                         </div>
                       </div>
@@ -916,123 +704,17 @@ exports[`WorkflowForm Test Workflow Form - validation error 1`] = `
                           className="pf-c-form__group-control"
                         >
                           <CodeEditor
-                            className=""
                             code=""
-                            copyButtonAriaLabel="Copy code to clipboard"
-                            copyButtonSuccessTooltipText="Content added to clipboard"
-                            copyButtonToolTipText="Copy to clipboard"
-                            customControls={null}
-                            downloadButtonAriaLabel="Download code"
-                            downloadButtonToolTipText="Download"
-                            downloadFileName="1688401716990"
-                            emptyState=""
-                            emptyStateBody="Drag and drop a file or upload one."
-                            emptyStateButton="Browse"
-                            emptyStateLink="Start from scratch"
-                            emptyStateTitle="Start editing"
-                            headerMainContent=""
                             height="400px"
                             isCopyEnabled={false}
                             isDarkTheme={false}
-                            isDownloadEnabled={false}
                             isLanguageLabelVisible={false}
                             isLineNumbersVisible={true}
                             isMinimapVisible={true}
                             isReadOnly={false}
-                            isUploadEnabled={false}
-                            language="json"
-                            loading=""
                             onChange={[Function]}
-                            onCodeChange={[Function]}
-                            onEditorDidMount={[Function]}
-                            options={Object {}}
-                            overrideServices={Object {}}
-                            shortcutsPopoverButtonText="View Shortcuts"
-                            shortcutsPopoverProps={
-                              Object {
-                                "aria-label": "Keyboard Shortcuts",
-                                "bodyContent": "",
-                              }
-                            }
-                            showEditor={true}
-                            toolTipCopyExitDelay={1600}
-                            toolTipDelay={300}
-                            toolTipMaxWidth="100px"
-                            toolTipPosition="top"
-                            uploadButtonAriaLabel="Upload code"
-                            uploadButtonToolTipText="Upload"
-                            width=""
                           >
-                            <t
-                              disabled={false}
-                              getDataTransferItems={[Function]}
-                              maxSize={Infinity}
-                              minSize={0}
-                              multiple={false}
-                              onDropAccepted={[Function]}
-                              onDropRejected={[Function]}
-                              preventDropOnDocument={true}
-                            >
-                              <div
-                                className="pf-c-code-editor"
-                              >
-                                <div
-                                  className="pf-c-code-editor__header"
-                                >
-                                  <div
-                                    className="pf-c-code-editor__controls"
-                                  />
-                                  <div
-                                    className="pf-c-code-editor__header-main"
-                                  />
-                                </div>
-                                <div
-                                  className="pf-c-code-editor__main"
-                                >
-                                  <div
-                                    className="pf-c-code-editor__code"
-                                    tabIndex={0}
-                                  >
-                                    <MonacoEditor
-                                      className={null}
-                                      defaultValue=""
-                                      editorDidMount={[Function]}
-                                      editorWillMount={[Function]}
-                                      editorWillUnmount={[Function]}
-                                      height="400px"
-                                      language="json"
-                                      onChange={[Function]}
-                                      options={
-                                        Object {
-                                          "cursorStyle": "line",
-                                          "lineNumbers": "on",
-                                          "minimap": Object {
-                                            "enabled": true,
-                                          },
-                                          "readOnly": false,
-                                          "scrollBeyondLastLine": true,
-                                          "tabIndex": -1,
-                                        }
-                                      }
-                                      overrideServices={Object {}}
-                                      theme="vs-light"
-                                      value=""
-                                      width=""
-                                    >
-                                      <div
-                                        className="react-monaco-editor-container"
-                                        style={
-                                          Object {
-                                            "height": "400px",
-                                            "width": "",
-                                          }
-                                        }
-                                      />
-                                    </MonacoEditor>
-                                  </div>
-                                </div>
-                              </div>
-                            </t>
+                            <MockedComponent />
                           </CodeEditor>
                           <div
                             aria-live="polite"

@@ -38,6 +38,19 @@ jest.mock('@patternfly/react-core/dist/js/components/Alert', () =>
   )
 );
 
+jest.mock('@patternfly/react-code-editor/dist/js/components/CodeEditor', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-code-editor'), {
+    CodeEditor: () => {
+      return <MockedComponent />;
+    },
+    Language: () => {
+      return {
+        json: 'json'
+      };
+    }
+  })
+);
+
 jest.mock('@patternfly/react-core/dist/js/components/Popover', () =>
   Object.assign(
     {},

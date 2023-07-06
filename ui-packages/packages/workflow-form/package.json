@@ -69,8 +69,8 @@
     "setupFiles": [
       "./config/Jest-config/test-shim.js",
       "./config/Jest-config/test-setup.js",
-      "core-js",
-      "jest-canvas-mock"
+      "./config/Jest-config/canvas-mock.js",
+      "core-js"
     ],
     "moduleFileExtensions": [
       "ts",
