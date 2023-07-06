@@ -197,8 +197,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                 <CheckCircleIcon
                   className="pf-u-mr-sm"
                   color="var(--pf-global--success-color--100)"
-                  noVerticalAlign={false}
-                  size="sm"
                 />
                 Executed
               </React.Fragment>,
@@ -222,9 +220,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
               "title": <React.Fragment>
                 <HistoryIcon
                   className="pf-u-mr-sm"
-                  color="currentColor"
-                  noVerticalAlign={false}
-                  size="sm"
                 />
                  Updated
                  
@@ -269,9 +264,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
               "title": <React.Fragment>
                 <ClockIcon
                   className="pf-u-mr-sm"
-                  color="currentColor"
-                  noVerticalAlign={false}
-                  size="sm"
                 />
                 Scheduled
               </React.Fragment>,
@@ -318,9 +310,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
               "title": <React.Fragment>
                 <HistoryIcon
                   className="pf-u-mr-sm"
-                  color="currentColor"
-                  noVerticalAlign={false}
-                  size="sm"
                 />
                  Updated
                  
@@ -365,9 +354,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
               "title": <React.Fragment>
                 <BanIcon
                   className="pf-u-mr-sm"
-                  color="currentColor"
-                  noVerticalAlign={false}
-                  size="sm"
                 />
                 Canceled
               </React.Fragment>,
@@ -414,9 +400,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
               "title": <React.Fragment>
                 <HistoryIcon
                   className="pf-u-mr-sm"
-                  color="currentColor"
-                  noVerticalAlign={false}
-                  size="sm"
                 />
                  Updated
                  
@@ -2976,8 +2959,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             <CheckCircleIcon
                               className="pf-u-mr-sm"
                               color="var(--pf-global--success-color--100)"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                             Executed
                           </React.Fragment>,
@@ -3001,9 +2982,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <HistoryIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                              Updated
                              
@@ -3048,9 +3026,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <ClockIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                             Scheduled
                           </React.Fragment>,
@@ -3097,9 +3072,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <HistoryIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                              Updated
                              
@@ -3144,9 +3116,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <BanIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                             Canceled
                           </React.Fragment>,
@@ -3193,9 +3162,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <HistoryIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                              Updated
                              
@@ -3249,8 +3215,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               <CheckCircleIcon
                                 className="pf-u-mr-sm"
                                 color="var(--pf-global--success-color--100)"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Executed
                             </React.Fragment>,
@@ -3274,9 +3238,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -3347,9 +3308,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <HistoryIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                              Updated
                              
@@ -3395,8 +3353,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             <CheckCircleIcon
                               className="pf-u-mr-sm"
                               color="var(--pf-global--success-color--100)"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                             Executed
                           </React.Fragment>,
@@ -3418,9 +3374,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <ClockIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Scheduled
                             </React.Fragment>,
@@ -3467,9 +3420,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -3563,9 +3513,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <HistoryIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                              Updated
                              
@@ -3610,9 +3557,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <ClockIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                             Scheduled
                           </React.Fragment>,
@@ -3634,9 +3578,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <BanIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Canceled
                             </React.Fragment>,
@@ -3683,9 +3624,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -3779,9 +3717,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <HistoryIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                              Updated
                              
@@ -3826,9 +3761,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <BanIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                             Canceled
                           </React.Fragment>,
@@ -3857,8 +3789,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               <CheckCircleIcon
                                 className="pf-u-mr-sm"
                                 color="var(--pf-global--success-color--100)"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Executed
                             </React.Fragment>,
@@ -3882,9 +3812,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -3955,9 +3882,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <HistoryIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                              Updated
                              
@@ -4003,8 +3927,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             <CheckCircleIcon
                               className="pf-u-mr-sm"
                               color="var(--pf-global--success-color--100)"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                             Executed
                           </React.Fragment>,
@@ -4026,9 +3948,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <ClockIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Scheduled
                             </React.Fragment>,
@@ -4075,9 +3994,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -4171,9 +4087,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <HistoryIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                              Updated
                              
@@ -4218,9 +4131,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <ClockIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                             Scheduled
                           </React.Fragment>,
@@ -4242,9 +4152,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <BanIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Canceled
                             </React.Fragment>,
@@ -4291,9 +4198,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -4387,9 +4291,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <HistoryIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                              Updated
                              
@@ -4434,9 +4335,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                           "title": <React.Fragment>
                             <BanIcon
                               className="pf-u-mr-sm"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                             Canceled
                           </React.Fragment>,
@@ -4902,8 +4800,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                 <CheckCircleIcon
                                   className="pf-u-mr-sm"
                                   color="var(--pf-global--success-color--100)"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                 Executed
                               </React.Fragment>,
@@ -4927,9 +4823,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <HistoryIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                  Updated
                                  
@@ -5000,9 +4893,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -5048,8 +4938,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               <CheckCircleIcon
                                 className="pf-u-mr-sm"
                                 color="var(--pf-global--success-color--100)"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Executed
                             </React.Fragment>,
@@ -5071,9 +4959,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <ClockIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                 Scheduled
                               </React.Fragment>,
@@ -5120,9 +5005,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <HistoryIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                  Updated
                                  
@@ -5216,9 +5098,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -5263,9 +5142,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <ClockIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Scheduled
                             </React.Fragment>,
@@ -5287,9 +5163,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <BanIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                 Canceled
                               </React.Fragment>,
@@ -5336,9 +5209,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <HistoryIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                  Updated
                                  
@@ -5432,9 +5302,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -5479,9 +5346,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <BanIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Canceled
                             </React.Fragment>,
@@ -5534,8 +5398,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                 <CheckCircleIcon
                                   className="pf-u-mr-sm"
                                   color="var(--pf-global--success-color--100)"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                 Executed
                               </React.Fragment>,
@@ -5559,9 +5421,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <HistoryIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                  Updated
                                  
@@ -5632,9 +5491,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -5680,8 +5536,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               <CheckCircleIcon
                                 className="pf-u-mr-sm"
                                 color="var(--pf-global--success-color--100)"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Executed
                             </React.Fragment>,
@@ -5703,9 +5557,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <ClockIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                 Scheduled
                               </React.Fragment>,
@@ -5752,9 +5603,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <HistoryIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                  Updated
                                  
@@ -5848,9 +5696,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -5895,9 +5740,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <ClockIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Scheduled
                             </React.Fragment>,
@@ -5919,9 +5761,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <BanIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                 Canceled
                               </React.Fragment>,
@@ -5968,9 +5807,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <HistoryIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                  Updated
                                  
@@ -6064,9 +5900,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <HistoryIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                                Updated
                                
@@ -6111,9 +5944,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                             "title": <React.Fragment>
                               <BanIcon
                                 className="pf-u-mr-sm"
-                                color="currentColor"
-                                noVerticalAlign={false}
-                                size="sm"
                               />
                               Canceled
                             </React.Fragment>,
@@ -6144,8 +5974,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                   <CheckCircleIcon
                                     className="pf-u-mr-sm"
                                     color="var(--pf-global--success-color--100)"
-                                    noVerticalAlign={false}
-                                    size="sm"
                                   />
                                   Executed
                                 </React.Fragment>,
@@ -6169,9 +5997,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                 "title": <React.Fragment>
                                   <HistoryIcon
                                     className="pf-u-mr-sm"
-                                    color="currentColor"
-                                    noVerticalAlign={false}
-                                    size="sm"
                                   />
                                    Updated
                                    
@@ -6242,9 +6067,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <HistoryIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                  Updated
                                  
@@ -6290,8 +6112,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                 <CheckCircleIcon
                                   className="pf-u-mr-sm"
                                   color="var(--pf-global--success-color--100)"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                 Executed
                               </React.Fragment>,
@@ -6313,9 +6133,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                 "title": <React.Fragment>
                                   <ClockIcon
                                     className="pf-u-mr-sm"
-                                    color="currentColor"
-                                    noVerticalAlign={false}
-                                    size="sm"
                                   />
                                   Scheduled
                                 </React.Fragment>,
@@ -6362,9 +6179,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                 "title": <React.Fragment>
                                   <HistoryIcon
                                     className="pf-u-mr-sm"
-                                    color="currentColor"
-                                    noVerticalAlign={false}
-                                    size="sm"
                                   />
                                    Updated
                                    
@@ -6458,9 +6272,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <HistoryIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                  Updated
                                  
@@ -6505,9 +6316,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <ClockIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                 Scheduled
                               </React.Fragment>,
@@ -6529,9 +6337,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                 "title": <React.Fragment>
                                   <BanIcon
                                     className="pf-u-mr-sm"
-                                    color="currentColor"
-                                    noVerticalAlign={false}
-                                    size="sm"
                                   />
                                   Canceled
                                 </React.Fragment>,
@@ -6578,9 +6383,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                 "title": <React.Fragment>
                                   <HistoryIcon
                                     className="pf-u-mr-sm"
-                                    color="currentColor"
-                                    noVerticalAlign={false}
-                                    size="sm"
                                   />
                                    Updated
                                    
@@ -6674,9 +6476,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <HistoryIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                  Updated
                                  
@@ -6721,9 +6520,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                               "title": <React.Fragment>
                                 <BanIcon
                                   className="pf-u-mr-sm"
-                                  color="currentColor"
-                                  noVerticalAlign={false}
-                                  size="sm"
                                 />
                                 Canceled
                               </React.Fragment>,
@@ -7206,8 +7002,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                         <CheckCircleIcon
                                           className="pf-u-mr-sm"
                                           color="var(--pf-global--success-color--100)"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                         Executed
                                       </React.Fragment>,
@@ -7231,9 +7025,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       "title": <React.Fragment>
                                         <HistoryIcon
                                           className="pf-u-mr-sm"
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                          Updated
                                          
@@ -7304,9 +7095,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                     "title": <React.Fragment>
                                       <HistoryIcon
                                         className="pf-u-mr-sm"
-                                        color="currentColor"
-                                        noVerticalAlign={false}
-                                        size="sm"
                                       />
                                        Updated
                                        
@@ -7352,8 +7140,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       <CheckCircleIcon
                                         className="pf-u-mr-sm"
                                         color="var(--pf-global--success-color--100)"
-                                        noVerticalAlign={false}
-                                        size="sm"
                                       />
                                       Executed
                                     </React.Fragment>,
@@ -7385,8 +7171,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                           <CheckCircleIcon
                                             className="pf-u-mr-sm"
                                             color="var(--pf-global--success-color--100)"
-                                            noVerticalAlign={false}
-                                            size="sm"
                                           />
                                           Executed
                                         </React.Fragment>,
@@ -7410,9 +7194,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                         "title": <React.Fragment>
                                           <HistoryIcon
                                             className="pf-u-mr-sm"
-                                            color="currentColor"
-                                            noVerticalAlign={false}
-                                            size="sm"
                                           />
                                            Updated
                                            
@@ -7483,9 +7264,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       "title": <React.Fragment>
                                         <HistoryIcon
                                           className="pf-u-mr-sm"
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                          Updated
                                          
@@ -7531,8 +7309,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                         <CheckCircleIcon
                                           className="pf-u-mr-sm"
                                           color="var(--pf-global--success-color--100)"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                         Executed
                                       </React.Fragment>,
@@ -7771,28 +7547,8 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                               <CheckCircleIcon
                                                 className="pf-u-mr-sm"
                                                 color="var(--pf-global--success-color--100)"
-                                                noVerticalAlign={false}
-                                                size="sm"
                                               >
-                                                <svg
-                                                  aria-hidden={true}
-                                                  aria-labelledby={null}
-                                                  className="pf-u-mr-sm"
-                                                  fill="var(--pf-global--success-color--100)"
-                                                  height="1em"
-                                                  role="img"
-                                                  style={
-                                                    Object {
-                                                      "verticalAlign": "-0.125em",
-                                                    }
-                                                  }
-                                                  viewBox="0 0 512 512"
-                                                  width="1em"
-                                                >
-                                                  <path
-                                                    d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"
-                                                  />
-                                                </svg>
+                                                <MockedIcon />
                                               </CheckCircleIcon>
                                               Executed
                                             </td>
@@ -7940,29 +7696,8 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                             >
                                               <HistoryIcon
                                                 className="pf-u-mr-sm"
-                                                color="currentColor"
-                                                noVerticalAlign={false}
-                                                size="sm"
                                               >
-                                                <svg
-                                                  aria-hidden={true}
-                                                  aria-labelledby={null}
-                                                  className="pf-u-mr-sm"
-                                                  fill="currentColor"
-                                                  height="1em"
-                                                  role="img"
-                                                  style={
-                                                    Object {
-                                                      "verticalAlign": "-0.125em",
-                                                    }
-                                                  }
-                                                  viewBox="0 0 512 512"
-                                                  width="1em"
-                                                >
-                                                  <path
-                                                    d="M504 255.531c.253 136.64-111.18 248.372-247.82 248.468-59.015.042-113.223-20.53-155.822-54.911-11.077-8.94-11.905-25.541-1.839-35.607l11.267-11.267c8.609-8.609 22.353-9.551 31.891-1.984C173.062 425.135 212.781 440 256 440c101.705 0 184-82.311 184-184 0-101.705-82.311-184-184-184-48.814 0-93.149 18.969-126.068 49.932l50.754 50.754c10.08 10.08 2.941 27.314-11.313 27.314H24c-8.837 0-16-7.163-16-16V38.627c0-14.254 17.234-21.393 27.314-11.314l49.372 49.372C129.209 34.136 189.552 8 256 8c136.81 0 247.747 110.78 248 247.531zm-180.912 78.784l9.823-12.63c8.138-10.463 6.253-25.542-4.21-33.679L288 256.349V152c0-13.255-10.745-24-24-24h-16c-13.255 0-24 10.745-24 24v135.651l65.409 50.874c10.463 8.137 25.541 6.253 33.679-4.21z"
-                                                  />
-                                                </svg>
+                                                <MockedIcon />
                                               </HistoryIcon>
                                                Updated
                                                
@@ -8133,8 +7868,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                           <CheckCircleIcon
                                                             className="pf-u-mr-sm"
                                                             color="var(--pf-global--success-color--100)"
-                                                            noVerticalAlign={false}
-                                                            size="sm"
                                                           />
                                                           Executed
                                                         </React.Fragment>,
@@ -8158,9 +7891,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                         "title": <React.Fragment>
                                                           <HistoryIcon
                                                             className="pf-u-mr-sm"
-                                                            color="currentColor"
-                                                            noVerticalAlign={false}
-                                                            size="sm"
                                                           />
                                                            Updated
                                                            
@@ -8231,9 +7961,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                       "title": <React.Fragment>
                                                         <HistoryIcon
                                                           className="pf-u-mr-sm"
-                                                          color="currentColor"
-                                                          noVerticalAlign={false}
-                                                          size="sm"
                                                         />
                                                          Updated
                                                          
@@ -8279,8 +8006,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                         <CheckCircleIcon
                                                           className="pf-u-mr-sm"
                                                           color="var(--pf-global--success-color--100)"
-                                                          noVerticalAlign={false}
-                                                          size="sm"
                                                         />
                                                         Executed
                                                       </React.Fragment>,
@@ -8955,9 +8680,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       "title": <React.Fragment>
                                         <ClockIcon
                                           className="pf-u-mr-sm"
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                         Scheduled
                                       </React.Fragment>,
@@ -9004,9 +8726,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       "title": <React.Fragment>
                                         <HistoryIcon
                                           className="pf-u-mr-sm"
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                          Updated
                                          
@@ -9100,9 +8819,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                     "title": <React.Fragment>
                                       <HistoryIcon
                                         className="pf-u-mr-sm"
-                                        color="currentColor"
-                                        noVerticalAlign={false}
-                                        size="sm"
                                       />
                                        Updated
                                        
@@ -9147,9 +8863,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                     "title": <React.Fragment>
                                       <ClockIcon
                                         className="pf-u-mr-sm"
-                                        color="currentColor"
-                                        noVerticalAlign={false}
-                                        size="sm"
                                       />
                                       Scheduled
                                     </React.Fragment>,
@@ -9180,9 +8893,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                         "title": <React.Fragment>
                                           <ClockIcon
                                             className="pf-u-mr-sm"
-                                            color="currentColor"
-                                            noVerticalAlign={false}
-                                            size="sm"
                                           />
                                           Scheduled
                                         </React.Fragment>,
@@ -9229,9 +8939,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                         "title": <React.Fragment>
                                           <HistoryIcon
                                             className="pf-u-mr-sm"
-                                            color="currentColor"
-                                            noVerticalAlign={false}
-                                            size="sm"
                                           />
                                            Updated
                                            
@@ -9325,9 +9032,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       "title": <React.Fragment>
                                         <HistoryIcon
                                           className="pf-u-mr-sm"
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                          Updated
                                          
@@ -9372,9 +9076,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       "title": <React.Fragment>
                                         <ClockIcon
                                           className="pf-u-mr-sm"
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                         Scheduled
                                       </React.Fragment>,
@@ -9612,29 +9313,8 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                             >
                                               <ClockIcon
                                                 className="pf-u-mr-sm"
-                                                color="currentColor"
-                                                noVerticalAlign={false}
-                                                size="sm"
                                               >
-                                                <svg
-                                                  aria-hidden={true}
-                                                  aria-labelledby={null}
-                                                  className="pf-u-mr-sm"
-                                                  fill="currentColor"
-                                                  height="1em"
-                                                  role="img"
-                                                  style={
-                                                    Object {
-                                                      "verticalAlign": "-0.125em",
-                                                    }
-                                                  }
-                                                  viewBox="0 0 512 512"
-                                                  width="1em"
-                                                >
-                                                  <path
-                                                    d="M256,8C119,8,8,119,8,256S119,504,256,504,504,393,504,256,393,8,256,8Zm92.49,313h0l-20,25a16,16,0,0,1-22.49,2.5h0l-67-49.72a40,40,0,0,1-15-31.23V112a16,16,0,0,1,16-16h32a16,16,0,0,1,16,16V256l58,42.5A16,16,0,0,1,348.49,321Z"
-                                                  />
-                                                </svg>
+                                                <MockedIcon />
                                               </ClockIcon>
                                               Scheduled
                                             </td>
@@ -9807,29 +9487,8 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                             >
                                               <HistoryIcon
                                                 className="pf-u-mr-sm"
-                                                color="currentColor"
-                                                noVerticalAlign={false}
-                                                size="sm"
                                               >
-                                                <svg
-                                                  aria-hidden={true}
-                                                  aria-labelledby={null}
-                                                  className="pf-u-mr-sm"
-                                                  fill="currentColor"
-                                                  height="1em"
-                                                  role="img"
-                                                  style={
-                                                    Object {
-                                                      "verticalAlign": "-0.125em",
-                                                    }
-                                                  }
-                                                  viewBox="0 0 512 512"
-                                                  width="1em"
-                                                >
-                                                  <path
-                                                    d="M504 255.531c.253 136.64-111.18 248.372-247.82 248.468-59.015.042-113.223-20.53-155.822-54.911-11.077-8.94-11.905-25.541-1.839-35.607l11.267-11.267c8.609-8.609 22.353-9.551 31.891-1.984C173.062 425.135 212.781 440 256 440c101.705 0 184-82.311 184-184 0-101.705-82.311-184-184-184-48.814 0-93.149 18.969-126.068 49.932l50.754 50.754c10.08 10.08 2.941 27.314-11.313 27.314H24c-8.837 0-16-7.163-16-16V38.627c0-14.254 17.234-21.393 27.314-11.314l49.372 49.372C129.209 34.136 189.552 8 256 8c136.81 0 247.747 110.78 248 247.531zm-180.912 78.784l9.823-12.63c8.138-10.463 6.253-25.542-4.21-33.679L288 256.349V152c0-13.255-10.745-24-24-24h-16c-13.255 0-24 10.745-24 24v135.651l65.409 50.874c10.463 8.137 25.541 6.253 33.679-4.21z"
-                                                  />
-                                                </svg>
+                                                <MockedIcon />
                                               </HistoryIcon>
                                                Updated
                                                
@@ -10007,9 +9666,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                         "title": <React.Fragment>
                                                           <ClockIcon
                                                             className="pf-u-mr-sm"
-                                                            color="currentColor"
-                                                            noVerticalAlign={false}
-                                                            size="sm"
                                                           />
                                                           Scheduled
                                                         </React.Fragment>,
@@ -10056,9 +9712,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                         "title": <React.Fragment>
                                                           <HistoryIcon
                                                             className="pf-u-mr-sm"
-                                                            color="currentColor"
-                                                            noVerticalAlign={false}
-                                                            size="sm"
                                                           />
                                                            Updated
                                                            
@@ -10152,9 +9805,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                       "title": <React.Fragment>
                                                         <HistoryIcon
                                                           className="pf-u-mr-sm"
-                                                          color="currentColor"
-                                                          noVerticalAlign={false}
-                                                          size="sm"
                                                         />
                                                          Updated
                                                          
@@ -10199,9 +9849,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                       "title": <React.Fragment>
                                                         <ClockIcon
                                                           className="pf-u-mr-sm"
-                                                          color="currentColor"
-                                                          noVerticalAlign={false}
-                                                          size="sm"
                                                         />
                                                         Scheduled
                                                       </React.Fragment>,
@@ -10904,9 +10551,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       "title": <React.Fragment>
                                         <BanIcon
                                           className="pf-u-mr-sm"
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                         Canceled
                                       </React.Fragment>,
@@ -10953,9 +10597,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       "title": <React.Fragment>
                                         <HistoryIcon
                                           className="pf-u-mr-sm"
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                          Updated
                                          
@@ -11049,9 +10690,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                     "title": <React.Fragment>
                                       <HistoryIcon
                                         className="pf-u-mr-sm"
-                                        color="currentColor"
-                                        noVerticalAlign={false}
-                                        size="sm"
                                       />
                                        Updated
                                        
@@ -11096,9 +10734,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                     "title": <React.Fragment>
                                       <BanIcon
                                         className="pf-u-mr-sm"
-                                        color="currentColor"
-                                        noVerticalAlign={false}
-                                        size="sm"
                                       />
                                       Canceled
                                     </React.Fragment>,
@@ -11129,9 +10764,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                         "title": <React.Fragment>
                                           <BanIcon
                                             className="pf-u-mr-sm"
-                                            color="currentColor"
-                                            noVerticalAlign={false}
-                                            size="sm"
                                           />
                                           Canceled
                                         </React.Fragment>,
@@ -11178,9 +10810,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                         "title": <React.Fragment>
                                           <HistoryIcon
                                             className="pf-u-mr-sm"
-                                            color="currentColor"
-                                            noVerticalAlign={false}
-                                            size="sm"
                                           />
                                            Updated
                                            
@@ -11274,9 +10903,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       "title": <React.Fragment>
                                         <HistoryIcon
                                           className="pf-u-mr-sm"
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                          Updated
                                          
@@ -11321,9 +10947,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                       "title": <React.Fragment>
                                         <BanIcon
                                           className="pf-u-mr-sm"
-                                          color="currentColor"
-                                          noVerticalAlign={false}
-                                          size="sm"
                                         />
                                         Canceled
                                       </React.Fragment>,
@@ -11561,29 +11184,8 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                             >
                                               <BanIcon
                                                 className="pf-u-mr-sm"
-                                                color="currentColor"
-                                                noVerticalAlign={false}
-                                                size="sm"
                                               >
-                                                <svg
-                                                  aria-hidden={true}
-                                                  aria-labelledby={null}
-                                                  className="pf-u-mr-sm"
-                                                  fill="currentColor"
-                                                  height="1em"
-                                                  role="img"
-                                                  style={
-                                                    Object {
-                                                      "verticalAlign": "-0.125em",
-                                                    }
-                                                  }
-                                                  viewBox="0 0 512 512"
-                                                  width="1em"
-                                                >
-                                                  <path
-                                                    d="M256 8C119.034 8 8 119.033 8 256s111.034 248 248 248 248-111.034 248-248S392.967 8 256 8zm130.108 117.892c65.448 65.448 70 165.481 20.677 235.637L150.47 105.216c70.204-49.356 170.226-44.735 235.638 20.676zM125.892 386.108c-65.448-65.448-70-165.481-20.677-235.637L361.53 406.784c-70.203 49.356-170.226 44.736-235.638-20.676z"
-                                                  />
-                                                </svg>
+                                                <MockedIcon />
                                               </BanIcon>
                                               Canceled
                                             </td>
@@ -11756,29 +11358,8 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                             >
                                               <HistoryIcon
                                                 className="pf-u-mr-sm"
-                                                color="currentColor"
-                                                noVerticalAlign={false}
-                                                size="sm"
                                               >
-                                                <svg
-                                                  aria-hidden={true}
-                                                  aria-labelledby={null}
-                                                  className="pf-u-mr-sm"
-                                                  fill="currentColor"
-                                                  height="1em"
-                                                  role="img"
-                                                  style={
-                                                    Object {
-                                                      "verticalAlign": "-0.125em",
-                                                    }
-                                                  }
-                                                  viewBox="0 0 512 512"
-                                                  width="1em"
-                                                >
-                                                  <path
-                                                    d="M504 255.531c.253 136.64-111.18 248.372-247.82 248.468-59.015.042-113.223-20.53-155.822-54.911-11.077-8.94-11.905-25.541-1.839-35.607l11.267-11.267c8.609-8.609 22.353-9.551 31.891-1.984C173.062 425.135 212.781 440 256 440c101.705 0 184-82.311 184-184 0-101.705-82.311-184-184-184-48.814 0-93.149 18.969-126.068 49.932l50.754 50.754c10.08 10.08 2.941 27.314-11.313 27.314H24c-8.837 0-16-7.163-16-16V38.627c0-14.254 17.234-21.393 27.314-11.314l49.372 49.372C129.209 34.136 189.552 8 256 8c136.81 0 247.747 110.78 248 247.531zm-180.912 78.784l9.823-12.63c8.138-10.463 6.253-25.542-4.21-33.679L288 256.349V152c0-13.255-10.745-24-24-24h-16c-13.255 0-24 10.745-24 24v135.651l65.409 50.874c10.463 8.137 25.541 6.253 33.679-4.21z"
-                                                  />
-                                                </svg>
+                                                <MockedIcon />
                                               </HistoryIcon>
                                                Updated
                                                
@@ -11948,9 +11529,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                         "title": <React.Fragment>
                                                           <BanIcon
                                                             className="pf-u-mr-sm"
-                                                            color="currentColor"
-                                                            noVerticalAlign={false}
-                                                            size="sm"
                                                           />
                                                           Canceled
                                                         </React.Fragment>,
@@ -11997,9 +11575,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                         "title": <React.Fragment>
                                                           <HistoryIcon
                                                             className="pf-u-mr-sm"
-                                                            color="currentColor"
-                                                            noVerticalAlign={false}
-                                                            size="sm"
                                                           />
                                                            Updated
                                                            
@@ -12093,9 +11668,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                       "title": <React.Fragment>
                                                         <HistoryIcon
                                                           className="pf-u-mr-sm"
-                                                          color="currentColor"
-                                                          noVerticalAlign={false}
-                                                          size="sm"
                                                         />
                                                          Updated
                                                          
@@ -12140,9 +11712,6 @@ exports[`Jobs management table component tests Snapshot test with default props 
                                                       "title": <React.Fragment>
                                                         <BanIcon
                                                           className="pf-u-mr-sm"
-                                                          color="currentColor"
-                                                          noVerticalAlign={false}
-                                                          size="sm"
                                                         />
                                                         Canceled
                                                       </React.Fragment>,

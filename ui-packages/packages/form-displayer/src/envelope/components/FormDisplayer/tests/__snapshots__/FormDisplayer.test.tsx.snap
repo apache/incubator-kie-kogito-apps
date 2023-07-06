@@ -118,45 +118,7 @@ exports[`FormDisplayer component tests Test beats spinner 1`] = `
     <Bullseye
       className="kogito-form-displayer__ball-beats"
     >
-      <div
-        className="pf-l-bullseye kogito-form-displayer__ball-beats"
-      >
-        <BallBeat
-          color="#000000"
-          loading={true}
-        >
-          <EmotionCssPropInternal
-            __EMOTION_LABEL_PLEASE_DO_NOT_USE__="Component"
-            __EMOTION_TYPE_PLEASE_DO_NOT_USE__="div"
-            css={
-              Object {
-                " > div": Object {
-                  "&:nth-of-type(2n-1)": Object {
-                    "animationDelay": "-0.35s !important",
-                  },
-                  "animation": "_EMO_animation-o8qkpw_@keyframes animation-o8qkpw{100%{opacity:1;transform:scale(1);}50%{opacity:0.2;transform:scale(0.75);}}_EMO_ 0.7s 0s infinite linear",
-                  "animationFillMode": "both",
-                  "backgroundColor": "#000000",
-                  "borderRadius": "100%",
-                  "display": "inline-block",
-                  "height": "15px",
-                  "margin": "2px",
-                  "width": "15px",
-                },
-              }
-            }
-          >
-            <Noop />
-            <div
-              className="css-1rg7usp-Component"
-            >
-              <div />
-              <div />
-              <div />
-            </div>
-          </EmotionCssPropInternal>
-        </BallBeat>
-      </div>
+      <MockedComponent />
     </Bullseye>
   </div>
 </ForwardRef>

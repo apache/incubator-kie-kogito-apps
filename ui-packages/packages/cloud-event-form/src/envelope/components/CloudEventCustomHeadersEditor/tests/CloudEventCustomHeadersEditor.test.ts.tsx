@@ -32,23 +32,33 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@patternfly/react-core', () =>
+jest.mock('@patternfly/react-core/dist/js/components/Button', () =>
   Object.assign({}, jest.requireActual('@patternfly/react-core'), {
     Button: () => {
       return <MockedComponent />;
-    },
+    }
+  })
+);
+
+jest.mock('@patternfly/react-core/dist/js/components/TextInput', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-core'), {
     TextInput: () => {
       return <MockedComponent />;
     }
   })
 );
 
-jest.mock('@patternfly/react-icons', () =>
+jest.mock('@patternfly/react-icons/dist/esm/icons/plus-circle-icon', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
+    PlusCircleIcon: () => {
+      return <MockedComponent />;
+    }
+  })
+);
+
+jest.mock('@patternfly/react-icons/dist/esm/icons/trash-icon', () =>
   Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     TrashIcon: () => {
-      return <MockedComponent />;
-    },
-    PlusCircleIcon: () => {
       return <MockedComponent />;
     }
   })

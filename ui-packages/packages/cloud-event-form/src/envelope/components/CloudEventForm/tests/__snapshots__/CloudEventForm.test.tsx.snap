@@ -88,323 +88,24 @@ exports[`CloudEventForm tests Snapshot - new instance -  default values 1`] = `
                       className="pf-c-input-group"
                     >
                       <Select
-                        aria-describedby=""
-                        aria-invalid={false}
-                        aria-label=""
-                        aria-labelledby=""
-                        chipGroupComponent={null}
-                        className=""
-                        clearSelectionsAriaLabel="Clear all"
-                        createText="Create"
-                        customBadgeText={null}
-                        customContent={null}
-                        direction="down"
-                        favorites={Array []}
-                        favoritesLabel="Favorites"
-                        hasInlineFilter={false}
-                        hasPlaceholderStyle={false}
                         id="method"
-                        inlineFilterPlaceholderText={null}
-                        inputAutoComplete="off"
-                        inputIdPrefix=""
-                        isCreatable={false}
-                        isCreateOptionOnTop={false}
-                        isCreateSelectOptionObject={false}
-                        isDisabled={false}
-                        isFlipEnabled={true}
-                        isGrouped={false}
-                        isInputFilterPersisted={false}
-                        isInputValuePersisted={false}
                         isOpen={false}
-                        isPlain={false}
-                        key=".0"
-                        menuAppendTo="inline"
-                        noResultsFoundText="No results found"
-                        onClear={[Function]}
-                        onCreateOption={[Function]}
-                        onFilter={null}
                         onSelect={[Function]}
                         onToggle={[Function]}
-                        onTypeaheadInputChanged={null}
-                        ouiaSafe={true}
-                        placeholderText=""
-                        position="left"
-                        removeFindDomNode={false}
-                        removeSelectionAriaLabel="Remove"
                         selections="POST"
-                        shouldResetOnSelect={true}
-                        toggleAriaLabel="Options menu"
-                        toggleIcon={null}
-                        toggleId={null}
-                        toggleIndicator={null}
-                        typeAheadAriaDescribedby=""
-                        typeAheadAriaLabel=""
-                        validated="default"
                         variant="single"
                         width="100px"
-                        zIndex={9999}
                       >
-                        <GenerateId
-                          prefix="pf-random-id-"
-                        >
-                          <div
-                            className="pf-c-select"
-                            data-ouia-component-id="OUIA-Generated-Select-single-2"
-                            data-ouia-component-type="PF4/Select"
-                            data-ouia-safe={true}
-                            style={
-                              Object {
-                                "width": "100px",
-                              }
-                            }
-                          >
-                            <ForwardRef
-                              aria-label="Options menu"
-                              aria-labelledby=" pf-select-toggle-id-2"
-                              handleTypeaheadKeys={[Function]}
-                              hasClearButton={false}
-                              hasFooter={false}
-                              hasPlaceholderStyle={false}
-                              id="pf-select-toggle-id-2"
-                              isDisabled={false}
-                              isOpen={false}
-                              isPlain={false}
-                              menuRef={
-                                Object {
-                                  "current": null,
-                                }
-                              }
-                              moveFocusToLastMenuItem={[Function]}
-                              onClickTypeaheadToggleButton={[Function]}
-                              onClose={[Function]}
-                              onEnter={[Function]}
-                              onToggle={[Function]}
-                              parentRef={
-                                Object {
-                                  "current": <div
-                                    class="pf-c-select"
-                                    data-ouia-component-id="OUIA-Generated-Select-single-2"
-                                    data-ouia-component-type="PF4/Select"
-                                    data-ouia-safe="true"
-                                    style="width: 100px;"
-                                  >
-                                    <button
-                                      aria-expanded="false"
-                                      aria-haspopup="listbox"
-                                      aria-label="Options menu"
-                                      aria-labelledby=" pf-select-toggle-id-2"
-                                      class="pf-c-select__toggle"
-                                      id="pf-select-toggle-id-2"
-                                      type="button"
-                                    >
-                                      <div
-                                        class="pf-c-select__toggle-wrapper"
-                                      >
-                                        <span
-                                          class="pf-c-select__toggle-text"
-                                        >
-                                          POST
-                                        </span>
-                                      </div>
-                                      <span
-                                        class="pf-c-select__toggle-arrow"
-                                      >
-                                        <svg
-                                          aria-hidden="true"
-                                          fill="currentColor"
-                                          height="1em"
-                                          role="img"
-                                          style="vertical-align: -0.125em;"
-                                          viewBox="0 0 320 512"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </div>,
-                                }
-                              }
-                              toggleIndicator={null}
-                              variant="single"
-                            >
-                              <SelectToggle
-                                aria-label="Options menu"
-                                aria-labelledby=" pf-select-toggle-id-2"
-                                className=""
-                                handleTypeaheadKeys={[Function]}
-                                hasClearButton={false}
-                                hasFooter={false}
-                                hasPlaceholderStyle={false}
-                                id="pf-select-toggle-id-2"
-                                innerRef={null}
-                                isActive={false}
-                                isDisabled={false}
-                                isOpen={false}
-                                isPlain={false}
-                                menuRef={
-                                  Object {
-                                    "current": null,
-                                  }
-                                }
-                                moveFocusToLastMenuItem={[Function]}
-                                onClickTypeaheadToggleButton={[Function]}
-                                onClose={[Function]}
-                                onEnter={[Function]}
-                                onToggle={[Function]}
-                                parentRef={
-                                  Object {
-                                    "current": <div
-                                      class="pf-c-select"
-                                      data-ouia-component-id="OUIA-Generated-Select-single-2"
-                                      data-ouia-component-type="PF4/Select"
-                                      data-ouia-safe="true"
-                                      style="width: 100px;"
-                                    >
-                                      <button
-                                        aria-expanded="false"
-                                        aria-haspopup="listbox"
-                                        aria-label="Options menu"
-                                        aria-labelledby=" pf-select-toggle-id-2"
-                                        class="pf-c-select__toggle"
-                                        id="pf-select-toggle-id-2"
-                                        type="button"
-                                      >
-                                        <div
-                                          class="pf-c-select__toggle-wrapper"
-                                        >
-                                          <span
-                                            class="pf-c-select__toggle-text"
-                                          >
-                                            POST
-                                          </span>
-                                        </div>
-                                        <span
-                                          class="pf-c-select__toggle-arrow"
-                                        >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 320 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                            />
-                                          </svg>
-                                        </span>
-                                      </button>
-                                    </div>,
-                                  }
-                                }
-                                toggleIndicator={null}
-                                type="button"
-                                variant="single"
-                              >
-                                <button
-                                  aria-expanded={false}
-                                  aria-haspopup="listbox"
-                                  aria-label="Options menu"
-                                  aria-labelledby=" pf-select-toggle-id-2"
-                                  className="pf-c-select__toggle"
-                                  disabled={false}
-                                  id="pf-select-toggle-id-2"
-                                  onClick={[Function]}
-                                  onKeyDown={[Function]}
-                                  type="button"
-                                >
-                                  <div
-                                    className="pf-c-select__toggle-wrapper"
-                                  >
-                                    <span
-                                      className="pf-c-select__toggle-text"
-                                    >
-                                      POST
-                                    </span>
-                                  </div>
-                                  <span
-                                    className="pf-c-select__toggle-arrow"
-                                  >
-                                    <CaretDownIcon
-                                      color="currentColor"
-                                      noVerticalAlign={false}
-                                      size="sm"
-                                    >
-                                      <svg
-                                        aria-hidden={true}
-                                        aria-labelledby={null}
-                                        fill="currentColor"
-                                        height="1em"
-                                        role="img"
-                                        style={
-                                          Object {
-                                            "verticalAlign": "-0.125em",
-                                          }
-                                        }
-                                        viewBox="0 0 320 512"
-                                        width="1em"
-                                      >
-                                        <path
-                                          d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                        />
-                                      </svg>
-                                    </CaretDownIcon>
-                                  </span>
-                                </button>
-                              </SelectToggle>
-                            </ForwardRef>
-                          </div>
-                        </GenerateId>
+                        <MockedComponent />
                       </Select>
                       <TextInput
-                        aria-describedby="method"
                         id="endpoint"
                         isRequired={true}
-                        key=".1"
                         onChange={[Function]}
                         validated="default"
                         value="/"
                       >
-                        <TextInputBase
-                          aria-describedby="method"
-                          aria-label={null}
-                          className=""
-                          id="endpoint"
-                          innerRef={null}
-                          isDisabled={false}
-                          isIconSprite={false}
-                          isLeftTruncated={false}
-                          isReadOnly={false}
-                          isRequired={true}
-                          onChange={[Function]}
-                          ouiaSafe={true}
-                          type="text"
-                          validated="default"
-                          value="/"
-                        >
-                          <input
-                            aria-describedby="method"
-                            aria-invalid={false}
-                            aria-label={null}
-                            className="pf-c-form-control"
-                            data-ouia-component-id="OUIA-Generated-TextInputBase-5"
-                            data-ouia-component-type="PF4/TextInput"
-                            data-ouia-safe={true}
-                            disabled={false}
-                            id="endpoint"
-                            onBlur={[Function]}
-                            onChange={[Function]}
-                            onFocus={[Function]}
-                            required={true}
-                            type="text"
-                            value="/"
-                          />
-                        </TextInputBase>
+                        <MockedComponent />
                       </TextInput>
                     </div>
                   </InputGroup>
@@ -476,39 +177,7 @@ exports[`CloudEventForm tests Snapshot - new instance -  default values 1`] = `
                     validated="default"
                     value=""
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="eventType"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value=""
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-6"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="eventType"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value=""
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -561,39 +230,7 @@ exports[`CloudEventForm tests Snapshot - new instance -  default values 1`] = `
                     type="text"
                     value="/test/source"
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="eventSource"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value="/test/source"
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-7"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="eventSource"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value="/test/source"
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -646,39 +283,7 @@ exports[`CloudEventForm tests Snapshot - new instance -  default values 1`] = `
                     type="text"
                     value=""
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="businessKey"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value=""
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-8"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="businessKey"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value=""
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -838,52 +443,14 @@ exports[`CloudEventForm tests Snapshot - new instance -  default values 1`] = `
                 onClick={[Function]}
                 variant="primary"
               >
-                <ButtonBase
-                  innerRef={null}
-                  onClick={[Function]}
-                  variant="primary"
-                >
-                  <button
-                    aria-disabled={false}
-                    aria-label={null}
-                    className="pf-c-button pf-m-primary"
-                    data-ouia-component-id="OUIA-Generated-Button-primary-2"
-                    data-ouia-component-type="PF4/Button"
-                    data-ouia-safe={true}
-                    disabled={false}
-                    onClick={[Function]}
-                    role={null}
-                    type="button"
-                  >
-                    Trigger
-                  </button>
-                </ButtonBase>
+                <MockedComponent />
               </Button>
               <Button
                 key="resetCloudEventFormButton"
                 onClick={[Function]}
                 variant="secondary"
               >
-                <ButtonBase
-                  innerRef={null}
-                  onClick={[Function]}
-                  variant="secondary"
-                >
-                  <button
-                    aria-disabled={false}
-                    aria-label={null}
-                    className="pf-c-button pf-m-secondary"
-                    data-ouia-component-id="OUIA-Generated-Button-secondary-2"
-                    data-ouia-component-type="PF4/Button"
-                    data-ouia-safe={true}
-                    disabled={false}
-                    onClick={[Function]}
-                    role={null}
-                    type="button"
-                  >
-                    Reset
-                  </button>
-                </ButtonBase>
+                <MockedComponent />
               </Button>
             </div>
           </ActionListGroup>
@@ -977,323 +544,24 @@ exports[`CloudEventForm tests Snapshot - new instance 1`] = `
                       className="pf-c-input-group"
                     >
                       <Select
-                        aria-describedby=""
-                        aria-invalid={false}
-                        aria-label=""
-                        aria-labelledby=""
-                        chipGroupComponent={null}
-                        className=""
-                        clearSelectionsAriaLabel="Clear all"
-                        createText="Create"
-                        customBadgeText={null}
-                        customContent={null}
-                        direction="down"
-                        favorites={Array []}
-                        favoritesLabel="Favorites"
-                        hasInlineFilter={false}
-                        hasPlaceholderStyle={false}
                         id="method"
-                        inlineFilterPlaceholderText={null}
-                        inputAutoComplete="off"
-                        inputIdPrefix=""
-                        isCreatable={false}
-                        isCreateOptionOnTop={false}
-                        isCreateSelectOptionObject={false}
-                        isDisabled={false}
-                        isFlipEnabled={true}
-                        isGrouped={false}
-                        isInputFilterPersisted={false}
-                        isInputValuePersisted={false}
                         isOpen={false}
-                        isPlain={false}
-                        key=".0"
-                        menuAppendTo="inline"
-                        noResultsFoundText="No results found"
-                        onClear={[Function]}
-                        onCreateOption={[Function]}
-                        onFilter={null}
                         onSelect={[Function]}
                         onToggle={[Function]}
-                        onTypeaheadInputChanged={null}
-                        ouiaSafe={true}
-                        placeholderText=""
-                        position="left"
-                        removeFindDomNode={false}
-                        removeSelectionAriaLabel="Remove"
                         selections="POST"
-                        shouldResetOnSelect={true}
-                        toggleAriaLabel="Options menu"
-                        toggleIcon={null}
-                        toggleId={null}
-                        toggleIndicator={null}
-                        typeAheadAriaDescribedby=""
-                        typeAheadAriaLabel=""
-                        validated="default"
                         variant="single"
                         width="100px"
-                        zIndex={9999}
                       >
-                        <GenerateId
-                          prefix="pf-random-id-"
-                        >
-                          <div
-                            className="pf-c-select"
-                            data-ouia-component-id="OUIA-Generated-Select-single-1"
-                            data-ouia-component-type="PF4/Select"
-                            data-ouia-safe={true}
-                            style={
-                              Object {
-                                "width": "100px",
-                              }
-                            }
-                          >
-                            <ForwardRef
-                              aria-label="Options menu"
-                              aria-labelledby=" pf-select-toggle-id-0"
-                              handleTypeaheadKeys={[Function]}
-                              hasClearButton={false}
-                              hasFooter={false}
-                              hasPlaceholderStyle={false}
-                              id="pf-select-toggle-id-0"
-                              isDisabled={false}
-                              isOpen={false}
-                              isPlain={false}
-                              menuRef={
-                                Object {
-                                  "current": null,
-                                }
-                              }
-                              moveFocusToLastMenuItem={[Function]}
-                              onClickTypeaheadToggleButton={[Function]}
-                              onClose={[Function]}
-                              onEnter={[Function]}
-                              onToggle={[Function]}
-                              parentRef={
-                                Object {
-                                  "current": <div
-                                    class="pf-c-select"
-                                    data-ouia-component-id="OUIA-Generated-Select-single-1"
-                                    data-ouia-component-type="PF4/Select"
-                                    data-ouia-safe="true"
-                                    style="width: 100px;"
-                                  >
-                                    <button
-                                      aria-expanded="false"
-                                      aria-haspopup="listbox"
-                                      aria-label="Options menu"
-                                      aria-labelledby=" pf-select-toggle-id-0"
-                                      class="pf-c-select__toggle"
-                                      id="pf-select-toggle-id-0"
-                                      type="button"
-                                    >
-                                      <div
-                                        class="pf-c-select__toggle-wrapper"
-                                      >
-                                        <span
-                                          class="pf-c-select__toggle-text"
-                                        >
-                                          POST
-                                        </span>
-                                      </div>
-                                      <span
-                                        class="pf-c-select__toggle-arrow"
-                                      >
-                                        <svg
-                                          aria-hidden="true"
-                                          fill="currentColor"
-                                          height="1em"
-                                          role="img"
-                                          style="vertical-align: -0.125em;"
-                                          viewBox="0 0 320 512"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </div>,
-                                }
-                              }
-                              toggleIndicator={null}
-                              variant="single"
-                            >
-                              <SelectToggle
-                                aria-label="Options menu"
-                                aria-labelledby=" pf-select-toggle-id-0"
-                                className=""
-                                handleTypeaheadKeys={[Function]}
-                                hasClearButton={false}
-                                hasFooter={false}
-                                hasPlaceholderStyle={false}
-                                id="pf-select-toggle-id-0"
-                                innerRef={null}
-                                isActive={false}
-                                isDisabled={false}
-                                isOpen={false}
-                                isPlain={false}
-                                menuRef={
-                                  Object {
-                                    "current": null,
-                                  }
-                                }
-                                moveFocusToLastMenuItem={[Function]}
-                                onClickTypeaheadToggleButton={[Function]}
-                                onClose={[Function]}
-                                onEnter={[Function]}
-                                onToggle={[Function]}
-                                parentRef={
-                                  Object {
-                                    "current": <div
-                                      class="pf-c-select"
-                                      data-ouia-component-id="OUIA-Generated-Select-single-1"
-                                      data-ouia-component-type="PF4/Select"
-                                      data-ouia-safe="true"
-                                      style="width: 100px;"
-                                    >
-                                      <button
-                                        aria-expanded="false"
-                                        aria-haspopup="listbox"
-                                        aria-label="Options menu"
-                                        aria-labelledby=" pf-select-toggle-id-0"
-                                        class="pf-c-select__toggle"
-                                        id="pf-select-toggle-id-0"
-                                        type="button"
-                                      >
-                                        <div
-                                          class="pf-c-select__toggle-wrapper"
-                                        >
-                                          <span
-                                            class="pf-c-select__toggle-text"
-                                          >
-                                            POST
-                                          </span>
-                                        </div>
-                                        <span
-                                          class="pf-c-select__toggle-arrow"
-                                        >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 320 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                            />
-                                          </svg>
-                                        </span>
-                                      </button>
-                                    </div>,
-                                  }
-                                }
-                                toggleIndicator={null}
-                                type="button"
-                                variant="single"
-                              >
-                                <button
-                                  aria-expanded={false}
-                                  aria-haspopup="listbox"
-                                  aria-label="Options menu"
-                                  aria-labelledby=" pf-select-toggle-id-0"
-                                  className="pf-c-select__toggle"
-                                  disabled={false}
-                                  id="pf-select-toggle-id-0"
-                                  onClick={[Function]}
-                                  onKeyDown={[Function]}
-                                  type="button"
-                                >
-                                  <div
-                                    className="pf-c-select__toggle-wrapper"
-                                  >
-                                    <span
-                                      className="pf-c-select__toggle-text"
-                                    >
-                                      POST
-                                    </span>
-                                  </div>
-                                  <span
-                                    className="pf-c-select__toggle-arrow"
-                                  >
-                                    <CaretDownIcon
-                                      color="currentColor"
-                                      noVerticalAlign={false}
-                                      size="sm"
-                                    >
-                                      <svg
-                                        aria-hidden={true}
-                                        aria-labelledby={null}
-                                        fill="currentColor"
-                                        height="1em"
-                                        role="img"
-                                        style={
-                                          Object {
-                                            "verticalAlign": "-0.125em",
-                                          }
-                                        }
-                                        viewBox="0 0 320 512"
-                                        width="1em"
-                                      >
-                                        <path
-                                          d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                        />
-                                      </svg>
-                                    </CaretDownIcon>
-                                  </span>
-                                </button>
-                              </SelectToggle>
-                            </ForwardRef>
-                          </div>
-                        </GenerateId>
+                        <MockedComponent />
                       </Select>
                       <TextInput
-                        aria-describedby="method"
                         id="endpoint"
                         isRequired={true}
-                        key=".1"
                         onChange={[Function]}
                         validated="default"
                         value="/"
                       >
-                        <TextInputBase
-                          aria-describedby="method"
-                          aria-label={null}
-                          className=""
-                          id="endpoint"
-                          innerRef={null}
-                          isDisabled={false}
-                          isIconSprite={false}
-                          isLeftTruncated={false}
-                          isReadOnly={false}
-                          isRequired={true}
-                          onChange={[Function]}
-                          ouiaSafe={true}
-                          type="text"
-                          validated="default"
-                          value="/"
-                        >
-                          <input
-                            aria-describedby="method"
-                            aria-invalid={false}
-                            aria-label={null}
-                            className="pf-c-form-control"
-                            data-ouia-component-id="OUIA-Generated-TextInputBase-1"
-                            data-ouia-component-type="PF4/TextInput"
-                            data-ouia-safe={true}
-                            disabled={false}
-                            id="endpoint"
-                            onBlur={[Function]}
-                            onChange={[Function]}
-                            onFocus={[Function]}
-                            required={true}
-                            type="text"
-                            value="/"
-                          />
-                        </TextInputBase>
+                        <MockedComponent />
                       </TextInput>
                     </div>
                   </InputGroup>
@@ -1365,39 +633,7 @@ exports[`CloudEventForm tests Snapshot - new instance 1`] = `
                     validated="default"
                     value=""
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="eventType"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value=""
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-2"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="eventType"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value=""
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -1450,39 +686,7 @@ exports[`CloudEventForm tests Snapshot - new instance 1`] = `
                     type="text"
                     value="/from/form"
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="eventSource"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value="/from/form"
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-3"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="eventSource"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value="/from/form"
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -1535,39 +739,7 @@ exports[`CloudEventForm tests Snapshot - new instance 1`] = `
                     type="text"
                     value=""
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="businessKey"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value=""
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-4"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="businessKey"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value=""
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -1727,52 +899,14 @@ exports[`CloudEventForm tests Snapshot - new instance 1`] = `
                 onClick={[Function]}
                 variant="primary"
               >
-                <ButtonBase
-                  innerRef={null}
-                  onClick={[Function]}
-                  variant="primary"
-                >
-                  <button
-                    aria-disabled={false}
-                    aria-label={null}
-                    className="pf-c-button pf-m-primary"
-                    data-ouia-component-id="OUIA-Generated-Button-primary-1"
-                    data-ouia-component-type="PF4/Button"
-                    data-ouia-safe={true}
-                    disabled={false}
-                    onClick={[Function]}
-                    role={null}
-                    type="button"
-                  >
-                    Trigger
-                  </button>
-                </ButtonBase>
+                <MockedComponent />
               </Button>
               <Button
                 key="resetCloudEventFormButton"
                 onClick={[Function]}
                 variant="secondary"
               >
-                <ButtonBase
-                  innerRef={null}
-                  onClick={[Function]}
-                  variant="secondary"
-                >
-                  <button
-                    aria-disabled={false}
-                    aria-label={null}
-                    className="pf-c-button pf-m-secondary"
-                    data-ouia-component-id="OUIA-Generated-Button-secondary-1"
-                    data-ouia-component-type="PF4/Button"
-                    data-ouia-safe={true}
-                    disabled={false}
-                    onClick={[Function]}
-                    role={null}
-                    type="button"
-                  >
-                    Reset
-                  </button>
-                </ButtonBase>
+                <MockedComponent />
               </Button>
             </div>
           </ActionListGroup>
@@ -1871,323 +1005,24 @@ exports[`CloudEventForm tests Snapshot - send cloud event -  default values 1`] 
                       className="pf-c-input-group"
                     >
                       <Select
-                        aria-describedby=""
-                        aria-invalid={false}
-                        aria-label=""
-                        aria-labelledby=""
-                        chipGroupComponent={null}
-                        className=""
-                        clearSelectionsAriaLabel="Clear all"
-                        createText="Create"
-                        customBadgeText={null}
-                        customContent={null}
-                        direction="down"
-                        favorites={Array []}
-                        favoritesLabel="Favorites"
-                        hasInlineFilter={false}
-                        hasPlaceholderStyle={false}
                         id="method"
-                        inlineFilterPlaceholderText={null}
-                        inputAutoComplete="off"
-                        inputIdPrefix=""
-                        isCreatable={false}
-                        isCreateOptionOnTop={false}
-                        isCreateSelectOptionObject={false}
-                        isDisabled={false}
-                        isFlipEnabled={true}
-                        isGrouped={false}
-                        isInputFilterPersisted={false}
-                        isInputValuePersisted={false}
                         isOpen={false}
-                        isPlain={false}
-                        key=".0"
-                        menuAppendTo="inline"
-                        noResultsFoundText="No results found"
-                        onClear={[Function]}
-                        onCreateOption={[Function]}
-                        onFilter={null}
                         onSelect={[Function]}
                         onToggle={[Function]}
-                        onTypeaheadInputChanged={null}
-                        ouiaSafe={true}
-                        placeholderText=""
-                        position="left"
-                        removeFindDomNode={false}
-                        removeSelectionAriaLabel="Remove"
                         selections="POST"
-                        shouldResetOnSelect={true}
-                        toggleAriaLabel="Options menu"
-                        toggleIcon={null}
-                        toggleId={null}
-                        toggleIndicator={null}
-                        typeAheadAriaDescribedby=""
-                        typeAheadAriaLabel=""
-                        validated="default"
                         variant="single"
                         width="100px"
-                        zIndex={9999}
                       >
-                        <GenerateId
-                          prefix="pf-random-id-"
-                        >
-                          <div
-                            className="pf-c-select"
-                            data-ouia-component-id="OUIA-Generated-Select-single-4"
-                            data-ouia-component-type="PF4/Select"
-                            data-ouia-safe={true}
-                            style={
-                              Object {
-                                "width": "100px",
-                              }
-                            }
-                          >
-                            <ForwardRef
-                              aria-label="Options menu"
-                              aria-labelledby=" pf-select-toggle-id-5"
-                              handleTypeaheadKeys={[Function]}
-                              hasClearButton={false}
-                              hasFooter={false}
-                              hasPlaceholderStyle={false}
-                              id="pf-select-toggle-id-5"
-                              isDisabled={false}
-                              isOpen={false}
-                              isPlain={false}
-                              menuRef={
-                                Object {
-                                  "current": null,
-                                }
-                              }
-                              moveFocusToLastMenuItem={[Function]}
-                              onClickTypeaheadToggleButton={[Function]}
-                              onClose={[Function]}
-                              onEnter={[Function]}
-                              onToggle={[Function]}
-                              parentRef={
-                                Object {
-                                  "current": <div
-                                    class="pf-c-select"
-                                    data-ouia-component-id="OUIA-Generated-Select-single-4"
-                                    data-ouia-component-type="PF4/Select"
-                                    data-ouia-safe="true"
-                                    style="width: 100px;"
-                                  >
-                                    <button
-                                      aria-expanded="false"
-                                      aria-haspopup="listbox"
-                                      aria-label="Options menu"
-                                      aria-labelledby=" pf-select-toggle-id-5"
-                                      class="pf-c-select__toggle"
-                                      id="pf-select-toggle-id-5"
-                                      type="button"
-                                    >
-                                      <div
-                                        class="pf-c-select__toggle-wrapper"
-                                      >
-                                        <span
-                                          class="pf-c-select__toggle-text"
-                                        >
-                                          POST
-                                        </span>
-                                      </div>
-                                      <span
-                                        class="pf-c-select__toggle-arrow"
-                                      >
-                                        <svg
-                                          aria-hidden="true"
-                                          fill="currentColor"
-                                          height="1em"
-                                          role="img"
-                                          style="vertical-align: -0.125em;"
-                                          viewBox="0 0 320 512"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </div>,
-                                }
-                              }
-                              toggleIndicator={null}
-                              variant="single"
-                            >
-                              <SelectToggle
-                                aria-label="Options menu"
-                                aria-labelledby=" pf-select-toggle-id-5"
-                                className=""
-                                handleTypeaheadKeys={[Function]}
-                                hasClearButton={false}
-                                hasFooter={false}
-                                hasPlaceholderStyle={false}
-                                id="pf-select-toggle-id-5"
-                                innerRef={null}
-                                isActive={false}
-                                isDisabled={false}
-                                isOpen={false}
-                                isPlain={false}
-                                menuRef={
-                                  Object {
-                                    "current": null,
-                                  }
-                                }
-                                moveFocusToLastMenuItem={[Function]}
-                                onClickTypeaheadToggleButton={[Function]}
-                                onClose={[Function]}
-                                onEnter={[Function]}
-                                onToggle={[Function]}
-                                parentRef={
-                                  Object {
-                                    "current": <div
-                                      class="pf-c-select"
-                                      data-ouia-component-id="OUIA-Generated-Select-single-4"
-                                      data-ouia-component-type="PF4/Select"
-                                      data-ouia-safe="true"
-                                      style="width: 100px;"
-                                    >
-                                      <button
-                                        aria-expanded="false"
-                                        aria-haspopup="listbox"
-                                        aria-label="Options menu"
-                                        aria-labelledby=" pf-select-toggle-id-5"
-                                        class="pf-c-select__toggle"
-                                        id="pf-select-toggle-id-5"
-                                        type="button"
-                                      >
-                                        <div
-                                          class="pf-c-select__toggle-wrapper"
-                                        >
-                                          <span
-                                            class="pf-c-select__toggle-text"
-                                          >
-                                            POST
-                                          </span>
-                                        </div>
-                                        <span
-                                          class="pf-c-select__toggle-arrow"
-                                        >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 320 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                            />
-                                          </svg>
-                                        </span>
-                                      </button>
-                                    </div>,
-                                  }
-                                }
-                                toggleIndicator={null}
-                                type="button"
-                                variant="single"
-                              >
-                                <button
-                                  aria-expanded={false}
-                                  aria-haspopup="listbox"
-                                  aria-label="Options menu"
-                                  aria-labelledby=" pf-select-toggle-id-5"
-                                  className="pf-c-select__toggle"
-                                  disabled={false}
-                                  id="pf-select-toggle-id-5"
-                                  onClick={[Function]}
-                                  onKeyDown={[Function]}
-                                  type="button"
-                                >
-                                  <div
-                                    className="pf-c-select__toggle-wrapper"
-                                  >
-                                    <span
-                                      className="pf-c-select__toggle-text"
-                                    >
-                                      POST
-                                    </span>
-                                  </div>
-                                  <span
-                                    className="pf-c-select__toggle-arrow"
-                                  >
-                                    <CaretDownIcon
-                                      color="currentColor"
-                                      noVerticalAlign={false}
-                                      size="sm"
-                                    >
-                                      <svg
-                                        aria-hidden={true}
-                                        aria-labelledby={null}
-                                        fill="currentColor"
-                                        height="1em"
-                                        role="img"
-                                        style={
-                                          Object {
-                                            "verticalAlign": "-0.125em",
-                                          }
-                                        }
-                                        viewBox="0 0 320 512"
-                                        width="1em"
-                                      >
-                                        <path
-                                          d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                        />
-                                      </svg>
-                                    </CaretDownIcon>
-                                  </span>
-                                </button>
-                              </SelectToggle>
-                            </ForwardRef>
-                          </div>
-                        </GenerateId>
+                        <MockedComponent />
                       </Select>
                       <TextInput
-                        aria-describedby="method"
                         id="endpoint"
                         isRequired={true}
-                        key=".1"
                         onChange={[Function]}
                         validated="default"
                         value="/"
                       >
-                        <TextInputBase
-                          aria-describedby="method"
-                          aria-label={null}
-                          className=""
-                          id="endpoint"
-                          innerRef={null}
-                          isDisabled={false}
-                          isIconSprite={false}
-                          isLeftTruncated={false}
-                          isReadOnly={false}
-                          isRequired={true}
-                          onChange={[Function]}
-                          ouiaSafe={true}
-                          type="text"
-                          validated="default"
-                          value="/"
-                        >
-                          <input
-                            aria-describedby="method"
-                            aria-invalid={false}
-                            aria-label={null}
-                            className="pf-c-form-control"
-                            data-ouia-component-id="OUIA-Generated-TextInputBase-13"
-                            data-ouia-component-type="PF4/TextInput"
-                            data-ouia-safe={true}
-                            disabled={false}
-                            id="endpoint"
-                            onBlur={[Function]}
-                            onChange={[Function]}
-                            onFocus={[Function]}
-                            required={true}
-                            type="text"
-                            value="/"
-                          />
-                        </TextInputBase>
+                        <MockedComponent />
                       </TextInput>
                     </div>
                   </InputGroup>
@@ -2259,39 +1094,7 @@ exports[`CloudEventForm tests Snapshot - send cloud event -  default values 1`] 
                     validated="default"
                     value=""
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="eventType"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value=""
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-14"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="eventType"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value=""
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -2344,39 +1147,7 @@ exports[`CloudEventForm tests Snapshot - send cloud event -  default values 1`] 
                     type="text"
                     value="/test/source"
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="eventSource"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value="/test/source"
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-15"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="eventSource"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value="/test/source"
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -2429,39 +1200,7 @@ exports[`CloudEventForm tests Snapshot - send cloud event -  default values 1`] 
                     type="text"
                     value="1234"
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="instanceId"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value="1234"
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-16"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="instanceId"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value="1234"
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -2621,52 +1360,14 @@ exports[`CloudEventForm tests Snapshot - send cloud event -  default values 1`] 
                 onClick={[Function]}
                 variant="primary"
               >
-                <ButtonBase
-                  innerRef={null}
-                  onClick={[Function]}
-                  variant="primary"
-                >
-                  <button
-                    aria-disabled={false}
-                    aria-label={null}
-                    className="pf-c-button pf-m-primary"
-                    data-ouia-component-id="OUIA-Generated-Button-primary-4"
-                    data-ouia-component-type="PF4/Button"
-                    data-ouia-safe={true}
-                    disabled={false}
-                    onClick={[Function]}
-                    role={null}
-                    type="button"
-                  >
-                    Trigger
-                  </button>
-                </ButtonBase>
+                <MockedComponent />
               </Button>
               <Button
                 key="resetCloudEventFormButton"
                 onClick={[Function]}
                 variant="secondary"
               >
-                <ButtonBase
-                  innerRef={null}
-                  onClick={[Function]}
-                  variant="secondary"
-                >
-                  <button
-                    aria-disabled={false}
-                    aria-label={null}
-                    className="pf-c-button pf-m-secondary"
-                    data-ouia-component-id="OUIA-Generated-Button-secondary-4"
-                    data-ouia-component-type="PF4/Button"
-                    data-ouia-safe={true}
-                    disabled={false}
-                    onClick={[Function]}
-                    role={null}
-                    type="button"
-                  >
-                    Reset
-                  </button>
-                </ButtonBase>
+                <MockedComponent />
               </Button>
             </div>
           </ActionListGroup>
@@ -2759,323 +1460,24 @@ exports[`CloudEventForm tests Snapshot - send cloud event 1`] = `
                       className="pf-c-input-group"
                     >
                       <Select
-                        aria-describedby=""
-                        aria-invalid={false}
-                        aria-label=""
-                        aria-labelledby=""
-                        chipGroupComponent={null}
-                        className=""
-                        clearSelectionsAriaLabel="Clear all"
-                        createText="Create"
-                        customBadgeText={null}
-                        customContent={null}
-                        direction="down"
-                        favorites={Array []}
-                        favoritesLabel="Favorites"
-                        hasInlineFilter={false}
-                        hasPlaceholderStyle={false}
                         id="method"
-                        inlineFilterPlaceholderText={null}
-                        inputAutoComplete="off"
-                        inputIdPrefix=""
-                        isCreatable={false}
-                        isCreateOptionOnTop={false}
-                        isCreateSelectOptionObject={false}
-                        isDisabled={false}
-                        isFlipEnabled={true}
-                        isGrouped={false}
-                        isInputFilterPersisted={false}
-                        isInputValuePersisted={false}
                         isOpen={false}
-                        isPlain={false}
-                        key=".0"
-                        menuAppendTo="inline"
-                        noResultsFoundText="No results found"
-                        onClear={[Function]}
-                        onCreateOption={[Function]}
-                        onFilter={null}
                         onSelect={[Function]}
                         onToggle={[Function]}
-                        onTypeaheadInputChanged={null}
-                        ouiaSafe={true}
-                        placeholderText=""
-                        position="left"
-                        removeFindDomNode={false}
-                        removeSelectionAriaLabel="Remove"
                         selections="POST"
-                        shouldResetOnSelect={true}
-                        toggleAriaLabel="Options menu"
-                        toggleIcon={null}
-                        toggleId={null}
-                        toggleIndicator={null}
-                        typeAheadAriaDescribedby=""
-                        typeAheadAriaLabel=""
-                        validated="default"
                         variant="single"
                         width="100px"
-                        zIndex={9999}
                       >
-                        <GenerateId
-                          prefix="pf-random-id-"
-                        >
-                          <div
-                            className="pf-c-select"
-                            data-ouia-component-id="OUIA-Generated-Select-single-3"
-                            data-ouia-component-type="PF4/Select"
-                            data-ouia-safe={true}
-                            style={
-                              Object {
-                                "width": "100px",
-                              }
-                            }
-                          >
-                            <ForwardRef
-                              aria-label="Options menu"
-                              aria-labelledby=" pf-select-toggle-id-3"
-                              handleTypeaheadKeys={[Function]}
-                              hasClearButton={false}
-                              hasFooter={false}
-                              hasPlaceholderStyle={false}
-                              id="pf-select-toggle-id-3"
-                              isDisabled={false}
-                              isOpen={false}
-                              isPlain={false}
-                              menuRef={
-                                Object {
-                                  "current": null,
-                                }
-                              }
-                              moveFocusToLastMenuItem={[Function]}
-                              onClickTypeaheadToggleButton={[Function]}
-                              onClose={[Function]}
-                              onEnter={[Function]}
-                              onToggle={[Function]}
-                              parentRef={
-                                Object {
-                                  "current": <div
-                                    class="pf-c-select"
-                                    data-ouia-component-id="OUIA-Generated-Select-single-3"
-                                    data-ouia-component-type="PF4/Select"
-                                    data-ouia-safe="true"
-                                    style="width: 100px;"
-                                  >
-                                    <button
-                                      aria-expanded="false"
-                                      aria-haspopup="listbox"
-                                      aria-label="Options menu"
-                                      aria-labelledby=" pf-select-toggle-id-3"
-                                      class="pf-c-select__toggle"
-                                      id="pf-select-toggle-id-3"
-                                      type="button"
-                                    >
-                                      <div
-                                        class="pf-c-select__toggle-wrapper"
-                                      >
-                                        <span
-                                          class="pf-c-select__toggle-text"
-                                        >
-                                          POST
-                                        </span>
-                                      </div>
-                                      <span
-                                        class="pf-c-select__toggle-arrow"
-                                      >
-                                        <svg
-                                          aria-hidden="true"
-                                          fill="currentColor"
-                                          height="1em"
-                                          role="img"
-                                          style="vertical-align: -0.125em;"
-                                          viewBox="0 0 320 512"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                          />
-                                        </svg>
-                                      </span>
-                                    </button>
-                                  </div>,
-                                }
-                              }
-                              toggleIndicator={null}
-                              variant="single"
-                            >
-                              <SelectToggle
-                                aria-label="Options menu"
-                                aria-labelledby=" pf-select-toggle-id-3"
-                                className=""
-                                handleTypeaheadKeys={[Function]}
-                                hasClearButton={false}
-                                hasFooter={false}
-                                hasPlaceholderStyle={false}
-                                id="pf-select-toggle-id-3"
-                                innerRef={null}
-                                isActive={false}
-                                isDisabled={false}
-                                isOpen={false}
-                                isPlain={false}
-                                menuRef={
-                                  Object {
-                                    "current": null,
-                                  }
-                                }
-                                moveFocusToLastMenuItem={[Function]}
-                                onClickTypeaheadToggleButton={[Function]}
-                                onClose={[Function]}
-                                onEnter={[Function]}
-                                onToggle={[Function]}
-                                parentRef={
-                                  Object {
-                                    "current": <div
-                                      class="pf-c-select"
-                                      data-ouia-component-id="OUIA-Generated-Select-single-3"
-                                      data-ouia-component-type="PF4/Select"
-                                      data-ouia-safe="true"
-                                      style="width: 100px;"
-                                    >
-                                      <button
-                                        aria-expanded="false"
-                                        aria-haspopup="listbox"
-                                        aria-label="Options menu"
-                                        aria-labelledby=" pf-select-toggle-id-3"
-                                        class="pf-c-select__toggle"
-                                        id="pf-select-toggle-id-3"
-                                        type="button"
-                                      >
-                                        <div
-                                          class="pf-c-select__toggle-wrapper"
-                                        >
-                                          <span
-                                            class="pf-c-select__toggle-text"
-                                          >
-                                            POST
-                                          </span>
-                                        </div>
-                                        <span
-                                          class="pf-c-select__toggle-arrow"
-                                        >
-                                          <svg
-                                            aria-hidden="true"
-                                            fill="currentColor"
-                                            height="1em"
-                                            role="img"
-                                            style="vertical-align: -0.125em;"
-                                            viewBox="0 0 320 512"
-                                            width="1em"
-                                          >
-                                            <path
-                                              d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                            />
-                                          </svg>
-                                        </span>
-                                      </button>
-                                    </div>,
-                                  }
-                                }
-                                toggleIndicator={null}
-                                type="button"
-                                variant="single"
-                              >
-                                <button
-                                  aria-expanded={false}
-                                  aria-haspopup="listbox"
-                                  aria-label="Options menu"
-                                  aria-labelledby=" pf-select-toggle-id-3"
-                                  className="pf-c-select__toggle"
-                                  disabled={false}
-                                  id="pf-select-toggle-id-3"
-                                  onClick={[Function]}
-                                  onKeyDown={[Function]}
-                                  type="button"
-                                >
-                                  <div
-                                    className="pf-c-select__toggle-wrapper"
-                                  >
-                                    <span
-                                      className="pf-c-select__toggle-text"
-                                    >
-                                      POST
-                                    </span>
-                                  </div>
-                                  <span
-                                    className="pf-c-select__toggle-arrow"
-                                  >
-                                    <CaretDownIcon
-                                      color="currentColor"
-                                      noVerticalAlign={false}
-                                      size="sm"
-                                    >
-                                      <svg
-                                        aria-hidden={true}
-                                        aria-labelledby={null}
-                                        fill="currentColor"
-                                        height="1em"
-                                        role="img"
-                                        style={
-                                          Object {
-                                            "verticalAlign": "-0.125em",
-                                          }
-                                        }
-                                        viewBox="0 0 320 512"
-                                        width="1em"
-                                      >
-                                        <path
-                                          d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                                        />
-                                      </svg>
-                                    </CaretDownIcon>
-                                  </span>
-                                </button>
-                              </SelectToggle>
-                            </ForwardRef>
-                          </div>
-                        </GenerateId>
+                        <MockedComponent />
                       </Select>
                       <TextInput
-                        aria-describedby="method"
                         id="endpoint"
                         isRequired={true}
-                        key=".1"
                         onChange={[Function]}
                         validated="default"
                         value="/"
                       >
-                        <TextInputBase
-                          aria-describedby="method"
-                          aria-label={null}
-                          className=""
-                          id="endpoint"
-                          innerRef={null}
-                          isDisabled={false}
-                          isIconSprite={false}
-                          isLeftTruncated={false}
-                          isReadOnly={false}
-                          isRequired={true}
-                          onChange={[Function]}
-                          ouiaSafe={true}
-                          type="text"
-                          validated="default"
-                          value="/"
-                        >
-                          <input
-                            aria-describedby="method"
-                            aria-invalid={false}
-                            aria-label={null}
-                            className="pf-c-form-control"
-                            data-ouia-component-id="OUIA-Generated-TextInputBase-9"
-                            data-ouia-component-type="PF4/TextInput"
-                            data-ouia-safe={true}
-                            disabled={false}
-                            id="endpoint"
-                            onBlur={[Function]}
-                            onChange={[Function]}
-                            onFocus={[Function]}
-                            required={true}
-                            type="text"
-                            value="/"
-                          />
-                        </TextInputBase>
+                        <MockedComponent />
                       </TextInput>
                     </div>
                   </InputGroup>
@@ -3147,39 +1549,7 @@ exports[`CloudEventForm tests Snapshot - send cloud event 1`] = `
                     validated="default"
                     value=""
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="eventType"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value=""
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-10"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="eventType"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value=""
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -3232,39 +1602,7 @@ exports[`CloudEventForm tests Snapshot - send cloud event 1`] = `
                     type="text"
                     value="/from/form"
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="eventSource"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value="/from/form"
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-11"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="eventSource"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value="/from/form"
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -3317,39 +1655,7 @@ exports[`CloudEventForm tests Snapshot - send cloud event 1`] = `
                     type="text"
                     value=""
                   >
-                    <TextInputBase
-                      aria-label={null}
-                      className=""
-                      id="instanceId"
-                      innerRef={null}
-                      isDisabled={false}
-                      isIconSprite={false}
-                      isLeftTruncated={false}
-                      isReadOnly={false}
-                      isRequired={true}
-                      onChange={[Function]}
-                      ouiaSafe={true}
-                      type="text"
-                      validated="default"
-                      value=""
-                    >
-                      <input
-                        aria-invalid={false}
-                        aria-label={null}
-                        className="pf-c-form-control"
-                        data-ouia-component-id="OUIA-Generated-TextInputBase-12"
-                        data-ouia-component-type="PF4/TextInput"
-                        data-ouia-safe={true}
-                        disabled={false}
-                        id="instanceId"
-                        onBlur={[Function]}
-                        onChange={[Function]}
-                        onFocus={[Function]}
-                        required={true}
-                        type="text"
-                        value=""
-                      />
-                    </TextInputBase>
+                    <MockedComponent />
                   </TextInput>
                 </div>
               </div>
@@ -3509,52 +1815,14 @@ exports[`CloudEventForm tests Snapshot - send cloud event 1`] = `
                 onClick={[Function]}
                 variant="primary"
               >
-                <ButtonBase
-                  innerRef={null}
-                  onClick={[Function]}
-                  variant="primary"
-                >
-                  <button
-                    aria-disabled={false}
-                    aria-label={null}
-                    className="pf-c-button pf-m-primary"
-                    data-ouia-component-id="OUIA-Generated-Button-primary-3"
-                    data-ouia-component-type="PF4/Button"
-                    data-ouia-safe={true}
-                    disabled={false}
-                    onClick={[Function]}
-                    role={null}
-                    type="button"
-                  >
-                    Trigger
-                  </button>
-                </ButtonBase>
+                <MockedComponent />
               </Button>
               <Button
                 key="resetCloudEventFormButton"
                 onClick={[Function]}
                 variant="secondary"
               >
-                <ButtonBase
-                  innerRef={null}
-                  onClick={[Function]}
-                  variant="secondary"
-                >
-                  <button
-                    aria-disabled={false}
-                    aria-label={null}
-                    className="pf-c-button pf-m-secondary"
-                    data-ouia-component-id="OUIA-Generated-Button-secondary-3"
-                    data-ouia-component-type="PF4/Button"
-                    data-ouia-safe={true}
-                    disabled={false}
-                    onClick={[Function]}
-                    role={null}
-                    type="button"
-                  >
-                    Reset
-                  </button>
-                </ButtonBase>
+                <MockedComponent />
               </Button>
             </div>
           </ActionListGroup>

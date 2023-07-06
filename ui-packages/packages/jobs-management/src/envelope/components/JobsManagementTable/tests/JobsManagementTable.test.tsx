@@ -17,10 +17,10 @@
 import React from 'react';
 import axios from 'axios';
 import JobsManagementTable from '../JobsManagementTable';
-import { KogitoSpinner } from '@kogito-apps/components-common';
+import KogitoSpinner from '@kogito-apps/components-common/dist/components/KogitoSpinner/KogitoSpinner';
 import { mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
-import { JobStatus } from '@kogito-apps/management-console-shared';
+import { JobStatus } from '@kogito-apps/management-console-shared/dist/types';
 import { MockedJobsManagementDriver } from '../../../../api/mocks/MockedJobsManagementDriver';
 import wait from 'waait';
 jest.mock('axios');
@@ -31,17 +31,32 @@ const MockedIcon = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@patternfly/react-icons', () =>
+jest.mock('@patternfly/react-icons/dist/js/icons/history-icon', () =>
   Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     HistoryIcon: () => {
       return <MockedIcon />;
-    },
+    }
+  })
+);
+
+jest.mock('@patternfly/react-icons/dist/js/icons/clock-icon', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     ClockIcon: () => {
       return <MockedIcon />;
-    },
+    }
+  })
+);
+
+jest.mock('@patternfly/react-icons/dist/js/icons/ban-icon', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     BanIcon: () => {
       return <MockedIcon />;
-    },
+    }
+  })
+);
+
+jest.mock('@patternfly/react-icons/dist/js/icons/check-circle-icon', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     CheckCircleIcon: () => {
       return <MockedIcon />;
     }

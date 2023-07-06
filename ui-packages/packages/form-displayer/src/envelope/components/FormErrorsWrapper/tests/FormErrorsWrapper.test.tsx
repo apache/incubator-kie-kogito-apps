@@ -26,11 +26,18 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@patternfly/react-core', () =>
+jest.mock('@patternfly/react-core/dist/js/components/Button', () =>
   Object.assign({}, jest.requireActual('@patternfly/react-core'), {
-    Button: () => <MockedComponent />,
-    EmptyStateIcon: () => <MockedComponent />,
-    ClipboardCopy: () => <MockedComponent />
+    Button: () => <MockedComponent />
+  })
+);
+
+jest.mock('@patternfly/react-core/dist/js/components/ClipboardCopy', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-core'), {
+    ClipboardCopy: () => <MockedComponent />,
+    ClipboardCopyVariant: {
+      expansion: 'expansion'
+    }
   })
 );
 

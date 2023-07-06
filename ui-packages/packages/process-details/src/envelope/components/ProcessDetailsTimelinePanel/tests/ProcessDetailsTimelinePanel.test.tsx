@@ -35,20 +35,40 @@ const MockedIcon = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@patternfly/react-icons', () =>
+jest.mock('@patternfly/react-icons/dist/js/icons/user-icon', () =>
   Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     UserIcon: () => {
       return <MockedIcon />;
-    },
+    }
+  })
+);
+
+jest.mock('@patternfly/react-icons/dist/js/icons/check-circle-icon', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     CheckCircleIcon: () => {
       return <MockedIcon />;
-    },
+    }
+  })
+);
+
+jest.mock('@patternfly/react-icons/dist/js/icons/error-circle-o-icon', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     ErrorCircleOIcon: () => {
       return <MockedIcon />;
-    },
+    }
+  })
+);
+
+jest.mock('@patternfly/react-icons/dist/js/icons/on-running-icon', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     OnRunningIcon: () => {
       return <MockedIcon />;
-    },
+    }
+  })
+);
+
+jest.mock('@patternfly/react-icons/dist/js/icons/outlined-clock-icon', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     OutlinedClockIcon: () => {
       return <MockedIcon />;
     }

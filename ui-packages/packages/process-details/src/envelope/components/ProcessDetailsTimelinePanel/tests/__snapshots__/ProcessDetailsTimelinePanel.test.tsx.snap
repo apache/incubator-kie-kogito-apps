@@ -36,9 +36,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for comple
           >
             <OnRunningIcon
               className="kogito-process-details--timeline-status"
-              color="currentColor"
-              noVerticalAlign={false}
-              size="sm"
             />
           </Tooltip>
         </SplitItem>
@@ -73,8 +70,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for comple
             <ErrorCircleOIcon
               className="kogito-process-details--timeline-status"
               color="var(--pf-global--danger-color--100)"
-              noVerticalAlign={false}
-              size="sm"
             />
           </Tooltip>
         </SplitItem>
@@ -93,8 +88,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for comple
                   <UserIcon
                     className="pf-u-ml-sm"
                     color="var(--pf-global--icon--Color--light)"
-                    noVerticalAlign={false}
-                    size="sm"
                   />
                 </Tooltip>
               </span>
@@ -188,9 +181,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for no ser
           >
             <OnRunningIcon
               className="kogito-process-details--timeline-status"
-              color="currentColor"
-              noVerticalAlign={false}
-              size="sm"
             />
           </Tooltip>
         </SplitItem>
@@ -224,9 +214,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for no ser
           >
             <OnRunningIcon
               className="kogito-process-details--timeline-status"
-              color="currentColor"
-              noVerticalAlign={false}
-              size="sm"
             />
           </Tooltip>
         </SplitItem>
@@ -245,8 +232,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for no ser
                   <UserIcon
                     className="pf-u-ml-sm"
                     color="var(--pf-global--icon--Color--light)"
-                    noVerticalAlign={false}
-                    size="sm"
                   />
                 </Tooltip>
               </span>
@@ -272,8 +257,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for no ser
             <ErrorCircleOIcon
               className="kogito-process-details--timeline-status"
               color="var(--pf-global--danger-color--100)"
-              noVerticalAlign={false}
-              size="sm"
             />
           </Tooltip>
         </SplitItem>
@@ -292,8 +275,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for no ser
                   <UserIcon
                     className="pf-u-ml-sm"
                     color="var(--pf-global--icon--Color--light)"
-                    noVerticalAlign={false}
-                    size="sm"
                   />
                 </Tooltip>
               </span>
@@ -388,8 +369,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for servic
             <ErrorCircleOIcon
               className="kogito-process-details--timeline-status"
               color="var(--pf-global--danger-color--100)"
-              noVerticalAlign={false}
-              size="sm"
             />
           </Tooltip>
         </SplitItem>
@@ -408,8 +387,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for servic
                   <UserIcon
                     className="pf-u-ml-sm"
                     color="var(--pf-global--icon--Color--light)"
-                    noVerticalAlign={false}
-                    size="sm"
                   />
                 </Tooltip>
                 <Tooltip
@@ -419,9 +396,7 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for servic
                   <OutlinedClockIcon
                     className="pf-u-ml-sm"
                     color="var(--pf-global--icon--Color--dark)"
-                    noVerticalAlign={false}
                     onClick={[Function]}
-                    size="sm"
                   />
                 </Tooltip>
               </span>
@@ -501,8 +476,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for servic
             <ErrorCircleOIcon
               className="kogito-process-details--timeline-status"
               color="var(--pf-global--danger-color--100)"
-              noVerticalAlign={false}
-              size="sm"
             />
           </Tooltip>
         </SplitItem>
@@ -554,9 +527,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for servic
           >
             <OnRunningIcon
               className="kogito-process-details--timeline-status"
-              color="currentColor"
-              noVerticalAlign={false}
-              size="sm"
             />
           </Tooltip>
         </SplitItem>
@@ -640,9 +610,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for servic
           >
             <OnRunningIcon
               className="kogito-process-details--timeline-status"
-              color="currentColor"
-              noVerticalAlign={false}
-              size="sm"
             />
           </Tooltip>
         </SplitItem>
@@ -677,8 +644,6 @@ exports[`ProcessDetailsTimelinePanel component tests Snapshot testing for servic
             <CheckCircleIcon
               className="kogito-process-details--timeline-status"
               color="var(--pf-global--success-color--100)"
-              noVerticalAlign={false}
-              size="sm"
             />
           </Tooltip>
         </SplitItem>
@@ -1763,9 +1728,6 @@ exports[`ProcessDetailsTimelinePanel component tests test job actions on nodes t
                           trigger={
                             <OnRunningIcon
                               className="kogito-process-details--timeline-status"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                           }
                           zIndex={9999}
@@ -1775,29 +1737,8 @@ exports[`ProcessDetailsTimelinePanel component tests test job actions on nodes t
                           >
                             <OnRunningIcon
                               className="kogito-process-details--timeline-status"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             >
-                              <svg
-                                aria-hidden={true}
-                                aria-labelledby={null}
-                                className="kogito-process-details--timeline-status"
-                                fill="currentColor"
-                                height="1em"
-                                role="img"
-                                style={
-                                  Object {
-                                    "verticalAlign": "-0.125em",
-                                  }
-                                }
-                                viewBox="0 0 1024 1024"
-                                width="1em"
-                              >
-                                <path
-                                  d="M512.1,895.9 C300.3,895.9 128.1,723.8 128.1,511.9 C128.1,300.2 300.3,127.9 512.1,127.9 C723.9,127.9 896,300.2 896.100043,511.9 C896.2,723.6 723.8,895.9 512.1,895.9 M512.1,0 C229.7,0 0,229.7 0,512 C0,794.3 229.7,1024 512.1,1024 C794.3,1024 1024,794.3 1024,512 C1024,229.7 794.3,0 512.1,0 M716.3,482.9 C710,495.2 575.5,679.5 493.7,782.4 C478,800.2 463.4,794.2 457.3,790.3 C443.9,781.4 443.1,771.7 451,745 C458.9,718.3 494.1,576 494.1,576 L341.3,576 C328.2,576.2 312.2,576.2 307.1,563.8 C302.2,552 306.9,541.2 314.4,530.8 C370,453.5 508.1,264.9 508.1,264.9 C508.1,264.9 527.2,239.7 541.4,238.3 C554.4,237 562.9,240.5 567,249.6 C572.1,260.2 570.4,272.9 566.8,286.9 C563.5,300 526.4,448 526.4,448 L695.3,448 C702.6,448 711.5,449.4 717.4,457 C723.3,464.6 719.5,477 716.3,482.9"
-                                />
-                              </svg>
+                              <MockedIcon />
                             </OnRunningIcon>
                           </FindRefWrapper>
                         </Popper>
@@ -1936,9 +1877,6 @@ exports[`ProcessDetailsTimelinePanel component tests test job actions on nodes t
                           trigger={
                             <OnRunningIcon
                               className="kogito-process-details--timeline-status"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                           }
                           zIndex={9999}
@@ -1948,29 +1886,8 @@ exports[`ProcessDetailsTimelinePanel component tests test job actions on nodes t
                           >
                             <OnRunningIcon
                               className="kogito-process-details--timeline-status"
-                              color="currentColor"
-                              noVerticalAlign={false}
-                              size="sm"
                             >
-                              <svg
-                                aria-hidden={true}
-                                aria-labelledby={null}
-                                className="kogito-process-details--timeline-status"
-                                fill="currentColor"
-                                height="1em"
-                                role="img"
-                                style={
-                                  Object {
-                                    "verticalAlign": "-0.125em",
-                                  }
-                                }
-                                viewBox="0 0 1024 1024"
-                                width="1em"
-                              >
-                                <path
-                                  d="M512.1,895.9 C300.3,895.9 128.1,723.8 128.1,511.9 C128.1,300.2 300.3,127.9 512.1,127.9 C723.9,127.9 896,300.2 896.100043,511.9 C896.2,723.6 723.8,895.9 512.1,895.9 M512.1,0 C229.7,0 0,229.7 0,512 C0,794.3 229.7,1024 512.1,1024 C794.3,1024 1024,794.3 1024,512 C1024,229.7 794.3,0 512.1,0 M716.3,482.9 C710,495.2 575.5,679.5 493.7,782.4 C478,800.2 463.4,794.2 457.3,790.3 C443.9,781.4 443.1,771.7 451,745 C458.9,718.3 494.1,576 494.1,576 L341.3,576 C328.2,576.2 312.2,576.2 307.1,563.8 C302.2,552 306.9,541.2 314.4,530.8 C370,453.5 508.1,264.9 508.1,264.9 C508.1,264.9 527.2,239.7 541.4,238.3 C554.4,237 562.9,240.5 567,249.6 C572.1,260.2 570.4,272.9 566.8,286.9 C563.5,300 526.4,448 526.4,448 L695.3,448 C702.6,448 711.5,449.4 717.4,457 C723.3,464.6 719.5,477 716.3,482.9"
-                                />
-                              </svg>
+                              <MockedIcon />
                             </OnRunningIcon>
                           </FindRefWrapper>
                         </Popper>
@@ -2072,8 +1989,6 @@ exports[`ProcessDetailsTimelinePanel component tests test job actions on nodes t
                                       <UserIcon
                                         className="pf-u-ml-sm"
                                         color="var(--pf-global--icon--Color--light)"
-                                        noVerticalAlign={false}
-                                        size="sm"
                                       />
                                     }
                                     zIndex={9999}
@@ -2084,28 +1999,8 @@ exports[`ProcessDetailsTimelinePanel component tests test job actions on nodes t
                                       <UserIcon
                                         className="pf-u-ml-sm"
                                         color="var(--pf-global--icon--Color--light)"
-                                        noVerticalAlign={false}
-                                        size="sm"
                                       >
-                                        <svg
-                                          aria-hidden={true}
-                                          aria-labelledby={null}
-                                          className="pf-u-ml-sm"
-                                          fill="var(--pf-global--icon--Color--light)"
-                                          height="1em"
-                                          role="img"
-                                          style={
-                                            Object {
-                                              "verticalAlign": "-0.125em",
-                                            }
-                                          }
-                                          viewBox="0 0 448 512"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
-                                          />
-                                        </svg>
+                                        <MockedIcon />
                                       </UserIcon>
                                     </FindRefWrapper>
                                   </Popper>
@@ -2222,8 +2117,6 @@ exports[`ProcessDetailsTimelinePanel component tests test job actions on nodes t
                             <ErrorCircleOIcon
                               className="kogito-process-details--timeline-status"
                               color="var(--pf-global--danger-color--100)"
-                              noVerticalAlign={false}
-                              size="sm"
                             />
                           }
                           zIndex={9999}
@@ -2234,28 +2127,8 @@ exports[`ProcessDetailsTimelinePanel component tests test job actions on nodes t
                             <ErrorCircleOIcon
                               className="kogito-process-details--timeline-status"
                               color="var(--pf-global--danger-color--100)"
-                              noVerticalAlign={false}
-                              size="sm"
                             >
-                              <svg
-                                aria-hidden={true}
-                                aria-labelledby={null}
-                                className="kogito-process-details--timeline-status"
-                                fill="var(--pf-global--danger-color--100)"
-                                height="1em"
-                                role="img"
-                                style={
-                                  Object {
-                                    "verticalAlign": "-0.125em",
-                                  }
-                                }
-                                viewBox="0 0 1024 1024"
-                                width="1em"
-                              >
-                                <path
-                                  d="M409.5,319 C406.699326,316.168774 402.882413,314.575614 398.9,314.575614 C394.917587,314.575614 391.100674,316.168774 388.3,319 L319,388.3 C316.168774,391.100674 314.575614,394.917587 314.575614,398.9 C314.575614,402.882413 316.168774,406.699326 319,409.5 L421.5,512 L319,614.5 C316.168774,617.300674 314.575614,621.117587 314.575614,625.1 C314.575614,629.082413 316.168774,632.899326 319,635.7 L388.3,705 C391.100674,707.831226 394.917587,709.424386 398.9,709.424386 C402.882413,709.424386 406.699326,707.831226 409.5,705 L512,602.5 L614.5,705 C620.367618,710.877435 629.877455,710.922082 635.8,705.1 L705.1,635.8 C707.926508,632.970191 709.505822,629.128746 709.48721,625.129169 C709.468267,621.129592 707.852954,617.303145 705,614.5 L602.5,512 L705,409.5 C707.821142,406.720523 709.417879,402.93109 709.436648,398.97079 C709.455417,395.01049 707.89467,391.206092 705.1,388.4 L635.8,319 C629.932382,313.122565 620.422545,313.077918 614.5,318.9 L512,421.5 L409.5,319 Z M512,896 C300.2,896 128,723.9 128,512 C128,300.3 300.2,128 512,128 C723.8,128 896,300.2 896,512 C896,723.8 723.7,896 512,896 Z M512.1,0 C229.7,0 0,229.8 0,512 C0,794.2 229.8,1024 512.1,1024 C794.4,1024 1024,794.3 1024,512 C1024,229.7 794.4,0 512.1,0 Z"
-                                />
-                              </svg>
+                              <MockedIcon />
                             </ErrorCircleOIcon>
                           </FindRefWrapper>
                         </Popper>
@@ -2357,8 +2230,6 @@ exports[`ProcessDetailsTimelinePanel component tests test job actions on nodes t
                                       <UserIcon
                                         className="pf-u-ml-sm"
                                         color="var(--pf-global--icon--Color--light)"
-                                        noVerticalAlign={false}
-                                        size="sm"
                                       />
                                     }
                                     zIndex={9999}
@@ -2369,28 +2240,8 @@ exports[`ProcessDetailsTimelinePanel component tests test job actions on nodes t
                                       <UserIcon
                                         className="pf-u-ml-sm"
                                         color="var(--pf-global--icon--Color--light)"
-                                        noVerticalAlign={false}
-                                        size="sm"
                                       >
-                                        <svg
-                                          aria-hidden={true}
-                                          aria-labelledby={null}
-                                          className="pf-u-ml-sm"
-                                          fill="var(--pf-global--icon--Color--light)"
-                                          height="1em"
-                                          role="img"
-                                          style={
-                                            Object {
-                                              "verticalAlign": "-0.125em",
-                                            }
-                                          }
-                                          viewBox="0 0 448 512"
-                                          width="1em"
-                                        >
-                                          <path
-                                            d="M224 256c70.7 0 128-57.3 128-128S294.7 0 224 0 96 57.3 96 128s57.3 128 128 128zm89.6 32h-16.7c-22.2 10.2-46.9 16-72.9 16s-50.6-5.8-72.9-16h-16.7C60.2 288 0 348.2 0 422.4V464c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48v-41.6c0-74.2-60.2-134.4-134.4-134.4z"
-                                          />
-                                        </svg>
+                                        <MockedIcon />
                                       </UserIcon>
                                     </FindRefWrapper>
                                   </Popper>

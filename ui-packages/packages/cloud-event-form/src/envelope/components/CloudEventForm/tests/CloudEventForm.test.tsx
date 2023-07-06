@@ -50,20 +50,32 @@ jest.mock('@patternfly/react-icons', () =>
   })
 );
 
-jest.mock('@patternfly/react-core', () =>
+jest.mock('@patternfly/react-core/dist/js/components/Button', () =>
   Object.assign({}, jest.requireActual('@patternfly/react-core'), {
     Button: () => {
-      return <MockedComponent />;
-    },
-    Select: () => {
-      return <MockedComponent />;
-    },
-    TextInput: () => {
       return <MockedComponent />;
     }
   })
 );
 
+jest.mock('@patternfly/react-core/dist/js/components/Select', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-core'), {
+    Select: () => {
+      return <MockedComponent />;
+    },
+    SelectVariant: {
+      single: 'single'
+    }
+  })
+);
+
+jest.mock('@patternfly/react-core/dist/js/components/TextInput', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-core'), {
+    TextInput: () => {
+      return <MockedComponent />;
+    }
+  })
+);
 jest.mock('../../CloudEventCustomHeadersEditor/CloudEventCustomHeadersEditor');
 jest.mock('../../CloudEventFieldLabelIcon/CloudEventFieldLabelIcon');
 

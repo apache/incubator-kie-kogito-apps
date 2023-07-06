@@ -59,14 +59,24 @@ const MockedComponent = (): React.ReactElement => {
 
 const DATE_FOR_TESTS = 1592000000000; // UTC Fri Jun 12 2020 22:13:20
 
-jest.mock('@patternfly/react-icons', () =>
+jest.mock('@patternfly/react-icons/dist/js/icons/on-running-icon', () =>
   Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     OnRunningIcon: () => {
       return <MockedComponent />;
-    },
+    }
+  })
+);
+
+jest.mock('@patternfly/react-icons/dist/js/icons/ban-icon', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     BanIcon: () => {
       return <MockedComponent />;
-    },
+    }
+  })
+);
+
+jest.mock('@patternfly/react-icons/dist/js/icons/check-circle-icon', () =>
+  Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     CheckCircleIcon: () => {
       return <MockedComponent />;
     }

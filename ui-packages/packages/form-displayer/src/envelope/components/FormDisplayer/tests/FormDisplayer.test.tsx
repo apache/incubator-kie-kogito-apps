@@ -26,7 +26,7 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@patternfly/react-core', () =>
+jest.mock('@patternfly/react-core/dist/js/layouts/Bullseye', () =>
   Object.assign({}, jest.requireActual('@patternfly/react-core'), {
     Bullseye: () => <MockedComponent />
   })

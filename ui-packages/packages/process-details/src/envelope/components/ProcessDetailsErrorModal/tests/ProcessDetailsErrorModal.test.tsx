@@ -23,7 +23,7 @@ import { mount } from 'enzyme';
 const MockedIcon = (): React.ReactElement => {
   return <></>;
 };
-jest.mock('@patternfly/react-icons', () =>
+jest.mock('@patternfly/react-icons/dist/js/icons/info-circle-icon', () =>
   Object.assign({}, jest.requireActual('@patternfly/react-icons'), {
     InfoCircleIcon: () => {
       return <MockedIcon />;
