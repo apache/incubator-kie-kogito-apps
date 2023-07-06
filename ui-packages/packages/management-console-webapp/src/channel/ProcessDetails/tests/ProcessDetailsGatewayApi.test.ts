@@ -29,9 +29,6 @@ import {
   ProcessDetailsGatewayApiImpl
 } from '../ProcessDetailsGatewayApi';
 import { GraphQL } from '@kogito-apps/consoles-common';
-// import {
-//   handleProcessVariableUpdate
-// } from '../../../apis/apis';
 
 jest.mock('@kogito-apps/runtime-gateway-api', () => ({
   handleJobReschedule: jest.fn(),

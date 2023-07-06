@@ -32,11 +32,6 @@ export interface QueryPage {
   limit: number;
 }
 
-// export interface ProcessListState {
-//   filters: ProcessInstanceFilter;
-//   sortBy: ProcessListSortBy;
-// }
-
 export interface ProcessListInitArgs {
   initialState: ProcessListState;
   singularProcessLabel: string;
