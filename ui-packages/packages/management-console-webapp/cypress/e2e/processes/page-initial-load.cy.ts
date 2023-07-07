@@ -52,10 +52,13 @@ describe('Process List Page test', () => {
                   // eslint-disable-next-line cypress/require-data-selectors
                   cy.get('li')
                     .should('have.length', 2)
-                    .within(($items) => {
-                      expect($items.eq(0)).to.contain.text('Home');
-                      expect($items.eq(1)).to.contain.text('Processes');
-                    });
+                    .eq(0)
+                    .should('have.text', 'Home');
+                  // eslint-disable-next-line cypress/require-data-selectors
+                  cy.get('li')
+                    .should('have.length', 2)
+                    .eq(1)
+                    .should('have.text', 'Processes');
                 });
             });
           cy.ouiaType('process-list')
