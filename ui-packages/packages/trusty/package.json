@@ -14,7 +14,7 @@
     "url": "https://github.com/kiegroup/kogito-apps.git"
   },
   "dependencies": {
-    "@kogito-tooling/kie-editors-standalone": "^0.10.0",
+    "@kie-tools/kie-editors-standalone": "^0.29.0",
     "@patternfly/react-charts": "^6.94.18",
     "@patternfly/react-core": "^4.276.6",
     "@patternfly/react-icons": "^4.93.6",

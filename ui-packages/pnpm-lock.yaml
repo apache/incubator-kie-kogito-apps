@@ -2920,9 +2920,9 @@ importers:
 
   packages/trusty:
     dependencies:
-      '@kogito-tooling/kie-editors-standalone':
-        specifier: ^0.10.0
-        version: 0.10.0(react-dom@17.0.2)(react@17.0.2)
+      '@kie-tools/kie-editors-standalone':
+        specifier: ^0.29.0
+        version: 0.29.0
       '@patternfly/react-charts':
         specifier: ^6.94.18
         version: 6.94.19(react-dom@17.0.2)(react@17.0.2)
@@ -7708,6 +7708,13 @@ packages:
       - supports-color
     dev: false
 
+  /@kie-tools/kie-editors-standalone@0.29.0:
+    resolution:
+      {
+        integrity: sha512-xacjYciqA4S2ybBvJXlcuba+jJ+CRy5+xhOvMYfd2S6NozDFqvJoasRoJWgJCD7fZcb8Z6hgyLDOm6Ng0MyghQ==
+      }
+    dev: false
+
   /@kie-tools/pmml-editor-marshaller@0.29.0:
     resolution:
       {
@@ -7905,185 +7912,6 @@ packages:
       line-reader: 0.4.0
       yargs: 17.7.1
     dev: true
-
-  /@kogito-tooling/backend@0.10.0:
-    resolution:
-      {
-        integrity: sha512-rj7ZuHQBS+gmKxVPleXmxf/Dp5e3SDHJX2zu4fka6xxrxzZJzFJz7BSeZUbQ27J/hZ6UkxNsf5h1XcqF35evJw==
-      }
-    dependencies:
-      '@kogito-tooling/i18n': 0.10.0
-      '@kogito-tooling/i18n-common-dictionary': 0.10.0
-      '@kogito-tooling/notifications': 0.10.0
-      '@kogito-tooling/workspace': 0.10.0
-      '@types/semver': 7.3.13
-      axios: 0.21.2
-      fast-xml-parser: 4.2.4
-      portfinder: 1.0.32
-    transitivePeerDependencies:
-      - debug
-      - supports-color
-    dev: false
-
-  /@kogito-tooling/channel-common-api@0.10.0:
-    resolution:
-      {
-        integrity: sha512-HFJmkpqmNKtOtmF84/S3omk6wycvweuB/7/u6P5am6zH6rKPOmqf3/kUHYfcElIdYsI0CJdio/79fFu8mSdKRQ==
-      }
-    dev: false
-
-  /@kogito-tooling/editor@0.10.0(react-dom@17.0.2)(react@17.0.2):
-    resolution:
-      {
-        integrity: sha512-ej4ykvXjsRcS7oSBTcZcWoxClNgtrcoWi6e46r1OCzLTq1b66otSlmoCAj64kb4VGevHArHmyjRjvkNl0xXUfQ==
-      }
-    dependencies:
-      '@kogito-tooling/backend': 0.10.0
-      '@kogito-tooling/envelope': 0.10.0
-      '@kogito-tooling/envelope-bus': 0.10.0
-      '@kogito-tooling/guided-tour': 0.10.0(react-dom@17.0.2)(react@17.0.2)
-      '@kogito-tooling/i18n': 0.10.0
-      '@kogito-tooling/keyboard-shortcuts': 0.10.0
-      '@kogito-tooling/notifications': 0.10.0
-      '@kogito-tooling/workspace': 0.10.0
-    transitivePeerDependencies:
-      - debug
-      - react
-      - react-dom
-      - supports-color
-    dev: false
-
-  /@kogito-tooling/envelope-bus@0.10.0:
-    resolution:
-      {
-        integrity: sha512-94W0/j2gTAvTzoTsDnMnw6mAZII0HFShNs7g+SvsPgiCRSxB4CoG7Gq+iX4Y7mvwxlW21TDGdzCUMz/kzBZkjg==
-      }
-    dev: false
-
-  /@kogito-tooling/envelope@0.10.0:
-    resolution:
-      {
-        integrity: sha512-/vdA0HqnSn2VnHMlctychlLCcWVSJ3waNo7zYIIENOv0nl+CMoGAzEVLtI8ogVYX6Y40pPiYjD1PIIUPJhu7Fg==
-      }
-    dependencies:
-      '@kogito-tooling/envelope-bus': 0.10.0
-    dev: false
-
-  /@kogito-tooling/external-assets-base@0.10.0:
-    resolution:
-      {
-        integrity: sha512-qZjax26XgNBLVDeMyn0SaPOaIl/scwPEi5Gk5hwPgRZpR3MEyV6EnLzbTrKEskozYV+snmKtxGuU/N0bQ8XSUQ==
-      }
-    dependencies:
-      '@types/glob': 7.2.0
-      glob: 7.2.3
-    dev: false
-
-  /@kogito-tooling/guided-tour@0.10.0(react-dom@17.0.2)(react@17.0.2):
-    resolution:
-      {
-        integrity: sha512-eG98HFvMDh9yM/Uyza3UG0O/spwJDdJ4KB1oOP8v5iR2jLorpWwvCAMFuUYTkjXX2ALcj7vKARD/gE0CtrTuAA==
-      }
-    peerDependencies:
-      react: 16.12.0
-      react-dom: 16.12.0
-    dependencies:
-      '@kogito-tooling/envelope-bus': 0.10.0
-      '@kogito-tooling/i18n': 0.10.0
-      '@kogito-tooling/i18n-common-dictionary': 0.10.0
-      react: 17.0.2
-      react-dom: 17.0.2(react@17.0.2)
-    dev: false
-
-  /@kogito-tooling/i18n-common-dictionary@0.10.0:
-    resolution:
-      {
-        integrity: sha512-o6i2Ty47Wiy5+X87tgMtfRj1gGa8fbTXsB4s33X82TZFp3UTtoxFRZh/wDHcLZxYfV+KbmhM4u7hj3JH7D8JSA==
-      }
-    dependencies:
-      '@kogito-tooling/i18n': 0.10.0
-    dev: false
-
-  /@kogito-tooling/i18n@0.10.0:
-    resolution:
-      {
-        integrity: sha512-A5oIDR6ndfe1FskPqUgVAEtJhdHQGMo52CLNzUx4Q3OMrtQ0kqug7X8IN5RDZzgDmSYBllOuWHy9kMpCWHEaeA==
-      }
-    dev: false
-
-  /@kogito-tooling/keyboard-shortcuts@0.10.0:
-    resolution:
-      {
-        integrity: sha512-ocCUAGgQT0Hae7x8rxXwZPZY2oSMIMYa/WcAz7bfzf6jsXZprSRoVKmjCmflLu+QX3tmzqtP/93aJueJ3Q1e4A==
-      }
-    dependencies:
-      '@kogito-tooling/channel-common-api': 0.10.0
-      '@kogito-tooling/envelope-bus': 0.10.0
-    dev: false
-
-  /@kogito-tooling/kie-bc-editors@0.10.0(react-dom@17.0.2)(react@17.0.2):
-    resolution:
-      {
-        integrity: sha512-/u/xL+iPnEYHM6EaoRfRFxaVof7/s9eGjESjTh7hyJPjODgJa7+A31REhlF+qwCEInSSFsD1vS7oiwMRaYRAqA==
-      }
-    dependencies:
-      '@kogito-tooling/backend': 0.10.0
-      '@kogito-tooling/editor': 0.10.0(react-dom@17.0.2)(react@17.0.2)
-      '@kogito-tooling/i18n': 0.10.0
-      '@kogito-tooling/pmml-editor-marshaller': 0.10.0
-    transitivePeerDependencies:
-      - debug
-      - react
-      - react-dom
-      - supports-color
-    dev: false
-
-  /@kogito-tooling/kie-editors-standalone@0.10.0(react-dom@17.0.2)(react@17.0.2):
-    resolution:
-      {
-        integrity: sha512-bgtpsMJodiI4kGtpKloi8GAzU7nka8OR8SD4qDTQVC0EW9E8C/mvXN1HenrW3VmbTOzYAV6esP5j2Z3g+GKk4g==
-      }
-    dependencies:
-      '@kogito-tooling/editor': 0.10.0(react-dom@17.0.2)(react@17.0.2)
-      '@kogito-tooling/external-assets-base': 0.10.0
-      '@kogito-tooling/i18n': 0.10.0
-      '@kogito-tooling/kie-bc-editors': 0.10.0(react-dom@17.0.2)(react@17.0.2)
-    transitivePeerDependencies:
-      - debug
-      - react
-      - react-dom
-      - supports-color
-    dev: false
-
-  /@kogito-tooling/notifications@0.10.0:
-    resolution:
-      {
-        integrity: sha512-GpKSTSIWzp0araokItbyblzCrfpc/CkXd5tpTfmQ0J2cZe1nlEkdJbgOiSUr8PMrw8tzi2lOAD+WEIAuX4cBBg==
-      }
-    dependencies:
-      '@kogito-tooling/i18n': 0.10.0
-      '@kogito-tooling/i18n-common-dictionary': 0.10.0
-      '@kogito-tooling/workspace': 0.10.0
-    dev: false
-
-  /@kogito-tooling/pmml-editor-marshaller@0.10.0:
-    resolution:
-      {
-        integrity: sha512-xPAH6QRxknZPlH6lK5I1OkVxjWaWVB8zIIcX7a0YAHdb18T7o+bak9mX37Jo/LCgiZMatsKYUTDA7ZISagnbvw==
-      }
-    dependencies:
-      jsonata: 1.8.6
-      xml-js: 1.6.11
-    dev: false
-
-  /@kogito-tooling/workspace@0.10.0:
-    resolution:
-      {
-        integrity: sha512-m7jT9SMRXT1+Wzv9cFZfqtethI5IuSpumFGYtf3LjJ/5mwZC5jl2YemKt7uvTwvJVQYvyW3+NrJCnsOoCT2mPg==
-      }
-    dependencies:
-      '@kogito-tooling/channel-common-api': 0.10.0
-    dev: false
 
   /@leichtgewicht/ip-codec@2.0.4:
     resolution:
@@ -8938,6 +8766,7 @@ packages:
     dependencies:
       '@types/minimatch': 3.0.5
       '@types/node': 18.15.11
+    dev: true
 
   /@types/graceful-fs@4.1.6:
     resolution:
@@ -9118,6 +8947,7 @@ packages:
       {
         integrity: sha512-Klz949h02Gz2uZCMGwDUSDS1YBlTdDDgbWHi+81l29tQALUtvz4rAYi5uoVhE5Lagoq6DeqAUlbrHvW/mXDgdQ==
       }
+    dev: true
 
   /@types/node@10.17.60:
     resolution:
@@ -9281,13 +9111,6 @@ packages:
       {
         integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==
       }
-
-  /@types/semver@7.3.13:
-    resolution:
-      {
-        integrity: sha512-21cFJr9z3g5dW8B0CVI9g2O9beqaThGQ6ZFBqHfwhzLDKUxaqTIy3vnfah/UPkfOiF2pLq+tGz+W8RyCskuslw==
-      }
-    dev: false
 
   /@types/serve-index@1.9.1:
     resolution:
