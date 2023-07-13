@@ -50,10 +50,10 @@
     "lint": "eslint './src/**/*.ts{,x}'",
     "mock-server": "json-server api-mock/db.js --routes api-mock/routes.json --port 1336 --delay 1000 --id executionId --middlewares api-mock/filterSingular.js  api-mock/counterfactualPoll.js",
     "start:it": "concurrently 'pnpm serve -p 9000 -c ../cypress/serve.json ./dist-standalone/' 'pnpm run mock-server'",
-    "cypress:open:it": "pnpm cypress open --project cypress --config-file cypress.it.json",
-    "cypress:run:it": "pnpm cypress run --project cypress --config-file cypress.it.json",
-    "cypress:open:e2e": "pnpm cypress open --project cypress --config-file cypress.e2e.json",
-    "cypress:run:e2e": "pnpm cypress run --project cypress --config-file cypress.e2e.json",
+    "cypress:open:it": "pnpm cypress open --project cypress --config-file cypress.it.ts",
+    "cypress:run:it": "pnpm cypress run --project cypress --config-file cypress.it.ts",
+    "cypress:open:e2e": "pnpm cypress open --project cypress --config-file cypress.e2e.ts",
+    "cypress:run:e2e": "pnpm cypress run --project cypress --config-file cypress.e2e.ts",
     "test:e2e:trusty": "pnpm run cypress:run:e2e && echo"
   },
   "devDependencies": {

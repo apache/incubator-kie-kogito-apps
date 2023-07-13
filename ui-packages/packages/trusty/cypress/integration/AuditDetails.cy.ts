@@ -41,39 +41,35 @@ describe('Audit Details Header', () => {
 
 function checkAuditHeader(reqId: string, thirdNavBar: string[]) {
   cy.ouiaId('exec-table', 'PF4/Table')
-    .ouiaId(reqId, 'PF4/TableRow', {timeout: 20000})
+    .ouiaId(reqId, 'PF4/TableRow', { timeout: 20000 })
     .ouiaId('show-detail', 'link')
     .click();
   const title = 'Execution #' + String(reqId).substring(0, 8);
 
   cy.ouiaType('PF4/Breadcrumb')
     .should('exist')
-    .within($nav => {
+    .within(($nav) => {
       cy.wrap($nav)
         .find('li>a')
         .should('have.length', 3)
-        .within($items => {
+        .within(($items) => {
           expect($items.eq(0)).have.text('Audit investigation');
           expect($items.eq(1)).have.text(title);
           expect($items.eq(2)).have.text(thirdNavBar[0]);
         });
     });
   cy.ouiaId('execution-header').within(() => {
-    cy.ouiaId('title')
-      .should('be.visible')
-      .should('have.text', title);
-    cy.ouiaId('status')
-      .should('be.visible')
-      .should('have.text', 'Completed');
+    cy.ouiaId('title').should('be.visible').should('have.text', title);
+    cy.ouiaId('status').should('be.visible').should('have.text', 'Completed');
   });
 
   cy.ouiaId('nav-audit-detail')
     .should('exist')
-    .within($nav => {
+    .within(($nav) => {
       cy.wrap($nav)
         .find('li>a')
         .should('have.length', thirdNavBar.length)
-        .within($item => {
+        .within(($item) => {
           for (let value = 0; value < thirdNavBar.length; value++) {
             expect($item.eq(value)).have.text(thirdNavBar[value]);
             expect($item.eq(value)).be.visible;

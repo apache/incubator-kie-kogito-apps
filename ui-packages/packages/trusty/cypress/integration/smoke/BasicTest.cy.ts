@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-describe('E2E - smoke test', () => {
+describe('Basic Elements', () => {
   beforeEach(() => {
     cy.visit('/');
   });
 
-  it('menu button is visible', () => {
+  it('Menu button is visible', () => {
     cy.get('button#nav-toggle').should('be.visible');
   });
 
   it('Menu button shows/hides options', () => {
-    cy.ouiaId('audit-item').then($item => {
+    cy.ouiaId('audit-item').then(($item) => {
       //toggle menu side bar - both directions
       if ($item.is(':visible')) {
         cy.get('button#nav-toggle').click();
@@ -57,5 +57,12 @@ describe('E2E - smoke test', () => {
 
   it('Top paging is visible', () => {
     cy.ouiaId('top-pagination').should('be.visible');
+  });
+
+  it('Decision result is available', () => {
+    cy.ouiaId('exec-table')
+      .ouiaId('unsuppor-ted--inpu-ts---a0741e0e7272', 'PF4/TableRow')
+      .ouiaId('show-detail', 'link')
+      .should('be.visible');
   });
 });
