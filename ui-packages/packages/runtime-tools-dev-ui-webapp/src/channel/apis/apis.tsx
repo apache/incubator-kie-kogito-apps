@@ -523,18 +523,23 @@ export const getCustomWorkflowSchema = (
   return new Promise((resolve, reject) => {
     SwaggerParser.parse(`${devUIUrl}/${openApiPath}`)
       .then((response: any) => {
-        const schemaFromRequestBody =
-          response.paths['/' + workflowName].post.requestBody.content[
-            'application/json'
-          ].schema;
-
         let schema = {};
-        if (schemaFromRequestBody && schemaFromRequestBody.type) {
-          schema = {
-            type: schemaFromRequestBody.type,
-            properties: schemaFromRequestBody.properties
-          };
-        } else {
+        try {
+          const schemaFromRequestBody =
+            response.paths['/' + workflowName].post.requestBody.content[
+              'application/json'
+            ].schema;
+
+          if (schemaFromRequestBody.type) {
+            schema = {
+              type: schemaFromRequestBody.type,
+              properties: schemaFromRequestBody.properties
+            };
+          } else {
+            schema = response.components.schemas[workflowName + '_input'];
+          }
+        } catch (e) {
+          console.log(e);
           schema = response.components.schemas[workflowName + '_input'];
         }
         if (schema) {
