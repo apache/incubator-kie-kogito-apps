@@ -15,14 +15,12 @@
  */
 
 import React from 'react';
-import {
-  BanIcon,
-  CheckCircleIcon,
-  OnRunningIcon
-} from '@patternfly/react-icons';
+import { BanIcon } from '@patternfly/react-icons/dist/js/icons/ban-icon';
+import { CheckCircleIcon } from '@patternfly/react-icons/dist/js/icons/check-circle-icon';
+import { OnRunningIcon } from '@patternfly/react-icons/dist/js/icons/on-running-icon';
 import _ from 'lodash';
 import TaskState from '../TaskState';
-import { Label } from '@patternfly/react-core';
+import { Label } from '@patternfly/react-core/dist/js/components/Label';
 import { mount } from 'enzyme';
 import { UserTaskInstance } from '../../../types';
 

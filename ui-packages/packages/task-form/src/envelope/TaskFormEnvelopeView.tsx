@@ -23,7 +23,7 @@ import React, {
 import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { TaskFormChannelApi, TaskFormInitArgs, User } from '../api';
-import { Bullseye } from '@patternfly/react-core';
+import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
 import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
 import {
   KogitoEmptyState,
