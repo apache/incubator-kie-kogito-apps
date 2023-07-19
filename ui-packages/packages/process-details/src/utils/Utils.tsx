@@ -187,7 +187,7 @@ export const getOmmitedNodesForTimeline = (
     const stateNames: string[] = workflowFile.states
       .map((state) => state.name)
       .concat(['Start', 'End']);
-    nodes.map((node) => {
+    nodes.forEach((node) => {
       if (!stateNames.includes(node.name)) {
         nodesToOmmit.push(node.name);
       }
