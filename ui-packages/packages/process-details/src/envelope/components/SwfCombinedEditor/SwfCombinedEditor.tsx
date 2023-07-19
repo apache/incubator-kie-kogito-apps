@@ -50,10 +50,7 @@ import { ProcessInstance } from '@kogito-apps/management-console-shared/dist/typ
 import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
 import { ServerlessWorkflowCombinedEditorChannelApi } from '@kie-tools/serverless-workflow-combined-editor/dist/api';
 import { ServerlessWorkflowCombinedEditorEnvelopeApi } from '@kie-tools/serverless-workflow-combined-editor/dist/api/ServerlessWorkflowCombinedEditorEnvelopeApi';
-import {
-  getOmmitedNodesForTimeline,
-  getSuccessNodes
-} from '../../../utils/Utils';
+import { getSuccessNodes } from '../../../utils/Utils';
 
 enum NodeColors {
   ERROR_COLOR = '#f4d5d5',
