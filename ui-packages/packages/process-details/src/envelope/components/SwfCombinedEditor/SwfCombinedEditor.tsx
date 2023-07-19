@@ -50,6 +50,15 @@ import { ProcessInstance } from '@kogito-apps/management-console-shared/dist/typ
 import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
 import { ServerlessWorkflowCombinedEditorChannelApi } from '@kie-tools/serverless-workflow-combined-editor/dist/api';
 import { ServerlessWorkflowCombinedEditorEnvelopeApi } from '@kie-tools/serverless-workflow-combined-editor/dist/api/ServerlessWorkflowCombinedEditorEnvelopeApi';
+import {
+  getOmmitedNodesForTimeline,
+  getSuccessNodes
+} from '../../../utils/Utils';
+
+enum NodeColors {
+  ERROR_COLOR = '#f4d5d5',
+  SUCCESS_COLOR = '#d5f4e6'
+}
 interface ISwfCombinedEditorProps {
   workflowInstance: Pick<ProcessInstance, 'source' | 'nodes' | 'error'>;
   isStunnerEnabled: boolean;
@@ -195,22 +204,19 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
             combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
               {
                 nodeNames: [errorNode.name],
-                color: '#f4d5d5',
+                color: NodeColors.ERROR_COLOR,
                 colorConnectedEnds
               }
             );
           }
         );
       }
-      const successNodes = errorNode
-        ? nodeNames.filter((nodeName) => nodeName !== errorNode.name)
-        : nodeNames;
       combinedEditorChannelApi.notifications.kogitoSwfCombinedEditor_combinedEditorReady.subscribe(
         () => {
           combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
             {
-              nodeNames: successNodes,
-              color: '#d5f4e6',
+              nodeNames: getSuccessNodes(nodes, nodeNames, source, errorNode),
+              color: NodeColors.SUCCESS_COLOR,
               colorConnectedEnds
             }
           );

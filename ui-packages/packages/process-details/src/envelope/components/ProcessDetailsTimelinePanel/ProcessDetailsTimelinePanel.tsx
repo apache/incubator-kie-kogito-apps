@@ -40,7 +40,7 @@ import { CheckCircleIcon } from '@patternfly/react-icons/dist/js/icons/check-cir
 import { ErrorCircleOIcon } from '@patternfly/react-icons/dist/js/icons/error-circle-o-icon';
 import { OnRunningIcon } from '@patternfly/react-icons/dist/js/icons/on-running-icon';
 import { OutlinedClockIcon } from '@patternfly/react-icons/dist/js/icons/outlined-clock-icon';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import '../styles.css';
 import {
   componentOuiaProps,
@@ -57,6 +57,7 @@ import {
 } from '@kogito-apps/management-console-shared';
 import { ProcessDetailsDriver } from '../../../api';
 import {
+  getOmmitedNodesForTimeline,
   handleJobRescheduleUtil,
   handleNodeInstanceCancel,
   handleNodeInstanceRetrigger,
@@ -64,11 +65,17 @@ import {
   handleSkip,
   jobCancel
 } from '../../../utils/Utils';
-
 export interface IOwnProps {
   data: Pick<
     ProcessInstance,
-    'id' | 'nodes' | 'addons' | 'error' | 'serviceUrl' | 'processId' | 'state'
+    | 'id'
+    | 'nodes'
+    | 'addons'
+    | 'error'
+    | 'serviceUrl'
+    | 'processId'
+    | 'state'
+    | 'source'
   >;
   driver: ProcessDetailsDriver;
   jobs: Job[];
@@ -101,6 +108,14 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
   const ignoredNodeTypes = ['Join', 'Split', 'EndNode'];
   const editableJobStatus: string[] = ['SCHEDULED', 'ERROR'];
   const [rescheduleError, setRescheduleError] = useState<string>('');
+  const [allOmmitedNodes, setAllOmmitedNodes] = useState<string[]>([]);
+
+  useEffect(() => {
+    setAllOmmitedNodes([
+      ...omittedProcessTimelineEvents,
+      ...getOmmitedNodesForTimeline(data.nodes, data.source)
+    ]);
+  }, [data]);
 
   const onKebabToggle = (isOpen: boolean, id) => {
     if (isOpen) {
@@ -464,10 +479,7 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
         <Stack hasGutter className="kogito-process-details--timeline">
           {data.nodes &&
             data.nodes
-              .filter(
-                (content) =>
-                  !omittedProcessTimelineEvents?.includes(content.name)
-              )
+              .filter((content) => !allOmmitedNodes?.includes(content.name))
               .sort(compareNodes)
               .map((content, idx) => {
                 return (

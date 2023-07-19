@@ -28,6 +28,7 @@ import { UndoIcon } from '@patternfly/react-icons/dist/js/icons/undo-icon';
 import { ErrorCircleOIcon } from '@patternfly/react-icons/dist/js/icons/error-circle-o-icon';
 import { CheckCircleIcon } from '@patternfly/react-icons/dist/js/icons/check-circle-icon';
 import { ProcessDetailsDriver } from '../api';
+import { parse } from 'yaml';
 
 export const JobsIconCreator = (state: JobStatus): JSX.Element => {
   switch (state) {
@@ -169,4 +170,48 @@ export const handleJobRescheduleUtil = async (
     handleRescheduleAction();
     setRescheduleError(response.modalContent);
   }
+};
+
+export const getOmmitedNodesForTimeline = (
+  nodes: NodeInstance[],
+  source: string | null
+): string[] => {
+  if (source && nodes.length > 0) {
+    let workflowFile;
+    const nodesToOmmit = [];
+    if (source.startsWith('{')) {
+      workflowFile = JSON.parse(source);
+    } else {
+      workflowFile = parse(source);
+    }
+    const stateNames: string[] = workflowFile.states
+      .map((state) => state.name)
+      .concat(['Start', 'End']);
+    nodes.map((node) => {
+      if (!stateNames.includes(node.name)) {
+        nodesToOmmit.push(node.name);
+      }
+    });
+    return nodesToOmmit;
+  }
+  return [];
+};
+
+export const getSuccessNodes = (
+  nodeInstances: NodeInstance[],
+  nodeNames: string[],
+  source: string,
+  errorNode: NodeInstance
+): string[] => {
+  const successNodes = errorNode
+    ? nodeNames.filter((nodeName) => nodeName !== errorNode.name)
+    : nodeNames;
+  const filteredSuccessNodeInstances = nodeInstances.filter((node) =>
+    successNodes.includes(node.name)
+  );
+  const ommitedNodesNames = getOmmitedNodesForTimeline(
+    filteredSuccessNodeInstances,
+    source
+  );
+  return successNodes.filter((name) => !ommitedNodesNames.includes(name));
 };

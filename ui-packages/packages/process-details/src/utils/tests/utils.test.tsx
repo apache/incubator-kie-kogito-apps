@@ -23,6 +23,8 @@ import {
 } from '@kogito-apps/management-console-shared/dist/types';
 import { setTitle } from '@kogito-apps/management-console-shared/dist/utils/Utils';
 import {
+  getOmmitedNodesForTimeline,
+  getSuccessNodes,
   handleJobRescheduleUtil,
   handleNodeInstanceCancel,
   handleNodeInstanceRetrigger,
@@ -71,6 +73,54 @@ export const job: Job = {
 const driver = new TestProcessDetailsDriver(
   '2d962eef-45b8-48a9-ad4e-9cde0ad6af89'
 );
+
+const nodeInstances = [
+  {
+    definitionId: '_jbpm-unique-2',
+    enter: new Date('2023-07-19T09:22:43.364Z'),
+    exit: new Date('2023-07-19T09:22:43.371Z'),
+    id: '5e67c1a8-2d66-40c3-a5a2-a1ac3b6c8138',
+    name: 'HelloWorld',
+    nodeId: '3',
+    type: 'ActionNode'
+  },
+  {
+    definitionId: '_jbpm-unique-2',
+    enter: new Date('2023-07-19T09:22:43.364Z'),
+    exit: new Date('2023-07-19T09:22:43.371Z'),
+    id: '5e67c1a8-2d66-40c3-a5a2-a1ac3b6c8138',
+    name: 'HelloWorld',
+    nodeId: '3',
+    type: 'ActionNode'
+  },
+  {
+    definitionId: '_jbpm-unique-1',
+    enter: new Date('2023-07-19T09:22:43.372Z'),
+    exit: new Date('2023-07-19T09:22:43.372Z'),
+    id: 'e273f5b2-d52f-4fc3-b45d-8f346952e86f',
+    name: 'End',
+    nodeId: '2',
+    type: 'EndNode'
+  },
+  {
+    definitionId: '_jbpm-unique-5',
+    enter: new Date('2023-07-19T09:22:43.372Z'),
+    exit: new Date('2023-07-19T09:22:43.372Z'),
+    id: 'e273f5b2-d52f-4fc3-b45d-8f346952e86f',
+    name: 'branch-18',
+    nodeId: '2',
+    type: 'branch'
+  },
+  {
+    definitionId: '_jbpm-unique-6',
+    enter: new Date('2023-07-19T09:22:43.372Z'),
+    exit: new Date('2023-07-19T09:22:43.372Z'),
+    id: 'e273f5b2-d52f-4fc3-b45d-8f346952e86f',
+    name: 'EmbeddedStart',
+    nodeId: '2',
+    type: 'EmbeddedStart'
+  }
+];
 
 describe('process details package utils', () => {
   it('Jobs icon creator tests', () => {
@@ -308,5 +358,46 @@ describe('test utils of jobs', () => {
     );
     expect(handleRescheduleAction).toHaveBeenCalled();
     expect(setRescheduleError).toHaveBeenCalledWith(failedContent);
+  });
+
+  it('test getOmmitedNodesForTimeline with json values', () => {
+    const source =
+      '{"id":"hello","version":"1.0","specVersion":"0.8.0","name":"HelloWorld","start":"HelloWorld","states":[{"name":"HelloWorld","type":"inject","data":{"message":"HelloWorld"},"end":true}]}';
+    const ommittedNodes = getOmmitedNodesForTimeline(nodeInstances, source);
+    expect(ommittedNodes).toEqual(['branch-18', 'EmbeddedStart']);
+  }),
+    it('test getOmmitedNodesForTimeline with yaml values', () => {
+      const source =
+        "id: hello\nversion: '1.0'\nspecVersion: 0.8.0\nname: Hello World\nstart: HelloWorld\nstates:\n- name: HelloWorld\n  type: inject\n  data:\n    message: Hello World\n  end: true\n";
+      const ommittedNodes = getOmmitedNodesForTimeline(nodeInstances, source);
+      expect(ommittedNodes).toEqual(['branch-18', 'EmbeddedStart']);
+    });
+
+  it('test getOmmitedNodesForTimeline with null values', () => {
+    const ommittedNodes = getOmmitedNodesForTimeline([], null);
+    expect(ommittedNodes).toEqual([]);
+  });
+
+  it('test getSuccessNodes with error node', () => {
+    const source =
+      '{"id":"hello","version":"1.0","specVersion":"0.8.0","name":"HelloWorld","start":"HelloWorld","states":[{"name":"HelloWorld","type":"inject","data":{"message":"HelloWorld"},"end":true}]}';
+    const nodeNames = ['Start', 'HelloWorld', 'End'];
+    const errorNode = {
+      definitionId: '_jbpm-unique-6',
+      enter: new Date('2023-07-19T09:22:43.372Z'),
+      exit: new Date('2023-07-19T09:22:43.372Z'),
+      id: 'e273f5b2-d52f-4fc3-b45d-8f346952e86f',
+      name: 'EmbeddedStart',
+      nodeId: '2',
+      type: 'EmbeddedStart'
+    };
+    const successNodes = getSuccessNodes(
+      nodeInstances,
+      nodeNames,
+      source,
+      errorNode
+    );
+    expect(successNodes.length).not.toEqual(0);
+    expect(successNodes).toEqual(['Start', 'HelloWorld', 'End']);
   });
 });
