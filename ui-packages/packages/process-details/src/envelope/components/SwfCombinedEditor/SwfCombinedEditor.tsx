@@ -194,7 +194,9 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
       let errorNode = null;
       if (error) {
         errorNode = nodes.filter(
-          (node) => node.nodeId === error.nodeDefinitionId
+          (node) =>
+            node.nodeId === error.nodeDefinitionId ||
+            node.definitionId === error.nodeDefinitionId
         )[0];
         combinedEditorChannelApi.notifications.kogitoSwfCombinedEditor_combinedEditorReady.subscribe(
           () => {
