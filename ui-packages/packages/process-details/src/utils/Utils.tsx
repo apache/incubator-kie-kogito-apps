@@ -178,11 +178,6 @@ export const getOmmitedNodesForTimeline = (
 ): string[] => {
   if (source && nodes.length > 0) {
     const nodesToOmmit = [];
-    // if (source.startsWith('{')) {
-    //   workflowFile = JSON.parse(source);
-    // } else {
-    //   workflowFile = parse(source);
-    // }
     const workflow: Specification.Workflow =
       Specification.Workflow.fromSource(source);
     const stateNames: string[] = workflow.states

@@ -49,48 +49,6 @@ Object {
       <Split
         className="kogito-process-details--timeline-item"
         hasGutter={true}
-        key="6ed7aa17-4bb1-48e3-b34a-5a4c5773dff2"
-      >
-        <SplitItem>
-          <Tooltip
-            content="Active"
-          >
-            <OnRunningIcon
-              className="kogito-process-details--timeline-status"
-            />
-          </Tooltip>
-        </SplitItem>
-        <SplitItem
-          isFilled={true}
-        >
-          <TextContent>
-            <Text
-              component="p"
-            >
-              StartProcess
-              <span>
-                <Tooltip
-                  content="Human task"
-                >
-                  <UserIcon
-                    className="pf-u-ml-sm"
-                    color="var(--pf-global--icon--Color--light)"
-                  />
-                </Tooltip>
-              </span>
-              <Text
-                component="small"
-              >
-                Active
-              </Text>
-            </Text>
-          </TextContent>
-        </SplitItem>
-        <SplitItem />
-      </Split>
-      <Split
-        className="kogito-process-details--timeline-item"
-        hasGutter={true}
         key="7244ba1b-75ec-4789-8c65-499a0c5b1a6f"
       >
         <SplitItem>
@@ -839,7 +797,7 @@ Object {
                             <div
                               aria-live="off"
                               className="pf-c-tooltip"
-                              id="pf-tooltip-566"
+                              id="pf-tooltip-470"
                               role="tooltip"
                               style={
                                 Object {
@@ -988,7 +946,7 @@ Object {
                             <div
                               aria-live="off"
                               className="pf-c-tooltip"
-                              id="pf-tooltip-567"
+                              id="pf-tooltip-471"
                               role="tooltip"
                               style={
                                 Object {
@@ -1099,7 +1057,7 @@ Object {
                                       <div
                                         aria-live="off"
                                         className="pf-c-tooltip"
-                                        id="pf-tooltip-568"
+                                        id="pf-tooltip-472"
                                         role="tooltip"
                                         style={
                                           Object {
@@ -1227,7 +1185,7 @@ Object {
                             <div
                               aria-live="off"
                               className="pf-c-tooltip"
-                              id="pf-tooltip-569"
+                              id="pf-tooltip-473"
                               role="tooltip"
                               style={
                                 Object {
@@ -1340,7 +1298,7 @@ Object {
                                       <div
                                         aria-live="off"
                                         className="pf-c-tooltip"
-                                        id="pf-tooltip-570"
+                                        id="pf-tooltip-474"
                                         role="tooltip"
                                         style={
                                           Object {
