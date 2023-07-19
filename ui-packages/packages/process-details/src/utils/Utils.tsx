@@ -28,7 +28,7 @@ import { UndoIcon } from '@patternfly/react-icons/dist/js/icons/undo-icon';
 import { ErrorCircleOIcon } from '@patternfly/react-icons/dist/js/icons/error-circle-o-icon';
 import { CheckCircleIcon } from '@patternfly/react-icons/dist/js/icons/check-circle-icon';
 import { ProcessDetailsDriver } from '../api';
-import { parse } from 'yaml';
+import { Specification } from '@severlessworkflow/sdk-typescript';
 
 export const JobsIconCreator = (state: JobStatus): JSX.Element => {
   switch (state) {
@@ -177,14 +177,15 @@ export const getOmmitedNodesForTimeline = (
   source: string | null
 ): string[] => {
   if (source && nodes.length > 0) {
-    let workflowFile;
     const nodesToOmmit = [];
-    if (source.startsWith('{')) {
-      workflowFile = JSON.parse(source);
-    } else {
-      workflowFile = parse(source);
-    }
-    const stateNames: string[] = workflowFile.states
+    // if (source.startsWith('{')) {
+    //   workflowFile = JSON.parse(source);
+    // } else {
+    //   workflowFile = parse(source);
+    // }
+    const workflow: Specification.Workflow =
+      Specification.Workflow.fromSource(source);
+    const stateNames: string[] = workflow.states
       .map((state) => state.name)
       .concat(['Start', 'End']);
     nodes.forEach((node) => {

@@ -1508,6 +1508,9 @@ importers:
       '@patternfly/react-table':
         specifier: ^4.113.0
         version: 4.113.0(react-dom@17.0.2)(react@17.0.2)
+      '@severlessworkflow/sdk-typescript':
+        specifier: ^3.0.3
+        version: 3.0.3
       react:
         specifier: ^17.0.2
         version: 17.0.2

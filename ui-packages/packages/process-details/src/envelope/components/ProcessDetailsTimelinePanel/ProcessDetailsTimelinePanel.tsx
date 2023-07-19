@@ -40,7 +40,7 @@ import { CheckCircleIcon } from '@patternfly/react-icons/dist/js/icons/check-cir
 import { ErrorCircleOIcon } from '@patternfly/react-icons/dist/js/icons/error-circle-o-icon';
 import { OnRunningIcon } from '@patternfly/react-icons/dist/js/icons/on-running-icon';
 import { OutlinedClockIcon } from '@patternfly/react-icons/dist/js/icons/outlined-clock-icon';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import '../styles.css';
 import {
   componentOuiaProps,
@@ -108,13 +108,12 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
   const ignoredNodeTypes = ['Join', 'Split', 'EndNode'];
   const editableJobStatus: string[] = ['SCHEDULED', 'ERROR'];
   const [rescheduleError, setRescheduleError] = useState<string>('');
-  const [allOmmitedNodes, setAllOmmitedNodes] = useState<string[]>([]);
 
-  useEffect(() => {
-    setAllOmmitedNodes([
+  const allOmmitedNodes = useMemo(() => {
+    return [
       ...omittedProcessTimelineEvents,
       ...getOmmitedNodesForTimeline(data.nodes, data.source)
-    ]);
+    ];
   }, [data]);
 
   const onKebabToggle = (isOpen: boolean, id) => {

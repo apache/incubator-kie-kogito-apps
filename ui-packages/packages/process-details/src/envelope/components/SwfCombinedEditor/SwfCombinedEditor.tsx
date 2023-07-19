@@ -191,36 +191,39 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
       nodeNames.push('Start');
     }
     if (combinedEditorEnvelopeApi && combinedEditorChannelApi) {
-      let errorNode = null;
-      if (error) {
-        errorNode = nodes.filter(
-          (node) =>
-            node.nodeId === error.nodeDefinitionId ||
-            node.definitionId === error.nodeDefinitionId
-        )[0];
+      const subscription =
         combinedEditorChannelApi.notifications.kogitoSwfCombinedEditor_combinedEditorReady.subscribe(
           () => {
+            let errorNode = null;
+            if (error) {
+              errorNode = nodes.filter(
+                (node) =>
+                  node.nodeId === error.nodeDefinitionId ||
+                  node.definitionId === error.nodeDefinitionId
+              )[0];
+
+              combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
+                {
+                  nodeNames: [errorNode.name],
+                  color: NodeColors.ERROR_COLOR,
+                  colorConnectedEnds
+                }
+              );
+            }
             combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
               {
-                nodeNames: [errorNode.name],
-                color: NodeColors.ERROR_COLOR,
+                nodeNames: getSuccessNodes(nodes, nodeNames, source, errorNode),
+                color: NodeColors.SUCCESS_COLOR,
                 colorConnectedEnds
               }
             );
           }
         );
-      }
-      combinedEditorChannelApi.notifications.kogitoSwfCombinedEditor_combinedEditorReady.subscribe(
-        () => {
-          combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
-            {
-              nodeNames: getSuccessNodes(nodes, nodeNames, source, errorNode),
-              color: NodeColors.SUCCESS_COLOR,
-              colorConnectedEnds
-            }
-          );
-        }
-      );
+      return () => {
+        combinedEditorChannelApi.notifications.kogitoSwfCombinedEditor_combinedEditorReady.unsubscribe(
+          subscription
+        );
+      };
     }
   }, [editor, nodes, embeddedFile]);
 
