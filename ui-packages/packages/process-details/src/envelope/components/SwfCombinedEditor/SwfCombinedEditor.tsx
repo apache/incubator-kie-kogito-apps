@@ -210,13 +210,21 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
                 }
               );
             }
-            combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
-              {
-                nodeNames: getSuccessNodes(nodes, nodeNames, source, errorNode),
-                color: NodeColors.SUCCESS_COLOR,
-                colorConnectedEnds
-              }
+            const successNodes = getSuccessNodes(
+              nodes,
+              nodeNames,
+              source,
+              errorNode
             );
+            if (successNodes.length > 0) {
+              combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
+                {
+                  nodeNames: successNodes,
+                  color: NodeColors.SUCCESS_COLOR,
+                  colorConnectedEnds
+                }
+              );
+            }
           }
         );
       return () => {
