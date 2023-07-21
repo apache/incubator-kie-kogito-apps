@@ -26,12 +26,12 @@ import {
 } from '@kogito-apps/management-console-shared';
 import ProcessListTable from '../ProcessListTable/ProcessListTable';
 import ProcessListToolbar from '../ProcessListToolbar/ProcessListToolbar';
+import { LoadMore } from '@kogito-apps/components-common/dist/components/LoadMore';
+import { ServerErrors } from '@kogito-apps/components-common/dist/components/ServerErrors';
 import {
   KogitoEmptyState,
-  KogitoEmptyStateType,
-  ServerErrors,
-  LoadMore
-} from '@kogito-apps/components-common';
+  KogitoEmptyStateType
+} from '@kogito-apps/components-common/dist/components/KogitoEmptyState';
 import {
   componentOuiaProps,
   OUIAProps

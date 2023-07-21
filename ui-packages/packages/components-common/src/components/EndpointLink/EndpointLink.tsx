@@ -26,7 +26,7 @@ interface IOwnProps {
   linkLabel?: string;
 }
 
-const EndpointLink: React.FC<IOwnProps & OUIAProps> = ({
+export const EndpointLink: React.FC<IOwnProps & OUIAProps> = ({
   serviceUrl,
   isLinkShown,
   linkLabel,
@@ -51,5 +51,3 @@ const EndpointLink: React.FC<IOwnProps & OUIAProps> = ({
     return <></>;
   }
 };
-
-export default EndpointLink;

@@ -29,7 +29,7 @@ import {
 interface KogitoSpinnerProps {
   spinnerText: string;
 }
-const KogitoSpinner: React.FC<KogitoSpinnerProps & OUIAProps> = ({
+export const KogitoSpinner: React.FC<KogitoSpinnerProps & OUIAProps> = ({
   spinnerText,
   ouiaId,
   ouiaSafe
@@ -43,6 +43,3 @@ const KogitoSpinner: React.FC<KogitoSpinnerProps & OUIAProps> = ({
     </EmptyState>
   );
 };
-
-KogitoSpinner.displayName = 'KogitoSpinner';
-export default KogitoSpinner;

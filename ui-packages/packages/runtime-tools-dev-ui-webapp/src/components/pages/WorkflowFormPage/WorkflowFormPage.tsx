@@ -25,7 +25,10 @@ import {
 import WorkflowFormContainer from '../../containers/WorkflowFormContainer/WorkflowFormContainer';
 import '../../styles.css';
 import { PageTitle } from '@kogito-apps/consoles-common';
-import { FormNotification, Notification } from '@kogito-apps/components-common';
+import {
+  FormNotification,
+  Notification
+} from '@kogito-apps/components-common/dist/components/FormNotification';
 import { useHistory } from 'react-router-dom';
 import { WorkflowDefinition } from '@kogito-apps/workflow-form';
 import {

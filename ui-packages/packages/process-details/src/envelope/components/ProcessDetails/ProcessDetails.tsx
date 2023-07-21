@@ -36,11 +36,9 @@ import {
 } from '@patternfly/react-core/dist/js/components/Title';
 import { SyncIcon } from '@patternfly/react-icons/dist/js/icons/sync-icon';
 import { InfoCircleIcon } from '@patternfly/react-icons/dist/js/icons/info-circle-icon';
-import {
-  ItemDescriptor,
-  KogitoSpinner,
-  ServerErrors
-} from '@kogito-apps/components-common';
+import { ItemDescriptor } from '@kogito-apps/components-common/dist/components/ItemDescriptor';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
+import { ServerErrors } from '@kogito-apps/components-common/dist/components/ServerErrors';
 import {
   ProcessInfoModal,
   Job,

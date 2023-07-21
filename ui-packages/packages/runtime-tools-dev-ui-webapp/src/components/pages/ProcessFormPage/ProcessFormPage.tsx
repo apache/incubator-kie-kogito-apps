@@ -27,7 +27,10 @@ import '../../styles.css';
 import { useHistory } from 'react-router-dom';
 import { ProcessDefinition } from '@kogito-apps/process-definition-list';
 import { PageTitle } from '@kogito-apps/consoles-common';
-import { FormNotification, Notification } from '@kogito-apps/components-common';
+import {
+  FormNotification,
+  Notification
+} from '@kogito-apps/components-common/dist/components/FormNotification';
 import InlineEdit from './components/InlineEdit/InlineEdit';
 import { useProcessFormGatewayApi } from '../../../channel/ProcessForm/ProcessFormContext';
 

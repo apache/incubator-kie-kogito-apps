@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2023 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,4 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import { shallow } from 'enzyme';
-import { KogitoSpinner } from '../KogitoSpinner';
-
-describe('KogitoSpinner component tests', () => {
-  it('snapshot testing with loading test', () => {
-    const wrapper = shallow(
-      <KogitoSpinner
-        spinnerText={'loading...'}
-        ouiaId="kogito-spinner-ouia-id"
-      />
-    );
-    expect(wrapper).toMatchSnapshot();
-  });
-});
+export * from './KogitoSpinner';

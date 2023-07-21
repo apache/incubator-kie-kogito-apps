@@ -26,9 +26,9 @@ import {
 import { Tooltip } from '@patternfly/react-core/dist/js/components/Tooltip';
 import {
   KogitoEmptyState,
-  KogitoSpinner,
   KogitoEmptyStateType
-} from '@kogito-apps/components-common';
+} from '@kogito-apps/components-common/dist/components/KogitoEmptyState';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 import {
   componentOuiaProps,
   OUIAProps

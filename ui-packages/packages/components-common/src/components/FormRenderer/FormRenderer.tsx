@@ -26,7 +26,7 @@ import {
   OUIAProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { FormAction, lookupValidator, ModelConversionTool } from '../utils';
-import FormFooter from '../FormFooter/FormFooter';
+import { FormFooter } from '../FormFooter/FormFooter';
 import '../styles.css';
 import { FormRendererApi } from '../../types/types';
 interface IOwnProps {
@@ -37,7 +37,10 @@ interface IOwnProps {
   readOnly: boolean;
 }
 
-const FormRenderer = React.forwardRef<FormRendererApi, IOwnProps & OUIAProps>(
+export const FormRenderer = React.forwardRef<
+  FormRendererApi,
+  IOwnProps & OUIAProps
+>(
   (
     { formSchema, model, onSubmit, formActions, readOnly, ouiaId, ouiaSafe },
     forwardedRef
@@ -97,5 +100,3 @@ const FormRenderer = React.forwardRef<FormRendererApi, IOwnProps & OUIAProps>(
     );
   }
 );
-
-export default FormRenderer;

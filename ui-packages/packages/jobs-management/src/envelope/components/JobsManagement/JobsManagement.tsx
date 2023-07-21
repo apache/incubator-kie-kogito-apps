@@ -19,12 +19,12 @@ import { Button } from '@patternfly/react-core/dist/js/components/Button';
 import { CardTitle } from '@patternfly/react-core/dist/js/components/Card';
 import { Divider } from '@patternfly/react-core/dist/js/components/Divider';
 import { ISortBy } from '@patternfly/react-table/dist/js/components/Table';
+import { LoadMore } from '@kogito-apps/components-common/dist/components/LoadMore';
+import { ServerErrors } from '@kogito-apps/components-common/dist/components/ServerErrors';
 import {
-  ServerErrors,
   KogitoEmptyState,
-  KogitoEmptyStateType,
-  LoadMore
-} from '@kogito-apps/components-common';
+  KogitoEmptyStateType
+} from '@kogito-apps/components-common/dist/components/KogitoEmptyState';
 import {
   componentOuiaProps,
   OUIAProps

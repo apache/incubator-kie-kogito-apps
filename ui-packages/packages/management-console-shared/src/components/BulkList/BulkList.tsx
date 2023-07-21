@@ -23,7 +23,7 @@ import {
   TextListItem
 } from '@patternfly/react-core/dist/js/components/Text';
 import { Divider } from '@patternfly/react-core/dist/js/components/Divider';
-import { ItemDescriptor } from '@kogito-apps/components-common';
+import { ItemDescriptor } from '@kogito-apps/components-common/dist/components/ItemDescriptor';
 import {
   OUIAProps,
   componentOuiaProps

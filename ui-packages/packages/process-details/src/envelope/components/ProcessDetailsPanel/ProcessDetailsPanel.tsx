@@ -38,7 +38,8 @@ import {
   ProcessInstance,
   ProcessInstanceIconCreator
 } from '@kogito-apps/management-console-shared';
-import { ItemDescriptor, EndpointLink } from '@kogito-apps/components-common';
+import { ItemDescriptor } from '@kogito-apps/components-common/dist/components/ItemDescriptor';
+import { EndpointLink } from '@kogito-apps/components-common/dist/components/EndpointLink';
 import {
   componentOuiaProps,
   OUIAProps

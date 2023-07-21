@@ -32,13 +32,13 @@ import {
   ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
 import ProcessListChildTable from '../ProcessListChildTable/ProcessListChildTable';
+import { EndpointLink } from '@kogito-apps/components-common/dist/components/EndpointLink';
 import {
-  ItemDescriptor,
   KogitoEmptyState,
-  KogitoEmptyStateType,
-  KogitoSpinner,
-  EndpointLink
-} from '@kogito-apps/components-common';
+  KogitoEmptyStateType
+} from '@kogito-apps/components-common/dist/components/KogitoEmptyState';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
+import { ItemDescriptor } from '@kogito-apps/components-common/dist/components/ItemDescriptor';
 import {
   componentOuiaProps,
   OUIAProps

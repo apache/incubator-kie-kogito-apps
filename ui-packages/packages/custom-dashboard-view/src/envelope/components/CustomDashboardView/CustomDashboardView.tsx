@@ -20,7 +20,7 @@ import {
   componentOuiaProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { CustomDashboardViewDriver } from '../../../api/CustomDashboardViewDriver';
-import ServerErrors from '@kogito-apps/components-common/dist/components/ServerErrors/ServerErrors';
+import { ServerErrors } from '@kogito-apps/components-common/dist/components/ServerErrors';
 import { Card } from '@patternfly/react-core/dist/js/components/Card';
 import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
 

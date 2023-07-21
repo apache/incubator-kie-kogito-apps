@@ -29,9 +29,9 @@ import FormCard from '../FormCard/FormCard';
 import { FormsListDriver } from '../../../api/FormsListDriver';
 import {
   KogitoEmptyState,
-  KogitoEmptyStateType,
-  KogitoSpinner
-} from '@kogito-apps/components-common';
+  KogitoEmptyStateType
+} from '@kogito-apps/components-common/dist/components/KogitoEmptyState';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 
 export interface FormsGalleryProps {
   driver: FormsListDriver;

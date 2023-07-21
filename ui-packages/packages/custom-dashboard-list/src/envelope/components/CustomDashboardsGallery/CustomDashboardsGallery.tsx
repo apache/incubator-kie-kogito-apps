@@ -27,11 +27,11 @@ import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
 import { CustomDashboardInfo } from '../../../api/CustomDashboardListEnvelopeApi';
 import CustomDashboardCard from '../CustomDashboardCard/CustomDashboardCard';
 import { CustomDashboardListDriver } from '../../../api/CustomDashboardListDriver';
-import KogitoSpinner from '@kogito-apps/components-common/dist/components/KogitoSpinner/KogitoSpinner';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 import {
   KogitoEmptyState,
   KogitoEmptyStateType
-} from '@kogito-apps/components-common/dist/components/KogitoEmptyState/KogitoEmptyState';
+} from '@kogito-apps/components-common/dist/components/KogitoEmptyState';
 
 export interface CustomDashboardGalleryProps {
   driver: CustomDashboardListDriver;

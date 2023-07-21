@@ -27,20 +27,42 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@kogito-apps/components-common', () =>
+jest.mock('@kogito-apps/components-common/dist/components/ServerErrors', () =>
   Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
     ServerErrors: () => {
       return <MockedComponent />;
-    },
+    }
+  })
+);
+
+jest.mock(
+  '@kogito-apps/components-common/dist/components/KogitoEmptyState',
+  () =>
+    Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
+      KogitoEmptyState: () => {
+        return <MockedComponent />;
+      }
+    })
+);
+
+jest.mock('@kogito-apps/components-common/dist/components/KogitoSpinner', () =>
+  Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
     KogitoSpinner: () => {
       return <MockedComponent />;
-    },
-    KogitoEmptyState: () => {
-      return <MockedComponent />;
-    },
+    }
+  })
+);
+
+jest.mock('@kogito-apps/components-common/dist/components/ItemDescriptor', () =>
+  Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
     ItemDescriptor: () => {
       return <MockedComponent />;
-    },
+    }
+  })
+);
+
+jest.mock('@kogito-apps/components-common/dist/components/EndpointLink', () =>
+  Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
     EndpointLink: () => {
       return <MockedComponent />;
     }

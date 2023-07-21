@@ -45,7 +45,7 @@ import MonitoringContainer from '../../containers/MonitoringContainer/Monitoring
 import {
   KogitoEmptyState,
   KogitoEmptyStateType
-} from '@kogito-apps/components-common';
+} from '@kogito-apps/components-common/dist/components/KogitoEmptyState';
 import '../../styles.css';
 import {
   ProcessInstance,

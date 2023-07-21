@@ -41,7 +41,7 @@ interface IOwnProps {
   variant: string;
   children?: React.ReactElement;
 }
-const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
+export const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe,
   ...props
@@ -128,5 +128,3 @@ const ServerErrors: React.FC<IOwnProps & OUIAProps> = ({
     </>
   );
 };
-
-export default ServerErrors;

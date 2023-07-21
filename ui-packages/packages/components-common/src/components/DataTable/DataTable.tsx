@@ -38,7 +38,7 @@ import {
   OUIAProps,
   componentOuiaProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
-import KogitoSpinner from '../KogitoSpinner/KogitoSpinner';
+import { KogitoSpinner } from '../KogitoSpinner/KogitoSpinner';
 import {
   KogitoEmptyState,
   KogitoEmptyStateType
@@ -129,7 +129,7 @@ const getRows = (data: any[], columns: ICell[]) => {
   return rowList;
 };
 
-const DataTable: React.FC<IOwnProps & OUIAProps> = ({
+export const DataTable: React.FC<IOwnProps & OUIAProps> = ({
   data,
   isLoading,
   columns,
@@ -234,5 +234,3 @@ const DataTable: React.FC<IOwnProps & OUIAProps> = ({
     </React.Fragment>
   );
 };
-
-export default DataTable;

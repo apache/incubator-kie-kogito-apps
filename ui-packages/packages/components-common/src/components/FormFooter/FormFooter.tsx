@@ -33,7 +33,7 @@ interface IOwnProps {
   onSubmitForm?: () => void;
 }
 
-const FormFooter: React.FC<IOwnProps & OUIAProps> = ({
+export const FormFooter: React.FC<IOwnProps & OUIAProps> = ({
   actions,
   enabled = true,
   onSubmitForm,
@@ -63,5 +63,3 @@ const FormFooter: React.FC<IOwnProps & OUIAProps> = ({
     </div>
   );
 };
-
-export default FormFooter;

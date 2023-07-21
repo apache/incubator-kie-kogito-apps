@@ -25,7 +25,7 @@ import {
   componentOuiaProps,
   OUIAProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
-import { KogitoSpinner } from '@kogito-apps/components-common';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
 import { WorkflowDefinition, WorkflowFormChannelApi } from '../api';
 import WorkflowForm from './components/WorkflowForm/WorkflowForm';

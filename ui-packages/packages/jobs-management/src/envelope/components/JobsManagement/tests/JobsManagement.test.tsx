@@ -42,7 +42,7 @@ const MockedJobsRescheduleModal = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('@kogito-apps/components-common', () =>
+jest.mock('@kogito-apps/components-common/dist/components/LoadMore', () =>
   Object.assign({}, jest.requireActual('@kogito-apps/components-common'), {
     LoadMore: () => {
       return <MockedLoadMore />;

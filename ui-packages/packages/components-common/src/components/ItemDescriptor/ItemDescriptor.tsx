@@ -37,7 +37,7 @@ interface IOwnProps {
   itemDescription: ItemDescription;
 }
 
-const ItemDescriptor: React.FC<IOwnProps & OUIAProps> = ({
+export const ItemDescriptor: React.FC<IOwnProps & OUIAProps> = ({
   itemDescription,
   ouiaId,
   ouiaSafe
@@ -75,5 +75,3 @@ const ItemDescriptor: React.FC<IOwnProps & OUIAProps> = ({
     </>
   );
 };
-
-export default ItemDescriptor;

@@ -17,9 +17,9 @@
 import React, { useEffect, useState } from 'react';
 import {
   DataTable,
-  DataTableColumn,
-  KogitoSpinner
-} from '@kogito-apps/components-common';
+  DataTableColumn
+} from '@kogito-apps/components-common/dist/components/DataTable';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 import {
   OUIAProps,
   componentOuiaProps

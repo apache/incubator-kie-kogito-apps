@@ -44,7 +44,7 @@ interface IOwnProps {
   setLoadMoreClicked?: (loadMoreClicked: boolean) => void;
 }
 
-const LoadMore: React.FC<IOwnProps & OUIAProps> = ({
+export const LoadMore: React.FC<IOwnProps & OUIAProps> = ({
   offset,
   setOffset,
   getMoreItems,
@@ -147,5 +147,3 @@ const LoadMore: React.FC<IOwnProps & OUIAProps> = ({
     </DataList>
   );
 };
-
-export default LoadMore;

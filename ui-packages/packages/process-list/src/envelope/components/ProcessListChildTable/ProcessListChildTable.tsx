@@ -29,14 +29,14 @@ import {
   ProcessInstanceState
 } from '@kogito-apps/management-console-shared';
 import _ from 'lodash';
+import { ServerErrors } from '@kogito-apps/components-common/dist/components/ServerErrors';
 import {
-  ServerErrors,
-  KogitoSpinner,
-  ItemDescriptor,
-  EndpointLink,
   KogitoEmptyState,
   KogitoEmptyStateType
-} from '@kogito-apps/components-common';
+} from '@kogito-apps/components-common/dist/components/KogitoEmptyState';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
+import { ItemDescriptor } from '@kogito-apps/components-common/dist/components/ItemDescriptor';
+import { EndpointLink } from '@kogito-apps/components-common/dist/components/EndpointLink';
 import {
   componentOuiaProps,
   OUIAProps

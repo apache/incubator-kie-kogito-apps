@@ -38,11 +38,11 @@ import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
 import { Grid, GridItem } from '@patternfly/react-core/dist/js/layouts/Grid';
 import { Flex, FlexItem } from '@patternfly/react-core/dist/js/layouts/Flex';
 import {
-  KogitoSpinner,
-  ServerErrors,
   KogitoEmptyState,
   KogitoEmptyStateType
-} from '@kogito-apps/components-common';
+} from '@kogito-apps/components-common/dist/components/KogitoEmptyState';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
+import { ServerErrors } from '@kogito-apps/components-common/dist/components/ServerErrors';
 import {
   OUIAProps,
   componentOuiaProps,

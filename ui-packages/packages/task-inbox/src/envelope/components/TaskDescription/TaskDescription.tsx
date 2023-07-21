@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { ItemDescriptor } from '@kogito-apps/components-common';
+import { ItemDescriptor } from '@kogito-apps/components-common/dist/components/ItemDescriptor';
 import {
   componentOuiaProps,
   OUIAProps

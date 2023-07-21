@@ -25,7 +25,7 @@ import {
   Text,
   TextVariants
 } from '@patternfly/react-core/dist/js/components/Text';
-import { KogitoSpinner } from '@kogito-apps/components-common';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 import {
   componentOuiaProps,
   OUIAProps

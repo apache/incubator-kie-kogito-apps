@@ -38,7 +38,7 @@ import {
 } from '@patternfly/react-code-editor/dist/js/components/CodeEditor';
 import ExclamationCircleIcon from '@patternfly/react-icons/dist/esm/icons/exclamation-circle-icon';
 import { validateWorkflowData } from './validateWorkflowData';
-import { KogitoSpinner } from '@kogito-apps/components-common';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 
 export interface WorkflowFormProps {
   workflowDefinition: WorkflowDefinition;

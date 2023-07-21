@@ -28,11 +28,11 @@ import {
   componentOuiaProps,
   OUIAProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 import {
   KogitoEmptyState,
-  KogitoEmptyStateType,
-  KogitoSpinner
-} from '@kogito-apps/components-common';
+  KogitoEmptyStateType
+} from '@kogito-apps/components-common/dist/components/KogitoEmptyState';
 import { CustomForm } from '../types';
 import { TaskFormEnvelopeViewDriver } from './TaskFormEnvelopeViewDriver';
 import CustomTaskFormDisplayer from './components/CustomTaskFormDisplayer/CustomTaskFormDisplayer';

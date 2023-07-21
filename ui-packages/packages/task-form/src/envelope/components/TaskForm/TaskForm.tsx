@@ -20,7 +20,7 @@ import has from 'lodash/has';
 import isEmpty from 'lodash/isEmpty';
 import set from 'lodash/set';
 import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
-import { KogitoSpinner } from '@kogito-apps/components-common';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 import {
   componentOuiaProps,
   OUIAProps

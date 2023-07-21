@@ -18,7 +18,8 @@ import React, { useState, useEffect } from 'react';
 import { Card } from '@patternfly/react-core/dist/js/components/Card';
 import { PageSection } from '@patternfly/react-core/dist/js/components/Page';
 import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
-import { KogitoSpinner, ServerErrors } from '@kogito-apps/components-common';
+import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
+import { ServerErrors } from '@kogito-apps/components-common/dist/components/ServerErrors';
 import {
   OUIAProps,
   ouiaPageTypeAndObjectId
