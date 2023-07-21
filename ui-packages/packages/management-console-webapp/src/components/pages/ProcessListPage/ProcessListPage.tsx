@@ -21,7 +21,7 @@ import {
   OUIAProps,
   ouiaPageTypeAndObjectId,
   componentOuiaProps
-} from '@kogito-apps/ouia-tools';
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { RouteComponentProps } from 'react-router-dom';
 import { PageSectionHeader } from '@kogito-apps/consoles-common';
 import ProcessListContainer from '../../containers/ProcessListContainer/ProcessListContainer';

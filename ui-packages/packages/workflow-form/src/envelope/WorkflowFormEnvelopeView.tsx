@@ -21,7 +21,10 @@ import React, {
   useState
 } from 'react';
 import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { KogitoSpinner } from '@kogito-apps/components-common';
 import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
 import { WorkflowDefinition, WorkflowFormChannelApi } from '../api';

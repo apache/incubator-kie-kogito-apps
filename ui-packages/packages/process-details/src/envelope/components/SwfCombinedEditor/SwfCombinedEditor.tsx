@@ -32,7 +32,10 @@ import {
   CardBody
 } from '@patternfly/react-core/dist/js/components/Card';
 import { Title } from '@patternfly/react-core/dist/js/components/Title';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import {
   EmbeddedEditorFile,
   StateControl

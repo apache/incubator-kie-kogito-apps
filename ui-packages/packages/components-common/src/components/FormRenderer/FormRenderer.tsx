@@ -21,7 +21,10 @@ import {
   AutoForm,
   ErrorsField
 } from 'uniforms-patternfly/dist/es6';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { FormAction, lookupValidator, ModelConversionTool } from '../utils';
 import FormFooter from '../FormFooter/FormFooter';
 import '../styles.css';

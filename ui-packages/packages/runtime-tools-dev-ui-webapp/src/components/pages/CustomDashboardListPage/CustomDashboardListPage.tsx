@@ -17,7 +17,10 @@
 import React, { useEffect } from 'react';
 import { Card } from '@patternfly/react-core/dist/js/components/Card';
 import { PageSection } from '@patternfly/react-core/dist/js/components/Page';
-import { OUIAProps, ouiaPageTypeAndObjectId } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  ouiaPageTypeAndObjectId
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { PageSectionHeader } from '@kogito-apps/consoles-common';
 import CustomDashboardListContainer from '../../containers/CustomDashboardListContainer/CustomDashboardListContainer';
 import '../../styles.css';

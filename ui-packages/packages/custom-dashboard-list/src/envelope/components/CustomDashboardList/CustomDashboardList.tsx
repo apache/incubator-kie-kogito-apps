@@ -15,7 +15,10 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { CustomDashboardListDriver } from '../../../api/CustomDashboardListDriver';
 import CustomDashboardListToolbar from '../CustomDashboardListToolbar/CustomDashboardListToolbar';
 import { Divider } from '@patternfly/react-core/dist/js/components/Divider';

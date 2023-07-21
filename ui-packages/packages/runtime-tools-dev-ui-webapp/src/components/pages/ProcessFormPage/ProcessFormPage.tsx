@@ -21,7 +21,7 @@ import {
   OUIAProps,
   ouiaPageTypeAndObjectId,
   componentOuiaProps
-} from '@kogito-apps/ouia-tools';
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import ProcessFormContainer from '../../containers/ProcessFormContainer/ProcessFormContainer';
 import '../../styles.css';
 import { useHistory } from 'react-router-dom';

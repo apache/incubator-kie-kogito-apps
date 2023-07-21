@@ -22,7 +22,10 @@ import {
   Text,
   TextVariants
 } from '@patternfly/react-core/dist/js/components/Text';
-import { OUIAProps, ouiaPageTypeAndObjectId } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  ouiaPageTypeAndObjectId
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import FormDetailsContainer from '../../containers/FormDetailsContainer/FormDetailsContainer';
 import '../../styles.css';
 import { useHistory } from 'react-router-dom';

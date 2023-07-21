@@ -16,7 +16,10 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import uuidv4 from 'uuid';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import {
   EmbeddedFormDisplayer,
   FormDisplayerApi,

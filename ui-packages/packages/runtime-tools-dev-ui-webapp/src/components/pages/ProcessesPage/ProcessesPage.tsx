@@ -26,7 +26,7 @@ import {
   OUIAProps,
   ouiaPageTypeAndObjectId,
   componentOuiaProps
-} from '@kogito-apps/ouia-tools';
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { RouteComponentProps } from 'react-router-dom';
 import { StaticContext } from 'react-router';
 import * as H from 'history';

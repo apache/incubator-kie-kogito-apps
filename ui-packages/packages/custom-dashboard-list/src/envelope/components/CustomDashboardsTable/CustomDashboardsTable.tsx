@@ -20,7 +20,10 @@ import {
   DataTableColumn,
   KogitoSpinner
 } from '@kogito-apps/components-common';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { CustomDashboardInfo, CustomDashboardListDriver } from '../../../api';
 import {
   getDashboardNameColumn,

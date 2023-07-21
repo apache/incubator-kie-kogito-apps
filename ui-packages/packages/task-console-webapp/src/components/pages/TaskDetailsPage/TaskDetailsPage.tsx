@@ -47,7 +47,7 @@ import {
   OUIAProps,
   componentOuiaProps,
   ouiaPageTypeAndObjectId
-} from '@kogito-apps/ouia-tools';
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { PageTitle } from '@kogito-apps/consoles-common';
 import { UserTaskInstance, TaskState } from '@kogito-apps/task-console-shared';
 import { TaskInboxGatewayApi } from '../../../channel/inbox';

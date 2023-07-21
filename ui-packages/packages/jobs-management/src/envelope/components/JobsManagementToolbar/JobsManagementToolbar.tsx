@@ -40,7 +40,10 @@ import {
   OverflowMenuControl
 } from '@patternfly/react-core/dist/js/components/OverflowMenu';
 import { SyncIcon } from '@patternfly/react-icons/dist/js/icons/sync-icon';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import {
   IOperations,
   OperationType,

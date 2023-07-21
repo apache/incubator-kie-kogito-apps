@@ -16,7 +16,10 @@
 
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { EmbeddedTaskInbox } from '@kogito-apps/task-inbox';
 import { TaskInboxGatewayApi } from '../../../../../channel/inbox';
 import { useTaskInboxGatewayApi } from '../../../../../channel/inbox/TaskInboxContext';

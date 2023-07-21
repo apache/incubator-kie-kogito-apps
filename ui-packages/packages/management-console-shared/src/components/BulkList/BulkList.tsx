@@ -24,7 +24,10 @@ import {
 } from '@patternfly/react-core/dist/js/components/Text';
 import { Divider } from '@patternfly/react-core/dist/js/components/Divider';
 import { ItemDescriptor } from '@kogito-apps/components-common';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 
 export enum OperationType {
   ABORT = 'ABORT',

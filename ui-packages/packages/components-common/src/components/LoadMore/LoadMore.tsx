@@ -28,7 +28,10 @@ import {
   DropdownToggleAction
 } from '@patternfly/react-core/dist/js/components/Dropdown';
 import { Split, SplitItem } from '@patternfly/react-core/dist/js/layouts/Split';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import '../styles.css';
 import { CheckIcon } from '@patternfly/react-icons/dist/js/icons/check-icon';
 

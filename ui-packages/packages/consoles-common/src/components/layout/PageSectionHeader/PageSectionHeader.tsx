@@ -21,7 +21,10 @@ import {
   BreadcrumbItem
 } from '@patternfly/react-core/dist/js/components/Breadcrumb';
 import PageTitle from '../PageTitle/PageTitle';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import * as H from 'history';
 
 type pathType = Pick<H.Location, 'pathname' | 'state'>;

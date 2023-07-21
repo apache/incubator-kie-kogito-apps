@@ -15,7 +15,10 @@
  */
 
 import React from 'react';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
 import {
   Gallery,

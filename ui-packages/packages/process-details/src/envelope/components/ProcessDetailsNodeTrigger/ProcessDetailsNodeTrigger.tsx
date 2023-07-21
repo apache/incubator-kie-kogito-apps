@@ -40,7 +40,10 @@ import {
   setTitle,
   TriggerableNode
 } from '@kogito-apps/management-console-shared';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import ProcessDetailsErrorModal from '../ProcessDetailsErrorModal/ProcessDetailsErrorModal';
 import '../styles.css';
 import { ProcessDetailsDriver } from '../../../api';

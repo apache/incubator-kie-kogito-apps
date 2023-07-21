@@ -22,7 +22,10 @@ import {
 } from '@patternfly/react-core/dist/js/components/Text';
 import { Tooltip } from '@patternfly/react-core/dist/js/components/Tooltip';
 import { Badge } from '@patternfly/react-core/dist/js/components/Badge';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 
 export interface ItemDescription {
   id: string;

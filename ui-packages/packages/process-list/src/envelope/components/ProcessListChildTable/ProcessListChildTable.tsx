@@ -37,7 +37,10 @@ import {
   KogitoEmptyState,
   KogitoEmptyStateType
 } from '@kogito-apps/components-common';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import {
   getProcessInstanceDescription,
   ProcessInstanceIconCreator

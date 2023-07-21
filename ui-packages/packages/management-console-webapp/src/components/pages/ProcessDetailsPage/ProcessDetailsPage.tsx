@@ -19,7 +19,10 @@ import { Card } from '@patternfly/react-core/dist/js/components/Card';
 import { PageSection } from '@patternfly/react-core/dist/js/components/Page';
 import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
 import { KogitoSpinner, ServerErrors } from '@kogito-apps/components-common';
-import { OUIAProps, ouiaPageTypeAndObjectId } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  ouiaPageTypeAndObjectId
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { RouteComponentProps } from 'react-router-dom';
 import { PageSectionHeader } from '@kogito-apps/consoles-common';
 import ProcessDetailsContainer from '../../containers/ProcessDetailsContainer/ProcessDetailsContainer';

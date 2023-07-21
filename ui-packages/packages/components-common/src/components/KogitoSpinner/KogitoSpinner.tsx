@@ -21,7 +21,10 @@ import {
 } from '@patternfly/react-core/dist/js/components/EmptyState';
 import { Title } from '@patternfly/react-core/dist/js/components/Title';
 import { Spinner } from '@patternfly/react-core/dist/js/components/Spinner';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 
 interface KogitoSpinnerProps {
   spinnerText: string;

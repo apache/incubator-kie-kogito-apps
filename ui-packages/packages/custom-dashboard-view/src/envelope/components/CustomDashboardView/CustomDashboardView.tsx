@@ -15,7 +15,10 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { CustomDashboardViewDriver } from '../../../api/CustomDashboardViewDriver';
 import ServerErrors from '@kogito-apps/components-common/dist/components/ServerErrors/ServerErrors';
 import { Card } from '@patternfly/react-core/dist/js/components/Card';

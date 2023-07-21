@@ -28,7 +28,10 @@ import {
   Job,
   setTitle
 } from '@kogito-apps/management-console-shared';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { ProcessDetailsDriver } from '../../../api';
 import { handleJobRescheduleUtil, jobCancel } from '../../../utils/Utils';
 

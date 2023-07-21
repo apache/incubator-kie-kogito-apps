@@ -21,7 +21,10 @@ import isEmpty from 'lodash/isEmpty';
 import set from 'lodash/set';
 import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
 import { KogitoSpinner } from '@kogito-apps/components-common';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { TaskFormDriver } from '../../../api';
 import EmptyTaskForm from '../EmptyTaskForm/EmptyTaskForm';

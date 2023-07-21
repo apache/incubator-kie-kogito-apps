@@ -21,7 +21,10 @@ import {
   ActionListItem
 } from '@patternfly/react-core/dist/js/components/ActionList';
 import { convertActionsToButton, FormAction } from '../utils';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import '../styles.css';
 
 interface IOwnProps {

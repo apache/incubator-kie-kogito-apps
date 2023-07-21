@@ -21,7 +21,7 @@ import {
   OUIAProps,
   ouiaPageTypeAndObjectId,
   componentOuiaProps
-} from '@kogito-apps/ouia-tools';
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import WorkflowFormContainer from '../../containers/WorkflowFormContainer/WorkflowFormContainer';
 import '../../styles.css';
 import { PageTitle } from '@kogito-apps/consoles-common';

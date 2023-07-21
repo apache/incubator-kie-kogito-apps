@@ -34,7 +34,10 @@ import { Job } from '../../types';
 import { OutlinedClockIcon } from '@patternfly/react-icons/dist/js/icons/outlined-clock-icon';
 import DateTimePicker from 'react-datetime-picker';
 import { setTitle } from '../../utils/Utils';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import '../styles.css';
 
 interface IOwnProps {

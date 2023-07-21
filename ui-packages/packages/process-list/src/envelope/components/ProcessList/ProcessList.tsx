@@ -32,7 +32,10 @@ import {
   ServerErrors,
   LoadMore
 } from '@kogito-apps/components-common';
-import { componentOuiaProps, OUIAProps } from '@kogito-apps/ouia-tools';
+import {
+  componentOuiaProps,
+  OUIAProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { ISortBy } from '@patternfly/react-table/dist/js/components/Table';
 import _ from 'lodash';
 import {

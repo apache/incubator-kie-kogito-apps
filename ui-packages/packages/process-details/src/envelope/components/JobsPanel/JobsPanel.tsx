@@ -32,7 +32,10 @@ import {
 } from '@patternfly/react-table/dist/js/components/Table';
 import Moment from 'react-moment';
 import JobActionsKebab from '../JobActionsKebab/JobActionsKebab';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { Job } from '@kogito-apps/management-console-shared';
 import { JobsIconCreator } from '../../../utils/Utils';
 import { ProcessDetailsDriver } from '../../../api';
