@@ -24,7 +24,7 @@ import _ from 'lodash';
 import axios from 'axios';
 import { BrowserRouter } from 'react-router-dom';
 import TestProcessListDriver from '../../ProcessList/tests/mocks/TestProcessListDriver';
-import { OrderBy } from '@kogito-apps/management-console-shared';
+import { OrderBy } from '@kogito-apps/management-console-shared/dist/types';
 jest.mock('axios');
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 jest.mock('../../ProcessListChildTable/ProcessListChildTable');

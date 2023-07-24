@@ -37,9 +37,9 @@ import React, { useState, useEffect } from 'react';
 import { CaretDownIcon } from '@patternfly/react-icons/dist/js/icons/caret-down-icon';
 import {
   ProcessInstance,
-  setTitle,
   TriggerableNode
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
+import { setTitle } from '@kogito-apps/management-console-shared/dist/utils/Utils';
 import {
   componentOuiaProps,
   OUIAProps

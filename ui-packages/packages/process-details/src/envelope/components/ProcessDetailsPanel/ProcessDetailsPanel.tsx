@@ -33,11 +33,11 @@ import {
 import React from 'react';
 import { LevelDownAltIcon } from '@patternfly/react-icons/dist/js/icons/level-down-alt-icon';
 import { LevelUpAltIcon } from '@patternfly/react-icons/dist/js/icons/level-up-alt-icon';
+import { ProcessInstance } from '@kogito-apps/management-console-shared/dist/types';
 import {
   getProcessInstanceDescription,
-  ProcessInstance,
   ProcessInstanceIconCreator
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/utils/Utils';
 import { ItemDescriptor } from '@kogito-apps/components-common/dist/components/ItemDescriptor';
 import { EndpointLink } from '@kogito-apps/components-common/dist/components/EndpointLink';
 import {

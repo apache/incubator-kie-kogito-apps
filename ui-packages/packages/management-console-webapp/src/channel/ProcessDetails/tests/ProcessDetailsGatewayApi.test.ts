@@ -22,7 +22,7 @@ import {
   ProcessInstance,
   ProcessInstanceState,
   TriggerableNode
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
 import {
   OnOpenProcessInstanceDetailsListener,
   ProcessDetailsGatewayApi,

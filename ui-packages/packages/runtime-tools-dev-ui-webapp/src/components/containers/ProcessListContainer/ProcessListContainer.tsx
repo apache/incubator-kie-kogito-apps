@@ -28,7 +28,7 @@ import {
 import {
   ProcessInstance,
   ProcessListState
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 import { CloudEventPageSource } from '../../pages/CloudEventFormPage/CloudEventFormPage';
 

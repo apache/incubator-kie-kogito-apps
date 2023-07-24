@@ -35,7 +35,7 @@ import {
 import { StaticContext, useHistory } from 'react-router';
 import * as H from 'history';
 import '../../styles.css';
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import { ProcessInstance } from '@kogito-apps/management-console-shared/dist/types';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 
 interface MatchProps {

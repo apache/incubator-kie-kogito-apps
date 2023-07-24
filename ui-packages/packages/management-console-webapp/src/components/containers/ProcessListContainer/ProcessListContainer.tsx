@@ -23,7 +23,7 @@ import { useProcessListGatewayApi } from '../../../channel/ProcessList/ProcessLi
 import {
   ProcessInstance,
   ProcessListState
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
 
 interface ProcessListContainerProps {
   initialState: ProcessListState;

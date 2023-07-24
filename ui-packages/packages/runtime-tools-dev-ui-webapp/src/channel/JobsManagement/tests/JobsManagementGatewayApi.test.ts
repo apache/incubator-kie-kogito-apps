@@ -15,7 +15,10 @@
  */
 
 import { JobsManagementQueries } from '../JobsManagementQueries';
-import { Job, JobStatus } from '@kogito-apps/management-console-shared';
+import {
+  Job,
+  JobStatus
+} from '@kogito-apps/management-console-shared/dist/types';
 import {
   JobsManagementGatewayApi,
   JobsManagementGatewayApiImpl

@@ -25,7 +25,7 @@ import {
   OUIAProps,
   componentOuiaProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
-import BulkList, { IOperation } from '../BulkList/BulkList';
+import { BulkList, IOperation } from '../BulkList';
 
 interface IOwnProps {
   actionType: string;
@@ -35,7 +35,7 @@ interface IOwnProps {
   isModalOpen: boolean;
   jobOperations?: IOperation;
 }
-const JobsCancelModal: React.FC<IOwnProps & OUIAProps> = ({
+export const JobsCancelModal: React.FC<IOwnProps & OUIAProps> = ({
   actionType,
   modalContent,
   modalTitle,
@@ -75,4 +75,3 @@ const JobsCancelModal: React.FC<IOwnProps & OUIAProps> = ({
     </Modal>
   );
 };
-export default JobsCancelModal;

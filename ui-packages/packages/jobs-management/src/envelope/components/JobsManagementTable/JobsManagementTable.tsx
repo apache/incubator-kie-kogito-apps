@@ -34,11 +34,13 @@ import {
   OUIAProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import {
-  setTitle,
-  constructObject,
   Job,
   JobsSortBy
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
+import {
+  setTitle,
+  constructObject
+} from '@kogito-apps/management-console-shared/dist/utils/Utils';
 import Moment from 'react-moment';
 import _ from 'lodash';
 import { JobsIconCreator } from '../../../utils/utils';

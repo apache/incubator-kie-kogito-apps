@@ -30,24 +30,28 @@ import {
   OUIAProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import {
-  JobsCancelModal,
-  JobsDetailsModal,
-  JobsRescheduleModal,
-  setTitle,
-  BulkListType,
-  IOperationResults,
-  IOperations,
-  OperationType,
-  formatForBulkListJob,
   Job,
   JobStatus,
   JobsSortBy,
   OrderBy
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
+import {
+  BulkListType,
+  IOperationResults,
+  IOperations,
+  OperationType
+} from '@kogito-apps/management-console-shared/dist/components/BulkList';
+import { JobsCancelModal } from '@kogito-apps/management-console-shared/dist/components/JobsCancelModal';
+import { JobsDetailsModal } from '@kogito-apps/management-console-shared/dist/components/JobsDetailsModal';
+import { JobsRescheduleModal } from '@kogito-apps/management-console-shared/dist/components/JobsRescheduleModal';
 import { JobsManagementDriver } from '../../../api';
 import JobsManagementTable from '../JobsManagementTable/JobsManagementTable';
 import JobsManagementToolbar from '../JobsManagementToolbar/JobsManagementToolbar';
 import '../styles.css';
+import {
+  setTitle,
+  formatForBulkListJob
+} from '@kogito-apps/management-console-shared/dist/utils/Utils';
 
 interface JobsManagementProps {
   isEnvelopeConnectedToChannel: boolean;

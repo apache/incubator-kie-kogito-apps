@@ -36,7 +36,7 @@ import {
   OUIAProps,
   componentOuiaProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
-import { Job } from '@kogito-apps/management-console-shared';
+import { Job } from '@kogito-apps/management-console-shared/dist/types';
 import { JobsIconCreator } from '../../../utils/Utils';
 import { ProcessDetailsDriver } from '../../../api';
 

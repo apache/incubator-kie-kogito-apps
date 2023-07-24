@@ -51,7 +51,7 @@ import {
   ProcessInstance,
   ProcessInstanceState,
   OrderBy
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
 import { Dashboard } from '@kogito-apps/monitoring';
 
 interface Props {

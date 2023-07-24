@@ -34,7 +34,7 @@ import {
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { InfoCircleIcon } from '@patternfly/react-icons/dist/js/icons/info-circle-icon';
 import '../styles.css';
-import { Milestone } from '@kogito-apps/management-console-shared';
+import { Milestone } from '@kogito-apps/management-console-shared/dist/types';
 
 interface IOwnProps {
   milestones?: Pick<Milestone, 'id' | 'name' | 'status'>[];

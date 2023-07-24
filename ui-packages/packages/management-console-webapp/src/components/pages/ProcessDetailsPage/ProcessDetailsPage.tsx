@@ -34,7 +34,7 @@ import {
 import { StaticContext, useHistory } from 'react-router';
 import * as H from 'history';
 import '../../styles.css';
-import { ProcessInstance } from 'packages/management-console-shared';
+import { ProcessInstance } from 'packages/management-console-shared/dist/types';
 
 interface MatchProps {
   instanceID: string;

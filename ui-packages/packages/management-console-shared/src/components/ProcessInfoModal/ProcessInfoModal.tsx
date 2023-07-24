@@ -25,7 +25,7 @@ import {
   OUIAProps,
   componentOuiaProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
-import BulkList, { IOperation } from '../BulkList/BulkList';
+import { BulkList, IOperation } from '../BulkList';
 interface IOwnProps {
   modalTitle: JSX.Element;
   modalContent?: string;
@@ -35,7 +35,7 @@ interface IOwnProps {
   operationResult?: IOperation;
   processName?: string;
 }
-const ProcessInfoModal: React.FC<IOwnProps & OUIAProps> = ({
+export const ProcessInfoModal: React.FC<IOwnProps & OUIAProps> = ({
   modalContent,
   modalTitle,
   isModalOpen,
@@ -94,5 +94,3 @@ const ProcessInfoModal: React.FC<IOwnProps & OUIAProps> = ({
     </Modal>
   );
 };
-
-export default ProcessInfoModal;

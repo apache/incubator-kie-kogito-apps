@@ -15,7 +15,7 @@
  */
 import React, { ReactElement } from 'react';
 import { Tooltip } from '@patternfly/react-core/dist/js/components/Tooltip';
-import { ProcessInstance } from '@kogito-apps/management-console-shared';
+import { ProcessInstance } from '@kogito-apps/management-console-shared/dist/types';
 import {
   componentOuiaProps,
   OUIAProps

@@ -69,16 +69,18 @@ jest.mock('@kogito-apps/components-common/dist/components/EndpointLink', () =>
   })
 );
 
-jest.mock('@kogito-apps/management-console-shared', () =>
-  Object.assign(
-    {},
-    jest.requireActual('@kogito-apps/management-console-shared'),
-    {
-      ProcessInfoModal: () => {
-        return <MockedComponent />;
+jest.mock(
+  '@kogito-apps/management-console-shared/dist/components/ProcessInfoModal',
+  () =>
+    Object.assign(
+      {},
+      jest.requireActual('@kogito-apps/management-console-shared'),
+      {
+        ProcessInfoModal: () => {
+          return <MockedComponent />;
+        }
       }
-    }
-  )
+    )
 );
 describe('ProcessListChildTable test', () => {
   it('render table', async () => {

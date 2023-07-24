@@ -22,7 +22,7 @@ import {
 import {
   ProcessInstance,
   ProcessInstanceState
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
 import {
   componentOuiaProps,
   OUIAProps

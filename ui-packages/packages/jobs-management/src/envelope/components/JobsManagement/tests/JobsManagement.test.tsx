@@ -18,7 +18,10 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { MockedJobsManagementDriver } from '../../../../api/mocks/MockedJobsManagementDriver';
 import JobsManagement from '../JobsManagement';
-import { JobStatus, OrderBy } from '@kogito-apps/management-console-shared';
+import {
+  JobStatus,
+  OrderBy
+} from '@kogito-apps/management-console-shared/dist/types';
 import { Jobs } from '../__mocks__/mockData';
 import { act } from 'react-dom/test-utils';
 import wait from 'waait';

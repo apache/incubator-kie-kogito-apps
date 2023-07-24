@@ -51,7 +51,7 @@ interface IOwnProps {
   handleJobReschedule: any;
 }
 
-const JobsRescheduleModal: React.FC<IOwnProps & OUIAProps> = ({
+export const JobsRescheduleModal: React.FC<IOwnProps & OUIAProps> = ({
   job,
   actionType,
   modalAction,
@@ -227,5 +227,3 @@ const JobsRescheduleModal: React.FC<IOwnProps & OUIAProps> = ({
     </>
   );
 };
-
-export default JobsRescheduleModal;

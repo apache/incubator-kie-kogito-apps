@@ -23,7 +23,7 @@ import {
   ProcessInstanceFilter,
   ProcessListSortBy,
   ProcessListState
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
 import ProcessListTable from '../ProcessListTable/ProcessListTable';
 import ProcessListToolbar from '../ProcessListToolbar/ProcessListToolbar';
 import { LoadMore } from '@kogito-apps/components-common/dist/components/LoadMore';

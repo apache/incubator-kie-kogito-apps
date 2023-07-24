@@ -45,11 +45,13 @@ import {
   OUIAProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import {
-  IOperations,
-  OperationType,
   JobStatus,
   Job
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
+import {
+  IOperations,
+  OperationType
+} from '@kogito-apps/management-console-shared/dist/components/BulkList';
 import { JobsManagementDriver } from '../../../api';
 import '../styles.css';
 

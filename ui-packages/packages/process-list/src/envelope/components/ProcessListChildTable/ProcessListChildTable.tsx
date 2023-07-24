@@ -27,7 +27,7 @@ import React, { useEffect, useState } from 'react';
 import {
   ProcessInstance,
   ProcessInstanceState
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
 import _ from 'lodash';
 import { ServerErrors } from '@kogito-apps/components-common/dist/components/ServerErrors';
 import {

@@ -26,11 +26,11 @@ import {
 import _ from 'lodash';
 import {
   ProcessInstance,
-  setTitle,
-  ProcessInfoModal,
   TitleType,
   ProcessInstanceState
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
+import { setTitle } from '@kogito-apps/management-console-shared/dist/utils/Utils';
+import { ProcessInfoModal } from '@kogito-apps/management-console-shared/dist/components/ProcessInfoModal';
 import ProcessListChildTable from '../ProcessListChildTable/ProcessListChildTable';
 import { EndpointLink } from '@kogito-apps/components-common/dist/components/EndpointLink';
 import {

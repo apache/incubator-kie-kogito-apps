@@ -39,7 +39,7 @@ interface IOwnProps {
   modalAction: JSX.Element[];
   job: Job;
 }
-const JobsDetailsModal: React.FC<IOwnProps & OUIAProps> = ({
+export const JobsDetailsModal: React.FC<IOwnProps & OUIAProps> = ({
   actionType,
   modalTitle,
   isModalOpen,
@@ -177,5 +177,3 @@ const JobsDetailsModal: React.FC<IOwnProps & OUIAProps> = ({
     </Modal>
   );
 };
-
-export default JobsDetailsModal;

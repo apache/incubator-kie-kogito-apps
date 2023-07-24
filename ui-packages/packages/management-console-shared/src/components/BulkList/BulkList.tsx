@@ -81,7 +81,7 @@ export interface BulkListItem {
   errorMessage?: string;
 }
 
-const BulkList: React.FC<IOwnProps & OUIAProps> = ({
+export const BulkList: React.FC<IOwnProps & OUIAProps> = ({
   operationResult,
   ouiaId,
   ouiaSafe
@@ -162,5 +162,3 @@ const BulkList: React.FC<IOwnProps & OUIAProps> = ({
     </div>
   );
 };
-
-export default BulkList;

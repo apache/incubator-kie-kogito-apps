@@ -49,16 +49,17 @@ import { FilterIcon } from '@patternfly/react-icons/dist/js/icons/filter-icon';
 import { SyncIcon } from '@patternfly/react-icons/dist/js/icons/sync-icon';
 import _ from 'lodash';
 import {
-  BulkListType,
-  IOperationResults,
-  IOperations,
-  OperationType,
   ProcessInstance,
   ProcessInstanceState,
-  ProcessInfoModal,
-  setTitle,
   ProcessInstanceFilter
-} from '@kogito-apps/management-console-shared';
+} from '@kogito-apps/management-console-shared/dist/types';
+import {
+  BulkListType,
+  IOperationResults,
+  IOperations
+} from '@kogito-apps/management-console-shared/dist/components/BulkList';
+import { setTitle } from '@kogito-apps/management-console-shared/dist/utils/Utils';
+import { ProcessInfoModal } from '@kogito-apps/management-console-shared/dist/components/ProcessInfoModal';
 import { ProcessListDriver } from '../../../api';
 import '../styles.css';
 import {
@@ -66,6 +67,7 @@ import {
   OUIAProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { formatForBulkListProcessInstance } from '../utils/ProcessListUtils';
+import { OperationType } from '@kogito-apps/management-console-shared/dist/components/BulkList';
 
 enum Category {
   STATUS = 'Status',
