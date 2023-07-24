@@ -30,7 +30,7 @@ import FormDetailsContainer from '../../containers/FormDetailsContainer/FormDeta
 import '../../styles.css';
 import { useHistory } from 'react-router-dom';
 import { FormInfo } from '@kogito-apps/forms-list';
-import { PageTitle } from '@kogito-apps/consoles-common';
+import { PageTitle } from '@kogito-apps/consoles-common/dist/components/layout/PageTitle';
 import {
   FormNotification,
   Notification

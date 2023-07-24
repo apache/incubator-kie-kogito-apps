@@ -27,7 +27,7 @@ export interface IOwnProps {
   extra?: JSX.Element;
 }
 
-const PageTitle: React.FC<IOwnProps & OUIAProps> = ({
+export const PageTitle: React.FC<IOwnProps & OUIAProps> = ({
   title,
   extra,
   ouiaId,
@@ -46,5 +46,3 @@ const PageTitle: React.FC<IOwnProps & OUIAProps> = ({
     </Flex>
   );
 };
-
-export default PageTitle;

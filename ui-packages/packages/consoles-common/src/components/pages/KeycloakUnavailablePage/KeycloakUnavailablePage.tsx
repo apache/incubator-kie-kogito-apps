@@ -30,7 +30,10 @@ import {
   OUIAProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import kogitoLogo from '../../../static/kogito.png';
-const KeycloakUnavailablePage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
+export const KeycloakUnavailablePage: React.FC<OUIAProps> = ({
+  ouiaId,
+  ouiaSafe
+}) => {
   return (
     <div
       style={{
@@ -79,5 +82,3 @@ const KeycloakUnavailablePage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
     </div>
   );
 };
-
-export default KeycloakUnavailablePage;

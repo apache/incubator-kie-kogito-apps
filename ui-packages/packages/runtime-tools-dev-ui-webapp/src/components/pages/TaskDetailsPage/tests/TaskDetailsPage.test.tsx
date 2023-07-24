@@ -28,7 +28,10 @@ import * as TaskInboxContext from '../../../../channel/TaskInbox/TaskInboxContex
 import TaskDetailsPage from '../TaskDetailsPage';
 import TaskFormContainer from '../../../containers/TaskFormContainer/TaskFormContainer';
 import DevUIAppContextProvider from '../../../contexts/DevUIAppContextProvider';
-import { DefaultUser, User } from '@kogito-apps/consoles-common';
+import {
+  DefaultUser,
+  User
+} from '@kogito-apps/consoles-common/dist/environment/auth';
 
 import { Button } from '@patternfly/react-core/dist/js/components/Button';
 import { DrawerPanelContent } from '@patternfly/react-core/dist/js/components/Drawer';
@@ -132,12 +135,15 @@ jest.mock(
   })
 );
 
-jest.mock('@kogito-apps/consoles-common', () => ({
-  ...jest.requireActual('@kogito-apps/consoles-common'),
-  PageTitle: () => {
-    return <MockedComponent />;
-  }
-}));
+jest.mock(
+  '@kogito-apps/consoles-common/dist/components/layout/PageTitle',
+  () => ({
+    ...jest.requireActual('@kogito-apps/consoles-common'),
+    PageTitle: () => {
+      return <MockedComponent />;
+    }
+  })
+);
 
 jest.mock('@kogito-apps/task-details', () => ({
   ...jest.requireActual('@kogito-apps/task-details'),

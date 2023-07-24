@@ -15,7 +15,7 @@
  */
 
 import axios from 'axios';
-import { GraphQL } from '@kogito-apps/consoles-common';
+import { GraphQL } from '@kogito-apps/consoles-common/dist/graphql';
 import wait from 'waait';
 import {
   getCustomDashboard,

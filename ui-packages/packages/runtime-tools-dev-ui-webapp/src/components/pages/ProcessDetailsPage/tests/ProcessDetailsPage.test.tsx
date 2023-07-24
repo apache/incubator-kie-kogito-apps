@@ -27,7 +27,7 @@ import { MemoryRouter } from 'react-router-dom';
 import * as ProcessDetailsContext from '../../../../channel/ProcessDetails/ProcessDetailsContext';
 import { ProcessDetailsGatewayApi } from '../../../../channel/ProcessDetails/ProcessDetailsGatewayApi';
 import * as RuntimeToolsDevUIAppContext from '../../../contexts/DevUIAppContext';
-import { User } from '@kogito-apps/consoles-common';
+import { User } from '@kogito-apps/consoles-common/dist/environment/auth';
 import { CustomLabels } from '../../../../api/CustomLabels';
 import { UserChangeListener } from '../../../contexts/DevUIAppContext';
 import { UnSubscribeHandler } from '../../../contexts/DevUIAppContext';

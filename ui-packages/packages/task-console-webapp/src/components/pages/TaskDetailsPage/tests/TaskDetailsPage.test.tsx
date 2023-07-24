@@ -124,7 +124,7 @@ jest.mock(
     })
 );
 
-jest.mock('@kogito-apps/consoles-common', () =>
+jest.mock('@kogito-apps/consoles-common/dist/components/layout/PageTitle', () =>
   Object.assign({}, jest.requireActual('@kogito-apps/consoles-common'), {
     PageTitle: () => {
       return <MockedComponent />;

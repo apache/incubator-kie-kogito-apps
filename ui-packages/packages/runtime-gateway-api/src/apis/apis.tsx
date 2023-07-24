@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { GraphQL } from '@kogito-apps/consoles-common';
+import { GraphQL } from '@kogito-apps/consoles-common/dist/graphql';
 import {
   BulkProcessInstanceActionResponse,
   JobCancel,

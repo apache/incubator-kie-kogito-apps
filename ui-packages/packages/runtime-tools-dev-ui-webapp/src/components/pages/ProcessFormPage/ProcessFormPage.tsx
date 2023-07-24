@@ -26,7 +26,7 @@ import ProcessFormContainer from '../../containers/ProcessFormContainer/ProcessF
 import '../../styles.css';
 import { useHistory } from 'react-router-dom';
 import { ProcessDefinition } from '@kogito-apps/process-definition-list';
-import { PageTitle } from '@kogito-apps/consoles-common';
+import { PageTitle } from '@kogito-apps/consoles-common/dist/components/layout/PageTitle';
 import {
   FormNotification,
   Notification

@@ -20,7 +20,7 @@ import {
   JobsManagementGatewayApi,
   JobsManagementGatewayApiImpl
 } from '../JobsManagementGatewayApi';
-import { GraphQL } from '@kogito-apps/consoles-common';
+import { GraphQL } from '@kogito-apps/consoles-common/dist/graphql';
 import { performMultipleCancel, jobCancel } from '../../apis/apis';
 
 export const JobData: Job = {

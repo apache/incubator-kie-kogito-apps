@@ -22,7 +22,10 @@ import * as ProcessDetailsContext from '../../../../channel/ProcessDetails/Proce
 import { ProcessDetailsGatewayApiImpl } from '../../../../channel/ProcessDetails/ProcessDetailsGatewayApi';
 import { ProcessDetailsQueries } from '../../../../channel/ProcessDetails/ProcessDetailsQueries';
 import DevUIAppContextProvider from '../../../contexts/DevUIAppContextProvider';
-import { DefaultUser, User } from '@kogito-apps/consoles-common';
+import {
+  DefaultUser,
+  User
+} from '@kogito-apps/consoles-common/dist/environment/auth';
 
 const getJobsMock = jest.fn();
 const getProcessDetailsMock = jest.fn();

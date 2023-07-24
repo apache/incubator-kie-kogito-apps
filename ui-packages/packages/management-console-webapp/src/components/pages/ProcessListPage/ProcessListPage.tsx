@@ -23,7 +23,7 @@ import {
   componentOuiaProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { RouteComponentProps } from 'react-router-dom';
-import { PageSectionHeader } from '@kogito-apps/consoles-common';
+import { PageSectionHeader } from '@kogito-apps/consoles-common/dist/components/layout/PageSectionHeader';
 import ProcessListContainer from '../../containers/ProcessListContainer/ProcessListContainer';
 import { StaticContext } from 'react-router';
 import * as H from 'history';

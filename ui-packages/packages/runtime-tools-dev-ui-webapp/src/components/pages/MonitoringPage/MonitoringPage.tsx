@@ -38,7 +38,7 @@ import {
   ouiaPageTypeAndObjectId,
   componentOuiaProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
-import { PageSectionHeader } from '@kogito-apps/consoles-common';
+import { PageSectionHeader } from '@kogito-apps/consoles-common/dist/components/layout/PageSectionHeader';
 import { ProcessListGatewayApi } from '../../../channel/ProcessList';
 import { useProcessListGatewayApi } from '../../../channel/ProcessList/ProcessListContext';
 import MonitoringContainer from '../../containers/MonitoringContainer/MonitoringContainer';

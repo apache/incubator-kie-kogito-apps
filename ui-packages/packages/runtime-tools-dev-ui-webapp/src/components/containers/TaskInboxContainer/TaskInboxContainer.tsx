@@ -24,7 +24,7 @@ import { EmbeddedTaskInbox, TaskInboxApi } from '@kogito-apps/task-inbox';
 import { TaskInboxGatewayApi } from '../../../channel/TaskInbox';
 import { useTaskInboxGatewayApi } from '../../../channel/TaskInbox/TaskInboxContext';
 import { getActiveTaskStates, getAllTaskStates } from '../../../utils/Utils';
-import { GraphQL } from '@kogito-apps/consoles-common';
+import { GraphQL } from '@kogito-apps/consoles-common/dist/graphql';
 import UserTaskInstance = GraphQL.UserTaskInstance;
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 

@@ -23,7 +23,7 @@ import {
   ouiaPageTypeAndObjectId,
   componentOuiaProps
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
-import { PageTitle } from '@kogito-apps/consoles-common';
+import { PageTitle } from '@kogito-apps/consoles-common/dist/components/layout/PageTitle';
 import TaskInboxContainer from '../../containers/TaskInboxContainer/TaskInboxContainer';
 import TaskInboxSwitchUser from './components/TaskInboxSwitchUser';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';

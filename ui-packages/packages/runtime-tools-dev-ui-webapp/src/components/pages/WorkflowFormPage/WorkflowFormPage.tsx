@@ -24,7 +24,7 @@ import {
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import WorkflowFormContainer from '../../containers/WorkflowFormContainer/WorkflowFormContainer';
 import '../../styles.css';
-import { PageTitle } from '@kogito-apps/consoles-common';
+import { PageTitle } from '@kogito-apps/consoles-common/dist/components/layout/PageTitle';
 import {
   FormNotification,
   Notification

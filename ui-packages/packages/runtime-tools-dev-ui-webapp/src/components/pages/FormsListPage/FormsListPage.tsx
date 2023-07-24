@@ -21,7 +21,7 @@ import {
   OUIAProps,
   ouiaPageTypeAndObjectId
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
-import { PageSectionHeader } from '@kogito-apps/consoles-common';
+import { PageSectionHeader } from '@kogito-apps/consoles-common/dist/components/layout/PageSectionHeader';
 import FormsListContainer from '../../containers/FormsListContainer/FormsListContainer';
 import '../../styles.css';
 
