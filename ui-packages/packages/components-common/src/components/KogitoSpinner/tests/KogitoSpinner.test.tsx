@@ -15,17 +15,17 @@
  */
 
 import React from 'react';
-import { shallow } from 'enzyme';
-import KogitoSpinner from '../KogitoSpinner';
+import { render, screen } from '@testing-library/react';
+import { KogitoSpinner } from '../KogitoSpinner';
 
 describe('KogitoSpinner component tests', () => {
   it('snapshot testing with loading test', () => {
-    const wrapper = shallow(
+    render(
       <KogitoSpinner
         spinnerText={'loading...'}
         ouiaId="kogito-spinner-ouia-id"
       />
     );
-    expect(wrapper).toMatchSnapshot();
+    expect(screen).toMatchSnapshot();
   });
 });

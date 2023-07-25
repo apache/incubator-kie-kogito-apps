@@ -75,6 +75,7 @@ const LoadMore: React.FC<IOwnProps & OUIAProps> = ({
       <DropdownItem
         key={'loadmore' + count}
         component="button"
+        data-testid="dropdown-item"
         id={count.toString()}
       >
         <Split hasGutter>
@@ -96,6 +97,7 @@ const LoadMore: React.FC<IOwnProps & OUIAProps> = ({
         'load-more',
         ouiaSafe ? ouiaSafe : !isLoadingMore
       )}
+      data-testid="load-more-data-list"
     >
       <DataListItem aria-labelledby="kie-datalist-item">
         <DataListCell className="kogito-components-common__load-more">
@@ -105,7 +107,7 @@ const LoadMore: React.FC<IOwnProps & OUIAProps> = ({
               direction="up"
               toggle={
                 <DropdownToggle
-                  id={`toggle-id`}
+                  data-testid={`toggle-id`}
                   onToggle={onToggle}
                   splitButtonItems={[
                     <DropdownToggleAction
@@ -114,6 +116,7 @@ const LoadMore: React.FC<IOwnProps & OUIAProps> = ({
                         loadMore(loadMoreValue);
                         setIsOpen(false);
                       }}
+                      data-testid="toggle-action"
                     >
                       {isLoadingMore ? (
                         <>
