@@ -15,7 +15,7 @@
  */
 
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, screen } from '@testing-library/react';
 import { PageSectionHeader } from '../PageSectionHeader';
 import { BrowserRouter } from 'react-router-dom';
 
@@ -26,11 +26,11 @@ describe('PageSectionHeader tests', () => {
     breadcrumbPath: ['/', { pathname: '/ProcessInstances', state: {} }]
   };
   it('Snapshot test with default props', () => {
-    const wrapper = mount(
+    render(
       <BrowserRouter>
         <PageSectionHeader {...props} />
       </BrowserRouter>
-    ).find('PageSectionHeader');
-    expect(wrapper).toMatchSnapshot();
+    );
+    expect(screen).toMatchSnapshot();
   });
 });

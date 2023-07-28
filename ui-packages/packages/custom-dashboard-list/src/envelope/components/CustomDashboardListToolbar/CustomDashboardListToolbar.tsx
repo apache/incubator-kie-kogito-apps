@@ -125,7 +125,12 @@ const CustomDashboardListToolbar: React.FC<
           </InputGroup>
         </ToolbarFilter>
         <ToolbarItem>
-          <Button id="apply-filter" variant="primary" onClick={doApplyFilter}>
+          <Button
+            id="apply-filter"
+            variant="primary"
+            onClick={doApplyFilter}
+            data-testit="apply-filter"
+          >
             Apply Filter
           </Button>
         </ToolbarItem>

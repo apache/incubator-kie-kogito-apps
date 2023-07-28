@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import React from 'react';
+// import React from 'react';
 
-const MockedEmbeddedCustomDashboardList = (): React.ReactElement => {
-  return <></>;
-};
+// const MockedEmbeddedCustomDashboardList = (): React.ReactElement => {
+//   return <></>;
+// };
 
-export default MockedEmbeddedCustomDashboardList;
+// export default MockedEmbeddedCustomDashboardList;

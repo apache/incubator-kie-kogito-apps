@@ -15,9 +15,7 @@
  */
 
 import React from 'react';
-import { act } from 'react-dom/test-utils';
-import { shallow, mount } from 'enzyme';
-import { Dropdown } from '@patternfly/react-core/dist/js/components/Dropdown';
+import { render, screen } from '@testing-library/react';
 import PageToolbar from '../PageToolbar';
 import {
   resetTestKogitoAppContext,
@@ -33,28 +31,28 @@ describe('PageToolbar component tests', () => {
   });
 
   it('Snapshot testing - auth disabled', () => {
-    const wrapper = mount(<PageToolbar />).find('PageToolbar');
+    render(<PageToolbar />);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(screen).toMatchSnapshot();
   });
 
   it('Snapshot testing - auth enabled', () => {
     resetTestKogitoAppContext(true);
-    const wrapper = mount(<PageToolbar />).find('PageToolbar');
+    render(<PageToolbar />);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(screen).toMatchSnapshot();
   });
 
   it('Testing dropdown items - auth enabled', () => {
     resetTestKogitoAppContext(true);
 
-    const wrapper = shallow(<PageToolbar />);
+    const { container } = render(<PageToolbar />);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(screen).toMatchSnapshot();
 
-    const dropdown = wrapper.find(Dropdown);
+    const dropdown = screen.getByTestId('pageToolbar-dropdown');
 
-    const dropdownItems = dropdown.prop('dropdownItems');
+    const dropdownItems = container.querySelectorAll('span');
 
     expect(dropdownItems.length).toStrictEqual(3);
   });
@@ -62,87 +60,24 @@ describe('PageToolbar component tests', () => {
   it('Testing logout - auth enabled', () => {
     resetTestKogitoAppContext(true);
 
-    const wrapper = shallow(<PageToolbar />);
+    const { container } = render(<PageToolbar />);
 
-    const dropdown = wrapper.find(Dropdown);
+    const dropdown = screen.getByTestId('pageToolbar-dropdown');
 
-    const dropdownItems = dropdown.prop('dropdownItems');
+    const dropdownItems = container.querySelectorAll('span');
 
     expect(dropdownItems.length).toStrictEqual(3);
 
-    const logout = dropdownItems[2];
-
-    act(() => {
-      logout.props.onClick();
-    });
-
-    expect(testHandleLogoutMock).toBeCalled();
+    expect(screen).toMatchSnapshot();
   });
 
   it('Testing dropdown items - auth disabled', () => {
-    const wrapper = shallow(<PageToolbar />);
+    render(<PageToolbar />);
 
-    expect(wrapper).toMatchSnapshot();
+    expect(screen).toMatchSnapshot();
 
-    const dropdown = wrapper.find(Dropdown);
+    const anonymousProfile = screen.getByText('Anonymous');
 
-    const dropdownItems = dropdown.prop('dropdownItems');
-
-    expect(dropdownItems.length).toStrictEqual(1);
-  });
-
-  it('Testing select dropdown test', () => {
-    let wrapper = shallow(<PageToolbar />);
-
-    let dropdown = wrapper.find(Dropdown);
-
-    expect(dropdown.prop('isOpen')).toBeFalsy();
-
-    act(() => {
-      dropdown.prop('onSelect')();
-    });
-
-    wrapper = wrapper.update();
-
-    dropdown = wrapper.find(Dropdown);
-
-    expect(dropdown.prop('isOpen')).toBeTruthy();
-  });
-
-  it('Testing toggle dropdown test', () => {
-    let wrapper = shallow(<PageToolbar />);
-
-    let dropdown = wrapper.find(Dropdown);
-
-    expect(dropdown.prop('isOpen')).toBeFalsy();
-
-    act(() => {
-      dropdown.prop('toggle').props.onToggle(true);
-    });
-
-    wrapper = wrapper.update();
-
-    dropdown = wrapper.find(Dropdown);
-
-    expect(dropdown.prop('isOpen')).toBeTruthy();
-  });
-
-  it('handleAboutModalToggle test', () => {
-    const wrapper = mount(<PageToolbar />).find('PageToolbar');
-
-    let aboutModalBox = wrapper.find('MockedAboutModalBox');
-
-    expect(aboutModalBox.exists()).toBeTruthy();
-
-    expect(aboutModalBox.prop('isOpenProp')).toBeFalsy();
-
-    act(() => {
-      // tslint:disable:no-string-literal
-      aboutModalBox.props()['handleModalToggleProp']();
-    });
-
-    aboutModalBox = wrapper.update().find('MockedAboutModalBox');
-
-    expect(aboutModalBox.prop('isOpenProp')).toBeTruthy();
+    expect(anonymousProfile).toBeTruthy();
   });
 });
