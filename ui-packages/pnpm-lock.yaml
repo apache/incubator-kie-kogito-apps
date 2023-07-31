@@ -1364,27 +1364,18 @@ importers:
       '@testing-library/jest-dom':
         specifier: ^5.16.5
         version: 5.16.5
-      '@types/enzyme':
-        specifier: ^3.10.13
-        version: 3.10.13
+      '@testing-library/react':
+        specifier: ^11.2.6
+        version: 11.2.7(react@17.0.2)
       '@types/jest':
         specifier: ^26.0.24
         version: 26.0.24
-      '@wojtekmaj/enzyme-adapter-react-17':
-        specifier: ^0.8.0
-        version: 0.8.0(enzyme@3.11.0)(react@17.0.2)
       babel-jest:
         specifier: ^25.5.1
         version: 25.5.1(@babel/core@7.22.8)
       copyfiles:
         specifier: ^2.4.1
         version: 2.4.1
-      enzyme:
-        specifier: ^3.11.0
-        version: 3.11.0
-      enzyme-to-json:
-        specifier: ^3.6.2
-        version: 3.6.2(enzyme@3.11.0)
       identity-obj-proxy:
         specifier: ^3.0.0
         version: 3.0.0
@@ -8510,6 +8501,21 @@ packages:
       react-dom: 17.0.2(react@17.0.2)
     dev: true
 
+  /@testing-library/react@11.2.7(react@17.0.2):
+    resolution:
+      {
+        integrity: sha512-tzRNp7pzd5QmbtXNG/mhdcl7Awfu/Iz1RaVHY75zTdOkmHCuzMhRL83gWHSgOAcjS3CCbyfwUHMZgRJb4kAfpA==
+      }
+    engines: { node: '>=10' }
+    peerDependencies:
+      react: '*'
+      react-dom: '*'
+    dependencies:
+      '@babel/runtime': 7.22.6
+      '@testing-library/dom': 7.31.2
+      react: 17.0.2
+    dev: true
+
   /@tootallnate/once@1.1.2:
     resolution:
       {
@@ -9777,26 +9783,6 @@ packages:
       prop-types: 15.8.1
       react: 17.0.2
       react-dom: 17.0.2(react@17.0.2)
-      react-is: 17.0.2
-      react-test-renderer: 17.0.2(react@17.0.2)
-    dev: true
-
-  /@wojtekmaj/enzyme-adapter-react-17@0.8.0(enzyme@3.11.0)(react@17.0.2):
-    resolution:
-      {
-        integrity: sha512-zeUGfQRziXW7R7skzNuJyi01ZwuKCH8WiBNnTgUJwdS/CURrJwAhWsfW7nG7E30ak8Pu3ZwD9PlK9skBfAoOBw==
-      }
-    peerDependencies:
-      enzyme: ^3.0.0
-      react: ^17.0.0-0
-      react-dom: ^17.0.0-0
-    dependencies:
-      '@wojtekmaj/enzyme-adapter-utils': 0.2.0(react@17.0.2)
-      enzyme: 3.11.0
-      enzyme-shallow-equal: 1.0.5
-      has: 1.0.3
-      prop-types: 15.8.1
-      react: 17.0.2
       react-is: 17.0.2
       react-test-renderer: 17.0.2(react@17.0.2)
     dev: true
