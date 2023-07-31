@@ -25,17 +25,19 @@ import CustomDashboardListEnvelopeView, {
 
 describe('CustomDashboardListEnvelopeView tests', () => {
   jest.mock('../components/CustomDashboardList/CustomDashboardList');
-  it('Snapshot', () => {
+  it('Snapshot', async () => {
     const channelApi = new MockedMessageBusClientApi();
 
     const forwardRef = React.createRef<CustomDashboardListEnvelopeViewApi>();
-
-    const { container } = render(
-      <CustomDashboardListEnvelopeView
-        channelApi={channelApi}
-        ref={forwardRef}
-      />
-    );
+    let container;
+    await act(async () => {
+      container = render(
+        <CustomDashboardListEnvelopeView
+          channelApi={channelApi}
+          ref={forwardRef}
+        />
+      ).container;
+    });
 
     expect(screen).toMatchSnapshot();
 
@@ -45,17 +47,16 @@ describe('CustomDashboardListEnvelopeView tests', () => {
       }
     });
 
-    const CustomDashboardListEnvelopeView = container.getElementsByClassName(
-      'pf-m-toggle-group-container'
-    );
-    expect(CustomDashboardListEnvelopeView).toMatchSnapshot();
+    const CustomDashboardListEnvelopeViewCheck =
+      container.getElementsByClassName('pf-m-toggle-group-container');
+    expect(CustomDashboardListEnvelopeViewCheck).toMatchSnapshot();
 
     const dashboardList = screen.getByText('Loading Dashboard...');
-    screen.debug();
-    // const dashboardList = envelopeView.find(CustomDashboardList);
 
-    // expect(dashboardList.exists()).toBeTruthy();
-    // expect(dashboardList.props().isEnvelopeConnectedToChannel).toBeTruthy();
-    // expect(dashboardList.props().driver).not.toBeNull();
+    expect(dashboardList).toBeTruthy();
+
+    const listTable = container.querySelector('table');
+
+    expect(listTable).toBeTruthy();
   });
 });

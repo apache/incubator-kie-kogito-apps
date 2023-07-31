@@ -129,7 +129,7 @@ const CustomDashboardListToolbar: React.FC<
             id="apply-filter"
             variant="primary"
             onClick={doApplyFilter}
-            data-testit="apply-filter"
+            data-testid="apply-filter"
           >
             Apply Filter
           </Button>

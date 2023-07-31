@@ -123,7 +123,6 @@ describe('FormRenderer test', () => {
 
     const { container } = render(<FormRenderer {...props} />);
     expect(screen).toMatchSnapshot();
-    // screen.debug()
     // const form = container.findWhere((node) => node.type() === AutoForm);
 
     // expect(form.exists()).toBeTruthy();

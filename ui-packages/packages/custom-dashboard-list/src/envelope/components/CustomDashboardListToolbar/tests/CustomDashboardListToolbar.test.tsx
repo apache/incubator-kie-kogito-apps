@@ -17,21 +17,17 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import CustomDashboardListToolbar from '../CustomDashboardListToolbar';
-import { act } from 'react-dom/test-utils';
-import { ToolbarFilter } from '@patternfly/react-core/dist/js/components/Toolbar';
-import { Button } from '@patternfly/react-core/dist/js/components/Button';
-import { Tooltip } from '@patternfly/react-core/dist/js/components/Tooltip';
 
 describe('CustomDashboard list toolbar tests', () => {
   it('render toolbar', () => {
-    render(
+    const { container } = render(
       <CustomDashboardListToolbar
         applyFilter={jest.fn()}
         setFilterDashboardNames={jest.fn()}
         filterDashboardNames={[]}
       />
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('apply filter click', () => {
