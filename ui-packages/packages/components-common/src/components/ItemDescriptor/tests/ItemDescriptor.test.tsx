@@ -34,11 +34,11 @@ mockMath.random = () => 0.5;
 global.Math = mockMath;
 describe('ItemDescriptor component tests', () => {
   it('snapshot testing for business key available', () => {
-    render(<ItemDescriptor itemDescription={item1} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<ItemDescriptor itemDescription={item1} />);
+    expect(container).toMatchSnapshot();
   });
   it('snapshot testing for business key null', () => {
-    render(<ItemDescriptor itemDescription={item2} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<ItemDescriptor itemDescription={item2} />);
+    expect(container).toMatchSnapshot();
   });
 });

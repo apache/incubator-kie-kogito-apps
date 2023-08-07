@@ -20,8 +20,8 @@ import { KeycloakUnavailablePage } from '../KeycloakUnavailablePage';
 
 describe('KeycloakUnavailablePage test', () => {
   it('render the page', () => {
-    render(<KeycloakUnavailablePage />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<KeycloakUnavailablePage />);
+    expect(container).toMatchSnapshot();
   });
   it('reload button is clicked', () => {
     const location: Location = window.location;

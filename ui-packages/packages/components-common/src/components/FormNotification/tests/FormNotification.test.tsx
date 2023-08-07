@@ -30,7 +30,7 @@ describe('FormNotification test', () => {
       <FormNotification notification={notificationProps} />
     );
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
     const alert = screen.getByTestId('alert-box');
 
@@ -62,7 +62,7 @@ describe('FormNotification test', () => {
     const { container } = render(
       <FormNotification notification={notificationProps} />
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
     const alertMessage = container.querySelector('h4')?.textContent;
 
@@ -84,7 +84,7 @@ describe('FormNotification test', () => {
 
     fireEvent.click(button);
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
     const detail = container.querySelector('p')?.textContent;
 
@@ -107,7 +107,7 @@ describe('FormNotification test', () => {
     const { container } = render(
       <FormNotification notification={notificationProps} />
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
     const alertMessage = container.querySelector('h4')?.textContent;
 

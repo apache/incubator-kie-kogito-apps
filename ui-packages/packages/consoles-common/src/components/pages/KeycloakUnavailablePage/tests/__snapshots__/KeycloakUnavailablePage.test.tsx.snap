@@ -1,56 +1,75 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`KeycloakUnavailablePage test render the page 1`] = `
-Object {
-  "debug": [Function],
-  "findAllByAltText": [Function],
-  "findAllByDisplayValue": [Function],
-  "findAllByLabelText": [Function],
-  "findAllByPlaceholderText": [Function],
-  "findAllByRole": [Function],
-  "findAllByTestId": [Function],
-  "findAllByText": [Function],
-  "findAllByTitle": [Function],
-  "findByAltText": [Function],
-  "findByDisplayValue": [Function],
-  "findByLabelText": [Function],
-  "findByPlaceholderText": [Function],
-  "findByRole": [Function],
-  "findByTestId": [Function],
-  "findByText": [Function],
-  "findByTitle": [Function],
-  "getAllByAltText": [Function],
-  "getAllByDisplayValue": [Function],
-  "getAllByLabelText": [Function],
-  "getAllByPlaceholderText": [Function],
-  "getAllByRole": [Function],
-  "getAllByTestId": [Function],
-  "getAllByText": [Function],
-  "getAllByTitle": [Function],
-  "getByAltText": [Function],
-  "getByDisplayValue": [Function],
-  "getByLabelText": [Function],
-  "getByPlaceholderText": [Function],
-  "getByRole": [Function],
-  "getByTestId": [Function],
-  "getByText": [Function],
-  "getByTitle": [Function],
-  "logTestingPlaygroundURL": [Function],
-  "queryAllByAltText": [Function],
-  "queryAllByDisplayValue": [Function],
-  "queryAllByLabelText": [Function],
-  "queryAllByPlaceholderText": [Function],
-  "queryAllByRole": [Function],
-  "queryAllByTestId": [Function],
-  "queryAllByText": [Function],
-  "queryAllByTitle": [Function],
-  "queryByAltText": [Function],
-  "queryByDisplayValue": [Function],
-  "queryByLabelText": [Function],
-  "queryByPlaceholderText": [Function],
-  "queryByRole": [Function],
-  "queryByTestId": [Function],
-  "queryByText": [Function],
-  "queryByTitle": [Function],
-}
+<div>
+  <div
+    data-ouia-component-type="server-unavailable"
+    data-ouia-safe="true"
+    style="display: flex; justify-content: center; padding-top: 5%; background: rgb(134, 134, 134); height: 100%;"
+  >
+     
+    <article
+      class="pf-c-card"
+      data-ouia-component-id="OUIA-Generated-Card-1"
+      data-ouia-component-type="PF4/Card"
+      data-ouia-safe="true"
+      id=""
+      style="max-height: 300px;"
+    >
+      <div
+        class="pf-c-card__header"
+      >
+        <div
+          class=""
+        >
+          <img
+            alt="Kogito keycloak"
+            class="pf-c-brand"
+            src="kogito.png"
+          />
+        </div>
+      </div>
+      <div
+        class="pf-c-card__body pf-m-no-fill"
+      />
+      <div
+        class="pf-c-card__title"
+      >
+        Error:503 - Server unavailable
+      </div>
+      <div
+        class="pf-c-card__body pf-m-no-fill"
+      />
+      <div
+        class="pf-c-card__body"
+      >
+        Sorry.. the keycloak server seems to be down
+      </div>
+      <div
+        class="pf-c-card__body pf-m-no-fill"
+      />
+      <div
+        class="pf-l-bullseye"
+      >
+        <span>
+          Please contact administrator or
+           
+          <button
+            aria-disabled="false"
+            class="pf-c-button pf-m-link pf-m-inline"
+            data-ouia-component-id="OUIA-Generated-Button-link-1"
+            data-ouia-component-type="PF4/Button"
+            data-ouia-safe="true"
+            type="button"
+          >
+            click here to retry
+          </button>
+        </span>
+      </div>
+      <div
+        class="pf-c-card__body pf-m-no-fill"
+      />
+    </article>
+  </div>
+</div>
 `;

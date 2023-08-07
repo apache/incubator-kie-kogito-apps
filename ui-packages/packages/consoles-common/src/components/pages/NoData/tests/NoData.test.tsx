@@ -40,23 +40,23 @@ const props2 = {
 
 describe('NoData component tests', () => {
   it('snapshot tests with location object', () => {
-    render(<NoData {...props1} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<NoData {...props1} />);
+    expect(container).toMatchSnapshot();
   });
 
   it('snapshot tests without location object', () => {
-    render(<NoData {...props2} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<NoData {...props2} />);
+    expect(container).toMatchSnapshot();
   });
   /* tslint:disable */
   it('redirect button click', async () => {
-    render(
+    const { container } = render(
       <Router>
         <NoData {...props2} />
       </Router>
     );
     const button = screen.getByTestId('redirect-button');
     fireEvent.click(button);
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

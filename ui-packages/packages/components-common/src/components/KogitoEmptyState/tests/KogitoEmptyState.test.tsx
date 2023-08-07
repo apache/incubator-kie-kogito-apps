@@ -69,38 +69,40 @@ const props = {
 
 describe('KogitoEmptyState component tests', () => {
   it('Search test', () => {
-    render(<KogitoEmptyState type={KogitoEmptyStateType.Search} {...props} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(
+      <KogitoEmptyState type={KogitoEmptyStateType.Search} {...props} />
+    );
+    expect(container).toMatchSnapshot();
   });
   it('Reset test', () => {
     const click = jest.fn();
-    const wrapper = render(
+    const { container } = render(
       <KogitoEmptyState
         type={KogitoEmptyStateType.Reset}
         onClick={click}
         {...props}
       />
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     fireEvent.click(screen.getByText('Reset to default'));
     expect(click).toHaveBeenCalledTimes(1);
   });
   it('Info test', () => {
-    const wrapper = render(
+    const { container } = render(
       <KogitoEmptyState type={KogitoEmptyStateType.Info} {...props} />
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
   it('Refresh test', () => {
     const click = jest.fn();
-    const wrapper = render(
+    const { container } = render(
       <KogitoEmptyState
         type={KogitoEmptyStateType.Refresh}
         onClick={click}
         {...props}
       />
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     fireEvent.click(screen.getByText('Refresh'));
     expect(click).toHaveBeenCalledTimes(1);
   });

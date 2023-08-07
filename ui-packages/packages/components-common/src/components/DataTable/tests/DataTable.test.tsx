@@ -224,12 +224,12 @@ describe('DataTable component tests', () => {
       ErrorComponent: undefined
     };
 
-    render(
+    const { container } = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <DataTable {...props} />
       </MockedProvider>
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('Should render ErrorComponent', async () => {
@@ -244,13 +244,13 @@ describe('DataTable component tests', () => {
       ErrorComponent: undefined
     };
 
-    render(
+    const { container } = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <DataTable {...props} />
       </MockedProvider>
     );
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('Should render LoadingComponent', async () => {
@@ -265,13 +265,13 @@ describe('DataTable component tests', () => {
       ErrorComponent: undefined
     };
 
-    render(
+    const { container } = render(
       <MockedProvider mocks={mocks} addTypename={false}>
         <DataTable {...props} />
       </MockedProvider>
     );
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('check sorting functionality', async () => {

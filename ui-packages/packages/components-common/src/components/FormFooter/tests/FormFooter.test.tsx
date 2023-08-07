@@ -48,8 +48,8 @@ describe('Form Footer test', () => {
       }
     ];
 
-    render(<FormFooter actions={actions} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<FormFooter actions={actions} />);
+    expect(container).toMatchSnapshot();
 
     const actionList = screen.getByTestId('action-list');
     expect(actionList).toBeTruthy();
@@ -74,8 +74,10 @@ describe('Form Footer test', () => {
       }
     ];
 
-    render(<FormFooter actions={actions} enabled={false} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(
+      <FormFooter actions={actions} enabled={false} />
+    );
+    expect(container).toMatchSnapshot();
 
     const actionList = screen.getByTestId('action-list');
     expect(actionList).toBeTruthy();

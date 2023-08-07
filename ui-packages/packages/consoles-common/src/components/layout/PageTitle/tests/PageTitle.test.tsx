@@ -21,15 +21,17 @@ import { render, screen } from '@testing-library/react';
 
 describe('PageTitle test', () => {
   it('default snapshot testing', () => {
-    render(<PageTitle title="Title" />);
+    const { container } = render(<PageTitle title="Title" />);
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('snapshot testing with extra', () => {
-    render(<PageTitle title="Title" extra={<Label>Label</Label>} />);
+    const { container } = render(
+      <PageTitle title="Title" extra={<Label>Label</Label>} />
+    );
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
     const extra = screen.getAllByText('Label');
 

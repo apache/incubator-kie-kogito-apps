@@ -36,13 +36,13 @@ describe('PageLayout component tests', () => {
   isAuthEnabledMock.mockReturnValue(false);
 
   it('snapshot tests', () => {
-    render(<PageLayout {...props} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<PageLayout {...props} />);
+    expect(container).toMatchSnapshot();
   });
 
   it('open with PageSidebar closed', () => {
-    render(<PageLayout {...props} pageNavOpen={false} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<PageLayout {...props} pageNavOpen={false} />);
+    expect(container).toMatchSnapshot();
 
     let pageSidebar = screen.getByTestId('page-sidebar');
     expect(pageSidebar).toBeTruthy();
@@ -56,10 +56,10 @@ describe('PageLayout component tests', () => {
   });
 
   it('check isNavOpen boolean', () => {
-    render(<PageLayout {...props} />);
+    const { container } = render(<PageLayout {...props} />);
     const button = screen.getByLabelText('Global navigation');
     fireEvent.click(button);
     expect(screen.getByText('page Navigation elements')).toBeTruthy();
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

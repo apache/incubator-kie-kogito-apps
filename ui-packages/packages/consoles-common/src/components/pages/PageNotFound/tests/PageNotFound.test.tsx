@@ -57,31 +57,31 @@ const props2 = {
 
 describe('PageNotFound component tests', () => {
   it('snapshot testing without location object', () => {
-    render(
+    const { container } = render(
       <Router>
         <PageNotFound {...props1} />
       </Router>
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('snapshot testing with location object', () => {
-    render(
+    const { container } = render(
       <Router>
         <PageNotFound {...props2} />
       </Router>
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
   /* tslint:disable */
   it('redirect button click', () => {
-    render(
+    const { container } = render(
       <Router>
         <PageNotFound {...props2} />
       </Router>
     );
     const button = screen.getByTestId('redirect-button');
     fireEvent.click(button);
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

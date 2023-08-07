@@ -26,7 +26,7 @@ const props = {
 describe('AboutModal component tests', () => {
   it('snapshot testing', () => {
     process.env.KOGITO_APP_VERSION = '1.2.3-MOCKED-VERSION';
-    render(
+    const { container } = render(
       <BrandContext.Provider
         value={{
           imageSrc: 'kogito-image-src',
@@ -36,6 +36,6 @@ describe('AboutModal component tests', () => {
         <AboutModal {...props} />
       </BrandContext.Provider>
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

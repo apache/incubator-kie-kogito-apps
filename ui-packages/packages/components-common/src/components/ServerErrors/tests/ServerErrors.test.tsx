@@ -72,24 +72,24 @@ const props4 = {
 
 describe('ServerErrors component tests', () => {
   it('snapshot testing ', () => {
-    render(<ServerErrors {...props} />);
+    const { container } = render(<ServerErrors {...props} />);
     expect(screen.queryByTestId('empty-state-body')?.textContent).toContain(
       'An error occurred while accessing data. It is possible the data index is still being loaded, please try again in a few moments. See more details'
     );
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('snapshot with children ', () => {
     const onClickMock = jest.fn();
 
-    render(
+    const { container } = render(
       <ServerErrors {...props}>
         <Button onClick={onClickMock}>Go back</Button>
       </ServerErrors>
     );
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
     expect(screen.getByText('Go back')).toBeTruthy();
 
     fireEvent.click(screen.getByText('Go back'));
@@ -107,9 +107,9 @@ describe('ServerErrors component tests', () => {
   });
 
   it('snapshot testing with small variant ', () => {
-    render(<ServerErrors {...props2} />);
+    const { container } = render(<ServerErrors {...props2} />);
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   it('display error button click with small variant ', () => {

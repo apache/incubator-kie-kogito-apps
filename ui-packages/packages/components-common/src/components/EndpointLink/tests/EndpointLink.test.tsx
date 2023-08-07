@@ -43,19 +43,19 @@ const props4 = {
 };
 describe('EndpointLink component tests', () => {
   it('snapshot testing for link shown', () => {
-    render(<EndpointLink {...props1} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<EndpointLink {...props1} />);
+    expect(container).toMatchSnapshot();
   });
   it('snapshot testing for link hidden', () => {
-    render(<EndpointLink {...props2} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<EndpointLink {...props2} />);
+    expect(container).toMatchSnapshot();
   });
   it('snapshot testing for link hidden with custom link label', () => {
-    render(<EndpointLink {...props3} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<EndpointLink {...props3} />);
+    expect(container).toMatchSnapshot();
   });
   it('snapshot testing no service URL and link hidden', () => {
-    render(<EndpointLink {...props4} />);
-    expect(screen).toMatchSnapshot();
+    const { container } = render(<EndpointLink {...props4} />);
+    expect(container).toMatchSnapshot();
   });
 });

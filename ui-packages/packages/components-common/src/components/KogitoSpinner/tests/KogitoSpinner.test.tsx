@@ -20,12 +20,12 @@ import { KogitoSpinner } from '../KogitoSpinner';
 
 describe('KogitoSpinner component tests', () => {
   it('snapshot testing with loading test', () => {
-    render(
+    const { container } = render(
       <KogitoSpinner
         spinnerText={'loading...'}
         ouiaId="kogito-spinner-ouia-id"
       />
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

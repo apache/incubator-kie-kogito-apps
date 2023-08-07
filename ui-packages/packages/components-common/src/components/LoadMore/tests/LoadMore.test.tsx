@@ -57,10 +57,12 @@ describe('LoadMore component tests with isLoading false', () => {
   });
 
   it('simulate loading state in button', async () => {
-    render(<LoadMore {...{ ...props, isLoadingMore: true, ouiaSafe: true }} />);
+    const { container } = render(
+      <LoadMore {...{ ...props, isLoadingMore: true, ouiaSafe: true }} />
+    );
     expect(screen.queryByTestId('toggle-action')?.textContent).toContain(
       'Loading...'
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });

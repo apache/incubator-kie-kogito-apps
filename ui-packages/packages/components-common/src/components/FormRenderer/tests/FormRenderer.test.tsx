@@ -15,9 +15,8 @@
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import cloneDeep from 'lodash/cloneDeep';
-import { AutoForm } from 'uniforms-patternfly/dist/es6';
 
 import { FormRenderer } from '../FormRenderer';
 import { FormAction } from '../../utils';
@@ -77,12 +76,8 @@ const MockedComponent = (): React.ReactElement => {
   return <></>;
 };
 
-jest.mock('../../FormFooter');
 jest.mock('uniforms-patternfly/dist/es6', () =>
   Object.assign({}, jest.requireActual('uniforms-patternfly/dist/es6'), {
-    AutoForm: () => {
-      return <MockedComponent />;
-    },
     AutoFields: () => {
       return <MockedComponent />;
     },
@@ -122,49 +117,50 @@ describe('FormRenderer test', () => {
     });
 
     const { container } = render(<FormRenderer {...props} />);
-    expect(screen).toMatchSnapshot();
-    // const form = container.findWhere((node) => node.type() === AutoForm);
+    expect(container).toMatchSnapshot();
 
-    // expect(form.exists()).toBeTruthy();
-    // expect(form.props().disabled).toBeFalsy();
+    const checkForm = container.querySelector('form');
+    expect(checkForm).toBeTruthy();
 
-    // const footer = wrapper.find('FormFooter');
-    // expect(footer.exists()).toBeTruthy();
-    // expect(footer.props()['actions']).toHaveLength(1);
-    // expect(footer.props()['enabled']).toBeTruthy();
+    const checkFormFooter = container.querySelector(
+      '[data-ouia-component-type="form-footer"]'
+    );
+    expect(checkFormFooter).toBeTruthy();
+
+    const checkSubmitButton = screen.getByText('Complete');
+    expect(checkSubmitButton).toBeTruthy();
   });
 
-  // it('Render readonly form with actions', () => {
-  //   formActions.push({
-  //     name: 'complete',
-  //     execute: jest.fn()
-  //   });
+  it('Render readonly form with actions', () => {
+    formActions.push({
+      name: 'complete',
+      execute: jest.fn()
+    });
 
-  //   props.readOnly = true;
+    props.readOnly = true;
 
-  //   const wrapper = mount(<FormRenderer {...props} />);
+    const { container } = render(<FormRenderer {...props} />);
 
-  //   const form = wrapper.findWhere((node) => node.type() === AutoForm);
+    const checkForm = container.querySelector('form');
+    expect(checkForm).toBeTruthy();
 
-  //   expect(form.exists()).toBeTruthy();
-  //   expect(form.props().disabled).toBeTruthy();
+    fireEvent.submit(container.querySelector('form')!);
+    const checkFormFooter = container.querySelector(
+      '[data-ouia-component-type="form-footer"]'
+    );
+    expect(checkFormFooter).toBeTruthy();
 
-  //   const footer = wrapper.find('FormFooter');
-  //   expect(footer.exists()).toBeTruthy();
-  //   expect(footer.props()['actions']).toHaveLength(1);
-  //   expect(footer.props()['enabled']).toBeFalsy();
-  // });
+    const checkSubmitButton = screen.getByText('Complete');
+    expect(checkSubmitButton).toBeTruthy();
+  });
 
-  // it('Render form without actions', () => {
-  //   const wrapper = mount(<FormRenderer {...props} />);
-  //   expect(wrapper).toMatchSnapshot();
+  it('Render form without actions', () => {
+    const { container } = render(<FormRenderer {...props} />);
+    expect(container).toMatchSnapshot();
 
-  //   const form = wrapper.findWhere((node) => node.type() === AutoForm);
-  //   expect(form.exists()).toBeTruthy();
-  //   expect(form.props()['disabled']).toBeFalsy();
-  //   const footer = wrapper.find('FormFooter');
-  //   expect(footer.exists()).toBeTruthy();
-  //   expect(footer.props()['actions']).toHaveLength(0);
-  //   expect(footer.props()['enabled']).toStrictEqual(true);
-  // });
+    const checkForm = container.querySelector('form');
+    expect(checkForm).toBeTruthy();
+
+    expect(container.querySelector('button')).toBeFalsy();
+  });
 });

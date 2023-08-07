@@ -21,7 +21,12 @@ module.exports = {
     'core-js'
   ],
   moduleFileExtensions: ['ts', 'tsx', 'js'],
-  coveragePathIgnorePatterns: ['./src/static', './src/graphql', 'dist/'],
+  coveragePathIgnorePatterns: [
+    './src/static',
+    './src/graphql',
+    'dist/',
+    './src/environment/auth/tests/utils'
+  ],
   modulePathIgnorePatterns: ['<rootDir>/.*/__mocks__'],
   coverageReporters: [
     [

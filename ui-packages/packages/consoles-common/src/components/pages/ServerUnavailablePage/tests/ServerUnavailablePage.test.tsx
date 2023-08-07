@@ -26,9 +26,9 @@ describe('ServerUnavailablePage tests', () => {
     reload.mockClear();
   });
   it('Snapshot with default name', () => {
-    render(<ServerUnavailablePage reload={reload} />);
+    const { container } = render(<ServerUnavailablePage reload={reload} />);
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
     const emptystates = screen.getAllByTestId('empty-state-body');
 
@@ -46,11 +46,11 @@ describe('ServerUnavailablePage tests', () => {
   it('Snapshot with custom name', () => {
     const customDisplayName: string = 'My custom display Name';
 
-    render(
+    const { container } = render(
       <ServerUnavailablePage displayName={customDisplayName} reload={reload} />
     );
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
     const emptystates = screen.getAllByTestId('empty-state-body');
 

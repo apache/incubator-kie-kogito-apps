@@ -26,11 +26,11 @@ describe('PageSectionHeader tests', () => {
     breadcrumbPath: ['/', { pathname: '/ProcessInstances', state: {} }]
   };
   it('Snapshot test with default props', () => {
-    render(
+    const { container } = render(
       <BrowserRouter>
         <PageSectionHeader {...props} />
       </BrowserRouter>
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 });
