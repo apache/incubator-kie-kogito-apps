@@ -28,6 +28,7 @@ exports[`DevUILayout tests Snapshot test with Processing disabled 1`] = `
     sidebar={
       <PageSidebar
         data-ouia-navigation="true"
+        data-testid="page-sidebar"
         isNavOpen={true}
         nav={
           <DevUINav
@@ -45,6 +46,7 @@ exports[`DevUILayout tests Snapshot test with Processing disabled 1`] = `
     >
       <PageSidebar
         data-ouia-navigation="true"
+        data-testid="page-sidebar"
         isNavOpen={true}
         nav={
           <DevUINav
@@ -57,6 +59,7 @@ exports[`DevUILayout tests Snapshot test with Processing disabled 1`] = `
           aria-hidden={false}
           className="pf-c-page__sidebar pf-m-expanded"
           data-ouia-navigation="true"
+          data-testid="page-sidebar"
           id="page-sidebar"
         >
           <div
@@ -223,6 +226,7 @@ exports[`DevUILayout tests Snapshot test with Tracing disabled 1`] = `
     sidebar={
       <PageSidebar
         data-ouia-navigation="true"
+        data-testid="page-sidebar"
         isNavOpen={true}
         nav={
           <DevUINav
@@ -240,6 +244,7 @@ exports[`DevUILayout tests Snapshot test with Tracing disabled 1`] = `
     >
       <PageSidebar
         data-ouia-navigation="true"
+        data-testid="page-sidebar"
         isNavOpen={true}
         nav={
           <DevUINav
@@ -252,6 +257,7 @@ exports[`DevUILayout tests Snapshot test with Tracing disabled 1`] = `
           aria-hidden={false}
           className="pf-c-page__sidebar pf-m-expanded"
           data-ouia-navigation="true"
+          data-testid="page-sidebar"
           id="page-sidebar"
         >
           <div
@@ -628,6 +634,7 @@ exports[`DevUILayout tests Snapshot test with default props 1`] = `
     sidebar={
       <PageSidebar
         data-ouia-navigation="true"
+        data-testid="page-sidebar"
         isNavOpen={true}
         nav={
           <DevUINav
@@ -645,6 +652,7 @@ exports[`DevUILayout tests Snapshot test with default props 1`] = `
     >
       <PageSidebar
         data-ouia-navigation="true"
+        data-testid="page-sidebar"
         isNavOpen={true}
         nav={
           <DevUINav
@@ -657,6 +665,7 @@ exports[`DevUILayout tests Snapshot test with default props 1`] = `
           aria-hidden={false}
           className="pf-c-page__sidebar pf-m-expanded"
           data-ouia-navigation="true"
+          data-testid="page-sidebar"
           id="page-sidebar"
         >
           <div

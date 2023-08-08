@@ -63,6 +63,7 @@ exports[`CustomDashboard list toolbar tests render toolbar 1`] = `
                   data-ouia-component-id="OUIA-Generated-TextInputBase-2"
                   data-ouia-component-type="PF4/TextInput"
                   data-ouia-safe="true"
+                  data-testid="search-input"
                   id="customDashboardName"
                   name="customDashboardName"
                   placeholder="Filter by dashboard name"
@@ -101,6 +102,7 @@ exports[`CustomDashboard list toolbar tests render toolbar 1`] = `
               data-ouia-component-id="OUIA-Generated-Button-plain-2"
               data-ouia-component-type="PF4/Button"
               data-ouia-safe="true"
+              data-testid="refresh"
               id="refresh"
               type="button"
             >

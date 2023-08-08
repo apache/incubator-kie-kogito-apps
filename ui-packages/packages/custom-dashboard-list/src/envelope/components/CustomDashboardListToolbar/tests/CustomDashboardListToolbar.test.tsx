@@ -51,70 +51,60 @@ describe('CustomDashboard list toolbar tests', () => {
       <CustomDashboardListToolbar
         applyFilter={applyFilter}
         setFilterDashboardNames={jest.fn()}
+        filterDashboardNames={['dashboard']}
+      />
+    );
+    const resetButton = screen.getAllByText('Reset to default')[1];
+    fireEvent.click(resetButton);
+    expect(applyFilter).toHaveBeenCalled();
+  });
+  it('refresh click', () => {
+    const applyFilter = jest.fn();
+    render(
+      <CustomDashboardListToolbar
+        applyFilter={applyFilter}
+        setFilterDashboardNames={jest.fn()}
         filterDashboardNames={[]}
       />
     );
-    screen.debug();
-    // act(() => {
-    //   wrapper.find('Toolbar').props()['clearAllFilters']();
-    // });
+
+    const refreshButton = screen.getByTestId('refresh');
+    fireEvent.click(refreshButton);
     expect(applyFilter).toHaveBeenCalled();
   });
 
-  // it('refresh click', () => {
-  //   const applyFilter = jest.fn();
-  //   const wrapper = mount(
-  //     <CustomDashboardListToolbar
-  //       applyFilter={applyFilter}
-  //       setFilterDashboardNames={jest.fn()}
-  //       filterDashboardNames={[]}
-  //     />
-  //   );
-  //   act(() => {
-  //     wrapper.find(Tooltip).find(Button).simulate('click');
-  //   });
-  //   expect(applyFilter).toHaveBeenCalled();
-  // });
+  it('enter clicked', () => {
+    const applyFilter = jest.fn();
+    const { container } = render(
+      <CustomDashboardListToolbar
+        applyFilter={applyFilter}
+        setFilterDashboardNames={jest.fn()}
+        filterDashboardNames={[]}
+      />
+    );
+    const searchInput = screen.getByTestId('search-input');
+    fireEvent.keyPress(searchInput, { key: 'Enter', code: 13 });
 
-  // it('enter clicked', () => {
-  //   const applyFilter = jest.fn();
-  //   const wrapper = mount(
-  //     <CustomDashboardListToolbar
-  //       applyFilter={applyFilter}
-  //       setFilterDashboardNames={jest.fn()}
-  //       filterDashboardNames={[]}
-  //     />
-  //   );
-  //   act(() => {
-  //     wrapper
-  //       .find('TextInputBase')
-  //       .props()
-  //       ['onKeyPress']({
-  //         key: 'Enter',
-  //         target: {
-  //           value: 'dashboard'
-  //         }
-  //       } as any);
-  //   });
-  //   wrapper.find('#apply-filter').find('button').simulate('click');
-  //   expect(applyFilter).toHaveBeenCalled();
-  // });
+    const applyFilterButton = screen.getByTestId('apply-filter');
 
-  // it('on delete chip', () => {
-  //   const applyFilter = jest.fn();
-  //   const wrapper = mount(
-  //     <CustomDashboardListToolbar
-  //       applyFilter={applyFilter}
-  //       setFilterDashboardNames={jest.fn()}
-  //       filterDashboardNames={[]}
-  //     />
-  //   );
-  //   act(() => {
-  //     wrapper
-  //       .find(ToolbarFilter)
-  //       .props()
-  //       ['deleteChip']('Custom Dashboard name', 'dashboard');
-  //   });
-  //   expect(applyFilter).toHaveBeenCalled();
-  // });
+    fireEvent.click(applyFilterButton);
+
+    expect(applyFilter).toHaveBeenCalled();
+  });
+
+  it('on delete chip', () => {
+    const applyFilter = jest.fn();
+    const { container } = render(
+      <CustomDashboardListToolbar
+        applyFilter={applyFilter}
+        setFilterDashboardNames={jest.fn()}
+        filterDashboardNames={['dashboard']}
+      />
+    );
+
+    const closeButton = screen.getByLabelText('close');
+    fireEvent.click(closeButton);
+
+    expect(applyFilter).toHaveBeenCalled();
+  });
 });

@@ -121,9 +121,11 @@ exports[`CustomWorkflowForm Test Custom Workflow Form - loading 2`] = `
     >
       <div
         class="pf-c-action-list"
+        data-testid="action-list"
       >
         <div
           class="pf-c-action-list__item"
+          data-testid="action-list-item"
         >
           <button
             aria-disabled="false"
@@ -138,6 +140,7 @@ exports[`CustomWorkflowForm Test Custom Workflow Form - loading 2`] = `
         </div>
         <div
           class="pf-c-action-list__item"
+          data-testid="action-list-item"
         >
           <button
             aria-disabled="false"
@@ -229,9 +232,11 @@ exports[`CustomWorkflowForm Test Custom Workflow Form rendering 1`] = `
     >
       <div
         class="pf-c-action-list"
+        data-testid="action-list"
       >
         <div
           class="pf-c-action-list__item"
+          data-testid="action-list-item"
         >
           <button
             aria-disabled="false"
@@ -246,6 +251,7 @@ exports[`CustomWorkflowForm Test Custom Workflow Form rendering 1`] = `
         </div>
         <div
           class="pf-c-action-list__item"
+          data-testid="action-list-item"
         >
           <button
             aria-disabled="false"
@@ -337,9 +343,11 @@ exports[`CustomWorkflowForm Test Custom Workflow Form with reset 1`] = `
     >
       <div
         class="pf-c-action-list"
+        data-testid="action-list"
       >
         <div
           class="pf-c-action-list__item"
+          data-testid="action-list-item"
         >
           <button
             aria-disabled="false"
@@ -354,6 +362,7 @@ exports[`CustomWorkflowForm Test Custom Workflow Form with reset 1`] = `
         </div>
         <div
           class="pf-c-action-list__item"
+          data-testid="action-list-item"
         >
           <button
             aria-disabled="false"
