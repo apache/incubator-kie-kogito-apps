@@ -1540,9 +1540,9 @@ importers:
       '@testing-library/jest-dom':
         specifier: ^5.16.5
         version: 5.16.5
-      '@types/enzyme':
-        specifier: ^3.10.13
-        version: 3.10.13
+      '@testing-library/react':
+        specifier: ^11.2.6
+        version: 11.2.7(react-dom@17.0.2)(react@17.0.2)
       '@types/jest':
         specifier: ^26.0.24
         version: 26.0.24
@@ -1552,21 +1552,12 @@ importers:
       '@types/react-dom':
         specifier: ^17.0.20
         version: 17.0.20
-      '@wojtekmaj/enzyme-adapter-react-17':
-        specifier: ^0.8.0
-        version: 0.8.0(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       babel-jest:
         specifier: ^25.5.1
         version: 25.5.1(@babel/core@7.22.8)
       copyfiles:
         specifier: ^2.4.1
         version: 2.4.1
-      enzyme:
-        specifier: ^3.11.0
-        version: 3.11.0
-      enzyme-to-json:
-        specifier: ^3.6.2
-        version: 3.6.2(enzyme@3.11.0)
       identity-obj-proxy:
         specifier: ^3.0.0
         version: 3.0.0
@@ -1743,9 +1734,9 @@ importers:
       '@testing-library/jest-dom':
         specifier: ^5.16.5
         version: 5.16.5
-      '@types/enzyme':
-        specifier: ^3.10.13
-        version: 3.10.13
+      '@testing-library/react':
+        specifier: ^11.2.6
+        version: 11.2.7(react-dom@17.0.2)(react@17.0.2)
       '@types/jest':
         specifier: ^26.0.24
         version: 26.0.24
@@ -1758,21 +1749,12 @@ importers:
       '@types/react-router-dom':
         specifier: ^5.3.3
         version: 5.3.3
-      '@wojtekmaj/enzyme-adapter-react-17':
-        specifier: ^0.8.0
-        version: 0.8.0(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       babel-jest:
         specifier: ^25.5.1
         version: 25.5.1(@babel/core@7.22.8)
       copyfiles:
         specifier: ^2.4.1
         version: 2.4.1
-      enzyme:
-        specifier: ^3.11.0
-        version: 3.11.0
-      enzyme-to-json:
-        specifier: ^3.6.2
-        version: 3.6.2(enzyme@3.11.0)
       identity-obj-proxy:
         specifier: ^3.0.0
         version: 3.0.0
@@ -9344,7 +9326,7 @@ packages:
       }
     requiresBuild: true
     dependencies:
-      '@types/node': 14.18.53
+      '@types/node': 20.4.1
     dev: true
     optional: true
 
@@ -11548,7 +11530,7 @@ packages:
     dependencies:
       ansi-align: 2.0.0
       camelcase: 4.1.0
-      chalk: 2.4.1
+      chalk: 2.4.2
       cli-boxes: 1.0.0
       string-width: 2.1.1
       term-size: 1.2.0
