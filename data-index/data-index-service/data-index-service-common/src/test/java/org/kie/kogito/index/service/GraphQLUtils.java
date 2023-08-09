@@ -133,6 +133,10 @@ public class GraphQLUtils {
         return getProcessInstanceQuery("ProcessInstanceByBusinessKey", businessKeys);
     }
 
+    public static String getProcessInstanceByIdentity(String identity) {
+        return getProcessInstanceQuery("ProcessInstanceByIdentity", identity);
+    }
+
     public static String getUserTaskInstanceById(String id) {
         return getUserTaskInstanceQuery("UserTaskInstanceById", id);
     }

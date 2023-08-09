@@ -38,6 +38,8 @@ message ProcessInstanceMeta {
     optional string businessKey = 13;
     /* @Field(store = Store.YES) */
     optional string version = 14;
+    /* @Field(store = Store.YES) */
+    optional string identity = 15;
 }
 
 /* @Indexed */
@@ -116,6 +118,8 @@ message ProcessInstance {
     repeated Milestone milestones = 18;
     /* @Field(store = Store.YES) */
     optional string version = 19;
+    /* @Field(store = Store.YES) */
+    optional string identity = 20;
 }
 
 /* @Indexed */

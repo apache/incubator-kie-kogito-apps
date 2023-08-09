@@ -100,6 +100,12 @@
       "bk": "%s"
     }
   },
+  "ProcessInstanceByIdentity": {
+    "query": "query ( $ident: String ) { ProcessInstances(where: { identity : { equal : $ident } }) { %s } }",
+    "variables": {
+      "ident": "%s"
+    }
+  },
   "UserTaskInstanceById": {
     "query": "query ( $id: String ) { UserTaskInstances( where: {  id: {  equal : $id } } ){ %s } }",
     "variables": {

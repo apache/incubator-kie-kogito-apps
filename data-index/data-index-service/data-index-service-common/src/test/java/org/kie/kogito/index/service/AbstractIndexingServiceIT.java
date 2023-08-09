@@ -201,7 +201,7 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
 
         IntStream.range(0, 100).forEach(i -> {
             String pId = UUID.randomUUID().toString();
-            ProcessInstanceDataEvent startEvent = getProcessCloudEvent(processId, pId, ACTIVE, null, null, null);
+            ProcessInstanceDataEvent startEvent = getProcessCloudEvent(processId, pId, ACTIVE, null, null, null, "currentUser");
             indexProcessCloudEvent(startEvent);
             pIds.add(pId);
             await()
@@ -294,7 +294,7 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
         String subProcessId = processId + "_sub";
         String subProcessInstanceId = UUID.randomUUID().toString();
 
-        ProcessInstanceDataEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
+        ProcessInstanceDataEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null, "currentUser");
         indexProcessCloudEvent(startEvent);
 
         validateProcessDefinition(getProcessDefinitionByIdAndVersion(startEvent.getKogitoProcessId(), startEvent.getData().getVersion()), startEvent);
@@ -309,8 +309,9 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
         validateProcessInstance(getProcessInstanceByIdAndMilestoneStatus(processInstanceId, MilestoneStatus.AVAILABLE.name()),
                 startEvent);
         validateProcessInstance(getProcessInstanceByBusinessKey(startEvent.getData().getBusinessKey()), startEvent);
+        validateProcessInstance(getProcessInstanceByIdentity(startEvent.getKogitoIdentity()), startEvent);
 
-        ProcessInstanceDataEvent endEvent = getProcessCloudEvent(processId, processInstanceId, COMPLETED, null, null, null);
+        ProcessInstanceDataEvent endEvent = getProcessCloudEvent(processId, processInstanceId, COMPLETED, null, null, null, "currentUser");
         endEvent.getData().update().endDate(new Date());
         Map<String, Object> variablesMap = getProcessInstanceVariablesMap();
         ((Map<String, Object>) variablesMap.get("hotel")).put("name", "Ibis");
@@ -323,7 +324,7 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
         validateProcessInstance(getProcessInstanceByIdAndMilestoneStatus(processInstanceId, MilestoneStatus.COMPLETED.name()), endEvent);
 
         ProcessInstanceDataEvent event = getProcessCloudEvent(subProcessId, subProcessInstanceId, ACTIVE, processInstanceId,
-                processId, processInstanceId);
+                processId, processInstanceId, "currentUser");
         indexProcessCloudEvent(event);
 
         validateProcessInstance(getProcessInstanceByParentProcessInstanceId(processInstanceId), event);
@@ -337,7 +338,7 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
                 event);
 
         ProcessInstanceDataEvent errorEvent = getProcessCloudEvent(subProcessId, subProcessInstanceId, ERROR, processInstanceId,
-                processId, processInstanceId);
+                processId, processInstanceId, "currentUser");
         indexProcessCloudEvent(errorEvent);
 
         validateProcessInstance(

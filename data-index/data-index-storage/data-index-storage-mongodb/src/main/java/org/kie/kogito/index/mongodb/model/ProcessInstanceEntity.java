@@ -64,6 +64,8 @@ public class ProcessInstanceEntity {
 
     List<MilestoneEntity> milestones;
 
+    String identity;
+
     public String getId() {
         return id;
     }
@@ -214,6 +216,14 @@ public class ProcessInstanceEntity {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
     }
 
     @Override

@@ -34,24 +34,7 @@ import org.mockito.InOrder;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singleton;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.ADDONS;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.BUSINESS_KEY;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.END;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.ENDPOINT;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.ERROR;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.ID;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.LAST_UPDATE;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.MILESTONES;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.NODES;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.PARENT_PROCESS_INSTANCE_ID;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.PROCESS_ID;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.PROCESS_NAME;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.ROLES;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.ROOT_PROCESS_ID;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.ROOT_PROCESS_INSTANCE_ID;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.START;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.STATE;
-import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.VARIABLES;
+import static org.kie.kogito.index.infinispan.protostream.ProcessInstanceMarshaller.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.inOrder;
@@ -82,6 +65,7 @@ class ProcessInstanceMarshallerTest {
         when(reader.readDate(LAST_UPDATE)).thenReturn(now);
         when(reader.readString(BUSINESS_KEY)).thenReturn("businessKey");
         when(reader.readCollection(eq(MILESTONES), any(), eq(Milestone.class))).thenReturn(new ArrayList<>());
+        when(reader.readString(IDENTITY)).thenReturn("currentUser");
 
         ProcessInstanceMarshaller marshaller = new ProcessInstanceMarshaller(null);
         ProcessInstance pi = marshaller.readFrom(reader);
@@ -105,7 +89,8 @@ class ProcessInstanceMarshallerTest {
                 .hasFieldOrPropertyWithValue(ERROR, null)
                 .hasFieldOrPropertyWithValue(LAST_UPDATE, marshaller.dateToZonedDateTime(now))
                 .hasFieldOrPropertyWithValue(BUSINESS_KEY, "businessKey")
-                .hasFieldOrPropertyWithValue(MILESTONES, emptyList());
+                .hasFieldOrPropertyWithValue(MILESTONES, emptyList())
+                .hasFieldOrPropertyWithValue(IDENTITY, "currentUser");
 
         InOrder inOrder = inOrder(reader);
         inOrder.verify(reader).readString(ID);
@@ -126,6 +111,7 @@ class ProcessInstanceMarshallerTest {
         inOrder.verify(reader).readDate(LAST_UPDATE);
         inOrder.verify(reader).readString(BUSINESS_KEY);
         inOrder.verify(reader).readCollection(MILESTONES, new ArrayList<>(), Milestone.class);
+        inOrder.verify(reader).readString(IDENTITY);
     }
 
     @Test
@@ -145,6 +131,7 @@ class ProcessInstanceMarshallerTest {
         pi.setStart(ZonedDateTime.now());
         pi.setError(new ProcessInstanceError("StartEvent_1", "Something went wrong"));
         pi.setMilestones(emptyList());
+        pi.setIdentity("currentUser");
 
         MessageMarshaller.ProtoStreamWriter writer = mock(MessageMarshaller.ProtoStreamWriter.class);
 
@@ -170,5 +157,6 @@ class ProcessInstanceMarshallerTest {
         inOrder.verify(writer).writeDate(LAST_UPDATE, marshaller.zonedDateTimeToDate(pi.getLastUpdate()));
         inOrder.verify(writer).writeString(BUSINESS_KEY, pi.getBusinessKey());
         inOrder.verify(writer).writeCollection(MILESTONES, pi.getMilestones(), Milestone.class);
+        inOrder.verify(writer).writeString(IDENTITY, pi.getIdentity());
     }
 }

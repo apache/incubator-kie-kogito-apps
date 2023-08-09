@@ -73,6 +73,7 @@ class ProcessInstanceEntityMapperTest {
         String processName = "testProcessName";
         Set<String> addons = Set.of("testAddons");
         String businessKey = "testBusinessKey";
+        String identity = "testIdentity";
 
         NodeInstance nodeInstance = new NodeInstance();
         nodeInstance.setId(nodeInstanceId);
@@ -111,6 +112,7 @@ class ProcessInstanceEntityMapperTest {
         processInstance.setLastUpdate(time);
         processInstance.setBusinessKey(businessKey);
         processInstance.setMilestones(List.of(milestone));
+        processInstance.setIdentity(identity);
 
         ProcessInstanceEntity.NodeInstanceEntity nodeInstanceEntity = new ProcessInstanceEntity.NodeInstanceEntity();
         nodeInstanceEntity.setId(nodeInstanceId);
@@ -149,6 +151,7 @@ class ProcessInstanceEntityMapperTest {
         processInstanceEntity.setLastUpdate(zonedDateTimeToInstant(time));
         processInstanceEntity.setBusinessKey(businessKey);
         processInstanceEntity.setMilestones(List.of(milestoneEntity));
+        processInstanceEntity.setIdentity(identity);
     }
 
     @Test

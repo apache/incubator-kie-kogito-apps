@@ -69,6 +69,7 @@ public class ProcessInstanceEntity extends AbstractEntity {
     private String parentProcessInstanceId;
     @Column(name = "lastUpdateTime")
     private ZonedDateTime lastUpdate;
+    private String identity;
     @Type(type = "jsonb")
     private ObjectNode variables;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "processInstance")
@@ -187,6 +188,14 @@ public class ProcessInstanceEntity extends AbstractEntity {
 
     public void setLastUpdate(ZonedDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
+    }
+
+    public String getIdentity() {
+        return identity;
+    }
+
+    public void setIdentity(String identity) {
+        this.identity = identity;
     }
 
     public ObjectNode getVariables() {
