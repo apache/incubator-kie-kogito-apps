@@ -20,6 +20,7 @@ import WorkflowFormPage from '../WorkflowFormPage';
 import { BrowserRouter } from 'react-router-dom';
 import { WorkflowFormGatewayApiImpl } from '../../../../channel/WorkflowForm/WorkflowFormGatewayApi';
 import * as WorkflowFormContext from '../../../../channel/WorkflowForm/WorkflowFormContext';
+import { act } from 'react-dom/test-utils';
 
 jest.mock('../../../containers/WorkflowFormContainer/WorkflowFormContainer');
 
@@ -51,5 +52,53 @@ describe('WorkflowFormPage tests', () => {
 
     expect(wrapper.find('WorkflowFormPage')).toMatchSnapshot();
     expect(wrapper.find('MockedWorkflowFormContainer').exists()).toBeTruthy();
+  });
+
+  it('test case for onSubmitSuccess prop',() => {
+    let wrapper;
+    act(() => {
+      wrapper = mount(
+        <BrowserRouter>
+          <WorkflowFormPage />
+        </BrowserRouter>
+      );
+    })
+      const successMessage =  {
+        type: 'success',
+        message: 'A workflow with id undefined was triggered successfully.',
+        details: undefined,
+        customActions: [ { label: 'Go to workflow list', onClick: ['Function: onClick'] } ],
+        close: ['Function: close']
+      }
+      wrapper
+        .find('MockedWorkflowFormContainer')
+        .props()
+        ['onSubmitSuccess']();
+      wrapper.update();
+      expect( wrapper.find('FormNotification').props()['notification'].message).toEqual(successMessage.message)
+  });
+
+  it('test case for onSubmitError prop',() => {
+    let wrapper;
+    act(() => {
+      wrapper = mount(
+        <BrowserRouter>
+          <WorkflowFormPage />
+        </BrowserRouter>
+      );
+      })
+      const errorMessage = {
+        type: 'error',
+        message: 'Failed to trigger workflow.',
+        details: undefined,
+        customActions: [ { label: 'Go to workflow list', onClick: ['Function: onClick'] } ],
+        close: ['Function: close']
+      }
+      wrapper
+        .find('MockedWorkflowFormContainer')
+        .props()
+        ['onSubmitError']();
+      wrapper.update();
+      expect( wrapper.find('FormNotification').props()['notification'].message).toEqual(errorMessage.message)
   });
 });

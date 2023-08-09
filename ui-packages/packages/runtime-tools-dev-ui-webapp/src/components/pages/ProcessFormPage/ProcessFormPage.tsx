@@ -32,13 +32,14 @@ import {
   Notification
 } from '@kogito-apps/components-common/dist/components/FormNotification';
 import InlineEdit from './components/InlineEdit/InlineEdit';
+import { ProcessFormGatewayApi } from 'packages/runtime-tools-dev-ui-webapp/src/channel/ProcessForm/ProcessFormGatewayApi';
 import { useProcessFormGatewayApi } from '../../../channel/ProcessForm/ProcessFormContext';
 
 const ProcessFormPage: React.FC<OUIAProps> = ({ ouiaId, ouiaSafe }) => {
   const [notification, setNotification] = useState<Notification>();
 
   const history = useHistory();
-  const gatewayApi = useProcessFormGatewayApi();
+  const gatewayApi: ProcessFormGatewayApi = useProcessFormGatewayApi();
 
   const processDefinition: ProcessDefinition =
     history.location.state['processDefinition'];

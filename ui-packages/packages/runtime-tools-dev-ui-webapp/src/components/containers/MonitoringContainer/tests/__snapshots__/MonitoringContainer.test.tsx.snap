@@ -1,0 +1,24 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`WebApp - MonitorinContainer tests Snapshot test 1`] = `
+<MonitoringContainer>
+  <MonitoringView
+    dashboard="MonitoringReport.dash.yml"
+  >
+    <MonitoringWebapp
+      dashboard="MonitoringReport.dash.yml"
+    >
+      <iframe
+        src="resources/webapp/monitoring-webapp/index.html?import=MonitoringReport.dash.yml"
+        style={
+          Object {
+            "height": "100%",
+            "padding": "10px",
+            "width": "100%",
+          }
+        }
+      />
+    </MonitoringWebapp>
+  </MonitoringView>
+</MonitoringContainer>
+`;
