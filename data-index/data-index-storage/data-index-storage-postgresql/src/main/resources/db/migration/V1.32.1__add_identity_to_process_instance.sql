@@ -1,2 +1,2 @@
 ALTER TABLE processes
-    ADD COLUMN identity VARCHAR(255);
+    ADD COLUMN identity character varying;
