@@ -78,7 +78,7 @@ public class ProcessInstanceMetaMapper implements Function<ProcessInstanceDataEv
             json.put("businessKey", event.getData().getBusinessKey());
         }
         if (!isNullOrEmpty(event.getData().getIdentity())) {
-            json.put("identity", event.getData().getIdentity());
+            json.put("updatedBy", event.getData().getIdentity());
         }
         return json;
     }

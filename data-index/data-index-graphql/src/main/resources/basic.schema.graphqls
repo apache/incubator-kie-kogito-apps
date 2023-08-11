@@ -70,6 +70,8 @@ type ProcessInstance {
     source: String
     definition: ProcessDefinition
     identity: String
+    createdBy: String
+    updatedBy: String
 }
 
 type ProcessInstanceError {
@@ -133,7 +135,8 @@ input ProcessInstanceOrderBy {
     error: ProcessInstanceErrorOrderBy
     lastUpdate: OrderBy
     businessKey: OrderBy
-    identity: OrderBy
+    createdBy: OrderBy
+    updatedBy: OrderBy
 }
 
 input ProcessInstanceErrorOrderBy {
@@ -162,7 +165,8 @@ input ProcessInstanceArgument {
     addons: StringArrayArgument
     lastUpdate: DateArgument
     businessKey: StringArgument
-    identity: StringArgument
+    createdBy: StringArgument
+    updatedBy: StringArgument
 }
 
 input ProcessInstanceErrorArgument {

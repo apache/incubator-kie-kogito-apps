@@ -39,7 +39,9 @@ message ProcessInstanceMeta {
     /* @Field(store = Store.YES) */
     optional string version = 14;
     /* @Field(store = Store.YES) */
-    optional string identity = 15;
+    optional string createdBy = 15;
+    /* @Field(store = Store.YES) */
+    optional string updatedBy = 16;
 }
 
 /* @Indexed */
@@ -119,7 +121,9 @@ message ProcessInstance {
     /* @Field(store = Store.YES) */
     optional string version = 19;
     /* @Field(store = Store.YES) */
-    optional string identity = 20;
+    optional string createdBy = 20;
+    /* @Field(store = Store.YES) */
+    optional string updatedBy = 21;
 }
 
 /* @Indexed */

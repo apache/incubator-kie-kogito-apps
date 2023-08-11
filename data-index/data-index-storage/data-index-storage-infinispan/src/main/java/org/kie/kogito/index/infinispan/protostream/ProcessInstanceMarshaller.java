@@ -50,7 +50,8 @@ public class ProcessInstanceMarshaller extends AbstractMarshaller implements Mes
     protected static final String LAST_UPDATE = "lastUpdate";
     protected static final String BUSINESS_KEY = "businessKey";
     protected static final String MILESTONES = "milestones";
-    protected static final String IDENTITY = "identity";
+    protected static final String CREATED_BY = "createdBy";
+    protected static final String UPDATED_BY = "updatedBy";
 
     public ProcessInstanceMarshaller(ObjectMapper mapper) {
         super(mapper);
@@ -78,7 +79,8 @@ public class ProcessInstanceMarshaller extends AbstractMarshaller implements Mes
         pi.setBusinessKey(reader.readString(BUSINESS_KEY));
         pi.setMilestones(reader.readCollection(MILESTONES, new ArrayList<>(), Milestone.class));
         pi.setVersion(reader.readString(VERSION));
-        pi.setIdentity(reader.readString(IDENTITY));
+        pi.setCreatedBy(reader.readString(CREATED_BY));
+        pi.setUpdatedBy(reader.readString(UPDATED_BY));
         return pi;
     }
 
@@ -103,7 +105,8 @@ public class ProcessInstanceMarshaller extends AbstractMarshaller implements Mes
         writer.writeString(BUSINESS_KEY, pi.getBusinessKey());
         writer.writeCollection(MILESTONES, pi.getMilestones(), Milestone.class);
         writer.writeString(VERSION, pi.getVersion());
-        writer.writeString(IDENTITY, pi.getIdentity());
+        writer.writeString(CREATED_BY, pi.getCreatedBy());
+        writer.writeString(UPDATED_BY, pi.getCreatedBy());
     }
 
     @Override

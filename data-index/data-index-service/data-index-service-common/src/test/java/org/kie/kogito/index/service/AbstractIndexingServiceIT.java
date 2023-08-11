@@ -59,6 +59,7 @@ import static org.kie.kogito.index.model.ProcessInstanceState.ERROR;
 import static org.kie.kogito.index.service.GraphQLUtils.getJobById;
 import static org.kie.kogito.index.service.GraphQLUtils.getProcessDefinitionByIdAndVersion;
 import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByBusinessKey;
+import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByCreatedBy;
 import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceById;
 import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByIdAndAddon;
 import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByIdAndErrorNode;
@@ -72,6 +73,7 @@ import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByIdAn
 import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByIdAndState;
 import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByParentProcessInstanceId;
 import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByRootProcessInstanceId;
+import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByUpdatedBy;
 import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceById;
 import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdAndActualOwner;
 import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdAndCompleted;
@@ -309,7 +311,8 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
         validateProcessInstance(getProcessInstanceByIdAndMilestoneStatus(processInstanceId, MilestoneStatus.AVAILABLE.name()),
                 startEvent);
         validateProcessInstance(getProcessInstanceByBusinessKey(startEvent.getData().getBusinessKey()), startEvent);
-        validateProcessInstance(getProcessInstanceByIdentity(startEvent.getKogitoIdentity()), startEvent);
+        validateProcessInstance(getProcessInstanceByCreatedBy(startEvent.getData().getIdentity()), startEvent);
+        validateProcessInstance(getProcessInstanceByUpdatedBy(startEvent.getData().getIdentity()), startEvent);
 
         ProcessInstanceDataEvent endEvent = getProcessCloudEvent(processId, processInstanceId, COMPLETED, null, null, null, "currentUser");
         endEvent.getData().update().endDate(new Date());

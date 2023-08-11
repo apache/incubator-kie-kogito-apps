@@ -1,2 +1,3 @@
 ALTER TABLE processes
-    ADD identity varchar(255);
+    ADD (created_by varchar(255),
+        updated_by varchar(255));

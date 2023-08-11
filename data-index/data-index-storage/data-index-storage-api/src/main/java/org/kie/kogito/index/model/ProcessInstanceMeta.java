@@ -41,8 +41,10 @@ public class ProcessInstanceMeta {
     private String rootProcessId;
     @JsonProperty("parentInstanceId")
     private String parentProcessInstanceId;
-    @JsonProperty("identity")
-    private String identity;
+    @JsonProperty("createdBy")
+    private String createdBy;
+    @JsonProperty("updatedBy")
+    private String updatedBy;
     private ZonedDateTime lastUpdate;
 
     public String getId() {
@@ -165,12 +167,20 @@ public class ProcessInstanceMeta {
         this.version = version;
     }
 
-    public String getIdentity() {
-        return identity;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    public void setIdentity(String identity) {
-        this.identity = identity;
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     @Override
@@ -190,7 +200,8 @@ public class ProcessInstanceMeta {
                 ", parentProcessInstanceId='" + parentProcessInstanceId + '\'' +
                 ", lastUpdated=" + lastUpdate +
                 ", version=" + version +
-                ", identity=" + identity +
+                ", createdBy=" + createdBy +
+                ", updatedBy=" + updatedBy +
                 '}';
     }
 

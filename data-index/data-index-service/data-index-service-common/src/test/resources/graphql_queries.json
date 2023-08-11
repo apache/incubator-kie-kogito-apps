@@ -100,8 +100,14 @@
       "bk": "%s"
     }
   },
-  "ProcessInstanceByIdentity": {
-    "query": "query ( $ident: String ) { ProcessInstances(where: { identity : { equal : $ident } }) { %s } }",
+  "ProcessInstanceByCreatedBy": {
+    "query": "query ( $ident: String ) { ProcessInstances(where: { createdBy : { equal : $ident } }) { %s } }",
+    "variables": {
+      "ident": "%s"
+    }
+  },
+  "ProcessInstanceByUpdatedBy": {
+    "query": "query ( $ident: String ) { ProcessInstances(where: { updatedBy : { equal : $ident } }) { %s } }",
     "variables": {
       "ident": "%s"
     }

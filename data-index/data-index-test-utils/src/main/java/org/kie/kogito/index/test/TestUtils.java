@@ -155,7 +155,8 @@ public final class TestUtils {
         }
         pi.setMilestones(getMilestones());
         pi.setBusinessKey(String.format("%s-key", processId));
-        pi.setIdentity("currentUser");
+        pi.setCreatedBy("currentUser");
+        pi.setUpdatedBy("currentUser");
         return pi;
     }
 

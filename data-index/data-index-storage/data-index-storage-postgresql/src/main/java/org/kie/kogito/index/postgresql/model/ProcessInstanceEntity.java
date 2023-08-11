@@ -69,7 +69,9 @@ public class ProcessInstanceEntity extends AbstractEntity {
     private String parentProcessInstanceId;
     @Column(name = "lastUpdateTime")
     private ZonedDateTime lastUpdate;
-    private String identity;
+    private String createdBy;
+
+    private String updatedBy;
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     private ObjectNode variables;
@@ -191,12 +193,20 @@ public class ProcessInstanceEntity extends AbstractEntity {
         this.lastUpdate = lastUpdate;
     }
 
-    public String getIdentity() {
-        return identity;
+    public String getCreatedBy() {
+        return createdBy;
     }
 
-    public void setIdentity(String identity) {
-        this.identity = identity;
+    public void setCreatedBy(String identity) {
+        this.createdBy = identity;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     public ObjectNode getVariables() {
@@ -280,6 +290,8 @@ public class ProcessInstanceEntity extends AbstractEntity {
                 ", rootProcessId='" + rootProcessId + '\'' +
                 ", parentProcessInstanceId='" + parentProcessInstanceId + '\'' +
                 ", lastUpdate=" + lastUpdate +
+                ", createdBy=" + createdBy +
+                ", updatedBy=" + updatedBy +
                 ", variables=" + variables +
                 ", nodes=" + nodes +
                 ", milestones=" + milestones +

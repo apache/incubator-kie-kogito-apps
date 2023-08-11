@@ -73,7 +73,8 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         entity.setBusinessKey(instance.getBusinessKey());
         entity.setMilestones(Optional.ofNullable(instance.getMilestones()).map(milestones -> milestones.stream().map(this::fromMilestone).collect(toList())).orElse(null));
         entity.setVersion(instance.getVersion());
-        entity.setIdentity(instance.getIdentity());
+        entity.setCreatedBy(instance.getCreatedBy());
+        entity.setUpdatedBy(instance.getUpdatedBy());
         return entity;
     }
 
@@ -103,8 +104,8 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         instance.setBusinessKey(entity.getBusinessKey());
         instance.setMilestones(Optional.ofNullable(entity.getMilestones()).map(milestones -> milestones.stream().map(this::toMilestone).collect(toList())).orElse(null));
         instance.setVersion(entity.getVersion());
-        instance.setMilestones(Optional.ofNullable(entity.getMilestones()).map(milesteons -> milesteons.stream().map(this::toMilestone).collect(toList())).orElse(null));
-        instance.setIdentity(entity.getIdentity());
+        instance.setCreatedBy(entity.getCreatedBy());
+        instance.setUpdatedBy(entity.getCreatedBy());
         return instance;
     }
 
