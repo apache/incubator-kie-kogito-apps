@@ -86,6 +86,7 @@ pipeline {
 MavenCommand getMavenCommand() {
     return new MavenCommand(this, ['-fae', '-ntp'])
                 .withSettingsXmlId('kogito_release_settings')
+                .withOptions(env.BUILD_MVN_OPTS ? [ env.BUILD_MVN_OPTS ] : [])
 }
 
 void setupCypressEnv(String cypressVersion) {
