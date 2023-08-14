@@ -15,8 +15,8 @@
  */
 package org.kie.kogito.jobs.service.json;
 
-import javax.enterprise.inject.Produces;
-import javax.inject.Singleton;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Singleton;
 
 import org.kie.kogito.jobs.service.api.serlialization.SerializationUtils;
 import org.slf4j.Logger;

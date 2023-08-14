@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.kie.kogito.explainability.api.LIMEExplainabilityResult;
 import org.kie.kogito.explainability.api.SaliencyModel;

@@ -20,8 +20,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.Collection;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.EventPublisher;

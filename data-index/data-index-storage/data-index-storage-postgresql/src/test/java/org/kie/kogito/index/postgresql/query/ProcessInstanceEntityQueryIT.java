@@ -16,7 +16,7 @@
 
 package org.kie.kogito.index.postgresql.query;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.postgresql.storage.ProcessInstanceEntityStorage;

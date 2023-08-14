@@ -16,10 +16,10 @@
 
 package org.kie.kogito.index.mongodb.storage;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.persistence.mongodb.index.IndexCreateOrUpdateEvent;

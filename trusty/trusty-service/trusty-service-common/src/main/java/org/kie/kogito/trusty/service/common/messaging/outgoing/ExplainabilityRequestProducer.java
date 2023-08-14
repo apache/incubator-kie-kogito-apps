@@ -19,7 +19,8 @@ package org.kie.kogito.trusty.service.common.messaging.outgoing;
 import java.net.URI;
 import java.util.Optional;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
+import mutiny.zero.flow.adapters.AdaptersToReactiveStreams;
 
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.kie.kogito.event.cloudevents.utils.CloudEventUtils;
@@ -53,6 +54,6 @@ public class ExplainabilityRequestProducer {
 
     @Outgoing("trusty-explainability-request")
     public Publisher<String> getEventPublisher() {
-        return eventSubject.toHotStream();
+        return AdaptersToReactiveStreams.publisher(eventSubject.toHotStream());
     }
 }

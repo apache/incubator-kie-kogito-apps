@@ -19,7 +19,7 @@ package org.kie.kogito.trusty.storage.api.model.process;
 import java.util.Collection;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.kie.kogito.ModelDomain;
 import org.kie.kogito.trusty.storage.api.model.Execution;

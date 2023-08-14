@@ -16,7 +16,7 @@
 
 package org.kie.kogito.index.mongodb.storage;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;

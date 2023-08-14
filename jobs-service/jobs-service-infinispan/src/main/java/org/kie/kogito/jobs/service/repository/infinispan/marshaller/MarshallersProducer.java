@@ -15,8 +15,8 @@
  */
 package org.kie.kogito.jobs.service.repository.infinispan.marshaller;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
 
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;

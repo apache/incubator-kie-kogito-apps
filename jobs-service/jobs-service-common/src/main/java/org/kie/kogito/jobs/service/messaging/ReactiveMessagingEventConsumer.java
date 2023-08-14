@@ -17,6 +17,7 @@ package org.kie.kogito.jobs.service.messaging;
 
 import java.util.Objects;
 
+import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.jobs.service.exception.JobServiceException;
 import org.kie.kogito.jobs.service.model.JobDetails;
@@ -74,7 +75,7 @@ public abstract class ReactiveMessagingEventConsumer {
         return Uni.createFrom().completionStage(jobRepository.get(job.getId()))
                 .flatMap(existingJob -> {
                     if (existingJob == null || existingJob.getStatus() == JobStatus.SCHEDULED) {
-                        return Uni.createFrom().publisher(scheduler.schedule(job));
+                        return Uni.createFrom().publisher(AdaptersToFlow.publisher(scheduler.schedule(job)));
                     } else {
                         LOGGER.info("A Job in status: {} already exists for the job id: {}, no processing will be done fot the event: {}.",
                                 existingJob.getStatus(),

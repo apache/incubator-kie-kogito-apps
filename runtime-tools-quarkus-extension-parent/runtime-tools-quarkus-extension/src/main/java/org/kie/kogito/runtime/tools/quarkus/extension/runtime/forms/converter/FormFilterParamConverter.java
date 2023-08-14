@@ -20,8 +20,8 @@ import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.ext.ParamConverter;
-import javax.ws.rs.ext.Provider;
+import jakarta.ws.rs.ext.ParamConverter;
+import jakarta.ws.rs.ext.Provider;
 
 import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormFilter;
 
