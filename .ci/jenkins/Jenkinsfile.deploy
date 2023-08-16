@@ -297,6 +297,7 @@ void runMavenDeploy(boolean skipTests = true, boolean localDeployment = false) {
 
     mvnCmd.withProperty('maven.test.failure.ignore', true)
         .withOptions(env.BUILD_MVN_OPTS_CURRENT ? [ env.BUILD_MVN_OPTS_CURRENT ] : [])
+        .withOptions(env.KOGITO_APPS_BUILD_MVN_OPTS ? [ env.KOGITO_APPS_BUILD_MVN_OPTS ] : [])
         .skipTests(skipTests)
         .run('clean deploy')
 }
