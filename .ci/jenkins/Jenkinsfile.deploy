@@ -137,8 +137,10 @@ pipeline {
             }
             steps {
                 script {
-                    // Stage release artifacts
-                    runMavenStage()
+                    dir(getRepoName()){
+                        // Stage release artifacts
+                        runMavenStage()
+                    }
                 }
             }
         }
