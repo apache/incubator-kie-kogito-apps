@@ -225,11 +225,9 @@ void commitAndCreatePR() {
     } else {
         prBody += '\nPlease review and merge.'
     }
-    dir(getRepoName()) {
-        githubscm.commitChanges(commitMsg, { githubscm.findAndStageNotIgnoredFiles('pom.xml') })
-        githubscm.pushObject('origin', getPRBranch(), getGitAuthorCredsID())
-        deployProperties["${getRepoName()}.pr.link"] = githubscm.createPRWithLabels(commitMsg, prBody, getBuildBranch(), ['skip-ci'] as String[], getGitAuthorCredsID()) 
-    }
+    githubscm.commitChanges(commitMsg, { githubscm.findAndStageNotIgnoredFiles('pom.xml') })
+    githubscm.pushObject('origin', getPRBranch(), getGitAuthorCredsID())
+    deployProperties["${getRepoName()}.pr.link"] = githubscm.createPRWithLabels(commitMsg, prBody, getBuildBranch(), ['skip-ci'] as String[], getGitAuthorCredsID()) 
 }
 
 boolean isSpecificArtifactsUpload() {
