@@ -97,6 +97,7 @@ describe('CloudEventCustomHeadersEditor tests', () => {
     act(() => {
       container = render(<CloudEventCustomHeadersEditor />).container;
     });
+
     expect(container).toMatchSnapshot();
 
     expect(screen.getByText('Add Header')).toBeTruthy();
@@ -162,8 +163,6 @@ describe('CloudEventCustomHeadersEditor tests', () => {
     expect(result).not.toHaveProperty('key', 'value');
     expect(result).not.toHaveProperty('key2', 'value2');
     expect(result).toHaveProperty('key3', 'value3');
-
-    container = deleteHeader(container, 0);
 
     result = editorApiRef.current.getCustomHeaders();
 

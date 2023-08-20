@@ -2063,9 +2063,9 @@ importers:
       '@testing-library/jest-dom':
         specifier: ^5.16.5
         version: 5.16.5
-      '@types/enzyme':
-        specifier: ^3.10.13
-        version: 3.10.13
+      '@testing-library/react':
+        specifier: ^11.2.6
+        version: 11.2.7(react-dom@17.0.2)(react@17.0.2)
       '@types/jest':
         specifier: ^26.0.24
         version: 26.0.24
@@ -2084,9 +2084,6 @@ importers:
       '@types/webpack':
         specifier: ^4.41.33
         version: 4.41.33
-      '@wojtekmaj/enzyme-adapter-react-17':
-        specifier: ^0.8.0
-        version: 0.8.0(enzyme@3.11.0)(react-dom@17.0.2)(react@17.0.2)
       apollo-server-express:
         specifier: ^2.26.1
         version: 2.26.1
@@ -2111,12 +2108,6 @@ importers:
       cypress:
         specifier: ^12.17.0
         version: 12.17.0
-      enzyme:
-        specifier: ^3.11.0
-        version: 3.11.0
-      enzyme-to-json:
-        specifier: ^3.6.2
-        version: 3.6.2(enzyme@3.11.0)
       express:
         specifier: ^4.18.2
         version: 4.18.2

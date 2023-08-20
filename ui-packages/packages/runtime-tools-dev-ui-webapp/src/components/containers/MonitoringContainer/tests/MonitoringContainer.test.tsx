@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2023 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,17 @@
  */
 
 import React from 'react';
+import MonitoringContainer from '../MonitoringContainer';
+import { act, render } from '@testing-library/react';
+import wait from 'waait';
 
-const MockedFormDetailsContainer = ({
-  onSuccess,
-  onError
-}): React.ReactElement => {
-  React.useEffect(() => {
-    onSuccess();
-    onError();
-  }, []);
-  return <></>;
-};
-
-export default MockedFormDetailsContainer;
+describe('MonitoringPage tests', () => {
+  it('Snapshot tests', async () => {
+    let container;
+    await act(async () => {
+      container = render(<MonitoringContainer />).container;
+      await wait(500);
+    });
+    expect(container).toMatchSnapshot();
+  });
+});
