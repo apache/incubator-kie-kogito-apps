@@ -18,9 +18,9 @@ package org.kie.kogito.trusty.storage.infinispan;
 
 import java.io.IOException;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 
 import org.infinispan.protostream.FileDescriptorSource;
 

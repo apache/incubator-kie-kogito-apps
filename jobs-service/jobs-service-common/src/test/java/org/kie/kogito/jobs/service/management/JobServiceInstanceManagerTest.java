@@ -20,8 +20,8 @@ import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
-import javax.enterprise.event.Event;
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.event.Event;
+import jakarta.enterprise.inject.Instance;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

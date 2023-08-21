@@ -18,9 +18,9 @@ package org.kie.kogito.index.postgresql.reporting.database;
 import java.util.Locale;
 import java.util.Objects;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 
 import org.kie.kogito.index.postgresql.model.JobEntityRepository;
 import org.kie.kogito.index.postgresql.model.ProcessInstanceEntityRepository;

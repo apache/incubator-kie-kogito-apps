@@ -18,16 +18,15 @@ package org.kie.kogito.persistence.postgresql.model;
 
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.Index;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.TypeDef;
 import org.kie.kogito.persistence.postgresql.hibernate.JsonBinaryType;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -36,7 +35,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @IdClass(CacheId.class)
 @Table(name = "kogito_data_cache", uniqueConstraints = @UniqueConstraint(columnNames = { "name",
         "key" }), indexes = @Index(columnList = "name,key", unique = true))
-@TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
 public class CacheEntity {
 
     @Id
@@ -47,7 +45,7 @@ public class CacheEntity {
     @Column(nullable = false)
     private String key;
 
-    @Type(type = "jsonb")
+    @Type(JsonBinaryType.class)
     @Column(name = "json_value", columnDefinition = "jsonb")
     private ObjectNode value;
 

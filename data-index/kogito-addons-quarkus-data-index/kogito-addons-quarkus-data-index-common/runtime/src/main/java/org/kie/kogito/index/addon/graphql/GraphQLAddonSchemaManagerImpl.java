@@ -15,7 +15,7 @@
  */
 package org.kie.kogito.index.addon.graphql;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.index.graphql.AbstractGraphQLSchemaManager;
 import org.kie.kogito.index.model.ProcessInstanceState;

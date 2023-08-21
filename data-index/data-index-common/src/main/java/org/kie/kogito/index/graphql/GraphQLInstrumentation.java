@@ -15,8 +15,8 @@
  */
 package org.kie.kogito.index.graphql;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

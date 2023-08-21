@@ -18,7 +18,7 @@ package org.kie.kogito.job.http.recipient;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.internal.utils.ConversionUtils;

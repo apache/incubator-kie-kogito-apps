@@ -16,8 +16,8 @@
 
 package org.kie.kogito.jobs.service.repository.mongodb.marshaller;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.repository.marshaller.JobDetailsMarshaller;

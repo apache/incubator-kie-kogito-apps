@@ -20,7 +20,7 @@ import java.net.URI;
 import java.time.Duration;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 import org.apache.commons.lang3.builder.CompareToBuilder;
 import org.awaitility.Awaitility;
