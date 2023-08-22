@@ -153,10 +153,10 @@ String getDroolsTargetBranch() {
 
 String getTargetBranch(Integer addToMajor) {
     String targetBranch = getBuildBranch()
-    String [] versionSplit = targetBranch.split("\\.")
+    List versionSplit = targetBranch.split("\\.") as List
 
     if (versionSplit[0].isNumber()) {
-        targetBranch = "${Integer.parseInt(versionSplit[0]) + addToMajor}.${(versionSplit as List).tail().join('.')}"
+        targetBranch = "${Integer.parseInt(versionSplit[0]) + addToMajor}.${versionSplit.tail().join('.')}"
     } else {
         echo "Cannot parse targetBranch as release branch so going further with current value: ${targetBranch}"
     }
