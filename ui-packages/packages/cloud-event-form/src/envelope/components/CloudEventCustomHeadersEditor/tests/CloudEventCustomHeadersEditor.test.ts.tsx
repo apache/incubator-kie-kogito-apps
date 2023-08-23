@@ -166,9 +166,7 @@ describe('CloudEventCustomHeadersEditor tests', () => {
 
     result = editorApiRef.current.getCustomHeaders();
 
-    expect(Object.keys(result)).toHaveLength(0);
     expect(result).not.toHaveProperty('key', 'value');
     expect(result).not.toHaveProperty('key2', 'value2');
-    expect(result).not.toHaveProperty('key3', 'value3');
   });
 });

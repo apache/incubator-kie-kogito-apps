@@ -16,7 +16,7 @@
 
 import React from 'react';
 import { act } from 'react-dom/test-utils';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { RuntimeToolsDevUIEnvelopeView } from '../RuntimeToolsDevUIEnvelopeView';
 import RuntimeTools from '../../components/DevUI/RuntimeTools/RuntimeTools';
 import { RuntimeToolsDevUIEnvelopeViewApi } from '../RuntimeToolsDevUIEnvelopeViewApi';
@@ -38,21 +38,40 @@ describe('RuntimeToolsDevUIEnvelopeView tests', () => {
         forwardRef.current.setDataIndexUrl('http://localhost:4000');
         forwardRef.current.setTrustyServiceUrl('http://localhost:1336');
         forwardRef.current.setUsers([]);
-        forwardRef.current.navigateTo('test');
+        forwardRef.current.navigateTo('/CustomDashboard');
         forwardRef.current.setDevUIUrl('http://localhost:8080');
         forwardRef.current.setOpenApiPath('/docs/openapi.json');
         forwardRef.current.setProcessEnabled(true);
         forwardRef.current.setTracingEnabled(true);
         forwardRef.current.setIsStunnerEnabled(false);
+        forwardRef.current.setAvailablePages([
+          'Processes',
+          'Monitoring',
+          'CustomDashboard'
+        ]);
+        forwardRef.current.setCustomLabels({
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        });
+        forwardRef.current.setOmittedProcessTimelineEvents([
+          'EmbeddedStart',
+          'EmbeddedEnd',
+          'Script'
+        ]);
+        forwardRef.current.setDiagramPreviewSize({
+          width: 1000,
+          height: 1000
+        });
       }
     });
-    // const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
 
-    // expect(container).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
-    // const devUI = envelopeView.find(RuntimeTools);
+    const RuntimeTools = container.querySelector(
+      'main[id="main-content-page-layout-default-nav"]'
+    );
 
-    // expect(devUI.exists()).toBeTruthy();
+    expect(RuntimeTools).toBeTruthy();
   });
 
   it('Snapshot::Process enabled, Trusty disabled', () => {
@@ -69,17 +88,35 @@ describe('RuntimeToolsDevUIEnvelopeView tests', () => {
         forwardRef.current.setDataIndexUrl('http://localhost:4000');
         forwardRef.current.setTrustyServiceUrl('http://localhost:8081');
         forwardRef.current.setUsers([]);
-        forwardRef.current.navigateTo('test');
+        forwardRef.current.navigateTo('/CustomDashboard');
         forwardRef.current.setIsStunnerEnabled(false);
+        forwardRef.current.setAvailablePages([
+          'Processes',
+          'Monitoring',
+          'CustomDashboard'
+        ]);
+        forwardRef.current.setCustomLabels({
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        });
+        forwardRef.current.setOmittedProcessTimelineEvents([
+          'EmbeddedStart',
+          'EmbeddedEnd',
+          'Script'
+        ]);
+        forwardRef.current.setDiagramPreviewSize({
+          width: 1000,
+          height: 1000
+        });
       }
     });
-    // const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
 
     expect(container).toMatchSnapshot();
+    const RuntimeTools = container.querySelector(
+      'main[id="main-content-page-layout-default-nav"]'
+    );
 
-    // const devUI = envelopeView.find(RuntimeTools);
-
-    // expect(devUI.exists()).toBeTruthy();
+    expect(RuntimeTools).toBeTruthy();
   });
 
   it('Snapshot::Process disabled, Trusty enabled', () => {
@@ -96,17 +133,36 @@ describe('RuntimeToolsDevUIEnvelopeView tests', () => {
         forwardRef.current.setDataIndexUrl('http://localhost:4000');
         forwardRef.current.setTrustyServiceUrl('http://localhost:8081');
         forwardRef.current.setUsers([]);
-        forwardRef.current.navigateTo('test');
+        forwardRef.current.navigateTo('/CustomDashboard');
         forwardRef.current.setIsStunnerEnabled(false);
+        forwardRef.current.setAvailablePages([
+          'Processes',
+          'Monitoring',
+          'CustomDashboard'
+        ]);
+        forwardRef.current.setCustomLabels({
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        });
+        forwardRef.current.setOmittedProcessTimelineEvents([
+          'EmbeddedStart',
+          'EmbeddedEnd',
+          'Script'
+        ]);
+        forwardRef.current.setDiagramPreviewSize({
+          width: 1000,
+          height: 1000
+        });
       }
     });
-    // const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
 
     expect(container).toMatchSnapshot();
 
-    // const devUI = envelopeView.find(RuntimeTools);
+    const RuntimeTools = container.querySelector(
+      'main[id="main-content-page-layout-default-nav"]'
+    );
 
-    // expect(devUI.exists()).toBeTruthy();
+    expect(RuntimeTools).toBeTruthy();
   });
 
   it('Snapshot::Process disabled, Trusty disabled', () => {
@@ -123,17 +179,36 @@ describe('RuntimeToolsDevUIEnvelopeView tests', () => {
         forwardRef.current.setDataIndexUrl('http://localhost:4000');
         forwardRef.current.setTrustyServiceUrl('http://localhost:8081');
         forwardRef.current.setUsers([]);
-        forwardRef.current.navigateTo('test');
+        forwardRef.current.navigateTo('/CustomDashboard');
         forwardRef.current.setIsStunnerEnabled(false);
+        forwardRef.current.setAvailablePages([
+          'Processes',
+          'Monitoring',
+          'CustomDashboard'
+        ]);
+        forwardRef.current.setCustomLabels({
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        });
+        forwardRef.current.setOmittedProcessTimelineEvents([
+          'EmbeddedStart',
+          'EmbeddedEnd',
+          'Script'
+        ]);
+        forwardRef.current.setDiagramPreviewSize({
+          width: 1000,
+          height: 1000
+        });
       }
     });
-    // const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
 
     expect(container).toMatchSnapshot();
 
-    // const devUI = envelopeView.find(RuntimeTools);
+    const RuntimeTools = container.querySelector(
+      'main[id="main-content-page-layout-default-nav"]'
+    );
 
-    // expect(devUI.exists()).toBeFalsy();
+    expect(RuntimeTools).toBeFalsy();
   });
 
   it('Snapshot::Process enabled, Trusty enabled, navitageTo empty', () => {
@@ -152,14 +227,32 @@ describe('RuntimeToolsDevUIEnvelopeView tests', () => {
         forwardRef.current.setUsers([]);
         forwardRef.current.navigateTo('');
         forwardRef.current.setIsStunnerEnabled(false);
+        forwardRef.current.setAvailablePages([
+          'Processes',
+          'Monitoring',
+          'CustomDashboard'
+        ]);
+        forwardRef.current.setCustomLabels({
+          singularProcessLabel: 'Workflow',
+          pluralProcessLabel: 'Workflows'
+        });
+        forwardRef.current.setOmittedProcessTimelineEvents([
+          'EmbeddedStart',
+          'EmbeddedEnd',
+          'Script'
+        ]);
+        forwardRef.current.setDiagramPreviewSize({
+          width: 1000,
+          height: 1000
+        });
       }
     });
-    // const envelopeView = wrapper.update().find(RuntimeToolsDevUIEnvelopeView);
 
     expect(container).toMatchSnapshot();
+    const RuntimeTools = container.querySelector(
+      'main[id="main-content-page-layout-default-nav"]'
+    );
 
-    // const devUI = envelopeView.find(RuntimeTools);
-
-    // expect(devUI.exists()).toBeFalsy();
+    expect(RuntimeTools).toBeFalsy();
   });
 });

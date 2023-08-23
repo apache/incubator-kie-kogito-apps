@@ -81,6 +81,19 @@ exports[`FormDetailsNotification test Notification with details 1`] = `
 </div>
 `;
 
+exports[`FormDetailsNotification test Notification with details 2`] = `
+<button
+  aria-disabled="false"
+  class="pf-c-button pf-m-link pf-m-inline"
+  data-ouia-component-id="OUIA-Generated-Button-link-1"
+  data-ouia-component-type="PF4/Button"
+  data-ouia-safe="true"
+  type="button"
+>
+  View details
+</button>
+`;
+
 exports[`FormDetailsNotification test Simple notification 1`] = `
 <div>
   <div

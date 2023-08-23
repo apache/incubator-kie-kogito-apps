@@ -48,11 +48,11 @@ describe('customDashboard list tests', () => {
       isEnvelopeConnectedToChannel: true,
       driver: driver
     };
-
+    let container;
     await act(async () => {
-      render(<CustomDashboardList {...props} />);
+      container = render(<CustomDashboardList {...props} />).container;
     });
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
 
   /* Re-enable card view after thumbnails are available */

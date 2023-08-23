@@ -39,7 +39,7 @@ describe('CustomDashboardListEnvelopeView tests', () => {
       ).container;
     });
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
     act(() => {
       if (forwardRef.current) {

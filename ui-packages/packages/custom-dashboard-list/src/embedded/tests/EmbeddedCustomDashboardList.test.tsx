@@ -29,7 +29,7 @@ describe('EmbeddedCustomDashboardList tests', () => {
 
     const { container } = render(<EmbeddedCustomDashboardList {...props} />);
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
     const contentDiv = container.querySelector('div');
 

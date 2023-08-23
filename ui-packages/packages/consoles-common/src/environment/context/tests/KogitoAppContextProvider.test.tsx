@@ -31,7 +31,7 @@ describe('KogitoAppContextProvider tests', () => {
       </KogitoAppContextProvider>
     );
 
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
 
     const MockedComponent = container.querySelector('div');
 

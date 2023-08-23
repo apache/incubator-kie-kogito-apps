@@ -27,22 +27,22 @@ describe('customDashboard card tests', () => {
   Date.now = jest.fn(() => 1487076708000);
   const driver = new MockedCustomDashboardListDriver();
   it('renders card - with tsx', () => {
-    render(
+    const { container } = render(
       <CustomDashboardCard
         driver={driver}
         customDashboardData={customDashboardInfos[0]}
       />
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
   it('renders card - with html', () => {
-    render(
+    const { container } = render(
       <CustomDashboardCard
         driver={driver}
         customDashboardData={customDashboardInfos[1]}
       />
     );
-    expect(screen).toMatchSnapshot();
+    expect(container).toMatchSnapshot();
   });
   it('simulate click on card', () => {
     const openDashboardSpy = jest.spyOn(driver, 'openDashboard');
