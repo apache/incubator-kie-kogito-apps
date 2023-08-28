@@ -68,13 +68,11 @@ public class KogitoIndexEventConverter implements MessageConverter {
                 if (processInstanceDataEvent.getData() == null) {
                     processInstanceDataEvent.setData(objectMapper.readValue(message.getPayload().toString(), ProcessInstanceEventBody.class));
                 }
-                LOGGER.error("---------------------------- Source: processInstanceEvent:" + processInstanceDataEvent.getSource());
                 return message.withPayload(processInstanceDataEvent);
             } else if (type.getTypeName().equals(KogitoJobCloudEvent.class.getTypeName())) {
                 KogitoJobCloudEvent event = objectMapper.readValue(message.getPayload().toString(), KogitoJobCloudEvent.class);
                 if (event.getData() == null) {
                     Job job = objectMapper.readValue(message.getPayload().toString(), Job.class);
-                    LOGGER.error("---------------------------- Source: jobEvent:" + event.getSource());
                     job.setEndpoint(event.getSource() != null ? event.getSource().toString() : "none");
                     event.setData(job);
                 }

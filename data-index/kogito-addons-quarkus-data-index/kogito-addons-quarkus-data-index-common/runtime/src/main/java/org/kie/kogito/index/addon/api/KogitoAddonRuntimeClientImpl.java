@@ -18,9 +18,11 @@ package org.kie.kogito.index.addon.api;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,23 +35,27 @@ import org.eclipse.microprofile.context.ManagedExecutor;
 import org.kie.kogito.Application;
 import org.kie.kogito.addon.source.files.SourceFilesProvider;
 import org.kie.kogito.index.api.KogitoRuntimeClient;
+import org.kie.kogito.index.api.KogitoRuntimeCommonClient;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.index.service.DataIndexServiceException;
 import org.kie.kogito.internal.process.runtime.KogitoWorkflowProcess;
+import org.kie.kogito.jobs.*;
 import org.kie.kogito.process.Process;
 import org.kie.kogito.process.ProcessInstanceExecutionException;
 import org.kie.kogito.process.Processes;
 import org.kie.kogito.process.impl.AbstractProcess;
 import org.kie.kogito.services.uow.UnitOfWorkExecutor;
 import org.kie.kogito.svg.ProcessSvgService;
+import org.kie.kogito.timer.TimerInstance;
 
 import static org.jbpm.ruleflow.core.Metadata.UNIQUE_ID;
+import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 
 @ApplicationScoped
-public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
+public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient implements KogitoRuntimeClient {
 
     private static String SUCCESSFULLY_OPERATION_MESSAGE = "Successfully performed: %s";
 
@@ -61,19 +67,27 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
 
     private Application application;
 
+    private JobsService jobsService;
+
     @Inject
     public KogitoAddonRuntimeClientImpl(Instance<ProcessSvgService> processSvgService,
             SourceFilesProvider sourceFilesProvider,
             Instance<Processes> processesInstance,
-            Instance<Application> application) {
+            Instance<Application> application,
+            Instance<JobsService> jobsService) {
         this.processSvgService = processSvgService.isResolvable() ? processSvgService.get() : null;
         this.sourceFilesProvider = sourceFilesProvider;
         this.processes = processesInstance.isResolvable() ? processesInstance.get() : null;
         this.application = application.isResolvable() ? application.get() : null;
+        this.jobsService = jobsService.isResolvable() ? jobsService.get() : null;
     }
 
     @Inject
     ManagedExecutor managedExecutor;
+
+    public void setJobsService(JobsService jobsService) {
+        this.jobsService = jobsService;
+    }
 
     static <T> CompletableFuture<T> throwUnsupportedException() {
         return CompletableFuture.failedFuture(new UnsupportedOperationException("Unsupported operation using Data Index addon"));
@@ -175,7 +189,7 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
                 throw new ProcessInstanceExecutionException(pInstance.id(), pInstance.error().get().failedNodeId(), pInstance.error().get().errorMessage());
             } else {
                 return String.format(SUCCESSFULLY_OPERATION_MESSAGE,
-                        "TRIGGER Node " + nodeDefinitionId + "from ProcessInstance with id: " + processInstance.getId());
+                        "TRIGGER Node " + nodeDefinitionId + FROM_PROCESS_INSTANCE_WITH_ID + processInstance.getId());
             }
         }));
     }
@@ -189,7 +203,7 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
                 throw new ProcessInstanceExecutionException(pInstance.id(), pInstance.error().get().failedNodeId(), pInstance.error().get().errorMessage());
             } else {
                 return String.format(SUCCESSFULLY_OPERATION_MESSAGE,
-                        "RETRIGGER Node instance " + nodeInstanceId + "from ProcessInstance with id: " + processInstance.getId());
+                        "RETRIGGER Node instance " + nodeInstanceId + FROM_PROCESS_INSTANCE_WITH_ID + processInstance.getId());
             }
         }));
     }
@@ -203,40 +217,9 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
                 throw new ProcessInstanceExecutionException(pInstance.id(), pInstance.error().get().failedNodeId(), pInstance.error().get().errorMessage());
             } else {
                 return String.format(SUCCESSFULLY_OPERATION_MESSAGE,
-                        "CANCEL Node instance " + nodeInstanceId + "from ProcessInstance with id: " + processInstance.getId());
+                        "CANCEL Node instance " + nodeInstanceId + FROM_PROCESS_INSTANCE_WITH_ID + processInstance.getId());
             }
         }));
-    }
-
-    public CompletableFuture<String> cancelJob(String serviceURL, Job job) {
-        return throwUnsupportedException();
-        /*
-         * if (jobResource == null) {
-         * return CompletableFuture.completedFuture(null);
-         * } else {
-         * return CompletableFuture.supplyAsync(() -> jobResource.delete(job.getId()).toString(),
-         * managedExecutor);
-         * }
-         */
-    }
-
-    public CompletableFuture<String> rescheduleJob(String serviceURL, Job job, String newJobData) throws UncheckedIOException {
-        return throwUnsupportedException();
-        /*
-         * if (jobResource == null) {
-         * return CompletableFuture.completedFuture(null);
-         * } else {
-         * return CompletableFuture.supplyAsync(() -> {
-         * try {
-         * return jobResource.patch(job.getId(), getObjectMapper().readValue(newJobData, org.kie.kogito.jobs.api.Job.class)).toString();
-         * } catch (JsonMappingException exception) {
-         * throw new UncheckedIOException(exception);
-         * } catch (JsonProcessingException e) {
-         * throw new RuntimeException(e);
-         * }
-         * }, managedExecutor);
-         * }
-         */
     }
 
     @Override
@@ -280,24 +263,6 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
         return throwUnsupportedException();
     }
 
-    private CompletableFuture<String> executeOnProcessInstanceOld(String processId, String processInstanceId, Function<org.kie.kogito.process.ProcessInstance<?>, String> supplier) {
-
-        Process<?> process = processes != null ? processes.processById(processId) : null;
-
-        if (process == null) {
-            return CompletableFuture.completedFuture(null);
-        }
-        return CompletableFuture.supplyAsync(() -> UnitOfWorkExecutor.executeInUnitOfWork(application.unitOfWorkManager(), () -> {
-            Optional<? extends org.kie.kogito.process.ProcessInstance<?>> processInstanceFound = process.instances().findById(processInstanceId);
-            if (processInstanceFound.isPresent()) {
-                org.kie.kogito.process.ProcessInstance<?> processInstance = processInstanceFound.get();
-                return supplier.apply(processInstance);
-            } else {
-                return String.format("Process instance with id %s not allow the operation requested", processInstanceId);
-            }
-        }), managedExecutor);
-    }
-
     private String executeOnProcessInstance(String processId, String processInstanceId, Function<org.kie.kogito.process.ProcessInstance<?>, String> supplier) {
 
         Process<?> process = processes != null ? processes.processById(processId) : null;
@@ -315,4 +280,99 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
             }
         });
     }
+
+    @Override
+    public CompletableFuture<String> cancelJob(String serviceURL, Job job) {
+        if (jobsService == null) {
+            return super.cancelJob(serviceURL, job);
+        }
+        if (jobsService.cancelJob(job.getId())) {
+            return CompletableFuture.completedFuture(String.format(SUCCESSFULLY_OPERATION_MESSAGE,
+                    "CANCEL Job with id" + job.getId() + FROM_PROCESS_INSTANCE_WITH_ID + job.getProcessInstanceId()));
+        }
+        return CompletableFuture.failedFuture(new DataIndexServiceException("Unable to CANCEL Job with id" + job.getId()));
+    }
+
+    @Override
+    public CompletableFuture<String> rescheduleJob(String serviceURL, Job job, String newJobData) {
+        if (jobsService == null) {
+            return super.rescheduleJob(serviceURL, job, newJobData);
+        }
+        try {
+            jobsService.cancelJob(job.getId());
+
+            //TODO : necessary create createDurationTimer and register??
+            Job newJob = getObjectMapper().readValue(newJobData, Job.class);
+            if (newJob.getExpirationTime() != null) {
+                job.setExpirationTime(newJob.getExpirationTime());
+            }
+            if (newJob.getPriority() != null) {
+                job.setPriority(newJob.getPriority());
+            }
+            if (newJob.getRepeatInterval() != null) {
+                job.setRepeatInterval(newJob.getRepeatInterval());
+            }
+            if (newJob.getRepeatLimit() != null) {
+                job.setRepeatLimit(newJob.getRepeatLimit());
+            }
+            if (newJob.getRetries() != null) {
+                job.setRetries(newJob.getRetries());
+            }
+            ProcessInstanceJobDescription description =
+                    ProcessInstanceJobDescription.builder()
+                            .id(job.getId())
+                            .timerId("-1")
+                            .expirationTime(new ExpirationTime() {
+                                @Override
+                                public ZonedDateTime get() {
+                                    return job.getExpirationTime();
+                                }
+
+                                @Override
+                                public Long repeatInterval() {
+                                    return job.getRepeatInterval();
+                                }
+
+                                @Override
+                                public Integer repeatLimit() {
+                                    return job.getRepeatLimit();
+                                }
+                            })
+                            .processInstanceId(job.getProcessInstanceId())
+                            .processId(job.getProcessId())
+                            .priority(job.getPriority())
+                            .build();
+            // TODO: how about passing retries?
+            if (jobsService.scheduleProcessInstanceJob(description) != null) {
+                return CompletableFuture.completedFuture(String.format(SUCCESSFULLY_OPERATION_MESSAGE,
+                        "RESCHEDULE Job with id" + job.getId() + FROM_PROCESS_INSTANCE_WITH_ID + job.getProcessInstanceId()));
+            }
+            return CompletableFuture.failedFuture(new DataIndexServiceException("Unable to RESCHEDULE Job with id" + job.getId()));
+        } catch (IOException e) {
+            return CompletableFuture.failedFuture(new DataIndexServiceException("Unable to RESCHEDULE Job with id" + job.getId(), e));
+        }
+    }
+
+    private TimerInstance createDurationTimer(long duration) {
+        TimerInstance timerInstance = new TimerInstance();
+        timerInstance.setId(UUID.randomUUID().toString());
+        timerInstance.setTimerId("-1");
+        timerInstance.setDelay(duration);
+        timerInstance.setPeriod(0);
+        return timerInstance;
+    }
+
+    private TimerInstance registerTimer(TimerInstance timerInstance, Job job) {
+        ProcessInstanceJobDescription description =
+                ProcessInstanceJobDescription.builder()
+                        .id(timerInstance.getId())
+                        .timerId(timerInstance.getTimerId())
+                        .expirationTime(DurationExpirationTime.after(timerInstance.getDelay()))
+                        .processInstanceId(job.getProcessInstanceId())
+                        .processId(job.getProcessId())
+                        .build();
+        jobsService.scheduleProcessInstanceJob(description);
+        return timerInstance;
+    }
+
 }

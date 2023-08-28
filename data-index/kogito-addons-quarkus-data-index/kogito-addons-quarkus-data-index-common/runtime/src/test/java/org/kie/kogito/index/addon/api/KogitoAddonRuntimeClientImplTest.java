@@ -24,9 +24,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.Application;
 import org.kie.kogito.addon.source.files.SourceFilesProvider;
-import org.kie.kogito.index.TestUtils;
+import org.kie.kogito.index.api.KogitoRuntimeCommonClient;
+import org.kie.kogito.index.api.KogitoRuntimeCommonClientTest;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessInstance;
+import org.kie.kogito.jobs.JobsService;
+import org.kie.kogito.jobs.ProcessInstanceJobDescription;
 import org.kie.kogito.process.ProcessError;
 import org.kie.kogito.process.ProcessInstanceExecutionException;
 import org.kie.kogito.process.ProcessInstances;
@@ -35,22 +38,20 @@ import org.kie.kogito.process.impl.AbstractProcess;
 import org.kie.kogito.services.uow.CollectingUnitOfWorkFactory;
 import org.kie.kogito.services.uow.DefaultUnitOfWorkManager;
 import org.kie.kogito.svg.ProcessSvgService;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import io.quarkus.security.credential.TokenCredential;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class KogitoAddonRuntimeClientImplTest {
+public class KogitoAddonRuntimeClientImplTest extends KogitoRuntimeCommonClientTest {
 
-    private static int ACTIVE = 1;
-    private static int ERROR = 5;
-    private static String SERVICE_URL = "http://runtimeURL.com";
-    private static String PROCESS_INSTANCE_ID = "pId";
     private static final String NODE_ID = "nodeId";
-    private static String TASK_ID = "taskId";
-    private static String JOB_ID = "jobId";
 
     public static final String NODE_ID_ERROR = "processInstanceIdError";
 
@@ -92,6 +93,12 @@ public class KogitoAddonRuntimeClientImplTest {
     @Mock
     private Application application;
 
+    @Mock
+    Instance<JobsService> jobsServiceInstance;
+
+    @Mock
+    private JobsService jobsService;
+
     @BeforeEach
     public void setup() {
         lenient().when(processSvgServiceInstance.isResolvable()).thenReturn(true);
@@ -110,8 +117,21 @@ public class KogitoAddonRuntimeClientImplTest {
         lenient().when(application.unitOfWorkManager()).thenReturn(new DefaultUnitOfWorkManager(new CollectingUnitOfWorkFactory()));
         lenient().when(applicationInstance.isResolvable()).thenReturn(true);
         lenient().when(applicationInstance.get()).thenReturn(application);
+        lenient().when(jobsService.cancelJob(anyString())).thenReturn(true);
+        lenient().when(jobsService.scheduleProcessInstanceJob(any(ProcessInstanceJobDescription.class))).thenReturn("OK");
+        lenient().when(jobsServiceInstance.isResolvable()).thenReturn(true);
+        lenient().when(jobsServiceInstance.get()).thenReturn(jobsService);
 
-        client = spy(new KogitoAddonRuntimeClientImpl(processSvgServiceInstance, sourceFilesProvider, processesInstance, applicationInstance));
+        client = spy(new KogitoAddonRuntimeClientImpl(processSvgServiceInstance, sourceFilesProvider, processesInstance, applicationInstance, jobsServiceInstance));
+        client.setGatewayTargetUrl(Optional.empty());
+        client.addServiceWebClient(SERVICE_URL, webClientMock);
+        client.setVertx(vertx);
+        client.setIdentity(identityMock);
+    }
+
+    @Override
+    public KogitoRuntimeCommonClient getClient() {
+        return client;
     }
 
     private org.kie.kogito.process.ProcessInstance mockProcessInstanceStatusActive() {
@@ -136,7 +156,7 @@ public class KogitoAddonRuntimeClientImplTest {
     }
 
     @Test
-    public void testAbortProcessInstanceSuccess() {
+    void testAbortProcessInstanceSuccess() {
         ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ACTIVE);
         mockProcessInstanceStatusActive().abort();
         client.abortProcessInstance(SERVICE_URL, pI);
@@ -145,7 +165,7 @@ public class KogitoAddonRuntimeClientImplTest {
     }
 
     @Test
-    public void testAbortProcessInstanceError() {
+    void testAbortProcessInstanceError() {
         ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ACTIVE);
         mockProcessInstanceStatusError().abort();
         assertThrows(ProcessInstanceExecutionException.class,
@@ -155,7 +175,7 @@ public class KogitoAddonRuntimeClientImplTest {
     }
 
     @Test
-    public void testRetryProcessInstance() {
+    void testRetryProcessInstance() {
         mockProcessInstanceStatusActiveOnError().retrigger();
         ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ACTIVE);
         client.retryProcessInstance(SERVICE_URL, pI);
@@ -165,7 +185,7 @@ public class KogitoAddonRuntimeClientImplTest {
     }
 
     @Test
-    public void testSkipProcessInstance() {
+    void testSkipProcessInstance() {
         mockProcessInstanceStatusActiveOnError().skip();
         ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ACTIVE);
         client.skipProcessInstance(SERVICE_URL, pI);
@@ -175,12 +195,7 @@ public class KogitoAddonRuntimeClientImplTest {
     }
 
     @Test
-    public void testUpdateProcessInstanceVariables() {
-
-    }
-
-    @Test
-    public void testTriggerNodeInstance() {
+    void testTriggerNodeInstance() {
         mockProcessInstanceStatusActive().triggerNode(NODE_ID);
         ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ACTIVE);
         client.triggerNodeInstance(SERVICE_URL, pI, NODE_ID);
@@ -189,7 +204,7 @@ public class KogitoAddonRuntimeClientImplTest {
     }
 
     @Test
-    public void testRetriggerNodeInstance() {
+    void testRetriggerNodeInstance() {
         mockProcessInstanceStatusActive().retriggerNodeInstance(NODE_ID);
         ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ACTIVE);
         client.retriggerNodeInstance(SERVICE_URL, pI, NODE_ID);
@@ -198,7 +213,7 @@ public class KogitoAddonRuntimeClientImplTest {
     }
 
     @Test
-    public void testCancelNodeInstance() {
+    void testCancelNodeInstance() {
         mockProcessInstanceStatusActive().cancelNodeInstance(NODE_ID);
         ProcessInstance pI = createProcessInstance(PROCESS_INSTANCE_ID, ACTIVE);
         client.cancelNodeInstance(SERVICE_URL, pI, NODE_ID);
@@ -207,31 +222,51 @@ public class KogitoAddonRuntimeClientImplTest {
     }
 
     @Test
-    public void testCancelJob() {
-
+    void testCancelJobWithRest() {
+        client.setJobsService(null);
+        testCancelJobRest();
     }
 
     @Test
-    public void testRescheduleJob() {
+    void testCancelJobWithInternalJobServiceInstance() {
+        client.setJobsService(jobsService);
+        Job job = createJob(JOB_ID, PROCESS_INSTANCE_ID, "SCHEDULED");
 
+        client.cancelJob(SERVICE_URL, job);
+        verify(jobsService).cancelJob(JOB_ID);
     }
 
     @Test
-    public void testGetProcessInstanceNodeDefinitions() {
-
+    protected void testRescheduleWithoutJobServiceInstance() {
+        client.setJobsService(null);
+        super.testRescheduleWithoutJobServiceInstance();
     }
 
     @Test
-    public void testGetProcessInstanceSource() {
+    void testRescheduleWithJobServiceInstance() {
+        client.setJobsService(jobsService);
+        String newJobData = "{\"expirationTime\": \"2023-08-27T04:35:54.631Z\",\"repeatInterval\": 2}";
 
+        Job job = createJob(JOB_ID, PROCESS_INSTANCE_ID, "SCHEDULED");
+        job.setRepeatLimit(3);
+        job.setRepeatInterval(3L);
+
+        getClient().rescheduleJob(SERVICE_URL, job, newJobData);
+        ArgumentCaptor<ProcessInstanceJobDescription> processInstanceJobDescriptionArgumentCaptor = ArgumentCaptor.forClass(ProcessInstanceJobDescription.class);
+
+        verify(jobsService).cancelJob(JOB_ID);
+        verify(jobsService).scheduleProcessInstanceJob(processInstanceJobDescriptionArgumentCaptor.capture());
+
+        assertThat(processInstanceJobDescriptionArgumentCaptor.getValue().expirationTime().get()).isEqualTo("2023-08-27T04:35:54.631Z");
+        assertThat(processInstanceJobDescriptionArgumentCaptor.getValue().expirationTime().repeatInterval()).isEqualTo(2);
+        assertThat(processInstanceJobDescriptionArgumentCaptor.getValue().expirationTime().repeatLimit()).isEqualTo(3);
     }
 
-    private ProcessInstance createProcessInstance(String processInstanceId, int status) {
-        return TestUtils.getProcessInstance("travels", processInstanceId, status, null, null);
-    }
-
-    private Job createJob(String jobId, String processInstanceId, String status) {
-        return TestUtils.getJob(jobId, "travels", processInstanceId, null, null, status);
+    protected void setupIdentityMock() {
+        tokenCredential = mock(TokenCredential.class);
+        when(identityMock.getCredential(TokenCredential.class)).thenReturn(tokenCredential);
+        when(tokenCredential.getToken()).thenReturn(AUTHORIZED_TOKEN);
+        when(httpRequestMock.putHeader(eq("Authorization"), anyString())).thenReturn(httpRequestMock);
     }
 
 }
