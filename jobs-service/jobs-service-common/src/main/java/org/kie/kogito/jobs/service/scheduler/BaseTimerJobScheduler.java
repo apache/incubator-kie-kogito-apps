@@ -26,6 +26,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
+import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.apache.commons.lang3.tuple.Pair;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
@@ -312,7 +313,7 @@ public abstract class BaseTimerJobScheduler implements ReactiveJobScheduler {
         return Uni.createFrom().completionStage(futureJob)
                 .onItem().invoke(job -> LOGGER.debug("Cancel Job Scheduling {}", job))
                 .chain(scheduledJob -> Optional.ofNullable(scheduledJob.getScheduledId())
-                        .map(id -> Uni.createFrom().publisher(this.doCancel(scheduledJob))
+                        .map(id -> Uni.createFrom().publisher(AdaptersToFlow.publisher(this.doCancel(scheduledJob)))
                                 .onItem().transform(b -> scheduledJob))
                         .orElse(Uni.createFrom().item(scheduledJob)))
                 //final state, removing the job

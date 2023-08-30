@@ -19,10 +19,10 @@ package org.kie.kogito.job.sink.recipient;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
+import jakarta.annotation.PostConstruct;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.job.recipient.common.http.HTTPRequest;
 import org.kie.kogito.job.recipient.common.http.HTTPRequestExecutor;

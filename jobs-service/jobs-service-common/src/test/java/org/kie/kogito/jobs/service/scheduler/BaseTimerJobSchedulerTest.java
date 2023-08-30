@@ -25,6 +25,7 @@ import java.util.concurrent.CompletionStage;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
+import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
@@ -355,7 +356,7 @@ public abstract class BaseTimerJobSchedulerTest {
 
     private void subscribeOn(Publisher<JobDetails> schedule) {
         Multi.createFrom()
-                .publisher(schedule)
+                .publisher(AdaptersToFlow.publisher(schedule))
                 .subscribe()
                 .with(dummyCallback(), dummyCallback());
     }

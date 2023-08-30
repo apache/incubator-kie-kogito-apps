@@ -18,7 +18,7 @@ package org.kie.kogito.trusty.service.common.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.explainability.api.CounterfactualExplainabilityResult;

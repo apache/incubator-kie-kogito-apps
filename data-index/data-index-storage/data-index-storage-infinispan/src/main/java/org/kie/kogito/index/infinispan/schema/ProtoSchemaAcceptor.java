@@ -18,7 +18,7 @@ package org.kie.kogito.index.infinispan.schema;
 
 import java.util.Optional;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.persistence.api.schema.SchemaAcceptor;
