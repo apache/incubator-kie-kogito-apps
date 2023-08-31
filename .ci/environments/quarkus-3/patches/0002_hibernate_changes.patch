@@ -39,7 +39,7 @@ index 1e20eccb9..23450b07f 100644
  
          Map<String, String> attachmentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
 diff --git a/data-index/data-index-service/data-index-service-common/src/test/java/org/kie/kogito/index/service/GraphQLUtils.java b/data-index/data-index-service/data-index-service-common/src/test/java/org/kie/kogito/index/service/GraphQLUtils.java
-index 99c322de0..d21dcfdcc 100644
+index 99c322de0..aae30d88d 100644
 --- a/data-index/data-index-service/data-index-service-common/src/test/java/org/kie/kogito/index/service/GraphQLUtils.java
 +++ b/data-index/data-index-service/data-index-service-common/src/test/java/org/kie/kogito/index/service/GraphQLUtils.java
 @@ -43,11 +43,28 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -72,7 +72,7 @@ index 99c322de0..d21dcfdcc 100644
      private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLUtils.class);
      private static final Map<Class, String> QUERY_FIELDS = new HashMap<>();
      private static final Map<String, String> QUERIES = new HashMap<>();
-@@ -74,103 +91,103 @@ public class GraphQLUtils {
+@@ -74,107 +91,107 @@ public class GraphQLUtils {
      }
  
      public static String getProcessDefinitionByIdAndVersion(String id, String version) {
@@ -202,15 +202,11 @@ index 99c322de0..d21dcfdcc 100644
      }
  
      public static String getJobById(String id) {
-@@ -178,7 +195,7 @@ public class GraphQLUtils {
+-        return getJobQuery("JobById", id);
++        return getJobQuery("JobById", Map.of(ID, id));
      }
  
      public static String getTravelsByUserTaskId(String id) {
--        return getQuery("TravelsByUserTaskId", id);
-+        return getQuery("TravelsByUserTaskId", id);
-     }
- 
-     public static String getTravelsByProcessInstanceId(String id) {
 @@ -197,10 +214,10 @@ public class GraphQLUtils {
          return getQuery("DealsByTaskIdNoActualOwner", id);
      }
