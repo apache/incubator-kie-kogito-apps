@@ -29,7 +29,7 @@ import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.persistence.api.Storage;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.index.TestUtils.getProcessInstance;
+import static org.kie.kogito.index.test.TestUtils.getProcessInstance;
 
 public abstract class AbstractStorageIT {
 
@@ -82,6 +82,7 @@ public abstract class AbstractStorageIT {
 
     @AfterEach
     void tearDown() {
+        cacheService.getProcessDefinitionsCache().clear();
         cacheService.getProcessInstancesCache().clear();
     }
 }

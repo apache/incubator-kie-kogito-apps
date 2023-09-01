@@ -16,11 +16,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>data-index-storage-infinispan</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>data-index-storage-protobuf</artifactId>
+      <artifactId>kogito-addons-quarkus-data-index-persistence-infinispan</artifactId>
     </dependency>
   </dependencies>
   <build>

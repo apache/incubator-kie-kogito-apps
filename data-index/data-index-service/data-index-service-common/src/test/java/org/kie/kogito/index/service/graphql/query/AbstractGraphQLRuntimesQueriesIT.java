@@ -41,14 +41,14 @@ import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.index.TestUtils.getJob;
-import static org.kie.kogito.index.TestUtils.getJobCloudEvent;
-import static org.kie.kogito.index.TestUtils.getProcessCloudEvent;
-import static org.kie.kogito.index.TestUtils.getProcessInstance;
-import static org.kie.kogito.index.TestUtils.getTaskAttachment;
-import static org.kie.kogito.index.TestUtils.getTaskComment;
-import static org.kie.kogito.index.TestUtils.getUserTaskCloudEvent;
 import static org.kie.kogito.index.model.ProcessInstanceState.ACTIVE;
+import static org.kie.kogito.index.test.TestUtils.getJob;
+import static org.kie.kogito.index.test.TestUtils.getJobCloudEvent;
+import static org.kie.kogito.index.test.TestUtils.getProcessCloudEvent;
+import static org.kie.kogito.index.test.TestUtils.getProcessInstance;
+import static org.kie.kogito.index.test.TestUtils.getTaskAttachment;
+import static org.kie.kogito.index.test.TestUtils.getTaskComment;
+import static org.kie.kogito.index.test.TestUtils.getUserTaskCloudEvent;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -126,14 +126,13 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
     }
 
     @Test
-    void testProcessInstanceNodeDefinitions() {
+    void testProcessDefinitionNodes() {
         String processInstanceId = UUID.randomUUID().toString();
         ProcessInstanceDataEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
         indexProcessCloudEvent(startEvent);
 
         checkOkResponse("{ \"query\" : \"query { ProcessInstances (where: { id: {equal: \\\"" + processInstanceId + "\\\"}}) { nodeDefinitions { id }} }\" }");
-        verify(dataIndexApiClient).getProcessInstanceNodeDefinitions(eq("http://localhost:8080"),
-                eq(getProcessInstance(processId, processInstanceId, 1, null, null)));
+        verify(dataIndexApiClient).getProcessDefinitionNodes(eq("http://localhost:8080"), eq(processId));
     }
 
     @Test
@@ -149,15 +148,14 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
     }
 
     @Test
-    void testProcessInstanceSource() {
+    void testProcessDefinitionSource() {
         String processInstanceId = UUID.randomUUID().toString();
         ProcessInstanceDataEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null);
         indexProcessCloudEvent(startEvent);
 
         checkOkResponse("{ \"query\" : \"query { ProcessInstances (where: { id: {equal: \\\"" + processInstanceId + "\\\"}}) {source} }\" }");
 
-        verify(dataIndexApiClient).getProcessInstanceSourceFileContent(eq("http://localhost:8080"),
-                eq(getProcessInstance(processId, processInstanceId, 1, null, null)));
+        verify(dataIndexApiClient).getProcessDefinitionSourceFileContent(eq("http://localhost:8080"), eq(processId));
     }
 
     @Test

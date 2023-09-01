@@ -41,8 +41,6 @@ import org.kie.kogito.process.Processes;
 import org.kie.kogito.process.impl.AbstractProcess;
 import org.kie.kogito.svg.ProcessSvgService;
 
-import static org.jbpm.ruleflow.core.Metadata.UNIQUE_ID;
-
 @ApplicationScoped
 public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
 
@@ -98,8 +96,8 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
     }
 
     @Override
-    public CompletableFuture<String> getProcessInstanceSourceFileContent(String serviceURL, ProcessInstance processInstance) {
-        return CompletableFuture.supplyAsync(() -> sourceFilesProvider.getProcessSourceFile(processInstance.getProcessId())
+    public CompletableFuture<String> getProcessDefinitionSourceFileContent(String serviceURL, String processId) {
+        return CompletableFuture.supplyAsync(() -> sourceFilesProvider.getProcessSourceFile(processId)
                 .map(sourceFile -> {
                     try {
                         return sourceFile.readContents();
@@ -108,12 +106,12 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
                     }
                 })
                 .map(String::new)
-                .orElseThrow(() -> new DataIndexServiceException("Source file not found for the specified process ID: " + processInstance.getProcessId())), managedExecutor);
+                .orElseThrow(() -> new DataIndexServiceException("Source file not found for the specified process ID: " + processId)), managedExecutor);
     }
 
     @Override
-    public CompletableFuture<List<Node>> getProcessInstanceNodeDefinitions(String serviceURL, ProcessInstance processInstance) {
-        Process<?> process = processes != null ? processes.processById(processInstance.getProcessId()) : null;
+    public CompletableFuture<List<Node>> getProcessDefinitionNodes(String serviceURL, String processId) {
+        Process<?> process = processes != null ? processes.processById(processId) : null;
         if (process == null) {
             return CompletableFuture.completedFuture(null);
         } else {
@@ -122,7 +120,7 @@ public class KogitoAddonRuntimeClientImpl implements KogitoRuntimeClient {
                 Node data = new Node();
                 data.setId(String.valueOf(n.getId()));
                 data.setNodeId(((org.jbpm.workflow.core.Node) n).getUniqueId());
-                data.setDefinitionId((String) n.getMetaData().get(UNIQUE_ID));
+                data.setMetadata(n.getMetaData());
                 data.setType(n.getClass().getSimpleName());
                 data.setName(n.getName());
                 return data;
