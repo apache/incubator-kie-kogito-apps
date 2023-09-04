@@ -27,6 +27,7 @@ import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
@@ -46,6 +47,8 @@ public class ProcessDefinitionEntity extends AbstractEntity {
     private String type;
 
     private String endpoint;
+
+    private byte[] source;
 
     @ElementCollection
     @JoinColumn(name = "id")
@@ -118,6 +121,14 @@ public class ProcessDefinitionEntity extends AbstractEntity {
 
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
+    }
+
+    public byte[] getSource() {
+        return source;
+    }
+
+    public void setSource(byte[] source) {
+        this.source = source;
     }
 
     @Override

@@ -31,6 +31,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
 
 @Entity(name = "definitions")
 @Table(name = "definitions")
@@ -44,6 +45,8 @@ public class ProcessDefinitionEntity extends AbstractEntity {
     private String version;
     private String name;
     private String type;
+
+    private byte[] source;
 
     @ElementCollection
     @JoinColumn(name = "id")
@@ -118,6 +121,14 @@ public class ProcessDefinitionEntity extends AbstractEntity {
 
     public void setEndpoint(String endpoint) {
         this.endpoint = endpoint;
+    }
+
+    public byte[] getSource() {
+        return source;
+    }
+
+    public void setSource(byte[] source) {
+        this.source = source;
     }
 
     @Override
