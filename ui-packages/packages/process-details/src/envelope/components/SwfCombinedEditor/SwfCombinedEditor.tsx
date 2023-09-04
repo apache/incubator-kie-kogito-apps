@@ -216,9 +216,8 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
             const successNodes = getSuccessNodes(
               nodes,
               nodeNames,
-              source,
               errorNode,
-              nodeDefinitions.map((nd) => nd.metadata)
+              (nodeDefinitions || []).map((nd) => nd.metadata)
             );
             if (successNodes.length > 0) {
               combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(

@@ -360,28 +360,36 @@ describe('test utils of jobs', () => {
     expect(setRescheduleError).toHaveBeenCalledWith(failedContent);
   });
 
-  it('test getOmmitedNodesForTimeline with json values', () => {
-    const source =
-      '{"id":"hello","version":"1.0","specVersion":"0.8.0","name":"HelloWorld","start":"HelloWorld","states":[{"name":"HelloWorld","type":"inject","data":{"message":"HelloWorld"},"end":true}]}';
-    const ommittedNodes = getOmmitedNodesForTimeline(nodeInstances, source);
+  it('test getOmmitedNodesForTimeline', () => {
+    const metaDataArray = [
+      {
+        UniqueId: '1',
+        state: 'HelloWorld',
+        branch: '',
+        action: ''
+      }
+    ];
+    const ommittedNodes = getOmmitedNodesForTimeline(
+      nodeInstances,
+      metaDataArray
+    );
     expect(ommittedNodes).toEqual(['branch-18', 'EmbeddedStart']);
   }),
-    it('test getOmmitedNodesForTimeline with yaml values', () => {
-      const source =
-        "id: hello\nversion: '1.0'\nspecVersion: 0.8.0\nname: Hello World\nstart: HelloWorld\nstates:\n- name: HelloWorld\n  type: inject\n  data:\n    message: Hello World\n  end: true\n";
-      const ommittedNodes = getOmmitedNodesForTimeline(nodeInstances, source);
-      expect(ommittedNodes).toEqual(['branch-18', 'EmbeddedStart']);
+    it('test getOmmitedNodesForTimeline with null values', () => {
+      const ommittedNodes = getOmmitedNodesForTimeline([], []);
+      expect(ommittedNodes).toEqual([]);
     });
 
-  it('test getOmmitedNodesForTimeline with null values', () => {
-    const ommittedNodes = getOmmitedNodesForTimeline([], null);
-    expect(ommittedNodes).toEqual([]);
-  });
-
   it('test getSuccessNodes with error node', () => {
-    const source =
-      '{"id":"hello","version":"1.0","specVersion":"0.8.0","name":"HelloWorld","start":"HelloWorld","states":[{"name":"HelloWorld","type":"inject","data":{"message":"HelloWorld"},"end":true}]}';
     const nodeNames = ['Start', 'HelloWorld', 'End'];
+    const metaDataArray = [
+      {
+        UniqueId: '1',
+        state: 'HelloWorld',
+        branch: '',
+        action: ''
+      }
+    ];
     const errorNode = {
       definitionId: '_jbpm-unique-6',
       enter: new Date('2023-07-19T09:22:43.372Z'),
@@ -394,8 +402,8 @@ describe('test utils of jobs', () => {
     const successNodes = getSuccessNodes(
       nodeInstances,
       nodeNames,
-      source,
-      errorNode
+      errorNode,
+      metaDataArray
     );
     expect(successNodes.length).not.toEqual(0);
     expect(successNodes).toEqual(['Start', 'HelloWorld', 'End']);

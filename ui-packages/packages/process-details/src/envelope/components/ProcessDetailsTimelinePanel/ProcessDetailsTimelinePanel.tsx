@@ -115,8 +115,7 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
       ...omittedProcessTimelineEvents,
       ...getOmmitedNodesForTimeline(
         data.nodes,
-        data.source,
-        data.nodeDefinitions.map((nd) => nd.metadata)
+        (data.nodeDefinitions || []).map((nd) => nd.metadata)
       )
     ];
   }, [data]);

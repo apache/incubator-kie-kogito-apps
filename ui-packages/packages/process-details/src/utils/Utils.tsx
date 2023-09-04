@@ -174,10 +174,9 @@ export const handleJobRescheduleUtil = async (
 
 export const getOmmitedNodesForTimeline = (
   nodes: NodeInstance[],
-  source: string | null,
   metaDataArray: NodeMetaData[]
 ): string[] => {
-  if (source && nodes.length > 0 && metaDataArray.length > 0) {
+  if (nodes.length > 0 && metaDataArray.length > 0) {
     const availableNodes = metaDataArray
       .map((metaData) => metaData.state)
       .concat(['Start', 'End'])
@@ -192,7 +191,6 @@ export const getOmmitedNodesForTimeline = (
 export const getSuccessNodes = (
   nodeInstances: NodeInstance[],
   nodeNames: string[],
-  source: string,
   errorNode: NodeInstance,
   metaDataArray: NodeMetaData[]
 ): string[] => {
@@ -204,7 +202,6 @@ export const getSuccessNodes = (
   );
   const ommitedNodesNames = getOmmitedNodesForTimeline(
     filteredSuccessNodeInstances,
-    source,
     metaDataArray
   );
   return successNodes.filter((name) => !ommitedNodesNames.includes(name));
