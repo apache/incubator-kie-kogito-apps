@@ -30,13 +30,15 @@ interface FormDetailsContainerProps {
   formData: FormInfo;
   onSuccess: () => void;
   onError: (details?: string) => void;
+  targetOrigin: string;
 }
 const FormDetailsContainer: React.FC<FormDetailsContainerProps & OUIAProps> = ({
   formData,
   onSuccess,
   onError,
   ouiaId,
-  ouiaSafe
+  ouiaSafe,
+  targetOrigin
 }) => {
   const gatewayApi: FormDetailsGatewayApi = useFormDetailsGatewayApi();
   const appContext = useDevUIAppContext();

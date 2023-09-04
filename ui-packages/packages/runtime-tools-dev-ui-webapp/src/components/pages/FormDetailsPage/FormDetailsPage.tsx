@@ -105,6 +105,7 @@ const FormDetailsPage: React.FC<OUIAProps> = () => {
             formData={formData}
             onSuccess={onSuccess}
             onError={onError}
+            targetOrigin={window.location.origin}
           />
         </Card>
       </PageSection>
