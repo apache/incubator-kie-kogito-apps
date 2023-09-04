@@ -16,7 +16,7 @@
 
 package org.kie.kogito.jitexecutor.dmn;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 

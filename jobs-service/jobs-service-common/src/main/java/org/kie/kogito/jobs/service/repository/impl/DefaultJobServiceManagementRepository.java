@@ -18,7 +18,7 @@ package org.kie.kogito.jobs.service.repository.impl;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Function;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;

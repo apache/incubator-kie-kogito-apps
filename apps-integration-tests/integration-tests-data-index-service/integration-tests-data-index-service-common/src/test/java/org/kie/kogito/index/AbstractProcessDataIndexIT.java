@@ -108,7 +108,7 @@ public abstract class AbstractProcessDataIndexIT {
                 .get("/approvals/{processId}/tasks")
                 .then()
                 .statusCode(200)
-                .body("$.size()", is(1))
+                .body("size()", is(1))
                 .body("[0].name", is("firstLineApproval"))
                 .body("[0].id", notNullValue())
                 .extract()
@@ -201,7 +201,7 @@ public abstract class AbstractProcessDataIndexIT {
                 .get("/approvals/{processId}/tasks")
                 .then()
                 .statusCode(200)
-                .body("$.size()", is(1))
+                .body("size()", is(1))
                 .body("[0].name", is("secondLineApproval"))
                 .body("[0].id", notNullValue())
                 .extract()
@@ -467,7 +467,7 @@ public abstract class AbstractProcessDataIndexIT {
                         .get("/approvals/{id}/firstLineApproval/{taskId}/comments")
                         .then()
                         .statusCode(200)
-                        .body("$.size()", is(1))
+                        .body("size()", is(1))
                         .body("[0].content", is(commentContent)));
 
         Map<String, String> commentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
@@ -565,7 +565,7 @@ public abstract class AbstractProcessDataIndexIT {
                         .get("/approvals/{id}/firstLineApproval/{taskId}/attachments")
                         .then()
                         .statusCode(200)
-                        .body("$.size()", is(1))
+                        .body("size()", is(1))
                         .body("[0].name", is(attachmentName)));
 
         Map<String, String> attachmentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)

@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.event.EventPublisher;

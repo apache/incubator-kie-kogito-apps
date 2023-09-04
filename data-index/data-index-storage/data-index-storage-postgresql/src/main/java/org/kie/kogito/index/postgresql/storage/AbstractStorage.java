@@ -19,7 +19,7 @@ package org.kie.kogito.index.postgresql.storage;
 import java.util.Map;
 import java.util.function.Function;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import org.kie.kogito.index.postgresql.model.AbstractEntity;
 import org.kie.kogito.persistence.api.Storage;

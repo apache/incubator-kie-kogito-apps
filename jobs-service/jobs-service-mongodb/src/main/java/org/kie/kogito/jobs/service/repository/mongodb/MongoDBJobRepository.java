@@ -19,10 +19,11 @@ package org.kie.kogito.jobs.service.repository.mongodb;
 import java.time.ZonedDateTime;
 import java.util.concurrent.CompletionStage;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 
+import mutiny.zero.flow.adapters.AdaptersToReactiveStreams;
 import org.bson.Document;
 import org.bson.json.JsonWriterSettings;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -142,28 +143,29 @@ public class MongoDBJobRepository extends BaseReactiveJobRepository implements R
 
     @Override
     public PublisherBuilder<JobDetails> findAll() {
-        return fromPublisher(collection.find()
-                .map(document -> documentToJson(document))
-                .map(jobDetailsMarshaller::unmarshall)
-                .emitOn(Infrastructure.getDefaultExecutor())
-                .convert()
-                .toPublisher());
+        return fromPublisher(
+                AdaptersToReactiveStreams.publisher(
+                        collection.find()
+                                .map(document -> documentToJson(document))
+                                .map(jobDetailsMarshaller::unmarshall)
+                                .emitOn(Infrastructure.getDefaultExecutor())
+                                .convert()
+                                .toPublisher()));
     }
 
     @Override
     public PublisherBuilder<JobDetails> findByStatusBetweenDatesOrderByPriority(ZonedDateTime from, ZonedDateTime to, JobStatus... status) {
         return fromPublisher(
+                AdaptersToReactiveStreams.publisher(
                 collection.find(
                         and(
                                 in(STATUS_COLUMN, stream(status).map(Enum::name).collect(toList())),
                                 gt(FIRE_TIME_COLUMN, from.toInstant().toEpochMilli()),
                                 lt(FIRE_TIME_COLUMN, to.toInstant().toEpochMilli())),
                         new FindOptions().sort(descending("priority")))
-                        .map(document -> documentToJson(document))
+                        .map(MongoDBJobRepository::documentToJson)
                         .map(jobDetailsMarshaller::unmarshall)
-                        .emitOn(Infrastructure.getDefaultExecutor())
-                        .convert()
-                        .toPublisher());
+                        .emitOn(Infrastructure.getDefaultExecutor())));
     }
 
     static JsonObject documentToJson(Document document) {

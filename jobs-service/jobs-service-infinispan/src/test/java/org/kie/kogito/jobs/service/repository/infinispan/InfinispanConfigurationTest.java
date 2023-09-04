@@ -15,8 +15,8 @@
  */
 package org.kie.kogito.jobs.service.repository.infinispan;
 
-import javax.enterprise.event.Event;
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.event.Event;
+import jakarta.enterprise.inject.Instance;
 
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;

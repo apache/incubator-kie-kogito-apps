@@ -16,7 +16,7 @@
 
 package org.kie.kogito.index.oracle.query;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.index.oracle.storage.UserTaskInstanceEntityStorage;

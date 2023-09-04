@@ -19,8 +19,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequest;
 import org.kie.kogito.explainability.api.CounterfactualExplainabilityResult;

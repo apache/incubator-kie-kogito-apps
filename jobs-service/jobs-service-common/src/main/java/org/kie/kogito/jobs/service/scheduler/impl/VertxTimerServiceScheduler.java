@@ -21,7 +21,7 @@ import java.time.chrono.ChronoZonedDateTime;
 import java.util.Collection;
 import java.util.Optional;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.jobs.service.model.ManageableJobHandle;
 import org.kie.kogito.jobs.service.utils.DateUtil;

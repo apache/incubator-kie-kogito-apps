@@ -18,7 +18,7 @@ package org.kie.kogito.index.postgresql.model;
 
 import java.util.Objects;
 
-import javax.persistence.Embeddable;
+import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class ProcessInstanceErrorEntity {
