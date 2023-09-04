@@ -86,13 +86,19 @@ export interface NodeInstance {
   definitionId: string;
   nodeId: string;
 }
-
+export interface NodeMetaData {
+  UniqueId: string;
+  state: string;
+  branch: string;
+  action: string;
+}
 export interface TriggerableNode {
   id: number;
   name: string;
   type: string;
   uniqueId: string;
   nodeDefinitionId: string;
+  metadata: NodeMetaData;
 }
 
 export interface Milestone {

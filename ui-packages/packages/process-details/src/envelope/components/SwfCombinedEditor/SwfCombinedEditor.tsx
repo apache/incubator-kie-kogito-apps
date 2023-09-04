@@ -57,7 +57,10 @@ enum NodeColors {
   SUCCESS_COLOR = '#d5f4e6'
 }
 interface ISwfCombinedEditorProps {
-  workflowInstance: Pick<ProcessInstance, 'source' | 'nodes' | 'error'>;
+  workflowInstance: Pick<
+    ProcessInstance,
+    'source' | 'nodes' | 'error' | 'nodeDefinitions'
+  >;
   isStunnerEnabled: boolean;
   width?: number;
   height?: number;
@@ -71,7 +74,7 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
-  const { source, nodes, error } = workflowInstance;
+  const { source, nodes, error, nodeDefinitions } = workflowInstance;
   const [editor, editorRef] = useController<EmbeddedEditorRef>();
   const [isReady, setReady] = useState<boolean>(false);
 
@@ -214,7 +217,8 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
               nodes,
               nodeNames,
               source,
-              errorNode
+              errorNode,
+              nodeDefinitions.map((nd) => nd.metadata)
             );
             if (successNodes.length > 0) {
               combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(

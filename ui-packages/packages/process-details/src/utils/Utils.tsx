@@ -19,7 +19,8 @@ import {
   JobStatus,
   Job,
   ProcessInstance,
-  NodeInstance
+  NodeInstance,
+  NodeMetaData
 } from '@kogito-apps/management-console-shared/dist/types';
 import { setTitle } from '@kogito-apps/management-console-shared/dist/utils/Utils';
 import { ClockIcon } from '@patternfly/react-icons/dist/js/icons/clock-icon';
@@ -28,7 +29,6 @@ import { UndoIcon } from '@patternfly/react-icons/dist/js/icons/undo-icon';
 import { ErrorCircleOIcon } from '@patternfly/react-icons/dist/js/icons/error-circle-o-icon';
 import { CheckCircleIcon } from '@patternfly/react-icons/dist/js/icons/check-circle-icon';
 import { ProcessDetailsDriver } from '../api';
-import { Specification } from '@severlessworkflow/sdk-typescript';
 
 export const JobsIconCreator = (state: JobStatus): JSX.Element => {
   switch (state) {
@@ -174,21 +174,17 @@ export const handleJobRescheduleUtil = async (
 
 export const getOmmitedNodesForTimeline = (
   nodes: NodeInstance[],
-  source: string | null
+  source: string | null,
+  metaDataArray: NodeMetaData[]
 ): string[] => {
-  if (source && nodes.length > 0) {
-    const nodesToOmmit = [];
-    const workflow: Specification.Workflow =
-      Specification.Workflow.fromSource(source);
-    const stateNames: string[] = workflow.states
-      .map((state) => state.name)
-      .concat(['Start', 'End']);
-    nodes.forEach((node) => {
-      if (!stateNames.includes(node.name)) {
-        nodesToOmmit.push(node.name);
-      }
-    });
-    return nodesToOmmit;
+  if (source && nodes.length > 0 && metaDataArray.length > 0) {
+    const availableNodes = metaDataArray
+      .map((metaData) => metaData.state)
+      .concat(['Start', 'End'])
+      .filter((metaData) => metaData !== null);
+    return nodes
+      .filter((node) => !availableNodes.includes(node.name))
+      .map((node) => node.name);
   }
   return [];
 };
@@ -197,7 +193,8 @@ export const getSuccessNodes = (
   nodeInstances: NodeInstance[],
   nodeNames: string[],
   source: string,
-  errorNode: NodeInstance
+  errorNode: NodeInstance,
+  metaDataArray: NodeMetaData[]
 ): string[] => {
   const successNodes = errorNode
     ? nodeNames.filter((nodeName) => nodeName !== errorNode.name)
@@ -207,7 +204,8 @@ export const getSuccessNodes = (
   );
   const ommitedNodesNames = getOmmitedNodesForTimeline(
     filteredSuccessNodeInstances,
-    source
+    source,
+    metaDataArray
   );
   return successNodes.filter((name) => !ommitedNodesNames.includes(name));
 };

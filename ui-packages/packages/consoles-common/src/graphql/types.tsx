@@ -1,19 +1,3 @@
-/*
- * Copyright 2022 Red Hat, Inc. and/or its affiliates.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 /* eslint-disable */
 import gql from 'graphql-tag';
 import * as ApolloReactCommon from '@apollo/react-common';
@@ -30,7 +14,7 @@ export namespace GraphQL {
   export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
     [SubKey in K]: Maybe<T[SubKey]>;
   };
-  const defaultOptions = {};
+  const defaultOptions = {} as const;
   /** All built-in and custom scalars, mapped to their actual values */
   export type Scalars = {
     ID: string;
@@ -38,40 +22,80 @@ export namespace GraphQL {
     Boolean: boolean;
     Int: number;
     Float: number;
-    /** An ISO-8601 compliant DateTime Scalar */
     DateTime: any;
+    JSON: any;
+    BigDecimal: any;
+    Long: any;
   };
 
-  export type Attachment = {
-    __typename?: 'Attachment';
-    content: Scalars['String'];
-    id: Scalars['String'];
-    name: Scalars['String'];
-    updatedAt: Scalars['DateTime'];
-    updatedBy: Scalars['String'];
+  export type Query = {
+    __typename?: 'Query';
+    Jobs?: Maybe<Array<Maybe<Job>>>;
+    ProcessDefinitions?: Maybe<Array<Maybe<ProcessDefinition>>>;
+    ProcessInstances?: Maybe<Array<Maybe<ProcessInstance>>>;
+    UserTaskInstances?: Maybe<Array<Maybe<UserTaskInstance>>>;
   };
 
-  export type AttachmentArgument = {
+  export type QueryJobsArgs = {
+    orderBy?: InputMaybe<JobOrderBy>;
+    pagination?: InputMaybe<Pagination>;
+    where?: InputMaybe<JobArgument>;
+  };
+
+  export type QueryProcessDefinitionsArgs = {
+    orderBy?: InputMaybe<ProcessDefinitionOrderBy>;
+    pagination?: InputMaybe<Pagination>;
+    where?: InputMaybe<ProcessDefinitionArgument>;
+  };
+
+  export type QueryProcessInstancesArgs = {
+    orderBy?: InputMaybe<ProcessInstanceOrderBy>;
+    pagination?: InputMaybe<Pagination>;
+    where?: InputMaybe<ProcessInstanceArgument>;
+  };
+
+  export type QueryUserTaskInstancesArgs = {
+    orderBy?: InputMaybe<UserTaskInstanceOrderBy>;
+    pagination?: InputMaybe<Pagination>;
+    where?: InputMaybe<UserTaskInstanceArgument>;
+  };
+
+  export type JobOrderBy = {
+    executionCounter?: InputMaybe<OrderBy>;
+    expirationTime?: InputMaybe<OrderBy>;
+    lastUpdate?: InputMaybe<OrderBy>;
+    priority?: InputMaybe<OrderBy>;
+    processId?: InputMaybe<OrderBy>;
+    retries?: InputMaybe<OrderBy>;
+    rootProcessId?: InputMaybe<OrderBy>;
+    status?: InputMaybe<OrderBy>;
+  };
+
+  export enum OrderBy {
+    Asc = 'ASC',
+    Desc = 'DESC'
+  }
+
+  export type Pagination = {
+    limit?: InputMaybe<Scalars['Int']>;
+    offset?: InputMaybe<Scalars['Int']>;
+  };
+
+  export type JobArgument = {
+    and?: InputMaybe<Array<JobArgument>>;
+    expirationTime?: InputMaybe<DateArgument>;
     id?: InputMaybe<IdArgument>;
-    name?: InputMaybe<StringArgument>;
-  };
-
-  export type BooleanArgument = {
-    equal?: InputMaybe<Scalars['Boolean']>;
-    isNull?: InputMaybe<Scalars['Boolean']>;
-  };
-
-  export type Comment = {
-    __typename?: 'Comment';
-    content: Scalars['String'];
-    id: Scalars['String'];
-    updatedAt: Scalars['DateTime'];
-    updatedBy: Scalars['String'];
-  };
-
-  export type CommentArgument = {
-    id?: InputMaybe<IdArgument>;
-    name?: InputMaybe<StringArgument>;
+    lastUpdate?: InputMaybe<DateArgument>;
+    nodeInstanceId?: InputMaybe<IdArgument>;
+    not?: InputMaybe<JobArgument>;
+    or?: InputMaybe<Array<JobArgument>>;
+    priority?: InputMaybe<NumericArgument>;
+    processId?: InputMaybe<StringArgument>;
+    processInstanceId?: InputMaybe<IdArgument>;
+    rootProcessId?: InputMaybe<StringArgument>;
+    rootProcessInstanceId?: InputMaybe<IdArgument>;
+    scheduledId?: InputMaybe<IdArgument>;
+    status?: InputMaybe<JobStatusArgument>;
   };
 
   export type DateArgument = {
@@ -95,6 +119,42 @@ export namespace GraphQL {
     isNull?: InputMaybe<Scalars['Boolean']>;
   };
 
+  export type NumericArgument = {
+    between?: InputMaybe<NumericRange>;
+    equal?: InputMaybe<Scalars['Int']>;
+    greaterThan?: InputMaybe<Scalars['Int']>;
+    greaterThanEqual?: InputMaybe<Scalars['Int']>;
+    in?: InputMaybe<Array<Scalars['Int']>>;
+    isNull?: InputMaybe<Scalars['Boolean']>;
+    lessThan?: InputMaybe<Scalars['Int']>;
+    lessThanEqual?: InputMaybe<Scalars['Int']>;
+  };
+
+  export type NumericRange = {
+    from: Scalars['Int'];
+    to: Scalars['Int'];
+  };
+
+  export type StringArgument = {
+    equal?: InputMaybe<Scalars['String']>;
+    in?: InputMaybe<Array<Scalars['String']>>;
+    isNull?: InputMaybe<Scalars['Boolean']>;
+    like?: InputMaybe<Scalars['String']>;
+  };
+
+  export type JobStatusArgument = {
+    equal?: InputMaybe<JobStatus>;
+    in?: InputMaybe<Array<InputMaybe<JobStatus>>>;
+  };
+
+  export enum JobStatus {
+    Canceled = 'CANCELED',
+    Error = 'ERROR',
+    Executed = 'EXECUTED',
+    Retry = 'RETRY',
+    Scheduled = 'SCHEDULED'
+  }
+
   export type Job = {
     __typename?: 'Job';
     callbackEndpoint?: Maybe<Scalars['String']>;
@@ -116,62 +176,177 @@ export namespace GraphQL {
     status: JobStatus;
   };
 
-  export type JobArgument = {
-    and?: InputMaybe<Array<JobArgument>>;
-    expirationTime?: InputMaybe<DateArgument>;
+  export type ProcessDefinitionOrderBy = {
+    id?: InputMaybe<OrderBy>;
+    name?: InputMaybe<OrderBy>;
+    version?: InputMaybe<OrderBy>;
+  };
+
+  export type ProcessDefinitionArgument = {
+    and?: InputMaybe<Array<ProcessDefinitionArgument>>;
+    id?: InputMaybe<StringArgument>;
+    name?: InputMaybe<StringArgument>;
+    not?: InputMaybe<ProcessDefinitionArgument>;
+    or?: InputMaybe<Array<ProcessDefinitionArgument>>;
+    version?: InputMaybe<StringArgument>;
+  };
+
+  export type ProcessDefinition = {
+    __typename?: 'ProcessDefinition';
+    addons?: Maybe<Array<Scalars['String']>>;
+    endpoint: Scalars['String'];
+    id: Scalars['String'];
+    name?: Maybe<Scalars['String']>;
+    nodes?: Maybe<Array<Node>>;
+    roles?: Maybe<Array<Scalars['String']>>;
+    serviceUrl?: Maybe<Scalars['String']>;
+    source?: Maybe<Scalars['String']>;
+    type?: Maybe<Scalars['String']>;
+    version?: Maybe<Scalars['String']>;
+  };
+
+  export type Node = {
+    __typename?: 'Node';
+    id: Scalars['String'];
+    metadata: NodeMetadata;
+    name: Scalars['String'];
+    type: Scalars['String'];
+    uniqueId: Scalars['String'];
+  };
+
+  export type NodeMetadata = {
+    __typename?: 'NodeMetadata';
+    action?: Maybe<Scalars['String']>;
+    branch?: Maybe<Scalars['String']>;
+    state?: Maybe<Scalars['String']>;
+    UniqueId: Scalars['String'];
+  };
+
+  export type ProcessInstanceOrderBy = {
+    businessKey?: InputMaybe<OrderBy>;
+    end?: InputMaybe<OrderBy>;
+    error?: InputMaybe<ProcessInstanceErrorOrderBy>;
+    lastUpdate?: InputMaybe<OrderBy>;
+    processId?: InputMaybe<OrderBy>;
+    processName?: InputMaybe<OrderBy>;
+    rootProcessId?: InputMaybe<OrderBy>;
+    start?: InputMaybe<OrderBy>;
+    state?: InputMaybe<OrderBy>;
+  };
+
+  export type ProcessInstanceErrorOrderBy = {
+    message?: InputMaybe<OrderBy>;
+    nodeDefinitionId?: InputMaybe<OrderBy>;
+  };
+
+  export type ProcessInstanceArgument = {
+    addons?: InputMaybe<StringArrayArgument>;
+    and?: InputMaybe<Array<ProcessInstanceArgument>>;
+    businessKey?: InputMaybe<StringArgument>;
+    end?: InputMaybe<DateArgument>;
+    endpoint?: InputMaybe<StringArgument>;
+    error?: InputMaybe<ProcessInstanceErrorArgument>;
     id?: InputMaybe<IdArgument>;
     lastUpdate?: InputMaybe<DateArgument>;
-    nodeInstanceId?: InputMaybe<IdArgument>;
-    not?: InputMaybe<JobArgument>;
-    or?: InputMaybe<Array<JobArgument>>;
-    priority?: InputMaybe<NumericArgument>;
+    milestones?: InputMaybe<MilestoneArgument>;
+    nodes?: InputMaybe<NodeInstanceArgument>;
+    not?: InputMaybe<ProcessInstanceArgument>;
+    or?: InputMaybe<Array<ProcessInstanceArgument>>;
+    parentProcessInstanceId?: InputMaybe<IdArgument>;
     processId?: InputMaybe<StringArgument>;
-    processInstanceId?: InputMaybe<IdArgument>;
+    processName?: InputMaybe<StringArgument>;
+    roles?: InputMaybe<StringArrayArgument>;
     rootProcessId?: InputMaybe<StringArgument>;
     rootProcessInstanceId?: InputMaybe<IdArgument>;
-    scheduledId?: InputMaybe<IdArgument>;
-    status?: InputMaybe<JobStatusArgument>;
+    start?: InputMaybe<DateArgument>;
+    state?: InputMaybe<ProcessInstanceStateArgument>;
   };
 
-  export type JobOrderBy = {
-    executionCounter?: InputMaybe<OrderBy>;
-    expirationTime?: InputMaybe<OrderBy>;
-    lastUpdate?: InputMaybe<OrderBy>;
-    priority?: InputMaybe<OrderBy>;
-    processId?: InputMaybe<OrderBy>;
-    retries?: InputMaybe<OrderBy>;
-    rootProcessId?: InputMaybe<OrderBy>;
-    status?: InputMaybe<OrderBy>;
+  export type StringArrayArgument = {
+    contains?: InputMaybe<Scalars['String']>;
+    containsAll?: InputMaybe<Array<Scalars['String']>>;
+    containsAny?: InputMaybe<Array<Scalars['String']>>;
+    isNull?: InputMaybe<Scalars['Boolean']>;
   };
 
-  export enum JobStatus {
-    Canceled = 'CANCELED',
-    Error = 'ERROR',
-    Executed = 'EXECUTED',
-    Retry = 'RETRY',
-    Scheduled = 'SCHEDULED'
+  export type ProcessInstanceErrorArgument = {
+    message?: InputMaybe<StringArgument>;
+    nodeDefinitionId?: InputMaybe<StringArgument>;
+  };
+
+  export type MilestoneArgument = {
+    id?: InputMaybe<IdArgument>;
+    name?: InputMaybe<StringArgument>;
+    status?: InputMaybe<MilestoneStatusArgument>;
+  };
+
+  export type MilestoneStatusArgument = {
+    equal?: InputMaybe<MilestoneStatus>;
+    in?: InputMaybe<Array<InputMaybe<MilestoneStatus>>>;
+  };
+
+  export enum MilestoneStatus {
+    Active = 'ACTIVE',
+    Available = 'AVAILABLE',
+    Completed = 'COMPLETED'
   }
 
-  export type JobStatusArgument = {
-    equal?: InputMaybe<JobStatus>;
-    in?: InputMaybe<Array<InputMaybe<JobStatus>>>;
+  export type NodeInstanceArgument = {
+    definitionId?: InputMaybe<StringArgument>;
+    enter?: InputMaybe<DateArgument>;
+    exit?: InputMaybe<DateArgument>;
+    id?: InputMaybe<IdArgument>;
+    name?: InputMaybe<StringArgument>;
+    nodeId?: InputMaybe<StringArgument>;
+    type?: InputMaybe<StringArgument>;
   };
 
-  export type KogitoMetadata = {
-    __typename?: 'KogitoMetadata';
+  export type ProcessInstanceStateArgument = {
+    equal?: InputMaybe<ProcessInstanceState>;
+    in?: InputMaybe<Array<InputMaybe<ProcessInstanceState>>>;
+  };
+
+  export enum ProcessInstanceState {
+    Aborted = 'ABORTED',
+    Active = 'ACTIVE',
+    Completed = 'COMPLETED',
+    Error = 'ERROR',
+    Pending = 'PENDING',
+    Suspended = 'SUSPENDED'
+  }
+
+  export type ProcessInstance = {
+    __typename?: 'ProcessInstance';
+    addons?: Maybe<Array<Scalars['String']>>;
+    businessKey?: Maybe<Scalars['String']>;
+    childProcessInstances?: Maybe<Array<ProcessInstance>>;
+    diagram?: Maybe<Scalars['String']>;
+    end?: Maybe<Scalars['DateTime']>;
+    endpoint: Scalars['String'];
+    error?: Maybe<ProcessInstanceError>;
+    id: Scalars['String'];
     lastUpdate: Scalars['DateTime'];
-    processInstances?: Maybe<Array<Maybe<ProcessInstanceMeta>>>;
-    userTasks?: Maybe<Array<Maybe<UserTaskInstanceMeta>>>;
+    milestones?: Maybe<Array<Milestone>>;
+    nodeDefinitions?: Maybe<Array<Node>>;
+    nodes: Array<NodeInstance>;
+    parentProcessInstance?: Maybe<ProcessInstance>;
+    parentProcessInstanceId?: Maybe<Scalars['String']>;
+    processId: Scalars['String'];
+    processName?: Maybe<Scalars['String']>;
+    roles?: Maybe<Array<Scalars['String']>>;
+    rootProcessId?: Maybe<Scalars['String']>;
+    rootProcessInstanceId?: Maybe<Scalars['String']>;
+    serviceUrl?: Maybe<Scalars['String']>;
+    source?: Maybe<Scalars['String']>;
+    start: Scalars['DateTime'];
+    state: ProcessInstanceState;
+    variables?: Maybe<Scalars['JSON']>;
   };
 
-  export type KogitoMetadataArgument = {
-    lastUpdate?: InputMaybe<DateArgument>;
-    processInstances?: InputMaybe<ProcessInstanceMetaArgument>;
-    userTasks?: InputMaybe<UserTaskInstanceMetaArgument>;
-  };
-
-  export type KogitoMetadataOrderBy = {
-    lastUpdate?: InputMaybe<OrderBy>;
+  export type ProcessInstanceError = {
+    __typename?: 'ProcessInstanceError';
+    message?: Maybe<Scalars['String']>;
+    nodeDefinitionId: Scalars['String'];
   };
 
   export type Milestone = {
@@ -181,21 +356,114 @@ export namespace GraphQL {
     status: MilestoneStatus;
   };
 
-  export type MilestoneArgument = {
-    id?: InputMaybe<IdArgument>;
-    name?: InputMaybe<StringArgument>;
-    status?: InputMaybe<MilestoneStatusArgument>;
+  export type NodeInstance = {
+    __typename?: 'NodeInstance';
+    definitionId: Scalars['String'];
+    enter: Scalars['DateTime'];
+    exit?: Maybe<Scalars['DateTime']>;
+    id: Scalars['String'];
+    name: Scalars['String'];
+    nodeId: Scalars['String'];
+    type: Scalars['String'];
   };
 
-  export enum MilestoneStatus {
-    Active = 'ACTIVE',
-    Available = 'AVAILABLE',
-    Completed = 'COMPLETED'
-  }
+  export type UserTaskInstanceOrderBy = {
+    actualOwner?: InputMaybe<OrderBy>;
+    completed?: InputMaybe<OrderBy>;
+    description?: InputMaybe<OrderBy>;
+    lastUpdate?: InputMaybe<OrderBy>;
+    name?: InputMaybe<OrderBy>;
+    priority?: InputMaybe<OrderBy>;
+    processId?: InputMaybe<OrderBy>;
+    referenceName?: InputMaybe<OrderBy>;
+    started?: InputMaybe<OrderBy>;
+    state?: InputMaybe<OrderBy>;
+  };
 
-  export type MilestoneStatusArgument = {
-    equal?: InputMaybe<MilestoneStatus>;
-    in?: InputMaybe<Array<InputMaybe<MilestoneStatus>>>;
+  export type UserTaskInstanceArgument = {
+    actualOwner?: InputMaybe<StringArgument>;
+    adminGroups?: InputMaybe<StringArrayArgument>;
+    adminUsers?: InputMaybe<StringArrayArgument>;
+    and?: InputMaybe<Array<UserTaskInstanceArgument>>;
+    attachments?: InputMaybe<AttachmentArgument>;
+    comments?: InputMaybe<CommentArgument>;
+    completed?: InputMaybe<DateArgument>;
+    description?: InputMaybe<StringArgument>;
+    excludedUsers?: InputMaybe<StringArrayArgument>;
+    id?: InputMaybe<IdArgument>;
+    lastUpdate?: InputMaybe<DateArgument>;
+    name?: InputMaybe<StringArgument>;
+    not?: InputMaybe<UserTaskInstanceArgument>;
+    or?: InputMaybe<Array<UserTaskInstanceArgument>>;
+    potentialGroups?: InputMaybe<StringArrayArgument>;
+    potentialUsers?: InputMaybe<StringArrayArgument>;
+    priority?: InputMaybe<StringArgument>;
+    processId?: InputMaybe<StringArgument>;
+    processInstanceId?: InputMaybe<IdArgument>;
+    referenceName?: InputMaybe<StringArgument>;
+    started?: InputMaybe<DateArgument>;
+    state?: InputMaybe<StringArgument>;
+  };
+
+  export type AttachmentArgument = {
+    id?: InputMaybe<IdArgument>;
+    name?: InputMaybe<StringArgument>;
+  };
+
+  export type CommentArgument = {
+    id?: InputMaybe<IdArgument>;
+    name?: InputMaybe<StringArgument>;
+  };
+
+  export type UserTaskInstance = {
+    __typename?: 'UserTaskInstance';
+    actualOwner?: Maybe<Scalars['String']>;
+    adminGroups?: Maybe<Array<Scalars['String']>>;
+    adminUsers?: Maybe<Array<Scalars['String']>>;
+    attachments?: Maybe<Array<Attachment>>;
+    comments?: Maybe<Array<Comment>>;
+    completed?: Maybe<Scalars['DateTime']>;
+    description?: Maybe<Scalars['String']>;
+    endpoint?: Maybe<Scalars['String']>;
+    excludedUsers?: Maybe<Array<Scalars['String']>>;
+    id: Scalars['String'];
+    inputs?: Maybe<Scalars['String']>;
+    lastUpdate: Scalars['DateTime'];
+    name?: Maybe<Scalars['String']>;
+    outputs?: Maybe<Scalars['String']>;
+    potentialGroups?: Maybe<Array<Scalars['String']>>;
+    potentialUsers?: Maybe<Array<Scalars['String']>>;
+    priority?: Maybe<Scalars['String']>;
+    processId: Scalars['String'];
+    processInstanceId: Scalars['String'];
+    referenceName?: Maybe<Scalars['String']>;
+    rootProcessId?: Maybe<Scalars['String']>;
+    rootProcessInstanceId?: Maybe<Scalars['String']>;
+    schema?: Maybe<Scalars['String']>;
+    started: Scalars['DateTime'];
+    state: Scalars['String'];
+  };
+
+  export type UserTaskInstanceSchemaArgs = {
+    groups?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
+    user?: InputMaybe<Scalars['String']>;
+  };
+
+  export type Attachment = {
+    __typename?: 'Attachment';
+    content: Scalars['String'];
+    id: Scalars['String'];
+    name: Scalars['String'];
+    updatedAt: Scalars['DateTime'];
+    updatedBy: Scalars['String'];
+  };
+
+  export type Comment = {
+    __typename?: 'Comment';
+    content: Scalars['String'];
+    id: Scalars['String'];
+    updatedAt: Scalars['DateTime'];
+    updatedBy: Scalars['String'];
   };
 
   export type Mutation = {
@@ -316,127 +584,58 @@ export namespace GraphQL {
     user?: InputMaybe<Scalars['String']>;
   };
 
-  export type Node = {
-    __typename?: 'Node';
-    id: Scalars['String'];
-    name: Scalars['String'];
-    nodeDefinitionId: Scalars['String'];
-    type: Scalars['String'];
-    uniqueId: Scalars['String'];
+  export type Subscription = {
+    __typename?: 'Subscription';
+    JobAdded: Job;
+    JobUpdated: Job;
+    ProcessInstanceAdded: ProcessInstance;
+    ProcessInstanceUpdated: ProcessInstance;
+    UserTaskInstanceAdded: UserTaskInstance;
+    UserTaskInstanceUpdated: UserTaskInstance;
   };
 
-  export type NodeInstance = {
-    __typename?: 'NodeInstance';
-    definitionId: Scalars['String'];
-    enter: Scalars['DateTime'];
-    exit?: Maybe<Scalars['DateTime']>;
-    id: Scalars['String'];
-    name: Scalars['String'];
-    nodeId: Scalars['String'];
-    type: Scalars['String'];
-  };
-
-  export type NodeInstanceArgument = {
-    definitionId?: InputMaybe<StringArgument>;
-    enter?: InputMaybe<DateArgument>;
-    exit?: InputMaybe<DateArgument>;
-    id?: InputMaybe<IdArgument>;
-    name?: InputMaybe<StringArgument>;
-    nodeId?: InputMaybe<StringArgument>;
-    type?: InputMaybe<StringArgument>;
-  };
-
-  export type NumericArgument = {
-    between?: InputMaybe<NumericRange>;
-    equal?: InputMaybe<Scalars['Int']>;
-    greaterThan?: InputMaybe<Scalars['Int']>;
-    greaterThanEqual?: InputMaybe<Scalars['Int']>;
-    in?: InputMaybe<Array<Scalars['Int']>>;
+  export type BigDecimalArgument = {
+    between?: InputMaybe<BigDecimalRange>;
+    equal?: InputMaybe<Scalars['BigDecimal']>;
+    greaterThan?: InputMaybe<Scalars['BigDecimal']>;
+    greaterThanEqual?: InputMaybe<Scalars['BigDecimal']>;
+    in?: InputMaybe<Array<Scalars['BigDecimal']>>;
     isNull?: InputMaybe<Scalars['Boolean']>;
-    lessThan?: InputMaybe<Scalars['Int']>;
-    lessThanEqual?: InputMaybe<Scalars['Int']>;
+    lessThan?: InputMaybe<Scalars['BigDecimal']>;
+    lessThanEqual?: InputMaybe<Scalars['BigDecimal']>;
   };
 
-  export type NumericRange = {
-    from: Scalars['Int'];
-    to: Scalars['Int'];
+  export type BigDecimalRange = {
+    from: Scalars['BigDecimal'];
+    to: Scalars['BigDecimal'];
   };
 
-  export enum OrderBy {
-    Asc = 'ASC',
-    Desc = 'DESC'
-  }
-
-  export type Pagination = {
-    limit?: InputMaybe<Scalars['Int']>;
-    offset?: InputMaybe<Scalars['Int']>;
+  export type BooleanArgument = {
+    equal?: InputMaybe<Scalars['Boolean']>;
+    isNull?: InputMaybe<Scalars['Boolean']>;
   };
 
-  export type ProcessInstance = {
-    __typename?: 'ProcessInstance';
-    addons?: Maybe<Array<Scalars['String']>>;
-    businessKey?: Maybe<Scalars['String']>;
-    childProcessInstances?: Maybe<Array<ProcessInstance>>;
-    diagram?: Maybe<Scalars['String']>;
-    end?: Maybe<Scalars['DateTime']>;
-    endpoint: Scalars['String'];
-    error?: Maybe<ProcessInstanceError>;
-    id: Scalars['String'];
+  export type FloatArgument = {
+    between?: InputMaybe<FloatRange>;
+    equal?: InputMaybe<Scalars['Float']>;
+    greaterThan?: InputMaybe<Scalars['Float']>;
+    greaterThanEqual?: InputMaybe<Scalars['Float']>;
+    in?: InputMaybe<Array<Scalars['Float']>>;
+    isNull?: InputMaybe<Scalars['Boolean']>;
+    lessThan?: InputMaybe<Scalars['Float']>;
+    lessThanEqual?: InputMaybe<Scalars['Float']>;
+  };
+
+  export type FloatRange = {
+    from: Scalars['Float'];
+    to: Scalars['Float'];
+  };
+
+  export type KogitoMetadata = {
+    __typename?: 'KogitoMetadata';
     lastUpdate: Scalars['DateTime'];
-    milestones?: Maybe<Array<Milestone>>;
-    nodeDefinitions?: Maybe<Array<Node>>;
-    nodes: Array<NodeInstance>;
-    parentProcessInstance?: Maybe<ProcessInstance>;
-    parentProcessInstanceId?: Maybe<Scalars['String']>;
-    processId: Scalars['String'];
-    processName?: Maybe<Scalars['String']>;
-    roles?: Maybe<Array<Scalars['String']>>;
-    rootProcessId?: Maybe<Scalars['String']>;
-    rootProcessInstanceId?: Maybe<Scalars['String']>;
-    serviceUrl?: Maybe<Scalars['String']>;
-    source?: Maybe<Scalars['String']>;
-    start: Scalars['DateTime'];
-    state: ProcessInstanceState;
-    variables?: Maybe<Scalars['String']>;
-  };
-
-  export type ProcessInstanceArgument = {
-    addons?: InputMaybe<StringArrayArgument>;
-    and?: InputMaybe<Array<ProcessInstanceArgument>>;
-    businessKey?: InputMaybe<StringArgument>;
-    end?: InputMaybe<DateArgument>;
-    endpoint?: InputMaybe<StringArgument>;
-    error?: InputMaybe<ProcessInstanceErrorArgument>;
-    id?: InputMaybe<IdArgument>;
-    lastUpdate?: InputMaybe<DateArgument>;
-    milestones?: InputMaybe<MilestoneArgument>;
-    nodes?: InputMaybe<NodeInstanceArgument>;
-    not?: InputMaybe<ProcessInstanceArgument>;
-    or?: InputMaybe<Array<ProcessInstanceArgument>>;
-    parentProcessInstanceId?: InputMaybe<IdArgument>;
-    processId?: InputMaybe<StringArgument>;
-    processName?: InputMaybe<StringArgument>;
-    roles?: InputMaybe<StringArrayArgument>;
-    rootProcessId?: InputMaybe<StringArgument>;
-    rootProcessInstanceId?: InputMaybe<IdArgument>;
-    start?: InputMaybe<DateArgument>;
-    state?: InputMaybe<ProcessInstanceStateArgument>;
-  };
-
-  export type ProcessInstanceError = {
-    __typename?: 'ProcessInstanceError';
-    message?: Maybe<Scalars['String']>;
-    nodeDefinitionId: Scalars['String'];
-  };
-
-  export type ProcessInstanceErrorArgument = {
-    message?: InputMaybe<StringArgument>;
-    nodeDefinitionId?: InputMaybe<StringArgument>;
-  };
-
-  export type ProcessInstanceErrorOrderBy = {
-    message?: InputMaybe<OrderBy>;
-    nodeDefinitionId?: InputMaybe<OrderBy>;
+    processInstances?: Maybe<Array<Maybe<ProcessInstanceMeta>>>;
+    userTasks?: Maybe<Array<Maybe<UserTaskInstanceMeta>>>;
   };
 
   export type ProcessInstanceMeta = {
@@ -455,155 +654,6 @@ export namespace GraphQL {
     serviceUrl?: Maybe<Scalars['String']>;
     start: Scalars['DateTime'];
     state: ProcessInstanceState;
-  };
-
-  export type ProcessInstanceMetaArgument = {
-    businessKey?: InputMaybe<StringArgument>;
-    end?: InputMaybe<DateArgument>;
-    endpoint?: InputMaybe<StringArgument>;
-    id?: InputMaybe<IdArgument>;
-    parentProcessInstanceId?: InputMaybe<IdArgument>;
-    processId?: InputMaybe<StringArgument>;
-    processName?: InputMaybe<StringArgument>;
-    roles?: InputMaybe<StringArrayArgument>;
-    rootProcessId?: InputMaybe<StringArgument>;
-    rootProcessInstanceId?: InputMaybe<IdArgument>;
-    start?: InputMaybe<DateArgument>;
-    state?: InputMaybe<ProcessInstanceStateArgument>;
-  };
-
-  export type ProcessInstanceOrderBy = {
-    businessKey?: InputMaybe<OrderBy>;
-    end?: InputMaybe<OrderBy>;
-    error?: InputMaybe<ProcessInstanceErrorOrderBy>;
-    lastUpdate?: InputMaybe<OrderBy>;
-    processId?: InputMaybe<OrderBy>;
-    processName?: InputMaybe<OrderBy>;
-    rootProcessId?: InputMaybe<OrderBy>;
-    start?: InputMaybe<OrderBy>;
-    state?: InputMaybe<OrderBy>;
-  };
-
-  export enum ProcessInstanceState {
-    Aborted = 'ABORTED',
-    Active = 'ACTIVE',
-    Completed = 'COMPLETED',
-    Error = 'ERROR',
-    Pending = 'PENDING',
-    Suspended = 'SUSPENDED'
-  }
-
-  export type ProcessInstanceStateArgument = {
-    equal?: InputMaybe<ProcessInstanceState>;
-    in?: InputMaybe<Array<InputMaybe<ProcessInstanceState>>>;
-  };
-
-  export type Query = {
-    __typename?: 'Query';
-    Jobs?: Maybe<Array<Maybe<Job>>>;
-    ProcessInstances?: Maybe<Array<Maybe<ProcessInstance>>>;
-    UserTaskInstances?: Maybe<Array<Maybe<UserTaskInstance>>>;
-  };
-
-  export type QueryJobsArgs = {
-    orderBy?: InputMaybe<JobOrderBy>;
-    pagination?: InputMaybe<Pagination>;
-    where?: InputMaybe<JobArgument>;
-  };
-
-  export type QueryProcessInstancesArgs = {
-    orderBy?: InputMaybe<ProcessInstanceOrderBy>;
-    pagination?: InputMaybe<Pagination>;
-    where?: InputMaybe<ProcessInstanceArgument>;
-  };
-
-  export type QueryUserTaskInstancesArgs = {
-    orderBy?: InputMaybe<UserTaskInstanceOrderBy>;
-    pagination?: InputMaybe<Pagination>;
-    where?: InputMaybe<UserTaskInstanceArgument>;
-  };
-
-  export type StringArgument = {
-    equal?: InputMaybe<Scalars['String']>;
-    in?: InputMaybe<Array<Scalars['String']>>;
-    isNull?: InputMaybe<Scalars['Boolean']>;
-    like?: InputMaybe<Scalars['String']>;
-  };
-
-  export type StringArrayArgument = {
-    contains?: InputMaybe<Scalars['String']>;
-    containsAll?: InputMaybe<Array<Scalars['String']>>;
-    containsAny?: InputMaybe<Array<Scalars['String']>>;
-    isNull?: InputMaybe<Scalars['Boolean']>;
-  };
-
-  export type Subscription = {
-    __typename?: 'Subscription';
-    JobAdded: Job;
-    JobUpdated: Job;
-    ProcessInstanceAdded: ProcessInstance;
-    ProcessInstanceUpdated: ProcessInstance;
-    UserTaskInstanceAdded: UserTaskInstance;
-    UserTaskInstanceUpdated: UserTaskInstance;
-  };
-
-  export type UserTaskInstance = {
-    __typename?: 'UserTaskInstance';
-    actualOwner?: Maybe<Scalars['String']>;
-    adminGroups?: Maybe<Array<Scalars['String']>>;
-    adminUsers?: Maybe<Array<Scalars['String']>>;
-    attachments?: Maybe<Array<Attachment>>;
-    comments?: Maybe<Array<Comment>>;
-    completed?: Maybe<Scalars['DateTime']>;
-    description?: Maybe<Scalars['String']>;
-    endpoint?: Maybe<Scalars['String']>;
-    excludedUsers?: Maybe<Array<Scalars['String']>>;
-    id: Scalars['String'];
-    inputs?: Maybe<Scalars['String']>;
-    lastUpdate: Scalars['DateTime'];
-    name?: Maybe<Scalars['String']>;
-    outputs?: Maybe<Scalars['String']>;
-    potentialGroups?: Maybe<Array<Scalars['String']>>;
-    potentialUsers?: Maybe<Array<Scalars['String']>>;
-    priority?: Maybe<Scalars['String']>;
-    processId: Scalars['String'];
-    processInstanceId: Scalars['String'];
-    referenceName?: Maybe<Scalars['String']>;
-    rootProcessId?: Maybe<Scalars['String']>;
-    rootProcessInstanceId?: Maybe<Scalars['String']>;
-    schema?: Maybe<Scalars['String']>;
-    started: Scalars['DateTime'];
-    state: Scalars['String'];
-  };
-
-  export type UserTaskInstanceSchemaArgs = {
-    groups?: InputMaybe<Array<InputMaybe<Scalars['String']>>>;
-    user?: InputMaybe<Scalars['String']>;
-  };
-
-  export type UserTaskInstanceArgument = {
-    actualOwner?: InputMaybe<StringArgument>;
-    adminGroups?: InputMaybe<StringArrayArgument>;
-    adminUsers?: InputMaybe<StringArrayArgument>;
-    and?: InputMaybe<Array<UserTaskInstanceArgument>>;
-    attachments?: InputMaybe<AttachmentArgument>;
-    comments?: InputMaybe<CommentArgument>;
-    completed?: InputMaybe<DateArgument>;
-    description?: InputMaybe<StringArgument>;
-    excludedUsers?: InputMaybe<StringArrayArgument>;
-    id?: InputMaybe<IdArgument>;
-    lastUpdate?: InputMaybe<DateArgument>;
-    name?: InputMaybe<StringArgument>;
-    not?: InputMaybe<UserTaskInstanceArgument>;
-    or?: InputMaybe<Array<UserTaskInstanceArgument>>;
-    potentialGroups?: InputMaybe<StringArrayArgument>;
-    potentialUsers?: InputMaybe<StringArrayArgument>;
-    priority?: InputMaybe<StringArgument>;
-    processId?: InputMaybe<StringArgument>;
-    processInstanceId?: InputMaybe<IdArgument>;
-    referenceName?: InputMaybe<StringArgument>;
-    started?: InputMaybe<DateArgument>;
-    state?: InputMaybe<StringArgument>;
   };
 
   export type UserTaskInstanceMeta = {
@@ -628,6 +678,27 @@ export namespace GraphQL {
     state: Scalars['String'];
   };
 
+  export type KogitoMetadataArgument = {
+    lastUpdate?: InputMaybe<DateArgument>;
+    processInstances?: InputMaybe<ProcessInstanceMetaArgument>;
+    userTasks?: InputMaybe<UserTaskInstanceMetaArgument>;
+  };
+
+  export type ProcessInstanceMetaArgument = {
+    businessKey?: InputMaybe<StringArgument>;
+    end?: InputMaybe<DateArgument>;
+    endpoint?: InputMaybe<StringArgument>;
+    id?: InputMaybe<IdArgument>;
+    parentProcessInstanceId?: InputMaybe<IdArgument>;
+    processId?: InputMaybe<StringArgument>;
+    processName?: InputMaybe<StringArgument>;
+    roles?: InputMaybe<StringArrayArgument>;
+    rootProcessId?: InputMaybe<StringArgument>;
+    rootProcessInstanceId?: InputMaybe<IdArgument>;
+    start?: InputMaybe<DateArgument>;
+    state?: InputMaybe<ProcessInstanceStateArgument>;
+  };
+
   export type UserTaskInstanceMetaArgument = {
     actualOwner?: InputMaybe<StringArgument>;
     adminGroups?: InputMaybe<StringArrayArgument>;
@@ -646,43 +717,46 @@ export namespace GraphQL {
     state?: InputMaybe<StringArgument>;
   };
 
-  export type UserTaskInstanceOrderBy = {
-    actualOwner?: InputMaybe<OrderBy>;
-    completed?: InputMaybe<OrderBy>;
-    description?: InputMaybe<OrderBy>;
+  export type KogitoMetadataOrderBy = {
     lastUpdate?: InputMaybe<OrderBy>;
-    name?: InputMaybe<OrderBy>;
-    priority?: InputMaybe<OrderBy>;
-    processId?: InputMaybe<OrderBy>;
-    referenceName?: InputMaybe<OrderBy>;
-    started?: InputMaybe<OrderBy>;
-    state?: InputMaybe<OrderBy>;
+  };
+
+  export type LongArgument = {
+    between?: InputMaybe<LongRange>;
+    equal?: InputMaybe<Scalars['Long']>;
+    greaterThan?: InputMaybe<Scalars['Long']>;
+    greaterThanEqual?: InputMaybe<Scalars['Long']>;
+    in?: InputMaybe<Array<Scalars['Long']>>;
+    isNull?: InputMaybe<Scalars['Long']>;
+    lessThan?: InputMaybe<Scalars['Long']>;
+    lessThanEqual?: InputMaybe<Scalars['Long']>;
+  };
+
+  export type LongRange = {
+    from: Scalars['Long'];
+    to: Scalars['Long'];
   };
 
   /**
    * A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.
    *
-   * In some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.
+   * In some cases, you need to provide options to alter GraphQL's execution behavior
+   * in ways field arguments will not suffice, such as conditionally including or
+   * skipping a field. Directives provide this by describing additional information
+   * to the executor.
    */
   export type __Directive = {
     __typename?: '__Directive';
     name: Scalars['String'];
     description?: Maybe<Scalars['String']>;
-    isRepeatable: Scalars['Boolean'];
     locations: Array<__DirectiveLocation>;
     args: Array<__InputValue>;
   };
 
   /**
-   * A Directive provides a way to describe alternate runtime execution and type validation behavior in a GraphQL document.
-   *
-   * In some cases, you need to provide options to alter GraphQL's execution behavior in ways field arguments will not suffice, such as conditionally including or skipping a field. Directives provide this by describing additional information to the executor.
+   * A Directive can be adjacent to many parts of the GraphQL language, a
+   * __DirectiveLocation describes one such possible adjacencies.
    */
-  export type __DirectiveArgsArgs = {
-    includeDeprecated?: InputMaybe<Scalars['Boolean']>;
-  };
-
-  /** A Directive can be adjacent to many parts of the GraphQL language, a __DirectiveLocation describes one such possible adjacencies. */
   export enum __DirectiveLocation {
     /** Location adjacent to a query operation. */
     Query = 'QUERY',
@@ -724,7 +798,11 @@ export namespace GraphQL {
     InputFieldDefinition = 'INPUT_FIELD_DEFINITION'
   }
 
-  /** One possible value for a given Enum. Enum values are unique values, not a placeholder for a string or numeric value. However an Enum value is returned in a JSON response as a string. */
+  /**
+   * One possible value for a given Enum. Enum values are unique values, not a
+   * placeholder for a string or numeric value. However an Enum value is returned in
+   * a JSON response as a string.
+   */
   export type __EnumValue = {
     __typename?: '__EnumValue';
     name: Scalars['String'];
@@ -733,7 +811,10 @@ export namespace GraphQL {
     deprecationReason?: Maybe<Scalars['String']>;
   };
 
-  /** Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type. */
+  /**
+   * Object and Interface types are described by a list of Fields, each of which has
+   * a name, potentially a list of arguments, and a return type.
+   */
   export type __Field = {
     __typename?: '__Field';
     name: Scalars['String'];
@@ -744,12 +825,11 @@ export namespace GraphQL {
     deprecationReason?: Maybe<Scalars['String']>;
   };
 
-  /** Object and Interface types are described by a list of Fields, each of which has a name, potentially a list of arguments, and a return type. */
-  export type __FieldArgsArgs = {
-    includeDeprecated?: InputMaybe<Scalars['Boolean']>;
-  };
-
-  /** Arguments provided to Fields or Directives and the input fields of an InputObject are represented as Input Values which describe their type and optionally a default value. */
+  /**
+   * Arguments provided to Fields or Directives and the input fields of an
+   * InputObject are represented as Input Values which describe their type and
+   * optionally a default value.
+   */
   export type __InputValue = {
     __typename?: '__InputValue';
     name: Scalars['String'];
@@ -757,14 +837,15 @@ export namespace GraphQL {
     type: __Type;
     /** A GraphQL-formatted string representing the default value for this input value. */
     defaultValue?: Maybe<Scalars['String']>;
-    isDeprecated: Scalars['Boolean'];
-    deprecationReason?: Maybe<Scalars['String']>;
   };
 
-  /** A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all available types and directives on the server, as well as the entry points for query, mutation, and subscription operations. */
+  /**
+   * A GraphQL Schema defines the capabilities of a GraphQL server. It exposes all
+   * available types and directives on the server, as well as the entry points for
+   * query, mutation, and subscription operations.
+   */
   export type __Schema = {
     __typename?: '__Schema';
-    description?: Maybe<Scalars['String']>;
     /** A list of all types supported by this server. */
     types: Array<__Type>;
     /** The type that query operations will be rooted at. */
@@ -778,16 +859,20 @@ export namespace GraphQL {
   };
 
   /**
-   * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
+   * The fundamental unit of any GraphQL Schema is the type. There are many kinds of
+   * types in GraphQL as represented by the `__TypeKind` enum.
    *
-   * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByUrl`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
+   * Depending on the kind of a type, certain fields describe information about that
+   * type. Scalar types provide no information beyond a name and description, while
+   * Enum types provide their values. Object and Interface types provide the fields
+   * they describe. Abstract types, Union and Interface, provide the Object types
+   * possible at runtime. List and NonNull types compose other types.
    */
   export type __Type = {
     __typename?: '__Type';
     kind: __TypeKind;
     name?: Maybe<Scalars['String']>;
     description?: Maybe<Scalars['String']>;
-    specifiedByUrl?: Maybe<Scalars['String']>;
     fields?: Maybe<Array<__Field>>;
     interfaces?: Maybe<Array<__Type>>;
     possibleTypes?: Maybe<Array<__Type>>;
@@ -797,29 +882,30 @@ export namespace GraphQL {
   };
 
   /**
-   * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
+   * The fundamental unit of any GraphQL Schema is the type. There are many kinds of
+   * types in GraphQL as represented by the `__TypeKind` enum.
    *
-   * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByUrl`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
+   * Depending on the kind of a type, certain fields describe information about that
+   * type. Scalar types provide no information beyond a name and description, while
+   * Enum types provide their values. Object and Interface types provide the fields
+   * they describe. Abstract types, Union and Interface, provide the Object types
+   * possible at runtime. List and NonNull types compose other types.
    */
   export type __TypeFieldsArgs = {
     includeDeprecated?: InputMaybe<Scalars['Boolean']>;
   };
 
   /**
-   * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
+   * The fundamental unit of any GraphQL Schema is the type. There are many kinds of
+   * types in GraphQL as represented by the `__TypeKind` enum.
    *
-   * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByUrl`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
+   * Depending on the kind of a type, certain fields describe information about that
+   * type. Scalar types provide no information beyond a name and description, while
+   * Enum types provide their values. Object and Interface types provide the fields
+   * they describe. Abstract types, Union and Interface, provide the Object types
+   * possible at runtime. List and NonNull types compose other types.
    */
   export type __TypeEnumValuesArgs = {
-    includeDeprecated?: InputMaybe<Scalars['Boolean']>;
-  };
-
-  /**
-   * The fundamental unit of any GraphQL Schema is the type. There are many kinds of types in GraphQL as represented by the `__TypeKind` enum.
-   *
-   * Depending on the kind of a type, certain fields describe information about that type. Scalar types provide no information beyond a name, description and optional `specifiedByUrl`, while Enum types provide their values. Object and Interface types provide the fields they describe. Abstract types, Union and Interface, provide the Object types possible at runtime. List and NonNull types compose other types.
-   */
-  export type __TypeInputFieldsArgs = {
     includeDeprecated?: InputMaybe<Scalars['Boolean']>;
   };
 
@@ -829,7 +915,7 @@ export namespace GraphQL {
     Scalar = 'SCALAR',
     /** Indicates this type is an object. `fields` and `interfaces` are valid fields. */
     Object = 'OBJECT',
-    /** Indicates this type is an interface. `fields`, `interfaces`, and `possibleTypes` are valid fields. */
+    /** Indicates this type is an interface. `fields` and `possibleTypes` are valid fields. */
     Interface = 'INTERFACE',
     /** Indicates this type is a union. `possibleTypes` is a valid field. */
     Union = 'UNION',
@@ -852,36 +938,26 @@ export namespace GraphQL {
 
   export type GetProcessInstancesQuery = {
     __typename?: 'Query';
-    ProcessInstances?:
-      | Array<
-          | {
-              __typename?: 'ProcessInstance';
-              id: string;
-              processId: string;
-              processName?: string | null | undefined;
-              parentProcessInstanceId?: string | null | undefined;
-              rootProcessInstanceId?: string | null | undefined;
-              roles?: Array<string> | null | undefined;
-              state: ProcessInstanceState;
-              start: any;
-              lastUpdate: any;
-              addons?: Array<string> | null | undefined;
-              businessKey?: string | null | undefined;
-              serviceUrl?: string | null | undefined;
-              error?:
-                | {
-                    __typename?: 'ProcessInstanceError';
-                    nodeDefinitionId: string;
-                    message?: string | null | undefined;
-                  }
-                | null
-                | undefined;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    ProcessInstances?: Array<{
+      __typename?: 'ProcessInstance';
+      id: string;
+      processId: string;
+      processName?: string | null;
+      parentProcessInstanceId?: string | null;
+      rootProcessInstanceId?: string | null;
+      roles?: Array<string> | null;
+      state: ProcessInstanceState;
+      start: any;
+      lastUpdate: any;
+      addons?: Array<string> | null;
+      businessKey?: string | null;
+      serviceUrl?: string | null;
+      error?: {
+        __typename?: 'ProcessInstanceError';
+        nodeDefinitionId: string;
+        message?: string | null;
+      } | null;
+    } | null> | null;
   };
 
   export type GetChildInstancesQueryVariables = Exact<{
@@ -890,36 +966,26 @@ export namespace GraphQL {
 
   export type GetChildInstancesQuery = {
     __typename?: 'Query';
-    ProcessInstances?:
-      | Array<
-          | {
-              __typename?: 'ProcessInstance';
-              id: string;
-              processId: string;
-              processName?: string | null | undefined;
-              parentProcessInstanceId?: string | null | undefined;
-              rootProcessInstanceId?: string | null | undefined;
-              roles?: Array<string> | null | undefined;
-              state: ProcessInstanceState;
-              start: any;
-              lastUpdate: any;
-              serviceUrl?: string | null | undefined;
-              addons?: Array<string> | null | undefined;
-              businessKey?: string | null | undefined;
-              error?:
-                | {
-                    __typename?: 'ProcessInstanceError';
-                    nodeDefinitionId: string;
-                    message?: string | null | undefined;
-                  }
-                | null
-                | undefined;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    ProcessInstances?: Array<{
+      __typename?: 'ProcessInstance';
+      id: string;
+      processId: string;
+      processName?: string | null;
+      parentProcessInstanceId?: string | null;
+      rootProcessInstanceId?: string | null;
+      roles?: Array<string> | null;
+      state: ProcessInstanceState;
+      start: any;
+      lastUpdate: any;
+      serviceUrl?: string | null;
+      addons?: Array<string> | null;
+      businessKey?: string | null;
+      error?: {
+        __typename?: 'ProcessInstanceError';
+        nodeDefinitionId: string;
+        message?: string | null;
+      } | null;
+    } | null> | null;
   };
 
   export type GetProcessInstanceByIdQueryVariables = Exact<{
@@ -928,76 +994,67 @@ export namespace GraphQL {
 
   export type GetProcessInstanceByIdQuery = {
     __typename?: 'Query';
-    ProcessInstances?:
-      | Array<
-          | {
-              __typename?: 'ProcessInstance';
-              id: string;
-              processId: string;
-              processName?: string | null | undefined;
-              businessKey?: string | null | undefined;
-              parentProcessInstanceId?: string | null | undefined;
-              roles?: Array<string> | null | undefined;
-              variables?: string | null | undefined;
-              state: ProcessInstanceState;
-              start: any;
-              lastUpdate: any;
-              end?: any | null | undefined;
-              addons?: Array<string> | null | undefined;
-              endpoint: string;
-              serviceUrl?: string | null | undefined;
-              source?: string | null | undefined;
-              parentProcessInstance?:
-                | {
-                    __typename?: 'ProcessInstance';
-                    id: string;
-                    processName?: string | null | undefined;
-                    businessKey?: string | null | undefined;
-                  }
-                | null
-                | undefined;
-              error?:
-                | {
-                    __typename?: 'ProcessInstanceError';
-                    nodeDefinitionId: string;
-                    message?: string | null | undefined;
-                  }
-                | null
-                | undefined;
-              childProcessInstances?:
-                | Array<{
-                    __typename?: 'ProcessInstance';
-                    id: string;
-                    processName?: string | null | undefined;
-                    businessKey?: string | null | undefined;
-                  }>
-                | null
-                | undefined;
-              nodes: Array<{
-                __typename?: 'NodeInstance';
-                id: string;
-                nodeId: string;
-                name: string;
-                enter: any;
-                exit?: any | null | undefined;
-                type: string;
-                definitionId: string;
-              }>;
-              milestones?:
-                | Array<{
-                    __typename?: 'Milestone';
-                    id: string;
-                    name: string;
-                    status: MilestoneStatus;
-                  }>
-                | null
-                | undefined;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    ProcessInstances?: Array<{
+      __typename?: 'ProcessInstance';
+      id: string;
+      processId: string;
+      processName?: string | null;
+      businessKey?: string | null;
+      parentProcessInstanceId?: string | null;
+      roles?: Array<string> | null;
+      variables?: any | null;
+      state: ProcessInstanceState;
+      start: any;
+      lastUpdate: any;
+      end?: any | null;
+      addons?: Array<string> | null;
+      endpoint: string;
+      serviceUrl?: string | null;
+      source?: string | null;
+      parentProcessInstance?: {
+        __typename?: 'ProcessInstance';
+        id: string;
+        processName?: string | null;
+        businessKey?: string | null;
+      } | null;
+      error?: {
+        __typename?: 'ProcessInstanceError';
+        nodeDefinitionId: string;
+        message?: string | null;
+      } | null;
+      childProcessInstances?: Array<{
+        __typename?: 'ProcessInstance';
+        id: string;
+        processName?: string | null;
+        businessKey?: string | null;
+      }> | null;
+      nodes: Array<{
+        __typename?: 'NodeInstance';
+        id: string;
+        nodeId: string;
+        name: string;
+        enter: any;
+        exit?: any | null;
+        type: string;
+        definitionId: string;
+      }>;
+      nodeDefinitions?: Array<{
+        __typename?: 'Node';
+        metadata: {
+          __typename?: 'NodeMetadata';
+          UniqueId: string;
+          state?: string | null;
+          branch?: string | null;
+          action?: string | null;
+        };
+      }> | null;
+      milestones?: Array<{
+        __typename?: 'Milestone';
+        id: string;
+        name: string;
+        status: MilestoneStatus;
+      }> | null;
+    } | null> | null;
   };
 
   export type GetColumnPickerAttributesQueryVariables = Exact<{
@@ -1006,37 +1063,28 @@ export namespace GraphQL {
 
   export type GetColumnPickerAttributesQuery = {
     __typename?: 'Query';
-    __type?:
-      | {
+    __type?: {
+      __typename?: '__Type';
+      name?: string | null;
+      fields?: Array<{
+        __typename?: '__Field';
+        name: string;
+        type: {
           __typename?: '__Type';
-          name?: string | null | undefined;
-          fields?:
-            | Array<{
-                __typename?: '__Field';
-                name: string;
-                type: {
-                  __typename?: '__Type';
-                  name?: string | null | undefined;
-                  kind: __TypeKind;
-                  fields?:
-                    | Array<{
-                        __typename?: '__Field';
-                        name: string;
-                        type: {
-                          __typename?: '__Type';
-                          name?: string | null | undefined;
-                          kind: __TypeKind;
-                        };
-                      }>
-                    | null
-                    | undefined;
-                };
-              }>
-            | null
-            | undefined;
-        }
-      | null
-      | undefined;
+          name?: string | null;
+          kind: __TypeKind;
+          fields?: Array<{
+            __typename?: '__Field';
+            name: string;
+            type: {
+              __typename?: '__Type';
+              name?: string | null;
+              kind: __TypeKind;
+            };
+          }> | null;
+        };
+      }> | null;
+    } | null;
   };
 
   export type GetQueryTypesQueryVariables = Exact<{ [key: string]: never }>;
@@ -1047,32 +1095,26 @@ export namespace GraphQL {
       __typename?: '__Schema';
       queryType: Array<{
         __typename?: '__Type';
-        name?: string | null | undefined;
+        name?: string | null;
         kind: __TypeKind;
-        fields?:
-          | Array<{
-              __typename?: '__Field';
-              name: string;
-              type: {
-                __typename?: '__Type';
-                name?: string | null | undefined;
-                kind: __TypeKind;
-              };
-            }>
-          | null
-          | undefined;
-        inputFields?:
-          | Array<{
-              __typename?: '__InputValue';
-              name: string;
-              type: {
-                __typename?: '__Type';
-                name?: string | null | undefined;
-                kind: __TypeKind;
-              };
-            }>
-          | null
-          | undefined;
+        fields?: Array<{
+          __typename?: '__Field';
+          name: string;
+          type: {
+            __typename?: '__Type';
+            name?: string | null;
+            kind: __TypeKind;
+          };
+        }> | null;
+        inputFields?: Array<{
+          __typename?: '__InputValue';
+          name: string;
+          type: {
+            __typename?: '__Type';
+            name?: string | null;
+            kind: __TypeKind;
+          };
+        }> | null;
       }>;
     };
   };
@@ -1081,39 +1123,27 @@ export namespace GraphQL {
 
   export type GetQueryFieldsQuery = {
     __typename?: 'Query';
-    __type?:
-      | {
+    __type?: {
+      __typename?: '__Type';
+      name?: string | null;
+      fields?: Array<{
+        __typename?: '__Field';
+        name: string;
+        args: Array<{
+          __typename?: '__InputValue';
+          name: string;
+          type: {
+            __typename?: '__Type';
+            kind: __TypeKind;
+            name?: string | null;
+          };
+        }>;
+        type: {
           __typename?: '__Type';
-          name?: string | null | undefined;
-          fields?:
-            | Array<{
-                __typename?: '__Field';
-                name: string;
-                args: Array<{
-                  __typename?: '__InputValue';
-                  name: string;
-                  type: {
-                    __typename?: '__Type';
-                    kind: __TypeKind;
-                    name?: string | null | undefined;
-                  };
-                }>;
-                type: {
-                  __typename?: '__Type';
-                  ofType?:
-                    | {
-                        __typename?: '__Type';
-                        name?: string | null | undefined;
-                      }
-                    | null
-                    | undefined;
-                };
-              }>
-            | null
-            | undefined;
-        }
-      | null
-      | undefined;
+          ofType?: { __typename?: '__Type'; name?: string | null } | null;
+        };
+      }> | null;
+    } | null;
   };
 
   export type GetInputFieldsFromQueryQueryVariables = Exact<{
@@ -1122,36 +1152,24 @@ export namespace GraphQL {
 
   export type GetInputFieldsFromQueryQuery = {
     __typename?: 'Query';
-    __type?:
-      | {
+    __type?: {
+      __typename?: '__Type';
+      name?: string | null;
+      inputFields?: Array<{
+        __typename?: '__InputValue';
+        name: string;
+        type: {
           __typename?: '__Type';
-          name?: string | null | undefined;
-          inputFields?:
-            | Array<{
-                __typename?: '__InputValue';
-                name: string;
-                type: {
-                  __typename?: '__Type';
-                  name?: string | null | undefined;
-                  kind: __TypeKind;
-                  inputFields?:
-                    | Array<{
-                        __typename?: '__InputValue';
-                        name: string;
-                        type: {
-                          __typename?: '__Type';
-                          name?: string | null | undefined;
-                        };
-                      }>
-                    | null
-                    | undefined;
-                };
-              }>
-            | null
-            | undefined;
-        }
-      | null
-      | undefined;
+          name?: string | null;
+          kind: __TypeKind;
+          inputFields?: Array<{
+            __typename?: '__InputValue';
+            name: string;
+            type: { __typename?: '__Type'; name?: string | null };
+          }> | null;
+        };
+      }> | null;
+    } | null;
   };
 
   export type GetInputFieldsFromTypeQueryVariables = Exact<{
@@ -1160,41 +1178,32 @@ export namespace GraphQL {
 
   export type GetInputFieldsFromTypeQuery = {
     __typename?: 'Query';
-    __type?:
-      | {
+    __type?: {
+      __typename?: '__Type';
+      name?: string | null;
+      inputFields?: Array<{
+        __typename?: '__InputValue';
+        name: string;
+        type: {
           __typename?: '__Type';
-          name?: string | null | undefined;
-          inputFields?:
-            | Array<{
-                __typename?: '__InputValue';
-                name: string;
-                type: {
-                  __typename?: '__Type';
-                  name?: string | null | undefined;
-                  kind: __TypeKind;
-                  enumValues?:
-                    | Array<{ __typename?: '__EnumValue'; name: string }>
-                    | null
-                    | undefined;
-                  ofType?:
-                    | {
-                        __typename?: '__Type';
-                        kind: __TypeKind;
-                        name?: string | null | undefined;
-                        enumValues?:
-                          | Array<{ __typename?: '__EnumValue'; name: string }>
-                          | null
-                          | undefined;
-                      }
-                    | null
-                    | undefined;
-                };
-              }>
-            | null
-            | undefined;
-        }
-      | null
-      | undefined;
+          name?: string | null;
+          kind: __TypeKind;
+          enumValues?: Array<{
+            __typename?: '__EnumValue';
+            name: string;
+          }> | null;
+          ofType?: {
+            __typename?: '__Type';
+            kind: __TypeKind;
+            name?: string | null;
+            enumValues?: Array<{
+              __typename?: '__EnumValue';
+              name: string;
+            }> | null;
+          } | null;
+        };
+      }> | null;
+    } | null;
   };
 
   export type GetUserTasksByStatesQueryVariables = Exact<{
@@ -1204,37 +1213,30 @@ export namespace GraphQL {
 
   export type GetUserTasksByStatesQuery = {
     __typename?: 'Query';
-    UserTaskInstances?:
-      | Array<
-          | {
-              __typename?: 'UserTaskInstance';
-              id: string;
-              name?: string | null | undefined;
-              referenceName?: string | null | undefined;
-              description?: string | null | undefined;
-              priority?: string | null | undefined;
-              processInstanceId: string;
-              processId: string;
-              rootProcessInstanceId?: string | null | undefined;
-              rootProcessId?: string | null | undefined;
-              state: string;
-              actualOwner?: string | null | undefined;
-              adminGroups?: Array<string> | null | undefined;
-              adminUsers?: Array<string> | null | undefined;
-              completed?: any | null | undefined;
-              started: any;
-              excludedUsers?: Array<string> | null | undefined;
-              potentialGroups?: Array<string> | null | undefined;
-              potentialUsers?: Array<string> | null | undefined;
-              inputs?: string | null | undefined;
-              outputs?: string | null | undefined;
-              endpoint?: string | null | undefined;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    UserTaskInstances?: Array<{
+      __typename?: 'UserTaskInstance';
+      id: string;
+      name?: string | null;
+      referenceName?: string | null;
+      description?: string | null;
+      priority?: string | null;
+      processInstanceId: string;
+      processId: string;
+      rootProcessInstanceId?: string | null;
+      rootProcessId?: string | null;
+      state: string;
+      actualOwner?: string | null;
+      adminGroups?: Array<string> | null;
+      adminUsers?: Array<string> | null;
+      completed?: any | null;
+      started: any;
+      excludedUsers?: Array<string> | null;
+      potentialGroups?: Array<string> | null;
+      potentialUsers?: Array<string> | null;
+      inputs?: string | null;
+      outputs?: string | null;
+      endpoint?: string | null;
+    } | null> | null;
   };
 
   export type GetUserTaskByIdQueryVariables = Exact<{
@@ -1243,38 +1245,31 @@ export namespace GraphQL {
 
   export type GetUserTaskByIdQuery = {
     __typename?: 'Query';
-    UserTaskInstances?:
-      | Array<
-          | {
-              __typename?: 'UserTaskInstance';
-              id: string;
-              description?: string | null | undefined;
-              name?: string | null | undefined;
-              priority?: string | null | undefined;
-              processInstanceId: string;
-              processId: string;
-              rootProcessInstanceId?: string | null | undefined;
-              rootProcessId?: string | null | undefined;
-              state: string;
-              actualOwner?: string | null | undefined;
-              adminGroups?: Array<string> | null | undefined;
-              adminUsers?: Array<string> | null | undefined;
-              completed?: any | null | undefined;
-              started: any;
-              excludedUsers?: Array<string> | null | undefined;
-              potentialGroups?: Array<string> | null | undefined;
-              potentialUsers?: Array<string> | null | undefined;
-              inputs?: string | null | undefined;
-              outputs?: string | null | undefined;
-              referenceName?: string | null | undefined;
-              endpoint?: string | null | undefined;
-              lastUpdate: any;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    UserTaskInstances?: Array<{
+      __typename?: 'UserTaskInstance';
+      id: string;
+      description?: string | null;
+      name?: string | null;
+      priority?: string | null;
+      processInstanceId: string;
+      processId: string;
+      rootProcessInstanceId?: string | null;
+      rootProcessId?: string | null;
+      state: string;
+      actualOwner?: string | null;
+      adminGroups?: Array<string> | null;
+      adminUsers?: Array<string> | null;
+      completed?: any | null;
+      started: any;
+      excludedUsers?: Array<string> | null;
+      potentialGroups?: Array<string> | null;
+      potentialUsers?: Array<string> | null;
+      inputs?: string | null;
+      outputs?: string | null;
+      referenceName?: string | null;
+      endpoint?: string | null;
+      lastUpdate: any;
+    } | null> | null;
   };
 
   export type GetTasksForUserQueryVariables = Exact<{
@@ -1286,38 +1281,31 @@ export namespace GraphQL {
 
   export type GetTasksForUserQuery = {
     __typename?: 'Query';
-    UserTaskInstances?:
-      | Array<
-          | {
-              __typename?: 'UserTaskInstance';
-              id: string;
-              name?: string | null | undefined;
-              referenceName?: string | null | undefined;
-              description?: string | null | undefined;
-              priority?: string | null | undefined;
-              processInstanceId: string;
-              processId: string;
-              rootProcessInstanceId?: string | null | undefined;
-              rootProcessId?: string | null | undefined;
-              state: string;
-              actualOwner?: string | null | undefined;
-              adminGroups?: Array<string> | null | undefined;
-              adminUsers?: Array<string> | null | undefined;
-              completed?: any | null | undefined;
-              started: any;
-              excludedUsers?: Array<string> | null | undefined;
-              potentialGroups?: Array<string> | null | undefined;
-              potentialUsers?: Array<string> | null | undefined;
-              inputs?: string | null | undefined;
-              outputs?: string | null | undefined;
-              lastUpdate: any;
-              endpoint?: string | null | undefined;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    UserTaskInstances?: Array<{
+      __typename?: 'UserTaskInstance';
+      id: string;
+      name?: string | null;
+      referenceName?: string | null;
+      description?: string | null;
+      priority?: string | null;
+      processInstanceId: string;
+      processId: string;
+      rootProcessInstanceId?: string | null;
+      rootProcessId?: string | null;
+      state: string;
+      actualOwner?: string | null;
+      adminGroups?: Array<string> | null;
+      adminUsers?: Array<string> | null;
+      completed?: any | null;
+      started: any;
+      excludedUsers?: Array<string> | null;
+      potentialGroups?: Array<string> | null;
+      potentialUsers?: Array<string> | null;
+      inputs?: string | null;
+      outputs?: string | null;
+      lastUpdate: any;
+      endpoint?: string | null;
+    } | null> | null;
   };
 
   export type GetJobsByProcessInstanceIdQueryVariables = Exact<{
@@ -1326,32 +1314,25 @@ export namespace GraphQL {
 
   export type GetJobsByProcessInstanceIdQuery = {
     __typename?: 'Query';
-    Jobs?:
-      | Array<
-          | {
-              __typename?: 'Job';
-              id: string;
-              processId?: string | null | undefined;
-              processInstanceId?: string | null | undefined;
-              rootProcessId?: string | null | undefined;
-              status: JobStatus;
-              expirationTime?: any | null | undefined;
-              priority?: number | null | undefined;
-              callbackEndpoint?: string | null | undefined;
-              repeatInterval?: number | null | undefined;
-              repeatLimit?: number | null | undefined;
-              scheduledId?: string | null | undefined;
-              retries?: number | null | undefined;
-              lastUpdate?: any | null | undefined;
-              endpoint?: string | null | undefined;
-              nodeInstanceId?: string | null | undefined;
-              executionCounter?: number | null | undefined;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    Jobs?: Array<{
+      __typename?: 'Job';
+      id: string;
+      processId?: string | null;
+      processInstanceId?: string | null;
+      rootProcessId?: string | null;
+      status: JobStatus;
+      expirationTime?: any | null;
+      priority?: number | null;
+      callbackEndpoint?: string | null;
+      repeatInterval?: number | null;
+      repeatLimit?: number | null;
+      scheduledId?: string | null;
+      retries?: number | null;
+      lastUpdate?: any | null;
+      endpoint?: string | null;
+      nodeInstanceId?: string | null;
+      executionCounter?: number | null;
+    } | null> | null;
   };
 
   export type GetJobsWithFiltersQueryVariables = Exact<{
@@ -1363,31 +1344,24 @@ export namespace GraphQL {
 
   export type GetJobsWithFiltersQuery = {
     __typename?: 'Query';
-    Jobs?:
-      | Array<
-          | {
-              __typename?: 'Job';
-              id: string;
-              processId?: string | null | undefined;
-              processInstanceId?: string | null | undefined;
-              rootProcessId?: string | null | undefined;
-              status: JobStatus;
-              expirationTime?: any | null | undefined;
-              priority?: number | null | undefined;
-              callbackEndpoint?: string | null | undefined;
-              repeatInterval?: number | null | undefined;
-              repeatLimit?: number | null | undefined;
-              scheduledId?: string | null | undefined;
-              retries?: number | null | undefined;
-              lastUpdate?: any | null | undefined;
-              endpoint?: string | null | undefined;
-              executionCounter?: number | null | undefined;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    Jobs?: Array<{
+      __typename?: 'Job';
+      id: string;
+      processId?: string | null;
+      processInstanceId?: string | null;
+      rootProcessId?: string | null;
+      status: JobStatus;
+      expirationTime?: any | null;
+      priority?: number | null;
+      callbackEndpoint?: string | null;
+      repeatInterval?: number | null;
+      repeatLimit?: number | null;
+      scheduledId?: string | null;
+      retries?: number | null;
+      lastUpdate?: any | null;
+      endpoint?: string | null;
+      executionCounter?: number | null;
+    } | null> | null;
   };
 
   export type AbortProcessInstanceMutationVariables = Exact<{
@@ -1396,7 +1370,7 @@ export namespace GraphQL {
 
   export type AbortProcessInstanceMutation = {
     __typename?: 'Mutation';
-    ProcessInstanceAbort?: string | null | undefined;
+    ProcessInstanceAbort?: string | null;
   };
 
   export type SkipProcessInstanceMutationVariables = Exact<{
@@ -1405,7 +1379,7 @@ export namespace GraphQL {
 
   export type SkipProcessInstanceMutation = {
     __typename?: 'Mutation';
-    ProcessInstanceSkip?: string | null | undefined;
+    ProcessInstanceSkip?: string | null;
   };
 
   export type RetryProcessInstanceMutationVariables = Exact<{
@@ -1414,7 +1388,7 @@ export namespace GraphQL {
 
   export type RetryProcessInstanceMutation = {
     __typename?: 'Mutation';
-    ProcessInstanceRetry?: string | null | undefined;
+    ProcessInstanceRetry?: string | null;
   };
 
   export type GetProcessInstanceSvgQueryVariables = Exact<{
@@ -1423,17 +1397,10 @@ export namespace GraphQL {
 
   export type GetProcessInstanceSvgQuery = {
     __typename?: 'Query';
-    ProcessInstances?:
-      | Array<
-          | {
-              __typename?: 'ProcessInstance';
-              diagram?: string | null | undefined;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    ProcessInstances?: Array<{
+      __typename?: 'ProcessInstance';
+      diagram?: string | null;
+    } | null> | null;
   };
 
   export type GetProcessInstanceNodeDefinitionsQueryVariables = Exact<{
@@ -1442,27 +1409,23 @@ export namespace GraphQL {
 
   export type GetProcessInstanceNodeDefinitionsQuery = {
     __typename?: 'Query';
-    ProcessInstances?:
-      | Array<
-          | {
-              __typename?: 'ProcessInstance';
-              nodeDefinitions?:
-                | Array<{
-                    __typename?: 'Node';
-                    id: string;
-                    name: string;
-                    type: string;
-                    uniqueId: string;
-                    nodeDefinitionId: string;
-                  }>
-                | null
-                | undefined;
-            }
-          | null
-          | undefined
-        >
-      | null
-      | undefined;
+    ProcessInstances?: Array<{
+      __typename?: 'ProcessInstance';
+      nodeDefinitions?: Array<{
+        __typename?: 'Node';
+        id: string;
+        name: string;
+        type: string;
+        uniqueId: string;
+        metadata: {
+          __typename?: 'NodeMetadata';
+          UniqueId: string;
+          state?: string | null;
+          branch?: string | null;
+          action?: string | null;
+        };
+      }> | null;
+    } | null> | null;
   };
 
   export type HandleNodeTriggerMutationVariables = Exact<{
@@ -1472,7 +1435,7 @@ export namespace GraphQL {
 
   export type HandleNodeTriggerMutation = {
     __typename?: 'Mutation';
-    NodeInstanceTrigger?: string | null | undefined;
+    NodeInstanceTrigger?: string | null;
   };
 
   export type HandleNodeInstanceCancelMutationVariables = Exact<{
@@ -1482,7 +1445,7 @@ export namespace GraphQL {
 
   export type HandleNodeInstanceCancelMutation = {
     __typename?: 'Mutation';
-    NodeInstanceCancel?: string | null | undefined;
+    NodeInstanceCancel?: string | null;
   };
 
   export type HandleNodeInstanceRetriggerMutationVariables = Exact<{
@@ -1492,7 +1455,7 @@ export namespace GraphQL {
 
   export type HandleNodeInstanceRetriggerMutation = {
     __typename?: 'Mutation';
-    NodeInstanceRetrigger?: string | null | undefined;
+    NodeInstanceRetrigger?: string | null;
   };
 
   export type HandleProcessVariableUpdateMutationVariables = Exact<{
@@ -1502,7 +1465,7 @@ export namespace GraphQL {
 
   export type HandleProcessVariableUpdateMutation = {
     __typename?: 'Mutation';
-    ProcessInstanceUpdateVariables?: string | null | undefined;
+    ProcessInstanceUpdateVariables?: string | null;
   };
 
   export type JobCancelMutationVariables = Exact<{
@@ -1511,7 +1474,7 @@ export namespace GraphQL {
 
   export type JobCancelMutation = {
     __typename?: 'Mutation';
-    JobCancel?: string | null | undefined;
+    JobCancel?: string | null;
   };
 
   export type HandleJobRescheduleMutationVariables = Exact<{
@@ -1521,7 +1484,7 @@ export namespace GraphQL {
 
   export type HandleJobRescheduleMutation = {
     __typename?: 'Mutation';
-    JobReschedule?: string | null | undefined;
+    JobReschedule?: string | null;
   };
 
   export const GetProcessInstancesDocument = gql`
@@ -1725,6 +1688,14 @@ export namespace GraphQL {
           exit
           type
           definitionId
+        }
+        nodeDefinitions {
+          metadata {
+            UniqueId
+            state
+            branch
+            action
+          }
         }
         milestones {
           id
@@ -2779,7 +2750,12 @@ export namespace GraphQL {
           name
           type
           uniqueId
-          nodeDefinitionId
+          metadata {
+            UniqueId
+            state
+            branch
+            action
+          }
         }
       }
     }

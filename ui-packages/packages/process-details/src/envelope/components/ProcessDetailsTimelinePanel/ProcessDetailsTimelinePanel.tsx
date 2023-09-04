@@ -76,6 +76,7 @@ export interface IOwnProps {
     | 'processId'
     | 'state'
     | 'source'
+    | 'nodeDefinitions'
   >;
   driver: ProcessDetailsDriver;
   jobs: Job[];
@@ -112,7 +113,11 @@ const ProcessDetailsTimelinePanel: React.FC<IOwnProps & OUIAProps> = ({
   const allOmmitedNodes = useMemo(() => {
     return [
       ...omittedProcessTimelineEvents,
-      ...getOmmitedNodesForTimeline(data.nodes, data.source)
+      ...getOmmitedNodesForTimeline(
+        data.nodes,
+        data.source,
+        data.nodeDefinitions.map((nd) => nd.metadata)
+      )
     ];
   }, [data]);
 
