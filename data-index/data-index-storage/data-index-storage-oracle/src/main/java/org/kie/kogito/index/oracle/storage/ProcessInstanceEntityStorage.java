@@ -16,8 +16,8 @@
 
 package org.kie.kogito.index.oracle.storage;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.oracle.mapper.ProcessInstanceEntityMapper;

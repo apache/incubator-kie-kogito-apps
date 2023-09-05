@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 import org.kie.kogito.job.recipient.common.http.converters.HttpConverters;
 import org.kie.kogito.jobs.api.URIBuilder;

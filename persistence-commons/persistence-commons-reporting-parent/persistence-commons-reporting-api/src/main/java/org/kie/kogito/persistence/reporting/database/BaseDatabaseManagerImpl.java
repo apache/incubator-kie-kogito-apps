@@ -21,7 +21,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.persistence.EntityManager;
+import jakarta.persistence.EntityManager;
 
 import org.kie.kogito.event.cloudevents.utils.CloudEventUtils;
 import org.kie.kogito.persistence.reporting.database.sqlbuilders.ApplyMappingSqlBuilder;

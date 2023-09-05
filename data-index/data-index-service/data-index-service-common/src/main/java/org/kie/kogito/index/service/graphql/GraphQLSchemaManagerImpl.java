@@ -22,9 +22,9 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-
+import jakarta.enterprise.context.ApplicationScoped;
+import mutiny.zero.flow.adapters.AdaptersToReactiveStreams;
+import jakarta.annotation.PostConstruct;
 import org.kie.kogito.index.graphql.AbstractGraphQLSchemaManager;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
 import org.kie.kogito.index.json.DataIndexParsingException;
@@ -328,11 +328,11 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
     }
 
     private DataFetcher<Publisher<ObjectNode>> objectCreatedPublisher(Supplier<Storage> cache) {
-        return env -> cache.get().objectCreatedListener();
+        return env -> AdaptersToReactiveStreams.publisher(cache.get().objectCreatedListener());
     }
 
     private DataFetcher<Publisher<ObjectNode>> objectUpdatedPublisher(Supplier<Storage> cache) {
-        return env -> cache.get().objectUpdatedListener();
+        return env -> AdaptersToReactiveStreams.publisher(cache.get().objectUpdatedListener());
     }
 
     private Supplier<DataIndexServiceException> cacheNotFoundException(String processId) {
@@ -340,11 +340,11 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
     }
 
     protected DataFetcher<Publisher<ObjectNode>> getDomainModelUpdatedDataFetcher(String processId) {
-        return env -> Optional.ofNullable(getCacheService().getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)).objectUpdatedListener();
+        return env -> AdaptersToReactiveStreams.publisher(Optional.ofNullable(getCacheService().getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)).objectUpdatedListener());
     }
 
     protected DataFetcher<Publisher<ObjectNode>> getDomainModelAddedDataFetcher(String processId) {
-        return env -> Optional.ofNullable(getCacheService().getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)).objectCreatedListener();
+        return env -> AdaptersToReactiveStreams.publisher(Optional.ofNullable(getCacheService().getDomainModelCache(processId)).orElseThrow(cacheNotFoundException(processId)).objectCreatedListener());
     }
 
     protected DataFetcher<Collection<ObjectNode>> getDomainModelDataFetcher(String processId) {

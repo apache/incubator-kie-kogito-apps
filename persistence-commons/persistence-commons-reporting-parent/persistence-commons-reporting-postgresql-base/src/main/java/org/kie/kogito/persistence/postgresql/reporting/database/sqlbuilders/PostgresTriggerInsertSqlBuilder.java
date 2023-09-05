@@ -22,7 +22,7 @@ import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.persistence.postgresql.reporting.model.JsonType;
 import org.kie.kogito.persistence.postgresql.reporting.model.PostgresField;

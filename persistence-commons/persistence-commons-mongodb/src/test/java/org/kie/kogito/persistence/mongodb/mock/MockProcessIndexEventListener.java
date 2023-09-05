@@ -18,8 +18,8 @@ package org.kie.kogito.persistence.mongodb.mock;
 
 import java.util.Map;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 
 import org.kie.kogito.persistence.mongodb.index.ProcessIndexEvent;
 import org.mockito.Mockito;

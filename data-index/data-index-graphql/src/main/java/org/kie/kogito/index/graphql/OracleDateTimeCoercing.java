@@ -18,7 +18,7 @@ package org.kie.kogito.index.graphql;
 
 import java.time.ZonedDateTime;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import io.quarkus.arc.properties.IfBuildProperty;
 

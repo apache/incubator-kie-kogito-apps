@@ -20,8 +20,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.Application;

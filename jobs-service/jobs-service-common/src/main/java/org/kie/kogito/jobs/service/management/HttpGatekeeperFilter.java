@@ -17,8 +17,8 @@ package org.kie.kogito.jobs.service.management;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 
