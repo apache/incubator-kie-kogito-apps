@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>integration-tests-trusty-service</artifactId>
-    <version>1.44.0.Final</version>
+    <version>1.44.1-SNAPSHOT</version>
   </parent>
   <artifactId>integration-tests-trusty-service-springboot</artifactId>
   <name>Kogito Apps :: Integration Tests :: Trusty Service :: Spring Boot</name>
