@@ -23,10 +23,8 @@ import javax.transaction.Transactional;
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
-import org.kie.kogito.event.process.UserTaskInstanceDataEvent;
+import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
-import org.kie.kogito.index.event.ProcessInstanceEventMapper;
-import org.kie.kogito.index.event.UserTaskInstanceEventMapper;
 import org.kie.kogito.index.service.IndexingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +43,7 @@ public class BlockingMessagingEventConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockingMessagingEventConsumer.class);
 
     @Inject
-    Event<DataEvent> eventPublisher;
+    Event<DataEvent<?>> eventPublisher;
 
     @Inject
     IndexingService indexingService;
@@ -53,18 +51,18 @@ public class BlockingMessagingEventConsumer {
     @Incoming(KOGITO_PROCESSINSTANCES_EVENTS)
     @Blocking
     @Transactional
-    public void onProcessInstanceEvent(ProcessInstanceDataEvent event) {
+    public void onProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
         LOGGER.debug("Process instance consumer received ProcessInstanceDataEvent: \n{}", event);
-        indexingService.indexProcessInstance(new ProcessInstanceEventMapper().apply(event));
+        indexingService.indexProcessInstanceEvent(event);
         eventPublisher.fire(event);
     }
 
     @Incoming(KOGITO_USERTASKINSTANCES_EVENTS)
     @Blocking
     @Transactional
-    public void onUserTaskInstanceEvent(UserTaskInstanceDataEvent event) {
+    public void onUserTaskInstanceEvent(UserTaskInstanceDataEvent<?> event) {
         LOGGER.debug("Task instance received UserTaskInstanceDataEvent \n{}", event);
-        indexingService.indexUserTaskInstance(new UserTaskInstanceEventMapper().apply(event));
+        indexingService.indexUserTaskInstanceEvent(event);
         eventPublisher.fire(event);
     }
 

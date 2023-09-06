@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Copyright 2023 Red Hat, Inc. and/or its affiliates.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.kie.kogito.index.json;
+package org.kie.kogito.index.event.mapper;
 
-public class DataIndexParsingException extends RuntimeException {
+import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
+import org.kie.kogito.index.model.UserTaskInstance;
 
-    private static final long serialVersionUID = 2205334685545385623L;
+public interface UserTaskInstanceEventMerger {
 
-    public DataIndexParsingException(String message, Throwable cause) {
-        super(message, cause);
-    }
+    boolean accept(UserTaskInstanceDataEvent<?> event);
+
+    void merge(UserTaskInstance processInstance, UserTaskInstanceDataEvent<?> event);
+
 }
