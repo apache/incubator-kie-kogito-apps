@@ -169,7 +169,7 @@ String getOptaPlannerBranch() {
 
 MavenCommand getMavenCommand(String directory) {
     return new MavenCommand(this, ['-fae', '-ntp'])
-                .withSettingsXmlId('kogito_release_settings')
+                .withSettingsXmlId('kie-release-settings')
                 .withProperty('java.net.preferIPv4Stack', true)
                 .withOptions(env.BUILD_MVN_OPTS ? [ env.BUILD_MVN_OPTS ] : [])
                 .inDirectory(directory)
