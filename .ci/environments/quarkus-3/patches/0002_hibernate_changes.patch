@@ -39,7 +39,7 @@ index 2edebf340..a0e91004d 100644
  
          Map<String, String> attachmentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
 diff --git a/data-index/data-index-service/data-index-service-common/src/test/java/org/kie/kogito/index/service/GraphQLUtils.java b/data-index/data-index-service/data-index-service-common/src/test/java/org/kie/kogito/index/service/GraphQLUtils.java
-index 5c1275858..83fbb42c3 100644
+index a12c24b59..f3db69fa8 100644
 --- a/data-index/data-index-service/data-index-service-common/src/test/java/org/kie/kogito/index/service/GraphQLUtils.java
 +++ b/data-index/data-index-service/data-index-service-common/src/test/java/org/kie/kogito/index/service/GraphQLUtils.java
 @@ -43,11 +43,28 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -608,10 +608,10 @@ index d848509ae..f698d913a 100644
          return ((List<AttributeFilter<?>>) filter.getValue())
                  .stream()
 diff --git a/data-index/data-index-storage/data-index-storage-oracle/src/test/java/org/kie/kogito/index/oracle/schema/DDLSchemaExporter.java b/data-index/data-index-storage/data-index-storage-oracle/src/test/java/org/kie/kogito/index/oracle/schema/DDLSchemaExporter.java
-index 7f2bf10f9..420d0ee8a 100644
+index 09123a4a6..630b0365b 100644
 --- a/data-index/data-index-storage/data-index-storage-oracle/src/test/java/org/kie/kogito/index/oracle/schema/DDLSchemaExporter.java
 +++ b/data-index/data-index-storage/data-index-storage-oracle/src/test/java/org/kie/kogito/index/oracle/schema/DDLSchemaExporter.java
-@@ -43,7 +43,7 @@ public class DDLSchemaExporter {
+@@ -44,7 +44,7 @@ public class DDLSchemaExporter {
      public static void main(String[] args) {
          try (KogitoOracleSqlContainer oracleSql = new KogitoOracleSqlContainer()) {
              oracleSql.start();
@@ -719,10 +719,10 @@ index 74fd17bd9..e2c373f78 100644
          return ((List<AttributeFilter<?>>) filter.getValue())
                  .stream()
 diff --git a/data-index/data-index-storage/data-index-storage-postgresql/src/test/java/org/kie/kogito/index/postgresql/schema/DDLSchemaExporter.java b/data-index/data-index-storage/data-index-storage-postgresql/src/test/java/org/kie/kogito/index/postgresql/schema/DDLSchemaExporter.java
-index 4f0d95a71..15b2ad7cc 100644
+index c2e13d15b..5f225f387 100644
 --- a/data-index/data-index-storage/data-index-storage-postgresql/src/test/java/org/kie/kogito/index/postgresql/schema/DDLSchemaExporter.java
 +++ b/data-index/data-index-storage/data-index-storage-postgresql/src/test/java/org/kie/kogito/index/postgresql/schema/DDLSchemaExporter.java
-@@ -45,7 +45,7 @@ public class DDLSchemaExporter {
+@@ -46,7 +46,7 @@ public class DDLSchemaExporter {
          try (KogitoPostgreSqlContainer postgresql = new KogitoPostgreSqlContainer()) {
              postgresql.waitingFor(Wait.forListeningPort());
              postgresql.start();
@@ -732,12 +732,12 @@ index 4f0d95a71..15b2ad7cc 100644
              settings.put(Environment.USER, postgresql.getUsername());
              settings.put(Environment.PASS, postgresql.getPassword());
 diff --git a/kogito-apps-build-parent/pom.xml b/kogito-apps-build-parent/pom.xml
-index 2e24461df..f965430b6 100644
+index 54d1b2825..490046a10 100644
 --- a/kogito-apps-build-parent/pom.xml
 +++ b/kogito-apps-build-parent/pom.xml
 @@ -47,7 +47,7 @@
          <!-- OptaPlanner version -->
-         <version.org.optaplanner>9.40.0.Final</version.org.optaplanner>
+         <version.org.optaplanner>9.44.0.Final</version.org.optaplanner>
  
 -        <version.com.vladmihalcea.hibernate-types-55>2.12.1</version.com.vladmihalcea.hibernate-types-55>
 +        <version.org.hibernate>6.2.0.Final</version.org.hibernate> <!-- Aligned with Quarkus bom -->
