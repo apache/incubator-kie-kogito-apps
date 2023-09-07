@@ -105,7 +105,7 @@ export const FormDisplayer = React.forwardRef<
 
     return (
       <div {...componentOuiaProps(ouiaId, 'form-displayer', ouiaSafe)}>
-        {isEnvelopeConnectedToChannel && !isExecuting ? (
+        {isEnvelopeConnectedToChannel && !isExecuting && source ? (
           <div id={'inner-form-container'}>
             {content.formInfo && content.formInfo.type === 'TSX' ? (
               <ReactFormRenderer
