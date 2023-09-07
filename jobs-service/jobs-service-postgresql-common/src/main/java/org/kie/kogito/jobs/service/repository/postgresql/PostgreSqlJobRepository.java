@@ -24,9 +24,10 @@ import java.util.concurrent.CompletionStage;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
+import mutiny.zero.flow.adapters.AdaptersToReactiveStreams;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.service.model.JobDetails;
@@ -139,17 +140,19 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
         String statusQuery = createStatusQuery(status);
         String query = " WHERE " + statusQuery;
         return ReactiveStreams.fromPublisher(
+            AdaptersToReactiveStreams.publisher(
                 client.preparedQuery("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC LIMIT $1").execute(Tuple.of(MAX_ITEMS_QUERY))
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
-                        .onItem().transform(this::from));
+                        .onItem().transform(this::from)));
     }
 
     @Override
     public PublisherBuilder<JobDetails> findAll() {
         return ReactiveStreams.fromPublisher(
+            AdaptersToReactiveStreams.publisher(
                 client.preparedQuery("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + " LIMIT $1").execute(Tuple.of(MAX_ITEMS_QUERY))
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
-                        .onItem().transform(this::from));
+                        .onItem().transform(this::from)));
     }
 
     @Override
@@ -159,10 +162,11 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
         String query = " WHERE " + statusQuery + " AND " + timeQuery;
 
         return ReactiveStreams.fromPublisher(
+            AdaptersToReactiveStreams.publisher(
                 client.preparedQuery("SELECT " + JOB_DETAILS_COLUMNS + " FROM " + JOB_DETAILS_TABLE + query + " ORDER BY priority DESC LIMIT $1")
                         .execute(Tuple.of(MAX_ITEMS_QUERY, from.toOffsetDateTime(), to.toOffsetDateTime()))
                         .onItem().transformToMulti(rowSet -> Multi.createFrom().iterable(rowSet))
-                        .onItem().transform(this::from));
+                        .onItem().transform(this::from)));
     }
 
     static String createStatusQuery(JobStatus... status) {

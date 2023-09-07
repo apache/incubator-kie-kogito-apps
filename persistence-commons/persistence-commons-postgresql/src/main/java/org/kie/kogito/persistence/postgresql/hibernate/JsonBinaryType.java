@@ -25,81 +25,72 @@ import java.util.Objects;
 
 import org.hibernate.HibernateException;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
+import org.hibernate.type.SqlTypes;
 import org.hibernate.usertype.UserType;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
 import static java.lang.String.format;
 
-public class JsonBinaryType implements UserType {
+public class JsonBinaryType implements UserType<JsonNode> {
 
     private ObjectMapper mapper = new ObjectMapper();
 
     @Override
-    public int[] sqlTypes() {
-        return new int[] { Types.JAVA_OBJECT };
+    public int getSqlType() {
+        return SqlTypes.JAVA_OBJECT;
     }
 
     @Override
-    public Class returnedClass() {
+    public Class<JsonNode> returnedClass() {
         return JsonNode.class;
     }
 
     @Override
-    public boolean equals(Object x, Object y) throws HibernateException {
+    public boolean equals(JsonNode x, JsonNode y) {
         return Objects.equals(x, y);
     }
 
     @Override
-    public int hashCode(Object x) throws HibernateException {
+    public int hashCode(JsonNode x) {
         return Objects.hashCode(x);
     }
 
     @Override
-    public Object nullSafeGet(ResultSet rs, String[] names, SharedSessionContractImplementor session, Object owner)
-            throws HibernateException, SQLException {
-        final String json = rs.getString(names[0]);
+    public JsonNode nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor session, Object owner)
+            throws SQLException {
+        final String json = rs.getString(position);
         if (json == null) {
             return null;
         }
         try {
             return mapper.readTree(json.getBytes("UTF-8"));
         } catch (final Exception ex) {
-            throw new RuntimeException("Failed to convert String to Invoice: " + ex.getMessage(), ex);
+            throw new RuntimeException("Failed to convert String to JSON: " + ex.getMessage(), ex);
         }
     }
 
     @Override
-    public void nullSafeSet(PreparedStatement ps, Object value, int index, SharedSessionContractImplementor session)
-            throws HibernateException, SQLException {
+    public void nullSafeSet(PreparedStatement ps, JsonNode value, int index, SharedSessionContractImplementor session)
+            throws SQLException {
         if (value == null) {
             ps.setNull(index, Types.OTHER);
             return;
         }
-        if (value instanceof ObjectNode) {
-            try {
-                ps.setObject(index, value.toString(), Types.OTHER);
-            } catch (final Exception ex) {
-                throw new RuntimeException(format("Failed to convert JSON to String: %s", ex.getMessage()), ex);
-            }
-        } else {
-            throw new RuntimeException(format("Cannot convert type %s as JSON String", value.getClass().getCanonicalName()));
+        try {
+            ps.setObject(index, value.toString(), Types.OTHER);
+        } catch (final Exception ex) {
+            throw new RuntimeException(format("Failed to convert JSON to String: %s", ex.getMessage()), ex);
         }
     }
 
     @Override
-    public Object deepCopy(Object value) throws HibernateException {
+    public JsonNode deepCopy(JsonNode value) throws HibernateException {
         if (value == null) {
             return null;
         }
-        if (value instanceof JsonNode) {
-            return ((JsonNode) value).deepCopy();
-        } else {
-            throw new RuntimeException(format("Cannot deep copy type %s", value.getClass().getCanonicalName()));
-        }
+        return value.deepCopy();
     }
 
     @Override
@@ -108,12 +99,12 @@ public class JsonBinaryType implements UserType {
     }
 
     @Override
-    public Serializable disassemble(Object value) throws HibernateException {
+    public Serializable disassemble(JsonNode value) throws HibernateException {
         return this.deepCopy(value).toString();
     }
 
     @Override
-    public Object assemble(Serializable cached, Object owner) throws HibernateException {
+    public JsonNode assemble(Serializable cached, Object owner) throws HibernateException {
         try {
             return mapper.readTree(cached.toString());
         } catch (JsonProcessingException ex) {
@@ -122,7 +113,7 @@ public class JsonBinaryType implements UserType {
     }
 
     @Override
-    public Object replace(Object original, Object target, Object owner) throws HibernateException {
+    public JsonNode replace(JsonNode original, JsonNode target, Object owner) throws HibernateException {
         return original;
     }
 }

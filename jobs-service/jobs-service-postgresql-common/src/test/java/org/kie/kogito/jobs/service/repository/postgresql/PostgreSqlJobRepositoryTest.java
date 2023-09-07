@@ -18,7 +18,7 @@ package org.kie.kogito.jobs.service.repository.postgresql;
 
 import java.time.Duration;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;

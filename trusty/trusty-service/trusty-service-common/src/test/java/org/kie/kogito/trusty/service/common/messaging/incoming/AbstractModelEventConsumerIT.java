@@ -16,7 +16,7 @@
 
 package org.kie.kogito.trusty.service.common.messaging.incoming;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.AfterEach;

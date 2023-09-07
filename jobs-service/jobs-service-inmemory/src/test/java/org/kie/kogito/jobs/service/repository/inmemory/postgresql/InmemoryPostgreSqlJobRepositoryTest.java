@@ -18,7 +18,7 @@ package org.kie.kogito.jobs.service.repository.inmemory.postgresql;
 
 import java.time.Duration;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;

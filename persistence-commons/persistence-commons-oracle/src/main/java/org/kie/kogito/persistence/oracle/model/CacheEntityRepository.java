@@ -16,7 +16,7 @@
 
 package org.kie.kogito.persistence.oracle.model;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 

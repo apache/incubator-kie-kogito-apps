@@ -15,19 +15,20 @@
  */
 package org.kie.kogito.jobs.service.resource;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.NotFoundException;
-import javax.ws.rs.PATCH;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.NotFoundException;
+import jakarta.ws.rs.PATCH;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
 
+import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.kie.kogito.jobs.api.Job;
@@ -65,7 +66,7 @@ public class JobResource {
     public Uni<ScheduledJob> create(Job job) {
         LOGGER.debug("REST create {}", job);
         JobDetails jobDetails = jobDetailsValidator.validateToCreate(ScheduledJobAdapter.to(ScheduledJob.builder().job(job).build()));
-        return Uni.createFrom().publisher(scheduler.schedule(jobDetails))
+        return Uni.createFrom().publisher(AdaptersToFlow.publisher(scheduler.schedule(jobDetails)))
                 .onItem().ifNull().failWith(new RuntimeException("Failed to schedule job " + job))
                 .onItem().transform(ScheduledJobAdapter::of);
     }
@@ -79,7 +80,7 @@ public class JobResource {
         LOGGER.debug("REST patch update {}", job);
         //validating allowed patch attributes
         JobDetails jobToBeMerged = jobDetailsValidator.validateToMerge(ScheduledJobAdapter.to(ScheduledJobBuilder.from(job)));
-        return Uni.createFrom().publisher(scheduler.reschedule(id, jobToBeMerged.getTrigger()).buildRs())
+        return Uni.createFrom().publisher(AdaptersToFlow.publisher(scheduler.reschedule(id, jobToBeMerged.getTrigger()).buildRs()))
                 .onItem().ifNull().failWith(new NotFoundException("Failed to reschedule job " + job))
                 .onItem().transform(ScheduledJobAdapter::of);
     }

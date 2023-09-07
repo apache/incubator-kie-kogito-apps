@@ -16,7 +16,7 @@
 
 package org.kie.kogito.trusty.storage.redis;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 

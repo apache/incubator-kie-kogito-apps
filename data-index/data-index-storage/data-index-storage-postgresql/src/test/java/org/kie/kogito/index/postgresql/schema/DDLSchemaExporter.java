@@ -46,7 +46,7 @@ public class DDLSchemaExporter {
         try (KogitoPostgreSqlContainer postgresql = new KogitoPostgreSqlContainer()) {
             postgresql.waitingFor(Wait.forListeningPort());
             postgresql.start();
-            Map<String, String> settings = new HashMap<>();
+            Map<String, Object> settings = new HashMap<>();
             settings.put(Environment.URL, postgresql.getJdbcUrl());
             settings.put(Environment.USER, postgresql.getUsername());
             settings.put(Environment.PASS, postgresql.getPassword());

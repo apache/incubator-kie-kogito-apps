@@ -17,7 +17,7 @@ package org.kie.kogito.jobs.service.repository.infinispan;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.junit.jupiter.api.BeforeEach;

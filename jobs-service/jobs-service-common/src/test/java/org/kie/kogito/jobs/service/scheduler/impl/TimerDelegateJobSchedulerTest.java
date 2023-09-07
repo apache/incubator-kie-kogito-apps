@@ -18,6 +18,7 @@ package org.kie.kogito.jobs.service.scheduler.impl;
 import java.util.Optional;
 import java.util.UUID;
 
+import mutiny.zero.flow.adapters.AdaptersToFlow;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
@@ -76,14 +77,14 @@ class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
     @Test
     void testDoSchedule() {
         PublisherBuilder<ManageableJobHandle> schedule = tested.doSchedule(scheduledJob, Optional.empty());
-        Multi.createFrom().publisher(schedule.buildRs()).subscribe().with(dummyCallback(), dummyCallback());
+        Multi.createFrom().publisher(AdaptersToFlow.publisher(schedule.buildRs())).subscribe().with(dummyCallback(), dummyCallback());
         verify(timer).scheduleJob(any(DelegateJob.class), any(JobDetailsContext.class), eq(scheduledJob.getTrigger()));
     }
 
     @Test
     void testDoCancel() {
         Publisher<ManageableJobHandle> cancel = tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(SCHEDULED_ID).build());
-        Multi.createFrom().publisher(cancel).subscribe().with(dummyCallback(), dummyCallback());
+        Multi.createFrom().publisher(AdaptersToFlow.publisher(cancel)).subscribe().with(dummyCallback(), dummyCallback());
         verify(timer).removeJob(any(ManageableJobHandle.class));
     }
 
@@ -91,7 +92,7 @@ class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
     void testDoCancelNullId() {
         Publisher<ManageableJobHandle> cancel =
                 tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(null).build());
-        Multi.createFrom().publisher(cancel).subscribe().with(dummyCallback(), dummyCallback());
+        Multi.createFrom().publisher(AdaptersToFlow.publisher(cancel)).subscribe().with(dummyCallback(), dummyCallback());
         verify(timer, never()).removeJob(any(ManageableJobHandle.class));
     }
 
