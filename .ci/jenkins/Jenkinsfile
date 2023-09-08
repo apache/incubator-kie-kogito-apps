@@ -14,7 +14,7 @@ pipeline {
         BUILDCHAIN_PROJECT = 'kiegroup/kogito-apps'
 
         ENABLE_SONARCLOUD = 'true'
-        KOGITO_RUNTIMES_BUILD_MVN_OPTS = '-Dvalidate-formatting -Prun-code-coverage'
+        KOGITO_APPS_BUILD_MVN_OPTS = '-Dvalidate-formatting -Prun-code-coverage'
     }
     stages {
         stage('Initialize') {
