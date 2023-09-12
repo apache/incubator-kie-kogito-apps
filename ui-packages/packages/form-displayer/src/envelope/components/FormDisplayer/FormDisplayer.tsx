@@ -114,7 +114,7 @@ export const FormDisplayer = React.forwardRef<
 
     return (
       <div {...componentOuiaProps(ouiaId, 'form-displayer', ouiaSafe)}>
-        {canDisplayForm ? (
+        {canDisplayForm() ? (
           <div id={'inner-form-container'}>
             {content.formInfo && content.formInfo.type === 'TSX' ? (
               <ReactFormRenderer
