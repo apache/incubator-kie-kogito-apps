@@ -2,10 +2,10 @@
 
 import org.kie.jenkins.MavenCommand
 
-droolsRepo = 'drools'
-optaplannerRepo = 'optaplanner'
-kogitoRuntimesRepo = 'kogito-runtimes'
-kogitoAppsRepo = 'kogito-apps'
+droolsRepo = 'incubator-kie-drools'
+optaplannerRepo = 'incubator-kie-optaplanner'
+kogitoRuntimesRepo = 'incubator-kie-kogito-runtimes'
+kogitoAppsRepo = 'incubator-kie-kogito-apps'
 
 pipeline {
     agent {

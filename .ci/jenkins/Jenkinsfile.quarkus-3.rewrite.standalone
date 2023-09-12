@@ -55,7 +55,7 @@ pipeline {
         stage('Build upstream projects') {
             steps {
                 script {
-                    [ 'drools', 'kogito-runtimes' ].each { project -> 
+                    [ 'incubator-kie-drools', 'incubator-kie-kogito-runtimes' ].each { project -> 
                         dir(project) {
                             githubscm.checkoutIfExists(project, getGitAuthor(), getBuildBranch(), getBaseAuthor(), getBaseBranch(), true)
                             sh '.ci/environments/update.sh quarkus-3'

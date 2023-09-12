@@ -3,8 +3,8 @@ import org.jenkinsci.plugins.workflow.libs.Library
 
 import org.kie.jenkins.MavenCommand
 
-droolsRepo = 'drools'
-kogitoRuntimesRepo = 'kogito-runtimes'
+droolsRepo = 'incubator-kie-drools'
+kogitoRuntimesRepo = 'incubator-kie-kogito-runtimes'
 
 pipeline {
     agent {
