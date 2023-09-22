@@ -65,8 +65,10 @@ module.exports = {
           copy: [
             { source: './dist/envelope.js', destination: './dist/resources/webapp/' },
             { source: './dist/envelope.js.map', destination: './dist/resources/webapp/' },
-            { source: './dist/*.js', destination: './dist/webapp/' },
-            { source: './dist/*.map', destination: './dist/webapp/' },
+            { source: './dist/standalone.js', destination: './dist/resources/webapp/' },
+            { source: './dist/standalone.js.map', destination: './dist/resources/webapp/' },
+            { source: './dist/*.js', destination: './dist/webapp/', globOptions: {ignore: ['./dist/envelope.js', './dist/standalone.js']} },
+            { source: './dist/*.map', destination: './dist/webapp/', globOptions: {ignore: ['./dist/envelope.js.map', './dist/standalone.js.map']}},
             { source: './dist/fonts', destination: './dist/webapp/fonts/' },
             {
               source: './dist/monitoring-webapp',
@@ -76,7 +78,8 @@ module.exports = {
               source: './dist/custom-dashboard-view',
               destination: './dist/resources/webapp/custom-dashboard-view'
             }
-          ]
+          ],
+          delete: ['./dist/*.js*', './dist/fonts', './dist/standalone']
         }
       }
     }),
