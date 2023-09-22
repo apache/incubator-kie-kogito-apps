@@ -62,13 +62,13 @@ module.exports = {
     new FileManagerPlugin({
       events: {
         onEnd: {
-          mkdir: ['./dist/resources/webapp/'],
+          mkdir: ['./dist/resources/webapp', './dist/webapp/', './dist/webapp/fonts/'],
           copy: [
-            { source: './dist/editor.worker.js', destination: './dist/webapp/' },
-            { source: './dist/editor.worker.js.map', destination: './dist/webapp/' },
-            { source: './dist/*.js', destination: './dist/resources/webapp/' },
-            { source: './dist/*.map', destination: './dist/resources/webapp/' },
-            { source: './dist/fonts', destination: './dist/webapp/fonts' },
+            { source: './dist/envelope.js', destination: './dist/resources/webapp/' },
+            { source: './dist/envelope.js.map', destination: './dist/resources/webapp/' },
+            { source: './dist/*.js', destination: './dist/webapp/' },
+            { source: './dist/*.map', destination: './dist/webapp/' },
+            { source: './dist/fonts', destination: './dist/webapp/fonts/' },
             {
               source: './dist/monitoring-webapp',
               destination: './dist/resources/webapp/monitoring-webapp'
