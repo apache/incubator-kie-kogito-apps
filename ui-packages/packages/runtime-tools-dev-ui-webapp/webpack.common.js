@@ -1,5 +1,4 @@
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 const webpack = require('webpack');
 const BG_IMAGES_DIRNAME = 'bgimages';
@@ -25,7 +24,7 @@ module.exports = {
   },
   plugins: [
     new MonacoWebpackPlugin({
-      languages: ['typescript', 'json'],
+      languages: ['typescript', 'json', 'html'],
       customLanguages: [
         {
           label: 'yaml',
