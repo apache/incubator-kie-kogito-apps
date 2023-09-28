@@ -76,7 +76,7 @@ public class JobSchedulerManager {
 
     @Inject
     Vertx vertx;
-    private AtomicBoolean enabled = new AtomicBoolean(false);
+    final AtomicBoolean enabled = new AtomicBoolean(false);
 
     void onStartup(@Observes @Priority(Interceptor.Priority.PLATFORM_AFTER) StartupEvent startupEvent) {
         if (loadJobIntervalInMinutes > schedulerChunkInMinutes) {
@@ -96,6 +96,8 @@ public class JobSchedulerManager {
 
     protected void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
         this.enabled.set(event.isEnabled());
+        //run load jobs once the instance become a leader to avoid waiting for the next periodic run
+        vertx.runOnContext(this::loadJobDetails);
     }
 
     //Runs periodically loading the jobs from the repository in chunks
