@@ -21,6 +21,7 @@ package org.kie.kogito.jobs.service.scheduler;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
@@ -78,26 +79,47 @@ public class JobSchedulerManager {
     Vertx vertx;
     final AtomicBoolean enabled = new AtomicBoolean(false);
 
-    void onStartup(@Observes @Priority(Interceptor.Priority.PLATFORM_AFTER) StartupEvent startupEvent) {
-        if (loadJobIntervalInMinutes > schedulerChunkInMinutes) {
-            LOGGER.warn("The loadJobIntervalInMinutes ({}) cannot be greater than schedulerChunkInMinutes ({}), " +
-                    "setting value {} for both",
-                    loadJobIntervalInMinutes,
-                    schedulerChunkInMinutes,
-                    schedulerChunkInMinutes);
-            loadJobIntervalInMinutes = schedulerChunkInMinutes;
-        }
+    final AtomicLong periodicTimerIdForLoadJobs = new AtomicLong(-1l);
 
-        //first execution
-        vertx.runOnContext(this::loadJobDetails);
-        //periodic execution
-        vertx.setPeriodic(TimeUnit.MINUTES.toMillis(loadJobIntervalInMinutes), id -> loadJobDetails());
+    void onStartup(@Observes @Priority(Interceptor.Priority.PLATFORM_AFTER) StartupEvent startupEvent) {
+        if (enabled.get()) {
+            startJobsLoadingFromRepositoryTask();
+        }
     }
 
-    protected void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
-        this.enabled.set(event.isEnabled());
-        //run load jobs once the instance become a leader to avoid waiting for the next periodic run
-        vertx.runOnContext(this::loadJobDetails);
+    private void startJobsLoadingFromRepositoryTask() {
+        //guarantee it starts the task just in case it is not already active
+        if (periodicTimerIdForLoadJobs.get() < 0) {
+            if (loadJobIntervalInMinutes > schedulerChunkInMinutes) {
+                LOGGER.warn("The loadJobIntervalInMinutes ({}) cannot be greater than schedulerChunkInMinutes ({}), " +
+                        "setting value {} for both",
+                        loadJobIntervalInMinutes,
+                        schedulerChunkInMinutes,
+                        schedulerChunkInMinutes);
+                loadJobIntervalInMinutes = schedulerChunkInMinutes;
+            }
+            //first execution
+            vertx.runOnContext(this::loadJobDetails);
+            //next executions to run periodically
+            periodicTimerIdForLoadJobs.set(vertx.setPeriodic(TimeUnit.MINUTES.toMillis(loadJobIntervalInMinutes), id -> loadJobDetails()));
+        }
+    }
+
+    private void cancelJobsLoadingFromRepositoryTask() {
+        if (periodicTimerIdForLoadJobs.get() > 0) {
+            vertx.cancelTimer(periodicTimerIdForLoadJobs.get());
+            //negative id indicates this is not active anymore
+            periodicTimerIdForLoadJobs.set(-1);
+        }
+    }
+
+    protected synchronized void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
+        boolean wasEnabled = enabled.getAndSet(event.isEnabled());
+        if (enabled.get() && !wasEnabled) {
+            startJobsLoadingFromRepositoryTask();
+        } else {
+            cancelJobsLoadingFromRepositoryTask();
+        }
     }
 
     //Runs periodically loading the jobs from the repository in chunks
