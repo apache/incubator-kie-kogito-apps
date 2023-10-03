@@ -19,6 +19,10 @@
 package org.kie.kogito.index.test.containers;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import org.kie.kogito.test.resources.TestResource;
 import org.kie.kogito.testcontainers.KogitoGenericContainer;
@@ -48,7 +52,19 @@ public abstract class AbstractDataIndexContainer extends KogitoGenericContainer<
     public void addProtoFileFolder() {
         String pathStr = "target/classes/META-INF/resources/persistence/protobuf/";
         String absolutePath = new File(pathStr).getAbsolutePath();
+        createIfNotExists(absolutePath);
         withFileSystemBind(absolutePath, "/home/kogito/data/protobufs/", BindMode.READ_ONLY);
+
+    }
+
+    public Path createIfNotExists(String absolutePath) {
+        Path path = Paths.get(absolutePath);
+        try {
+            Files.createDirectories(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return path;
     }
 
     @Override
