@@ -42,13 +42,11 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import io.quarkus.runtime.StartupEvent;
 import io.vertx.mutiny.core.Vertx;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -109,23 +107,6 @@ class JobSchedulerManagerTest {
         AtomicLong counter = new AtomicLong(1);
         lenient().when(vertx.setPeriodic(anyLong(), any(Consumer.class))).thenReturn(counter.incrementAndGet());
         tested.enabled.set(true);
-    }
-
-    @Test
-    void testOnStartup(@Mock StartupEvent event) {
-        tested.onStartup(event);
-        verify(vertx).runOnContext(captorFirstExecution.capture());
-        verify(vertx).setPeriodic(eq(tested.loadJobIntervalInMinutes), captorPeriodic.capture());
-    }
-
-    @Test
-    void testOnStartupInvalidInterval(@Mock StartupEvent event) {
-        tested.schedulerChunkInMinutes = 10;
-        tested.loadJobIntervalInMinutes = 20;
-
-        tested.onStartup(event);
-
-        assertThat(tested.loadJobIntervalInMinutes).isEqualTo(tested.schedulerChunkInMinutes);
     }
 
     @Test

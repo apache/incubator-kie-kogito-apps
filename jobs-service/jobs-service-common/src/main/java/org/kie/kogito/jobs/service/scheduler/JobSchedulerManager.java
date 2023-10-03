@@ -23,11 +23,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicLong;
 
-import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.interceptor.Interceptor;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
@@ -41,7 +39,6 @@ import org.kie.kogito.jobs.service.utils.ErrorHandling;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.quarkus.runtime.StartupEvent;
 import io.vertx.mutiny.core.Vertx;
 
 @ApplicationScoped
@@ -81,12 +78,6 @@ public class JobSchedulerManager {
 
     final AtomicLong periodicTimerIdForLoadJobs = new AtomicLong(-1l);
 
-    void onStartup(@Observes @Priority(Interceptor.Priority.PLATFORM_AFTER) StartupEvent startupEvent) {
-        if (enabled.get()) {
-            startJobsLoadingFromRepositoryTask();
-        }
-    }
-
     private void startJobsLoadingFromRepositoryTask() {
         //guarantee it starts the task just in case it is not already active
         if (periodicTimerIdForLoadJobs.get() < 0) {
@@ -116,8 +107,10 @@ public class JobSchedulerManager {
     protected synchronized void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
         boolean wasEnabled = enabled.getAndSet(event.isEnabled());
         if (enabled.get() && !wasEnabled) {
+            // good, avoid starting twice if we receive two consecutive enabled = true
             startJobsLoadingFromRepositoryTask();
-        } else {
+        } else if (!enabled.get()) {
+            // but only cancel if we receive enabled = false, otherwise with two consecutive enable we are also cancelling.
             cancelJobsLoadingFromRepositoryTask();
         }
     }
