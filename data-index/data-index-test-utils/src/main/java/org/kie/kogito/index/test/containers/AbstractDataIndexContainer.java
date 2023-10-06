@@ -20,6 +20,7 @@ package org.kie.kogito.index.test.containers;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -54,7 +55,6 @@ public abstract class AbstractDataIndexContainer extends KogitoGenericContainer<
         String absolutePath = new File(pathStr).getAbsolutePath();
         createIfNotExists(absolutePath);
         withFileSystemBind(absolutePath, "/home/kogito/data/protobufs/", BindMode.READ_ONLY);
-
     }
 
     public Path createIfNotExists(String absolutePath) {
@@ -62,7 +62,7 @@ public abstract class AbstractDataIndexContainer extends KogitoGenericContainer<
         try {
             Files.createDirectories(path);
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new UncheckedIOException(e);
         }
         return path;
     }
