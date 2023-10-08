@@ -347,8 +347,6 @@ public abstract class AbstractProcessDataIndexIT {
                         .statusCode(200)
                         .body("errors", nullValue()));
 
-        System.out.println("PROCESS INSTANCE 2!!! UPDATED " + taskSchema);
-
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
