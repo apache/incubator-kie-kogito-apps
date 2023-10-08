@@ -57,6 +57,7 @@ public class ProcessInstanceStateDataEventMerger implements ProcessInstanceEvent
         pi.setState(event.getData().getState());
         if (event.getData().getEventType() == null || event.getData().getEventType() == ProcessInstanceStateEventBody.EVENT_TYPE_STARTED) {
             pi.setStart(toZonedDateTime(event.getData().getEventDate()));
+            pi.setCreatedBy(event.getData().getEventUser());
         } else if (event.getData().getEventType() == ProcessInstanceStateEventBody.EVENT_TYPE_STARTED) {
             pi.setEnd(toZonedDateTime(event.getData().getEventDate()));
         }
@@ -65,7 +66,7 @@ public class ProcessInstanceStateDataEventMerger implements ProcessInstanceEvent
         pi.setEndpoint(event.getSource() == null ? null : event.getSource().toString());
         pi.setLastUpdate(toZonedDateTime(event.getTime()));
         pi.setDefinition(definitions(event));
-        pi.setCreatedBy(event.getData().getEventUser());
+        pi.setUpdatedBy(event.getData().getEventUser());
         LOGGER.debug("Value after merging: {}", pi);
     }
 
