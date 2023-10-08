@@ -18,9 +18,12 @@
  */
 package org.kie.kogito.jobs.service.repository.infinispan.marshaller;
 
+import java.io.IOException;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 
+import org.infinispan.protostream.FileDescriptorSource;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 
@@ -35,5 +38,14 @@ public class MarshallersProducer {
     @Produces
     public MessageMarshaller triggerMarshaller() {
         return new TriggerMarshaller();
+    }
+
+    @Produces
+    public FileDescriptorSource bookProtoDefinition() {
+        try {
+            return FileDescriptorSource.fromResources("META-INF/library.proto");
+        } catch (IOException e) {
+            return null;
+        }
     }
 }
