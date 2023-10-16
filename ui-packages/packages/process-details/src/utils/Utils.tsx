@@ -19,7 +19,8 @@ import {
   JobStatus,
   Job,
   ProcessInstance,
-  NodeInstance
+  NodeInstance,
+  NodeMetaData
 } from '@kogito-apps/management-console-shared/dist/types';
 import { setTitle } from '@kogito-apps/management-console-shared/dist/utils/Utils';
 import { ClockIcon } from '@patternfly/react-icons/dist/js/icons/clock-icon';
@@ -169,4 +170,39 @@ export const handleJobRescheduleUtil = async (
     handleRescheduleAction();
     setRescheduleError(response.modalContent);
   }
+};
+
+export const getOmmitedNodesForTimeline = (
+  nodes: NodeInstance[],
+  metaDataArray: NodeMetaData[]
+): string[] => {
+  if (nodes.length > 0 && metaDataArray.length > 0) {
+    const availableNodes = metaDataArray
+      .map((metaData) => metaData.state)
+      .concat(['Start', 'End'])
+      .filter((metaData) => metaData !== null);
+    return nodes
+      .filter((node) => !availableNodes.includes(node.name))
+      .map((node) => node.name);
+  }
+  return [];
+};
+
+export const getSuccessNodes = (
+  nodeInstances: NodeInstance[],
+  nodeNames: string[],
+  errorNode: NodeInstance,
+  metaDataArray: NodeMetaData[]
+): string[] => {
+  const successNodes = errorNode
+    ? nodeNames.filter((nodeName) => nodeName !== errorNode.name)
+    : nodeNames;
+  const filteredSuccessNodeInstances = nodeInstances.filter((node) =>
+    successNodes.includes(node.name)
+  );
+  const ommitedNodesNames = getOmmitedNodesForTimeline(
+    filteredSuccessNodeInstances,
+    metaDataArray
+  );
+  return successNodes.filter((name) => !ommitedNodesNames.includes(name));
 };

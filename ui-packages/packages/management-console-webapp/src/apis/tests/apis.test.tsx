@@ -695,6 +695,12 @@ describe('retrieve list of triggerable nodes test', () => {
 describe('handle node trigger click tests', () => {
   const node = {
     nodeDefinitionId: '_BDA56801-1155-4AF2-94D4-7DAADED2E3C0',
+    metadata: {
+      UniqueId: '1',
+      state: 'Send visa application',
+      branch: null,
+      action: null
+    },
     name: 'Send visa application',
     id: 1,
     type: 'ActionNode',

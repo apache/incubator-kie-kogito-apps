@@ -115,6 +115,14 @@ const GET_PROCESS_INSTANCE = gql`
         type
         definitionId
       }
+      nodeDefinitions {
+        metadata {
+          UniqueId
+          state
+          branch
+          action
+        }
+      }
       milestones {
         id
         name
@@ -427,7 +435,12 @@ const GET_PROCESS_INSTANCE_NODES = gql`
         name
         type
         uniqueId
-        nodeDefinitionId
+        metadata {
+          UniqueId
+          state
+          branch
+          action
+        }
       }
     }
   }

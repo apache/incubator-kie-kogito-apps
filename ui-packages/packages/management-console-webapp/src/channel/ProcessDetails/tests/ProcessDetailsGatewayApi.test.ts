@@ -232,7 +232,13 @@ describe('ProcessDetailsGatewayApi tests', () => {
       name: 'book_travel',
       type: 'start',
       uniqueId: 'avg3-wwr2-bgh5t6',
-      nodeDefinitionId: '_aabfr245kgtgiy'
+      nodeDefinitionId: '_aabfr245kgtgiy',
+      metadata: {
+        UniqueId: '1',
+        state: 'book_travel',
+        branch: null,
+        action: null
+      }
     };
     gatewayApi.handleNodeTrigger(data, node);
     expect(handleNodeTriggerMock).toHaveBeenCalledWith(data, node);

@@ -50,8 +50,17 @@ import { ProcessInstance } from '@kogito-apps/management-console-shared/dist/typ
 import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
 import { ServerlessWorkflowCombinedEditorChannelApi } from '@kie-tools/serverless-workflow-combined-editor/dist/api';
 import { ServerlessWorkflowCombinedEditorEnvelopeApi } from '@kie-tools/serverless-workflow-combined-editor/dist/api/ServerlessWorkflowCombinedEditorEnvelopeApi';
+import { getSuccessNodes } from '../../../utils/Utils';
+
+enum NodeColors {
+  ERROR_COLOR = '#f4d5d5',
+  SUCCESS_COLOR = '#d5f4e6'
+}
 interface ISwfCombinedEditorProps {
-  workflowInstance: Pick<ProcessInstance, 'source' | 'nodes' | 'error'>;
+  workflowInstance: Pick<
+    ProcessInstance,
+    'source' | 'nodes' | 'error' | 'nodeDefinitions'
+  >;
   isStunnerEnabled: boolean;
   width?: number;
   height?: number;
@@ -65,7 +74,7 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
   ouiaId,
   ouiaSafe
 }) => {
-  const { source, nodes, error } = workflowInstance;
+  const { source, nodes, error, nodeDefinitions } = workflowInstance;
   const [editor, editorRef] = useController<EmbeddedEditorRef>();
   const [isReady, setReady] = useState<boolean>(false);
 
@@ -185,37 +194,47 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
       nodeNames.push('Start');
     }
     if (combinedEditorEnvelopeApi && combinedEditorChannelApi) {
-      let errorNode = null;
-      if (error) {
-        errorNode = nodes.filter(
-          (node) => node.nodeId === error.nodeDefinitionId
-        )[0];
+      const subscription =
         combinedEditorChannelApi.notifications.kogitoSwfCombinedEditor_combinedEditorReady.subscribe(
           () => {
-            combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
-              {
-                nodeNames: [errorNode.name],
-                color: '#f4d5d5',
-                colorConnectedEnds
-              }
+            let errorNode = null;
+            if (error) {
+              errorNode = nodes.filter(
+                (node) =>
+                  node.nodeId === error.nodeDefinitionId ||
+                  node.definitionId === error.nodeDefinitionId
+              )[0];
+
+              combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
+                {
+                  nodeNames: [errorNode.name],
+                  color: NodeColors.ERROR_COLOR,
+                  colorConnectedEnds
+                }
+              );
+            }
+            const successNodes = getSuccessNodes(
+              nodes,
+              nodeNames,
+              errorNode,
+              (nodeDefinitions || []).map((nd) => nd.metadata)
             );
+            if (successNodes.length > 0) {
+              combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
+                {
+                  nodeNames: successNodes,
+                  color: NodeColors.SUCCESS_COLOR,
+                  colorConnectedEnds
+                }
+              );
+            }
           }
         );
-      }
-      const successNodes = errorNode
-        ? nodeNames.filter((nodeName) => nodeName !== errorNode.name)
-        : nodeNames;
-      combinedEditorChannelApi.notifications.kogitoSwfCombinedEditor_combinedEditorReady.subscribe(
-        () => {
-          combinedEditorEnvelopeApi.notifications.kogitoSwfCombinedEditor_colorNodes.send(
-            {
-              nodeNames: successNodes,
-              color: '#d5f4e6',
-              colorConnectedEnds
-            }
-          );
-        }
-      );
+      return () => {
+        combinedEditorChannelApi.notifications.kogitoSwfCombinedEditor_combinedEditorReady.unsubscribe(
+          subscription
+        );
+      };
     }
   }, [editor, nodes, embeddedFile]);
 

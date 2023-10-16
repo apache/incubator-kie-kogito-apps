@@ -192,6 +192,12 @@ describe('ProcessDetailsChannelApiImpl tests', () => {
 
   it('processDetails__handleNodeTrigger', () => {
     const node = {
+      metadata: {
+        UniqueId: '1',
+        state: 'Send visa application',
+        branch: '',
+        action: ''
+      },
       nodeDefinitionId: '_BDA56801-1155-4AF2-94D4-7DAADED2E3C0',
       name: 'Send visa application',
       id: 1,
