@@ -6,26 +6,26 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
     Array [
       Object {
         "label": "ProcessId",
-        "path": "$.processId",
+        "path": "processId",
       },
       Object {
         "isSortable": true,
         "label": "Name",
-        "path": "$.name",
+        "path": "name",
       },
       Object {
         "label": "Priority",
-        "path": "$.priority",
+        "path": "priority",
       },
       Object {
         "label": "ProcessInstanceId",
-        "path": "$.processInstanceId",
+        "path": "processInstanceId",
       },
       Object {
         "bodyCellTransformer": [Function],
         "isSortable": true,
         "label": "State",
-        "path": "$.state",
+        "path": "state",
       },
     ]
   }
@@ -90,13 +90,13 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
       Array [
         Object {
           "cellTransforms": undefined,
-          "data": "$.processId",
+          "data": "processId",
           "title": "ProcessId",
           "transforms": undefined,
         },
         Object {
           "cellTransforms": undefined,
-          "data": "$.name",
+          "data": "name",
           "title": "Name",
           "transforms": Array [
             [Function],
@@ -104,13 +104,13 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
         },
         Object {
           "cellTransforms": undefined,
-          "data": "$.priority",
+          "data": "priority",
           "title": "Priority",
           "transforms": undefined,
         },
         Object {
           "cellTransforms": undefined,
-          "data": "$.processInstanceId",
+          "data": "processInstanceId",
           "title": "ProcessInstanceId",
           "transforms": undefined,
         },
@@ -118,7 +118,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
           "cellTransforms": Array [
             [Function],
           ],
-          "data": "$.state",
+          "data": "state",
           "title": "State",
           "transforms": Array [
             [Function],
@@ -182,7 +182,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                 [Function],
               ],
             },
-            "data": "$.processId",
+            "data": "processId",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -229,7 +229,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                 [Function],
               ],
             },
-            "data": "$.name",
+            "data": "name",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -277,7 +277,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                 [Function],
               ],
             },
-            "data": "$.priority",
+            "data": "priority",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -324,7 +324,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                 [Function],
               ],
             },
-            "data": "$.processInstanceId",
+            "data": "processInstanceId",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -372,7 +372,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                 [Function],
               ],
             },
-            "data": "$.state",
+            "data": "state",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -490,7 +490,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.processId",
+                          "data": "processId",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -537,7 +537,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.name",
+                          "data": "name",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -585,7 +585,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.priority",
+                          "data": "priority",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -632,7 +632,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.processInstanceId",
+                          "data": "processInstanceId",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -680,7 +680,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.state",
+                          "data": "state",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -788,7 +788,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": "$.processId",
+                                  "data": "processId",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -835,7 +835,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": "$.name",
+                                  "data": "name",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -883,7 +883,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": "$.priority",
+                                  "data": "priority",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -930,7 +930,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": "$.processInstanceId",
+                                  "data": "processInstanceId",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -978,7 +978,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": "$.state",
+                                  "data": "state",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -1364,7 +1364,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                           [Function],
                         ],
                       },
-                      "data": "$.processId",
+                      "data": "processId",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -1411,7 +1411,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                           [Function],
                         ],
                       },
-                      "data": "$.name",
+                      "data": "name",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -1459,7 +1459,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                           [Function],
                         ],
                       },
-                      "data": "$.priority",
+                      "data": "priority",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -1506,7 +1506,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                           [Function],
                         ],
                       },
-                      "data": "$.processInstanceId",
+                      "data": "processInstanceId",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -1554,7 +1554,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                           [Function],
                         ],
                       },
-                      "data": "$.state",
+                      "data": "state",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -1859,7 +1859,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.processId",
+                          "data": "processId",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -1906,7 +1906,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.name",
+                          "data": "name",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -1954,7 +1954,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.priority",
+                          "data": "priority",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -2001,7 +2001,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.processInstanceId",
+                          "data": "processInstanceId",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -2049,7 +2049,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.state",
+                          "data": "state",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -2472,7 +2472,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.processId",
+                                    "data": "processId",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -2519,7 +2519,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.name",
+                                    "data": "name",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -2567,7 +2567,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.priority",
+                                    "data": "priority",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -2614,7 +2614,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.processInstanceId",
+                                    "data": "processInstanceId",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -2662,7 +2662,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.state",
+                                    "data": "state",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -3047,7 +3047,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.processId",
+                                    "data": "processId",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -3094,7 +3094,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.name",
+                                    "data": "name",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -3142,7 +3142,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.priority",
+                                    "data": "priority",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -3189,7 +3189,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.processInstanceId",
+                                    "data": "processInstanceId",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -3237,7 +3237,7 @@ exports[`DataTable component tests Should render DataTable correctly 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.state",
+                                    "data": "state",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -3632,26 +3632,26 @@ exports[`DataTable component tests Should render ErrorComponent 1`] = `
     Array [
       Object {
         "label": "ProcessId",
-        "path": "$.processId",
+        "path": "processId",
       },
       Object {
         "isSortable": true,
         "label": "Name",
-        "path": "$.name",
+        "path": "name",
       },
       Object {
         "label": "Priority",
-        "path": "$.priority",
+        "path": "priority",
       },
       Object {
         "label": "ProcessInstanceId",
-        "path": "$.processInstanceId",
+        "path": "processInstanceId",
       },
       Object {
         "bodyCellTransformer": [Function],
         "isSortable": true,
         "label": "State",
-        "path": "$.state",
+        "path": "state",
       },
     ]
   }
@@ -3680,26 +3680,26 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
     Array [
       Object {
         "label": "ProcessId",
-        "path": "$.processId",
+        "path": "processId",
       },
       Object {
         "isSortable": true,
         "label": "Name",
-        "path": "$.name",
+        "path": "name",
       },
       Object {
         "label": "Priority",
-        "path": "$.priority",
+        "path": "priority",
       },
       Object {
         "label": "ProcessInstanceId",
-        "path": "$.processInstanceId",
+        "path": "processInstanceId",
       },
       Object {
         "bodyCellTransformer": [Function],
         "isSortable": true,
         "label": "State",
-        "path": "$.state",
+        "path": "state",
       },
     ]
   }
@@ -3715,23 +3715,23 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
     cells={
       Array [
         Object {
-          "data": "$.processId",
+          "data": "processId",
           "title": "ProcessId",
         },
         Object {
-          "data": "$.name",
+          "data": "name",
           "title": "Name",
         },
         Object {
-          "data": "$.priority",
+          "data": "priority",
           "title": "Priority",
         },
         Object {
-          "data": "$.processInstanceId",
+          "data": "processInstanceId",
           "title": "ProcessInstanceId",
         },
         Object {
-          "data": "$.state",
+          "data": "state",
           "title": "State",
         },
       ]
@@ -3787,7 +3787,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                 [Function],
               ],
             },
-            "data": "$.processId",
+            "data": "processId",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -3834,7 +3834,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                 [Function],
               ],
             },
-            "data": "$.name",
+            "data": "name",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -3881,7 +3881,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                 [Function],
               ],
             },
-            "data": "$.priority",
+            "data": "priority",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -3928,7 +3928,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                 [Function],
               ],
             },
-            "data": "$.processInstanceId",
+            "data": "processInstanceId",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -3975,7 +3975,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                 [Function],
               ],
             },
-            "data": "$.state",
+            "data": "state",
             "extraParams": Object {
               "actionResolver": undefined,
               "actions": undefined,
@@ -4092,7 +4092,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.processId",
+                          "data": "processId",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -4139,7 +4139,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.name",
+                          "data": "name",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -4186,7 +4186,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.priority",
+                          "data": "priority",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -4233,7 +4233,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.processInstanceId",
+                          "data": "processInstanceId",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -4280,7 +4280,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.state",
+                          "data": "state",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -4387,7 +4387,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": "$.processId",
+                                  "data": "processId",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -4434,7 +4434,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": "$.name",
+                                  "data": "name",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -4481,7 +4481,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": "$.priority",
+                                  "data": "priority",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -4528,7 +4528,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": "$.processInstanceId",
+                                  "data": "processInstanceId",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -4575,7 +4575,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                       [Function],
                                     ],
                                   },
-                                  "data": "$.state",
+                                  "data": "state",
                                   "extraParams": Object {
                                     "actionResolver": undefined,
                                     "actions": undefined,
@@ -4850,7 +4850,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           [Function],
                         ],
                       },
-                      "data": "$.processId",
+                      "data": "processId",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -4897,7 +4897,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           [Function],
                         ],
                       },
-                      "data": "$.name",
+                      "data": "name",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -4944,7 +4944,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           [Function],
                         ],
                       },
-                      "data": "$.priority",
+                      "data": "priority",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -4991,7 +4991,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           [Function],
                         ],
                       },
-                      "data": "$.processInstanceId",
+                      "data": "processInstanceId",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -5038,7 +5038,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                           [Function],
                         ],
                       },
-                      "data": "$.state",
+                      "data": "state",
                       "extraParams": Object {
                         "actionResolver": undefined,
                         "actions": undefined,
@@ -5197,7 +5197,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.processId",
+                          "data": "processId",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -5244,7 +5244,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.name",
+                          "data": "name",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -5291,7 +5291,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.priority",
+                          "data": "priority",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -5338,7 +5338,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.processInstanceId",
+                          "data": "processInstanceId",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -5385,7 +5385,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                               [Function],
                             ],
                           },
-                          "data": "$.state",
+                          "data": "state",
                           "extraParams": Object {
                             "actionResolver": undefined,
                             "actions": undefined,
@@ -5597,7 +5597,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.processId",
+                                    "data": "processId",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -5644,7 +5644,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.name",
+                                    "data": "name",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -5691,7 +5691,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.priority",
+                                    "data": "priority",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -5738,7 +5738,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.processInstanceId",
+                                    "data": "processInstanceId",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,
@@ -5785,7 +5785,7 @@ exports[`DataTable component tests Should render LoadingComponent 1`] = `
                                         [Function],
                                       ],
                                     },
-                                    "data": "$.state",
+                                    "data": "state",
                                     "extraParams": Object {
                                       "actionResolver": undefined,
                                       "actions": undefined,

@@ -34,7 +34,6 @@
     "axios": "^0.21.1",
     "camel-case": "^3.0.0",
     "graphql": "^15.5.3",
-    "jsonpath": "^1.0.2",
     "lodash": "^4.17.15",
     "lower-case": "^1.1.4",
     "monaco-editor": "0.27.0",
@@ -125,6 +124,7 @@
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-test-renderer": "^16.10.2",
+    "replace-in-file-webpack-plugin": "1.0.6",
     "sass": "^1.54.5",
     "sass-loader": "^10.3.1",
     "start-server-and-test": "^1.12.0",
@@ -143,8 +143,7 @@
     "webpack-dev-server": "^4.8.0",
     "webpack-merge": "^4.2.2",
     "webpack-node-externals": "^3.0.0",
-    "yarn": "1.22.10",
-    "replace-in-file-webpack-plugin": "1.0.6"
+    "yarn": "1.22.10"
   },
   "resolutions": {
     "@patternfly/react-core": "4.157.3",
@@ -153,7 +152,7 @@
     "axios": "0.21.2",
     "d3": "^7.0.0",
     "d3-ease": "^3.0.1",
-    "d3-interpolate":"^3.0.1",
+    "d3-interpolate": "^3.0.1",
     "fast-xml-parser": "^4.2.4",
     "minimatch": "^3.0.5"
   },

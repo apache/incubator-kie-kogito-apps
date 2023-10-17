@@ -1,3 +1,21 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 import React, { useEffect, useState } from 'react';
 import { Bullseye } from '@patternfly/react-core';
 import {
@@ -16,9 +34,14 @@ import {
   KogitoEmptyStateType
 } from '../../Atoms/KogitoEmptyState/KogitoEmptyState';
 import '@patternfly/patternfly/patternfly-addons.css';
-import _ from 'lodash';
+import isEmpty from 'lodash/isEmpty';
+import filter from 'lodash/filter';
+import sample from 'lodash/sample';
+import keys from 'lodash/keys';
+import get from 'lodash/get';
+import reduce from 'lodash/reduce';
+import isFunction from 'lodash/isFunction';
 import uuidv4 from 'uuid';
-import jp from 'jsonpath';
 import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
 
 export interface DataTableColumn {
@@ -45,9 +68,7 @@ interface IOwnProps {
 
 const getCellData = (dataObj: Record<string, unknown>, path: string) => {
   if (dataObj && path) {
-    return !_.isEmpty(jp.value(dataObj, path))
-      ? jp.value(dataObj, path)
-      : 'N/A';
+    return get(dataObj, path) ?? 'N/A';
   } else {
     return 'N/A';
   }
@@ -57,7 +78,7 @@ const getColumns = (data: any[], columns: DataTableColumn[]) => {
   let columnList: ICell[] = [];
   if (data) {
     columnList = columns
-      ? _.filter(columns, (column) => !_.isEmpty(column.path)).map((column) => {
+      ? filter(columns, (column) => !isEmpty(column.path)).map((column) => {
           return {
             title: column.label,
             data: column.path,
@@ -77,8 +98,8 @@ const getColumns = (data: any[], columns: DataTableColumn[]) => {
             transforms: column.isSortable ? [sortable] : undefined
           } as ICell;
         })
-      : _.filter(_.keys(_.sample(data)), (key) => key !== '__typename').map(
-          (key) => ({ title: key, data: `$.${key}` } as ICell)
+      : filter(keys(sample(data)), (key) => key !== '__typename').map(
+          (key) => ({ title: key, data: key } as ICell)
         );
   }
   return columnList;
@@ -89,7 +110,7 @@ const getRows = (data: any[], columns: ICell[]) => {
   if (data) {
     rowList = data.map((rowData) => {
       return {
-        cells: _.reduce(
+        cells: reduce(
           columns,
           (result, column: ICell) => {
             if (column.data) {
@@ -124,9 +145,9 @@ const DataTable: React.FC<IOwnProps & OUIAProps> = ({
   const [columnList, setColumnList] = useState<ICell[]>([]);
 
   useEffect(() => {
-    if (!_.isEmpty(data)) {
+    if (!isEmpty(data)) {
       const cols = getColumns(data, columns);
-      if (!_.isEmpty(cols)) {
+      if (!isEmpty(cols)) {
         setColumnList(cols);
         setRows(getRows(data, cols));
       }
@@ -134,7 +155,7 @@ const DataTable: React.FC<IOwnProps & OUIAProps> = ({
   }, [data]);
 
   const onSort = (event, index, direction) => {
-    if (_.isFunction(onSorting)) {
+    if (isFunction(onSorting)) {
       onSorting(index, direction);
     }
   };
