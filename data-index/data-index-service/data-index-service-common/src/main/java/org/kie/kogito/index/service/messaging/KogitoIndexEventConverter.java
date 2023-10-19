@@ -28,6 +28,8 @@ import javax.inject.Inject;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.event.AbstractDataEvent;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
+import org.kie.kogito.event.process.ProcessDefinitionEventBody;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorEventBody;
@@ -87,6 +89,7 @@ public class KogitoIndexEventConverter implements MessageConverter {
 
     private boolean isIndexable(Type type) {
         return type == ProcessInstanceDataEvent.class
+                || type == ProcessDefinitionDataEvent.class
                 || type == UserTaskInstanceDataEvent.class
                 || type == KogitoJobCloudEvent.class;
     }
@@ -109,6 +112,12 @@ public class KogitoIndexEventConverter implements MessageConverter {
                 return message.withPayload(buildKogitoJobCloudEvent(cloudEvent));
             } else if (type.getTypeName().equals(UserTaskInstanceDataEvent.class.getTypeName())) {
                 return message.withPayload(buildUserTaskInstanceDataEvent(cloudEvent));
+            }else if (type.getTypeName().equals(ProcessDefinitionDataEvent.class.getTypeName())) {
+                ProcessDefinitionDataEvent event = objectMapper.readValue(message.getPayload().toString(), ProcessDefinitionDataEvent.class);
+                if (event.getData() == null) {
+                    event.setData(objectMapper.readValue(message.getPayload().toString(), ProcessDefinitionEventBody.class));
+                }
+                return message.withPayload(event);
             }
             // never happens, see isIndexable.
             throw new IllegalArgumentException("Unknown event type: " + type);

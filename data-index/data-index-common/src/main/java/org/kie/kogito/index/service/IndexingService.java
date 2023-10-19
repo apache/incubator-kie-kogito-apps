@@ -106,7 +106,17 @@ public class IndexingService {
         manager.getProcessInstancesCache().put(pi.getId(), pi);
 
         LOGGER.debug("Stored Process Instance: {}", pi);
+
         return pi;
+    }
+
+    public void indexProcessDefinition(ProcessDefinition definition) {
+        if (!manager.getProcessDefinitionsCache().containsKey(definition.getKey())) {
+            manager.getProcessDefinitionsCache().put(definition.getKey(), definition);
+            LOGGER.debug("Stored Process Definition: {}", definition);
+        } else {
+            //merge
+        }
     }
 
     //retry in case of rare but possible race condition during the insert for the first registry

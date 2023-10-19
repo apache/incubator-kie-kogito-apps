@@ -28,6 +28,7 @@ import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
+import org.kie.kogito.index.event.ProcessDefinitionEventMapper;
 import org.kie.kogito.index.service.IndexingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +43,7 @@ public class ReactiveMessagingEventConsumer {
     private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveMessagingEventConsumer.class);
 
     public static final String KOGITO_PROCESSINSTANCES_EVENTS = "kogito-processinstances-events";
-    public static final String KOGITO_PROCESSDEFINITIONS_EVENTS = "kogito-processdefinitions-events";
+    public static final String KOGITO_PROCESS_DEFINITIONS_EVENTS = "kogito-processdefinitions-events";
     public static final String KOGITO_USERTASKINSTANCES_EVENTS = "kogito-usertaskinstances-events";
     public static final String KOGITO_JOBS_EVENTS = "kogito-jobs-events";
 
@@ -83,10 +84,13 @@ public class ReactiveMessagingEventConsumer {
                 .onItem().ignore().andContinueWithNull();
     }
 
-    @Incoming(KOGITO_PROCESSDEFINITIONS_EVENTS)
-    public Uni<Void> onProcessDefinitionsEvent(ProcessDefinitionDataEvent event) {
-        //to nothing from now
-        return Uni.createFrom().nullItem();
+    @Incoming(KOGITO_PROCESS_DEFINITIONS_EVENTS)
+    public Uni<Void> onProcessDefinitionDataEvent(ProcessDefinitionDataEvent event) {
+        LOGGER.debug("Process Definition received ProcessDefinitionDataEvent \n{}", event);
+        return Uni.createFrom().item(event)
+                .onItem().transform(ProcessDefinitionEventMapper.get()::apply)
+                .onItem().invoke(indexingService::indexProcessDefinition)
+                .onFailure().invoke(t -> LOGGER.error("Error processing ProcessDefinitionDataEvent: {}", t.getMessage(), t))
+                .onItem().ignore().andContinueWithNull();
     }
-
 }

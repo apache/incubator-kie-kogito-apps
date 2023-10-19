@@ -29,6 +29,7 @@ import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
+import org.kie.kogito.index.event.ProcessDefinitionEventMapper;
 import org.kie.kogito.index.service.IndexingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +37,10 @@ import org.slf4j.LoggerFactory;
 import io.quarkus.arc.properties.IfBuildProperty;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 
-import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.*;
+import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_JOBS_EVENTS;
+import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_PROCESSINSTANCES_EVENTS;
+import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_PROCESS_DEFINITIONS_EVENTS;
+import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_USERTASKINSTANCES_EVENTS;
 
 @ApplicationScoped
 @IfBuildProperty(name = "kogito.data-index.blocking", stringValue = "true")
@@ -76,10 +80,11 @@ public class BlockingMessagingEventConsumer {
         indexingService.indexJob(event.getData());
     }
 
-    @Incoming(KOGITO_PROCESSDEFINITIONS_EVENTS)
+    @Incoming(KOGITO_PROCESS_DEFINITIONS_EVENTS)
     @Blocking
     @Transactional
-    public void onProcessDefinitionsEvent(ProcessDefinitionDataEvent event) {
-        LOGGER.debug("Received but skipping  ProcessDefinition DataEvent\n{}", event);
+    public void onProcessDefinitionDataEvent(ProcessDefinitionDataEvent event) {
+        LOGGER.debug("Job received KogitoJobCloudEvent \n{}", event);
+        indexingService.indexProcessDefinition(ProcessDefinitionEventMapper.get().apply(event));
     }
 }

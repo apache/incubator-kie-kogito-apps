@@ -36,6 +36,7 @@ import javax.transaction.Transactional;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
@@ -58,6 +59,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyOrNullString;
 import static org.hamcrest.Matchers.hasItems;
 import static org.kie.kogito.index.DateTimeUtils.formatDateTime;
@@ -90,6 +92,7 @@ import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdN
 import static org.kie.kogito.index.test.TestUtils.PROCESS_VERSION;
 import static org.kie.kogito.index.test.TestUtils.getJobCloudEvent;
 import static org.kie.kogito.index.test.TestUtils.getProcessCloudEvent;
+import static org.kie.kogito.index.test.TestUtils.getProcessDefinitionDataEvent;
 import static org.kie.kogito.index.test.TestUtils.getUserTaskCloudEvent;
 
 public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
@@ -137,19 +140,19 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
                 .then().log().ifValidationFails().statusCode(200).body("data.Jobs", isA(Collection.class));
     }
 
-    protected void validateProcessDefinition(String query, ProcessInstanceStateDataEvent event) {
+    protected void validateProcessDefinition(String query, ProcessDefinitionDataEvent event) {
         LOGGER.debug("GraphQL query: {}", query);
         await()
                 .atMost(timeout)
                 .untilAsserted(() -> given().contentType(ContentType.JSON).body(query)
                         .when().post("/graphql")
                         .then().log().ifValidationFails().statusCode(200)
-                        .body("data.ProcessDefinitions[0].id", is(event.getData().getProcessId()))
-                        .body("data.ProcessDefinitions[0].name", is(event.getData().getProcessName()))
-                        .body("data.ProcessDefinitions[0].version", is(event.getData().getProcessVersion()))
-                        .body("data.ProcessDefinitions[0].type", is(event.getData().getProcessType()))
-                        .body("data.ProcessDefinitions[0].addons", event.getKogitoAddons() == null ? is(nullValue()) : hasItems(event.getKogitoAddons().split(",")))
-                        .body("data.ProcessDefinitions[0].roles", event.getData().getRoles() == null ? is(nullValue()) : hasItems(event.getData().getRoles().toArray())));
+                        .body("data.ProcessDefinitions[0].id", is(event.getData().getId()))
+                        .body("data.ProcessDefinitions[0].name", is(event.getData().getName()))
+                        .body("data.ProcessDefinitions[0].version", is(event.getData().getVersion()))
+                        .body("data.ProcessDefinitions[0].type", is(event.getData().getType()))
+                        .body("data.ProcessDefinitions[0].addons", containsInAnyOrder(event.getData().getAddons().toArray()))
+                        .body("data.ProcessDefinitions[0].roles", containsInAnyOrder(event.getData().getRoles().toArray())));
     }
 
     protected void validateProcessInstance(String query, ProcessInstanceStateDataEvent event, String childProcessInstanceId) {
@@ -175,7 +178,6 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
                         .body("data.ProcessInstances[0].endpoint", is(event.getSource().toString()))
                         .body("data.ProcessInstances[0].serviceUrl", event.getSource().toString().equals("/" + event.getData().getProcessId()) ? is(nullValue()) : is("http://localhost:8080"))
                         .body("data.ProcessInstances[0].addons", event.getKogitoAddons() == null ? is(nullValue()) : hasItems(event.getKogitoAddons().split(",")))
-                        .body("data.ProcessInstances[0].definition.name", is(event.getData().getProcessName()))
                         .body("data.ProcessInstances[0].lastUpdate", anything()));
 
     }
@@ -317,11 +319,13 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
         String subProcessId = processId + "_sub";
         String subProcessInstanceId = UUID.randomUUID().toString();
 
-        ProcessInstanceStateDataEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null, CURRENT_USER);
+        ProcessDefinitionDataEvent definitionDataEvent = getProcessDefinitionDataEvent(processId);
+        indexProcessCloudEvent(definitionDataEvent);
+        validateProcessDefinition(getProcessDefinitionByIdAndVersion(processId, definitionDataEvent.getData().getVersion()), definitionDataEvent);
 
+        ProcessInstanceStateDataEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null, CURRENT_USER);
         indexProcessCloudEvent(startEvent);
 
-        validateProcessDefinition(getProcessDefinitionByIdAndVersion(startEvent.getKogitoProcessId(), startEvent.getData().getProcessVersion()), startEvent);
         validateProcessInstance(getProcessInstanceById(processInstanceId), startEvent);
         validateProcessInstance(getProcessInstanceByIdAndState(processInstanceId, ACTIVE), startEvent);
         validateProcessInstance(getProcessInstanceByIdAndProcessId(processInstanceId, processId), startEvent);
