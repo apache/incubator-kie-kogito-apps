@@ -33,8 +33,6 @@ module.exports = {
     'resources/form-displayer': './src/resources/form-displayer.ts',
     'resources/serverless-workflow-text-editor-envelope':
       './src/resources/ServerlessWorkflowTextEditorEnvelopeApp.ts',
-    'resources/serverless-workflow-mermaid-viewer-envelope':
-      './src/resources/ServerlessWorkflowMermaidViewerEnvelopeApp.ts',
     'resources/serverless-workflow-combined-editor-envelope':
       './src/resources/ServerlessWorkflowCombinedEditorEnvelopeApp.ts',
     'resources/serverless-workflow-diagram-editor-envelope':
@@ -79,14 +77,42 @@ module.exports = {
     new FileManagerPlugin({
       events: {
         onEnd: {
-          mkdir: ['./dist/resources/webapp', './dist/webapp/', './dist/webapp/fonts/'],
+          mkdir: [
+            './dist/resources/webapp',
+            './dist/webapp/',
+            './dist/webapp/fonts/'
+          ],
           copy: [
-            { source: './dist/envelope.js', destination: './dist/resources/webapp/' },
-            { source: './dist/envelope.js.map', destination: './dist/resources/webapp/' },
-            { source: './dist/standalone.js', destination: './dist/resources/webapp/' },
-            { source: './dist/standalone.js.map', destination: './dist/resources/webapp/' },
-            { source: './dist/*.js', destination: './dist/webapp/', globOptions: {ignore: ['./dist/envelope.js', './dist/standalone.js']} },
-            { source: './dist/*.map', destination: './dist/webapp/', globOptions: {ignore: ['./dist/envelope.js.map', './dist/standalone.js.map']}},
+            {
+              source: './dist/envelope.js',
+              destination: './dist/resources/webapp/'
+            },
+            {
+              source: './dist/envelope.js.map',
+              destination: './dist/resources/webapp/'
+            },
+            {
+              source: './dist/standalone.js',
+              destination: './dist/resources/webapp/'
+            },
+            {
+              source: './dist/standalone.js.map',
+              destination: './dist/resources/webapp/'
+            },
+            {
+              source: './dist/*.js',
+              destination: './dist/webapp/',
+              globOptions: {
+                ignore: ['./dist/envelope.js', './dist/standalone.js']
+              }
+            },
+            {
+              source: './dist/*.map',
+              destination: './dist/webapp/',
+              globOptions: {
+                ignore: ['./dist/envelope.js.map', './dist/standalone.js.map']
+              }
+            },
             { source: './dist/fonts', destination: './dist/webapp/fonts/' },
             {
               source: './dist/monitoring-webapp',
