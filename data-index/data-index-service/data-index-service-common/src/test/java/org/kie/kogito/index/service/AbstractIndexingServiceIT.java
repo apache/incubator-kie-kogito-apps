@@ -61,6 +61,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.emptyOrNullString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.kie.kogito.index.DateTimeUtils.formatDateTime;
 import static org.kie.kogito.index.DateTimeUtils.formatZonedDateTime;
@@ -151,6 +152,9 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
                         .body("data.ProcessDefinitions[0].name", is(event.getData().getName()))
                         .body("data.ProcessDefinitions[0].version", is(event.getData().getVersion()))
                         .body("data.ProcessDefinitions[0].type", is(event.getData().getType()))
+                        .body("data.ProcessDefinitions[0].description", is(event.getData().getDescription()))
+                        .body("data.ProcessDefinitions[0].annotations", containsInAnyOrder(event.getData().getAnnotations().toArray()))
+                        .body("data.ProcessDefinitions[0].metadata", equalTo(event.getData().getMetadata()))
                         .body("data.ProcessDefinitions[0].addons", containsInAnyOrder(event.getData().getAddons().toArray()))
                         .body("data.ProcessDefinitions[0].roles", containsInAnyOrder(event.getData().getRoles().toArray())));
     }

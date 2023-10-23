@@ -21,8 +21,10 @@ package org.kie.kogito.index.infinispan.protostream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.stream.Collectors;
 
 import org.infinispan.protostream.MessageMarshaller;
+import org.kie.kogito.index.model.Entry;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
@@ -34,6 +36,9 @@ public class ProcessDefinitionMarshaller extends AbstractMarshaller implements M
     protected static final String ID = "id";
     protected static final String VERSION = "version";
     protected static final String NAME = "name";
+    protected static final String ANNOTATIONS = "annotations";
+    protected static final String DESCRIPTION = "description";
+    protected static final String METADATA = "metadata";
     protected static final String ROLES = "roles";
     protected static final String ADDONS = "addons";
     protected static final String TYPE = "type";
@@ -52,6 +57,9 @@ public class ProcessDefinitionMarshaller extends AbstractMarshaller implements M
         pd.setId(reader.readString(ID));
         pd.setVersion(reader.readString(VERSION));
         pd.setName(reader.readString(NAME));
+        pd.setDescription(reader.readString(DESCRIPTION));
+        pd.setAnnotations(reader.readCollection(ANNOTATIONS, new HashSet<>(), String.class));
+        pd.setMetadata(reader.readCollection(METADATA, new HashSet<>(), Entry.class).stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue)));
         pd.setRoles(reader.readCollection(ROLES, new HashSet<>(), String.class));
         pd.setAddons(reader.readCollection(ADDONS, new HashSet<>(), String.class));
         pd.setType(reader.readString(TYPE));
@@ -67,6 +75,9 @@ public class ProcessDefinitionMarshaller extends AbstractMarshaller implements M
         writer.writeString(ID, pd.getId());
         writer.writeString(VERSION, pd.getVersion());
         writer.writeString(NAME, pd.getName());
+        writer.writeString(DESCRIPTION, pd.getDescription());
+        writer.writeCollection(ANNOTATIONS, pd.getAnnotations(), String.class);
+        writer.writeCollection(METADATA, pd.getMetadata().entrySet().stream().map(e -> new Entry(e.getKey(), e.getValue())).collect(Collectors.toSet()), Entry.class);
         writer.writeCollection(ROLES, pd.getRoles(), String.class);
         writer.writeCollection(ADDONS, pd.getAddons(), String.class);
         writer.writeString(TYPE, pd.getType());

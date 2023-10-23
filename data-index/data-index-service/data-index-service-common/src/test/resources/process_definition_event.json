@@ -1,11 +1,13 @@
 {
-  "id": "c81236c9-3382-446b-9094-86fcf47f8364",
+  "id": "717af02d-645a-4b27-8058-b67ff1fa8edb",
   "source": "http://localhost:8080/jsongreet",
   "type": "ProcessDefinitionEvent",
-  "time": "2023-10-13T10:20:44.929756-03:00",
+  "time": "2023-10-19T10:18:01.540311-03:00",
+  "dataSchema": "ProcessDefinitionEvent",
   "data": {
     "id": "jsongreet",
     "name": "Greeting workflow",
+    "description": "JSON based greeting workflow",
     "version": "1.0",
     "type": "ProcessDefinitionEvent",
     "roles": null,
@@ -13,8 +15,26 @@
       "source-files",
       "cloudevents"
     ],
+    "annotations": [
+      "test2",
+      "test3",
+      "test1"
+    ],
     "endpoint": "http://localhost:8080/jsongreet",
     "source": null,
+    "metadata": {
+      "Description": "JSON based greeting workflow",
+      "annotations": [
+        "test1",
+        "test2",
+        "test3"
+      ],
+      "Tags": [
+        "test1",
+        "test2",
+        "test3"
+      ]
+    },
     "nodes": [
       {
         "id": "1",
@@ -139,8 +159,5 @@
     ]
   },
   "specversion": "1.0",
-  "datacontenttype": "application/json",
-  "kogitoprocinstanceid": null,
-  "kogitoprocid": "jsongreet",
-  "kogitoproctype": "ProcessDefinitionEvent"
+  "kogitoprocid": "jsongreet"
 }
