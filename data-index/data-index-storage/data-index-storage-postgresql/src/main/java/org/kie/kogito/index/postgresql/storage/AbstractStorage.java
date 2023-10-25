@@ -24,11 +24,12 @@ import java.util.function.Function;
 import javax.persistence.LockModeType;
 import javax.transaction.Transactional;
 
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import io.smallrye.mutiny.Multi;
 import org.kie.kogito.index.postgresql.model.AbstractEntity;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
+
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.smallrye.mutiny.Multi;
 
 import static java.util.stream.Collectors.toMap;
 
