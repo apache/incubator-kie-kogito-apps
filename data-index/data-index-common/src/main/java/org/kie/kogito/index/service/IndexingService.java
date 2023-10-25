@@ -89,9 +89,9 @@ public class IndexingService {
 
         ProcessDefinition definition = pi.getDefinition();
 
-        if (definition != null) {
+        if (definition != null && !manager.getProcessDefinitionsCache().containsKey(definition.getKey())) {
             manager.getProcessDefinitionsCache().put(definition.getKey(), definition);
-            LOGGER.debug("Stored Process Definitioin: {}", definition);
+            LOGGER.debug("Stored Process Definition: {}", definition);
         }
 
     }

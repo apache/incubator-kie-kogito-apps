@@ -21,14 +21,14 @@ package org.kie.kogito.index.postgresql.storage;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.persistence.LockModeType;
 import javax.transaction.Transactional;
-
-import org.kie.kogito.index.postgresql.model.AbstractEntity;
-import org.kie.kogito.persistence.api.Storage;
-import org.kie.kogito.persistence.api.query.Query;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.smallrye.mutiny.Multi;
+import org.kie.kogito.index.postgresql.model.AbstractEntity;
+import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.query.Query;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -85,8 +85,13 @@ public abstract class AbstractStorage<E extends AbstractEntity, V> implements St
     @Override
     @Transactional
     public V put(String key, V value) {
-        repository.deleteById(key);
-        repository.persist(mapToEntity.apply(value));
+        E persistedEntity = repository.findById(key, LockModeType.PESSIMISTIC_WRITE);
+        E newEntity = mapToEntity.apply(value);
+        if (persistedEntity != null) {
+            repository.getEntityManager().merge(newEntity);
+        } else {
+            repository.persist(newEntity);
+        }
         return value;
     }
 
