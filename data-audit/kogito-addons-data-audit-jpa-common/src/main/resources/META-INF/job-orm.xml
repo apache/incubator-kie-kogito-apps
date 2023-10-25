@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd">
+
+    <!-- 
+        SCHEDULED,
+        RETRY,
+        EXECUTED,
+        ERROR,
+        CANCELED  
+    -->
+
+    <!-- missing request 
+    	RunningRequests
+    	GetRequestsByBusinessKeyAndstate
+    	GetRequestsByCommand
+    	GetRequestsByCommandAndstate
+    	GetRequestsByDeploymentAndstate
+    	GetRequestsByProcessInstanceAndstate
+    	PendingRequestByIdForProcessing
+    -->
+    
+	<!-- all the basic queries needs to compute the last part based on the execution time -->
+	<named-native-query name="GetAllScheduledJobs" result-set-mapping="JobExecutionTO" >
+		<query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL AND o1.state = 'SCHEDULED'
+        </query>
+	</named-native-query>
+
+
+	<named-native-query name="GetJobById" result-set-mapping="JobExecutionTO" >
+		<query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL AND o1.job_id = :jobId
+        </query>
+	</named-native-query>
+
+	<named-native-query name="GetJobHistoryById" result-set-mapping="JobExecutionTO" >
+		<query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
+              FROM JobExecutionHistory o1 
+             WHERE o1.job_id = :jobId
+          ORDER BY o1.timestamp DESC
+        </query>
+	</named-native-query>
+	 
+	<named-native-query name="GetJobHistoryByCorrelationId" result-set-mapping="JobExecutionTO" >
+		<query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
+              FROM JobExecutionHistory o1 
+             WHERE o1.correlation_id = :correlationId
+          ORDER BY o1.timestamp DESC
+        </query>
+	</named-native-query>
+
+    <named-native-query name="GetAllPendingJobs" result-set-mapping="JobExecutionTO">
+        <query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL AND o1.state IN ('SCHEDULED', 'RETRY')
+        </query>
+    </named-native-query>
+
+    <named-native-query name="GetAllEligibleJobsForExecution" result-set-mapping="JobExecutionTO">
+        <query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL AND o1.state IN ('SCHEDULED')
+        </query>
+    </named-native-query>
+
+    <named-native-query name="GetAllEligibleJobsForRetry" result-set-mapping="JobExecutionTO">
+        <query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL AND o1.state IN ('RETRY', 'ERROR')
+        </query>
+    </named-native-query>
+
+
+    <named-native-query name="GetAllJobs" result-set-mapping="JobExecutionTO">
+        <query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL 
+          ORDER BY o1.timestamp DESC
+        </query>
+    </named-native-query>
+          
+    <named-native-query name="GetAllCompletedJobs" result-set-mapping="JobExecutionTO">
+        <query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL AND o1.state = 'EXECUTED'
+        </query>
+    </named-native-query>
+      
+    <named-native-query name="GetAllInErrorJobs" result-set-mapping="JobExecutionTO">
+        <query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL AND o1.state = 'ERROR'
+        </query>
+    </named-native-query>
+      
+    <named-native-query name="GetAllCancelledJobs" result-set-mapping="JobExecutionTO">
+        <query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL AND o1.state = 'CANCELED'
+        </query>
+    </named-native-query>
+
+
+    <named-native-query name="GetAllJobsByState" result-set-mapping="JobExecutionTO">
+        <query>
+             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL AND o1.state IN (:state) 
+          ORDER BY o1.timestamp DESC
+        </query>
+    </named-native-query>
+
+    <named-native-query name="GetJobByCorrelationId" result-set-mapping="JobExecutionTO">
+        <query>
+            SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
+              FROM JobExecutionHistory o1 
+              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+             WHERE o2.job_id IS NULL AND o1.correlation_id = :correlationId
+          ORDER BY o1.timestamp DESC
+        </query>
+    </named-native-query>
+
+	<sql-result-set-mapping name="JobExecutionTO">
+		<constructor-result target-class="org.kie.kogito.app.audit.graphql.type.JobExecutionTO">
+			<column name="jobId" />
+			<column name="correlationId" />
+			<column name="state" />
+			<column name="schedule" />
+			<column name="retry" />
+			<column name="executionTimeout" class="java.lang.Long"/>
+			<column name="executionTimeoutUnit" />
+			<column name="timestamp" class="java.util.Date" />
+		</constructor-result>
+	</sql-result-set-mapping>
+</entity-mappings>

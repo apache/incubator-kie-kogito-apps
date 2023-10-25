@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd">
+
+  <!-- not migrated
+  getProcessInstancesByDeploymentId
+  countProcessInstancesByDeploymentId
+  getProcessInstanceFullHistoryByType
+  getProcessInstanceFinishedNodes
+  getDeploymentUnit
+  getDeploymentUnitsByDate
+  getDeploymentUnitsByState
+  getQueryDefinitionByName
+  getQueryDefinitions
+   -->
+
+  <named-native-query name="GetAllProcessInstancesState" result-set-mapping="ProcessInstanceStateTOMapping">
+    <query>
+        SELECT log.event_id as eventId,
+        	   log.event_date as eventDate,
+        	   log.process_type as processType,
+        	   log.process_id as processId,
+        	   log.process_version as processVersion,
+        	   log.parent_process_instance_id as parentProcessInstanceId,
+        	   log.root_process_id as rootProcessId,
+        	   log.root_process_instance_id as rootProcessInstanceId,
+        	   log.process_instance_id as processInstanceId,
+        	   log.business_key as businessKey,
+        	   log.event_type as eventType,
+        	   log.outcome as outcome,
+        	   log.state as state,
+        	   log.sla_due_date as slaDueDate      
+          FROM ProcessInstanceStateLog log
+     LEFT JOIN ProcessInstanceStateLog log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
+         WHERE log_newer.event_id IS NULL
+      ORDER BY log.event_date DESC
+    </query>
+    <!-- hint name="org.hibernate.timeout" value="200"/ -->
+  </named-native-query>  
+    
+   <named-native-query name="GetAllProcessInstancesNodeByProcessInstanceId" result-set-mapping="ProcessInstanceNodeTOMapping">
+    <query>
+        SELECT log.event_id as eventId,
+        	   log.event_date as eventDate,
+        	   log.process_type as processType,
+        	   log.process_id as processId,
+        	   log.process_version as processVersion,
+        	   log.parent_process_instance_id as parentProcessInstanceId,
+        	   log.root_process_id as rootProcessId,
+        	   log.root_process_instance_id as rootProcessInstanceId,
+        	   log.process_instance_id as processInstanceId,
+        	   log.business_key as businessKey,
+        	   log.event_type as eventType,
+			   log.node_container_id as nodeContainerId,
+			   log.node_definition_id as nodeDefinitionId,
+			   log.node_type as nodeType,
+			   log.node_container_instance_id as nodeContainerInstanceId,
+			   log.node_name as nodeName,
+			   log.node_instance_id as nodeInstanceId,
+			   log.connection as connection,
+			   log.work_item_id as workItemId,
+			   log.sla_due_date as slaDueDate,
+			   log.event_data as eventData
+          FROM ProcessInstanceNodeLog log
+     LEFT JOIN ProcessInstanceNodeLog log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id AND log.node_instance_id = log_newer.node_instance_id 
+         WHERE log_newer.event_id IS NULL AND log.process_instance_id = :processInstanceId
+      ORDER BY log.event_date DESC
+    </query>
+    <!-- hint name="org.hibernate.timeout" value="200"/ -->
+   </named-native-query>
+ 
+   <named-native-query name="GetAllProcessInstancesErrorByProcessInstanceId" result-set-mapping="ProcessInstanceErrorTOMapping">
+    <query>
+        SELECT log.event_id as eventId,
+        	   log.event_date as eventDate,
+        	   log.process_type as processType,
+        	   log.process_id as processId,
+        	   log.process_version as processVersion,
+        	   log.parent_process_instance_id as parentProcessInstanceId,
+        	   log.root_process_id as rootProcessId,
+        	   log.root_process_instance_id as rootProcessInstanceId,
+        	   log.process_instance_id as processInstanceId,
+        	   log.business_key as businessKey,
+        	   log.error_message as errorMessage,
+        	   log.node_definition_id as nodeDefinitionId,
+        	   log.node_instance_id as nodeInstanceId
+          FROM ProcessInstanceErrorLog log
+         WHERE log.process_instance_id = :processInstanceId
+      ORDER BY log.event_date DESC
+    </query>
+    <!-- hint name="org.hibernate.timeout" value="200"/ -->
+  </named-native-query>  
+ 
+   <named-native-query name="GetAllProcessInstancesVariablebyProcessInstanceId" result-set-mapping="ProcessInstanceVariableTOMapping">
+    <query>
+        SELECT log.event_id as eventId,
+        	   log.event_date as eventDate,
+        	   log.process_type as processType,
+        	   log.process_id as processId,
+        	   log.process_version as processVersion,
+        	   log.parent_process_instance_id as parentProcessInstanceId,
+        	   log.root_process_id as rootProcessId,
+        	   log.root_process_instance_id as rootProcessInstanceId,
+        	   log.process_instance_id as processInstanceId,
+        	   log.business_key as businessKey,
+			   log.variable_id as variableId,
+			   log.variable_name as variableName,
+			   log.variable_value as variableValue    
+          FROM ProcessInstanceVariableLog log
+     LEFT JOIN ProcessInstanceVariableLog log_newer ON log.event_date &lt; log_newer.event_date 
+     											   AND log.process_instance_id = log_newer.process_instance_id 
+     											   AND log.variable_id = log_newer.variable_id      											    
+         WHERE log_newer.event_id IS NULL AND log.process_instance_id = :processInstanceId
+      ORDER BY log.event_date DESC
+    </query>
+    <!-- hint name="org.hibernate.timeout" value="200"/ -->
+  </named-native-query>  
+ 
+    <!-- process instance mapping -->
+ 	<sql-result-set-mapping name="ProcessInstanceStateTOMapping">
+		<constructor-result target-class="org.kie.kogito.app.audit.graphql.type.ProcessInstanceStateTO">
+			<column name="eventId" />
+		    <column name="eventDate" class="java.util.Date" />
+			<column name="processType" />
+			<column name="processId" />
+			<column name="processVersion" />
+			<column name="parentProcessInstanceId" />
+			<column name="rootProcessId"/>
+			<column name="rootProcessInstanceId" />
+			<column name="processInstanceId" />
+			<column name="businessKey" />
+			<column name="eventType"/>
+			<column name="outcome" />
+			<column name="state" />
+			<column name="slaDueDate" class="java.util.Date"/>
+		</constructor-result>
+	</sql-result-set-mapping>
+ 
+ 
+  	<sql-result-set-mapping name="ProcessInstanceErrorTOMapping">
+		<constructor-result target-class="org.kie.kogito.app.audit.graphql.type.ProcessInstanceErrorTO">
+			<column name="eventId" />
+		    <column name="eventDate" class="java.util.Date" />
+			<column name="processType" />
+			<column name="processId" />
+			<column name="processVersion" />
+			<column name="parentProcessInstanceId" />
+			<column name="rootProcessId"/>
+			<column name="rootProcessInstanceId" />
+			<column name="processInstanceId" />
+			<column name="businessKey" />
+			<column name="errorMessage" />
+			<column name="nodeDefinitionId" />
+			<column name="nodeInstanceId" />
+		</constructor-result>
+	</sql-result-set-mapping>
+	
+	<sql-result-set-mapping name="ProcessInstanceNodeTOMapping">
+		<constructor-result target-class="org.kie.kogito.app.audit.graphql.type.ProcessInstanceNodeTO">
+			<column name="eventId" />
+		    <column name="eventDate" class="java.util.Date" />
+			<column name="processType" />
+			<column name="processId" />
+			<column name="processVersion" />
+			<column name="parentProcessInstanceId" />
+			<column name="rootProcessId"/>
+			<column name="rootProcessInstanceId" />
+			<column name="processInstanceId" />
+			<column name="businessKey" />
+			<column name="eventType"/>
+			<column name="nodeContainerId"/>
+			<column name="nodeDefinitionId"/>
+			<column name="nodeType"/>
+			<column name="nodeContainerInstanceId"/>
+			<column name="nodeName"/>
+			<column name="nodeInstanceId"/>
+			<column name="connection"/>
+			<column name="workItemId"/>
+			<column name="slaDueDate" class="java.util.Date"/>
+			<column name="eventData" />
+		</constructor-result>
+	</sql-result-set-mapping>
+	
+	<sql-result-set-mapping name="ProcessInstanceVariableTOMapping">
+		<constructor-result target-class="org.kie.kogito.app.audit.graphql.type.ProcessInstanceVariableTO">
+			<column name="eventId" />
+		    <column name="eventDate" class="java.util.Date" />
+			<column name="processType" />
+			<column name="processId" />
+			<column name="processVersion" />
+			<column name="parentProcessInstanceId" />
+			<column name="rootProcessId"/>
+			<column name="rootProcessInstanceId" />
+			<column name="processInstanceId" />
+			<column name="businessKey" />
+			<column name="variableId" />
+			<column name="variableName" />
+			<column name="variableValue" />
+		</constructor-result>
+	</sql-result-set-mapping>
+	
+
+</entity-mappings>
