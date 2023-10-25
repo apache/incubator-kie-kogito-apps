@@ -15,7 +15,7 @@
  */
 
 import React, { useEffect, useState } from 'react';
-import { Bullseye } from '@patternfly/react-core';
+import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
 import {
   Table,
   TableHeader,
@@ -25,16 +25,19 @@ import {
   ICell,
   sortable,
   ISortBy
-} from '@patternfly/react-table';
+} from '@patternfly/react-table/dist/js/components/Table';
 import isEmpty from 'lodash/isEmpty';
 import filter from 'lodash/filter';
 import sample from 'lodash/sample';
 import keys from 'lodash/keys';
+import get from 'lodash/get';
 import reduce from 'lodash/reduce';
 import isFunction from 'lodash/isFunction';
 import uuidv4 from 'uuid';
-import jp from 'jsonpath';
-import { OUIAProps, componentOuiaProps } from '@kogito-apps/ouia-tools';
+import {
+  OUIAProps,
+  componentOuiaProps
+} from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import KogitoSpinner from '../KogitoSpinner/KogitoSpinner';
 import {
   KogitoEmptyState,
@@ -61,7 +64,7 @@ interface IOwnProps {
 
 const getCellData = (dataObj: Record<string, unknown>, path: string) => {
   if (dataObj && path) {
-    return !isEmpty(jp.value(dataObj, path)) ? jp.value(dataObj, path) : 'N/A';
+    return get(dataObj, path) ?? 'N/A';
   } else {
     return 'N/A';
   }
@@ -91,7 +94,7 @@ const getColumns = (data: any[], columns: DataTableColumn[]) => {
           } as ICell;
         })
       : filter(keys(sample(data)), (key) => key !== '__typename').map(
-          (key) => ({ title: key, data: `$.${key}` } as ICell)
+          (key) => ({ title: key, data: key } as ICell)
         );
   } else if (columns) {
     return filter(columns, (column) => !isEmpty(column.path)).map((column) => {
