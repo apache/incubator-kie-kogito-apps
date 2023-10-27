@@ -24,7 +24,6 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
-import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
 import org.kie.kogito.app.audit.jpa.JPADataAuditStore;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
@@ -36,6 +35,7 @@ import org.slf4j.LoggerFactory;
 
 import io.smallrye.common.annotation.Blocking;
 
+import static org.kie.kogito.app.audit.api.DataAuditContext.newDataAuditContext;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.KOGITO_JOBS_EVENTS;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.KOGITO_PROCESSINSTANCES_EVENTS;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.KOGITO_USERTASKINSTANCES_EVENTS;
@@ -59,7 +59,7 @@ public class QuarkusDataAuditMessagingEventConsumer {
     @Transactional
     public void onProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
         LOGGER.debug("Process instance consumer received ProcessInstanceDataEvent: \n{}", event);
-        proxy.storeProcessInstanceDataEvent(DataAuditContext.of(entityManager), event);
+        proxy.storeProcessInstanceDataEvent(newDataAuditContext(entityManager), event);
 
     }
 
@@ -68,7 +68,7 @@ public class QuarkusDataAuditMessagingEventConsumer {
     @Transactional
     public void onUserTaskInstanceEvent(UserTaskInstanceDataEvent<?> event) {
         LOGGER.debug("Task instance received UserTaskInstanceDataEvent \n{}", event);
-        proxy.storeUserTaskInstanceDataEvent(DataAuditContext.of(entityManager), event);
+        proxy.storeUserTaskInstanceDataEvent(newDataAuditContext(entityManager), event);
 
     }
 
@@ -77,7 +77,7 @@ public class QuarkusDataAuditMessagingEventConsumer {
     @Transactional
     public void onJobEvent(JobCloudEvent<Job> event) {
         LOGGER.debug("Job received KogitoJobCloudEvent \n{}", event);
-        proxy.storeJobDataEvent(DataAuditContext.of(entityManager), event);
+        proxy.storeJobDataEvent(newDataAuditContext(entityManager), event);
     }
 
 }

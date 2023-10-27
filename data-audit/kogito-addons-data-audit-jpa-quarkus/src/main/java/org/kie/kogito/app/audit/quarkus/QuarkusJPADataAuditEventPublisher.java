@@ -64,11 +64,11 @@ public class QuarkusJPADataAuditEventPublisher implements DataAuditEventPublishe
 
         if (event instanceof ProcessInstanceDataEvent) {
             LOGGER.debug("Processing process instance event {}", event);
-            proxy.storeProcessInstanceDataEvent(DataAuditContext.of(entityManager), (ProcessInstanceDataEvent<?>) event);
+            proxy.storeProcessInstanceDataEvent(DataAuditContext.newDataAuditContext(entityManager), (ProcessInstanceDataEvent<?>) event);
             return;
         } else if (event instanceof UserTaskInstanceDataEvent) {
             LOGGER.debug("Processing user task instacne event {}", event);
-            proxy.storeUserTaskInstanceDataEvent(DataAuditContext.of(entityManager), (UserTaskInstanceDataEvent<?>) event);
+            proxy.storeUserTaskInstanceDataEvent(DataAuditContext.newDataAuditContext(entityManager), (UserTaskInstanceDataEvent<?>) event);
             return;
         }
 
@@ -79,7 +79,7 @@ public class QuarkusJPADataAuditEventPublisher implements DataAuditEventPublishe
     @Transactional(value = TxType.REQUIRED)
     public void publish(JobCloudEvent<Job> event) {
         LOGGER.debug("Processing job event {}", event);
-        proxy.storeJobDataEvent(DataAuditContext.of(entityManager), event);
+        proxy.storeJobDataEvent(DataAuditContext.newDataAuditContext(entityManager), event);
     }
 
 }

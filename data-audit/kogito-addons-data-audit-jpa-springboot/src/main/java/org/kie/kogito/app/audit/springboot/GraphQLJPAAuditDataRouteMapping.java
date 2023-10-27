@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import static org.kie.kogito.app.audit.api.DataAuditContext.newDataAuditContext;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_PATH;
 
 import graphql.ExecutionResult;
@@ -54,7 +55,7 @@ public class GraphQLJPAAuditDataRouteMapping {
 
     @PostMapping(value = DATA_AUDIT_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> executeQuery(@RequestBody JsonNode query) {
-        ExecutionResult executionResult = dataAuditQueryService.executeQuery(entityManager, query.get("query").asText());
+        ExecutionResult executionResult = dataAuditQueryService.executeQuery(newDataAuditContext(entityManager), query.get("query").asText());
         return executionResult.toSpecification();
     }
 

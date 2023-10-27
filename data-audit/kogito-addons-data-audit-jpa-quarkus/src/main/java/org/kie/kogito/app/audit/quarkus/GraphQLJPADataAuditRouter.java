@@ -33,6 +33,7 @@ import io.vertx.ext.web.handler.graphql.GraphQLHandlerOptions;
 
 import static io.quarkus.vertx.web.Route.HttpMethod.GET;
 import static io.quarkus.vertx.web.Route.HttpMethod.POST;
+import static org.kie.kogito.app.audit.api.DataAuditContext.newDataAuditContext;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_PATH;
 
 import graphql.GraphQL;
@@ -52,7 +53,6 @@ public class GraphQLJPADataAuditRouter {
     @PostConstruct
     public void init() {
         graphQL = GraphQL.newGraphQL(DataAuditQueryService.newAuditQuerySerice().getGraphQLSchema()).build();
-
         graphQLHandler = GraphQLHandler.create(graphQL, new GraphQLHandlerOptions());
     }
 
@@ -67,7 +67,7 @@ public class GraphQLJPADataAuditRouter {
     }
 
     private void beforeExecuteHTTP(ExecutionInputBuilderWithContext<RoutingContext> config) {
-        config.builder().localContext(entityManager);
+        config.builder().localContext(newDataAuditContext(entityManager));
     }
 
 }

@@ -44,7 +44,7 @@ public class DataAuditQueryService {
         return this.graphQLManager.getGraphQLSchema();
     }
 
-    public ExecutionResult executeQuery(Object context, String query) {
+    public ExecutionResult executeQuery(DataAuditContext context, String query) {
         return executeQuery(context, query, emptyMap());
     }
 
@@ -52,7 +52,7 @@ public class DataAuditQueryService {
         return executeQuery(null, query, emptyMap());
     }
     
-    public ExecutionResult executeQuery(Object context, String query, Map<String, Object> variables) {
+    public ExecutionResult executeQuery(DataAuditContext context, String query, Map<String, Object> variables) {
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .localContext(context)
                 .query(query)

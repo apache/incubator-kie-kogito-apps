@@ -26,7 +26,7 @@ public class DataAuditContext {
         this.context = context;
     }
 
-    public static DataAuditContext of(Object context) {
+    public static DataAuditContext newDataAuditContext(Object context) {
         return new DataAuditContext(context);
     }
     

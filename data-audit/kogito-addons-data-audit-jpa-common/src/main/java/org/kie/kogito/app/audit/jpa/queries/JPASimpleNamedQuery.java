@@ -23,6 +23,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQuery;
 
 import graphql.schema.DataFetchingEnvironment;
@@ -48,8 +49,9 @@ public class JPASimpleNamedQuery<T> extends JPAAbstractQuery implements GraphQLS
     public List<T> fetch(DataFetchingEnvironment dataFetchingEnvironment) {
 
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
+        DataAuditContext context = dataFetchingEnvironment.getLocalContext();
+        EntityManager entityManager = context.getContext();
 
-        EntityManager entityManager = dataFetchingEnvironment.getLocalContext();
         if (arguments.isEmpty()) {
             return executeWithNamedQueryEntityManager(entityManager, namedQuery, clazz);
         } else {
