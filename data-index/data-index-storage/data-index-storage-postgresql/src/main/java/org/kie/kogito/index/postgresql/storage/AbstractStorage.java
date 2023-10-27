@@ -34,6 +34,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.smallrye.mutiny.Multi;
 
 import static java.util.stream.Collectors.toMap;
+import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 
 public abstract class AbstractStorage<E extends AbstractEntity, V> implements Storage<String, V> {
 
@@ -80,13 +81,12 @@ public abstract class AbstractStorage<E extends AbstractEntity, V> implements St
     }
 
     @Override
-    @Transactional
     public V get(String key) {
         return repository.findByIdOptional(key).map(mapToModel).orElse(null);
     }
 
     @Override
-    @Transactional
+    @Transactional(REQUIRES_NEW)
     public V put(String key, V value) {
         E persistedEntity = repository.findById(key, LockModeType.PESSIMISTIC_WRITE);
         E newEntity = mapToEntity.apply(value);
