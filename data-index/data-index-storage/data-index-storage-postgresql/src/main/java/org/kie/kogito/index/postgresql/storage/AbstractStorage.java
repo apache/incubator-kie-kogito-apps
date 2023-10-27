@@ -95,12 +95,13 @@ public abstract class AbstractStorage<E extends AbstractEntity, V> implements St
         } else {
             try {
                 repository.persistAndFlush(newEntity);
-            }catch (PersistenceException e){
+            } catch (PersistenceException e) {
                 throw new ConcurrentModificationException(e);
             }
         }
         return value;
     }
+
     @Override
     @Transactional
     public V remove(String key) {
