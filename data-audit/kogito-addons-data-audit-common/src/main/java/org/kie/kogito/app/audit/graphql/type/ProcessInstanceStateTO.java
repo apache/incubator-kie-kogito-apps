@@ -52,6 +52,10 @@ public class ProcessInstanceStateTO {
 
     private OffsetDateTime slaDueDate;
 
+    public ProcessInstanceStateTO() {
+
+    }
+
     public ProcessInstanceStateTO(String eventId, Date eventDate, String processType, String processId,
             String processVersion, String parentProcessInstanceId, String rootProcessId, String rootProcessInstanceId, String processInstanceId,
             String businessKey, String eventType, String outcome, String state, Date slaDueDate) {

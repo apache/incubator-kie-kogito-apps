@@ -9,7 +9,6 @@
 	<artifactId>kogito-addons-data-audit-jpa-common</artifactId>
 	<name>Kogito Apps :: Data Audit :: JPA Data Audit Persistence Common</name>
 	<dependencies>
-
 	    <dependency>
 			<groupId>org.kie.kogito</groupId>
 			<artifactId>kogito-addons-data-audit-common</artifactId>	
@@ -72,29 +71,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
 			<version>5.6.12.Final</version>
-			<scope>test</scope>
-		</dependency>
-		<!-- jdbc drivers -->
-		<dependency>
-			<groupId>com.github.h-thurow</groupId>
-			<artifactId>simple-jndi</artifactId>
-			<version>0.23.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-dbcp2</artifactId>
-			<version>2.10.0</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.narayana.jta</groupId>
-			<artifactId>narayana-jta</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

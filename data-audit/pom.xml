@@ -15,7 +15,6 @@
 	<name>Kogito Apps :: Data Audit</name>
 
 	<modules>
-		<module>kogito-addons-data-audit-tck</module>
 		<module>kogito-addons-data-audit-common</module>
 		<module>kogito-addons-data-audit-jpa-common</module>
 		<module>kogito-addons-data-audit-jpa-quarkus</module>

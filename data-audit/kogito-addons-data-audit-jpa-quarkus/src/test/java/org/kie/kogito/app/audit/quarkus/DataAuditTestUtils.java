@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.audit.tck;
+package org.kie.kogito.app.audit.quarkus;
 
 import java.net.URI;
 import java.util.Date;
@@ -65,6 +65,10 @@ public class DataAuditTestUtils {
         return URI.create("http://localhost:8080/" + processId).toString();
     }
 
+    public static String wrapQuery(String query) {
+        return "{ \"query\" : \"" + query + " \"}";
+    }
+    
     public static JobCloudEvent<Job> newJobEvent(String jobId, String correlationId, Job.State state, Long executionTimeout, TemporalUnit unit, Retry retry, Schedule schedule) {
         Job job = new Job();
         job.setCorrelationId(correlationId);
