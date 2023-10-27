@@ -23,6 +23,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 import javax.inject.Inject;
@@ -36,6 +40,7 @@ import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
+import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.index.test.TestUtils;
 import org.slf4j.Logger;
@@ -53,11 +58,13 @@ import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.emptyOrNullString;
+import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.kie.kogito.index.DateTimeUtils.formatDateTime;
 import static org.kie.kogito.index.DateTimeUtils.formatZonedDateTime;
 import static org.kie.kogito.index.model.ProcessInstanceState.ACTIVE;
 import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
+import static org.kie.kogito.index.model.ProcessInstanceState.PENDING;
 import static org.kie.kogito.index.service.GraphQLUtils.getJobById;
 import static org.kie.kogito.index.service.GraphQLUtils.getProcessDefinitionByIdAndVersion;
 import static org.kie.kogito.index.service.GraphQLUtils.getProcessInstanceByBusinessKey;
@@ -87,11 +94,15 @@ import static org.kie.kogito.index.test.TestUtils.getUserTaskCloudEvent;
 public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractIndexingServiceIT.class);
+    public static final String CURRENT_USER = "currentUser";
 
     Duration timeout = Duration.ofSeconds(30);
 
     @Inject
     public DataIndexStorageService cacheService;
+
+    @Inject
+    IndexingService indexingService;
 
     @BeforeAll
     static void setup() {
@@ -154,6 +165,7 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
                         .body("data.ProcessInstances[0].processId", is(event.getData().getProcessId()))
                         .body("data.ProcessInstances[0].processName", is(event.getData().getProcessName()))
                         .body("data.ProcessInstances[0].version", is(event.getData().getProcessVersion()))
+                        .body("data.ProcessInstances[0].state", is(ProcessInstanceState.fromStatus(event.getData().getState()).name()))
                         .body("data.ProcessInstances[0].rootProcessId", is(event.getData().getRootProcessId()))
                         .body("data.ProcessInstances[0].rootProcessInstanceId", is(event.getData().getRootProcessInstanceId()))
                         .body("data.ProcessInstances[0].parentProcessInstanceId", is(event.getData().getParentInstanceId()))
@@ -182,7 +194,7 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
         IntStream.range(0, 100).forEach(i -> {
             String pId = UUID.randomUUID().toString();
 
-            ProcessInstanceDataEvent<?> startEvent = getProcessCloudEvent(processId, pId, ACTIVE, null, null, null, "currentUser");
+            ProcessInstanceDataEvent<?> startEvent = getProcessCloudEvent(processId, pId, ACTIVE, null, null, null, CURRENT_USER);
 
             indexProcessCloudEvent(startEvent);
             pIds.add(pId);
@@ -270,13 +282,36 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
     }
 
     @Test
+    void testConcurrentProcessInstanceIndex() throws Exception {
+        String processId = "travels";
+        ExecutorService executorService = new ScheduledThreadPoolExecutor(8);
+        int max_instance_events = 20;
+        List<CompletableFuture<Void>> futures = new ArrayList<>();
+        String processInstanceId = UUID.randomUUID().toString();
+        //indexing multiple events in parallel to the same process instance id
+        for (int i = 0; i < max_instance_events; i++) {
+            addFutureEvent(futures, processId, processInstanceId, ACTIVE, executorService);
+            addFutureEvent(futures, processId, processInstanceId, PENDING, executorService);
+            addFutureEvent(futures, processId, processInstanceId, COMPLETED, executorService);
+        }
+        //wait for all futures to complete
+        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).get(30, TimeUnit.SECONDS);
+    }
+
+    private void addFutureEvent(List<CompletableFuture<Void>> futures, String processId, String processInstanceId, ProcessInstanceState state, ExecutorService executorService) {
+        futures.add(CompletableFuture.runAsync(() -> {
+            ProcessInstanceStateDataEvent event = getProcessCloudEvent(processId, processInstanceId, state, null, null, null, CURRENT_USER);
+            indexingService.indexProcessInstanceEvent(event);
+        }, executorService));
+    }
+    @Test
     void testProcessInstanceIndex() throws Exception {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
         String subProcessId = processId + "_sub";
         String subProcessInstanceId = UUID.randomUUID().toString();
 
-        ProcessInstanceStateDataEvent startEvent = (ProcessInstanceStateDataEvent) getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null, "currentUser");
+        ProcessInstanceStateDataEvent startEvent = getProcessCloudEvent(processId, processInstanceId, ACTIVE, null, null, null, CURRENT_USER);
 
         indexProcessCloudEvent(startEvent);
 
@@ -292,14 +327,14 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
         validateProcessInstance(getProcessInstanceByCreatedBy(startEvent.getData().getEventUser()), startEvent);
         validateProcessInstance(getProcessInstanceByUpdatedBy(startEvent.getData().getEventUser()), startEvent);
 
-        ProcessInstanceStateDataEvent endEvent = getProcessCloudEvent(processId, processInstanceId, COMPLETED, null, null, null, "currentUser");
+        ProcessInstanceStateDataEvent endEvent = getProcessCloudEvent(processId, processInstanceId, COMPLETED, null, null, null, CURRENT_USER);
 
         indexProcessCloudEvent(endEvent);
 
         validateProcessInstance(getProcessInstanceByIdAndState(processInstanceId, COMPLETED), endEvent);
 
         ProcessInstanceStateDataEvent event = getProcessCloudEvent(subProcessId, subProcessInstanceId, ACTIVE, processInstanceId,
-                processId, processInstanceId, "currentUser");
+                processId, processInstanceId, CURRENT_USER);
 
         indexProcessCloudEvent(event);
 

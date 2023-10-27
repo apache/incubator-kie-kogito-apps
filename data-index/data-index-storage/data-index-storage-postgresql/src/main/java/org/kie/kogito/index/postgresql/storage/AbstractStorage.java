@@ -18,10 +18,12 @@
  */
 package org.kie.kogito.index.postgresql.storage;
 
+import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.function.Function;
 
 import javax.persistence.LockModeType;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 
 import org.kie.kogito.index.postgresql.model.AbstractEntity;
@@ -91,11 +93,14 @@ public abstract class AbstractStorage<E extends AbstractEntity, V> implements St
         if (persistedEntity != null) {
             repository.getEntityManager().merge(newEntity);
         } else {
-            repository.persist(newEntity);
+            try {
+                repository.persistAndFlush(newEntity);
+            }catch (PersistenceException e){
+                throw new ConcurrentModificationException(e);
+            }
         }
         return value;
     }
-
     @Override
     @Transactional
     public V remove(String key) {
