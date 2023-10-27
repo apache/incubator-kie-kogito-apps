@@ -29,7 +29,6 @@ import javax.transaction.Transactional.TxType;
 import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.api.DataAuditEventPublisher;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
-import org.kie.kogito.app.audit.jpa.JPADataAuditStore;
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
@@ -49,7 +48,7 @@ public class QuarkusJPADataAuditEventPublisher implements DataAuditEventPublishe
     EntityManager entityManager;
 
     public QuarkusJPADataAuditEventPublisher() {
-        proxy = DataAuditStoreProxyService.newAuditStoreSerice(new JPADataAuditStore());
+        proxy = DataAuditStoreProxyService.newAuditStoreService();
     }
 
     @Override

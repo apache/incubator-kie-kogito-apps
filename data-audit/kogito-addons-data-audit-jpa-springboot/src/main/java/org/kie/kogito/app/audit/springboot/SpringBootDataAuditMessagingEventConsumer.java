@@ -46,15 +46,13 @@ public class SpringBootDataAuditMessagingEventConsumer {
 
     private DataAuditStoreProxyService proxy;
 
-    private JPADataAuditStore jpaAuditStore;
 
     @Autowired
     EntityManager entityManager;
     
     
     public SpringBootDataAuditMessagingEventConsumer() {
-        jpaAuditStore = new JPADataAuditStore();
-        proxy = DataAuditStoreProxyService.newAuditStoreSerice(jpaAuditStore);
+        proxy = DataAuditStoreProxyService.newAuditStoreService();
     }
     
     @KafkaHandler

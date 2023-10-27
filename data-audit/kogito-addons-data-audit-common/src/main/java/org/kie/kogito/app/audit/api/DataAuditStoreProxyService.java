@@ -18,6 +18,8 @@
  */
 package org.kie.kogito.app.audit.api;
 
+import java.util.ServiceLoader;
+
 import org.kie.kogito.app.audit.spi.DataAuditStore;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
@@ -75,7 +77,8 @@ public class DataAuditStoreProxyService {
 
     }
 
-    public static DataAuditStoreProxyService newAuditStoreSerice(DataAuditStore service) {
+    public static DataAuditStoreProxyService newAuditStoreService() {
+        DataAuditStore service = ServiceLoader.load(DataAuditStore.class).findFirst().orElseThrow(() -> new RuntimeException("DataAuditStore implementation not found"));
         LOGGER.debug("Creating new Data Audit Store proxy service with {}", service);
         return new DataAuditStoreProxyService(service);
     }

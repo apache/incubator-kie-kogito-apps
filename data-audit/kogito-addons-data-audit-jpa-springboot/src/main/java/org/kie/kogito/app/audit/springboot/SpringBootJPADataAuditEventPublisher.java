@@ -24,7 +24,6 @@ import javax.persistence.EntityManager;
 
 import org.kie.kogito.app.audit.api.DataAuditEventPublisher;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
-import org.kie.kogito.app.audit.jpa.JPADataAuditStore;
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
@@ -49,7 +48,7 @@ public class SpringBootJPADataAuditEventPublisher implements DataAuditEventPubli
     EntityManager entityManager;
 
     public SpringBootJPADataAuditEventPublisher() {
-        proxy = DataAuditStoreProxyService.newAuditStoreSerice(new JPADataAuditStore());
+        proxy = DataAuditStoreProxyService.newAuditStoreService();
     }
 
     @Override

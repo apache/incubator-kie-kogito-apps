@@ -25,7 +25,6 @@ import javax.transaction.Transactional;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
-import org.kie.kogito.app.audit.jpa.JPADataAuditStore;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.jobs.service.api.Job;
@@ -51,7 +50,7 @@ public class QuarkusDataAuditMessagingEventConsumer {
     EntityManager entityManager;
 
     public QuarkusDataAuditMessagingEventConsumer() {
-        proxy = DataAuditStoreProxyService.newAuditStoreSerice(new JPADataAuditStore());
+        proxy = DataAuditStoreProxyService.newAuditStoreService();
     }
 
     @Incoming(KOGITO_PROCESSINSTANCES_EVENTS)
