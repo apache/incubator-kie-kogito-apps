@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
@@ -70,21 +71,31 @@ public class IndexingService {
     Instance<UserTaskInstanceEventMerger> userTaskInstanceMergers;
 
     public void indexProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
-        ProcessInstance pi = null;
-        try {
-            pi = handleProcessInstanceEvent(event);
-        } catch (ConcurrentModificationException e) {
-            LOGGER.warn("Retrying to index processInstance due to error on the insert {} {}", event, e.getMessage());
-            //retry in case of rare but possible race condition during the insert for the first registry
-            pi = handleProcessInstanceEvent(event);
-        }
+        //retry in case of rare but possible race condition during the insert for the first registry
+        ProcessInstance pi = executeWithRetry(event, this::handleProcessInstanceEvent, "indexing process instance");
 
         ProcessDefinition definition = pi.getDefinition();
 
-        if (definition != null) {
-            manager.getProcessDefinitionsCache().put(definition.getKey(), definition);
+        if (definition != null && !manager.getProcessDefinitionsCache().containsKey(definition.getKey())) {
+            //retry in case of rare but possible race condition during the insert for the first registry
+            executeWithRetry(definition, this::handleProcessDefinition, "indexing process definition");
             LOGGER.debug("Stored Process Definition: {}", definition);
         }
+    }
+
+    private ProcessDefinition handleProcessDefinition(ProcessDefinition definition) {
+        return manager.getProcessDefinitionsCache().put(definition.getKey(), definition);
+    }
+
+    private <R, T> R executeWithRetry(T input, Function<T, R> toExecute, String logMessage) {
+        R pi;
+        try {
+            pi = toExecute.apply(input);
+        } catch (ConcurrentModificationException e) {
+            LOGGER.warn("Retrying {} for {} {}", logMessage, input, e.getMessage());
+            pi = toExecute.apply(input);
+        }
+        return pi;
     }
 
     private ProcessInstance handleProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
