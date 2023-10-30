@@ -155,13 +155,13 @@ public class JPADataAuditStore implements DataAuditStore {
     public void storeProcessInstanceDataEvent(DataAuditContext context, ProcessInstanceSLADataEvent event) {
         EntityManager entityManager = context.getContext();
 
-        if(event.getData().getNodeDefinitionId() != null) {
-        
+        if (event.getData().getNodeDefinitionId() != null) {
+
             ProcessInstanceStateLog log = new ProcessInstanceStateLog();
             setProcessCommonAttributes(log, event);
-            
+
             log.setEventType(ProcessStateLogType.SLA_VIOLATION);
-            
+
             entityManager.persist(log);
         } else {
             ProcessInstanceNodeLog log = new ProcessInstanceNodeLog();
