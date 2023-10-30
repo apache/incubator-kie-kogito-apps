@@ -37,11 +37,11 @@ public class UserTaskInstanceDeadlineTO {
     private String processInstanceId;
 
     private String businessKey;
-    
+
     private Map<String, Object> notification;
 
     private String eventType;
-    
+
     public UserTaskInstanceDeadlineTO(String eventId, Date eventDate, String userTaskDefinitionId, String userTaskInstanceId, String processInstanceId, String businessKey, String eventType) {
         this.eventId = eventId;
         this.eventDate = OffsetDateTime.ofInstant(eventDate.toInstant(), ZoneId.of("UTC"));
@@ -52,81 +52,65 @@ public class UserTaskInstanceDeadlineTO {
         this.eventType = eventType;
     }
 
-
     public String getEventId() {
         return eventId;
     }
-
 
     public void setEventId(String eventId) {
         this.eventId = eventId;
     }
 
-
     public OffsetDateTime getEventDate() {
         return eventDate;
     }
-
 
     public void setEventDate(OffsetDateTime eventDate) {
         this.eventDate = eventDate;
     }
 
-
     public String getUserTaskDefinitionId() {
         return userTaskDefinitionId;
     }
-
 
     public void setUserTaskDefinitionId(String userTaskDefinitionId) {
         this.userTaskDefinitionId = userTaskDefinitionId;
     }
 
-
     public String getUserTaskInstanceId() {
         return userTaskInstanceId;
     }
-
 
     public void setUserTaskInstanceId(String userTaskInstanceId) {
         this.userTaskInstanceId = userTaskInstanceId;
     }
 
-
     public String getProcessInstanceId() {
         return processInstanceId;
     }
-
 
     public void setProcessInstanceId(String processInstanceId) {
         this.processInstanceId = processInstanceId;
     }
 
-
     public String getBusinessKey() {
         return businessKey;
     }
-
 
     public void setBusinessKey(String businessKey) {
         this.businessKey = businessKey;
     }
 
-
     public Map<String, Object> getNotification() {
         return notification;
     }
-
 
     public void setNotification(Map<String, Object> notification) {
         this.notification = notification;
     }
 
-
     public String getEventType() {
         return eventType;
     }
-
 
     public void setEventType(String eventType) {
         this.eventType = eventType;

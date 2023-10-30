@@ -22,13 +22,13 @@ import java.util.Map;
 
 import org.kie.kogito.app.audit.graphql.GraphQLSchemaManager;
 
-import static java.util.Collections.emptyMap;
-import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchemaManagerInstance;
-
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
 import graphql.schema.GraphQLSchema;
+
+import static java.util.Collections.emptyMap;
+import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchemaManagerInstance;
 
 public class DataAuditQueryService {
 
@@ -51,14 +51,14 @@ public class DataAuditQueryService {
     public ExecutionResult executeQuery(String query) {
         return executeQuery(null, query, emptyMap());
     }
-    
+
     public ExecutionResult executeQuery(DataAuditContext context, String query, Map<String, Object> variables) {
         ExecutionInput executionInput = ExecutionInput.newExecutionInput()
                 .localContext(context)
                 .query(query)
                 .variables(variables)
                 .build();
-        
+
         return graphQL.execute(executionInput);
     }
 

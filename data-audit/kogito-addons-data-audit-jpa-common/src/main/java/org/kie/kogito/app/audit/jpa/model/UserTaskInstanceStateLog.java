@@ -34,29 +34,18 @@ import javax.persistence.Table;
 @SequenceGenerator(name = "taskInstanceStateLogIdSeq", sequenceName = "TASK_INSTANCE_STATE_LOG_ID_SEQ")
 public class UserTaskInstanceStateLog extends AbstractUserTaskInstanceLog {
 
-    public enum LogType {
-        CREATED,
-        READY,
-        CLAIMED,
-        STARTED,
-        COMPLETED,
-        ABORTED,
-        NOMINATED,
-        FORWARDED
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "taskInstanceStateLogIdSeq")
     private Long id;
 
-    @Column(name="task_id")
+    @Column(name = "task_id")
     private String taskId;
 
     private String name;
 
     private String description;
 
-    @Column(name="actual_user")
+    @Column(name = "actual_user")
     private String actualUser;
 
     private String state;
@@ -68,8 +57,7 @@ public class UserTaskInstanceStateLog extends AbstractUserTaskInstanceLog {
     private String nodeInstanceId;
 
     @Column(name = "event_type")
-    @Enumerated(EnumType.STRING)
-    private LogType eventType;
+    private String eventType;
 
     public Long getId() {
         return id;
@@ -119,11 +107,11 @@ public class UserTaskInstanceStateLog extends AbstractUserTaskInstanceLog {
         this.nodeInstanceId = nodeInstanceId;
     }
 
-    public LogType getEventType() {
+    public String getEventType() {
         return eventType;
     }
 
-    public void setEventType(LogType eventType) {
+    public void setEventType(String eventType) {
         this.eventType = eventType;
     }
 

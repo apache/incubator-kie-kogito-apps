@@ -84,8 +84,7 @@ public class SpringbootJPADataAuditTest {
         event.setKogitoBusinessKey(body.getBusinessKey());
 
         eventPublisher.publish(event);
-        
-        
+
         Response response = given()
                 .port(randomServerPort)
                 .contentType(ContentType.JSON)

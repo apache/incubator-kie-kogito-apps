@@ -44,7 +44,9 @@ public class ProcessInstanceNodeLog extends AbstractProcessInstanceLog {
         ABORTED,
         ASYNC_ENTER,
         OBSOLETE,
-        SKIPPED
+        SKIPPED,
+        ERROR,
+        SLA_VIOLATION
     }
 
     @Id
@@ -55,17 +57,11 @@ public class ProcessInstanceNodeLog extends AbstractProcessInstanceLog {
     @Enumerated(EnumType.STRING)
     private NodeLogType eventType;
 
-    @Column(name = "node_container_id")
-    private String nodeContainerId;
-
     @Column(name = "node_definition_id")
     private String nodeDefinitionId;
 
     @Column(name = "node_type")
     private String nodeType;
-
-    @Column(name = "node_container_instance_id")
-    private String nodeContainerInstanceId;
 
     @Column(name = "node_name")
     private String nodeName;
@@ -102,14 +98,6 @@ public class ProcessInstanceNodeLog extends AbstractProcessInstanceLog {
         this.eventType = eventType;
     }
 
-    public String getNodeContainerId() {
-        return nodeContainerId;
-    }
-
-    public void setNodeContainerId(String nodeContainerId) {
-        this.nodeContainerId = nodeContainerId;
-    }
-
     public String getNodeDefinitionId() {
         return nodeDefinitionId;
     }
@@ -124,14 +112,6 @@ public class ProcessInstanceNodeLog extends AbstractProcessInstanceLog {
 
     public void setNodeType(String nodeType) {
         this.nodeType = nodeType;
-    }
-
-    public String getNodeContainerInstanceId() {
-        return nodeContainerInstanceId;
-    }
-
-    public void setNodeContainerInstanceId(String nodeContainerInstanceId) {
-        this.nodeContainerInstanceId = nodeContainerInstanceId;
     }
 
     public String getNodeName() {

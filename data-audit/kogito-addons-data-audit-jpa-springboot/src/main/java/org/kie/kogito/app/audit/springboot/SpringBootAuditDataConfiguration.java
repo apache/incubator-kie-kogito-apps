@@ -18,22 +18,13 @@
  */
 package org.kie.kogito.app.audit.springboot;
 
-import org.kie.kogito.app.audit.json.JsonUtils;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan
 public class SpringBootAuditDataConfiguration {
 
-     @Bean
-     ObjectMapper producerObjectMapper() {
-         return JsonUtils.getObjectMapper();
-     }
-    
 }

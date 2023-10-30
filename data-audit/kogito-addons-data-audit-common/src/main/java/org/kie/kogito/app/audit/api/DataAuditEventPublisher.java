@@ -23,7 +23,7 @@ import org.kie.kogito.jobs.service.api.Job;
 import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
 
 public interface DataAuditEventPublisher extends EventPublisher {
-    
+
     void publish(JobCloudEvent<Job> event);
-    
+
 }

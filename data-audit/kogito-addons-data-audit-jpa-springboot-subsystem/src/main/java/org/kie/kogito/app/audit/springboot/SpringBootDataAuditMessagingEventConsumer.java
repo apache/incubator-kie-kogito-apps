@@ -21,7 +21,6 @@ package org.kie.kogito.app.audit.springboot;
 import javax.persistence.EntityManager;
 
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
-import org.kie.kogito.app.audit.jpa.JPADataAuditStore;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.jobs.service.api.Job;
@@ -39,35 +38,33 @@ import static org.kie.kogito.app.audit.api.SubsystemConstants.KOGITO_PROCESSINST
 import static org.kie.kogito.app.audit.api.SubsystemConstants.KOGITO_USERTASKINSTANCES_EVENTS;
 
 @Service
-@KafkaListener(topics = { KOGITO_PROCESSINSTANCES_EVENTS, KOGITO_USERTASKINSTANCES_EVENTS, KOGITO_JOBS_EVENTS}, groupId = "data-audit", clientIdPrefix = "data-audit-events")
+@KafkaListener(topics = { KOGITO_PROCESSINSTANCES_EVENTS, KOGITO_USERTASKINSTANCES_EVENTS, KOGITO_JOBS_EVENTS }, groupId = "data-audit", clientIdPrefix = "data-audit-events")
 public class SpringBootDataAuditMessagingEventConsumer {
 
     private final Logger LOGGER = LoggerFactory.getLogger(SpringBootDataAuditMessagingEventConsumer.class);
 
     private DataAuditStoreProxyService proxy;
 
-
     @Autowired
     EntityManager entityManager;
-    
-    
+
     public SpringBootDataAuditMessagingEventConsumer() {
         proxy = DataAuditStoreProxyService.newAuditStoreService();
     }
-    
+
     @KafkaHandler
     public void onProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
         LOGGER.debug("Process instance consumer received ProcessInstanceDataEvent: \n{}", event);
-        proxy.storeProcessInstanceDataEvent(newDataAuditContext(entityManager), event);       
+        proxy.storeProcessInstanceDataEvent(newDataAuditContext(entityManager), event);
     }
-    
+
     @KafkaHandler
     public void onUserTaskInstanceEvent(UserTaskInstanceDataEvent<?> event) {
         LOGGER.debug("Process instance consumer received ProcessInstanceDataEvent: \n{}", event);
-        proxy.storeUserTaskInstanceDataEvent(newDataAuditContext(entityManager), event);    
+        proxy.storeUserTaskInstanceDataEvent(newDataAuditContext(entityManager), event);
 
     }
-    
+
     @KafkaHandler
     public void onJobInstanceEvent(JobCloudEvent<Job> event) {
         LOGGER.debug("Process instance consumer received ProcessInstanceDataEvent: \n{}", event);

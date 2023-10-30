@@ -29,7 +29,7 @@ public class UserTaskInstanceAttachmentTO {
     private String eventId;
 
     private OffsetDateTime eventDate;
-    
+
     private String eventUser;
 
     private String userTaskDefinitionId;
@@ -143,11 +143,10 @@ public class UserTaskInstanceAttachmentTO {
         this.eventType = eventType;
     }
 
-    
     public String getEventUser() {
         return eventUser;
     }
-    
+
     public void setEventUser(String eventUser) {
         this.eventUser = eventUser;
     }

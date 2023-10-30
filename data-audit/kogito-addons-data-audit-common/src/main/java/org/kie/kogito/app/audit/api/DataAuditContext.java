@@ -21,7 +21,7 @@ package org.kie.kogito.app.audit.api;
 public class DataAuditContext {
 
     private Object context;
-    
+
     public DataAuditContext(Object context) {
         this.context = context;
     }
@@ -29,10 +29,10 @@ public class DataAuditContext {
     public static DataAuditContext newDataAuditContext(Object context) {
         return new DataAuditContext(context);
     }
-    
+
     @SuppressWarnings("unchecked")
     public <T> T getContext() {
         return (T) context;
     }
-    
+
 }

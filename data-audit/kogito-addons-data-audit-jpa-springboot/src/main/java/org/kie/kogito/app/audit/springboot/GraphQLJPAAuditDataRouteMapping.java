@@ -32,21 +32,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import graphql.ExecutionResult;
+
 import static org.kie.kogito.app.audit.api.DataAuditContext.newDataAuditContext;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_PATH;
 
-import graphql.ExecutionResult;
-
-
 @RestController
 public class GraphQLJPAAuditDataRouteMapping {
-
 
     private DataAuditQueryService dataAuditQueryService;
 
     @Autowired
     private EntityManager entityManager;
-    
+
     @PostConstruct
     public void init() {
         dataAuditQueryService = DataAuditQueryService.newAuditQuerySerice();

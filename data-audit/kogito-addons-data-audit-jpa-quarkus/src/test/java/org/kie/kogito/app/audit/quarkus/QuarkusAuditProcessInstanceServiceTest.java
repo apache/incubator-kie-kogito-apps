@@ -55,7 +55,7 @@ import static org.kie.kogito.app.audit.quarkus.DataAuditTestUtils.wrapQuery;
 public class QuarkusAuditProcessInstanceServiceTest {
 
     @Inject
-    private DataAuditEventPublisher publisher;
+    DataAuditEventPublisher publisher;
 
     @BeforeAll
     public void init() {

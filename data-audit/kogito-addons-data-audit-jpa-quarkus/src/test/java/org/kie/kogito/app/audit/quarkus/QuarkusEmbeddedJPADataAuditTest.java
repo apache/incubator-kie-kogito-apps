@@ -44,7 +44,7 @@ import static io.restassured.RestAssured.given;
 public class QuarkusEmbeddedJPADataAuditTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(QuarkusEmbeddedJPADataAuditTest.class);
 
-    @Inject 
+    @Inject
     EventPublisher eventPublisher;
 
     @Test

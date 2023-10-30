@@ -20,10 +20,10 @@ package org.kie.kogito.app.audit.api;
 
 public final class SubsystemConstants {
 
-    
     private SubsystemConstants() {
         // do nothing
     }
+
     public static final String DATA_AUDIT_PATH = "/data-audit";
 
     public static final String KOGITO_PROCESSINSTANCES_EVENTS = "kogito-processinstances-events";

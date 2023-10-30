@@ -43,7 +43,7 @@ public class UserTaskInstanceCommentLog extends AbstractUserTaskInstanceLog {
     @Column(name = "comment_content")
     private String commentContent;
 
-    @Column(name="event_type")
+    @Column(name = "event_type")
     private int eventType;
 
     public Long getId() {

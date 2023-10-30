@@ -51,7 +51,6 @@ public class ProcessInstanceErrorLog extends AbstractProcessInstanceLog {
     @Column(name = "node_instance_id")
     private String nodeInstanceId;
 
-
     public Long getId() {
         return id;
     }

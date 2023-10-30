@@ -75,7 +75,7 @@ public class SpringBootJPADataAuditEventPublisher implements DataAuditEventPubli
     @Override
     public void publish(JobCloudEvent<Job> event) {
         LOGGER.debug("Processing job event {}", event);
-        proxy.storeJobDataEvent(newDataAuditContext(entityManager), event);    
+        proxy.storeJobDataEvent(newDataAuditContext(entityManager), event);
     }
 
 }

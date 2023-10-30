@@ -32,7 +32,9 @@ import org.kie.kogito.app.audit.jpa.model.AbstractUserTaskInstanceLog;
 import org.kie.kogito.app.audit.jpa.model.JobExecutionLog;
 import org.kie.kogito.app.audit.jpa.model.ProcessInstanceErrorLog;
 import org.kie.kogito.app.audit.jpa.model.ProcessInstanceNodeLog;
+import org.kie.kogito.app.audit.jpa.model.ProcessInstanceNodeLog.NodeLogType;
 import org.kie.kogito.app.audit.jpa.model.ProcessInstanceStateLog;
+import org.kie.kogito.app.audit.jpa.model.ProcessInstanceStateLog.ProcessStateLogType;
 import org.kie.kogito.app.audit.jpa.model.ProcessInstanceVariableLog;
 import org.kie.kogito.app.audit.jpa.model.UserTaskInstanceAssignmentLog;
 import org.kie.kogito.app.audit.jpa.model.UserTaskInstanceAttachmentLog;
@@ -40,8 +42,6 @@ import org.kie.kogito.app.audit.jpa.model.UserTaskInstanceCommentLog;
 import org.kie.kogito.app.audit.jpa.model.UserTaskInstanceDeadlineLog;
 import org.kie.kogito.app.audit.jpa.model.UserTaskInstanceStateLog;
 import org.kie.kogito.app.audit.jpa.model.UserTaskInstanceVariableLog;
-import org.kie.kogito.app.audit.jpa.model.ProcessInstanceNodeLog.NodeLogType;
-import org.kie.kogito.app.audit.jpa.model.ProcessInstanceStateLog.ProcessStateLogType;
 import org.kie.kogito.app.audit.jpa.model.UserTaskInstanceVariableLog.VariableType;
 import org.kie.kogito.app.audit.spi.DataAuditStore;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
@@ -77,7 +77,6 @@ public class JPADataAuditStore implements DataAuditStore {
         mapper = new ObjectMapper();
     }
 
-    
     @Override
     public void storeProcessInstanceDataEvent(DataAuditContext context, ProcessInstanceStateDataEvent event) {
         ProcessInstanceStateLog log = new ProcessInstanceStateLog();
@@ -86,20 +85,19 @@ public class JPADataAuditStore implements DataAuditStore {
         log.setState(event.getKogitoProcessInstanceState());
         log.setRoles(event.getData().getRoles());
 
+        EntityManager entityManager = context.getContext();
         switch (event.getData().getEventType()) {
             case ProcessInstanceStateEventBody.EVENT_TYPE_STARTED:
                 log.setEventType(ProcessStateLogType.STARTED);
+                entityManager.persist(log);
                 break;
             case ProcessInstanceStateEventBody.EVENT_TYPE_ENDED:
                 log.setEventType(ProcessStateLogType.COMPLETED);
+                entityManager.persist(log);
                 break;
         }
-
-        EntityManager entityManager = context.getContext();
-        entityManager.persist(log);
-
     }
-    
+
     @Override
     public void storeProcessInstanceDataEvent(DataAuditContext context, ProcessInstanceErrorDataEvent event) {
         ProcessInstanceErrorLog log = new ProcessInstanceErrorLog();
@@ -119,12 +117,10 @@ public class JPADataAuditStore implements DataAuditStore {
 
         setProcessCommonAttributes(log, event);
 
-        log.setConnection(event.getData().getConnectionNodeInstanceId());
-        log.setNodeContainerId(null);
+        log.setConnection(event.getData().getConnectionNodeDefinitionId());
         log.setNodeDefinitionId(event.getData().getNodeDefinitionId());
         log.setNodeType(event.getData().getNodeType());
 
-        log.setNodeContainerInstanceId(null);
         log.setNodeInstanceId(event.getData().getNodeInstanceId());
         log.setNodeName(event.getData().getNodeName());
 
@@ -135,21 +131,49 @@ public class JPADataAuditStore implements DataAuditStore {
             case ProcessInstanceNodeEventBody.EVENT_TYPE_EXIT:
                 log.setEventType(NodeLogType.EXIT);
                 break;
+            case ProcessInstanceNodeEventBody.EVENT_TYPE_ABORTED:
+                log.setEventType(NodeLogType.ABORTED);
+                break;
+            case ProcessInstanceNodeEventBody.EVENT_TYPE_SKIPPED:
+                log.setEventType(NodeLogType.SKIPPED);
+                break;
+            case ProcessInstanceNodeEventBody.EVENT_TYPE_OBSOLETE:
+                log.setEventType(NodeLogType.OBSOLETE);
+                break;
+            case ProcessInstanceNodeEventBody.EVENT_TYPE_ERROR:
+                log.setEventType(NodeLogType.ERROR);
+                break;
+
         }
+
+        log.setWorkItemId(event.getData().getWorkItemId());
         EntityManager entityManager = context.getContext();
         entityManager.persist(log);
     }
 
     @Override
     public void storeProcessInstanceDataEvent(DataAuditContext context, ProcessInstanceSLADataEvent event) {
-        ProcessInstanceStateLog log = new ProcessInstanceStateLog();
-
-        setProcessCommonAttributes(log, event);
         EntityManager entityManager = context.getContext();
-        entityManager.persist(log);
+
+        if(event.getData().getNodeDefinitionId() != null) {
+        
+            ProcessInstanceStateLog log = new ProcessInstanceStateLog();
+            setProcessCommonAttributes(log, event);
+            
+            log.setEventType(ProcessStateLogType.SLA_VIOLATION);
+            
+            entityManager.persist(log);
+        } else {
+            ProcessInstanceNodeLog log = new ProcessInstanceNodeLog();
+            setProcessCommonAttributes(log, event);
+            log.setNodeDefinitionId(event.getData().getNodeDefinitionId());
+            log.setNodeInstanceId(event.getData().getNodeInstanceId());
+            log.setNodeName(event.getData().getNodeName());
+            log.setNodeType(event.getData().getNodeType());
+            log.setEventType(NodeLogType.SLA_VIOLATION);
+            entityManager.persist(log);
+        }
     }
-
-
 
     @Override
     public void storeProcessInstanceDataEvent(DataAuditContext context, ProcessInstanceVariableDataEvent event) {
@@ -205,8 +229,7 @@ public class JPADataAuditStore implements DataAuditStore {
         try {
             log.setAttachmentURI(event.getData().getAttachmentURI().toURL());
         } catch (MalformedURLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LOGGER.error("Could not serialize url {}", e);
         }
         log.setEventType(event.getData().getEventType());
         EntityManager entityManager = context.getContext();
@@ -238,7 +261,7 @@ public class JPADataAuditStore implements DataAuditStore {
         log.setEventUser(event.getData().getEventUser());
         if (event.getData().getNotification() != null) {
             Map<String, String> data = new HashMap<>();
-            for(Map.Entry<String, Object> entry : event.getData().getNotification().entrySet()) {
+            for (Map.Entry<String, Object> entry : event.getData().getNotification().entrySet()) {
                 data.put(entry.getKey(), entry.getValue().toString());
             }
             log.setNotification(data);
@@ -257,7 +280,7 @@ public class JPADataAuditStore implements DataAuditStore {
         log.setName(event.getData().getUserTaskName());
         log.setDescription(event.getData().getUserTaskDescription());
         log.setState(event.getData().getState());
-//        log.setEventType(event.getData().getEventType());
+        log.setEventType(event.getData().getEventType());
         EntityManager entityManager = context.getContext();
         entityManager.persist(log);
 

@@ -34,7 +34,6 @@ import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 public class JsonJobDataEventDeserializer extends StdDeserializer<JobCloudEvent<?>> {
 
-
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonJobDataEventDeserializer.class);
 
     private static final long serialVersionUID = 6152014726577574241L;
@@ -52,9 +51,7 @@ public class JsonJobDataEventDeserializer extends StdDeserializer<JobCloudEvent<
             throws IOException, JsonProcessingException {
         JsonNode node = jp.getCodec().readTree(jp);
         LOGGER.debug("Deserialize process instance data event: {}", node);
-        
-        
-        
+
         String type = node.get("type").asText();
 
         switch (type) {

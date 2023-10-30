@@ -122,6 +122,11 @@
 			</dependency>
 			<dependency>
 				<groupId>org.kie.kogito</groupId>
+				<artifactId>kogito-addons-data-audit-common-kafka</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.kie.kogito</groupId>
 				<artifactId>kogito-addons-data-audit-jpa-common</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -132,7 +137,17 @@
 			</dependency>
 			<dependency>
 				<groupId>org.kie.kogito</groupId>
+				<artifactId>kogito-addons-data-audit-jpa-quarkus-subsystem</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.kie.kogito</groupId>
 				<artifactId>kogito-addons-data-audit-jpa-springboot</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.kie.kogito</groupId>
+				<artifactId>kogito-addons-data-audit-jpa-springboot-subsystem</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<!-- Data Index -->

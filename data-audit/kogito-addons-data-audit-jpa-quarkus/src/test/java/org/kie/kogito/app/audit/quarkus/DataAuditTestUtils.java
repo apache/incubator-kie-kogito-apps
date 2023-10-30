@@ -68,7 +68,7 @@ public class DataAuditTestUtils {
     public static String wrapQuery(String query) {
         return "{ \"query\" : \"" + query + " \"}";
     }
-    
+
     public static JobCloudEvent<Job> newJobEvent(String jobId, String correlationId, Job.State state, Long executionTimeout, TemporalUnit unit, Retry retry, Schedule schedule) {
         Job job = new Job();
         job.setCorrelationId(correlationId);
@@ -182,7 +182,7 @@ public class DataAuditTestUtils {
                 .nodeType(nodeType)
                 .nodeDefinitionId(nodeDefintionId)
                 .nodeInstanceId(nodeInstanceId)
-                .connectionNodeInstanceId(connection)
+                .connectionNodeDefinitionId(connection)
                 .build();
 
         ProcessInstanceNodeDataEvent event = new ProcessInstanceNodeDataEvent(toURIEndpoint(body.getProcessId()),
@@ -288,7 +288,6 @@ public class DataAuditTestUtils {
         metadata.put(UserTaskInstanceEventMetadata.USER_TASK_INSTANCE_ID_META_DATA, userTaskInstanceId);
         metadata.put(UserTaskInstanceEventMetadata.USER_TASK_INSTANCE_STATE_META_DATA, state);
 
-        
         UserTaskInstanceStateDataEvent event =
                 new UserTaskInstanceStateDataEvent(toURIEndpoint(processId), ADDONS, (String) eventUser,
                         metadata, body);

@@ -69,7 +69,7 @@ public class ProcessInstanceStateLog extends AbstractProcessInstanceLog {
     private Date slaDueDate;
 
     @ElementCollection
-    @CollectionTable(name = "ProcessInstanceStateRolesLog", joinColumns = @JoinColumn(name = "process_instance_id", foreignKey = @ForeignKey(name="fk_process_instance_state_pid")))
+    @CollectionTable(name = "ProcessInstanceStateRolesLog", joinColumns = @JoinColumn(name = "process_instance_id", foreignKey = @ForeignKey(name = "fk_process_instance_state_pid")))
     @Column(name = "role")
     private Set<String> roles;
 
