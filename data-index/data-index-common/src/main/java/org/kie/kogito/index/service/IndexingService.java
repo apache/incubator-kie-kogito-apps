@@ -73,7 +73,7 @@ public class IndexingService {
         ProcessInstance pi = null;
         try {
             pi = handleProcessInstanceEvent(event);
-        } catch (ConcurrentModificationException e){
+        } catch (ConcurrentModificationException e) {
             LOGGER.warn("Retrying to index processInstance due to error on the insert {} {}", event, e.getMessage());
             //retry in case of rare but possible race condition during the insert for the first registry
             pi = handleProcessInstanceEvent(event);

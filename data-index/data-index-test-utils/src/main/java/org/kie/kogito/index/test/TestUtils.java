@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.eclipse.microprofile.config.ConfigProvider;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorEventBody;
@@ -60,6 +59,8 @@ import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.model.UserTaskInstance;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static java.util.Collections.singleton;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;

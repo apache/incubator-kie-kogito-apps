@@ -81,6 +81,7 @@ public abstract class AbstractStorage<E extends AbstractEntity, V> implements St
     }
 
     @Override
+    @Transactional
     public V get(String key) {
         return repository.findByIdOptional(key).map(mapToModel).orElse(null);
     }

@@ -58,7 +58,6 @@ import static org.hamcrest.CoreMatchers.isA;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.emptyOrNullString;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import static org.kie.kogito.index.DateTimeUtils.formatDateTime;
 import static org.kie.kogito.index.DateTimeUtils.formatZonedDateTime;
@@ -304,6 +303,7 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
             indexingService.indexProcessInstanceEvent(event);
         }, executorService));
     }
+
     @Test
     void testProcessInstanceIndex() throws Exception {
         String processId = "travels";
