@@ -38,4 +38,3 @@ public class ProcessInstanceEntityStorage extends AbstractStorage<ProcessInstanc
         super(repository, ProcessInstance.class, ProcessInstanceEntity.class, mapper::mapToModel, mapper::mapToEntity, AbstractEntity::getId);
     }
 }
-    

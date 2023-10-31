@@ -112,11 +112,9 @@ public class KogitoIndexEventConverter implements MessageConverter {
                 return message.withPayload(buildKogitoJobCloudEvent(cloudEvent));
             } else if (type.getTypeName().equals(UserTaskInstanceDataEvent.class.getTypeName())) {
                 return message.withPayload(buildUserTaskInstanceDataEvent(cloudEvent));
-            }else if (type.getTypeName().equals(ProcessDefinitionDataEvent.class.getTypeName())) {
-                ProcessDefinitionDataEvent event = objectMapper.readValue(message.getPayload().toString(), ProcessDefinitionDataEvent.class);
-                if (event.getData() == null) {
-                    event.setData(objectMapper.readValue(message.getPayload().toString(), ProcessDefinitionEventBody.class));
-                }
+            } else if (type.getTypeName().equals(ProcessDefinitionDataEvent.class.getTypeName())) {
+                ProcessDefinitionDataEvent event = objectMapper.convertValue(cloudEvent, ProcessDefinitionDataEvent.class);
+                event.setData(objectMapper.readValue(cloudEvent.getData().toBytes(), ProcessDefinitionEventBody.class));
                 return message.withPayload(event);
             }
             // never happens, see isIndexable.

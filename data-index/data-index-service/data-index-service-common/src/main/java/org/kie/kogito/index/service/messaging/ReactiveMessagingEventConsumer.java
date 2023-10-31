@@ -28,7 +28,6 @@ import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
-import org.kie.kogito.index.event.ProcessDefinitionEventMapper;
 import org.kie.kogito.index.service.IndexingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +87,6 @@ public class ReactiveMessagingEventConsumer {
     public Uni<Void> onProcessDefinitionDataEvent(ProcessDefinitionDataEvent event) {
         LOGGER.debug("Process Definition received ProcessDefinitionDataEvent \n{}", event);
         return Uni.createFrom().item(event)
-                .onItem().transform(ProcessDefinitionEventMapper.get()::apply)
                 .onItem().invoke(indexingService::indexProcessDefinition)
                 .onFailure().invoke(t -> LOGGER.error("Error processing ProcessDefinitionDataEvent: {}", t.getMessage(), t))
                 .onItem().ignore().andContinueWithNull();

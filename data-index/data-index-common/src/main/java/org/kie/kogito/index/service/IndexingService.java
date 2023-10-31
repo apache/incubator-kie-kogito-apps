@@ -31,8 +31,10 @@ import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
 import org.eclipse.microprofile.faulttolerance.Retry;
+import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
+import org.kie.kogito.index.event.mapper.ProcessDefinitionEventMerger;
 import org.kie.kogito.index.event.mapper.ProcessInstanceEventMerger;
 import org.kie.kogito.index.event.mapper.UserTaskInstanceEventMerger;
 import org.kie.kogito.index.model.Job;
@@ -69,6 +71,9 @@ public class IndexingService {
 
     @Inject
     Instance<UserTaskInstanceEventMerger> userTaskInstanceMergers;
+
+    @Inject
+    ProcessDefinitionEventMerger processDefinitionEventMerger;
 
     //retry in case of rare but possible race condition during the insert for the first registry
     @Retry(maxRetries = 3, delay = 300, jitter = 100, retryOn = ConcurrentModificationException.class)
@@ -110,12 +115,18 @@ public class IndexingService {
         return pi;
     }
 
-    public void indexProcessDefinition(ProcessDefinition definition) {
-        if (!manager.getProcessDefinitionsCache().containsKey(definition.getKey())) {
+    public void indexProcessDefinition(ProcessDefinitionDataEvent definitionDataEvent) {
+        if (!processDefinitionEventMerger.accept(definitionDataEvent)) {
+            return;
+        }
+        ProcessDefinition current = manager.getProcessDefinitionsCache().get(ProcessDefinition.toKey(definitionDataEvent.getKogitoProcessId(), definitionDataEvent.getData().getVersion()));
+        ProcessDefinition definition = processDefinitionEventMerger.merge(current, definitionDataEvent);
+        if (current == null) {
             manager.getProcessDefinitionsCache().put(definition.getKey(), definition);
             LOGGER.debug("Stored Process Definition: {}", definition);
         } else {
             //merge
+
         }
     }
 

@@ -29,7 +29,6 @@ import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
-import org.kie.kogito.index.event.ProcessDefinitionEventMapper;
 import org.kie.kogito.index.service.IndexingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -85,6 +84,6 @@ public class BlockingMessagingEventConsumer {
     @Transactional
     public void onProcessDefinitionDataEvent(ProcessDefinitionDataEvent event) {
         LOGGER.debug("Job received KogitoJobCloudEvent \n{}", event);
-        indexingService.indexProcessDefinition(ProcessDefinitionEventMapper.get().apply(event));
+        indexingService.indexProcessDefinition(event);
     }
 }

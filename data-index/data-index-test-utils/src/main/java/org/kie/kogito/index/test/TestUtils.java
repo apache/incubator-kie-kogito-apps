@@ -111,7 +111,7 @@ public final class TestUtils {
                 .setName(getProcessName(processId))
                 .setDescription("new definition for testing")
                 .setAddons(Set.of(ADDONS.split(",")))
-                .setAnnotations(Set.of("annotation1","annotation2"))
+                .setAnnotations(Set.of("annotation1", "annotation2"))
                 .setMetadata(Map.of("meta1", "value1", "meta2", "value2"))
                 .setRoles(Set.of("admin"))
                 .setNodes(List.of(NodeDefinition.builder().setName("node1").setId("id1").build()))
