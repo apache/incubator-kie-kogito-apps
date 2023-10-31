@@ -122,6 +122,10 @@ module.exports = {
             {
               source: './dist/custom-dashboard-view',
               destination: './dist/resources/webapp/custom-dashboard-view'
+            },
+            {
+              source: './dist/diagram',
+              destination: './dist/resources/diagram'
             }
           ],
           delete: ['./dist/*.js*', './dist/fonts', './dist/standalone']
