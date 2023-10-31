@@ -18,9 +18,12 @@
  */
 package org.kie.kogito.index.oracle.storage;
 
+import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.function.Function;
 
+import javax.persistence.LockModeType;
+import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 
 import org.kie.kogito.index.oracle.model.AbstractEntity;
@@ -31,6 +34,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 import io.smallrye.mutiny.Multi;
 
 import static java.util.stream.Collectors.toMap;
+import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 
 public abstract class AbstractStorage<E extends AbstractEntity, V> implements Storage<String, V> {
 
@@ -84,10 +88,19 @@ public abstract class AbstractStorage<E extends AbstractEntity, V> implements St
     }
 
     @Override
-    @Transactional
+    @Transactional(REQUIRES_NEW)
     public V put(String key, V value) {
-        repository.deleteById(key);
-        repository.persist(mapToEntity.apply(value));
+        E persistedEntity = repository.findById(key, LockModeType.PESSIMISTIC_WRITE);
+        E newEntity = mapToEntity.apply(value);
+        if (persistedEntity != null) {
+            repository.getEntityManager().merge(newEntity);
+        } else {
+            try {
+                repository.persistAndFlush(newEntity);
+            } catch (PersistenceException e) {
+                throw new ConcurrentModificationException(e);
+            }
+        }
         return value;
     }
 
