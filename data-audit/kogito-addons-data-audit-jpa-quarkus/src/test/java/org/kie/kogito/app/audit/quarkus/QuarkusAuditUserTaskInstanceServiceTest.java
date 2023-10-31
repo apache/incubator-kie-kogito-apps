@@ -64,10 +64,10 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
     public void init() {
 
         UserTaskInstanceStateDataEvent uEvent;
-        uEvent = newUserTaskInstanceStateEvent("eventUser", "utd1", "1", "utn1", 1, "utd1", "utp1", "utrn1", "Ready", "owner", "1");
+        uEvent = newUserTaskInstanceStateEvent("eventUser", "utd1", "1", "utn1", "1", "utd1", "utp1", "utrn1", "Ready", "owner", "1");
         publisher.publish(uEvent);
 
-        uEvent = newUserTaskInstanceStateEvent("eventUser", "utd1", "1", "utn1", 1, "utd1", "utp1", "utrn1", "Claimed", "owner", "1");
+        uEvent = newUserTaskInstanceStateEvent("eventUser", "utd1", "1", "utn1", "1", "utd1", "utp1", "utrn1", "Claimed", "owner", "1");
         publisher.publish(uEvent);
 
         UserTaskInstanceVariableDataEvent vEvent;
@@ -107,7 +107,7 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
         deadlineEvent = newUserTaskInstanceDeadlineEvent(uEvent, "eventUser", Collections.singletonMap("input1", "value1"), Collections.singletonMap("notification1", "notificationValue"));
         publisher.publish(deadlineEvent);
 
-        uEvent = newUserTaskInstanceStateEvent("eventUser", "utd2", "2", "utn2", 1, "utd2", "utp2", "utrn2", "Claimed", "owner", "1");
+        uEvent = newUserTaskInstanceStateEvent("eventUser", "utd2", "2", "utn2", "1", "utd2", "utp2", "utrn2", "Claimed", "owner", "1");
         publisher.publish(uEvent);
 
     }

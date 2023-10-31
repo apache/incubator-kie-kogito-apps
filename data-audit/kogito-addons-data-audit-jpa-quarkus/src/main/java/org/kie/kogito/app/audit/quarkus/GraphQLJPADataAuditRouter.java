@@ -20,8 +20,8 @@ package org.kie.kogito.app.audit.quarkus;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import org.kie.kogito.app.audit.api.DataAuditQueryService;
 
@@ -45,7 +45,7 @@ public class GraphQLJPADataAuditRouter {
 
     GraphQLHandler graphQLHandler;
 
-    @Inject
+    @PersistenceContext(unitName = "DataAuditPU")
     EntityManager entityManager;
 
     @PostConstruct

@@ -21,6 +21,7 @@ package org.kie.kogito.app.audit.api;
 import java.util.ServiceLoader;
 
 import org.kie.kogito.app.audit.spi.DataAuditStore;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
@@ -73,6 +74,10 @@ public class DataAuditStoreProxyService {
     }
 
     public void storeJobDataEvent(DataAuditContext context, JobCloudEvent<Job> event) {
+        auditStoreService.storeJobDataEvent(context, event);
+    }
+
+    public void storeJobDataEvent(DataAuditContext context, JobInstanceDataEvent event) {
         auditStoreService.storeJobDataEvent(context, event);
 
     }

@@ -30,6 +30,7 @@ import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.api.DataAuditEventPublisher;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.jobs.service.api.Job;
@@ -44,7 +45,7 @@ public class QuarkusJPADataAuditEventPublisher implements DataAuditEventPublishe
 
     private DataAuditStoreProxyService proxy;
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "DataAuditPU")
     EntityManager entityManager;
 
     public QuarkusJPADataAuditEventPublisher() {
@@ -69,9 +70,13 @@ public class QuarkusJPADataAuditEventPublisher implements DataAuditEventPublishe
             LOGGER.debug("Processing user task instacne event {}", event);
             proxy.storeUserTaskInstanceDataEvent(DataAuditContext.newDataAuditContext(entityManager), (UserTaskInstanceDataEvent<?>) event);
             return;
+        } else if (event instanceof JobInstanceDataEvent) {
+            LOGGER.info("Processing job instance event {}", event);
+            proxy.storeJobDataEvent(DataAuditContext.newDataAuditContext(entityManager), (JobInstanceDataEvent) event);
+            return;
         }
 
-        LOGGER.debug("Discard event {} as class {} is not supported by this", event, event.getClass().getName());
+        LOGGER.info("Discard event {} as class {} is not supported by this", event, event.getClass().getName());
     }
 
     @Override

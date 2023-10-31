@@ -22,9 +22,11 @@ import java.util.Collection;
 
 import javax.persistence.EntityManager;
 
+import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.api.DataAuditEventPublisher;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.jobs.service.api.Job;
@@ -32,6 +34,7 @@ import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +48,7 @@ public class SpringBootJPADataAuditEventPublisher implements DataAuditEventPubli
     private DataAuditStoreProxyService proxy;
 
     @Autowired
+    @Qualifier("DataAuditPU")
     EntityManager entityManager;
 
     public SpringBootJPADataAuditEventPublisher() {
@@ -66,6 +70,10 @@ public class SpringBootJPADataAuditEventPublisher implements DataAuditEventPubli
         } else if (event instanceof UserTaskInstanceDataEvent) {
             LOGGER.debug("Processing user task instacne event {}", event);
             proxy.storeUserTaskInstanceDataEvent(newDataAuditContext(entityManager), (UserTaskInstanceDataEvent<?>) event);
+            return;
+        } else if (event instanceof JobInstanceDataEvent) {
+            LOGGER.info("Processing job instance event {}", event);
+            proxy.storeJobDataEvent(DataAuditContext.newDataAuditContext(entityManager), (JobInstanceDataEvent) event);
             return;
         }
 

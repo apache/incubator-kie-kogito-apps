@@ -61,7 +61,10 @@ public class GraphQLSchemaManager {
             runtimeWiringBuilder.scalar(ExtendedScalars.DateTime);
             runtimeWiringBuilder.scalar(ExtendedScalars.Json);
 
-            ServiceLoader.load(GraphQLSchemaQueryProvider.class).forEach(queryProvider -> {
+            ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+            classLoader = (classLoader != null) ? classLoader : this.getClass().getClassLoader();
+
+            ServiceLoader.load(GraphQLSchemaQueryProvider.class, classLoader).forEach(queryProvider -> {
                 for (GraphQLSchemaQuery<?> query : queryProvider.queries()) {
                     runtimeWiringBuilder.type("Query", builder -> builder.dataFetcher(query.name(), query::fetch));
                 }
@@ -72,7 +75,7 @@ public class GraphQLSchemaManager {
             SchemaGenerator schemaGenerator = new SchemaGenerator();
             graphQLSchema = schemaGenerator.makeExecutableSchema(typeDefinitionRegistry, runtimeWiring);
         } catch (IOException e) {
-            LOGGER.error("could not find data-audit.graphqls", e);
+            LOGGER.error("could not find or process data-audit.graphqls", e);
         }
     }
 

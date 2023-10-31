@@ -254,7 +254,7 @@ public class DataAuditTestUtils {
 
     // user task instance stuff
     public static UserTaskInstanceStateDataEvent newUserTaskInstanceStateEvent(
-            String eventUser, String userTaskDefinitionId, String userTaskInstanceId, String userTaskName, Integer eventType,
+            String eventUser, String userTaskDefinitionId, String userTaskInstanceId, String userTaskName, String eventType,
             String userTaskDescription, String userTaskPriority, String userTaskReferenceName, String state, String actualOwner, String processInstanceId) {
 
         String processId = UUID.randomUUID().toString();

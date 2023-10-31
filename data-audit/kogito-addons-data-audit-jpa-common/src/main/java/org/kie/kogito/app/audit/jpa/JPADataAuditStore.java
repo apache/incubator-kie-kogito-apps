@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.app.audit.jpa;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -44,6 +45,7 @@ import org.kie.kogito.app.audit.jpa.model.UserTaskInstanceStateLog;
 import org.kie.kogito.app.audit.jpa.model.UserTaskInstanceVariableLog;
 import org.kie.kogito.app.audit.jpa.model.UserTaskInstanceVariableLog.VariableType;
 import org.kie.kogito.app.audit.spi.DataAuditStore;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
@@ -61,11 +63,13 @@ import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
 import org.kie.kogito.jobs.service.api.Job;
 import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
+import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class JPADataAuditStore implements DataAuditStore {
 
@@ -75,6 +79,7 @@ public class JPADataAuditStore implements DataAuditStore {
 
     public JPADataAuditStore() {
         mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
     }
 
     @Override
@@ -333,6 +338,30 @@ public class JPADataAuditStore implements DataAuditStore {
         log.setTimestamp(Timestamp.from(jobDataEvent.getTime().toInstant()));
         EntityManager entityManager = context.getContext();
         entityManager.persist(log);
+    }
+
+    @Override
+    public void storeJobDataEvent(DataAuditContext context, JobInstanceDataEvent jobDataEvent) {
+
+        ScheduledJob job = toObject(ScheduledJob.class, jobDataEvent.getData());
+
+        JobExecutionLog log = new JobExecutionLog();
+        log.setCorrelationId(jobDataEvent.getKogitoProcessInstanceId());
+        log.setJobId(job.getId());
+        log.setState(job.getStatus().name());
+        log.setTimestamp(Timestamp.from(jobDataEvent.getTime().toInstant()));
+
+        EntityManager entityManager = context.getContext();
+        entityManager.persist(log);
+    }
+
+    private <T> T toObject(Class<T> clazz, byte[] bytes) {
+        try {
+            return clazz.cast(mapper.readValue(bytes, clazz));
+        } catch (IOException e) {
+            LOGGER.error("could not convert to json string {}", new String(bytes), e);
+            return null;
+        }
     }
 
     private String toJsonString(Object data) {

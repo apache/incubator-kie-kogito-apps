@@ -55,9 +55,9 @@ public class UserTaskInstanceStateEventMerger implements UserTaskInstanceEventMe
         task.setDescription(event.getData().getUserTaskDescription());
         task.setState(event.getData().getState());
         task.setPriority(event.getData().getUserTaskPriority());
-        if (event.getData().getEventType() == null || event.getData().getEventType() == 1) {
+        if (event.getData().getEventType() == null || "Ready".equals(event.getData().getEventType())) {
             task.setStarted(toZonedDateTime(event.getData().getEventDate()));
-        } else if (event.getData().getEventType() == 2) {
+        } else if ("Completed".equals(event.getData().getEventType())) {
             task.setCompleted(toZonedDateTime(event.getData().getEventDate()));
         }
 

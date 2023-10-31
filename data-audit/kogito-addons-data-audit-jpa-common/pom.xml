@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.kie.kogito</groupId>
@@ -9,9 +11,17 @@
 	<artifactId>kogito-addons-data-audit-jpa-common</artifactId>
 	<name>Kogito Apps :: Data Audit :: JPA Data Audit Persistence Common</name>
 	<dependencies>
-	    <dependency>
+		<dependency>
 			<groupId>org.kie.kogito</groupId>
-			<artifactId>kogito-addons-data-audit-common</artifactId>	
+			<artifactId>kogito-events-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.kie.kogito</groupId>
+			<artifactId>jobs-service-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.kie.kogito</groupId>
+			<artifactId>kogito-addons-data-audit-common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
@@ -81,10 +91,12 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
 					<systemProperties>
-						<com.arjuna.ats.arjuna.objectstore.objectStoreDir>${project.build.directory}/ObjectStore</com.arjuna.ats.arjuna.objectstore.objectStoreDir>
+						<com.arjuna.ats.arjuna.objectstore.objectStoreDir>
+							${project.build.directory}/ObjectStore</com.arjuna.ats.arjuna.objectstore.objectStoreDir>
 					</systemProperties>
 					<dependenciesToScan>
-						<dependency>org.kie.kogito.app.audit:data-audit-service-tck</dependency>
+						<dependency>
+							org.kie.kogito.app.audit:data-audit-service-tck</dependency>
 					</dependenciesToScan>
 				</configuration>
 			</plugin>

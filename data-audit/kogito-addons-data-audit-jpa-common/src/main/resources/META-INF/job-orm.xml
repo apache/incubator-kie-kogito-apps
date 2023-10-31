@@ -26,8 +26,8 @@
 	<named-native-query name="GetAllScheduledJobs" result-set-mapping="JobExecutionTO" >
 		<query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL AND o1.state = 'SCHEDULED'
         </query>
 	</named-native-query>
@@ -36,8 +36,8 @@
 	<named-native-query name="GetJobById" result-set-mapping="JobExecutionTO" >
 		<query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL AND o1.job_id = :jobId
         </query>
 	</named-native-query>
@@ -45,7 +45,7 @@
 	<named-native-query name="GetJobHistoryById" result-set-mapping="JobExecutionTO" >
 		<query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
-              FROM JobExecutionHistory o1 
+              FROM JobExecutionLog o1 
              WHERE o1.job_id = :jobId
           ORDER BY o1.timestamp DESC
         </query>
@@ -54,7 +54,7 @@
 	<named-native-query name="GetJobHistoryByCorrelationId" result-set-mapping="JobExecutionTO" >
 		<query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
-              FROM JobExecutionHistory o1 
+              FROM JobExecutionLog o1 
              WHERE o1.correlation_id = :correlationId
           ORDER BY o1.timestamp DESC
         </query>
@@ -63,8 +63,8 @@
     <named-native-query name="GetAllPendingJobs" result-set-mapping="JobExecutionTO">
         <query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL AND o1.state IN ('SCHEDULED', 'RETRY')
         </query>
     </named-native-query>
@@ -72,8 +72,8 @@
     <named-native-query name="GetAllEligibleJobsForExecution" result-set-mapping="JobExecutionTO">
         <query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL AND o1.state IN ('SCHEDULED')
         </query>
     </named-native-query>
@@ -81,8 +81,8 @@
     <named-native-query name="GetAllEligibleJobsForRetry" result-set-mapping="JobExecutionTO">
         <query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestamp
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL AND o1.state IN ('RETRY', 'ERROR')
         </query>
     </named-native-query>
@@ -91,8 +91,8 @@
     <named-native-query name="GetAllJobs" result-set-mapping="JobExecutionTO">
         <query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL 
           ORDER BY o1.timestamp DESC
         </query>
@@ -101,8 +101,8 @@
     <named-native-query name="GetAllCompletedJobs" result-set-mapping="JobExecutionTO">
         <query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL AND o1.state = 'EXECUTED'
         </query>
     </named-native-query>
@@ -110,8 +110,8 @@
     <named-native-query name="GetAllInErrorJobs" result-set-mapping="JobExecutionTO">
         <query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL AND o1.state = 'ERROR'
         </query>
     </named-native-query>
@@ -119,8 +119,8 @@
     <named-native-query name="GetAllCancelledJobs" result-set-mapping="JobExecutionTO">
         <query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL AND o1.state = 'CANCELED'
         </query>
     </named-native-query>
@@ -129,8 +129,8 @@
     <named-native-query name="GetAllJobsByState" result-set-mapping="JobExecutionTO">
         <query>
              SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL AND o1.state IN (:state) 
           ORDER BY o1.timestamp DESC
         </query>
@@ -139,8 +139,8 @@
     <named-native-query name="GetJobByCorrelationId" result-set-mapping="JobExecutionTO">
         <query>
             SELECT o1.job_id as jobId, o1.correlation_id as correlationId, o1.state as state, o1.schedule, o1.retry, o1.execution_timeout as executionTimeout, o1.execution_timeout_unit as executionTimeoutUnit, o1.timestamp as timestmap
-              FROM JobExecutionHistory o1 
-              LEFT JOIN JobExecutionHistory o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
+              FROM JobExecutionLog o1 
+              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.timestamp &lt; o2.timestamp 
              WHERE o2.job_id IS NULL AND o1.correlation_id = :correlationId
           ORDER BY o1.timestamp DESC
         </query>
