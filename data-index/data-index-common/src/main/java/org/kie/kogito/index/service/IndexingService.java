@@ -121,13 +121,7 @@ public class IndexingService {
         }
         ProcessDefinition current = manager.getProcessDefinitionsCache().get(ProcessDefinition.toKey(definitionDataEvent.getKogitoProcessId(), definitionDataEvent.getData().getVersion()));
         ProcessDefinition definition = processDefinitionEventMerger.merge(current, definitionDataEvent);
-        if (current == null) {
-            manager.getProcessDefinitionsCache().put(definition.getKey(), definition);
-            LOGGER.debug("Stored Process Definition: {}", definition);
-        } else {
-            //merge
-
-        }
+        manager.getProcessDefinitionsCache().put(definition.getKey(), definition);
     }
 
     //retry in case of rare but possible race condition during the insert for the first registry

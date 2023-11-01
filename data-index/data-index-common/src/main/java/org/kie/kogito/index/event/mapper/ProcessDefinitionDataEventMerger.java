@@ -18,7 +18,11 @@
  */
 package org.kie.kogito.index.event.mapper;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -49,18 +53,25 @@ public class ProcessDefinitionDataEventMerger implements ProcessDefinitionEventM
         if (instance == null) {
             instance = new ProcessDefinition();
         }
-        instance.setId(data.getId());
-        instance.setName(data.getName());
-        instance.setVersion(data.getVersion());
-        instance.setAddons(data.getAddons());
-        instance.setRoles(data.getRoles());
-        instance.setType(event.getKogitoProcessType());
-        instance.setEndpoint(data.getEndpoint());
-        instance.setDescription(data.getDescription());
-        instance.setAnnotations(data.getAnnotations());
-        instance.setMetadata(toStringMap(data.getMetadata()));
-        instance.setNodes(ofNullable(data.getNodes()).map(nodes -> nodes.stream().map(this::nodeDefinition).collect(toList())).orElse(null));
+        instance.setId(doMerge(data.getId(), instance.getId()));
+        instance.setName(doMerge(data.getName(), instance.getName()));
+        instance.setVersion(doMerge(data.getVersion(), instance.getVersion()));
+        instance.setAddons(doMerge(data.getAddons(), instance.getAddons()));
+        instance.setRoles(doMerge(data.getRoles(), instance.getRoles()));
+        instance.setType(doMerge(event.getKogitoProcessType(), instance.getType()));
+        instance.setEndpoint(doMerge(data.getEndpoint(), instance.getEndpoint()));
+        instance.setDescription(doMerge(data.getDescription(), instance.getDescription()));
+        instance.setAnnotations(doMerge(data.getAnnotations(), instance.getAnnotations()));
+        instance.setMetadata(doMerge(toStringMap(data.getMetadata()), instance.getMetadata()));
+        instance.setNodes(doMerge(nodeDefinitions(data), instance.getNodes()));
         return instance;
+    }
+
+    private List<Node> nodeDefinitions(ProcessDefinitionEventBody data) {
+        if (data.getNodes() == null && data.getNodes().isEmpty()) {
+            return Collections.emptyList();
+        }
+        return data.getNodes().stream().map(this::nodeDefinition).collect(toList());
     }
 
     private Node nodeDefinition(NodeDefinition definition) {
@@ -71,6 +82,15 @@ public class ProcessDefinitionDataEventMerger implements ProcessDefinitionEventM
         node.setType(definition.getType());
         node.setMetadata(toStringMap(definition.getMetadata()));
         return node;
+    }
+
+    private <T> T doMerge(T incoming, T current) {
+        boolean notEmpty = (incoming instanceof Collection) ? !((Collection) incoming).isEmpty() : incoming != null;
+        boolean notEquals = !Objects.deepEquals(incoming, current);
+        if (notEmpty && notEquals) {
+            return incoming;
+        }
+        return current;
     }
 
     private static Map<String, String> toStringMap(Map<String, ?> input) {
