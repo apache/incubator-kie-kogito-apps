@@ -114,6 +114,7 @@ public abstract class AbstractStorage<E extends AbstractEntity, V> implements St
         return value;
     }
 
+    @Transactional
     @Override
     public boolean containsKey(String key) {
         return repository.count("id = ?1", key) == 1;

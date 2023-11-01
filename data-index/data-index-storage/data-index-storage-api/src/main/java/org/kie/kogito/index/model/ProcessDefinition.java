@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class ProcessDefinition {
 
@@ -117,7 +118,7 @@ public class ProcessDefinition {
     }
 
     public static String[] fromKey(String key) {
-        return Optional.ofNullable(key).map(k -> k.split("\\$v:")).orElse(new String[0]);
+        return Optional.ofNullable(key).map(k -> k.split(Pattern.quote("$v:"))).orElse(new String[0]);
     }
 
     @Override
