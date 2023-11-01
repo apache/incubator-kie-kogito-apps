@@ -72,13 +72,13 @@ type ProcessInstance {
     rootProcessInstanceId: String
     rootProcessId: String
     roles: [String!]
-    state: ProcessInstanceState!
+    state: ProcessInstanceState
     endpoint: String!
     serviceUrl: String
-    nodes: [NodeInstance!]!
+    nodes: [NodeInstance!]
     milestones: [Milestone!]
     variables: JSON
-    start: DateTime!
+    start: DateTime
     end: DateTime
     parentProcessInstance: ProcessInstance
     childProcessInstances: [ProcessInstance!]
