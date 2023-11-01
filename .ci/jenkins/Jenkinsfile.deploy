@@ -36,7 +36,7 @@ pipeline {
         stage('Initialize') {
             steps {
                 script {
-                    cleanWs()
+                    cleanWs(disableDeferredWipeout: true)
 
                     if (params.DISPLAY_NAME) {
                         currentBuild.displayName = params.DISPLAY_NAME
@@ -176,7 +176,7 @@ pipeline {
         }
         cleanup {
             script {
-                util.cleanNode('docker')
+                util.cleanNode()
             }
         }
     }
@@ -269,7 +269,6 @@ void setDeployPropertyIfNeeded(String key, def value) {
 
 MavenCommand getMavenCommand() {
     return new MavenCommand(this, ['-fae', '-ntp'])
-            .withSettingsXmlId(env.MAVEN_SETTINGS_CONFIG_FILE_ID)
             .withOptions(env.BUILD_MVN_OPTS ? [ env.BUILD_MVN_OPTS ] : [])
             .withProperty('full')
 }
@@ -283,11 +282,14 @@ void runMavenDeploy(boolean skipTests = true, boolean localDeployment = false) {
         mvnCmd.withDeployRepository(env.MAVEN_DEPLOY_REPOSITORY)
     }
 
-    mvnCmd.withProperty('maven.test.failure.ignore', true)
-        .withOptions(env.BUILD_MVN_OPTS_CURRENT ? [ env.BUILD_MVN_OPTS_CURRENT ] : [])
-        .withOptions(env.KOGITO_APPS_BUILD_MVN_OPTS ? [ env.KOGITO_APPS_BUILD_MVN_OPTS ] : [])
-        .skipTests(skipTests)
-        .run('clean deploy')
+    configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
+        mvnCmd.withProperty('maven.test.failure.ignore', true)
+            .withOptions(env.BUILD_MVN_OPTS_CURRENT ? [ env.BUILD_MVN_OPTS_CURRENT ] : [])
+            .withOptions(env.KOGITO_APPS_BUILD_MVN_OPTS ? [ env.KOGITO_APPS_BUILD_MVN_OPTS ] : [])
+            .skipTests(skipTests)
+            .withSettingsXmlFile(MAVEN_SETTINGS_FILE)
+            .run('clean deploy')
+    }
 }
 
 void runMavenStage() {
