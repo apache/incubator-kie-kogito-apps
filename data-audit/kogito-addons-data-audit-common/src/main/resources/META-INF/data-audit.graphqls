@@ -44,8 +44,6 @@ type ProcessInstanceNodeLog {
 	processInstanceId : String
 	businessKey : String
 	eventType : String
-	nodeContainerId : String
-	nodeDefinitionId : String
 	nodeType : String
 	nodeName : String
 	nodeInstanceId : String

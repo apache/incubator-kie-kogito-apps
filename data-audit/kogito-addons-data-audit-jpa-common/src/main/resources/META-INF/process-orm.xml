@@ -53,10 +53,7 @@
         	   log.process_instance_id as processInstanceId,
         	   log.business_key as businessKey,
         	   log.event_type as eventType,
-			   log.node_container_id as nodeContainerId,
-			   log.node_definition_id as nodeDefinitionId,
 			   log.node_type as nodeType,
-			   log.node_container_instance_id as nodeContainerInstanceId,
 			   log.node_name as nodeName,
 			   log.node_instance_id as nodeInstanceId,
 			   log.connection as connection,
@@ -170,10 +167,7 @@
 			<column name="processInstanceId" />
 			<column name="businessKey" />
 			<column name="eventType"/>
-			<column name="nodeContainerId"/>
-			<column name="nodeDefinitionId"/>
 			<column name="nodeType"/>
-			<column name="nodeContainerInstanceId"/>
 			<column name="nodeName"/>
 			<column name="nodeInstanceId"/>
 			<column name="connection"/>

@@ -139,7 +139,7 @@ public class QuarkusAuditProcessInstanceServiceTest {
     @Test
     public void testGetAllProcessInstancesNodeByProcessInstanceId() {
         String query =
-                "{ GetAllProcessInstancesNodeByProcessInstanceId ( processInstanceId : \\\"1\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, nodeContainerId, nodeDefinitionId, nodeType , nodeName, nodeInstanceId, connection, slaDueDate , eventData  } }";
+                "{ GetAllProcessInstancesNodeByProcessInstanceId ( processInstanceId : \\\"1\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, nodeType , nodeName, nodeInstanceId, connection, slaDueDate , eventData  } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)

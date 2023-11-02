@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
+import org.kie.api.runtime.process.ProcessInstance;
 import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.jpa.model.AbstractProcessInstanceLog;
 import org.kie.kogito.app.audit.jpa.model.AbstractUserTaskInstanceLog;
@@ -61,6 +62,7 @@ import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDeadlineDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
+import org.kie.kogito.internal.process.runtime.KogitoProcessInstance;
 import org.kie.kogito.jobs.service.api.Job;
 import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
@@ -87,20 +89,37 @@ public class JPADataAuditStore implements DataAuditStore {
         ProcessInstanceStateLog log = new ProcessInstanceStateLog();
 
         setProcessCommonAttributes(log, event);
-        log.setState(event.getKogitoProcessInstanceState());
+        log.setState(String.valueOf(event.getData().getState()));
         log.setRoles(event.getData().getRoles());
 
         EntityManager entityManager = context.getContext();
-        switch (event.getData().getEventType()) {
-            case ProcessInstanceStateEventBody.EVENT_TYPE_STARTED:
-                log.setEventType(ProcessStateLogType.STARTED);
+        switch(event.getData().getState()) {
+            case KogitoProcessInstance.STATE_ACTIVE:
+                log.setEventType(ProcessStateLogType.ACTIVE);
                 entityManager.persist(log);
                 break;
-            case ProcessInstanceStateEventBody.EVENT_TYPE_ENDED:
+            case KogitoProcessInstance.STATE_ABORTED:
+                log.setEventType(ProcessStateLogType.ABORTED);
+                entityManager.persist(log);
+                break;
+            case KogitoProcessInstance.STATE_COMPLETED:
                 log.setEventType(ProcessStateLogType.COMPLETED);
                 entityManager.persist(log);
                 break;
+            case KogitoProcessInstance.STATE_PENDING:
+                log.setEventType(ProcessStateLogType.PENDING);
+                entityManager.persist(log);
+                break;
+            case KogitoProcessInstance.STATE_SUSPENDED:
+                log.setEventType(ProcessStateLogType.SUSPENDING);
+                entityManager.persist(log);
+                break;
+            case KogitoProcessInstance.STATE_ERROR:
+                log.setEventType(ProcessStateLogType.ERROR);
+                entityManager.persist(log);
+                break;
         }
+
     }
 
     @Override
@@ -343,6 +362,24 @@ public class JPADataAuditStore implements DataAuditStore {
     @Override
     public void storeJobDataEvent(DataAuditContext context, JobInstanceDataEvent jobDataEvent) {
 
+        //        assertHasField(jsonNode, "id", JOB_ID);
+        //        assertHasField(jsonNode, "expirationTime", EXPIRATION_TIME.toString());
+        //        assertHasField(jsonNode, "priority", Integer.toString(PRIORITY));
+        //        assertHasField(jsonNode, "callbackEndpoint", RECIPIENT_URL);
+        //        assertHasField(jsonNode, "processInstanceId", PROCESS_INSTANCE_ID);
+        //        assertHasField(jsonNode, "processId", PROCESS_ID);
+        //        assertHasField(jsonNode, "rootProcessInstanceId", ROOT_PROCESS_INSTANCE_ID);
+        //        assertHasField(jsonNode, "rootProcessId", ROOT_PROCESS_ID);
+        //        assertHasField(jsonNode, "nodeInstanceId", NODE_INSTANCE_ID);
+        //        assertHasField(jsonNode, "repeatInterval", Long.toString(PERIOD));
+        //        assertHasField(jsonNode, "repeatLimit", Integer.toString(REPEAT_COUNT));
+        //        assertHasField(jsonNode, "scheduledId", SCHEDULE_ID);
+        //        assertHasField(jsonNode, "retries", Integer.toString(RETRIES));
+        //        assertHasField(jsonNode, "status", STATUS.name());
+        //        assertHasField(jsonNode, "lastUpdate", LAST_UPDATE.toString());
+        //        assertHasField(jsonNode, "executionCounter", Integer.toString(EXECUTION_COUNTER));
+        //        assertHasField(jsonNode, "executionResponse", null);
+
         ScheduledJob job = toObject(ScheduledJob.class, jobDataEvent.getData());
 
         JobExecutionLog log = new JobExecutionLog();
@@ -350,6 +387,8 @@ public class JPADataAuditStore implements DataAuditStore {
         log.setJobId(job.getId());
         log.setState(job.getStatus().name());
         log.setTimestamp(Timestamp.from(jobDataEvent.getTime().toInstant()));
+        log.setRetry(job.getRetries() != null ? job.getRetries().toString() : null);
+        log.setSchedule(job.getExpirationTime() != null ? Timestamp.from(jobDataEvent.getTime().toInstant()).toString() : null);
 
         EntityManager entityManager = context.getContext();
         entityManager.persist(log);

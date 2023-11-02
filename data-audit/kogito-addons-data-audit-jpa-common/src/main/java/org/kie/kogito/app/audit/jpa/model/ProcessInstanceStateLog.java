@@ -44,10 +44,14 @@ import javax.persistence.TemporalType;
 public class ProcessInstanceStateLog extends AbstractProcessInstanceLog {
 
     public enum ProcessStateLogType {
+        ACTIVE,
         STARTED,
         COMPLETED,
         ABORTED,
-        SLA_VIOLATION
+        SLA_VIOLATION,
+        PENDING,
+        SUSPENDING,
+        ERROR
     }
 
     @Id

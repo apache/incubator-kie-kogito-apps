@@ -45,13 +45,7 @@ public class ProcessInstanceNodeTO {
 
     private String eventType;
 
-    private String nodeContainerId;
-
-    private String nodeDefinitionId;
-
     private String nodeType;
-
-    private String nodeContainerInstanceId;
 
     private String nodeName;
 
@@ -67,7 +61,7 @@ public class ProcessInstanceNodeTO {
 
     public ProcessInstanceNodeTO(String eventId, Date eventDate, String processType, String processId,
             String processVersion, String parentProcessInstanceId, String rootProcessId, String rootProcessInstanceId, String processInstanceId,
-            String businessKey, String eventType, String nodeContainerId, String nodeDefinitionId, String nodeType, String nodeContainerInstanceId,
+            String businessKey, String eventType, String nodeType,
             String nodeName, String nodeInstanceId, String connection, String workItemId, Date slaDueDate, String eventData) {
         this.eventId = eventId;
         this.eventDate = OffsetDateTime.ofInstant(eventDate.toInstant(), ZoneId.of("UTC"));
@@ -80,10 +74,7 @@ public class ProcessInstanceNodeTO {
         this.processInstanceId = processInstanceId;
         this.businessKey = businessKey;
         this.eventType = eventType;
-        this.nodeContainerId = nodeContainerId;
-        this.nodeDefinitionId = nodeDefinitionId;
         this.nodeType = nodeType;
-        this.nodeContainerInstanceId = nodeContainerInstanceId;
         this.nodeName = nodeName;
         this.nodeInstanceId = nodeInstanceId;
         this.connection = connection;
@@ -182,36 +173,12 @@ public class ProcessInstanceNodeTO {
         this.eventType = eventType;
     }
 
-    public String getNodeContainerId() {
-        return nodeContainerId;
-    }
-
-    public void setNodeContainerId(String nodeContainerId) {
-        this.nodeContainerId = nodeContainerId;
-    }
-
-    public String getNodeDefinitionId() {
-        return nodeDefinitionId;
-    }
-
-    public void setNodeDefinitionId(String nodeDefinitionId) {
-        this.nodeDefinitionId = nodeDefinitionId;
-    }
-
     public String getNodeType() {
         return nodeType;
     }
 
     public void setNodeType(String nodeType) {
         this.nodeType = nodeType;
-    }
-
-    public String getNodeContainerInstanceId() {
-        return nodeContainerInstanceId;
-    }
-
-    public void setNodeContainerInstanceId(String nodeContainerInstanceId) {
-        this.nodeContainerInstanceId = nodeContainerInstanceId;
     }
 
     public String getNodeName() {
