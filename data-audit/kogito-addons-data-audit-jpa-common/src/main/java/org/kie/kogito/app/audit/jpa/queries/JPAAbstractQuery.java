@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.app.audit.jpa.queries;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,15 +33,25 @@ public abstract class JPAAbstractQuery {
     }
 
     protected <T> List<T> executeWithNamedQueryEntityManager(EntityManager entityManager, String query, Class<T> clazz) {
-
         return entityManager.createNamedQuery(query, clazz).getResultList();
-
     }
 
     protected <T> List<T> executeWithNamedQueryEntityManagerAndArguments(EntityManager entityManager, String query, Class<T> clazz, Map<String, Object> arguments) {
 
+        Map<String, Object> parameters = new HashMap<>(arguments);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> pagination = (Map<String, Object>) parameters.remove("pagination");
         TypedQuery<T> typedQuery = entityManager.createNamedQuery(query, clazz);
-        arguments.forEach(typedQuery::setParameter);
+        parameters.forEach(typedQuery::setParameter);
+        if (pagination != null) {
+            if(pagination.get("limit") != null) {
+                typedQuery.setMaxResults((Integer) pagination.get("limit"));
+            }
+            if(pagination.get("offset") != null) {
+                typedQuery.setFirstResult((Integer) pagination.get("offset"));
+            }
+        }
+ 
         return typedQuery.getResultList();
 
     }
