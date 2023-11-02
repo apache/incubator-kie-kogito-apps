@@ -162,6 +162,7 @@
 			<column name="variableId" />
 			<column name="variableName" />
 			<column name="variableValue" />
+			<column name="variableType" />
 		</constructor-result>
 	</sql-result-set-mapping>
 	

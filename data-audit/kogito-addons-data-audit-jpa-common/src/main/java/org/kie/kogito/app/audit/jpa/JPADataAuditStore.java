@@ -411,7 +411,7 @@ public class JPADataAuditStore implements DataAuditStore {
 
             return mapper.writeValueAsString(data);
         } catch (JsonProcessingException e) {
-            LOGGER.error("could not convert to json string {}", data);
+            LOGGER.error("could not convert to json string {}", data, e);
             return null;
         }
     }

@@ -22,6 +22,8 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 public class ProcessInstanceVariableTO {
     private String eventId;
 
@@ -47,7 +49,7 @@ public class ProcessInstanceVariableTO {
 
     private String variableName;
 
-    private String variableValue;
+    private JsonNode variableValue;
 
     public ProcessInstanceVariableTO(String eventId, Date eventDate, String processType, String processId,
             String processVersion, String parentProcessInstanceId, String rootProcessId, String rootProcessInstanceId, String processInstanceId,
@@ -64,7 +66,7 @@ public class ProcessInstanceVariableTO {
         this.businessKey = businessKey;
         this.variableId = variableId;
         this.variableName = variableName;
-        this.variableValue = variableValue;
+        this.variableValue = JsonUtil.toJsonNode(variableValue);
     }
 
     public String getEventId() {
@@ -163,11 +165,11 @@ public class ProcessInstanceVariableTO {
         this.variableName = variableName;
     }
 
-    public String getVariableValue() {
+    public JsonNode getVariableValue() {
         return variableValue;
     }
 
-    public void setVariableValue(String variableValue) {
+    public void setVariableValue(JsonNode variableValue) {
         this.variableValue = variableValue;
     }
 

@@ -60,6 +60,22 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
     @Inject
     DataAuditEventPublisher publisher;
 
+    class Pojo {
+        public Pojo(Integer value) {
+            this.value = value;
+        }
+
+        Integer value;
+
+        public Integer getValue() {
+            return value;
+        }
+
+        public void setValue(Integer value) {
+            this.value = value;
+        }
+    }
+
     @BeforeAll
     public void init() {
 
@@ -71,16 +87,16 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
         publisher.publish(uEvent);
 
         UserTaskInstanceVariableDataEvent vEvent;
-        vEvent = newUserTaskInstanceVariableEvent(uEvent, "eventUser", "varId1", "varName1", "INPUT", 1);
+        vEvent = newUserTaskInstanceVariableEvent(uEvent, "eventUser", "varId1", "varName1", "INPUT", new Pojo(1));
         publisher.publish(vEvent);
 
-        vEvent = newUserTaskInstanceVariableEvent(uEvent, "eventUser", "varId1", "varName1", "INPUT", 2);
+        vEvent = newUserTaskInstanceVariableEvent(uEvent, "eventUser", "varId1", "varName1", "INPUT", new Pojo(2));
         publisher.publish(vEvent);
 
-        vEvent = newUserTaskInstanceVariableEvent(uEvent, "eventUser", "varId2", "varName2", "OUTPUT", 1);
+        vEvent = newUserTaskInstanceVariableEvent(uEvent, "eventUser", "varId2", "varName2", "OUTPUT", new Pojo(1));
         publisher.publish(vEvent);
 
-        vEvent = newUserTaskInstanceVariableEvent(uEvent, "eventUser", "varId3", "varName3", "OUTPUT", 1);
+        vEvent = newUserTaskInstanceVariableEvent(uEvent, "eventUser", "varId3", "varName3", "OUTPUT", new Pojo(1));
         publisher.publish(vEvent);
 
         UserTaskInstanceAssignmentDataEvent aEvent;

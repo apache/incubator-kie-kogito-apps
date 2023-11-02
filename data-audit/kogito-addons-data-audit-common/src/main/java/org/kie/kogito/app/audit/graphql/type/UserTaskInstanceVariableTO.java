@@ -23,6 +23,10 @@ import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class UserTaskInstanceVariableTO {
 
     private String eventId;
@@ -41,10 +45,12 @@ public class UserTaskInstanceVariableTO {
 
     private String variableName;
 
-    private String variableValue;
+    private JsonNode variableValue;
+
+    private String variableType;
 
     public UserTaskInstanceVariableTO(String eventId, Date eventDate, String eventUser, String userTaskDefinitionId, String userTaskInstanceId, String processInstanceId, String businessKey,
-            String variableId, String variableName, String variableValue) {
+            String variableId, String variableName, String variableValue, String variableType) {
         this.eventId = eventId;
         this.eventDate = OffsetDateTime.ofInstant(eventDate.toInstant(), ZoneId.of("UTC"));
         this.userTaskDefinitionId = userTaskDefinitionId;
@@ -53,7 +59,8 @@ public class UserTaskInstanceVariableTO {
         this.businessKey = businessKey;
         this.variableId = variableId;
         this.variableName = variableName;
-        this.variableValue = variableValue;
+        this.variableType = variableType;
+        this.variableValue = JsonUtil.toJsonNode(variableValue);
     }
 
     public String getEventId() {
@@ -120,12 +127,20 @@ public class UserTaskInstanceVariableTO {
         this.variableName = variableName;
     }
 
-    public String getVariableValue() {
+    public JsonNode getVariableValue() {
         return variableValue;
     }
 
-    public void setVariableValue(String variableValue) {
+    public void setVariableValue(JsonNode variableValue) {
         this.variableValue = variableValue;
+    }
+
+    public String getVariableType() {
+        return variableType;
+    }
+
+    public void setVariableType(String variableType) {
+        this.variableType = variableType;
     }
 
 }

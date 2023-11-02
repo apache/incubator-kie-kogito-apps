@@ -81,7 +81,7 @@ type ProcessInstanceVariableLog {
     businessKey : String
     variableId : String
 	variableName : String
-	variableValue : String
+	variableValue : JSON
 }
   
 type UserTaskInstanceStateLog {
@@ -164,7 +164,7 @@ type UserTaskInstanceVariableLog {
 	businessKey : String
 	variableId : String
 	variableName : String
-	variableValue : String
+	variableValue : JSON
 	variableType : String
 }
 
@@ -182,15 +182,12 @@ type Query {
     GetAllCancelledJobs : [JobExecutionLog]
     GetAllJobsByState (state : [String]!) : [JobExecutionLog]
     GetJobByCorrelationId (correlationId : String!) : [JobExecutionLog]
-    	
 
   	GetAllProcessInstancesState : [ProcessInstanceStateLog]
-  	GetAllProcessInstancesNodeByProcessInstanceId (processInstanceId : String!) : [ProcessInstanceNodeLog]                                    
+  	GetAllProcessInstancesNodeByProcessInstanceId (processInstanceId : String!) : [ProcessInstanceNodeLog]
   	GetAllProcessInstancesErrorByProcessInstanceId (processInstanceId : String!) : [ProcessInstanceErrorLog]
   	GetAllProcessInstancesVariablebyProcessInstanceId (processInstanceId : String!) : [ProcessInstanceVariableLog]
-  	
-  	
-  	
+
   	GetAllUserTaskInstanceState : [UserTaskInstanceStateLog]
   	GetAllUserTaskInstanceAssignments (userTaskInstanceId : String!) : [UserTaskInstanceAssignmentLog]
   	GetAllUserTaskInstanceAttachments (userTaskInstanceId : String!) : [UserTaskInstanceAttachmentLog]
@@ -198,6 +195,3 @@ type Query {
   	GetAllUserTaskInstanceDeadline (userTaskInstanceId : String!) : [UserTaskInstanceDeadlineLog]
   	GetAllUserTaskInstanceVariable (userTaskInstanceId : String!) : [UserTaskInstanceVariableLog]
 }
-
-
-
