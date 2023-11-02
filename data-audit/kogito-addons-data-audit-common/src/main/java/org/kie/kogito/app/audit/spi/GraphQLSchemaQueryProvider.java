@@ -22,6 +22,10 @@ import java.util.List;
 
 public interface GraphQLSchemaQueryProvider {
 
+    default String[] graphQLQueryExtension() {
+        return new String[0];
+    }
+    
     List<GraphQLSchemaQuery<?>> queries();
 
 }

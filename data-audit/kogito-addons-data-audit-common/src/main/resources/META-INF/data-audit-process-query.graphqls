@@ -1,0 +1,10 @@
+
+type Query {
+
+
+    GetAllProcessInstancesState (pagination: Pagination): [ProcessInstanceStateLog]
+    GetAllProcessInstancesNodeByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceNodeLog]
+    GetAllProcessInstancesErrorByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceErrorLog]
+    GetAllProcessInstancesVariablebyProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceVariableLog]
+
+}

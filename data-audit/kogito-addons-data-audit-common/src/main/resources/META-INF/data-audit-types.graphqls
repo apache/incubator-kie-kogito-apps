@@ -169,39 +169,12 @@ type UserTaskInstanceVariableLog {
     variableType : String
 }
 
-type Query {
-    GetAllScheduledJobs (pagination: Pagination): [JobExecutionLog]
-
-    GetJobById (jobId : String!) : [JobExecutionLog]
-    GetJobByCorrelationId (correlationId : String!) : [JobExecutionLog]
-
-    GetJobHistoryById (jobId : String!) : [JobExecutionLog]
-    GetJobHistoryByCorrelationId (correlationId : String!) : [JobExecutionLog]
-
-    GetAllPendingJobs (pagination: Pagination): [JobExecutionLog]
-    GetAllEligibleJobsForExecution (pagination: Pagination) : [JobExecutionLog]
-    GetAllEligibleJobsForRetry (pagination: Pagination) : [JobExecutionLog]
-    GetAllJobs (pagination: Pagination) : [JobExecutionLog]
-    GetAllCompletedJobs (pagination: Pagination) : [JobExecutionLog]
-    GetAllInErrorJobs (pagination: Pagination) : [JobExecutionLog]
-    GetAllCancelledJobs (pagination: Pagination) : [JobExecutionLog]
-    GetAllJobsByState (state : [String]!, pagination: Pagination) : [JobExecutionLog]
-
-
-    GetAllProcessInstancesState (pagination: Pagination): [ProcessInstanceStateLog]
-    GetAllProcessInstancesNodeByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceNodeLog]
-    GetAllProcessInstancesErrorByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceErrorLog]
-    GetAllProcessInstancesVariablebyProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceVariableLog]
-
-    GetAllUserTaskInstanceState (pagination: Pagination) : [UserTaskInstanceStateLog]
-    GetAllUserTaskInstanceAssignments (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceAssignmentLog]
-    GetAllUserTaskInstanceAttachments (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceAttachmentLog]
-    GetAllUserTaskInstanceComment (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceCommentLog]
-    GetAllUserTaskInstanceDeadline (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceDeadlineLog]
-    GetAllUserTaskInstanceVariable (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceVariableLog]
-}
-
 input Pagination {
     limit: Int
     offset: Int
+}
+
+
+schema {
+    query: Query
 }

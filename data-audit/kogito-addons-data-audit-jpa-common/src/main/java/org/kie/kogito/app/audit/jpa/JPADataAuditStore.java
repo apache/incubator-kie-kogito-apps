@@ -27,7 +27,6 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 
-import org.kie.api.runtime.process.ProcessInstance;
 import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.jpa.model.AbstractProcessInstanceLog;
 import org.kie.kogito.app.audit.jpa.model.AbstractUserTaskInstanceLog;
@@ -53,7 +52,6 @@ import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceNodeEventBody;
 import org.kie.kogito.event.process.ProcessInstanceSLADataEvent;
 import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceStateEventBody;
 import org.kie.kogito.event.process.ProcessInstanceVariableDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentDataEvent;
