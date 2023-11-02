@@ -28,18 +28,16 @@ import org.kie.kogito.app.audit.spi.GraphQLSchemaQuery;
 
 import graphql.schema.DataFetchingEnvironment;
 
-public class JPASimpleNamedQuery<T> extends JPAAbstractQuery implements GraphQLSchemaQuery<List<T>> {
+public class JPAComplexNamedQuery<T> extends JPAAbstractQuery implements GraphQLSchemaQuery<List<T>> {
 
     private String name;
     private String namedQuery;
-    private Class<T> clazz;
+    private DataMapper<T> dataMapper;
 
-    
-
-    public JPASimpleNamedQuery(String name, String namedQuery, Class<T> clazz) {
+    public JPAComplexNamedQuery(String name, String namedQuery, DataMapper<T> dataMapper) {
         this.name = name;
         this.namedQuery = namedQuery;
-        this.clazz = clazz;
+        this.dataMapper = dataMapper;
     }
 
     @Override
@@ -54,9 +52,9 @@ public class JPASimpleNamedQuery<T> extends JPAAbstractQuery implements GraphQLS
         EntityManager entityManager = context.getContext();
 
         if (arguments.isEmpty()) {
-            return executeWithNamedQueryEntityManager(entityManager, namedQuery, clazz);
+            return dataMapper.produce(executeWithNamedQueryEntityManager(entityManager, namedQuery));
         } else {
-            return executeWithNamedQueryEntityManagerAndArguments(entityManager, namedQuery, clazz, arguments);
+            return dataMapper.produce(executeWithNamedQueryEntityManagerAndArguments(entityManager, namedQuery, arguments));
         }
     }
 

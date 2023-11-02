@@ -111,7 +111,7 @@ public class QuarkusAuditProcessInstanceServiceTest {
     public void testGetAllProcessInstancesState() {
 
         String query =
-                "{ GetAllProcessInstancesState { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate } }";
+                "{ GetAllProcessInstancesState { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
 
         query = wrapQuery(query);
 

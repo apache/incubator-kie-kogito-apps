@@ -16,56 +16,57 @@ type JobExecutionLog {
 }
 
 type ProcessInstanceStateLog {
-	eventId : String!
-	eventDate : DateTime
-	processType : String
-	processId : String
-	processVersion : String
-	parentProcessInstanceId : String
-	rootProcessId : String
-	rootProcessInstanceId : String
-	processInstanceId : String
-	businessKey : String
-	eventType : String
-	outcome : String
-	state : String
-	slaDueDate : DateTime
+    eventId : String!
+    eventDate : DateTime
+    processType : String
+    processId : String
+    processVersion : String
+    parentProcessInstanceId : String
+    rootProcessId : String
+    rootProcessInstanceId : String
+    processInstanceId : String
+    businessKey : String
+    eventType : String
+    outcome : String
+    state : String
+    slaDueDate : DateTime
+    roles : [String]
 }
 
 type ProcessInstanceNodeLog {
     eventId : String!
     eventDate : DateTime
- 	processType : String
- 	processId : String
-	processVersion : String
-	parentProcessInstanceId : String
-	rootProcessId : String
-	rootProcessInstanceId : String
-	processInstanceId : String
-	businessKey : String
-	eventType : String
-	nodeType : String
-	nodeName : String
-	nodeInstanceId : String
-	connection : String
-	slaDueDate : DateTime
-	eventData : String
+     processType : String
+     processId : String
+    processVersion : String
+    parentProcessInstanceId : String
+    rootProcessId : String
+    rootProcessInstanceId : String
+    processInstanceId : String
+    businessKey : String
+    eventType : String
+    nodeType : String
+    nodeName : String
+    nodeInstanceId : String
+    connection : String
+    slaDueDate : DateTime
+    eventData : String
 }
 
 type ProcessInstanceErrorLog {
     eventId : String!
-	eventDate : DateTime
-	processType : String
-	processId : String
-	processVersion : String
-	parentProcessInstanceId : String
-	rootProcessId : String
-	rootProcessInstanceId : String
-	processInstanceId : String
-	businessKey : String
-	errorMessage : String
-	nodeDefinitionId : String
-	nodeInstanceId : String
+    eventDate : DateTime
+    processType : String
+    processId : String
+    processVersion : String
+    parentProcessInstanceId : String
+    rootProcessId : String
+    rootProcessInstanceId : String
+    processInstanceId : String
+    businessKey : String
+    errorMessage : String
+    nodeDefinitionId : String
+    nodeInstanceId : String
 }
 
 type ProcessInstanceVariableLog {
@@ -80,62 +81,62 @@ type ProcessInstanceVariableLog {
     processInstanceId : String
     businessKey : String
     variableId : String
-	variableName : String
-	variableValue : JSON
+    variableName : String
+    variableValue : JSON
 }
   
 type UserTaskInstanceStateLog {
-	eventId : String!
-	eventDate : DateTime
-	userTaskDefinitionId : String
-	userTaskInstanceId : String
-	processInstanceId : String
-	businessKey : String
-	taskId : String
-	name : String
-	description : String
-	actualUser : String
-	state : String
-	nodeDefitionId : String
-	nodeInstanceId : String
-	eventType : String
+    eventId : String!
+    eventDate : DateTime
+    userTaskDefinitionId : String
+    userTaskInstanceId : String
+    processInstanceId : String
+    businessKey : String
+    taskId : String
+    name : String
+    description : String
+    actualUser : String
+    state : String
+    nodeDefitionId : String
+    nodeInstanceId : String
+    eventType : String
 }
    
 type UserTaskInstanceAssignmentLog {
-	eventId : String!
-	eventDate : DateTime
-	userTaskDefinitionId : String
-	userTaskInstanceId : String
-	processInstanceId : String
-	businessKey : String
-	userTaskName : String
-	assignmentType : String
-	users : [String]
+    eventId : String!
+    eventDate : DateTime
+    userTaskDefinitionId : String
+    userTaskInstanceId : String
+    processInstanceId : String
+    businessKey : String
+    userTaskName : String
+    assignmentType : String
+    users : [String]
 }
 
 type UserTaskInstanceAttachmentLog {
-	eventId : String!
-	eventDate : DateTime
-	userTaskDefinitionId : String
-	userTaskInstanceId : String
-	processInstanceId : String
-	businessKey : String
-	attachmentId : String
-	attachmentName : String
-	attachmentURI : String
-	eventType : Int
+    eventId : String!
+    eventDate : DateTime
+    userTaskDefinitionId : String
+    userTaskInstanceId : String
+    processInstanceId : String
+    businessKey : String
+    attachmentId : String
+    attachmentName : String
+    attachmentURI : String
+    eventType : Int
 }
    
 type UserTaskInstanceCommentLog {
-	eventId : String!
-	eventDate : DateTime
-	userTaskDefinitionId : String
-	userTaskInstanceId : String
-	processInstanceId : String
-	businessKey : String
-	commentId : String
-	commentContent : String
-	eventType : Int
+    eventId : String!
+    eventDate : DateTime
+    userTaskDefinitionId : String
+    userTaskInstanceId : String
+    processInstanceId : String
+    businessKey : String
+    commentId : String
+    commentContent : String
+    eventType : Int
 }
 
 
@@ -145,34 +146,38 @@ type AttributeKeyValuePair {
 }
     
 type UserTaskInstanceDeadlineLog {
-	eventId : String!
-	eventDate : DateTime
-	userTaskDefinitionId : String
-	userTaskInstanceId : String
-	processInstanceId : String
-	businessKey : String
-	eventType : String
-	notification : [AttributeKeyValuePair]
+    eventId : String!
+    eventDate : DateTime
+    userTaskDefinitionId : String
+    userTaskInstanceId : String
+    processInstanceId : String
+    businessKey : String
+    eventType : String
+    notification : [AttributeKeyValuePair]
 }
    
 type UserTaskInstanceVariableLog {
-	eventId : String!
-	eventDate : DateTime
-	userTaskDefinitionId : String
-	userTaskInstanceId : String
-	processInstanceId : String
-	businessKey : String
-	variableId : String
-	variableName : String
-	variableValue : JSON
-	variableType : String
+    eventId : String!
+    eventDate : DateTime
+    userTaskDefinitionId : String
+    userTaskInstanceId : String
+    processInstanceId : String
+    businessKey : String
+    variableId : String
+    variableName : String
+    variableValue : JSON
+    variableType : String
 }
 
 type Query {
-  	GetAllScheduledJobs (pagination: Pagination): [JobExecutionLog]
+    GetAllScheduledJobs (pagination: Pagination): [JobExecutionLog]
+
     GetJobById (jobId : String!) : [JobExecutionLog]
+    GetJobByCorrelationId (correlationId : String!) : [JobExecutionLog]
+
     GetJobHistoryById (jobId : String!) : [JobExecutionLog]
     GetJobHistoryByCorrelationId (correlationId : String!) : [JobExecutionLog]
+
     GetAllPendingJobs (pagination: Pagination): [JobExecutionLog]
     GetAllEligibleJobsForExecution (pagination: Pagination) : [JobExecutionLog]
     GetAllEligibleJobsForRetry (pagination: Pagination) : [JobExecutionLog]
@@ -181,21 +186,20 @@ type Query {
     GetAllInErrorJobs (pagination: Pagination) : [JobExecutionLog]
     GetAllCancelledJobs (pagination: Pagination) : [JobExecutionLog]
     GetAllJobsByState (state : [String]!, pagination: Pagination) : [JobExecutionLog]
-    GetJobByCorrelationId (correlationId : String!) : [JobExecutionLog]
 
-  	GetAllProcessInstancesState (pagination: Pagination): [ProcessInstanceStateLog]
-  	GetAllProcessInstancesNodeByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceNodeLog]
-  	GetAllProcessInstancesErrorByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceErrorLog]
-  	GetAllProcessInstancesVariablebyProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceVariableLog]
 
-  	GetAllUserTaskInstanceState (pagination: Pagination) : [UserTaskInstanceStateLog]
-  	GetAllUserTaskInstanceAssignments (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceAssignmentLog]
-  	GetAllUserTaskInstanceAttachments (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceAttachmentLog]
-  	GetAllUserTaskInstanceComment (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceCommentLog]
-  	GetAllUserTaskInstanceDeadline (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceDeadlineLog]
-  	GetAllUserTaskInstanceVariable (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceVariableLog]
+    GetAllProcessInstancesState (pagination: Pagination): [ProcessInstanceStateLog]
+    GetAllProcessInstancesNodeByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceNodeLog]
+    GetAllProcessInstancesErrorByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceErrorLog]
+    GetAllProcessInstancesVariablebyProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceVariableLog]
+
+    GetAllUserTaskInstanceState (pagination: Pagination) : [UserTaskInstanceStateLog]
+    GetAllUserTaskInstanceAssignments (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceAssignmentLog]
+    GetAllUserTaskInstanceAttachments (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceAttachmentLog]
+    GetAllUserTaskInstanceComment (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceCommentLog]
+    GetAllUserTaskInstanceDeadline (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceDeadlineLog]
+    GetAllUserTaskInstanceVariable (userTaskInstanceId : String!, pagination: Pagination) : [UserTaskInstanceVariableLog]
 }
-
 
 input Pagination {
     limit: Int

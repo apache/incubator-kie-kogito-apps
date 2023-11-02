@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 public abstract class JPAAbstractQuery {
@@ -56,4 +57,28 @@ public abstract class JPAAbstractQuery {
 
     }
 
+    
+    protected List<Object[]> executeWithNamedQueryEntityManager(EntityManager entityManager, String query) {
+        return entityManager.createNamedQuery(query).getResultList();
+    }
+
+    protected List<Object[]> executeWithNamedQueryEntityManagerAndArguments(EntityManager entityManager, String query, Map<String, Object> arguments) {
+
+        Map<String, Object> parameters = new HashMap<>(arguments);
+        @SuppressWarnings("unchecked")
+        Map<String, Object> pagination = (Map<String, Object>) parameters.remove("pagination");
+        Query typedQuery = entityManager.createNamedQuery(query);
+        parameters.forEach(typedQuery::setParameter);
+        if (pagination != null) {
+            if(pagination.get("limit") != null) {
+                typedQuery.setMaxResults((Integer) pagination.get("limit"));
+            }
+            if(pagination.get("offset") != null) {
+                typedQuery.setFirstResult((Integer) pagination.get("offset"));
+            }
+        }
+ 
+        return typedQuery.getResultList();
+
+    }
 }

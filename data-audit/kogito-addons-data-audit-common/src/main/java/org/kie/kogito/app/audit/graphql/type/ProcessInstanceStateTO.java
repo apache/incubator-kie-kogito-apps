@@ -21,6 +21,8 @@ package org.kie.kogito.app.audit.graphql.type;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProcessInstanceStateTO {
 
@@ -52,13 +54,16 @@ public class ProcessInstanceStateTO {
 
     private OffsetDateTime slaDueDate;
 
+    private Set<String> roles;
+    
     public ProcessInstanceStateTO() {
-
+        roles = new HashSet<>();
     }
 
     public ProcessInstanceStateTO(String eventId, Date eventDate, String processType, String processId,
             String processVersion, String parentProcessInstanceId, String rootProcessId, String rootProcessInstanceId, String processInstanceId,
             String businessKey, String eventType, String outcome, String state, Date slaDueDate) {
+        this();
         this.eventId = eventId;
         this.eventDate = OffsetDateTime.ofInstant(eventDate.toInstant(), ZoneId.of("UTC"));
         this.processType = processType;
@@ -187,6 +192,10 @@ public class ProcessInstanceStateTO {
 
     public void setSlaDueDate(OffsetDateTime slaDueDate) {
         this.slaDueDate = slaDueDate;
+    }
+
+    public void addRole(String role) {
+        this.roles.add(role);
     }
 
 }

@@ -119,7 +119,7 @@ public class DataAuditTestUtils {
                 .eventDate(new Date())
                 .state(status)
                 .businessKey(UUID.randomUUID().toString())
-                .roles("admin")
+                .roles("admin", "role2")
                 .eventUser(identity)
                 .eventType(eventType)
                 .build();
