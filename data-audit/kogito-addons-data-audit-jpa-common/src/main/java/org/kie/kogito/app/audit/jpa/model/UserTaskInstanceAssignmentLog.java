@@ -55,7 +55,7 @@ public class UserTaskInstanceAssignmentLog extends AbstractUserTaskInstanceLog {
     private String assignmentType; // POT OWNERS, ADMIN...
 
     @ElementCollection
-    @CollectionTable(name = "TaskInstanceAssignmentRolesLog", joinColumns = @JoinColumn(name = "task_instance_assignment_log_id"), foreignKey = @ForeignKey(name = "fk_task_instance_assignment_log_tid"))
+    @CollectionTable(name = "TaskInstanceAssignmentUsersLog", joinColumns = @JoinColumn(name = "task_instance_assignment_log_id"), foreignKey = @ForeignKey(name = "fk_task_instance_assignment_log_tid"))
     @Column(name = "user_id")
     private List<String> users;
 

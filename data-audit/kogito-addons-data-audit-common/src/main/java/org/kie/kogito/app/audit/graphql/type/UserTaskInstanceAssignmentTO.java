@@ -22,6 +22,7 @@ package org.kie.kogito.app.audit.graphql.type;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 public class UserTaskInstanceAssignmentTO {
@@ -46,8 +47,13 @@ public class UserTaskInstanceAssignmentTO {
 
     private Set<String> users;
 
+    public UserTaskInstanceAssignmentTO() {
+        users = new HashSet<>();
+    }
+
     public UserTaskInstanceAssignmentTO(String eventId, Date eventDate, String eventUser, String userTaskDefinitionId, String userTaskInstanceId, String processInstanceId, String businessKey,
             String userTaskName, String assignmentType) {
+        this();
         this.eventId = eventId;
         this.eventDate = OffsetDateTime.ofInstant(eventDate.toInstant(), ZoneId.of("UTC"));
         this.eventUser = eventUser;
@@ -137,6 +143,10 @@ public class UserTaskInstanceAssignmentTO {
 
     public void setUsers(Set<String> users) {
         this.users = users;
+    }
+
+    public void addUser(String user) {
+        this.users.add(user);
     }
 
 }

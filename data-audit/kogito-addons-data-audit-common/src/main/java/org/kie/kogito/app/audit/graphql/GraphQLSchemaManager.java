@@ -55,8 +55,6 @@ public class GraphQLSchemaManager {
 
     private GraphQLSchemaManager() {
 
-
-
         RuntimeWiring.Builder runtimeWiringBuilder = newRuntimeWiring();
 
         runtimeWiringBuilder.scalar(ExtendedScalars.GraphQLBigInteger);
@@ -90,6 +88,8 @@ public class GraphQLSchemaManager {
             TypeDefinitionRegistry newTypes = readDefintionRegistry(graphQLSchema);
 
             // for allowing extension of the schema we need to merge this object manually
+            // we remove it from the new Types and aggregate in temporal list so we can add this at the end
+            // of extension processing
             Optional<ObjectTypeDefinition> newDefinitions = newTypes.getType("Query", ObjectTypeDefinition.class);
             if (newDefinitions.isPresent()) {
                 queryDefinitions.addAll(newDefinitions.get().getFieldDefinitions());
@@ -112,7 +112,7 @@ public class GraphQLSchemaManager {
             SchemaParser schemaParser = new SchemaParser();
             return schemaParser.parse(is);
         } catch (IOException e) {
-            LOGGER.error("could not find or process data-audit.graphqls", e);
+            LOGGER.error("could not find or process {}", graphQLSchema, e);
             return new TypeDefinitionRegistry();
         }
     }

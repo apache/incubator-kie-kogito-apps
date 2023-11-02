@@ -32,7 +32,7 @@
     <!-- hint name="org.hibernate.timeout" value="200"/ -->
   </named-native-query>  
     
-  <named-native-query name="GetAllUserTaskInstanceAssignments" result-set-mapping="UserTaskInstanceAssignmentTOMapping">
+  <named-native-query name="GetAllUserTaskInstanceAssignments">
     <query>
 		SELECT log.event_id as eventId,
 		       log.event_date as eventDate,
@@ -42,8 +42,10 @@
 		       log.process_instance_id as processInstanceId,
 		       log.business_key as businessKey,
 			   log.task_name as userTaskName,
-			   log.assignment_type as assignmentType
+			   log.assignment_type as assignmentType,
+			   users.user_id
 		  FROM TaskInstanceAssignmentLog log
+     LEFT JOIN TaskInstanceAssignmentUsersLog users ON users.task_instance_assignment_log_id = log.id
          WHERE log.user_task_instance_id = :userTaskInstanceId
     </query>
     <!-- hint name="org.hibernate.timeout" value="200"/ -->
