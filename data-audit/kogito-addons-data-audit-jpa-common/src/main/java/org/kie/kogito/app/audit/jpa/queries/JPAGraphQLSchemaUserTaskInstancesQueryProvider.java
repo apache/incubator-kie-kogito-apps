@@ -23,6 +23,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.kie.kogito.app.audit.graphql.type.UserTaskInstanceAssignmentTO;
 import org.kie.kogito.app.audit.graphql.type.UserTaskInstanceAttachmentTO;
@@ -43,7 +44,6 @@ public class JPAGraphQLSchemaUserTaskInstancesQueryProvider implements GraphQLSc
                 new JPASimpleNamedQuery<UserTaskInstanceStateTO>("GetAllUserTaskInstanceState", "GetAllUserTaskInstanceState", UserTaskInstanceStateTO.class),
                 new JPASimpleNamedQuery<UserTaskInstanceAttachmentTO>("GetAllUserTaskInstanceAttachments", "GetAllUserTaskInstanceAttachments", UserTaskInstanceAttachmentTO.class),
                 new JPASimpleNamedQuery<UserTaskInstanceCommentTO>("GetAllUserTaskInstanceComment", "GetAllUserTaskInstanceComment", UserTaskInstanceCommentTO.class),
-                new JPASimpleNamedQuery<UserTaskInstanceDeadlineTO>("GetAllUserTaskInstanceDeadline", "GetAllUserTaskInstanceDeadline", UserTaskInstanceDeadlineTO.class),
                 new JPASimpleNamedQuery<UserTaskInstanceVariableTO>("GetAllUserTaskInstanceVariable", "GetAllUserTaskInstanceVariable", UserTaskInstanceVariableTO.class),
                 new JPAComplexNamedQuery<UserTaskInstanceAssignmentTO>("GetAllUserTaskInstanceAssignments", "GetAllUserTaskInstanceAssignments", new DataMapper<UserTaskInstanceAssignmentTO>() {
 
@@ -69,6 +69,36 @@ public class JPAGraphQLSchemaUserTaskInstancesQueryProvider implements GraphQLSc
                             current.setUserTaskName((String) row[7]);
                             current.setAssignmentType((String) row[8]);
                             current.addUser((String) data.get(idx)[9]);
+
+                        }
+
+                        return transformedData;
+                    }
+
+                }),
+                new JPAComplexNamedQuery<UserTaskInstanceDeadlineTO>("GetAllUserTaskInstanceDeadline", "GetAllUserTaskInstanceDeadline", new DataMapper<UserTaskInstanceDeadlineTO>() {
+
+
+                    @Override
+                    public List<UserTaskInstanceDeadlineTO> produce(List<Object[]> data) {
+                        List<UserTaskInstanceDeadlineTO> transformedData = new ArrayList<>();
+                        UserTaskInstanceDeadlineTO current = null;
+                        Object currentIndex = null;
+                        for (int idx = 0; idx < data.size(); idx++) {
+                            Object[] row = data.get(idx);
+                            if (!Objects.equal(currentIndex, row[0])) {
+                                current = new UserTaskInstanceDeadlineTO();
+                                currentIndex = row[0];
+                                transformedData.add(current);
+                            }
+                            current.setEventId((String) row[0]);
+                            current.setEventDate(toDateTime((Date) row[1]));
+                            current.setUserTaskDefinitionId((String) row[2]);
+                            current.setUserTaskInstanceId((String) row[3]);
+                            current.setProcessInstanceId((String) row[4]);
+                            current.setBusinessKey((String) row[5]);
+                            current.setEventType((String) row[6]);
+                            current.addNotification((String) row[7], (String) row[8]);
 
                         }
 

@@ -213,7 +213,7 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
     @Test
     public void testGetAllUserTaskInstanceDeadline() {
         String query =
-                "{ GetAllUserTaskInstanceDeadline (userTaskInstanceId : \\\"1\\\") { eventId, eventDate, userTaskDefinitionId, userTaskInstanceId, processInstanceId, businessKey, eventType, notification {key, value} } }";
+                "{ GetAllUserTaskInstanceDeadline (userTaskInstanceId : \\\"1\\\") { eventId, eventDate, userTaskDefinitionId, userTaskInstanceId, processInstanceId, businessKey, eventType, notification } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)

@@ -44,7 +44,7 @@ public class UserTaskInstanceDeadlineLog extends AbstractUserTaskInstanceLog {
     private Long id;
 
     @ElementCollection
-    @JoinTable(name = "TaskInstanceDeadlineNotificationLog", joinColumns = @JoinColumn(name = "task_instance_deadline_id"), foreignKey = @ForeignKey(name = "fk_task_instance_deadline_tid"))
+    @JoinTable(name = "TaskInstanceDeadlineNotificationLog", joinColumns = @JoinColumn(name = "task_instance_deadline_log_id"), foreignKey = @ForeignKey(name = "fk_task_instance_deadline_tid"))
     @MapKeyColumn(name = "property_name")
     @Column(name = "property_value")
     private Map<String, String> notification;

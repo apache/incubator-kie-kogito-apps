@@ -93,7 +93,7 @@
     <!-- hint name="org.hibernate.timeout" value="200"/ -->
   </named-native-query>  
   
-  <named-native-query name="GetAllUserTaskInstanceDeadline" result-set-mapping="UserTaskInstanceDeadlineTOMapping">
+  <named-native-query name="GetAllUserTaskInstanceDeadline" >
     <query>
 		SELECT log.event_id as eventId,
 		       log.event_date as eventDate,
@@ -101,8 +101,11 @@
 		       log.user_task_instance_id as userTaskInstanceId,
 		       log.process_instance_id as processInstanceId,
 		       log.business_key as businessKey,
-			   log.event_type as eventType
+			   log.event_type as eventType,
+			   notification.property_name as propertyName,
+			   notification.property_value as propertyValue 
 		  FROM TaskInstanceDeadlineLog log
+     LEFT JOIN TaskInstanceDeadlineNotificationLog notification ON log.id = notification.task_instance_deadline_log_id
          WHERE log.user_task_instance_id = :userTaskInstanceId
     </query>
     <!-- hint name="org.hibernate.timeout" value="200"/ -->

@@ -22,6 +22,7 @@ package org.kie.kogito.app.audit.graphql.type;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 public class UserTaskInstanceDeadlineTO {
@@ -43,6 +44,7 @@ public class UserTaskInstanceDeadlineTO {
     private String eventType;
 
     public UserTaskInstanceDeadlineTO(String eventId, Date eventDate, String userTaskDefinitionId, String userTaskInstanceId, String processInstanceId, String businessKey, String eventType) {
+        this();
         this.eventId = eventId;
         this.eventDate = OffsetDateTime.ofInstant(eventDate.toInstant(), ZoneId.of("UTC"));
         this.userTaskDefinitionId = userTaskDefinitionId;
@@ -50,6 +52,10 @@ public class UserTaskInstanceDeadlineTO {
         this.processInstanceId = processInstanceId;
         this.businessKey = businessKey;
         this.eventType = eventType;
+    }
+
+    public UserTaskInstanceDeadlineTO() {
+        this.notification = new HashMap<>();
     }
 
     public String getEventId() {
@@ -114,6 +120,10 @@ public class UserTaskInstanceDeadlineTO {
 
     public void setEventType(String eventType) {
         this.eventType = eventType;
+    }
+
+    public void addNotification(String key, String value) {
+        notification.put(key, value);
     }
 
 }

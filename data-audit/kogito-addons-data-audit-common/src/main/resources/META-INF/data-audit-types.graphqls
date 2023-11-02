@@ -139,12 +139,6 @@ type UserTaskInstanceCommentLog {
     eventType : Int
 }
 
-
-type AttributeKeyValuePair {
-    key : String
-    value : String
-}
-    
 type UserTaskInstanceDeadlineLog {
     eventId : String!
     eventDate : DateTime
@@ -153,7 +147,7 @@ type UserTaskInstanceDeadlineLog {
     processInstanceId : String
     businessKey : String
     eventType : String
-    notification : [AttributeKeyValuePair]
+    notification : JSON
 }
    
 type UserTaskInstanceVariableLog {
