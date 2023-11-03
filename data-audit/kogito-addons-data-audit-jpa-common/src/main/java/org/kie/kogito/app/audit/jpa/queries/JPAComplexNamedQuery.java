@@ -34,6 +34,10 @@ public class JPAComplexNamedQuery<T> extends JPAAbstractQuery implements GraphQL
     private String namedQuery;
     private DataMapper<T> dataMapper;
 
+    public JPAComplexNamedQuery(String name, DataMapper<T> dataMapper) {
+        this(name, name, dataMapper);
+    }
+
     public JPAComplexNamedQuery(String name, String namedQuery, DataMapper<T> dataMapper) {
         this.name = name;
         this.namedQuery = namedQuery;

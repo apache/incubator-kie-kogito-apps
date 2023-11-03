@@ -35,6 +35,109 @@
 		<!-- hint name="org.hibernate.timeout" value="200"/ -->
 	</named-native-query>
 
+    <named-native-query name="GetAllProcessInstancesStateByStatus" >
+        <query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               log.outcome as outcome,
+               log.state as state,
+               log.sla_due_date as slaDueDate,
+               roles.role as role
+          FROM ProcessInstanceStateLog log
+     LEFT JOIN ProcessInstanceStateLog log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
+     LEFT JOIN ProcessInstanceStateRolesLog roles ON log.id = roles.process_instance_state_log_id 
+         WHERE log_newer.event_id IS NULL AND log.state = :status
+      ORDER BY log.event_date DESC
+    </query>
+        <!-- hint name="org.hibernate.timeout" value="200"/ -->
+    </named-native-query>
+
+    <named-native-query name="GetAllProcessInstancesStateByProcessId" >
+        <query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               log.outcome as outcome,
+               log.state as state,
+               log.sla_due_date as slaDueDate,
+               roles.role as role
+          FROM ProcessInstanceStateLog log
+     LEFT JOIN ProcessInstanceStateLog log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
+     LEFT JOIN ProcessInstanceStateRolesLog roles ON log.id = roles.process_instance_state_log_id 
+         WHERE log_newer.event_id IS NULL AND log.process_id = :processId
+      ORDER BY log.event_date DESC
+    </query>
+        <!-- hint name="org.hibernate.timeout" value="200"/ -->
+    </named-native-query>
+
+
+    <named-native-query name="GetProcessInstancesStateHistory" >
+        <query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               log.outcome as outcome,
+               log.state as state,
+               log.sla_due_date as slaDueDate,
+               roles.role as role
+          FROM ProcessInstanceStateLog log
+     LEFT JOIN ProcessInstanceStateRolesLog roles ON log.id = roles.process_instance_state_log_id 
+         WHERE log.process_instance_id = :processInstanceId
+      ORDER BY log.event_date DESC
+    </query>
+        <!-- hint name="org.hibernate.timeout" value="200"/ -->
+    </named-native-query>
+
+    <named-native-query name="GetProcessInstancesStateHistoryByBusinessKey" >
+        <query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               log.outcome as outcome,
+               log.state as state,
+               log.sla_due_date as slaDueDate,
+               roles.role as role
+          FROM ProcessInstanceStateLog log
+     LEFT JOIN ProcessInstanceStateRolesLog roles ON log.id = roles.process_instance_state_log_id 
+         WHERE log.business_key = :businessKey
+      ORDER BY log.event_date DESC
+    </query>
+        <!-- hint name="org.hibernate.timeout" value="200"/ -->
+    </named-native-query>
+
 	<named-native-query
 		name="GetAllProcessInstancesNodeByProcessInstanceId"
 		result-set-mapping="ProcessInstanceNodeTOMapping">

@@ -34,7 +34,9 @@ public class JPASimpleNamedQuery<T> extends JPAAbstractQuery implements GraphQLS
     private String namedQuery;
     private Class<T> clazz;
 
-    
+    public JPASimpleNamedQuery(String name, Class<T> clazz) {
+        this(name, name, clazz);
+    }
 
     public JPASimpleNamedQuery(String name, String namedQuery, Class<T> clazz) {
         this.name = name;

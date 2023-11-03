@@ -118,7 +118,7 @@ public class DataAuditTestUtils {
                 .processName(UUID.randomUUID().toString())
                 .eventDate(new Date())
                 .state(status)
-                .businessKey(UUID.randomUUID().toString())
+                .businessKey("BusinessKey" + processInstanceId)
                 .roles("admin", "role2")
                 .eventUser(identity)
                 .eventType(eventType)

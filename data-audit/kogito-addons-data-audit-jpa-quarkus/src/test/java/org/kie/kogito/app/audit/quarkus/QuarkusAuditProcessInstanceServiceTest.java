@@ -137,6 +137,111 @@ public class QuarkusAuditProcessInstanceServiceTest {
     }
 
     @Test
+    public void testGetProcessInstancesStateHistory() {
+        String query =
+                "{ GetProcessInstancesStateHistory ( processInstanceId : \\\"2\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
+        query = wrapQuery(query);
+        List<Map<String, Object>> data = given()
+                .contentType(ContentType.JSON)
+                .body(query)
+                .when()
+                .post(SubsystemConstants.DATA_AUDIT_PATH)
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .and()
+                .extract().path("data.GetProcessInstancesStateHistory");
+
+        assertThat(data)
+                .hasSize(2)
+                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"))
+                .containsExactlyInAnyOrder(
+                        tuple("2", String.valueOf(ProcessInstance.STATE_ACTIVE)),
+                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED)));
+
+    }
+
+    @Test
+    public void testGetProcessInstancesStateHistoryByBusinessKey() {
+        String query =
+                "{ GetProcessInstancesStateHistoryByBusinessKey ( businessKey : \\\"BusinessKey2\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
+        query = wrapQuery(query);
+        List<Map<String, Object>> data = given()
+                .contentType(ContentType.JSON)
+                .body(query)
+                .when()
+                .post(SubsystemConstants.DATA_AUDIT_PATH)
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .and()
+                .extract().path("data.GetProcessInstancesStateHistoryByBusinessKey");
+
+        assertThat(data)
+                .hasSize(2)
+                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"))
+                .containsExactlyInAnyOrder(
+                        tuple("2", String.valueOf(ProcessInstance.STATE_ACTIVE)),
+                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED)));
+
+    }
+
+    @Test
+    public void testGetAllProcessInstancesStateByStatus() {
+
+        String query =
+                "{ GetAllProcessInstancesStateByStatus (status : \\\"1\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
+
+        query = wrapQuery(query);
+
+        List<Map<String, Object>> data = given()
+                .contentType(ContentType.JSON)
+                .body(query)
+                .when()
+                .post(SubsystemConstants.DATA_AUDIT_PATH)
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .and()
+                .extract().path("data.GetAllProcessInstancesStateByStatus");
+
+        assertThat(data)
+                .hasSize(1)
+                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"))
+                .containsExactlyInAnyOrder(
+                        tuple("1", String.valueOf(ProcessInstance.STATE_ACTIVE)));
+
+    }
+
+    @Test
+    public void testGetAllProcessInstancesStateByProcessId() {
+
+        String query =
+                "{ GetAllProcessInstancesStateByProcessId (processId : \\\"processId1\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
+
+        query = wrapQuery(query);
+
+        List<Map<String, Object>> data = given()
+                .contentType(ContentType.JSON)
+                .body(query)
+                .when()
+                .post(SubsystemConstants.DATA_AUDIT_PATH)
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .and()
+                .extract().path("data.GetAllProcessInstancesStateByProcessId");
+
+        assertThat(data)
+                .hasSize(2)
+                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"))
+                .containsExactlyInAnyOrder(
+                        tuple("1", String.valueOf(ProcessInstance.STATE_ACTIVE)),
+                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED)));
+
+    }
+
+    @Test
     public void testGetAllProcessInstancesNodeByProcessInstanceId() {
         String query =
                 "{ GetAllProcessInstancesNodeByProcessInstanceId ( processInstanceId : \\\"1\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, nodeType , nodeName, nodeInstanceId, connection, slaDueDate , eventData  } }";
