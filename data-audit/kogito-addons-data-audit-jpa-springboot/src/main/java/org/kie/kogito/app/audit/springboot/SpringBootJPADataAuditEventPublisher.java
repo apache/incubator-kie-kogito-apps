@@ -48,7 +48,7 @@ public class SpringBootJPADataAuditEventPublisher implements DataAuditEventPubli
     private DataAuditStoreProxyService proxy;
 
     @Autowired
-    @Qualifier("DataAuditPU")
+    @Qualifier("jpaDataAuditEntityManagerFactory")
     EntityManager entityManager;
 
     public SpringBootJPADataAuditEventPublisher() {

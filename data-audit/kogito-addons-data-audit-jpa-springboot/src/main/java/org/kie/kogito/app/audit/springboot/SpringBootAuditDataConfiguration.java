@@ -18,13 +18,66 @@
  */
 package org.kie.kogito.app.audit.springboot;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan
+@Configuration(proxyBeanMethods = false)
 public class SpringBootAuditDataConfiguration {
 
+    @Bean
+    @Primary
+    public JpaProperties primaryJpaDataAuditProperties() {
+        return new JpaProperties();
+    }
+
+    @Bean(name = "JPADataAuditProperties")
+    @Qualifier("JPADataAuditProperties")
+    @ConfigurationProperties(prefix = "data-audit.spring.jpa")
+    public JpaProperties jpaDataAuditProperties() {
+        return new JpaProperties();
+    }
+
+    @Bean
+    public LocalContainerEntityManagerFactoryBean jpaDataAuditEntityManagerFactory(
+            DataSource dataSource,
+            @Autowired @Qualifier("JPADataAuditProperties") JpaProperties jpaProperties) {
+        EntityManagerFactoryBuilder builder = createEntityManagerFactoryBuilder(jpaProperties);
+        return builder
+                .dataSource(dataSource)
+                .mappingResources(jpaProperties.getMappingResources().toArray(String[]::new))
+                .properties(jpaProperties.getProperties())
+                .persistenceUnit("DataAuditPU")
+                .build();
+    }
+
+    private EntityManagerFactoryBuilder createEntityManagerFactoryBuilder(JpaProperties jpaProperties) {
+        JpaVendorAdapter jpaVendorAdapter = createJpaVendorAdapter(jpaProperties);
+        return new EntityManagerFactoryBuilder(jpaVendorAdapter, jpaProperties.getProperties(), null);
+    }
+
+    private JpaVendorAdapter createJpaVendorAdapter(JpaProperties jpaProperties) {
+        HibernateJpaVendorAdapter hibernate = new HibernateJpaVendorAdapter();
+        hibernate.setDatabase(jpaProperties.getDatabase());
+        hibernate.setGenerateDdl(jpaProperties.isGenerateDdl());
+        hibernate.setShowSql(jpaProperties.isShowSql());
+        hibernate.setDatabasePlatform(jpaProperties.getDatabasePlatform());
+        return hibernate;
+    }
 }
