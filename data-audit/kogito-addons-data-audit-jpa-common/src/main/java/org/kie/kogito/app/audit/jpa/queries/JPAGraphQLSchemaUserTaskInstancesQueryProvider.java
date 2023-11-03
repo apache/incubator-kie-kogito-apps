@@ -20,10 +20,8 @@ package org.kie.kogito.app.audit.jpa.queries;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.kie.kogito.app.audit.graphql.type.UserTaskInstanceAssignmentTO;
 import org.kie.kogito.app.audit.graphql.type.UserTaskInstanceAttachmentTO;
@@ -31,82 +29,22 @@ import org.kie.kogito.app.audit.graphql.type.UserTaskInstanceCommentTO;
 import org.kie.kogito.app.audit.graphql.type.UserTaskInstanceDeadlineTO;
 import org.kie.kogito.app.audit.graphql.type.UserTaskInstanceStateTO;
 import org.kie.kogito.app.audit.graphql.type.UserTaskInstanceVariableTO;
+import org.kie.kogito.app.audit.jpa.queries.mapper.UserTaskInstanceAssignmentTOMapper;
+import org.kie.kogito.app.audit.jpa.queries.mapper.UserTaskInstanceDeadlineTOMapper;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQuery;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQueryProvider;
-
-import graphql.com.google.common.base.Objects;
 
 public class JPAGraphQLSchemaUserTaskInstancesQueryProvider implements GraphQLSchemaQueryProvider {
 
     @Override
     public List<GraphQLSchemaQuery<?>> queries() {
         return List.of(
-                new JPASimpleNamedQuery<UserTaskInstanceStateTO>("GetAllUserTaskInstanceState", "GetAllUserTaskInstanceState", UserTaskInstanceStateTO.class),
-                new JPASimpleNamedQuery<UserTaskInstanceAttachmentTO>("GetAllUserTaskInstanceAttachments", "GetAllUserTaskInstanceAttachments", UserTaskInstanceAttachmentTO.class),
-                new JPASimpleNamedQuery<UserTaskInstanceCommentTO>("GetAllUserTaskInstanceComment", "GetAllUserTaskInstanceComment", UserTaskInstanceCommentTO.class),
-                new JPASimpleNamedQuery<UserTaskInstanceVariableTO>("GetAllUserTaskInstanceVariable", "GetAllUserTaskInstanceVariable", UserTaskInstanceVariableTO.class),
-                new JPAComplexNamedQuery<UserTaskInstanceAssignmentTO>("GetAllUserTaskInstanceAssignments", "GetAllUserTaskInstanceAssignments", new DataMapper<UserTaskInstanceAssignmentTO>() {
-
-                    @Override
-                    public List<UserTaskInstanceAssignmentTO> produce(List<Object[]> data) {
-                        List<UserTaskInstanceAssignmentTO> transformedData = new ArrayList<>();
-                        UserTaskInstanceAssignmentTO current = null;
-                        Object currentIndex = null;
-                        for (int idx = 0; idx < data.size(); idx++) {
-                            Object[] row = data.get(idx);
-                            if (!Objects.equal(currentIndex, row[0])) {
-                                current = new UserTaskInstanceAssignmentTO();
-                                currentIndex = row[0];
-                                transformedData.add(current);
-                            }
-                            current.setEventId((String) row[0]);
-                            current.setEventDate(toDateTime((Date) row[1]));
-                            current.setEventUser((String) row[2]);
-                            current.setUserTaskDefinitionId((String) row[3]);
-                            current.setUserTaskInstanceId((String) row[4]);
-                            current.setProcessInstanceId((String) row[5]);
-                            current.setBusinessKey((String) row[6]);
-                            current.setUserTaskName((String) row[7]);
-                            current.setAssignmentType((String) row[8]);
-                            current.addUser((String) data.get(idx)[9]);
-
-                        }
-
-                        return transformedData;
-                    }
-
-                }),
-                new JPAComplexNamedQuery<UserTaskInstanceDeadlineTO>("GetAllUserTaskInstanceDeadline", "GetAllUserTaskInstanceDeadline", new DataMapper<UserTaskInstanceDeadlineTO>() {
-
-
-                    @Override
-                    public List<UserTaskInstanceDeadlineTO> produce(List<Object[]> data) {
-                        List<UserTaskInstanceDeadlineTO> transformedData = new ArrayList<>();
-                        UserTaskInstanceDeadlineTO current = null;
-                        Object currentIndex = null;
-                        for (int idx = 0; idx < data.size(); idx++) {
-                            Object[] row = data.get(idx);
-                            if (!Objects.equal(currentIndex, row[0])) {
-                                current = new UserTaskInstanceDeadlineTO();
-                                currentIndex = row[0];
-                                transformedData.add(current);
-                            }
-                            current.setEventId((String) row[0]);
-                            current.setEventDate(toDateTime((Date) row[1]));
-                            current.setUserTaskDefinitionId((String) row[2]);
-                            current.setUserTaskInstanceId((String) row[3]);
-                            current.setProcessInstanceId((String) row[4]);
-                            current.setBusinessKey((String) row[5]);
-                            current.setEventType((String) row[6]);
-                            current.addNotification((String) row[7], (String) row[8]);
-
-                        }
-
-                        return transformedData;
-                    }
-
-                }));
-
+                new JPASimpleNamedQuery<UserTaskInstanceStateTO>("GetAllUserTaskInstanceState", UserTaskInstanceStateTO.class),
+                new JPASimpleNamedQuery<UserTaskInstanceAttachmentTO>("GetAllUserTaskInstanceAttachments", UserTaskInstanceAttachmentTO.class),
+                new JPASimpleNamedQuery<UserTaskInstanceCommentTO>("GetAllUserTaskInstanceComment", UserTaskInstanceCommentTO.class),
+                new JPASimpleNamedQuery<UserTaskInstanceVariableTO>("GetAllUserTaskInstanceVariable", UserTaskInstanceVariableTO.class),
+                new JPAComplexNamedQuery<UserTaskInstanceAssignmentTO>("GetAllUserTaskInstanceAssignments", new UserTaskInstanceAssignmentTOMapper()),
+                new JPAComplexNamedQuery<UserTaskInstanceDeadlineTO>("GetAllUserTaskInstanceDeadline", new UserTaskInstanceDeadlineTOMapper()));
     }
 
     public OffsetDateTime toDateTime(Date date) {
