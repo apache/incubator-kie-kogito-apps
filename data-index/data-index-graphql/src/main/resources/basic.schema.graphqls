@@ -420,7 +420,7 @@ enum OrderBy {
 }
 
 input Pagination {
-    limit: Intgit s
+    limit: Int
     offset: Int
 }
 
