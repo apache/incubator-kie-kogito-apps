@@ -25,6 +25,7 @@ import javax.transaction.Transactional;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.jobs.service.api.Job;
@@ -74,7 +75,7 @@ public class QuarkusDataAuditMessagingEventConsumer {
     @Incoming(KOGITO_JOBS_EVENTS)
     @Blocking
     @Transactional
-    public void onJobEvent(JobCloudEvent<Job> event) {
+    public void onJobEvent(JobInstanceDataEvent event) {
         LOGGER.debug("Job received KogitoJobCloudEvent \n{}", event);
         proxy.storeJobDataEvent(newDataAuditContext(entityManager), event);
     }

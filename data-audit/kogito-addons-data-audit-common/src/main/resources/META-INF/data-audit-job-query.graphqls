@@ -3,10 +3,10 @@ type Query {
     GetAllScheduledJobs (pagination: Pagination): [JobExecutionLog]
 
     GetJobById (jobId : String!) : [JobExecutionLog]
-    GetJobByCorrelationId (correlationId : String!) : [JobExecutionLog]
+    GetJobByProcessInstanceId (processInstanceId : String!) : [JobExecutionLog]
 
     GetJobHistoryById (jobId : String!) : [JobExecutionLog]
-    GetJobHistoryByCorrelationId (correlationId : String!) : [JobExecutionLog]
+    GetJobHistoryByProcessInstanceId (processInstanceId : String!) : [JobExecutionLog]
 
     GetAllPendingJobs (pagination: Pagination): [JobExecutionLog]
     GetAllEligibleJobsForExecution (pagination: Pagination) : [JobExecutionLog]
@@ -15,7 +15,7 @@ type Query {
     GetAllCompletedJobs (pagination: Pagination) : [JobExecutionLog]
     GetAllInErrorJobs (pagination: Pagination) : [JobExecutionLog]
     GetAllCancelledJobs (pagination: Pagination) : [JobExecutionLog]
-    GetAllJobsByState (state : [String]!, pagination: Pagination) : [JobExecutionLog]
+    GetAllJobsByStatus (status : [String]!, pagination: Pagination) : [JobExecutionLog]
 
 }
 

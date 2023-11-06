@@ -21,6 +21,7 @@ package org.kie.kogito.app.audit.jpa;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -61,8 +62,6 @@ import org.kie.kogito.event.usertask.UserTaskInstanceDeadlineDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
 import org.kie.kogito.internal.process.runtime.KogitoProcessInstance;
-import org.kie.kogito.jobs.service.api.Job;
-import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,7 +90,7 @@ public class JPADataAuditStore implements DataAuditStore {
         log.setRoles(event.getData().getRoles());
 
         EntityManager entityManager = context.getContext();
-        switch(event.getData().getState()) {
+        switch (event.getData().getState()) {
             case KogitoProcessInstance.STATE_ACTIVE:
                 log.setEventType(ProcessStateLogType.ACTIVE);
                 entityManager.persist(log);
@@ -341,53 +340,28 @@ public class JPADataAuditStore implements DataAuditStore {
     }
 
     @Override
-    public void storeJobDataEvent(DataAuditContext context, JobCloudEvent<Job> jobDataEvent) {
-        Job job = jobDataEvent.getData();
-
-        JobExecutionLog log = new JobExecutionLog();
-        log.setCorrelationId(job.getCorrelationId());
-        log.setJobId(job.getId());
-        log.setState(job.getState().name());
-        log.setExecutionTimeout(job.getExecutionTimeout());
-        log.setSchedule(toJsonString(job.getSchedule()));
-        log.setRetry(toJsonString(job.getRetry()));
-        log.setExecutionTimeoutUnit(job.getExecutionTimeoutUnit().name());
-        log.setTimestamp(Timestamp.from(jobDataEvent.getTime().toInstant()));
-        EntityManager entityManager = context.getContext();
-        entityManager.persist(log);
-    }
-
-    @Override
     public void storeJobDataEvent(DataAuditContext context, JobInstanceDataEvent jobDataEvent) {
-
-        //        assertHasField(jsonNode, "id", JOB_ID);
-        //        assertHasField(jsonNode, "expirationTime", EXPIRATION_TIME.toString());
-        //        assertHasField(jsonNode, "priority", Integer.toString(PRIORITY));
-        //        assertHasField(jsonNode, "callbackEndpoint", RECIPIENT_URL);
-        //        assertHasField(jsonNode, "processInstanceId", PROCESS_INSTANCE_ID);
-        //        assertHasField(jsonNode, "processId", PROCESS_ID);
-        //        assertHasField(jsonNode, "rootProcessInstanceId", ROOT_PROCESS_INSTANCE_ID);
-        //        assertHasField(jsonNode, "rootProcessId", ROOT_PROCESS_ID);
-        //        assertHasField(jsonNode, "nodeInstanceId", NODE_INSTANCE_ID);
-        //        assertHasField(jsonNode, "repeatInterval", Long.toString(PERIOD));
-        //        assertHasField(jsonNode, "repeatLimit", Integer.toString(REPEAT_COUNT));
-        //        assertHasField(jsonNode, "scheduledId", SCHEDULE_ID);
-        //        assertHasField(jsonNode, "retries", Integer.toString(RETRIES));
-        //        assertHasField(jsonNode, "status", STATUS.name());
-        //        assertHasField(jsonNode, "lastUpdate", LAST_UPDATE.toString());
-        //        assertHasField(jsonNode, "executionCounter", Integer.toString(EXECUTION_COUNTER));
-        //        assertHasField(jsonNode, "executionResponse", null);
 
         ScheduledJob job = toObject(ScheduledJob.class, jobDataEvent.getData());
 
         JobExecutionLog log = new JobExecutionLog();
-        log.setCorrelationId(jobDataEvent.getKogitoProcessInstanceId());
         log.setJobId(job.getId());
-        log.setState(job.getStatus().name());
-        log.setTimestamp(Timestamp.from(jobDataEvent.getTime().toInstant()));
-        log.setRetry(job.getRetries() != null ? job.getRetries().toString() : null);
-        log.setSchedule(job.getExpirationTime() != null ? Timestamp.from(jobDataEvent.getTime().toInstant()).toString() : null);
+        if (job.getExpirationTime() != null) {
+            log.setExpirationTime(Timestamp.from(job.getExpirationTime().toInstant()));
+        }
+        log.setPriority(job.getPriority());
+        log.setProcessInstanceId(job.getProcessInstanceId());
+        log.setNodeInstanceId(job.getNodeInstanceId());
+        log.setRepeatInterval(job.getRepeatInterval());
+        log.setRepeatLimit(job.getRepeatLimit());
+        log.setScheduledId(job.getScheduledId());
 
+        if (job.getStatus() != null) {
+            log.setStatus(job.getStatus().name());
+        }
+
+        log.setExecutionCounter(job.getExecutionCounter());
+        log.setEventDate(Timestamp.from(Instant.now()));
         EntityManager entityManager = context.getContext();
         entityManager.persist(log);
     }

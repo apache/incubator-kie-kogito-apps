@@ -27,19 +27,17 @@ import javax.transaction.Transactional;
 import javax.transaction.Transactional.TxType;
 
 import org.kie.kogito.app.audit.api.DataAuditContext;
-import org.kie.kogito.app.audit.api.DataAuditEventPublisher;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
-import org.kie.kogito.jobs.service.api.Job;
-import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
-public class QuarkusJPADataAuditEventPublisher implements DataAuditEventPublisher {
+public class QuarkusJPADataAuditEventPublisher implements EventPublisher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuarkusJPADataAuditEventPublisher.class);
 
@@ -77,13 +75,6 @@ public class QuarkusJPADataAuditEventPublisher implements DataAuditEventPublishe
         }
 
         LOGGER.info("Discard event {} as class {} is not supported by this", event, event.getClass().getName());
-    }
-
-    @Override
-    @Transactional(value = TxType.REQUIRED)
-    public void publish(JobCloudEvent<Job> event) {
-        LOGGER.debug("Processing job event {}", event);
-        proxy.storeJobDataEvent(DataAuditContext.newDataAuditContext(entityManager), event);
     }
 
 }

@@ -29,8 +29,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.kie.kogito.app.audit.api.DataAuditEventPublisher;
 import org.kie.kogito.app.audit.api.SubsystemConstants;
+import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentEventBody;
@@ -58,7 +58,7 @@ import static org.kie.kogito.app.audit.quarkus.DataAuditTestUtils.wrapQuery;
 public class QuarkusAuditUserTaskInstanceServiceTest {
 
     @Inject
-    DataAuditEventPublisher publisher;
+    EventPublisher publisher;
 
     class Pojo {
         public Pojo(Integer value) {

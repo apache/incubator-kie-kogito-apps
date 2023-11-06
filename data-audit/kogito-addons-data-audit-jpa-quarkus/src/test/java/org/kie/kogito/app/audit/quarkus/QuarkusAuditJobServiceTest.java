@@ -27,19 +27,17 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.kie.kogito.app.audit.api.DataAuditEventPublisher;
 import org.kie.kogito.app.audit.api.SubsystemConstants;
-import org.kie.kogito.jobs.service.api.Job;
-import org.kie.kogito.jobs.service.api.Job.State;
-import org.kie.kogito.jobs.service.api.TemporalUnit;
-import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
+import org.kie.kogito.event.EventPublisher;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
+import org.kie.kogito.jobs.service.model.JobStatus;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.kie.kogito.app.audit.quarkus.DataAuditTestUtils.deriveNewState;
 import static org.kie.kogito.app.audit.quarkus.DataAuditTestUtils.newJobEvent;
 import static org.kie.kogito.app.audit.quarkus.DataAuditTestUtils.wrapQuery;
@@ -49,46 +47,46 @@ import static org.kie.kogito.app.audit.quarkus.DataAuditTestUtils.wrapQuery;
 public class QuarkusAuditJobServiceTest {
 
     @Inject
-    DataAuditEventPublisher publisher;
+    EventPublisher publisher;
 
     @BeforeAll
-    public void init() {
+    public void init() throws Exception {
 
-        JobCloudEvent<Job> jobEvent;
-        jobEvent = newJobEvent("job1", "correlation1", State.SCHEDULED, 10L, TemporalUnit.MILLIS, null, null);
+        JobInstanceDataEvent jobEvent;
+        jobEvent = newJobEvent("job1", "nodeInstanceId1", 1, "processId1", "processInstanceId1", 100L, 10, "rootProcessId1", "rootProcessInstanceId1", JobStatus.SCHEDULED, 0);
         publisher.publish(jobEvent);
 
-        jobEvent = deriveNewState(jobEvent, State.EXECUTED);
+        jobEvent = deriveNewState(jobEvent, 1, JobStatus.EXECUTED);
         publisher.publish(jobEvent);
 
-        jobEvent = newJobEvent("job2", "correlation2", State.SCHEDULED, 10L, TemporalUnit.MILLIS, null, null);
+        jobEvent = newJobEvent("job2", "nodeInstanceId1", 1, "processId1", "processInstanceId2", 100L, 10, "rootProcessId1", "rootProcessInstanceId1", JobStatus.SCHEDULED, 0);
         publisher.publish(jobEvent);
 
-        jobEvent = newJobEvent("job3", "correlation3", State.SCHEDULED, 10L, TemporalUnit.MILLIS, null, null);
+        jobEvent = newJobEvent("job3", "nodeInstanceId1", 1, "processId1", "processInstanceId3", 100L, 10, "rootProcessId1", "rootProcessInstanceId1", JobStatus.SCHEDULED, 0);
         publisher.publish(jobEvent);
 
-        jobEvent = deriveNewState(jobEvent, State.CANCELED);
+        jobEvent = deriveNewState(jobEvent, 1, JobStatus.CANCELED);
         publisher.publish(jobEvent);
 
-        jobEvent = newJobEvent("job4", "correlation4", State.SCHEDULED, 10L, TemporalUnit.MILLIS, null, null);
+        jobEvent = newJobEvent("job4", "nodeInstanceId1", 1, "processId1", "processInstanceId4", 100L, 10, "rootProcessId1", "rootProcessInstanceId1", JobStatus.SCHEDULED, 0);
         publisher.publish(jobEvent);
 
-        jobEvent = deriveNewState(jobEvent, State.RETRY);
+        jobEvent = deriveNewState(jobEvent, 1, JobStatus.RETRY);
         publisher.publish(jobEvent);
 
-        jobEvent = deriveNewState(jobEvent, State.EXECUTED);
+        jobEvent = deriveNewState(jobEvent, 2, JobStatus.EXECUTED);
         publisher.publish(jobEvent);
 
-        jobEvent = newJobEvent("job5", "correlation5", State.SCHEDULED, 10L, TemporalUnit.MILLIS, null, null);
+        jobEvent = newJobEvent("job5", "nodeInstanceId1", 1, "processId1", "processInstanceI51", 100L, 10, "rootProcessId1", "rootProcessInstanceId1", JobStatus.SCHEDULED, 0);
         publisher.publish(jobEvent);
 
-        jobEvent = deriveNewState(jobEvent, State.ERROR);
+        jobEvent = deriveNewState(jobEvent, 1, JobStatus.ERROR);
         publisher.publish(jobEvent);
     }
 
     @Test
     public void testGetAllScheduledJobs() {
-        String query = "{ GetAllScheduledJobs { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp } }";
+        String query = "{ GetAllScheduledJobs { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
 
         List<Map<String, Object>> response = given()
@@ -105,18 +103,16 @@ public class QuarkusAuditJobServiceTest {
                 .extract().path("data.GetAllScheduledJobs");
 
         assertThat(response)
-                .hasSize(1).first()
-                .hasFieldOrPropertyWithValue("jobId", equalTo("job2"))
-                .hasFieldOrPropertyWithValue("correlationId", equalTo("correlation2"))
-                .hasFieldOrPropertyWithValue("state", equalTo("SCHEDULED"))
-                .hasFieldOrPropertyWithValue("executionTimeout", equalTo(10))
-                .hasFieldOrPropertyWithValue("executionTimeoutUnit", equalTo("MILLIS"));
+                .hasSize(1)
+                .extracting(e -> e.get("jobId"), e -> e.get("processInstanceId"), e -> e.get("status"))
+                .containsExactlyInAnyOrder(tuple("job2", "processInstanceId2", "SCHEDULED"));
 
     }
 
     @Test
     public void testGetJobById() {
-        String query = "{ GetJobById ( jobId : \\\"job1\\\") { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+        String query =
+                "{ GetJobById ( jobId : \\\"job1\\\") { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
         List<Map<String, Object>> response = given()
                 .contentType(ContentType.JSON)
@@ -137,7 +133,8 @@ public class QuarkusAuditJobServiceTest {
 
     @Test
     public void testGetJobHistoryById() {
-        String query = "{ GetJobHistoryById ( jobId : \\\"job4\\\") { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+        String query =
+                "{ GetJobHistoryById ( jobId : \\\"job4\\\") { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
         List<Map<String, Object>> response = given()
                 .contentType(ContentType.JSON)
@@ -155,14 +152,15 @@ public class QuarkusAuditJobServiceTest {
         assertThat(response)
                 .hasSize(3)
                 .allMatch(e -> "job4".equals(e.get("jobId")))
-                .extracting(e -> e.get("state"))
+                .extracting(e -> e.get("status"))
                 .containsExactlyInAnyOrder("SCHEDULED", "RETRY", "EXECUTED");
 
     }
 
     @Test
-    public void testGetJobHistoryByCorrelationId() {
-        String query = "{ GetJobHistoryByCorrelationId ( correlationId : \\\"correlation4\\\") { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+    public void testGetJobHistoryByProcessInstanceId() {
+        String query =
+                "{ GetJobHistoryByProcessInstanceId ( processInstanceId : \\\"processInstanceId4\\\") { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -173,19 +171,19 @@ public class QuarkusAuditJobServiceTest {
                 .assertThat()
                 .statusCode(200)
                 .and()
-                .extract().path("data.GetJobHistoryByCorrelationId");
+                .extract().path("data.GetJobHistoryByProcessInstanceId");
 
         assertThat(data)
                 .hasSize(3)
                 .allMatch(e -> "job4".equals(e.get("jobId")))
-                .allMatch(e -> "correlation4".equals(e.get("correlationId")))
-                .extracting(e -> e.get("state"))
+                .allMatch(e -> "processInstanceId4".equals(e.get("processInstanceId")))
+                .extracting(e -> e.get("status"))
                 .containsExactlyInAnyOrder("SCHEDULED", "RETRY", "EXECUTED");
     }
 
     @Test
     public void testGetAllPendingJobs() {
-        String query = "{ GetAllPendingJobs { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+        String query = "{ GetAllPendingJobs { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -203,7 +201,8 @@ public class QuarkusAuditJobServiceTest {
 
     @Test
     public void testGetAllEligibleJobsForExecution() {
-        String query = "{ GetAllEligibleJobsForExecution { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+        String query =
+                "{ GetAllEligibleJobsForExecution { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter }  }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -211,6 +210,8 @@ public class QuarkusAuditJobServiceTest {
                 .when()
                 .post(SubsystemConstants.DATA_AUDIT_PATH)
                 .then()
+                .log()
+                .body()
                 .assertThat()
                 .statusCode(200)
                 .and()
@@ -222,7 +223,8 @@ public class QuarkusAuditJobServiceTest {
 
     @Test
     public void testGetAllEligibleJobsForRetry() {
-        String query = "{ GetAllEligibleJobsForRetry { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+        String query =
+                "{ GetAllEligibleJobsForRetry { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -240,7 +242,7 @@ public class QuarkusAuditJobServiceTest {
 
     @Test
     public void testGetAllJobs() {
-        String query = "{ GetAllJobs { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+        String query = "{ GetAllJobs { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -261,7 +263,7 @@ public class QuarkusAuditJobServiceTest {
 
     @Test
     public void testGetAllCompletedJobs() {
-        String query = "{ GetAllCompletedJobs { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+        String query = "{ GetAllCompletedJobs { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -276,7 +278,7 @@ public class QuarkusAuditJobServiceTest {
 
         assertThat(data)
                 .hasSize(2)
-                .allMatch(e -> "EXECUTED".equals(e.get("state")))
+                .allMatch(e -> "EXECUTED".equals(e.get("status")))
                 .extracting(e -> e.get("jobId"))
                 .containsExactlyInAnyOrder("job1", "job4");
     }
@@ -284,7 +286,7 @@ public class QuarkusAuditJobServiceTest {
     @Test
     public void testGetAllInErrorJobs() {
 
-        String query = "{ GetAllInErrorJobs { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+        String query = "{ GetAllInErrorJobs { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -299,15 +301,16 @@ public class QuarkusAuditJobServiceTest {
 
         assertThat(data)
                 .hasSize(1)
-                .allMatch(e -> "ERROR".equals(e.get("state")))
+                .allMatch(e -> "ERROR".equals(e.get("status")))
                 .extracting(e -> e.get("jobId"))
                 .containsExactlyInAnyOrder("job5");
     }
 
     @Test
-    public void testGetAllJobsByState() {
+    public void testGetAllJobsByStatus() {
 
-        String query = "{ GetAllJobsByState (state : \\\"EXECUTED\\\") { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+        String query =
+                "{ GetAllJobsByStatus (status : \\\"EXECUTED\\\") { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -318,18 +321,19 @@ public class QuarkusAuditJobServiceTest {
                 .assertThat()
                 .statusCode(200)
                 .and()
-                .extract().path("data.GetAllJobsByState");
+                .extract().path("data.GetAllJobsByStatus");
 
         assertThat(data)
-                .allMatch(e -> "EXECUTED".equals(e.get("state")))
+                .allMatch(e -> "EXECUTED".equals(e.get("status")))
                 .extracting(e -> e.get("jobId"))
                 .containsExactlyInAnyOrder("job1", "job4");
     }
 
     @Test
-    public void testGetJobByCorrelationId() {
+    public void testGetJobByProcessInstanceId() {
 
-        String query = "{ GetJobByCorrelationId (correlationId : \\\"correlation1\\\") { jobId, correlationId, state, schedule, retry, executionTimeout, executionTimeoutUnit, timestamp} }";
+        String query =
+                "{ GetJobByProcessInstanceId (processInstanceId : \\\"processInstanceId1\\\") { jobId, expirationTime, priority, processInstanceId, nodeInstanceId, repeatInterval, repeatLimit, scheduledId, retries, status, executionCounter } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -340,10 +344,10 @@ public class QuarkusAuditJobServiceTest {
                 .assertThat()
                 .statusCode(200)
                 .and()
-                .extract().path("data.GetJobByCorrelationId");
+                .extract().path("data.GetJobByProcessInstanceId");
 
         assertThat(data).first()
-                .hasFieldOrPropertyWithValue("correlationId", "correlation1");
+                .hasFieldOrPropertyWithValue("processInstanceId", "processInstanceId1");
 
     }
 

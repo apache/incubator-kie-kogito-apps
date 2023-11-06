@@ -31,8 +31,6 @@ import org.kie.kogito.event.usertask.UserTaskInstanceCommentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDeadlineDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
-import org.kie.kogito.jobs.service.api.Job;
-import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
 
 public interface DataAuditStore {
 
@@ -57,8 +55,6 @@ public interface DataAuditStore {
     void storeUserTaskInstanceDataEvent(DataAuditContext context, UserTaskInstanceStateDataEvent event);
 
     void storeUserTaskInstanceDataEvent(DataAuditContext context, UserTaskInstanceVariableDataEvent event);
-
-    void storeJobDataEvent(DataAuditContext context, JobCloudEvent<Job> jobDataEvent);
 
     void storeJobDataEvent(DataAuditContext context, JobInstanceDataEvent event);
 

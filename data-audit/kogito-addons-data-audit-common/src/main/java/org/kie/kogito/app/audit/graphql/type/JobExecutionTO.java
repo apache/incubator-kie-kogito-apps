@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.app.audit.graphql.type;
 
+import java.math.BigInteger;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -25,27 +26,47 @@ import java.util.Date;
 public class JobExecutionTO {
 
     private String jobId;
-    private String correlationId;
-    private String state;
-    private String schedule;
-    private String retry;
-    private Long executionTimeout;
-    private String executionTimeoutUnit;
-    private OffsetDateTime timestamp;
+
+    private OffsetDateTime expirationTime;
+
+    private Integer priority;
+
+    private String processInstanceId;
+
+    private String nodeInstanceId;
+
+    private Long repeatInterval;
+
+    private Integer repeatLimit;
+
+    private String scheduledId;
+
+    private Integer retries;
+
+    private String status;
+
+    private Integer executionCounter;
+
+    private OffsetDateTime eventDate;
 
     public JobExecutionTO() {
 
     }
 
-    public JobExecutionTO(String jobId, String correlationId, String state, String schedule, String retry, Long executionTimeout, String executionTimeoutUnit, Date timestamp) {
+    public JobExecutionTO(String jobId, Date expirationtime, Integer priority, String processInstanceId, String nodeInstanceId,
+            BigInteger repeatInterval, Integer repeatLimit, String scheduledId, Integer retries, String status, Integer executionCounter, Date eventDate) {
         this.jobId = jobId;
-        this.correlationId = correlationId;
-        this.state = state;
-        this.schedule = schedule;
-        this.retry = retry;
-        this.executionTimeout = executionTimeout;
-        this.executionTimeoutUnit = executionTimeoutUnit;
-        this.timestamp = OffsetDateTime.ofInstant(timestamp.toInstant(), ZoneId.of("UTC"));
+        this.expirationTime = OffsetDateTime.ofInstant(expirationtime.toInstant(), ZoneId.of("UTC"));
+        this.priority = priority;
+        this.processInstanceId = processInstanceId;
+        this.nodeInstanceId = nodeInstanceId;
+        this.repeatInterval = repeatInterval != null ? repeatInterval.longValue() : null;
+        this.repeatLimit = repeatLimit;
+        this.scheduledId = scheduledId;
+        this.retries = retries;
+        this.status = status;
+        this.executionCounter = executionCounter;
+        this.eventDate = OffsetDateTime.ofInstant(eventDate.toInstant(), ZoneId.of("UTC"));
     }
 
     public String getJobId() {
@@ -56,60 +77,92 @@ public class JobExecutionTO {
         this.jobId = jobId;
     }
 
-    public String getCorrelationId() {
-        return correlationId;
+    public OffsetDateTime getExpirationTime() {
+        return expirationTime;
     }
 
-    public void setCorrelationId(String correlationId) {
-        this.correlationId = correlationId;
+    public void setExpirationTime(OffsetDateTime expirationTime) {
+        this.expirationTime = expirationTime;
     }
 
-    public String getState() {
-        return state;
+    public Integer getPriority() {
+        return priority;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 
-    public String getSchedule() {
-        return schedule;
+    public String getProcessInstanceId() {
+        return processInstanceId;
     }
 
-    public void setSchedule(String schedule) {
-        this.schedule = schedule;
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
     }
 
-    public String getRetry() {
-        return retry;
+    public String getNodeInstanceId() {
+        return nodeInstanceId;
     }
 
-    public void setRetry(String retry) {
-        this.retry = retry;
+    public void setNodeInstanceId(String nodeInstanceId) {
+        this.nodeInstanceId = nodeInstanceId;
     }
 
-    public Long getExecutionTimeout() {
-        return executionTimeout;
+    public Long getRepeatInterval() {
+        return repeatInterval;
     }
 
-    public void setExecutionTimeout(Long executionTimeout) {
-        this.executionTimeout = executionTimeout;
+    public void setRepeatInterval(Long repeatInterval) {
+        this.repeatInterval = repeatInterval;
     }
 
-    public String getExecutionTimeoutUnit() {
-        return executionTimeoutUnit;
+    public Integer getRepeatLimit() {
+        return repeatLimit;
     }
 
-    public void setExecutionTimeoutUnit(String executionTimeoutUnit) {
-        this.executionTimeoutUnit = executionTimeoutUnit;
+    public void setRepeatLimit(Integer repeatLimit) {
+        this.repeatLimit = repeatLimit;
     }
 
-    public OffsetDateTime getTimestamp() {
-        return timestamp;
+    public String getScheduledId() {
+        return scheduledId;
     }
 
-    public void setTimestamp(OffsetDateTime timestamp) {
-        this.timestamp = timestamp;
+    public void setScheduledId(String scheduledId) {
+        this.scheduledId = scheduledId;
+    }
+
+    public Integer getRetries() {
+        return retries;
+    }
+
+    public void setRetries(Integer retries) {
+        this.retries = retries;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getExecutionCounter() {
+        return executionCounter;
+    }
+
+    public void setExecutionCounter(Integer executionCounter) {
+        this.executionCounter = executionCounter;
+    }
+
+    public OffsetDateTime getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(OffsetDateTime eventDate) {
+        this.eventDate = eventDate;
     }
 
 }

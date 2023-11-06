@@ -23,14 +23,12 @@ import java.util.Collection;
 import javax.persistence.EntityManager;
 
 import org.kie.kogito.app.audit.api.DataAuditContext;
-import org.kie.kogito.app.audit.api.DataAuditEventPublisher;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
-import org.kie.kogito.jobs.service.api.Job;
-import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +39,7 @@ import org.springframework.transaction.annotation.Transactional;
 import static org.kie.kogito.app.audit.api.DataAuditContext.newDataAuditContext;
 
 @Component
-public class SpringBootJPADataAuditEventPublisher implements DataAuditEventPublisher {
+public class SpringBootJPADataAuditEventPublisher implements EventPublisher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringBootJPADataAuditEventPublisher.class);
 
@@ -78,12 +76,6 @@ public class SpringBootJPADataAuditEventPublisher implements DataAuditEventPubli
         }
 
         LOGGER.debug("Discard event {} as class {} is not supported by this", event, event.getClass().getName());
-    }
-
-    @Override
-    public void publish(JobCloudEvent<Job> event) {
-        LOGGER.debug("Processing job event {}", event);
-        proxy.storeJobDataEvent(newDataAuditContext(entityManager), event);
     }
 
 }

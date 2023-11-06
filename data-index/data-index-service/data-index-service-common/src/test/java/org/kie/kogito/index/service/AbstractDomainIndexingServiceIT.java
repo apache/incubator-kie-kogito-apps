@@ -711,7 +711,7 @@ public abstract class AbstractDomainIndexingServiceIT extends AbstractIndexingSe
 
         event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state, "kogito", 2);
         UserTaskInstanceStateEventBody body = UserTaskInstanceStateEventBody.create()
-                .eventType(2)
+                .eventType("Completed")
                 .userTaskInstanceId(taskId)
                 .state("Completed")
                 .userTaskName("TaskName")

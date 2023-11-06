@@ -35,8 +35,6 @@ import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDeadlineDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
-import org.kie.kogito.jobs.service.api.Job;
-import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,10 +69,6 @@ public class DataAuditStoreProxyService {
         typeCheckOf(UserTaskInstanceStateDataEvent.class).ifType(context, event, auditStoreService::storeUserTaskInstanceDataEvent);
         typeCheckOf(UserTaskInstanceVariableDataEvent.class).ifType(context, event, auditStoreService::storeUserTaskInstanceDataEvent);
 
-    }
-
-    public void storeJobDataEvent(DataAuditContext context, JobCloudEvent<Job> event) {
-        auditStoreService.storeJobDataEvent(context, event);
     }
 
     public void storeJobDataEvent(DataAuditContext context, JobInstanceDataEvent event) {

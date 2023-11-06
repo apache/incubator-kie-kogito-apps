@@ -19,11 +19,13 @@
 package org.kie.kogito.app.audit.quarkus;
 
 import java.net.URI;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorEventBody;
@@ -48,14 +50,12 @@ import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateEventBody;
 import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceVariableEventBody;
-import org.kie.kogito.jobs.service.api.Job;
-import org.kie.kogito.jobs.service.api.Retry;
-import org.kie.kogito.jobs.service.api.Schedule;
-import org.kie.kogito.jobs.service.api.TemporalUnit;
-import org.kie.kogito.jobs.service.api.event.CreateJobEvent;
-import org.kie.kogito.jobs.service.api.event.CreateJobEvent.Builder;
-import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
+import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.process.ProcessInstance;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 public class DataAuditTestUtils {
 
@@ -69,36 +69,49 @@ public class DataAuditTestUtils {
         return "{ \"query\" : \"" + query + " \"}";
     }
 
-    public static JobCloudEvent<Job> newJobEvent(String jobId, String correlationId, Job.State state, Long executionTimeout, TemporalUnit unit, Retry retry, Schedule schedule) {
-        Job job = new Job();
-        job.setCorrelationId(correlationId);
+    public static JobInstanceDataEvent newJobEvent(String jobId, String nodeInstanceId, Integer priority,
+            String processId, String procesInstanceId, Long repeatInterval, Integer repeatLimit, String rootProcessId, String rootProcessInstanceId,
+            JobStatus state, Integer executionCounter) throws Exception {
+
+        ScheduledJob job = new ScheduledJob();
         job.setId(jobId);
-        job.setState(state);
-        job.setExecutionTimeout(executionTimeout);
-        job.setExecutionTimeoutUnit(unit);
-        job.setRetry(retry);
-        job.setSchedule(schedule);
-        Builder builder = CreateJobEvent.builder()
-                .id(UUID.randomUUID().toString())
-                .data(job);
-        return builder.build();
+        job.setNodeInstanceId(nodeInstanceId);
+        job.setCallbackEndpoint("https://callback");
+        job.setPriority(priority);
+        job.setProcessId(processId);
+        job.setProcessInstanceId(procesInstanceId);
+        job.setRepeatInterval(repeatInterval);
+        job.setRepeatLimit(repeatLimit);
+        job.setRootProcessId(rootProcessId);
+        job.setRootProcessInstanceId(rootProcessInstanceId);
+
+        job = ScheduledJob.builder()
+                .job(job)
+                .status(state)
+                .executionCounter(executionCounter)
+                .scheduledId("my scheduler")
+                .expirationTime(ZonedDateTime.now())
+                .build();
+
+        
+        JobInstanceDataEvent dataEvent = new JobInstanceDataEvent("JobEvent", toURIEndpoint(processId), new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsBytes(job), procesInstanceId,
+                rootProcessInstanceId, processId, rootProcessId, (String) "identity");
+        return dataEvent;
     }
 
-    public static JobCloudEvent<Job> deriveNewState(JobCloudEvent<Job> jobEvent, Job.State state) {
-        Job job = new Job();
-        job.setCorrelationId(jobEvent.getData().getCorrelationId());
-        job.setId(jobEvent.getData().getId());
-        job.setState(state);
-        job.setExecutionTimeout(jobEvent.getData().getExecutionTimeout());
-        job.setExecutionTimeoutUnit(jobEvent.getData().getExecutionTimeoutUnit());
-        job.setRetry(jobEvent.getData().getRetry());
-        job.setSchedule(jobEvent.getData().getSchedule());
+    public static JobInstanceDataEvent deriveNewState(JobInstanceDataEvent jobEvent, Integer executionCounter, JobStatus state) throws Exception  {
+        ScheduledJob job = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(jobEvent.getData(), ScheduledJob.class);
+        job = ScheduledJob.builder()
+                .job(job)
+                .status(state)
+                .executionCounter(executionCounter)
+                .scheduledId("my scheduler")
+                .expirationTime(ZonedDateTime.now())
+                .build();
 
-        Builder builder = CreateJobEvent.builder()
-                .id(UUID.randomUUID().toString())
-                .data(job);
-
-        return builder.build();
+        JobInstanceDataEvent dataEvent = new JobInstanceDataEvent("JobEvent", jobEvent.getSource().toString(), new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsBytes(job), jobEvent.getKogitoProcessInstanceId(),
+                jobEvent.getKogitoRootProcessInstanceId(), jobEvent.getKogitoProcessId(), jobEvent.getKogitoRootProcessId(), (String) "identity");
+        return dataEvent;
     }
 
     public static ProcessInstanceStateDataEvent newProcessInstanceStateEvent(

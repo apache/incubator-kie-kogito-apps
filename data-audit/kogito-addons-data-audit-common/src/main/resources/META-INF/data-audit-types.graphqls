@@ -6,13 +6,17 @@ scalar Date
 
 type JobExecutionLog {
     jobId : String!
-    correlationId : String
-    state : String
-    schedule : JSON
-    retry : JSON
-    executionTimeout : Long
-    executionTimeoutUnit : String
-    timestamp: DateTime
+    expirationTime : DateTime
+    priority: Int
+    processInstanceId : String
+    nodeInstanceId : String
+    repeatInterval : Long
+    repeatLimit : Int
+    scheduledId : String
+    retries : Int
+    status : String
+    executionCounter : Int
+    eventDate : DateTime
 }
 
 type ProcessInstanceStateLog {

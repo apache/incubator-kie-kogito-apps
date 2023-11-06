@@ -17,7 +17,6 @@
 package org.kie.kogito.app.audit.jpa.model;
 
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -41,24 +40,38 @@ public class JobExecutionLog {
 
     @Column(name = "job_id")
     private String jobId;
-    @Column(name = "correlation_id")
-    private String correlationId;
-    private String state;
-    private String schedule;
-    private String retry;
-    @Column(name = "execution_timeout")
-    private Long executionTimeout;
 
-    @Column(name = "execution_timeout_unit")
-    private String executionTimeoutUnit;
-
+    @Column(name = "expiration_time")
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(columnDefinition = "TIMESTAMP")
-    private Date timestamp;
+    private Date expirationTime;
 
-    public JobExecutionLog() {
-        this.timestamp = Timestamp.from(Instant.now());
-    }
+    private Integer priority;
+
+    @Column(name = "process_instance_id")
+    private String processInstanceId;
+
+    @Column(name = "node_instance_id")
+    private String nodeInstanceId;
+
+    @Column(name = "repeat_interval")
+    private Long repeatInterval;
+
+    @Column(name = "repeat_limit")
+    private Integer repeatLimit;
+
+    @Column(name = "scheduled_id")
+    private String scheduledId;
+
+    private Integer retries;
+
+    private String status;
+
+    @Column(name = "execution_counter")
+    private Integer executionCounter;
+
+    @Column(name = "event_date")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date eventDate;
 
     public Long getId() {
         return id;
@@ -76,66 +89,91 @@ public class JobExecutionLog {
         this.jobId = jobId;
     }
 
-    public String getCorrelationId() {
-        return correlationId;
+    public Date getExpirationTime() {
+        return expirationTime;
     }
 
-    public void setCorrelationId(String correlationId) {
-        this.correlationId = correlationId;
+    public void setExpirationTime(Timestamp expirationTime) {
+        this.expirationTime = expirationTime;
     }
 
-    public String getState() {
-        return state;
+    public Integer getPriority() {
+        return priority;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setPriority(Integer priority) {
+        this.priority = priority;
     }
 
-    public String getSchedule() {
-        return schedule;
+    public String getProcessInstanceId() {
+        return processInstanceId;
     }
 
-    public void setSchedule(String schedule) {
-        this.schedule = schedule;
+    public void setProcessInstanceId(String processInstanceId) {
+        this.processInstanceId = processInstanceId;
     }
 
-    public String getRetry() {
-        return retry;
+    public String getNodeInstanceId() {
+        return nodeInstanceId;
     }
 
-    public void setRetry(String retry) {
-        this.retry = retry;
+    public void setNodeInstanceId(String nodeInstanceId) {
+        this.nodeInstanceId = nodeInstanceId;
     }
 
-    public Long getExecutionTimeout() {
-        return executionTimeout;
+    public Long getRepeatInterval() {
+        return repeatInterval;
     }
 
-    public void setExecutionTimeout(Long executionTimeout) {
-        this.executionTimeout = executionTimeout;
+    public void setRepeatInterval(Long repeatInterval) {
+        this.repeatInterval = repeatInterval;
     }
 
-    public String getExecutionTimeoutUnit() {
-        return executionTimeoutUnit;
+    public Integer getRepeatLimit() {
+        return repeatLimit;
     }
 
-    public void setExecutionTimeoutUnit(String executionTimeoutUnit) {
-        this.executionTimeoutUnit = executionTimeoutUnit;
+    public void setRepeatLimit(Integer repeatLimit) {
+        this.repeatLimit = repeatLimit;
     }
 
-    public Date getTimestamp() {
-        return this.timestamp;
+    public String getScheduledId() {
+        return scheduledId;
     }
 
-    public void setTimestamp(Date timestamp) {
-        this.timestamp = timestamp;
+    public void setScheduledId(String scheduledId) {
+        this.scheduledId = scheduledId;
     }
 
-    @Override
-    public String toString() {
-        return "JobExecutionLog [id=" + id + ", jobId=" + jobId + ", correlationId=" + correlationId + ", state=" + state + ", schedule=" + schedule + ", retry=" + retry + ", executionTimeout="
-                + executionTimeout + ", executionTimeoutUnit=" + executionTimeoutUnit + ", timestamp=" + timestamp + "]";
+    public Integer getRetries() {
+        return retries;
     }
 
+    public void setRetries(Integer retries) {
+        this.retries = retries;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public Integer getExecutionCounter() {
+        return executionCounter;
+    }
+
+    public void setExecutionCounter(Integer executionCounter) {
+        this.executionCounter = executionCounter;
+    }
+
+    public Date getEventDate() {
+        return eventDate;
+    }
+
+    public void setEventDate(Timestamp eventDate) {
+        this.eventDate = eventDate;
+    }
 }

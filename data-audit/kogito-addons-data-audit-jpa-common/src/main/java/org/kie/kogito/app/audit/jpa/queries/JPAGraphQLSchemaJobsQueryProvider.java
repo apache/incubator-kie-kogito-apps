@@ -29,19 +29,19 @@ public class JPAGraphQLSchemaJobsQueryProvider implements GraphQLSchemaQueryProv
     @Override
     public List<GraphQLSchemaQuery<?>> queries() {
         return List.of(
-                new JPASimpleNamedQuery<JobExecutionTO>("GetAllScheduledJobs", "GetAllScheduledJobs", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetJobById", "GetJobById", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetJobHistoryById", "GetJobHistoryById", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetJobHistoryByCorrelationId", "GetJobHistoryByCorrelationId", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetAllPendingJobs", "GetAllPendingJobs", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetAllEligibleJobsForExecution", "GetAllEligibleJobsForExecution", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetAllEligibleJobsForRetry", "GetAllEligibleJobsForRetry", JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetAllScheduledJobs", JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetJobById", JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetJobHistoryById", JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetJobHistoryByProcessInstanceId", JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetAllPendingJobs", JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetAllEligibleJobsForExecution", JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetAllEligibleJobsForRetry", JobExecutionTO.class),
                 new JPASimpleNamedQuery<JobExecutionTO>("GetAllJobs", "GetAllJobs", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetAllCompletedJobs", "GetAllCompletedJobs", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetAllInErrorJobs", "GetAllInErrorJobs", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetAllCancelledJobs", "GetAllCancelledJobs", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetAllJobsByState", "GetAllJobsByState", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetJobByCorrelationId", "GetJobByCorrelationId", JobExecutionTO.class));
+                new JPASimpleNamedQuery<JobExecutionTO>("GetAllCompletedJobs", JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetAllInErrorJobs", JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetAllCancelledJobs",JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetAllJobsByStatus", JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetJobByProcessInstanceId",  JobExecutionTO.class));
 
     }
 

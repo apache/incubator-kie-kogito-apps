@@ -27,8 +27,8 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
-import org.kie.kogito.app.audit.api.DataAuditEventPublisher;
 import org.kie.kogito.app.audit.api.SubsystemConstants;
+import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceNodeEventBody;
@@ -55,7 +55,7 @@ import static org.kie.kogito.app.audit.quarkus.DataAuditTestUtils.wrapQuery;
 public class QuarkusAuditProcessInstanceServiceTest {
 
     @Inject
-    DataAuditEventPublisher publisher;
+    EventPublisher publisher;
 
     @BeforeAll
     public void init() {
