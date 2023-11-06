@@ -20,21 +20,21 @@ package org.kie.kogito.app.audit.kafka;
 
 import org.apache.kafka.common.serialization.Deserializer;
 import org.kie.kogito.app.audit.json.JsonUtils;
-import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-public class JobDataEventDeserializer implements Deserializer<UserTaskInstanceDataEvent<?>> {
+public class JobDataEventDeserializer implements Deserializer<JobInstanceDataEvent> {
     private static final Logger LOGGER = LoggerFactory.getLogger(JobDataEventDeserializer.class);
 
     @Override
-    public UserTaskInstanceDataEvent<?> deserialize(String topic, byte[] data) {
+    public JobInstanceDataEvent deserialize(String topic, byte[] data) {
         try {
-            return JsonUtils.getObjectMapper().readValue(new String(data), UserTaskInstanceDataEvent.class);
+            return JsonUtils.getObjectMapper().readValue(new String(data), JobInstanceDataEvent.class);
         } catch (JsonProcessingException e) {
-            LOGGER.error("not possible to deserialize UserTaskInstanceDataEvent data {}", new String(data), e);
+            LOGGER.error("not possible to deserialize JobInstanceDataEvent data {}", new String(data), e);
             throw new IllegalArgumentException("not possible to deserialize data");
         }
 
