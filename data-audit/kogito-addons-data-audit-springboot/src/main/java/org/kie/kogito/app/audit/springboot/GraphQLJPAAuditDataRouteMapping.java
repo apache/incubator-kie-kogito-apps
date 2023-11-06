@@ -32,9 +32,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_PATH;
-
 import graphql.ExecutionResult;
+
+import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_PATH;
 
 @RestController
 public class GraphQLJPAAuditDataRouteMapping {

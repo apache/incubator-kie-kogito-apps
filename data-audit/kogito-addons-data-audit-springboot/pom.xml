@@ -11,7 +11,7 @@
 
     <artifactId>kogito-addons-data-audit-springboot</artifactId>
 
-    <name>Kogito Apps :: Data Audit :: Springboot</name>
+    <name>Kogito Apps :: Data Audit :: SpringBoot</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

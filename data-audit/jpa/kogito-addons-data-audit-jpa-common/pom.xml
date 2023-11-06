@@ -9,7 +9,7 @@
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>kogito-addons-data-audit-jpa-common</artifactId>
-	<name>Kogito Apps :: Data Audit :: JPA Data Audit Persistence Common</name>
+	<name>Kogito Apps :: Data Audit :: JPA :: Common</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.kie.kogito</groupId>

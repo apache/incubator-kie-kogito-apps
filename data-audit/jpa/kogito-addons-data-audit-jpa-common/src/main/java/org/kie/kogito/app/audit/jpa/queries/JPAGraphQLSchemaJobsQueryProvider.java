@@ -39,9 +39,9 @@ public class JPAGraphQLSchemaJobsQueryProvider implements GraphQLSchemaQueryProv
                 new JPASimpleNamedQuery<JobExecutionTO>("GetAllJobs", "GetAllJobs", JobExecutionTO.class),
                 new JPASimpleNamedQuery<JobExecutionTO>("GetAllCompletedJobs", JobExecutionTO.class),
                 new JPASimpleNamedQuery<JobExecutionTO>("GetAllInErrorJobs", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetAllCancelledJobs",JobExecutionTO.class),
+                new JPASimpleNamedQuery<JobExecutionTO>("GetAllCancelledJobs", JobExecutionTO.class),
                 new JPASimpleNamedQuery<JobExecutionTO>("GetAllJobsByStatus", JobExecutionTO.class),
-                new JPASimpleNamedQuery<JobExecutionTO>("GetJobByProcessInstanceId",  JobExecutionTO.class));
+                new JPASimpleNamedQuery<JobExecutionTO>("GetJobByProcessInstanceId", JobExecutionTO.class));
 
     }
 

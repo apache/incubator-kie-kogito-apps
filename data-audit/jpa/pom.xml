@@ -12,7 +12,7 @@
     <packaging>pom</packaging>
     <artifactId>jpa</artifactId>
 
-    <name>jpa</name>
+    <name>Kogito Apps :: Data Audit :: JPA</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

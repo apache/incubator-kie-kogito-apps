@@ -11,7 +11,7 @@
 
 
     <artifactId>kogito-addons-data-audit-jpa-springboot</artifactId>
-    <name>Kogito Apps :: Data Audit :: JPA :: Springboot</name>
+    <name>Kogito Apps :: Data Audit :: JPA :: SpringBoot</name>
 
 
     <properties>

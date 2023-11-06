@@ -45,19 +45,18 @@ public abstract class JPAAbstractQuery {
         TypedQuery<T> typedQuery = entityManager.createNamedQuery(query, clazz);
         parameters.forEach(typedQuery::setParameter);
         if (pagination != null) {
-            if(pagination.get("limit") != null) {
+            if (pagination.get("limit") != null) {
                 typedQuery.setMaxResults((Integer) pagination.get("limit"));
             }
-            if(pagination.get("offset") != null) {
+            if (pagination.get("offset") != null) {
                 typedQuery.setFirstResult((Integer) pagination.get("offset"));
             }
         }
- 
+
         return typedQuery.getResultList();
 
     }
 
-    
     protected List<Object[]> executeWithNamedQueryEntityManager(EntityManager entityManager, String query) {
         return entityManager.createNamedQuery(query).getResultList();
     }
@@ -70,14 +69,14 @@ public abstract class JPAAbstractQuery {
         Query typedQuery = entityManager.createNamedQuery(query);
         parameters.forEach(typedQuery::setParameter);
         if (pagination != null) {
-            if(pagination.get("limit") != null) {
+            if (pagination.get("limit") != null) {
                 typedQuery.setMaxResults((Integer) pagination.get("limit"));
             }
-            if(pagination.get("offset") != null) {
+            if (pagination.get("offset") != null) {
                 typedQuery.setFirstResult((Integer) pagination.get("offset"));
             }
         }
- 
+
         return typedQuery.getResultList();
 
     }

@@ -31,11 +31,11 @@ import io.vertx.ext.web.handler.graphql.ExecutionInputBuilderWithContext;
 import io.vertx.ext.web.handler.graphql.GraphQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphQLHandlerOptions;
 
+import graphql.GraphQL;
+
 import static io.quarkus.vertx.web.Route.HttpMethod.GET;
 import static io.quarkus.vertx.web.Route.HttpMethod.POST;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_PATH;
-
-import graphql.GraphQL;
 
 @ApplicationScoped
 public class GraphQLJPADataAuditRouter {

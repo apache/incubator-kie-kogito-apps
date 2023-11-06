@@ -10,7 +10,7 @@
 
   <artifactId>kogito-addons-data-audit-quarkus-subsystem</artifactId>
 
-  <name>kogito-addons-data-audit-quarkus-subsystem</name>
+  <name>Kogito Apps :: Data Audit :: Quarkus :: subsystem</name>
 
 
   <properties>

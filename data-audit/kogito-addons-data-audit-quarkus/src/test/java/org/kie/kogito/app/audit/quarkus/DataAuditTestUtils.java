@@ -93,13 +93,13 @@ public class DataAuditTestUtils {
                 .expirationTime(ZonedDateTime.now())
                 .build();
 
-        
-        JobInstanceDataEvent dataEvent = new JobInstanceDataEvent("JobEvent", toURIEndpoint(processId), new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsBytes(job), procesInstanceId,
-                rootProcessInstanceId, processId, rootProcessId, (String) "identity");
+        JobInstanceDataEvent dataEvent =
+                new JobInstanceDataEvent("JobEvent", toURIEndpoint(processId), new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsBytes(job), procesInstanceId,
+                        rootProcessInstanceId, processId, rootProcessId, (String) "identity");
         return dataEvent;
     }
 
-    public static JobInstanceDataEvent deriveNewState(JobInstanceDataEvent jobEvent, Integer executionCounter, JobStatus state) throws Exception  {
+    public static JobInstanceDataEvent deriveNewState(JobInstanceDataEvent jobEvent, Integer executionCounter, JobStatus state) throws Exception {
         ScheduledJob job = new ObjectMapper().registerModule(new JavaTimeModule()).readValue(jobEvent.getData(), ScheduledJob.class);
         job = ScheduledJob.builder()
                 .job(job)
@@ -109,7 +109,8 @@ public class DataAuditTestUtils {
                 .expirationTime(ZonedDateTime.now())
                 .build();
 
-        JobInstanceDataEvent dataEvent = new JobInstanceDataEvent("JobEvent", jobEvent.getSource().toString(), new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsBytes(job), jobEvent.getKogitoProcessInstanceId(),
+        JobInstanceDataEvent dataEvent = new JobInstanceDataEvent("JobEvent", jobEvent.getSource().toString(), new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsBytes(job),
+                jobEvent.getKogitoProcessInstanceId(),
                 jobEvent.getKogitoRootProcessInstanceId(), jobEvent.getKogitoProcessId(), jobEvent.getKogitoRootProcessId(), (String) "identity");
         return dataEvent;
     }

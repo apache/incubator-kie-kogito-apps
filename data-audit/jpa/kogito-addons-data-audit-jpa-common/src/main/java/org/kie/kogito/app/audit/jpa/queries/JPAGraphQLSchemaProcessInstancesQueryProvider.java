@@ -44,5 +44,4 @@ public class JPAGraphQLSchemaProcessInstancesQueryProvider implements GraphQLSch
 
     }
 
-
 }

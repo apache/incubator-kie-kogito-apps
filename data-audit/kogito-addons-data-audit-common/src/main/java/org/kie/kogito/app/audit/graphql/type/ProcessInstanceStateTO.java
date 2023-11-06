@@ -55,7 +55,7 @@ public class ProcessInstanceStateTO {
     private OffsetDateTime slaDueDate;
 
     private Set<String> roles;
-    
+
     public ProcessInstanceStateTO() {
         roles = new HashSet<>();
     }

@@ -11,7 +11,7 @@
 
 	<artifactId>kogito-addons-data-audit-common-kafka</artifactId>
 
-	<name>Kogito Apps :: Data Audit :: Data Audit Service Common Kafka Utils</name>
+	<name>Kogito Apps :: Data Audit :: Kafka Utils</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
