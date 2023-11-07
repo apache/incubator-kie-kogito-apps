@@ -26,15 +26,13 @@ import javax.persistence.LockModeType;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.smallrye.mutiny.Multi;
 import org.kie.kogito.index.oracle.model.AbstractEntity;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
 
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import io.smallrye.mutiny.Multi;
-
 import static java.util.stream.Collectors.toMap;
-import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 
 public abstract class AbstractStorage<E extends AbstractEntity, V> implements Storage<String, V> {
 
@@ -88,14 +86,16 @@ public abstract class AbstractStorage<E extends AbstractEntity, V> implements St
     }
 
     @Override
-    @Transactional(REQUIRES_NEW)
+    @Transactional
     public V put(String key, V value) {
+        //Pessimistic lock is used to lock the row to handle concurrency with an exiting registry
         E persistedEntity = repository.findById(key, LockModeType.PESSIMISTIC_WRITE);
         E newEntity = mapToEntity.apply(value);
         if (persistedEntity != null) {
             repository.getEntityManager().merge(newEntity);
         } else {
             try {
+                //to handle concurrency in case of a new registry persist flush and throw an exception to allow retry on the caller side
                 repository.persistAndFlush(newEntity);
             } catch (PersistenceException e) {
                 throw new ConcurrentModificationException(e);

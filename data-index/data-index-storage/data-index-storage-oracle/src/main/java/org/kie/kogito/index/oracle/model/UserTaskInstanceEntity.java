@@ -28,19 +28,19 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ForeignKey;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.vladmihalcea.hibernate.type.json.JsonBlobType;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.TypeDef;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.vladmihalcea.hibernate.type.json.JsonBlobType;
 
 @Entity(name = "tasks")
 @TypeDef(name = "jsonb", typeClass = JsonBlobType.class)
@@ -97,9 +97,9 @@ public class UserTaskInstanceEntity extends AbstractEntity {
     @Type(type = "jsonb")
     private ObjectNode outputs;
     private String endpoint;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTask")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTask", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<CommentEntity> comments;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTask")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userTask", orphanRemoval = true, fetch = FetchType.LAZY)
     private List<AttachmentEntity> attachments;
 
     @Override

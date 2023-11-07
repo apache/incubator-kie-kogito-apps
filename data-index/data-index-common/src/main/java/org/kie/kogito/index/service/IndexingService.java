@@ -88,14 +88,14 @@ public class IndexingService {
     }
 
     private <R, T> R executeWithRetry(T input, Function<T, R> toExecute, String logMessage) {
-        R pi;
+        R response;
         try {
-            pi = toExecute.apply(input);
+            response = toExecute.apply(input);
         } catch (ConcurrentModificationException e) {
             LOGGER.warn("Retrying {} for {} {}", logMessage, input, e.getMessage());
-            pi = toExecute.apply(input);
+            response = toExecute.apply(input);
         }
-        return pi;
+        return response;
     }
 
     private ProcessInstance handleProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
@@ -120,6 +120,10 @@ public class IndexingService {
     }
 
     public <T> void indexUserTaskInstanceEvent(UserTaskInstanceDataEvent<T> event) {
+        executeWithRetry(event, this::handleUserTaskEvent, "indexing user task");
+    }
+
+    private <T> UserTaskInstance handleUserTaskEvent(UserTaskInstanceDataEvent<T> event) {
         Optional<UserTaskInstance> found = Optional.ofNullable(manager.getUserTaskInstancesCache().get(event.getKogitoUserTaskInstanceId()));
         UserTaskInstance ut;
         if (found.isEmpty()) {
@@ -134,8 +138,7 @@ public class IndexingService {
         userTaskInstanceMergers.stream().filter(e -> e.accept(event)).findAny().ifPresent(e -> e.merge(ut, event));
         LOGGER.debug("Stored User Task Instance: {}", ut);
 
-        manager.getUserTaskInstancesCache().put(ut.getId(), ut);
-
+        return manager.getUserTaskInstancesCache().put(ut.getId(), ut);
     }
 
     public void indexJob(Job job) {
