@@ -74,7 +74,6 @@ public class ProcessDefinitionEntityStorage extends AbstractStorage<ProcessDefin
             return repository.findById(new ProcessDefinitionEntityId(s), lockModeType);
         }
 
-
         @Override
         public void persist(ProcessDefinitionEntity entity) {
             repository.persist(entity);
