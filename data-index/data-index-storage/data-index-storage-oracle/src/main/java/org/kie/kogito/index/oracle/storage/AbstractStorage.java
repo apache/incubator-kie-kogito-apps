@@ -26,11 +26,12 @@ import javax.persistence.LockModeType;
 import javax.persistence.PersistenceException;
 import javax.transaction.Transactional;
 
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
-import io.smallrye.mutiny.Multi;
 import org.kie.kogito.index.oracle.model.AbstractEntity;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;
+
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.smallrye.mutiny.Multi;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -86,7 +87,8 @@ public abstract class AbstractStorage<E extends AbstractEntity, V> implements St
     }
 
     @Override
-    @Transactional
+    //always create a new transaction in the method level since it is flushing on persist
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     public V put(String key, V value) {
         //Pessimistic lock is used to lock the row to handle concurrency with an exiting registry
         E persistedEntity = repository.findById(key, LockModeType.PESSIMISTIC_WRITE);
