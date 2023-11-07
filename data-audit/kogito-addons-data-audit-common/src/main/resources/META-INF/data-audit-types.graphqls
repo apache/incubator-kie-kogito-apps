@@ -88,6 +88,12 @@ type ProcessInstanceVariableLog {
     variableName : String
     variableValue : JSON
 }
+
+type ProcessInstanceVariableHistoryLog {
+    variableId : String!
+    variableName : String!
+    logs : [ProcessInstanceVariableLog]
+}
   
 type UserTaskInstanceStateLog {
     eventId : String!

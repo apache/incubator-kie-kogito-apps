@@ -9,6 +9,7 @@ type Query {
 
     GetAllProcessInstancesNodeByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceNodeLog]
     GetAllProcessInstancesErrorByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceErrorLog]
-    GetAllProcessInstancesVariablebyProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceVariableLog]
 
+    GetAllProcessInstancesVariableByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceVariableLog]
+    GetAllProcessInstancesVariableHistoryByProcessInstanceId (processInstanceId : String!, pagination: Pagination) : [ProcessInstanceVariableHistoryLog]
 }

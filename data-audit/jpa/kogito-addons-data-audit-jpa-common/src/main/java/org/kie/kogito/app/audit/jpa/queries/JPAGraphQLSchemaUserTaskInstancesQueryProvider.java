@@ -43,8 +43,8 @@ public class JPAGraphQLSchemaUserTaskInstancesQueryProvider implements GraphQLSc
                 new JPASimpleNamedQuery<UserTaskInstanceAttachmentTO>("GetAllUserTaskInstanceAttachments", UserTaskInstanceAttachmentTO.class),
                 new JPASimpleNamedQuery<UserTaskInstanceCommentTO>("GetAllUserTaskInstanceComment", UserTaskInstanceCommentTO.class),
                 new JPASimpleNamedQuery<UserTaskInstanceVariableTO>("GetAllUserTaskInstanceVariable", UserTaskInstanceVariableTO.class),
-                new JPAComplexNamedQuery<UserTaskInstanceAssignmentTO>("GetAllUserTaskInstanceAssignments", new UserTaskInstanceAssignmentTOMapper()),
-                new JPAComplexNamedQuery<UserTaskInstanceDeadlineTO>("GetAllUserTaskInstanceDeadline", new UserTaskInstanceDeadlineTOMapper()));
+                new JPAComplexNamedQuery<UserTaskInstanceAssignmentTO, Object[]>("GetAllUserTaskInstanceAssignments", new UserTaskInstanceAssignmentTOMapper()),
+                new JPAComplexNamedQuery<UserTaskInstanceDeadlineTO, Object[]>("GetAllUserTaskInstanceDeadline", new UserTaskInstanceDeadlineTOMapper()));
     }
 
     public OffsetDateTime toDateTime(Date date) {

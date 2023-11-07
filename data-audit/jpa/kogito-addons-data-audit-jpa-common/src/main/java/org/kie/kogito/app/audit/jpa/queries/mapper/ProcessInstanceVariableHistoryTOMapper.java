@@ -24,40 +24,28 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.kie.kogito.app.audit.graphql.type.ProcessInstanceStateTO;
+import org.kie.kogito.app.audit.graphql.type.ProcessInstanceVariableHistoryTO;
+import org.kie.kogito.app.audit.graphql.type.ProcessInstanceVariableTO;
 import org.kie.kogito.app.audit.jpa.queries.DataMapper;
 
 import graphql.com.google.common.base.Objects;
 
-public class ProcessInstanceStateTOMapper implements DataMapper<ProcessInstanceStateTO, Object[]> {
+public class ProcessInstanceVariableHistoryTOMapper implements DataMapper<ProcessInstanceVariableHistoryTO, ProcessInstanceVariableTO> {
     @Override
-    public List<ProcessInstanceStateTO> produce(List<Object[]> data) {
-        List<ProcessInstanceStateTO> transformedData = new ArrayList<>();
-        ProcessInstanceStateTO current = null;
+    public List<ProcessInstanceVariableHistoryTO> produce(List<ProcessInstanceVariableTO> data) {
+        List<ProcessInstanceVariableHistoryTO> transformedData = new ArrayList<>();
+        ProcessInstanceVariableHistoryTO current = null;
         Object currentIndex = null;
         for (int idx = 0; idx < data.size(); idx++) {
-            Object[] row = data.get(idx);
-            if (!Objects.equal(currentIndex, row[0])) {
-                current = new ProcessInstanceStateTO();
-                currentIndex = row[0];
+            ProcessInstanceVariableTO row = data.get(idx);
+            if (!Objects.equal(currentIndex, row.getVariableId())) {
+                current = new ProcessInstanceVariableHistoryTO();
+                current.setVariableId(row.getVariableId());
+                current.setVariableName(row.getVariableName());
+                currentIndex = row.getVariableId();
                 transformedData.add(current);
             }
-            current.setEventId((String) row[0]);
-            current.setEventDate(toDateTime((Date) row[1]));
-            current.setProcessType((String) row[2]);
-            current.setProcessId((String) row[3]);
-            current.setProcessVersion((String) row[4]);
-            current.setParentProcessInstanceId((String) row[5]);
-            current.setRootProcessId((String) row[6]);
-            current.setRootProcessInstanceId((String) row[7]);
-            current.setProcessInstanceId((String) row[8]);
-            current.setBusinessKey((String) row[9]);
-            current.setEventType((String) row[10]);
-            current.setOutcome((String) row[11]);
-            current.setState((String) row[12]);
-            current.setSlaDueDate(toDateTime((Date) row[13]));
-            current.addRole((String) data.get(idx)[14]);
-
+            current.addLog(row);
         }
 
         return transformedData;

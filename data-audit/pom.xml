@@ -3,52 +3,27 @@
     	
   
   <parent>
-        		
-    
     <groupId>org.kie.kogito</groupId>
-        		
-    
     <artifactId>kogito-apps-build-parent</artifactId>
-       		
-    
     <version>2.0.0-SNAPSHOT</version>
-     		
-    
     <relativePath>../kogito-apps-build-parent/pom.xml</relativePath>
-     	
-  
   </parent>
     	
   
   <modelVersion>4.0.0</modelVersion>
-    
-  <artifactId>data-audit</artifactId>
-    
+  <artifactId>kogito-addons-data-audit</artifactId>
   <packaging>pom</packaging>
-    	
-  
   <name>Kogito Apps :: Data Audit</name>
     	
   
   <modules>
-    		
-    
     <module>kogito-addons-data-audit-common</module>
-        
-    <module>kogito-addons-data-audit-quarkus</module>
-     		
-    
-    <module>kogito-addons-data-audit-springboot</module>
-        
-    <module>kogito-addons-data-audit-quarkus-subsystem</module>
-        
     <module>kogito-addons-data-audit-common-kafka</module>
-        
-    	
-    
+    <module>kogito-addons-data-audit-quarkus</module>
+    <module>kogito-addons-data-audit-springboot</module>
+    <module>kogito-addons-data-audit-quarkus-subsystem</module>
+
     <module>jpa</module>
-      
   </modules>
-    
 
 </project>

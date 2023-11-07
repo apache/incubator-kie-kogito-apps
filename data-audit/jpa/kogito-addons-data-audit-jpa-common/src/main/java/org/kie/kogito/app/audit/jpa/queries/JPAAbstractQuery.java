@@ -26,7 +26,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
-public abstract class JPAAbstractQuery {
+public abstract class JPAAbstractQuery<R> {
 
     protected <T> List<T> executeWithEntityManager(EntityManager entityManager, String query, Class<T> clazz) {
         return entityManager.createQuery(query, clazz).getResultList();
@@ -57,11 +57,11 @@ public abstract class JPAAbstractQuery {
 
     }
 
-    protected List<Object[]> executeWithNamedQueryEntityManager(EntityManager entityManager, String query) {
+    protected List<R> executeWithNamedQueryEntityManager(EntityManager entityManager, String query) {
         return entityManager.createNamedQuery(query).getResultList();
     }
 
-    protected List<Object[]> executeWithNamedQueryEntityManagerAndArguments(EntityManager entityManager, String query, Map<String, Object> arguments) {
+    protected List<R> executeWithNamedQueryEntityManagerAndArguments(EntityManager entityManager, String query, Map<String, Object> arguments) {
 
         Map<String, Object> parameters = new HashMap<>(arguments);
         @SuppressWarnings("unchecked")

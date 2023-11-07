@@ -23,8 +23,10 @@ import java.util.List;
 import org.kie.kogito.app.audit.graphql.type.ProcessInstanceErrorTO;
 import org.kie.kogito.app.audit.graphql.type.ProcessInstanceNodeTO;
 import org.kie.kogito.app.audit.graphql.type.ProcessInstanceStateTO;
+import org.kie.kogito.app.audit.graphql.type.ProcessInstanceVariableHistoryTO;
 import org.kie.kogito.app.audit.graphql.type.ProcessInstanceVariableTO;
 import org.kie.kogito.app.audit.jpa.queries.mapper.ProcessInstanceStateTOMapper;
+import org.kie.kogito.app.audit.jpa.queries.mapper.ProcessInstanceVariableHistoryTOMapper;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQuery;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQueryProvider;
 
@@ -33,14 +35,16 @@ public class JPAGraphQLSchemaProcessInstancesQueryProvider implements GraphQLSch
     @Override
     public List<GraphQLSchemaQuery<?>> queries() {
         return List.<GraphQLSchemaQuery<?>> of(
-                new JPAComplexNamedQuery<ProcessInstanceStateTO>("GetAllProcessInstancesState", new ProcessInstanceStateTOMapper()),
-                new JPAComplexNamedQuery<ProcessInstanceStateTO>("GetAllProcessInstancesStateByStatus", new ProcessInstanceStateTOMapper()),
-                new JPAComplexNamedQuery<ProcessInstanceStateTO>("GetAllProcessInstancesStateByProcessId", new ProcessInstanceStateTOMapper()),
-                new JPAComplexNamedQuery<ProcessInstanceStateTO>("GetProcessInstancesStateHistory", new ProcessInstanceStateTOMapper()),
-                new JPAComplexNamedQuery<ProcessInstanceStateTO>("GetProcessInstancesStateHistoryByBusinessKey", new ProcessInstanceStateTOMapper()),
+                new JPAComplexNamedQuery<ProcessInstanceStateTO, Object[]>("GetAllProcessInstancesState", new ProcessInstanceStateTOMapper()),
+                new JPAComplexNamedQuery<ProcessInstanceStateTO, Object[]>("GetAllProcessInstancesStateByStatus", new ProcessInstanceStateTOMapper()),
+                new JPAComplexNamedQuery<ProcessInstanceStateTO, Object[]>("GetAllProcessInstancesStateByProcessId", new ProcessInstanceStateTOMapper()),
+                new JPAComplexNamedQuery<ProcessInstanceStateTO, Object[]>("GetProcessInstancesStateHistory", new ProcessInstanceStateTOMapper()),
+                new JPAComplexNamedQuery<ProcessInstanceStateTO, Object[]>("GetProcessInstancesStateHistoryByBusinessKey", new ProcessInstanceStateTOMapper()),
                 new JPASimpleNamedQuery<ProcessInstanceNodeTO>("GetAllProcessInstancesNodeByProcessInstanceId", ProcessInstanceNodeTO.class),
                 new JPASimpleNamedQuery<ProcessInstanceErrorTO>("GetAllProcessInstancesErrorByProcessInstanceId", ProcessInstanceErrorTO.class),
-                new JPASimpleNamedQuery<ProcessInstanceVariableTO>("GetAllProcessInstancesVariablebyProcessInstanceId", ProcessInstanceVariableTO.class));
+                new JPASimpleNamedQuery<ProcessInstanceVariableTO>("GetAllProcessInstancesVariableByProcessInstanceId", ProcessInstanceVariableTO.class),
+                new JPAComplexNamedQuery<ProcessInstanceVariableHistoryTO, ProcessInstanceVariableTO>("GetAllProcessInstancesVariableHistoryByProcessInstanceId",
+                        new ProcessInstanceVariableHistoryTOMapper()));
 
     }
 

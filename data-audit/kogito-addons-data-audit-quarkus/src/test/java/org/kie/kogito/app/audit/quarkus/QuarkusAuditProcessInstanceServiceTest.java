@@ -296,7 +296,7 @@ public class QuarkusAuditProcessInstanceServiceTest {
     public void testGetAllProcessInstancesVariablebyProcessInstanceId() {
 
         String query =
-                "{ GetAllProcessInstancesVariablebyProcessInstanceId ( processInstanceId : \\\"1\\\")  { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, variableId, variableName, variableValue } }";
+                "{ GetAllProcessInstancesVariableByProcessInstanceId ( processInstanceId : \\\"1\\\")  { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, variableId, variableName, variableValue } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -307,13 +307,38 @@ public class QuarkusAuditProcessInstanceServiceTest {
                 .assertThat()
                 .statusCode(200)
                 .and()
-                .extract().path("data.GetAllProcessInstancesVariablebyProcessInstanceId");
+                .extract().path("data.GetAllProcessInstancesVariableByProcessInstanceId");
 
         assertThat(data)
                 .hasSize(1)
                 .extracting(e -> e.get("variableId"), e -> e.get("variableName"), e -> e.get("variableValue"))
                 .containsExactlyInAnyOrder(
-                        tuple("var_id1", "varName", "\"variableValue\""));
+                        tuple("var_id1", "varName", "variableValue"));
+
+    }
+
+    @Test
+    public void testGetAllProcessInstancesVariableHistoryByProcessInstanceId() {
+
+        String query =
+                "{ GetAllProcessInstancesVariableHistoryByProcessInstanceId ( processInstanceId : \\\"1\\\")  { variableId, variableName, logs { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, variableId, variableName, variableValue} } }";
+        query = wrapQuery(query);
+        List<Map<String, Object>> data = given()
+                .contentType(ContentType.JSON)
+                .body(query)
+                .when()
+                .post(SubsystemConstants.DATA_AUDIT_PATH)
+                .then()
+                .assertThat()
+                .statusCode(200)
+                .and()
+                .extract().path("data.GetAllProcessInstancesVariableHistoryByProcessInstanceId");
+
+        assertThat(data)
+                .hasSize(1)
+                .extracting(e -> e.get("variableId"), e -> e.get("variableName"))
+                .containsExactlyInAnyOrder(
+                        tuple("var_id1", "varName"));
 
     }
 }

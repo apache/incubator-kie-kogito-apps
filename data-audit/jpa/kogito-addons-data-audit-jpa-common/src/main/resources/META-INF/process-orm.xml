@@ -193,7 +193,7 @@
 	</named-native-query>
 
 	<named-native-query
-		name="GetAllProcessInstancesVariablebyProcessInstanceId"
+		name="GetAllProcessInstancesVariableByProcessInstanceId"
 		result-set-mapping="ProcessInstanceVariableTOMapping">
 		<query>
         SELECT log.event_id as eventId,
@@ -218,6 +218,30 @@
     </query>
 		<!-- hint name="org.hibernate.timeout" value="200"/ -->
 	</named-native-query>
+
+    <named-native-query
+        name="GetAllProcessInstancesVariableHistoryByProcessInstanceId"
+        result-set-mapping="ProcessInstanceVariableTOMapping">
+        <query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.variable_id as variableId,
+               log.variable_name as variableName,
+               log.variable_value as variableValue    
+          FROM ProcessInstanceVariableLog log
+         WHERE log.process_instance_id = :processInstanceId
+      ORDER BY log.variable_id ASC, log.event_date DESC
+    </query>
+        <!-- hint name="org.hibernate.timeout" value="200"/ -->
+    </named-native-query>
 
 	<!-- process instance mapping -->
 	<sql-result-set-mapping

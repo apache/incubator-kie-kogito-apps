@@ -29,7 +29,7 @@ import org.kie.kogito.app.audit.jpa.queries.DataMapper;
 
 import graphql.com.google.common.base.Objects;
 
-public class UserTaskInstanceAssignmentTOMapper implements DataMapper<UserTaskInstanceAssignmentTO> {
+public class UserTaskInstanceAssignmentTOMapper implements DataMapper<UserTaskInstanceAssignmentTO, Object[]> {
 
     @Override
     public List<UserTaskInstanceAssignmentTO> produce(List<Object[]> data) {

@@ -25,6 +25,7 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Supplier;
 
 import javax.persistence.EntityManager;
 
@@ -217,11 +218,16 @@ public class JPADataAuditStore implements DataAuditStore {
         log.setProcessType(event.getKogitoProcessType());
         log.setProcessId(event.getKogitoProcessId());
         log.setProcessVersion(event.getKogitoProcessInstanceVersion());
-        log.setParentProcessInstanceId(event.getKogitoParentProcessInstanceId());
         log.setProcessInstanceId(event.getKogitoProcessInstanceId());
-        log.setRootProcessId(event.getKogitoRootProcessId());
-        log.setRootProcessInstanceId(event.getKogitoRootProcessInstanceId());
+        log.setParentProcessInstanceId(getOnlyIfFilled(event::getKogitoParentProcessInstanceId));
+        log.setRootProcessId(getOnlyIfFilled(event::getKogitoRootProcessId));
+        log.setRootProcessInstanceId(getOnlyIfFilled(event::getKogitoRootProcessInstanceId));
         log.setBusinessKey(event.getKogitoBusinessKey());
+    }
+
+    private String getOnlyIfFilled(Supplier<String> producer) {
+        String data = producer.get();
+        return data != null && !data.isBlank() ? data : null;
     }
 
     @Override
@@ -247,11 +253,15 @@ public class JPADataAuditStore implements DataAuditStore {
         log.setEventUser(event.getData().getEventUser());
         log.setAttachmentId(event.getData().getAttachmentId());
         log.setAttachmentName(event.getData().getAttachmentName());
-        try {
-            log.setAttachmentURI(event.getData().getAttachmentURI().toURL());
-        } catch (MalformedURLException e) {
-            LOGGER.error("Could not serialize url {}", e);
+
+        if (event.getData().getAttachmentURI() != null) {
+            try {
+                log.setAttachmentURI(event.getData().getAttachmentURI().toURL());
+            } catch (MalformedURLException e) {
+                LOGGER.error("Could not serialize url {}", e);
+            }
         }
+
         log.setEventType(event.getData().getEventType());
         EntityManager entityManager = context.getContext();
         entityManager.persist(log);
@@ -333,7 +343,7 @@ public class JPADataAuditStore implements DataAuditStore {
 
     private void setUserTaskCommonAttributes(AbstractUserTaskInstanceLog log, UserTaskInstanceDataEvent<?> event) {
         log.setEventId(event.getId());
-        log.setEventDate(new Date(event.getTime().toInstant().toEpochMilli()));
+        log.setEventDate(event.getTime() != null ? Date.from(event.getTime().toInstant()) : Date.from(Instant.now()));
         log.setProcessInstanceId(event.getKogitoProcessInstanceId());
         log.setBusinessKey(event.getKogitoBusinessKey());
         log.setUserTaskInstanceId(event.getKogitoUserTaskInstanceId());

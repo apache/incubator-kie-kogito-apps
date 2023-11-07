@@ -29,7 +29,7 @@ import org.kie.kogito.app.audit.jpa.queries.DataMapper;
 
 import graphql.com.google.common.base.Objects;
 
-public class UserTaskInstanceDeadlineTOMapper implements DataMapper<UserTaskInstanceDeadlineTO> {
+public class UserTaskInstanceDeadlineTOMapper implements DataMapper<UserTaskInstanceDeadlineTO, Object[]> {
 
     @Override
     public List<UserTaskInstanceDeadlineTO> produce(List<Object[]> data) {
