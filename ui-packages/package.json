@@ -151,6 +151,7 @@
     "@kie-tools-core/**/semver": "^7.5.2",
     "@kie-tools/**/semver": "^7.5.2",
     "@kogito-tooling/**/semver": "^7.5.2",
+    "@kogito-apps/trusty/semver": "^7.5.2",
     "@types/express-serve-static-core": "^4.17.21",
     "@types/minimatch": "^3.0.5",
     "axios": "0.21.2",
