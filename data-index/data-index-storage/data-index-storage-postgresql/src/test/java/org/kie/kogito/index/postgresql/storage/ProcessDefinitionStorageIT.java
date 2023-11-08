@@ -21,7 +21,6 @@ package org.kie.kogito.index.postgresql.storage;
 import java.util.Set;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.ProcessDefinition;
@@ -59,7 +58,6 @@ class ProcessDefinitionStorageIT extends AbstractStorageIT<ProcessDefinitionEnti
     }
 
     @Test
-    @Transactional
     void testProcessInstanceEntity() {
         String processId = "travels";
         String version = "1.0";

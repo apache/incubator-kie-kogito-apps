@@ -28,9 +28,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 @Entity(name = "comments")
 @Table(name = "comments")
 public class CommentEntity extends AbstractEntity {
@@ -41,7 +38,6 @@ public class CommentEntity extends AbstractEntity {
     private String updatedBy;
     private ZonedDateTime updatedAt;
     @ManyToOne(optional = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "taskId", foreignKey = @ForeignKey(name = "fk_comments_tasks"))
     private UserTaskInstanceEntity userTask;
 

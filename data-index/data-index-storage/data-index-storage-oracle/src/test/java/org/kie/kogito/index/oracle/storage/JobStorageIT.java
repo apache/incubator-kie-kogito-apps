@@ -67,7 +67,6 @@ public class JobStorageIT extends AbstractStorageIT<JobEntity, Job> {
     }
 
     @Test
-    @Transactional
     public void testJobEntity() {
         String jobId = UUID.randomUUID().toString();
         String processInstanceId = UUID.randomUUID().toString();
