@@ -30,7 +30,6 @@ import java.util.function.Function;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
@@ -71,7 +70,6 @@ public class IndexingService {
     @Inject
     Instance<UserTaskInstanceEventMerger> userTaskInstanceMergers;
 
-    @Transactional
     public void indexProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
         //retry in case of rare but possible race condition during the insert for the first registry
         ProcessInstance pi = executeWithRetry(event, this::handleProcessInstanceEvent, "indexing process instance");
@@ -121,7 +119,6 @@ public class IndexingService {
         return pi;
     }
 
-    @Transactional
     public <T> void indexUserTaskInstanceEvent(UserTaskInstanceDataEvent<T> event) {
         executeWithRetry(event, this::handleUserTaskEvent, "indexing user task");
     }
@@ -144,12 +141,10 @@ public class IndexingService {
         return manager.getUserTaskInstancesCache().put(ut.getId(), ut);
     }
 
-    @Transactional
     public void indexJob(Job job) {
         manager.getJobsCache().put(job.getId(), job);
     }
 
-    @Transactional
     public void indexModel(ObjectNode updateData) {
         String processId = updateData.remove(PROCESS_ID).asText();
         Storage<String, ObjectNode> cache = manager.getDomainModelCache(processId);
