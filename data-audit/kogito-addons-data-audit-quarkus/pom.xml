@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>org.kie.kogito</groupId>
-        <artifactId>kogito-addons-data-audit</artifactId>
+        <artifactId>data-audit</artifactId>
         <version>2.0.0-SNAPSHOT</version>
     </parent>
 
@@ -21,7 +21,7 @@
     <dependencies>
         <dependency>
             <groupId>org.kie.kogito</groupId>
-            <artifactId>kogito-addons-data-audit-common</artifactId>
+            <artifactId>data-audit-common</artifactId>
         </dependency>
         <dependency>
             <groupId>org.kie.kogito</groupId>

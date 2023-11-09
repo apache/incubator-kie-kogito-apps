@@ -4,24 +4,20 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.kie.kogito</groupId>
 		<artifactId>kogito-addons-data-audit</artifactId>
+		<groupId>org.kie.kogito</groupId>
 		<version>2.0.0-SNAPSHOT</version>
 	</parent>
-	<artifactId>kogito-addons-data-audit-common</artifactId>
-	<name>Kogito Apps :: Data Audit :: Common</name>
+
+	<artifactId>data-audit-common-service</artifactId>
+
+	<name>Kogito Apps :: Data Audit :: Service Common</name>
+
 	<properties>
-		<graphql-maven-plugin.version>1.18</graphql-maven-plugin.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
+
 	<dependencies>
-		<dependency>
-			<groupId>com.graphql-java</groupId>
-			<artifactId>graphql-java-extended-scalars</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.graphql-java</groupId>
-			<artifactId>graphql-java</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.kie.kogito</groupId>
 			<artifactId>kogito-events-core</artifactId>
@@ -29,10 +25,6 @@
 		<dependency>
 			<groupId>org.kie.kogito</groupId>
 			<artifactId>jobs-service-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.kie.kogito</groupId>
-			<artifactId>jobs-service-internal-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -43,4 +35,6 @@
 			<artifactId>kafka-clients</artifactId>
 		</dependency>
 	</dependencies>
+
+
 </project>

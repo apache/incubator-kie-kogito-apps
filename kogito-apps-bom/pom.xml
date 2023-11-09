@@ -117,22 +117,22 @@
             <!-- Data Audit-->
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>kogito-addons-data-audit-common</artifactId>
+                <artifactId>data-audit-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>kogito-addons-data-audit-common-kafka</artifactId>
+                <artifactId>data-audit-common-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-audit-quarkus-service</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>kogito-addons-data-audit-quarkus</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>kogito-addons-data-audit-quarkus-subsystem</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

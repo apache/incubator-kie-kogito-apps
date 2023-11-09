@@ -21,7 +21,7 @@
 		</dependency>
 		<dependency>
 			<groupId>org.kie.kogito</groupId>
-			<artifactId>kogito-addons-data-audit-common</artifactId>
+			<artifactId>data-audit-common</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.fasterxml.jackson.core</groupId>
