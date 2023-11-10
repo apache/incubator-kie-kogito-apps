@@ -58,7 +58,7 @@ public class ProcessDefinitionDataEventMerger implements ProcessDefinitionEventM
         instance.setVersion(doMerge(data.getVersion(), instance.getVersion()));
         instance.setAddons(doMerge(data.getAddons(), instance.getAddons()));
         instance.setRoles(doMerge(data.getRoles(), instance.getRoles()));
-        instance.setType(doMerge(event.getKogitoProcessType(), instance.getType()));
+        instance.setType(doMerge(data.getType(), instance.getType()));
         instance.setEndpoint(doMerge(data.getEndpoint(), instance.getEndpoint()));
         instance.setDescription(doMerge(data.getDescription(), instance.getDescription()));
         instance.setAnnotations(doMerge(data.getAnnotations(), instance.getAnnotations()));
