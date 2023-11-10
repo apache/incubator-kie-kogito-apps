@@ -110,12 +110,13 @@
                 <dependency>
                     <groupId>org.kie.kogito</groupId>
                     <artifactId>kogito-addons-data-audit-jpa-quarkus</artifactId>
+                    <scope>runtime</scope>
                 </dependency>
                 <!-- test for jpa -->
                 <dependency>
                     <groupId>io.quarkus</groupId>
                     <artifactId>quarkus-jdbc-h2</artifactId>
-                    <scope>test</scope>
+                    <scope>runtime</scope>
                 </dependency>
             </dependencies>
         </profile>
