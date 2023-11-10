@@ -23,8 +23,7 @@ import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
-import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
-import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
+import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
@@ -42,22 +41,15 @@ public class QuarkusDataAuditMessagingEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuarkusDataAuditMessagingEventConsumer.class);
 
-    private DataAuditStoreProxyService proxy;
-
     @Inject
-    DataAuditContextFactory dataAuditContextFactory;
-
-    public QuarkusDataAuditMessagingEventConsumer() {
-        proxy = DataAuditStoreProxyService.newAuditStoreService();
-    }
+    EventPublisher eventPublisher;
 
     @Incoming(KOGITO_PROCESSINSTANCES_EVENTS)
     @Blocking
     @Transactional
     public void onProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
         LOGGER.debug("Process instance consumer received ProcessInstanceDataEvent: \n{}", event);
-        proxy.storeProcessInstanceDataEvent(dataAuditContextFactory.newDataAuditContext(), event);
-
+        eventPublisher.publish(event);
     }
 
     @Incoming(KOGITO_USERTASKINSTANCES_EVENTS)
@@ -65,8 +57,7 @@ public class QuarkusDataAuditMessagingEventConsumer {
     @Transactional
     public void onUserTaskInstanceEvent(UserTaskInstanceDataEvent<?> event) {
         LOGGER.debug("Task instance received UserTaskInstanceDataEvent \n{}", event);
-        proxy.storeUserTaskInstanceDataEvent(dataAuditContextFactory.newDataAuditContext(), event);
-
+        eventPublisher.publish(event);
     }
 
     @Incoming(KOGITO_JOBS_EVENTS)
@@ -74,7 +65,7 @@ public class QuarkusDataAuditMessagingEventConsumer {
     @Transactional
     public void onJobEvent(JobInstanceDataEvent event) {
         LOGGER.debug("Job received KogitoJobCloudEvent \n{}", event);
-        proxy.storeJobDataEvent(dataAuditContextFactory.newDataAuditContext(), event);
+        eventPublisher.publish(event);
     }
 
 }
