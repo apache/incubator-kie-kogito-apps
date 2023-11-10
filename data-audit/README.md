@@ -88,9 +88,9 @@ quarkus.datasource.data-audit-ds.jdbc.url=${QUARKUS_DATASOURCE_JDBC_URL:jdbc:pos
 
 In springboot might look like:
 
+spring.datasource.jdbc-url=jdbc:h2:mem:test
+spring.datasource.driver-class-name=org.h2.Driver
+
 data-audit.spring.jpa.database=H2
 data-audit.spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
 data-audit.spring.jpa.properties.hibernate.hbm2ddl.auto=create-drop
-data-audit.spring.jpa.properties.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-data-audit.spring.jpa.mapping-resources=META-INF/entity-orm.xml,META-INF/job-orm.xml,META-INF/process-orm.xml,META-INF/usertask-orm.xml
-data-audit.spring.jpa.show-sql=false
