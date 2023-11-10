@@ -6,7 +6,7 @@
   <parent>
     <artifactId>jitexecutor</artifactId>
     <groupId>org.kie.kogito</groupId>
-    <version>1.40.2-SNAPSHOT</version>
+    <version>1.40.2.Final</version>
   </parent>
 
   <artifactId>jitexecutor-bpmn</artifactId>
