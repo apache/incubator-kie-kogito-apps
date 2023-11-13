@@ -40,6 +40,7 @@ import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsu
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_PROCESSINSTANCES_EVENTS;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_PROCESS_DEFINITIONS_EVENTS;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_USERTASKINSTANCES_EVENTS;
+import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.*;
 
 @ApplicationScoped
 @IfBuildProperty(name = "kogito.data-index.blocking", stringValue = "true")
