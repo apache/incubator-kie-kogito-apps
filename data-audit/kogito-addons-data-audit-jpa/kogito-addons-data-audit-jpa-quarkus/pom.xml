@@ -61,10 +61,12 @@
             <artifactId>quarkus-vertx-graphql</artifactId>
         </dependency>
 
+        <!-- dependencies -->
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-hibernate-orm</artifactId>
         </dependency>
+
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-jdbc-h2</artifactId>
@@ -74,6 +76,5 @@
             <artifactId>quarkus-jdbc-postgresql</artifactId>
         </dependency>
     </dependencies>
-
 
 </project>

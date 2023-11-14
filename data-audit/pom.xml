@@ -15,7 +15,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>data-audit</artifactId>
     <packaging>pom</packaging>
-    <name>Kogito Apps :: Data Audit :: App Parent</name>
+    <name>Kogito Apps :: Data Audit :: App</name>
 
 
     <modules>
