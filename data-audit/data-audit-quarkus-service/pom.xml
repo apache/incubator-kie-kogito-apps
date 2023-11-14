@@ -12,7 +12,7 @@
 
     <artifactId>data-audit-quarkus-service</artifactId>
 
-    <name>Kogito Apps :: Data Audit :: Quarkus :: subsystem</name>
+    <name>Kogito Apps :: Data Audit :: Quarkus :: Service</name>
 
 
     <properties>
@@ -106,38 +106,5 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>postgresql</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.kie.kogito</groupId>
-                    <artifactId>kogito-addons-data-audit-jpa-quarkus</artifactId>
-                </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-jdbc-postgresql</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-
-        <profile>
-            <id>container</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-container-image-jib</artifactId>
-                </dependency>
-            </dependencies>
-        </profile>
-
-    </profiles>
 
 </project>

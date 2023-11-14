@@ -19,10 +19,9 @@
 package org.kie.kogito.app.audit.json;
 
 import java.io.IOException;
+import java.time.OffsetDateTime;
 
-import org.kie.kogito.jobs.service.api.event.CreateJobEvent;
-import org.kie.kogito.jobs.service.api.event.DeleteJobEvent;
-import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +31,7 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
-public class JsonJobDataEventDeserializer extends StdDeserializer<JobCloudEvent<?>> {
+public class JsonJobDataEventDeserializer extends StdDeserializer<JobInstanceDataEvent> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonJobDataEventDeserializer.class);
 
@@ -47,20 +46,25 @@ public class JsonJobDataEventDeserializer extends StdDeserializer<JobCloudEvent<
     }
 
     @Override
-    public JobCloudEvent<?> deserialize(JsonParser jp, DeserializationContext ctxt)
+    public JobInstanceDataEvent deserialize(JsonParser jp, DeserializationContext ctxt)
             throws IOException, JsonProcessingException {
         JsonNode node = jp.getCodec().readTree(jp);
         LOGGER.debug("Deserialize process instance data event: {}", node);
 
-        String type = node.get("type").asText();
+        JobInstanceDataEvent event = new JobInstanceDataEvent(
+                node.has("type") ? node.get("type").asText() : null,
+                node.has("source") ? node.get("source").asText() : null,
+                node.has("data") ? node.get("data").binaryValue() : null,
+                node.has("kogitoprocinstanceid") ? node.get("kogitoprocinstanceid").asText() : null,
+                node.has("kogitorootprociid") ? node.get("kogitorootprociid").asText() : null,
+                node.has("kogitoprocid") ? node.get("kogitoprocid").asText() : null,
+                node.has("kogitorootprocid") ? node.get("kogitorootprocid").asText() : null,
+                node.has("kogitoidentity") ? node.get("kogitoidentity").asText() : null);
 
-        switch (type) {
-            case CreateJobEvent.TYPE:
-                return jp.getCodec().treeToValue(node, CreateJobEvent.class);
-            case DeleteJobEvent.TYPE:
-                return jp.getCodec().treeToValue(node, DeleteJobEvent.class);
-            default:
-                return null;
-        }
+        event.setId(node.has("id") ? node.get("id").asText() : null);
+        event.setKogitoIdentity(node.has("kogitoidentity") ? node.get("kogitoidentity").asText() : null);
+        event.setTime(node.has("time") ? jp.getCodec().treeToValue(node.get("time"), OffsetDateTime.class) : null);
+
+        return event;
     }
 }

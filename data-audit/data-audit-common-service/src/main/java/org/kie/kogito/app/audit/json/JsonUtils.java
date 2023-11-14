@@ -18,9 +18,9 @@
  */
 package org.kie.kogito.app.audit.json;
 
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
-import org.kie.kogito.jobs.service.api.event.JobCloudEvent;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +48,7 @@ public final class JsonUtils {
         SimpleModule module = new SimpleModule("Kogito Cloud Events");
         module.addDeserializer(ProcessInstanceDataEvent.class, new JsonProcessInstanceDataEventDeserializer());
         module.addDeserializer(UserTaskInstanceDataEvent.class, new JsonUserTaskInstanceDataEventDeserializer());
-        module.addDeserializer(JobCloudEvent.class, new JsonJobDataEventDeserializer());
+        module.addDeserializer(JobInstanceDataEvent.class, new JsonJobDataEventDeserializer());
         objectMapper.registerModule(module);
         return objectMapper;
     }
