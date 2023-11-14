@@ -112,11 +112,6 @@
                     <artifactId>kogito-addons-data-audit-jpa-quarkus</artifactId>
                     <scope>test</scope>
                 </dependency>
-                <dependency>
-                    <groupId>io.quarkus</groupId>
-                    <artifactId>quarkus-jdbc-h2</artifactId>
-                    <scope>test</scope>
-                </dependency>
             </dependencies>
         </profile>
     </profiles>
