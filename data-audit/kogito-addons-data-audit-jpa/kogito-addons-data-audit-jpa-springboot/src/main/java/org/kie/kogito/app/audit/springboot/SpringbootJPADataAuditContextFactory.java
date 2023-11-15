@@ -23,14 +23,12 @@ import javax.persistence.EntityManager;
 import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SpringbootJPADataAuditContextFactory implements DataAuditContextFactory {
 
     @Autowired
-    @Qualifier("jpaDataAuditEntityManagerFactory")
     EntityManager entityManager;
 
     @Override

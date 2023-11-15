@@ -28,7 +28,7 @@ import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 @ApplicationScoped
 public class QuarkusJPADataAuditContextFactory implements DataAuditContextFactory {
 
-    @PersistenceContext(unitName = "DataAuditPU")
+    @PersistenceContext
     EntityManager entityManager;
 
     @Override

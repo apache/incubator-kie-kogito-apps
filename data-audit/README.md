@@ -77,20 +77,5 @@ Each implementation might require additional dependencies. In our case for using
             <artifactId>quarkus-jdbc-h2</artifactId>
         </dependency>
 
-for the case of use h2 database with quarkus runtime. plus additional parameters. In our case for make in work in quarkus you need to define
-the data audit persistence
+No additional configuration is requires besides the default datasource use by the application already.
 
-
-quarkus.datasource.data-audit-ds.db-kind=posgres
-quarkus.datasource.data-audit-ds.username=kogito-user
-quarkus.datasource.data-audit-ds.password=kogito-pass
-quarkus.datasource.data-audit-ds.jdbc.url=${QUARKUS_DATASOURCE_JDBC_URL:jdbc:postgresql://localhost:5432/kogito}
-
-In springboot might look like:
-
-spring.datasource.jdbc-url=jdbc:h2:mem:test
-spring.datasource.driver-class-name=org.h2.Driver
-
-data-audit.spring.jpa.database=H2
-data-audit.spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.H2Dialect
-data-audit.spring.jpa.properties.hibernate.hbm2ddl.auto=create-drop

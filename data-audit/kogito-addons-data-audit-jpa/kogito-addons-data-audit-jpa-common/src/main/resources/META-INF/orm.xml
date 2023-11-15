@@ -1,0 +1,899 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-mappings version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence/orm"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd">
+
+	<!-- SCHEDULED, RETRY, EXECUTED, ERROR, CANCELED -->
+
+	<!-- missing request RunningRequests GetRequestsByBusinessKeyAndstatus GetRequestsByCommand 
+		GetRequestsByCommandAndstatus GetRequestsByDeploymentAndstatus GetRequestsByProcessInstanceAndstatus 
+		PendingRequestByIdForProcessing -->
+
+	<!-- all the basic queries needs to compute the last part based on the execution 
+		time -->
+	<named-native-query name="GetAllScheduledJobs" result-set-mapping="JobExecutionTO">
+        <query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL AND o1.status = 'SCHEDULED'
+        </query>
+	</named-native-query>
+
+
+	<named-native-query name="GetJobById"
+		result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL AND o1.job_id = :jobId
+        </query>
+	</named-native-query>
+
+	<named-native-query name="GetJobHistoryById"
+		result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+             WHERE o1.job_id = :jobId
+          ORDER BY o1.event_date DESC
+        </query>
+	</named-native-query>
+
+	<named-native-query
+		name="GetJobHistoryByProcessInstanceId"
+		result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+             WHERE o1.process_instance_id = :processInstanceId
+          ORDER BY o1.event_date DESC
+        </query>
+	</named-native-query>
+
+	<named-native-query name="GetAllPendingJobs"
+		result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL AND o1.status IN ('SCHEDULED', 'RETRY')
+        </query>
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllEligibleJobsForExecution"
+		result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL AND o1.status IN ('SCHEDULED')
+        </query>
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllEligibleJobsForRetry" result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL AND o1.status IN ('RETRY', 'ERROR')
+        </query>
+	</named-native-query>
+
+
+	<named-native-query name="GetAllJobs"
+		result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL 
+          ORDER BY o1.event_date DESC
+        </query>
+	</named-native-query>
+
+	<named-native-query name="GetAllCompletedJobs"
+		result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL AND o1.status = 'EXECUTED'
+        </query>
+	</named-native-query>
+
+	<named-native-query name="GetAllInErrorJobs"
+		result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL AND o1.status = 'ERROR'
+        </query>
+	</named-native-query>
+
+	<named-native-query name="GetAllCancelledJobs"
+		result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL AND o1.status = 'CANCELED'
+        </query>
+	</named-native-query>
+
+
+	<named-native-query name="GetAllJobsByStatus"
+		result-set-mapping="JobExecutionTO">
+		<query>
+             SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL AND o1.status IN (:status) 
+          ORDER BY o1.event_date DESC
+        </query>
+	</named-native-query>
+
+	<named-native-query name="GetJobByProcessInstanceId"
+		result-set-mapping="JobExecutionTO">
+		<query>
+            SELECT 
+                  o1.job_id as jobId,
+                  o1.expiration_time as expirationTime, 
+                  o1.priority as priority, 
+                  o1.process_instance_id as processInstanceId, 
+                  o1.node_instance_id as nodeInstanceId, 
+                  o1.repeat_interval as repeatInterval, 
+                  o1.repeat_limit as repeatLimit, 
+                  o1.scheduled_id as scheduledId, 
+                  o1.retries as retries, 
+                  o1.status as status, 
+                  o1.execution_counter as executionCounter,  
+                  o1.event_date as eventDate
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+             WHERE o2.job_id IS NULL AND o1.process_instance_id = :processInstanceId
+          ORDER BY o1.event_date DESC
+        </query>
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllProcessInstancesState">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               log.outcome as outcome,
+               log.state as state,
+               log.sla_due_date as slaDueDate,
+               roles.role as role
+          FROM Process_Instance_State_Log log
+     LEFT JOIN Process_Instance_State_Log log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
+     LEFT JOIN Process_Instance_State_Roles_Log roles ON log.id = roles.process_instance_state_log_id 
+         WHERE log_newer.event_id IS NULL
+      ORDER BY log.event_date DESC
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllProcessInstancesStateByStatus">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               log.outcome as outcome,
+               log.state as state,
+               log.sla_due_date as slaDueDate,
+               roles.role as role
+          FROM Process_Instance_State_Log log
+     LEFT JOIN Process_Instance_State_Log log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
+     LEFT JOIN Process_Instance_State_Roles_Log roles ON log.id = roles.process_instance_state_log_id 
+         WHERE log_newer.event_id IS NULL AND log.state = :status
+      ORDER BY log.event_date DESC
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllProcessInstancesStateByProcessId">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               log.outcome as outcome,
+               log.state as state,
+               log.sla_due_date as slaDueDate,
+               roles.role as role
+          FROM Process_Instance_State_Log log
+     LEFT JOIN Process_Instance_State_Log log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
+     LEFT JOIN Process_Instance_State_Roles_Log roles ON log.id = roles.process_instance_state_log_id 
+         WHERE log_newer.event_id IS NULL AND log.process_id = :processId
+      ORDER BY log.event_date DESC
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+
+	<named-native-query
+		name="GetProcessInstancesStateHistory">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               log.outcome as outcome,
+               log.state as state,
+               log.sla_due_date as slaDueDate,
+               roles.role as role
+          FROM Process_Instance_State_Log log
+     LEFT JOIN Process_Instance_State_Roles_Log roles ON log.id = roles.process_instance_state_log_id 
+         WHERE log.process_instance_id = :processInstanceId
+      ORDER BY log.event_date DESC
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetProcessInstancesStateHistoryByBusinessKey">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               log.outcome as outcome,
+               log.state as state,
+               log.sla_due_date as slaDueDate,
+               roles.role as role
+          FROM Process_Instance_State_Log log
+     LEFT JOIN Process_Instance_State_Roles_Log roles ON log.id = roles.process_instance_state_log_id 
+         WHERE log.business_key = :businessKey
+      ORDER BY log.event_date DESC
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllProcessInstancesNodeByProcessInstanceId"
+		result-set-mapping="ProcessInstanceNodeTOMapping">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               log.node_type as nodeType,
+               log.node_name as nodeName,
+               log.node_instance_id as nodeInstanceId,
+               log.connection as connection,
+               log.work_item_id as workItemId,
+               log.sla_due_date as slaDueDate,
+               log.event_data as eventData
+          FROM Process_Instance_Node_Log log
+     LEFT JOIN Process_Instance_Node_Log log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id AND log.node_instance_id = log_newer.node_instance_id 
+         WHERE log_newer.event_id IS NULL AND log.process_instance_id = :processInstanceId
+      ORDER BY log.event_date DESC
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllProcessInstancesErrorByProcessInstanceId"
+		result-set-mapping="ProcessInstanceErrorTOMapping">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.error_message as errorMessage,
+               log.node_definition_id as nodeDefinitionId,
+               log.node_instance_id as nodeInstanceId
+          FROM Process_Instance_Error_Log log
+         WHERE log.process_instance_id = :processInstanceId
+      ORDER BY log.event_date DESC
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllProcessInstancesVariableByProcessInstanceId"
+		result-set-mapping="ProcessInstanceVariableTOMapping">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.variable_id as variableId,
+               log.variable_name as variableName,
+               log.variable_value as variableValue    
+          FROM Process_Instance_Variable_Log log
+     LEFT JOIN Process_Instance_Variable_Log log_newer ON log.event_date &lt; log_newer.event_date 
+                                                   AND log.process_instance_id = log_newer.process_instance_id 
+                                                   AND log.variable_id = log_newer.variable_id                                                      
+         WHERE log_newer.event_id IS NULL AND log.process_instance_id = :processInstanceId
+      ORDER BY log.event_date DESC
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllProcessInstancesVariableHistoryByProcessInstanceId"
+		result-set-mapping="ProcessInstanceVariableTOMapping">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.process_type as processType,
+               log.process_id as processId,
+               log.process_version as processVersion,
+               log.parent_process_instance_id as parentProcessInstanceId,
+               log.root_process_id as rootProcessId,
+               log.root_process_instance_id as rootProcessInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.variable_id as variableId,
+               log.variable_name as variableName,
+               log.variable_value as variableValue    
+          FROM Process_Instance_Variable_Log log
+         WHERE log.process_instance_id = :processInstanceId
+      ORDER BY log.variable_id ASC, log.event_date DESC
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+
+
+	<!-- queries that are not being migrated -->
+
+	<named-native-query
+		name="GetAllUserTaskInstanceState"
+		result-set-mapping="UserTaskInstanceStateTOMapping">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.user_task_definition_id as userTaskDefinitionId,
+               log.user_task_instance_id as userTaskInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.task_id as taskId,
+               log.name as name,
+               log.description as description,
+               log.actual_user as actualUser,
+               log.state as state,
+               log.node_definition_id as nodeDefinitionId,
+               log.node_instance_id as nodeInstanceId,
+               log.event_type as eventType
+          FROM Task_Instance_State_Log log
+     LEFT JOIN Task_Instance_State_Log log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
+                                             AND log_newer.event_date &lt; log_newer.event_date
+         WHERE log_newer.event_id IS NULL
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllUserTaskInstanceAssignments">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.event_user as eventUser,
+               log.user_task_definition_id as userTaskDefinitionId,
+               log.user_task_instance_id as userTaskInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.task_name as userTaskName,
+               log.assignment_type as assignmentType,
+               users.user_id
+          FROM Task_Instance_Assignment_Log log
+     LEFT JOIN Task_Instance_Assignment_Users_Log users ON users.task_instance_assignment_log_id = log.id
+         WHERE log.user_task_instance_id = :userTaskInstanceId
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllUserTaskInstanceAttachments"
+		result-set-mapping="UserTaskInstanceAttachmentTOMapping">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.event_user as eventUser,
+               log.user_task_definition_id as userTaskDefinitionId,
+               log.user_task_instance_id as userTaskInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.attachment_id as attachmentId,
+               log.attachment_name as attachmentName,
+               log.attachment_uri as attachmentURI,
+               log.event_type as eventType
+          FROM Task_Instance_Attachment_Log log
+     LEFT JOIN Task_Instance_Attachment_Log log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
+                                                  AND log.attachment_id = log_newer.attachment_id 
+                                                  AND log_newer.event_date &lt; log_newer.event_date
+         WHERE log_newer.event_id IS NULL AND log.user_task_instance_id = :userTaskInstanceId
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllUserTaskInstanceComment"
+		result-set-mapping="UserTaskInstanceCommentTOMapping">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.user_task_definition_id as userTaskDefinitionId,
+               log.user_task_instance_id as userTaskInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.comment_id as commentId,
+               log.comment_content as commentContent,
+               log.event_type as eventType
+          FROM Task_Instance_Comment_Log log
+     LEFT JOIN Task_Instance_Comment_Log log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
+                                               AND log.comment_id = log_newer.comment_id 
+                                               AND log_newer.event_date &lt; log_newer.event_date
+         WHERE log_newer.event_id IS NULL AND log.user_task_instance_id = :userTaskInstanceId
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllUserTaskInstanceDeadline">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.user_task_definition_id as userTaskDefinitionId,
+               log.user_task_instance_id as userTaskInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.event_type as eventType,
+               notification.property_name as propertyName,
+               notification.property_value as propertyValue 
+          FROM Task_Instance_Deadline_Log log
+     LEFT JOIN TaskInstanceDeadlineNotificationLog notification ON log.id = notification.task_instance_deadline_log_id
+         WHERE log.user_task_instance_id = :userTaskInstanceId
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+	<named-native-query
+		name="GetAllUserTaskInstanceVariable"
+		result-set-mapping="UserTaskInstanceVariableTOMapping">
+		<query>
+        SELECT log.event_id as eventId,
+               log.event_date as eventDate,
+               log.event_user as eventUser,
+               log.user_task_definition_id as userTaskDefinitionId,
+               log.user_task_instance_id as userTaskInstanceId,
+               log.process_instance_id as processInstanceId,
+               log.business_key as businessKey,
+               log.variable_id as variableId,
+               log.variable_name as variableName,
+               log.variable_value as variableValue,
+               log.variable_type as variableType
+          FROM Task_Instance_Variable_Log log
+     LEFT JOIN Task_Instance_Variable_Log log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
+                                             AND log.variable_id = log_newer.variable_id 
+                                             AND log.variable_type = log_newer.variable_type 
+                                             AND log.event_date &lt; log_newer.event_date
+         WHERE log_newer.event_id IS NULL AND log.user_task_instance_id = :userTaskInstanceId
+    </query>
+		<!-- hint name="org.hibernate.timeout" value="200"/ -->
+	</named-native-query>
+
+
+
+	<sql-result-set-mapping
+		name="UserTaskInstanceStateTOMapping">
+		<constructor-result
+			target-class="org.kie.kogito.app.audit.graphql.type.UserTaskInstanceStateTO">
+			<column name="eventId" />
+			<column name="eventDate" class="java.util.Date" />
+			<column name="userTaskDefinitionId" />
+			<column name="userTaskInstanceId" />
+			<column name="processInstanceId" />
+			<column name="businessKey" />
+			<column name="taskId" />
+			<column name="name" />
+			<column name="description" />
+			<column name="actualUser" />
+			<column name="state" />
+			<column name="nodeDefinitionId" />
+			<column name="nodeInstanceId" />
+			<column name="eventType" />
+		</constructor-result>
+	</sql-result-set-mapping>
+
+	<sql-result-set-mapping
+		name="UserTaskInstanceVariableTOMapping">
+		<constructor-result
+			target-class="org.kie.kogito.app.audit.graphql.type.UserTaskInstanceVariableTO">
+			<column name="eventId" />
+			<column name="eventDate" class="java.util.Date" />
+			<column name="eventUser" />
+			<column name="userTaskDefinitionId" />
+			<column name="userTaskInstanceId" />
+			<column name="processInstanceId" />
+			<column name="businessKey" />
+			<column name="variableId" />
+			<column name="variableName" />
+			<column name="variableValue" />
+			<column name="variableType" />
+		</constructor-result>
+	</sql-result-set-mapping>
+
+	<sql-result-set-mapping
+		name="UserTaskInstanceAssignmentTOMapping">
+		<constructor-result
+			target-class="org.kie.kogito.app.audit.graphql.type.UserTaskInstanceAssignmentTO">
+			<column name="eventId" />
+			<column name="eventDate" class="java.util.Date" />
+			<column name="eventUser" />
+			<column name="userTaskDefinitionId" />
+			<column name="userTaskInstanceId" />
+			<column name="processInstanceId" />
+			<column name="businessKey" />
+			<column name="userTaskName" />
+			<column name="assignmentType" />
+		</constructor-result>
+	</sql-result-set-mapping>
+
+	<sql-result-set-mapping
+		name="UserTaskInstanceAttachmentTOMapping">
+		<constructor-result
+			target-class="org.kie.kogito.app.audit.graphql.type.UserTaskInstanceAttachmentTO">
+			<column name="eventId" />
+			<column name="eventDate" class="java.util.Date" />
+			<column name="eventUser" />
+			<column name="userTaskDefinitionId" />
+			<column name="userTaskInstanceId" />
+			<column name="processInstanceId" />
+			<column name="businessKey" />
+			<column name="attachmentId" />
+			<column name="attachmentName" />
+			<column name="attachmentURI" />
+			<column name="eventType" />
+		</constructor-result>
+	</sql-result-set-mapping>
+
+	<sql-result-set-mapping
+		name="UserTaskInstanceCommentTOMapping">
+		<constructor-result
+			target-class="org.kie.kogito.app.audit.graphql.type.UserTaskInstanceCommentTO">
+			<column name="eventId" />
+			<column name="eventDate" class="java.util.Date" />
+			<column name="userTaskDefinitionId" />
+			<column name="userTaskInstanceId" />
+			<column name="processInstanceId" />
+			<column name="businessKey" />
+			<column name="commentId" />
+			<column name="commentContent" />
+			<column name="eventType" />
+		</constructor-result>
+	</sql-result-set-mapping>
+
+	<sql-result-set-mapping
+		name="UserTaskInstanceDeadlineTOMapping">
+		<constructor-result
+			target-class="org.kie.kogito.app.audit.graphql.type.UserTaskInstanceDeadlineTO">
+			<column name="eventId" />
+			<column name="eventDate" class="java.util.Date" />
+			<column name="userTaskDefinitionId" />
+			<column name="userTaskInstanceId" />
+			<column name="processInstanceId" />
+			<column name="businessKey" />
+			<column name="eventType" />
+		</constructor-result>
+	</sql-result-set-mapping>
+	
+	
+
+    <sql-result-set-mapping name="JobExecutionTO">
+        <constructor-result
+            target-class="org.kie.kogito.app.audit.graphql.type.JobExecutionTO">
+            <column name="jobId" />
+            <column name="expirationTime" class="java.util.Date" />
+            <column name="priority" />
+            <column name="processInstanceId" />
+            <column name="nodeInstanceId" />
+            <column name="repeatInterval" />
+            <column name="repeatLimit" />
+            <column name="scheduledId" />
+            <column name="retries" />
+            <column name="status" />
+            <column name="executionCounter" />
+            <column name="eventDate" class="java.util.Date" />
+        </constructor-result>
+    </sql-result-set-mapping>
+    
+        <!-- process instance mapping -->
+    <sql-result-set-mapping
+        name="ProcessInstanceStateTOMapping">
+        <constructor-result
+            target-class="org.kie.kogito.app.audit.graphql.type.ProcessInstanceStateTO">
+            <column name="eventId" />
+            <column name="eventDate" class="java.util.Date" />
+            <column name="processType" />
+            <column name="processId" />
+            <column name="processVersion" />
+            <column name="parentProcessInstanceId" />
+            <column name="rootProcessId" />
+            <column name="rootProcessInstanceId" />
+            <column name="processInstanceId" />
+            <column name="businessKey" />
+            <column name="eventType" />
+            <column name="outcome" />
+            <column name="state" />
+            <column name="slaDueDate" class="java.util.Date" />
+        </constructor-result>
+    </sql-result-set-mapping>
+
+
+    <sql-result-set-mapping
+        name="ProcessInstanceErrorTOMapping">
+        <constructor-result
+            target-class="org.kie.kogito.app.audit.graphql.type.ProcessInstanceErrorTO">
+            <column name="eventId" />
+            <column name="eventDate" class="java.util.Date" />
+            <column name="processType" />
+            <column name="processId" />
+            <column name="processVersion" />
+            <column name="parentProcessInstanceId" />
+            <column name="rootProcessId" />
+            <column name="rootProcessInstanceId" />
+            <column name="processInstanceId" />
+            <column name="businessKey" />
+            <column name="errorMessage" />
+            <column name="nodeDefinitionId" />
+            <column name="nodeInstanceId" />
+        </constructor-result>
+    </sql-result-set-mapping>
+
+    <sql-result-set-mapping
+        name="ProcessInstanceNodeTOMapping">
+        <constructor-result
+            target-class="org.kie.kogito.app.audit.graphql.type.ProcessInstanceNodeTO">
+            <column name="eventId" />
+            <column name="eventDate" class="java.util.Date" />
+            <column name="processType" />
+            <column name="processId" />
+            <column name="processVersion" />
+            <column name="parentProcessInstanceId" />
+            <column name="rootProcessId" />
+            <column name="rootProcessInstanceId" />
+            <column name="processInstanceId" />
+            <column name="businessKey" />
+            <column name="eventType" />
+            <column name="nodeType" />
+            <column name="nodeName" />
+            <column name="nodeInstanceId" />
+            <column name="connection" />
+            <column name="workItemId" />
+            <column name="slaDueDate" class="java.util.Date" />
+            <column name="eventData" />
+        </constructor-result>
+    </sql-result-set-mapping>
+
+    <sql-result-set-mapping
+        name="ProcessInstanceVariableTOMapping">
+        <constructor-result
+            target-class="org.kie.kogito.app.audit.graphql.type.ProcessInstanceVariableTO">
+            <column name="eventId" />
+            <column name="eventDate" class="java.util.Date" />
+            <column name="processType" />
+            <column name="processId" />
+            <column name="processVersion" />
+            <column name="parentProcessInstanceId" />
+            <column name="rootProcessId" />
+            <column name="rootProcessInstanceId" />
+            <column name="processInstanceId" />
+            <column name="businessKey" />
+            <column name="variableId" />
+            <column name="variableName" />
+            <column name="variableValue" />
+        </constructor-result>
+    </sql-result-set-mapping>
+</entity-mappings>
