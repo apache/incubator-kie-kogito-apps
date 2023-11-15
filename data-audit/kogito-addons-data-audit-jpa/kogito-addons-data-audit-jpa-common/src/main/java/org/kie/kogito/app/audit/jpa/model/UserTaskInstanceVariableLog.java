@@ -30,7 +30,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "TaskInstanceVariableLog")
+@Table(name = "Task_Instance_Variable_Log")
 @SequenceGenerator(name = "taskInstanceVariableLogIdSeq", sequenceName = "TASK_INSTANCE_VARIABLE_LOG_ID_SEQ")
 public class UserTaskInstanceVariableLog extends AbstractUserTaskInstanceLog {
 

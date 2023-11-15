@@ -30,7 +30,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "TaskInstanceAttachmentLog")
+@Table(name = "Task_Instance_Attachment_Log")
 @SequenceGenerator(name = "taskInstanceAttachmentLogIdSeq", sequenceName = "TASK_INSTANCE_ATTACHMENT_LOG_ID_SEQ")
 public class UserTaskInstanceAttachmentLog extends AbstractUserTaskInstanceLog {
 

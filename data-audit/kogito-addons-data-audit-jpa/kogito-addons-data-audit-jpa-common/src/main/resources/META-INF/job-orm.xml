@@ -28,8 +28,8 @@
 	              o1.status as status, 
 	              o1.execution_counter as executionCounter,  
 	              o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL AND o1.status = 'SCHEDULED'
         </query>
 	</named-native-query>
@@ -51,8 +51,8 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL AND o1.job_id = :jobId
         </query>
 	</named-native-query>
@@ -73,7 +73,7 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
+              FROM Job_Execution_Log o1 
              WHERE o1.job_id = :jobId
           ORDER BY o1.event_date DESC
         </query>
@@ -96,7 +96,7 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
+              FROM Job_Execution_Log o1 
              WHERE o1.process_instance_id = :processInstanceId
           ORDER BY o1.event_date DESC
         </query>
@@ -118,8 +118,8 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL AND o1.status IN ('SCHEDULED', 'RETRY')
         </query>
 	</named-native-query>
@@ -141,8 +141,8 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL AND o1.status IN ('SCHEDULED')
         </query>
 	</named-native-query>
@@ -163,8 +163,8 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL AND o1.status IN ('RETRY', 'ERROR')
         </query>
 	</named-native-query>
@@ -186,8 +186,8 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL 
           ORDER BY o1.event_date DESC
         </query>
@@ -209,8 +209,8 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL AND o1.status = 'EXECUTED'
         </query>
 	</named-native-query>
@@ -231,8 +231,8 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL AND o1.status = 'ERROR'
         </query>
 	</named-native-query>
@@ -253,8 +253,8 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL AND o1.status = 'CANCELED'
         </query>
 	</named-native-query>
@@ -276,8 +276,8 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL AND o1.status IN (:status) 
           ORDER BY o1.event_date DESC
         </query>
@@ -299,8 +299,8 @@
                   o1.status as status, 
                   o1.execution_counter as executionCounter,  
                   o1.event_date as eventDate
-              FROM JobExecutionLog o1 
-              LEFT JOIN JobExecutionLog o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
+              FROM Job_Execution_Log o1 
+              LEFT JOIN Job_Execution_Log o2 ON o1.job_id = o2.job_id AND o1.event_date &lt; o2.event_date 
              WHERE o2.job_id IS NULL AND o1.process_instance_id = :processInstanceId
           ORDER BY o1.event_date DESC
         </query>

@@ -34,7 +34,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "ProcessInstanceNodeLog")
+@Table(name = "Process_Instance_Node_Log")
 @SequenceGenerator(name = "processInstanceNodeLogIdSeq", sequenceName = "PROCESS_INSTANCE_NODE_LOG_ID_SEQ")
 public class ProcessInstanceNodeLog extends AbstractProcessInstanceLog {
 

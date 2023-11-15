@@ -32,7 +32,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "JobExecutionLog")
+@Table(name = "Job_Execution_Log")
 @SequenceGenerator(name = "jobExecutionHistoryIdSeq", sequenceName = "JOB_EXECUTION_HISTORY_ID_SEQ")
 public class JobExecutionLog {
 

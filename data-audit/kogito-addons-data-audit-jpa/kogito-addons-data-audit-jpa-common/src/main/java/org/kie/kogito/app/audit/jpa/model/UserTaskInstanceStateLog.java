@@ -28,7 +28,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "TaskInstanceStateLog")
+@Table(name = "Task_Instance_State_Log")
 @SequenceGenerator(name = "taskInstanceStateLogIdSeq", sequenceName = "TASK_INSTANCE_STATE_LOG_ID_SEQ")
 public class UserTaskInstanceStateLog extends AbstractUserTaskInstanceLog {
 

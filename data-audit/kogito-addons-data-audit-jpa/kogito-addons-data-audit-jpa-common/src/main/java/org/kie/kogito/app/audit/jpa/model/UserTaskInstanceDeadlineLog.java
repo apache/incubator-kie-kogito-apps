@@ -35,7 +35,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "TaskInstanceDeadlineLog")
+@Table(name = "Task_Instance_Deadline_Log")
 @SequenceGenerator(name = "taskInstanceDeadlineLogIdSeq", sequenceName = "TASK_INSTANCE_DEADLINE_LOG_ID_SEQ")
 public class UserTaskInstanceDeadlineLog extends AbstractUserTaskInstanceLog {
 

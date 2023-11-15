@@ -24,8 +24,8 @@
 		       log.node_definition_id as nodeDefinitionId,
 		       log.node_instance_id as nodeInstanceId,
 		       log.event_type as eventType
-		  FROM TaskInstanceStateLog log
-     LEFT JOIN TaskInstanceStateLog log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
+		  FROM Task_Instance_State_Log log
+     LEFT JOIN Task_Instance_State_Log log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
                                              AND log_newer.event_date &lt; log_newer.event_date
          WHERE log_newer.event_id IS NULL
     </query>
@@ -44,8 +44,8 @@
 			   log.task_name as userTaskName,
 			   log.assignment_type as assignmentType,
 			   users.user_id
-		  FROM TaskInstanceAssignmentLog log
-     LEFT JOIN TaskInstanceAssignmentUsersLog users ON users.task_instance_assignment_log_id = log.id
+		  FROM Task_Instance_Assignment_Log log
+     LEFT JOIN Task_Instance_Assignment_Users_Log users ON users.task_instance_assignment_log_id = log.id
          WHERE log.user_task_instance_id = :userTaskInstanceId
     </query>
     <!-- hint name="org.hibernate.timeout" value="200"/ -->
@@ -64,8 +64,8 @@
 			   log.attachment_name as attachmentName,
 			   log.attachment_uri as attachmentURI,
 			   log.event_type as eventType
-		  FROM TaskInstanceAttachmentLog log
-     LEFT JOIN TaskInstanceAttachmentLog log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
+		  FROM Task_Instance_Attachment_Log log
+     LEFT JOIN Task_Instance_Attachment_Log log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
      											  AND log.attachment_id = log_newer.attachment_id 
                                                   AND log_newer.event_date &lt; log_newer.event_date
          WHERE log_newer.event_id IS NULL AND log.user_task_instance_id = :userTaskInstanceId
@@ -84,8 +84,8 @@
 			   log.comment_id as commentId,
 			   log.comment_content as commentContent,
 			   log.event_type as eventType
-		  FROM TaskInstanceCommentLog log
-     LEFT JOIN TaskInstanceCommentLog log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
+		  FROM Task_Instance_Comment_Log log
+     LEFT JOIN Task_Instance_Comment_Log log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
      										   AND log.comment_id = log_newer.comment_id 
                                                AND log_newer.event_date &lt; log_newer.event_date
          WHERE log_newer.event_id IS NULL AND log.user_task_instance_id = :userTaskInstanceId
@@ -104,7 +104,7 @@
 			   log.event_type as eventType,
 			   notification.property_name as propertyName,
 			   notification.property_value as propertyValue 
-		  FROM TaskInstanceDeadlineLog log
+		  FROM Task_Instance_Deadline_Log log
      LEFT JOIN TaskInstanceDeadlineNotificationLog notification ON log.id = notification.task_instance_deadline_log_id
          WHERE log.user_task_instance_id = :userTaskInstanceId
     </query>
@@ -124,8 +124,8 @@
 			   log.variable_name as variableName,
 			   log.variable_value as variableValue,
 			   log.variable_type as variableType
-		  FROM TaskInstanceVariableLog log
-     LEFT JOIN TaskInstanceVariableLog log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
+		  FROM Task_Instance_Variable_Log log
+     LEFT JOIN Task_Instance_Variable_Log log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 
      										 AND log.variable_id = log_newer.variable_id 
      										 AND log.variable_type = log_newer.variable_type 
                                              AND log.event_date &lt; log_newer.event_date

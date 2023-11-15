@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import static org.kie.kogito.app.audit.jpa.model.ModelConstants.ERROR_LOG_LENGTH;
 
 @Entity
-@Table(name = "ProcessInstanceErrorLog")
+@Table(name = "Process_Instance_Error_Log")
 @SequenceGenerator(name = "processInstanceErrorHistorySeq", sequenceName = "PROCESS_INSTANCE_ERROR_LOG_SEQ_ID")
 public class ProcessInstanceErrorLog extends AbstractProcessInstanceLog {
 

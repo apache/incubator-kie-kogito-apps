@@ -39,7 +39,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "ProcessInstanceStateLog")
+@Table(name = "Process_Instance_State_Log")
 @SequenceGenerator(name = "processInstanceStateLogIdSeq", sequenceName = "PROCESS_INSTANCE_STATE_LOG_ID_SEQ")
 public class ProcessInstanceStateLog extends AbstractProcessInstanceLog {
 
@@ -73,7 +73,7 @@ public class ProcessInstanceStateLog extends AbstractProcessInstanceLog {
     private Date slaDueDate;
 
     @ElementCollection
-    @CollectionTable(name = "ProcessInstanceStateRolesLog", joinColumns = @JoinColumn(name = "process_instance_state_log_id", foreignKey = @ForeignKey(name = "fk_process_instance_state_pid")))
+    @CollectionTable(name = "Process_Instance_State_Roles_Log", joinColumns = @JoinColumn(name = "process_instance_state_log_id", foreignKey = @ForeignKey(name = "fk_process_instance_state_pid")))
     @Column(name = "role")
     private Set<String> roles;
 

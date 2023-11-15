@@ -32,7 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @Entity
-@Table(name = "ProcessInstanceVariableLog")
+@Table(name = "Process_Instance_Variable_Log")
 @SequenceGenerator(name = "processInstanceVariableLogIdSeq", sequenceName = "PROCESS_INSTANCE_VARIABLE_LOG_ID_SEQ")
 public class ProcessInstanceVariableLog extends AbstractProcessInstanceLog {
 

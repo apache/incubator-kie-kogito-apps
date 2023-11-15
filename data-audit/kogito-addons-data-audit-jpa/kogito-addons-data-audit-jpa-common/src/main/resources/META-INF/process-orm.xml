@@ -26,9 +26,9 @@
         	   log.state as state,
         	   log.sla_due_date as slaDueDate,
                roles.role as role
-          FROM ProcessInstanceStateLog log
-     LEFT JOIN ProcessInstanceStateLog log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
-     LEFT JOIN ProcessInstanceStateRolesLog roles ON log.id = roles.process_instance_state_log_id 
+          FROM Process_Instance_State_Log log
+     LEFT JOIN Process_Instance_State_Log log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
+     LEFT JOIN Process_Instance_State_Roles_Log roles ON log.id = roles.process_instance_state_log_id 
          WHERE log_newer.event_id IS NULL
       ORDER BY log.event_date DESC
     </query>
@@ -52,9 +52,9 @@
                log.state as state,
                log.sla_due_date as slaDueDate,
                roles.role as role
-          FROM ProcessInstanceStateLog log
-     LEFT JOIN ProcessInstanceStateLog log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
-     LEFT JOIN ProcessInstanceStateRolesLog roles ON log.id = roles.process_instance_state_log_id 
+          FROM Process_Instance_State_Log log
+     LEFT JOIN Process_Instance_State_Log log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
+     LEFT JOIN Process_Instance_State_Roles_Log roles ON log.id = roles.process_instance_state_log_id 
          WHERE log_newer.event_id IS NULL AND log.state = :status
       ORDER BY log.event_date DESC
     </query>
@@ -78,9 +78,9 @@
                log.state as state,
                log.sla_due_date as slaDueDate,
                roles.role as role
-          FROM ProcessInstanceStateLog log
-     LEFT JOIN ProcessInstanceStateLog log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
-     LEFT JOIN ProcessInstanceStateRolesLog roles ON log.id = roles.process_instance_state_log_id 
+          FROM Process_Instance_State_Log log
+     LEFT JOIN Process_Instance_State_Log log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id
+     LEFT JOIN Process_Instance_State_Roles_Log roles ON log.id = roles.process_instance_state_log_id 
          WHERE log_newer.event_id IS NULL AND log.process_id = :processId
       ORDER BY log.event_date DESC
     </query>
@@ -105,8 +105,8 @@
                log.state as state,
                log.sla_due_date as slaDueDate,
                roles.role as role
-          FROM ProcessInstanceStateLog log
-     LEFT JOIN ProcessInstanceStateRolesLog roles ON log.id = roles.process_instance_state_log_id 
+          FROM Process_Instance_State_Log log
+     LEFT JOIN Process_Instance_State_Roles_Log roles ON log.id = roles.process_instance_state_log_id 
          WHERE log.process_instance_id = :processInstanceId
       ORDER BY log.event_date DESC
     </query>
@@ -130,8 +130,8 @@
                log.state as state,
                log.sla_due_date as slaDueDate,
                roles.role as role
-          FROM ProcessInstanceStateLog log
-     LEFT JOIN ProcessInstanceStateRolesLog roles ON log.id = roles.process_instance_state_log_id 
+          FROM Process_Instance_State_Log log
+     LEFT JOIN Process_Instance_State_Roles_Log roles ON log.id = roles.process_instance_state_log_id 
          WHERE log.business_key = :businessKey
       ORDER BY log.event_date DESC
     </query>
@@ -160,8 +160,8 @@
 			   log.work_item_id as workItemId,
 			   log.sla_due_date as slaDueDate,
 			   log.event_data as eventData
-          FROM ProcessInstanceNodeLog log
-     LEFT JOIN ProcessInstanceNodeLog log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id AND log.node_instance_id = log_newer.node_instance_id 
+          FROM Process_Instance_Node_Log log
+     LEFT JOIN Process_Instance_Node_Log log_newer ON log.event_date &lt; log_newer.event_date AND log.process_instance_id = log_newer.process_instance_id AND log.node_instance_id = log_newer.node_instance_id 
          WHERE log_newer.event_id IS NULL AND log.process_instance_id = :processInstanceId
       ORDER BY log.event_date DESC
     </query>
@@ -185,7 +185,7 @@
         	   log.error_message as errorMessage,
         	   log.node_definition_id as nodeDefinitionId,
         	   log.node_instance_id as nodeInstanceId
-          FROM ProcessInstanceErrorLog log
+          FROM Process_Instance_Error_Log log
          WHERE log.process_instance_id = :processInstanceId
       ORDER BY log.event_date DESC
     </query>
@@ -209,8 +209,8 @@
 			   log.variable_id as variableId,
 			   log.variable_name as variableName,
 			   log.variable_value as variableValue    
-          FROM ProcessInstanceVariableLog log
-     LEFT JOIN ProcessInstanceVariableLog log_newer ON log.event_date &lt; log_newer.event_date 
+          FROM Process_Instance_Variable_Log log
+     LEFT JOIN Process_Instance_Variable_Log log_newer ON log.event_date &lt; log_newer.event_date 
      											   AND log.process_instance_id = log_newer.process_instance_id 
      											   AND log.variable_id = log_newer.variable_id      											    
          WHERE log_newer.event_id IS NULL AND log.process_instance_id = :processInstanceId
@@ -236,7 +236,7 @@
                log.variable_id as variableId,
                log.variable_name as variableName,
                log.variable_value as variableValue    
-          FROM ProcessInstanceVariableLog log
+          FROM Process_Instance_Variable_Log log
          WHERE log.process_instance_id = :processInstanceId
       ORDER BY log.variable_id ASC, log.event_date DESC
     </query>
