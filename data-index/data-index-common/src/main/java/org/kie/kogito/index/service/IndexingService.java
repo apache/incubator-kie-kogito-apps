@@ -69,6 +69,7 @@ public class IndexingService {
     Instance<UserTaskInstanceEventMerger> userTaskInstanceMergers;
 
     public void indexProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
+        LOGGER.info("Kafka Process Instance: {}", event);
         Optional<ProcessInstance> found = Optional.ofNullable(manager.getProcessInstancesCache().get(event.getKogitoProcessInstanceId()));
         ProcessInstance pi;
         if (found.isEmpty()) {
@@ -97,6 +98,7 @@ public class IndexingService {
     }
 
     public <T> void indexUserTaskInstanceEvent(UserTaskInstanceDataEvent<T> event) {
+        LOGGER.info("Kafka User Task Instance: {}", event);
         Optional<UserTaskInstance> found = Optional.ofNullable(manager.getUserTaskInstancesCache().get(event.getKogitoUserTaskInstanceId()));
         UserTaskInstance ut;
         if (found.isEmpty()) {
@@ -120,6 +122,7 @@ public class IndexingService {
     }
 
     public void indexModel(ObjectNode updateData) {
+        LOGGER.info("Kafka domain model: {}", updateData);
         String processId = updateData.remove(PROCESS_ID).asText();
         Storage<String, ObjectNode> cache = manager.getDomainModelCache(processId);
 
