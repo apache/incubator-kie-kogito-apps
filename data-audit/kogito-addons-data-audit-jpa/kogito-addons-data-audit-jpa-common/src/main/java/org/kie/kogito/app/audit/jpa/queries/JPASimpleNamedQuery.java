@@ -24,16 +24,18 @@ import java.util.Map;
 import javax.persistence.EntityManager;
 
 import org.kie.kogito.app.audit.api.DataAuditContext;
+import org.kie.kogito.app.audit.jpa.queries.mapper.PojoMapper;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQuery;
 
 import graphql.schema.DataFetchingEnvironment;
 
-public class JPASimpleNamedQuery<T> extends JPAAbstractQuery implements GraphQLSchemaQuery<List<T>> {
+public class JPASimpleNamedQuery<T> extends JPAAbstractQuery<T> implements GraphQLSchemaQuery<List<T>> {
 
     private String name;
     private String namedQuery;
     private Class<T> clazz;
-
+    private PojoMapper<T> mapper;
+    
     public JPASimpleNamedQuery(String name, Class<T> clazz) {
         this(name, name, clazz);
     }
@@ -42,6 +44,7 @@ public class JPASimpleNamedQuery<T> extends JPAAbstractQuery implements GraphQLS
         this.name = name;
         this.namedQuery = namedQuery;
         this.clazz = clazz;
+        this.mapper = new PojoMapper<T>(this.clazz);
     }
 
     @Override
@@ -56,9 +59,9 @@ public class JPASimpleNamedQuery<T> extends JPAAbstractQuery implements GraphQLS
         EntityManager entityManager = context.getContext();
 
         if (arguments.isEmpty()) {
-            return executeWithNamedQueryEntityManager(entityManager, namedQuery, clazz);
+            return mapper.produce(executeWithNamedQueryEntityManager(entityManager, namedQuery));
         } else {
-            return executeWithNamedQueryEntityManagerAndArguments(entityManager, namedQuery, clazz, arguments);
+            return mapper.produce(executeWithNamedQueryEntityManagerAndArguments(entityManager, namedQuery, arguments));
         }
     }
 

@@ -43,7 +43,7 @@ public class JPAGraphQLSchemaProcessInstancesQueryProvider implements GraphQLSch
                 new JPASimpleNamedQuery<ProcessInstanceNodeTO>("GetAllProcessInstancesNodeByProcessInstanceId", ProcessInstanceNodeTO.class),
                 new JPASimpleNamedQuery<ProcessInstanceErrorTO>("GetAllProcessInstancesErrorByProcessInstanceId", ProcessInstanceErrorTO.class),
                 new JPASimpleNamedQuery<ProcessInstanceVariableTO>("GetAllProcessInstancesVariableByProcessInstanceId", ProcessInstanceVariableTO.class),
-                new JPAComplexNamedQuery<ProcessInstanceVariableHistoryTO, ProcessInstanceVariableTO>("GetAllProcessInstancesVariableHistoryByProcessInstanceId",
+                new JPAComplexNamedQuery<ProcessInstanceVariableHistoryTO, Object[]>("GetAllProcessInstancesVariableHistoryByProcessInstanceId",
                         new ProcessInstanceVariableHistoryTOMapper()));
 
     }

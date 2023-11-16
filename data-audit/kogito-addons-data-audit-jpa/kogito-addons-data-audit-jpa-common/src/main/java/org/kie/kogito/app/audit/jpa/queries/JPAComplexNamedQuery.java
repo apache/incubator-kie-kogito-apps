@@ -28,7 +28,7 @@ import org.kie.kogito.app.audit.spi.GraphQLSchemaQuery;
 
 import graphql.schema.DataFetchingEnvironment;
 
-public class JPAComplexNamedQuery<T, R> extends JPAAbstractQuery implements GraphQLSchemaQuery<List<R>> {
+public class JPAComplexNamedQuery<T, R> extends JPAAbstractQuery<R> implements GraphQLSchemaQuery<List<T>> {
 
     private String name;
     private String namedQuery;
@@ -50,7 +50,7 @@ public class JPAComplexNamedQuery<T, R> extends JPAAbstractQuery implements Grap
     }
 
     @Override
-    public List<R> fetch(DataFetchingEnvironment dataFetchingEnvironment) {
+    public List<T> fetch(DataFetchingEnvironment dataFetchingEnvironment) {
         Map<String, Object> arguments = dataFetchingEnvironment.getArguments();
         DataAuditContext context = dataFetchingEnvironment.getLocalContext();
         EntityManager entityManager = context.getContext();

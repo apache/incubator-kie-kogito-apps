@@ -30,9 +30,17 @@ import org.kie.kogito.app.audit.jpa.queries.DataMapper;
 
 import graphql.com.google.common.base.Objects;
 
-public class ProcessInstanceVariableHistoryTOMapper implements DataMapper<ProcessInstanceVariableHistoryTO, ProcessInstanceVariableTO> {
+public class ProcessInstanceVariableHistoryTOMapper implements DataMapper<ProcessInstanceVariableHistoryTO, Object[]> {
+
+    PojoMapper<ProcessInstanceVariableTO> mapper;
+    
+    public ProcessInstanceVariableHistoryTOMapper() {
+        mapper = new PojoMapper<>(ProcessInstanceVariableTO.class);
+    }
+    
     @Override
-    public List<ProcessInstanceVariableHistoryTO> produce(List<ProcessInstanceVariableTO> data) {
+    public List<ProcessInstanceVariableHistoryTO> produce(List<Object[]> rows) {
+        List<ProcessInstanceVariableTO> data = mapper.produce(rows);
         List<ProcessInstanceVariableHistoryTO> transformedData = new ArrayList<>();
         ProcessInstanceVariableHistoryTO current = null;
         Object currentIndex = null;
