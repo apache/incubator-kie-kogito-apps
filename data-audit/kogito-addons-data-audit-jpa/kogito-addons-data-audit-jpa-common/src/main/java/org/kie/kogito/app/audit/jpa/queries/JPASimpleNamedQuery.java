@@ -35,7 +35,7 @@ public class JPASimpleNamedQuery<T> extends JPAAbstractQuery<T> implements Graph
     private String namedQuery;
     private Class<T> clazz;
     private PojoMapper<T> mapper;
-    
+
     public JPASimpleNamedQuery(String name, Class<T> clazz) {
         this(name, name, clazz);
     }

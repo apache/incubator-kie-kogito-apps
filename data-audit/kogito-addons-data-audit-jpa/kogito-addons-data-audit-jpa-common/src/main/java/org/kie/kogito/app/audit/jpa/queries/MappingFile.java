@@ -35,7 +35,9 @@ public class MappingFile {
     }
 
     public static String findInFile(String file, EntityManager entityManager, String queryName) {
-        try (InputStream is = MappingFile.class.getClassLoader().getResourceAsStream(file)) {
+        ClassLoader cl = Thread.currentThread().getContextClassLoader();
+        cl = (cl == null) ? MappingFile.class.getClassLoader() : cl;
+        try (InputStream is = cl.getResourceAsStream(file)) {
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             // parse XML file
             DocumentBuilder db = dbf.newDocumentBuilder();

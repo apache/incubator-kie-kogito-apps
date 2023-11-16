@@ -33,11 +33,11 @@ import graphql.com.google.common.base.Objects;
 public class ProcessInstanceVariableHistoryTOMapper implements DataMapper<ProcessInstanceVariableHistoryTO, Object[]> {
 
     PojoMapper<ProcessInstanceVariableTO> mapper;
-    
+
     public ProcessInstanceVariableHistoryTOMapper() {
         mapper = new PojoMapper<>(ProcessInstanceVariableTO.class);
     }
-    
+
     @Override
     public List<ProcessInstanceVariableHistoryTO> produce(List<Object[]> rows) {
         List<ProcessInstanceVariableTO> data = mapper.produce(rows);
