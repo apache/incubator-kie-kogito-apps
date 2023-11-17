@@ -36,9 +36,6 @@ public class UserTaskInstanceStateLog extends AbstractUserTaskInstanceLog {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "taskInstanceStateLogIdSeq")
     private Long id;
 
-    @Column(name = "task_id")
-    private String taskId;
-
     private String name;
 
     private String description;
@@ -47,12 +44,6 @@ public class UserTaskInstanceStateLog extends AbstractUserTaskInstanceLog {
     private String actualUser;
 
     private String state;
-
-    @Column(name = "node_definition_id")
-    private String nodeDefinitionId;
-
-    @Column(name = "node_instance_id")
-    private String nodeInstanceId;
 
     @Column(name = "event_type")
     private String eventType;
@@ -63,14 +54,6 @@ public class UserTaskInstanceStateLog extends AbstractUserTaskInstanceLog {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
     }
 
     public String getName() {
@@ -97,14 +80,6 @@ public class UserTaskInstanceStateLog extends AbstractUserTaskInstanceLog {
         this.actualUser = actualUser;
     }
 
-    public String getNodeInstanceId() {
-        return nodeInstanceId;
-    }
-
-    public void setNodeInstanceId(String nodeInstanceId) {
-        this.nodeInstanceId = nodeInstanceId;
-    }
-
     public String getEventType() {
         return eventType;
     }
@@ -119,14 +94,6 @@ public class UserTaskInstanceStateLog extends AbstractUserTaskInstanceLog {
 
     public void setState(String state) {
         this.state = state;
-    }
-
-    public String getNodeDefinitionId() {
-        return nodeDefinitionId;
-    }
-
-    public void setNodeDefinitionId(String nodeDefinitionId) {
-        this.nodeDefinitionId = nodeDefinitionId;
     }
 
 }
