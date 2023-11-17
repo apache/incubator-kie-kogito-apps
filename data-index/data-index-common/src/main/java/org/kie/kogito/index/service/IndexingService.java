@@ -25,12 +25,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import org.eclipse.microprofile.faulttolerance.Retry;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.mapper.ProcessInstanceEventMerger;
@@ -70,32 +70,22 @@ public class IndexingService {
     @Inject
     Instance<UserTaskInstanceEventMerger> userTaskInstanceMergers;
 
+    //retry in case of rare but possible race condition during the insert for the first registry
+    @Retry(maxRetries = 3, delay = 300, jitter = 100, retryOn = ConcurrentModificationException.class)
     public void indexProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
-        //retry in case of rare but possible race condition during the insert for the first registry
-        ProcessInstance pi = executeWithRetry(event, this::handleProcessInstanceEvent, "indexing process instance");
+        ProcessInstance pi = handleProcessInstanceEvent(event);
 
         ProcessDefinition definition = pi.getDefinition();
 
+        handleProcessDefinition(definition);
+    }
+
+    @Retry(maxRetries = 3, delay = 300, jitter = 100, retryOn = ConcurrentModificationException.class)
+    public void handleProcessDefinition(ProcessDefinition definition) {
         if (definition != null && !manager.getProcessDefinitionsCache().containsKey(definition.getKey())) {
-            //retry in case of rare but possible race condition during the insert for the first registry
-            executeWithRetry(definition, this::handleProcessDefinition, "indexing process definition");
+            manager.getProcessDefinitionsCache().put(definition.getKey(), definition);
             LOGGER.debug("Stored Process Definition: {}", definition);
         }
-    }
-
-    private ProcessDefinition handleProcessDefinition(ProcessDefinition definition) {
-        return manager.getProcessDefinitionsCache().put(definition.getKey(), definition);
-    }
-
-    private <R, T> R executeWithRetry(T input, Function<T, R> toExecute, String logMessage) {
-        R response;
-        try {
-            response = toExecute.apply(input);
-        } catch (ConcurrentModificationException e) {
-            LOGGER.warn("Retrying {} for {} {}", logMessage, input, e.getMessage());
-            response = toExecute.apply(input);
-        }
-        return response;
     }
 
     private ProcessInstance handleProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
@@ -119,11 +109,9 @@ public class IndexingService {
         return pi;
     }
 
+    //retry in case of rare but possible race condition during the insert for the first registry
+    @Retry(maxRetries = 3, delay = 300, jitter = 100, retryOn = ConcurrentModificationException.class)
     public <T> void indexUserTaskInstanceEvent(UserTaskInstanceDataEvent<T> event) {
-        executeWithRetry(event, this::handleUserTaskEvent, "indexing user task");
-    }
-
-    private <T> UserTaskInstance handleUserTaskEvent(UserTaskInstanceDataEvent<T> event) {
         Optional<UserTaskInstance> found = Optional.ofNullable(manager.getUserTaskInstancesCache().get(event.getKogitoUserTaskInstanceId()));
         UserTaskInstance ut;
         if (found.isEmpty()) {
@@ -138,7 +126,7 @@ public class IndexingService {
         userTaskInstanceMergers.stream().filter(e -> e.accept(event)).findAny().ifPresent(e -> e.merge(ut, event));
         LOGGER.debug("Stored User Task Instance: {}", ut);
 
-        return manager.getUserTaskInstancesCache().put(ut.getId(), ut);
+        manager.getUserTaskInstancesCache().put(ut.getId(), ut);
     }
 
     public void indexJob(Job job) {

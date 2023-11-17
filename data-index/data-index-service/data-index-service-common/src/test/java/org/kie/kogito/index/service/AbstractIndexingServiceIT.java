@@ -27,11 +27,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -45,9 +48,6 @@ import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.index.test.TestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
@@ -86,6 +86,7 @@ import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdA
 import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdAndStarted;
 import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdAndState;
 import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdNoActualOwner;
+import static org.kie.kogito.index.test.TestUtils.PROCESS_VERSION;
 import static org.kie.kogito.index.test.TestUtils.getJobCloudEvent;
 import static org.kie.kogito.index.test.TestUtils.getProcessCloudEvent;
 import static org.kie.kogito.index.test.TestUtils.getUserTaskCloudEvent;
@@ -99,9 +100,6 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
 
     @Inject
     public DataIndexStorageService cacheService;
-
-    @Inject
-    IndexingService indexingService;
 
     @BeforeAll
     static void setup() {
@@ -289,18 +287,25 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
         String processInstanceId = UUID.randomUUID().toString();
         //indexing multiple events in parallel to the same process instance id
         for (int i = 0; i < max_instance_events; i++) {
-            addFutureEvent(futures, processId, processInstanceId, ACTIVE, executorService);
-            addFutureEvent(futures, processId, processInstanceId, PENDING, executorService);
-            addFutureEvent(futures, processId, processInstanceId, COMPLETED, executorService);
+            addFutureEvent(futures, processId, processInstanceId, ACTIVE, executorService, false);
+            addFutureEvent(futures, processId, processInstanceId, PENDING, executorService, false);
+            addFutureEvent(futures, processId, processInstanceId, ACTIVE, executorService, false);
+            addFutureEvent(futures, processId, processInstanceId, COMPLETED, executorService, true);
         }
         //wait for all futures to complete
-        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).get(30, TimeUnit.SECONDS);
+        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).get(10, TimeUnit.SECONDS);
+        ProcessInstanceStateDataEvent event = getProcessCloudEvent(processId, processInstanceId, COMPLETED, null, null, null, CURRENT_USER);
+        validateProcessDefinition(getProcessDefinitionByIdAndVersion(processId, PROCESS_VERSION), event);
+        validateProcessInstance(getProcessInstanceById(processInstanceId), event);
     }
 
-    private void addFutureEvent(List<CompletableFuture<Void>> futures, String processId, String processInstanceId, ProcessInstanceState state, ExecutorService executorService) {
+    private void addFutureEvent(List<CompletableFuture<Void>> futures, String processId, String processInstanceId, ProcessInstanceState state, ExecutorService executorService, boolean delay) {
         futures.add(CompletableFuture.runAsync(() -> {
+            if (delay) {
+                await().atLeast(5, TimeUnit.MILLISECONDS).untilTrue(new AtomicBoolean(true));
+            }
             ProcessInstanceStateDataEvent event = getProcessCloudEvent(processId, processInstanceId, state, null, null, null, CURRENT_USER);
-            indexingService.indexProcessInstanceEvent(event);
+            indexProcessCloudEvent(event);
         }, executorService));
     }
 

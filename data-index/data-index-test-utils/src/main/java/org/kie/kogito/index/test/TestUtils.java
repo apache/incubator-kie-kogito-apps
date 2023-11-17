@@ -113,7 +113,7 @@ public final class TestUtils {
                 .processName(getProcessName(processId))
                 .eventDate(new Date())
                 .state(status.ordinal())
-                .businessKey(getProcessName(processId))
+                .businessKey(processInstanceId)
                 .roles("admin")
                 .eventUser(identity)
                 .eventType(eventType)
