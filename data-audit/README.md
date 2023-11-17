@@ -1,6 +1,6 @@
 ### Data Audit subsystem
 
-This is the implementation of the Kogito Audit subystem. The subsystem allows to store the events from issued by
+This is the implementation of the Kogito Audit subystem. The subsystem allows to store events from issued by
 - process engine
 - user task
 - job service
@@ -33,7 +33,7 @@ Data Audit JPA «SpringBoot»: Provides the wiring between the specific implemen
 
 ## Queries
 
-The way to retrieve information from the data audit is to use GraphQL. This way we can abstract how the information is retrieved and allow different needs depending on the user.
+The way to retrieve information from the data audit is using GraphQL. This way we can abstract how the information is retrieved and allow different needs depending on the user.
 
 ## JPA implementation
 
@@ -44,17 +44,17 @@ The jpa implementation allows you to store those events to be stored in a databa
 There are two different extensions. Those who belong to the runtime to wire things and those which does not depends on the runtime
 
 Extension points depending on the runtime is:
-org.kie.kogito.app.audit.spi.DataAuditContextFactory: this allos to create context needed by a particular implementation
+org.kie.kogito.app.audit.spi.DataAuditContextFactory: this allows creating the context needed by a particular implementation.
 
 Extension points not depending on the runtime:
-org.kie.kogito.app.audit.spi.DataAuditStore: This is responsible to storange in certain way the data
+org.kie.kogito.app.audit.spi.DataAuditStore: This is responsible to store the data in certain way
 org.kie.kogito.app.audit.spi.GraphQLSchemaQuery<T>: This is responsible to execute a GraphQL query
 org.kie.kogito.app.audit.spi.GraphQLSchemaQueryProvider: this allow the subsystem to identify additional queries provided by the end user
 
 
 ## How to use in with Quarkus/Springboot
 
-You need to add two different dependencies to your project
+You need to add two different dependencies to your project.
 
         <dependency>
             <groupId>org.kie.kogito</groupId>
@@ -67,7 +67,7 @@ You need to add two different dependencies to your project
             <version>${version}</version>
         </dependency>
         
-The first dependency is related how to you want to deploy it. In this case as colocated/embedded service
+The first dependency is related how to you want to deploy it. In this case as collocated/embedded service
 The second dependency is which implementation you want to use.
 
 Each implementation might require additional dependencies. In our case for using JPA implementation we might require driver
