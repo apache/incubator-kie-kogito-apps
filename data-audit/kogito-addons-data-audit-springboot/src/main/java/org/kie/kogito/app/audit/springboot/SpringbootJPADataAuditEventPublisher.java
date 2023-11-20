@@ -31,7 +31,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class SpringbootJPADataAuditEventPublisher implements EventPublisher {
@@ -53,7 +52,7 @@ public class SpringbootJPADataAuditEventPublisher implements EventPublisher {
     }
 
     @Override
-    @Transactional
+
     public void publish(DataEvent<?> event) {
         if (event instanceof ProcessInstanceDataEvent) {
             LOGGER.debug("Processing process instance event {}", event);
