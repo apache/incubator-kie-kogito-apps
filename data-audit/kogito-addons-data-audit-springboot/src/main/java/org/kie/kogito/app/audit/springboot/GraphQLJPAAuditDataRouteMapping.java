@@ -26,6 +26,7 @@ import org.kie.kogito.app.audit.api.DataAuditQueryService;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,6 +38,7 @@ import graphql.ExecutionResult;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_PATH;
 
 @RestController
+@Transactional
 public class GraphQLJPAAuditDataRouteMapping {
 
     private DataAuditQueryService dataAuditQueryService;

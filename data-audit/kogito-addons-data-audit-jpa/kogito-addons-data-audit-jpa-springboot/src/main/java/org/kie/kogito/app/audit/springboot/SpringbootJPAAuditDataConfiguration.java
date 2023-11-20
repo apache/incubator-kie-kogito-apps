@@ -20,9 +20,11 @@ package org.kie.kogito.app.audit.springboot;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration(proxyBeanMethods = false)
 @EntityScan(basePackages = "org.kie.kogito.app.audit.jpa.model")
+@EnableTransactionManagement
 public class SpringbootJPAAuditDataConfiguration {
 
 }
