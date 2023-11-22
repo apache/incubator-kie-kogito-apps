@@ -600,7 +600,7 @@
 		<!-- hint name="org.hibernate.timeout" value="200"/ -->
 	</named-native-query>
 
-	<named-native-query name="GetAllUserTaskInstanceComment">
+	<named-native-query name="GetAllUserTaskInstanceComments">
 		<query>
 	        SELECT 
 	               log.event_id,
@@ -621,7 +621,7 @@
 		<!-- hint name="org.hibernate.timeout" value="200"/ -->
 	</named-native-query>
 
-	<named-native-query name="GetAllUserTaskInstanceDeadline">
+	<named-native-query name="GetAllUserTaskInstanceDeadlines">
 		<query>
 	        SELECT log.event_id as eventId,
 	               log.event_date as eventDate,
@@ -639,7 +639,7 @@
 		<!-- hint name="org.hibernate.timeout" value="200"/ -->
 	</named-native-query>
 
-	<named-native-query name="GetAllUserTaskInstanceVariable" >
+	<named-native-query name="GetAllUserTaskInstanceVariables" >
 		<query>
 	        SELECT 
 	               log.event_id,

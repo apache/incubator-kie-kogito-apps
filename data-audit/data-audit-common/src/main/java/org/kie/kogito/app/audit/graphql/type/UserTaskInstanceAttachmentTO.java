@@ -59,7 +59,9 @@ public class UserTaskInstanceAttachmentTO {
         this.businessKey = businessKey;
         this.attachmentId = attachmentId;
         this.attachmentName = attachmentName;
-        this.attachmentURI = URI.create(new String(attachmentURI));
+        if (attachmentURI != null) {
+            this.attachmentURI = URI.create(new String(attachmentURI));
+        }
         this.eventType = eventType;
     }
 

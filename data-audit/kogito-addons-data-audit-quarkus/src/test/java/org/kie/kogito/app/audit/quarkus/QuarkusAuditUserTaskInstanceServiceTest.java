@@ -111,8 +111,8 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
                 UserTaskInstanceAttachmentEventBody.EVENT_TYPE_ADDED);
         publisher.publish(attEvent);
 
-        attEvent = newUserTaskInstanceAttachmentEvent(uEvent, "eventUser", "att2", "attName2", URI.create("http://localhost:8080/att2"),
-                UserTaskInstanceAttachmentEventBody.EVENT_TYPE_ADDED);
+        attEvent = newUserTaskInstanceAttachmentEvent(uEvent, "eventUser", "att2", "attName2", null,
+                UserTaskInstanceAttachmentEventBody.EVENT_TYPE_DELETED);
         publisher.publish(attEvent);
 
         UserTaskInstanceCommentDataEvent commentEvent;
@@ -193,7 +193,7 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
     @Test
     public void testGetAllUserTaskInstanceComment() {
         String query =
-                "{ GetAllUserTaskInstanceComment (userTaskInstanceId : \\\"1\\\") { eventId, eventDate, userTaskDefinitionId, userTaskInstanceId, processInstanceId, businessKey, commentId, commentContent, eventType } }";
+                "{ GetAllUserTaskInstanceComments (userTaskInstanceId : \\\"1\\\") { eventId, eventDate, userTaskDefinitionId, userTaskInstanceId, processInstanceId, businessKey, commentId, commentContent, eventType } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -204,7 +204,7 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
                 .assertThat()
                 .statusCode(200)
                 .and()
-                .extract().path("data.GetAllUserTaskInstanceComment");
+                .extract().path("data.GetAllUserTaskInstanceComments");
 
         assertThat(data).hasSize(1);
 
@@ -213,7 +213,7 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
     @Test
     public void testGetAllUserTaskInstanceDeadline() {
         String query =
-                "{ GetAllUserTaskInstanceDeadline (userTaskInstanceId : \\\"1\\\") { eventId, eventDate, userTaskDefinitionId, userTaskInstanceId, processInstanceId, businessKey, eventType, notification } }";
+                "{ GetAllUserTaskInstanceDeadlines (userTaskInstanceId : \\\"1\\\") { eventId, eventDate, userTaskDefinitionId, userTaskInstanceId, processInstanceId, businessKey, eventType, notification } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -224,7 +224,7 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
                 .assertThat()
                 .statusCode(200)
                 .and()
-                .extract().path("data.GetAllUserTaskInstanceDeadline");
+                .extract().path("data.GetAllUserTaskInstanceDeadlines");
 
         assertThat(data).hasSize(1);
 
@@ -233,7 +233,7 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
     @Test
     public void testGetAllUserTaskInstanceVariable() {
         String query =
-                "{ GetAllUserTaskInstanceVariable (userTaskInstanceId : \\\"1\\\") {  eventId, eventDate, userTaskDefinitionId, userTaskInstanceId, processInstanceId, businessKey, variableId, variableName, variableValue, variableType } }";
+                "{ GetAllUserTaskInstanceVariables (userTaskInstanceId : \\\"1\\\") {  eventId, eventDate, userTaskDefinitionId, userTaskInstanceId, processInstanceId, businessKey, variableId, variableName, variableValue, variableType } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -244,7 +244,7 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
                 .assertThat()
                 .statusCode(200)
                 .and()
-                .extract().path("data.GetAllUserTaskInstanceVariable");
+                .extract().path("data.GetAllUserTaskInstanceVariables");
 
         assertThat(data).hasSize(3);
 
