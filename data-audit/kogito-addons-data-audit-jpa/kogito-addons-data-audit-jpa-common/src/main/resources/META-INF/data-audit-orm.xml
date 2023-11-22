@@ -545,13 +545,10 @@
 	               log.user_task_instance_id,
 	               log.process_instance_id,
 	               log.business_key,
-	               log.task_id,
 	               log.name,
 	               log.description,
 	               log.actual_user,
 	               log.state,
-	               log.node_definition_id,
-	               log.node_instance_id,
 	               log.event_type
 	          FROM Task_Instance_State_Log log
 	     LEFT JOIN Task_Instance_State_Log log_newer ON log.user_task_instance_id = log_newer.user_task_instance_id 

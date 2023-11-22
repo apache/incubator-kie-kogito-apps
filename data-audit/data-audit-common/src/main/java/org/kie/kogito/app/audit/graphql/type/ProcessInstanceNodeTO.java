@@ -57,7 +57,7 @@ public class ProcessInstanceNodeTO {
 
     private OffsetDateTime slaDueDate;
 
-    private String eventData;
+    private Object eventData;
 
     public ProcessInstanceNodeTO(String eventId, Date eventDate, String processType, String processId,
             String processVersion, String parentProcessInstanceId, String rootProcessId, String rootProcessInstanceId, String processInstanceId,
@@ -82,7 +82,7 @@ public class ProcessInstanceNodeTO {
         if (slaDueDate != null) {
             this.slaDueDate = OffsetDateTime.ofInstant(slaDueDate.toInstant(), ZoneId.of("UTC"));
         }
-        this.eventData = eventData;
+        this.eventData = JsonUtil.toJsonNode(eventData);
     }
 
     public String getEventId() {
@@ -221,11 +221,11 @@ public class ProcessInstanceNodeTO {
         this.slaDueDate = slaDueDate;
     }
 
-    public String getEventData() {
+    public Object getEventData() {
         return eventData;
     }
 
-    public void setEventData(String eventData) {
+    public void setEventData(Object eventData) {
         this.eventData = eventData;
     }
 

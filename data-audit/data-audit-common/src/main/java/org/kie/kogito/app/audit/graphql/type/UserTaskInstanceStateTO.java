@@ -37,8 +37,6 @@ public class UserTaskInstanceStateTO {
 
     private String businessKey;
 
-    private String taskId;
-
     private String name;
 
     private String description;
@@ -47,27 +45,20 @@ public class UserTaskInstanceStateTO {
 
     private String state;
 
-    private String nodeDefitionId;
-
-    private String nodeInstanceId;
-
     private String eventType;
 
     public UserTaskInstanceStateTO(String eventId, Date eventDate, String userTaskDefinitionId, String userTaskInstanceId, String processInstanceId, String businessKey,
-            String taskId, String name, String description, String actualUser, String state, String nodeDefitionId, String nodeInstanceId, String eventType) {
+            String name, String description, String actualUser, String state, String eventType) {
         this.eventId = eventId;
         this.eventDate = OffsetDateTime.ofInstant(eventDate.toInstant(), ZoneId.of("UTC"));
         this.userTaskDefinitionId = userTaskDefinitionId;
         this.userTaskInstanceId = userTaskInstanceId;
         this.processInstanceId = processInstanceId;
         this.businessKey = businessKey;
-        this.taskId = taskId;
         this.name = name;
         this.description = description;
         this.actualUser = actualUser;
         this.state = state;
-        this.nodeDefitionId = nodeDefitionId;
-        this.nodeInstanceId = nodeInstanceId;
         this.eventType = eventType;
     }
 
@@ -119,14 +110,6 @@ public class UserTaskInstanceStateTO {
         this.businessKey = businessKey;
     }
 
-    public String getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(String taskId) {
-        this.taskId = taskId;
-    }
-
     public String getName() {
         return name;
     }
@@ -159,28 +142,12 @@ public class UserTaskInstanceStateTO {
         this.state = state;
     }
 
-    public String getNodeInstanceId() {
-        return nodeInstanceId;
-    }
-
-    public void setNodeInstanceId(String nodeInstanceId) {
-        this.nodeInstanceId = nodeInstanceId;
-    }
-
     public String getEventType() {
         return eventType;
     }
 
     public void setEventType(String eventType) {
         this.eventType = eventType;
-    }
-
-    public String getNodeDefitionId() {
-        return nodeDefitionId;
-    }
-
-    public void setNodeDefitionId(String nodeDefitionId) {
-        this.nodeDefitionId = nodeDefitionId;
     }
 
 }

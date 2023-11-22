@@ -40,8 +40,8 @@ type ProcessInstanceStateLog {
 type ProcessInstanceNodeLog {
     eventId : String!
     eventDate : DateTime
-     processType : String
-     processId : String
+    processType : String
+    processId : String
     processVersion : String
     parentProcessInstanceId : String
     rootProcessId : String
@@ -53,8 +53,9 @@ type ProcessInstanceNodeLog {
     nodeName : String
     nodeInstanceId : String
     connection : String
+    workItemId : String
     slaDueDate : DateTime
-    eventData : String
+    eventData : JSON
 }
 
 type ProcessInstanceErrorLog {
@@ -102,13 +103,11 @@ type UserTaskInstanceStateLog {
     userTaskInstanceId : String
     processInstanceId : String
     businessKey : String
-    taskId : String
     name : String
     description : String
     actualUser : String
     state : String
-    nodeDefitionId : String
-    nodeInstanceId : String
+    slaDueDate : DateTime
     eventType : String
 }
    

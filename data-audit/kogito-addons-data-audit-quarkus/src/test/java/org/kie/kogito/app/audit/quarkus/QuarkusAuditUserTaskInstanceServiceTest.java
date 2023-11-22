@@ -132,7 +132,7 @@ public class QuarkusAuditUserTaskInstanceServiceTest {
     public void testGetAllUserTaskInstanceState() {
 
         String query =
-                "{ GetAllUserTaskInstanceState { eventId, eventDate, userTaskDefinitionId, userTaskInstanceId, processInstanceId, businessKey, taskId, name, description, actualUser, state, nodeDefitionId, nodeInstanceId, eventType } }";
+                "{ GetAllUserTaskInstanceState { eventId, eventDate, userTaskDefinitionId, userTaskInstanceId, processInstanceId, businessKey, name, description, actualUser, state, eventType } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)

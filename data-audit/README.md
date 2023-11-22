@@ -56,26 +56,29 @@ org.kie.kogito.app.audit.spi.GraphQLSchemaQueryProvider: this allow the subsyste
 
 You need to add two different dependencies to your project.
 
-        <dependency>
-            <groupId>org.kie.kogito</groupId>
-            <artifactId>kogito-addons-data-audit-<runtime></artifactId>
-            <version>${version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.kie.kogito</groupId>
-            <artifactId>kogito-addons-data-audit-jpa-<runtime></artifactId>
-            <version>${version}</version>
-        </dependency>
-        
+	<dependency>
+	    <groupId>org.kie.kogito</groupId>
+	    <artifactId>kogito-addons-data-audit-<runtime></artifactId>
+	    <version>${version}</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.kie.kogito</groupId>
+	    <artifactId>kogito-addons-data-audit-jpa-<runtime></artifactId>
+	    <version>${version}</version>
+	</dependency>
+
+
+
+
 The first dependency is related how to you want to deploy it. In this case as collocated/embedded service
 The second dependency is which implementation you want to use.
 
 Each implementation might require additional dependencies. In our case for using JPA implementation we might require driver
 
-        <dependency>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-jdbc-h2</artifactId>
-        </dependency>
+	<dependency>
+	    <groupId>io.quarkus</groupId>
+	    <artifactId>quarkus-jdbc-h2</artifactId>
+	</dependency>
 
 No additional configuration is requires besides the default datasource use by the application already.
 

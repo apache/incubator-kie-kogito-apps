@@ -181,7 +181,7 @@ public class JPADataAuditStore implements DataAuditStore {
             ProcessInstanceStateLog log = new ProcessInstanceStateLog();
             setProcessCommonAttributes(log, event);
             log.setEventType(ProcessStateLogType.SLA_VIOLATION);
-
+            log.setSlaDueDate(event.getData().getSlaDueDate());
             entityManager.persist(log);
         } else {
             ProcessInstanceNodeLog log = new ProcessInstanceNodeLog();
@@ -191,6 +191,7 @@ public class JPADataAuditStore implements DataAuditStore {
             log.setNodeName(event.getData().getNodeName());
             log.setNodeType(event.getData().getNodeType());
             log.setEventType(NodeLogType.SLA_VIOLATION);
+            log.setSlaDueDate(event.getData().getSlaDueDate());
             entityManager.persist(log);
         }
     }
