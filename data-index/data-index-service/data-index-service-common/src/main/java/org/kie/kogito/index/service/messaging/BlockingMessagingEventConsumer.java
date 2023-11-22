@@ -36,11 +36,11 @@ import org.slf4j.LoggerFactory;
 import io.quarkus.arc.properties.IfBuildProperty;
 import io.smallrye.reactive.messaging.annotations.Blocking;
 
+import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.*;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_JOBS_EVENTS;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_PROCESSINSTANCES_EVENTS;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_PROCESS_DEFINITIONS_EVENTS;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_USERTASKINSTANCES_EVENTS;
-import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.*;
 
 @ApplicationScoped
 @IfBuildProperty(name = "kogito.data-index.blocking", stringValue = "true")

@@ -30,6 +30,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.eclipse.microprofile.faulttolerance.Retry;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
@@ -45,10 +48,6 @@ import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.persistence.api.Storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 import static org.kie.kogito.index.storage.Constants.ID;
@@ -82,6 +81,7 @@ public class IndexingService {
 
         ProcessDefinition definition = pi.getDefinition();
 
+        //todo: can be removed
         handleProcessDefinition(definition);
     }
 
@@ -115,6 +115,8 @@ public class IndexingService {
         return pi;
     }
 
+    //retry in case of rare but possible race condition during the insert for the first registry
+    @Retry(maxRetries = 3, delay = 300, jitter = 100, retryOn = ConcurrentModificationException.class)
     public void indexProcessDefinition(ProcessDefinitionDataEvent definitionDataEvent) {
         if (!processDefinitionEventMerger.accept(definitionDataEvent)) {
             return;

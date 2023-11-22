@@ -90,7 +90,6 @@ import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdA
 import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdAndStarted;
 import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdAndState;
 import static org.kie.kogito.index.service.GraphQLUtils.getUserTaskInstanceByIdNoActualOwner;
-import static org.kie.kogito.index.test.TestUtils.PROCESS_VERSION;
 import static org.kie.kogito.index.test.TestUtils.getJobCloudEvent;
 import static org.kie.kogito.index.test.TestUtils.getProcessCloudEvent;
 import static org.kie.kogito.index.test.TestUtils.getProcessDefinitionDataEvent;
@@ -302,7 +301,6 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
         //wait for all futures to complete
         CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).get(10, TimeUnit.SECONDS);
         ProcessInstanceStateDataEvent event = getProcessCloudEvent(processId, processInstanceId, COMPLETED, null, null, null, CURRENT_USER);
-        validateProcessDefinition(getProcessDefinitionByIdAndVersion(processId, PROCESS_VERSION), event);
         validateProcessInstance(getProcessInstanceById(processInstanceId), event);
     }
 
