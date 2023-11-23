@@ -15,18 +15,18 @@ create table definitions_metadata
     primary key (process_id, process_version, key)
 );
 
-alter table if exists definitions_annotations
+alter table definitions_annotations
     add constraint fk_definitions_annotations
     foreign key (process_id, process_version)
     references definitions
     on delete cascade;
 
-alter table if exists definitions_metadata
+alter table definitions_metadata
     add constraint fk_definitions_metadata
     foreign key (process_id, process_version)
     references definitions
     on delete cascade;
 
 alter table if exists definitions
-    add description varchar2(255 char);
+    add (description varchar2(255 char));
 
