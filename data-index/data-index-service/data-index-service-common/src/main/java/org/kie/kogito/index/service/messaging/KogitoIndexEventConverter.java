@@ -25,6 +25,14 @@ import java.util.function.Supplier;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cloudevents.CloudEvent;
+import io.cloudevents.core.message.MessageReader;
+import io.cloudevents.http.vertx.VertxMessageFactory;
+import io.quarkus.reactivemessaging.http.runtime.IncomingHttpMetadata;
+import io.smallrye.reactive.messaging.MessageConverter;
+import io.vertx.core.MultiMap;
+import io.vertx.core.buffer.Buffer;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.event.AbstractDataEvent;
 import org.kie.kogito.event.DataEvent;
@@ -59,16 +67,6 @@ import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.service.DataIndexServiceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.cloudevents.CloudEvent;
-import io.cloudevents.core.message.MessageReader;
-import io.cloudevents.http.vertx.VertxMessageFactory;
-import io.quarkus.reactivemessaging.http.runtime.IncomingHttpMetadata;
-import io.smallrye.reactive.messaging.MessageConverter;
-import io.vertx.core.MultiMap;
-import io.vertx.core.buffer.Buffer;
 
 /**
  * Converts the message payload into an indexable object. The conversion takes into account that the
@@ -113,9 +111,7 @@ public class KogitoIndexEventConverter implements MessageConverter {
             } else if (type.getTypeName().equals(UserTaskInstanceDataEvent.class.getTypeName())) {
                 return message.withPayload(buildUserTaskInstanceDataEvent(cloudEvent));
             } else if (type.getTypeName().equals(ProcessDefinitionDataEvent.class.getTypeName())) {
-                ProcessDefinitionDataEvent event = objectMapper.convertValue(cloudEvent, ProcessDefinitionDataEvent.class);
-                event.setData(objectMapper.readValue(cloudEvent.getData().toBytes(), ProcessDefinitionEventBody.class));
-                return message.withPayload(event);
+                return message.withPayload(buildProcessDefinitionEvent(cloudEvent));
             }
             // never happens, see isIndexable.
             throw new IllegalArgumentException("Unknown event type: " + type);
@@ -123,6 +119,12 @@ public class KogitoIndexEventConverter implements MessageConverter {
             LOGGER.error("Error converting message payload to " + type.getTypeName(), e);
             throw new DataIndexServiceException("Error converting message payload:\n" + message.getPayload() + " \n to" + type.getTypeName(), e);
         }
+    }
+
+    private ProcessDefinitionDataEvent buildProcessDefinitionEvent(CloudEvent cloudEvent) throws IOException {
+        ProcessDefinitionDataEvent event = objectMapper.convertValue(cloudEvent, ProcessDefinitionDataEvent.class);
+        event.setData(objectMapper.readValue(cloudEvent.getData().toBytes(), ProcessDefinitionEventBody.class));
+        return event;
     }
 
     @Inject
