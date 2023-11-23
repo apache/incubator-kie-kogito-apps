@@ -32,4 +32,4 @@ delete
 cascade;
 
 alter table definitions
-    add (description varchar2(255 char));
+    add description varchar2(255 char);
