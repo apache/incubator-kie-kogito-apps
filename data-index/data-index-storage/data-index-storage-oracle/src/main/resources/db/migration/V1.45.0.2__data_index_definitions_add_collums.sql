@@ -17,16 +17,16 @@ create table definitions_metadata
 
 alter table definitions_annotations
     add constraint fk_definitions_annotations
-    foreign key (process_id, process_version)
-    references definitions
-    on delete cascade;
+        foreign key (process_id, process_version)
+            references definitions
+            on delete cascade;
 
 alter table definitions_metadata
     add constraint fk_definitions_metadata
-    foreign key (process_id, process_version)
-    references definitions
-    on delete cascade;
+        foreign key (process_id, process_version)
+            references definitions
+            on delete cascade;
 
-alter table if exists definitions
+alter table definitions
     add (description varchar2(255 char));
 
