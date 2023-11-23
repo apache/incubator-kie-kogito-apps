@@ -8,7 +8,7 @@ create table definitions_annotations
 
 create table definitions_metadata
 (
-    process_id      varchar2(255 char)  not null,
+    process_id      varchar2(255 char) not null,
     process_version varchar2(255 char) not null,
     value           varchar2(255 char),
     key             varchar2(255 char) not null,
@@ -32,4 +32,4 @@ delete
 cascade;
 
 alter table definitions
-    add (description varchar2(255));
+    add (description varchar2(255 char));
