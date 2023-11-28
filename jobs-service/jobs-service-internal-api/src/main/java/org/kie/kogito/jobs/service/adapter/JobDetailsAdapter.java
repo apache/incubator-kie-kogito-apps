@@ -170,7 +170,7 @@ public class JobDetailsAdapter {
         }
 
         public static org.kie.kogito.jobs.service.model.Recipient from(Recipient<?> recipient) {
-            checkIsSupported(recipient);
+            //            checkIsSupported(recipient);
             return new RecipientInstance(recipient);
         }
 
