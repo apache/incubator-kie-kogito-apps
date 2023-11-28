@@ -16,16 +16,4 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { CustomForm } from '../types';
-import { ProcessDefinition } from './ProcessFormEnvelopeApi';
-
-/**
- * Interface that defines a Driver for ProcessForm views.
- */
-export interface ProcessFormDriver {
-  getProcessFormSchema(
-    processDefinitionData: ProcessDefinition
-  ): Promise<Record<string, any>>;
-  getCustomForm(processDefinitionData: ProcessDefinition): Promise<CustomForm>;
-  startProcess(formData: any): Promise<void>;
-}
+export * from './types';

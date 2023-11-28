@@ -28,6 +28,7 @@ import { FormRenderer } from '@kogito-apps/components-common/dist/components/For
 import { FormRendererApi } from '@kogito-apps/components-common/dist/types';
 import { FormAction } from '@kogito-apps/components-common/dist/components/utils';
 import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
+import { CustomForm } from 'packages/process-form/src/types';
 export interface ProcessFormProps {
   processDefinition: ProcessDefinition;
   driver: ProcessFormDriver;
@@ -43,6 +44,7 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
 }) => {
   const formRendererApi = React.useRef<FormRendererApi>();
   const [processFormSchema, setProcessFormSchema] = useState<any>({});
+  const [processCustomForm, setProcessCustomForm] = useState<CustomForm>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>(null);
 
@@ -64,6 +66,8 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
     try {
       const schema = await driver.getProcessFormSchema(processDefinition);
       setProcessFormSchema(schema);
+      const customForm = await driver.getCustomForm(processDefinition);
+      setProcessCustomForm(customForm);
     } catch (errorContent) {
       setError(errorContent);
     } finally {
@@ -92,24 +96,28 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
     return <ServerErrors error={error} variant={'large'} />;
   }
 
-  return (
-    <div
-      {...componentOuiaProps(
-        ouiaId,
-        'process-form',
-        ouiaSafe ? ouiaSafe : !isLoading
-      )}
-    >
-      <FormRenderer
-        formSchema={processFormSchema}
-        model={{}}
-        readOnly={false}
-        onSubmit={onSubmit}
-        formActions={formAction}
-        ref={formRendererApi}
-      />
-    </div>
-  );
+  if (!processCustomForm) {
+    return (
+      <div
+        {...componentOuiaProps(
+          ouiaId,
+          'process-form',
+          ouiaSafe ? ouiaSafe : !isLoading
+        )}
+      >
+        <FormRenderer
+          formSchema={processFormSchema}
+          model={{}}
+          readOnly={false}
+          onSubmit={onSubmit}
+          formActions={formAction}
+          ref={formRendererApi}
+        />
+      </div>
+    );
+  } else {
+    return <div>olala</div>;
+  }
 };
 
 export default ProcessForm;

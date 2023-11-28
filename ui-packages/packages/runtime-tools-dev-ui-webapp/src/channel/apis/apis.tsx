@@ -36,6 +36,7 @@ import {
   CloudEventRequest,
   KOGITO_BUSINESS_KEY
 } from '@kogito-apps/cloud-event-form/dist';
+import { CustomForm } from 'packages/process-form/dist';
 
 //Rest Api to Cancel multiple Jobs
 export const performMultipleCancel = async (
@@ -383,6 +384,28 @@ export const getProcessSchema = (
   return new Promise((resolve, reject) => {
     axios
       .get(`${processDefinitionData.endpoint}/schema`)
+      .then((response) => {
+        /* istanbul ignore else*/
+        if (response.status === 200) {
+          resolve(response.data);
+        }
+      })
+      .catch((error) => {
+        reject(error);
+      });
+  });
+};
+
+export const getCustomForm = (
+  processDefinitionData: ProcessDefinition
+): Promise<CustomForm> => {
+  return new Promise((resolve, reject) => {
+    const lastIndex = processDefinitionData.endpoint.lastIndexOf(
+      `/${processDefinitionData.processName}`
+    );
+    const baseEndpoint = processDefinitionData.endpoint.slice(0, lastIndex);
+    axios
+      .get(`${baseEndpoint}/forms/${processDefinitionData.processName}`)
       .then((response) => {
         /* istanbul ignore else*/
         if (response.status === 200) {

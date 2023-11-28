@@ -16,11 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+import { CustomForm } from '../types';
 import { ProcessDefinition } from './ProcessFormEnvelopeApi';
 
 export interface ProcessFormChannelApi {
   processForm__getProcessFormSchema(
     processDefinitionData: ProcessDefinition
   ): Promise<Record<string, any>>;
+  processForm__getCustomForm(
+    processDefinitionData: ProcessDefinition
+  ): Promise<CustomForm>;
   processForm__startProcess(formData: any): Promise<void>;
 }
