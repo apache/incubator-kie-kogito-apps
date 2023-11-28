@@ -41,4 +41,9 @@ public class InVMPayloadData extends PayloadData<ProcessInstanceJobDescription> 
     public ProcessInstanceJobDescription getData() {
         return data;
     }
+
+    @Override
+    public String toString() {
+        return "InVMPayloadData [data=" + data + "]";
+    }
 }

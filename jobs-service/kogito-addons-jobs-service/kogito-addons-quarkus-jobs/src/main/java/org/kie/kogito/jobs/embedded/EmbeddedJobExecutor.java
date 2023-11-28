@@ -71,6 +71,7 @@ public class EmbeddedJobExecutor implements JobExecutor {
                         .build());
     }
 
+    @SuppressWarnings("rawtypes")
     @Override
     public Class<? extends Recipient> type() {
         return InVMRecipient.class;

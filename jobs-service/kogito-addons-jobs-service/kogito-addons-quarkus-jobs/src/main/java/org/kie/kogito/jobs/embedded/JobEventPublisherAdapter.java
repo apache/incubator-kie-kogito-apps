@@ -18,6 +18,8 @@
  */
 package org.kie.kogito.jobs.embedded;
 
+import java.util.List;
+
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
@@ -40,6 +42,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.smallrye.reactive.messaging.annotations.Blocking;
 
+import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.jobs.service.events.JobDataEvent.JOB_EVENT_TYPE;
 
 /**
@@ -47,27 +50,23 @@ import static org.kie.kogito.jobs.service.events.JobDataEvent.JOB_EVENT_TYPE;
  * EventPublisher API. Events propagation is enabled only when the embedded data index is present in current application.
  */
 @ApplicationScoped
-public class EventPublisherJobStreams {
+public class JobEventPublisherAdapter {
 
-    public static final String DATA_INDEX_EVENT_PUBLISHER = "org.kie.kogito.index.addon.DataIndexEventPublisher";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EventPublisherJobStreams.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JobEventPublisherAdapter.class);
 
     private final String url;
 
-    private final EventPublisher eventPublisher;
+    private final List<EventPublisher> eventPublisher;
 
     private final ObjectMapper objectMapper;
 
     @Inject
-    public EventPublisherJobStreams(@ConfigProperty(name = "kogito.service.url", defaultValue = "http://localhost:8080") String url,
+    public JobEventPublisherAdapter(
+            @ConfigProperty(name = "kogito.service.url", defaultValue = "http://localhost:8080") String url,
             Instance<EventPublisher> eventPublishers,
             ObjectMapper objectMapper) {
         this.url = url;
-        eventPublisher = eventPublishers.stream()
-                .filter(publisher -> publisher.getClass().getName().startsWith(DATA_INDEX_EVENT_PUBLISHER))
-                .findFirst()
-                .orElse(null);
+        eventPublisher = eventPublishers.stream().collect(toList());
         this.objectMapper = objectMapper;
     }
 
@@ -92,7 +91,7 @@ public class EventPublisherJobStreams {
                     scheduledJob.getRootProcessId(),
                     null);
             try {
-                eventPublisher.publish(event);
+                eventPublisher.forEach(e -> e.publish(event));
             } catch (Exception e) {
                 LOGGER.error("Job status change propagation has failed at eventPublisher: " + eventPublisher.getClass() + " execution.", e);
             }

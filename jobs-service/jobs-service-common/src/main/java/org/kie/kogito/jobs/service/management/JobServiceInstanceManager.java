@@ -99,12 +99,10 @@ public class JobServiceInstanceManager {
                                 ex -> LOGGER.error("Error on heartbeat {}", currentInfo.get(), ex)))
                 .pause();
 
-        leader.set(true);
-        enableCommunication();
         //initial leader check
-        //        tryBecomeLeader(currentInfo.get(), checkLeader, heartbeat)
-        //                .subscribe().with(i -> LOGGER.info("Initial leader check completed"),
-        //                        ex -> LOGGER.error("Error on initial check leader", ex));
+        tryBecomeLeader(currentInfo.get(), checkLeader, heartbeat)
+                .subscribe().with(i -> LOGGER.info("Initial leader check completed"),
+                        ex -> LOGGER.error("Error on initial check leader", ex));
     }
 
     private void disableCommunication() {

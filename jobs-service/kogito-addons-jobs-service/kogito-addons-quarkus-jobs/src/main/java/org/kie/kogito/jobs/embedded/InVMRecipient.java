@@ -41,4 +41,13 @@ public class InVMRecipient extends Recipient<InVMPayloadData> {
         return data;
     }
 
+    public InVMPayloadData getData() {
+        return data;
+    }
+
+    @Override
+    public String toString() {
+        return "InVMRecipient [data=" + data + "]";
+    }
+
 }
