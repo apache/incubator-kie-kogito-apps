@@ -26,12 +26,13 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.index.model.Entry;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ProcessDefinitionMarshaller extends AbstractMarshaller implements MessageMarshaller<ProcessDefinition> {
 
