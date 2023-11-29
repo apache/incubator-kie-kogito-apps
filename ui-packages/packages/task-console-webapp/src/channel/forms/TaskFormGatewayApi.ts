@@ -19,7 +19,7 @@
 import axios from 'axios';
 import { User } from '@kogito-apps/consoles-common/dist/environment/auth';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
-import { CustomForm } from '@kogito-apps/task-form';
+import { CustomForm } from '@kogito-apps/components-common/dist/types';
 
 export interface TaskFormGatewayApi {
   getTaskFormSchema(userTask: UserTaskInstance): Promise<Record<string, any>>;

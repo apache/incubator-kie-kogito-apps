@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import { CustomForm } from '../types';
+import { CustomForm } from '@kogito-apps/components-common/dist/types';
 import { ProcessDefinition } from './ProcessFormEnvelopeApi';
 
 /**

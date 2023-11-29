@@ -21,7 +21,7 @@ import {
   ProcessFormChannelApi,
   ProcessFormDriver
 } from '../api';
-import { CustomForm } from '../types';
+import { CustomForm } from '@kogito-apps/components-common/dist/types';
 
 export class EmbeddedProcessFormChannelApiImpl
   implements ProcessFormChannelApi

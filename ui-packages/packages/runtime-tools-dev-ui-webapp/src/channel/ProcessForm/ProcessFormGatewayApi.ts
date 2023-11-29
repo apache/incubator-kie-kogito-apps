@@ -18,7 +18,7 @@
  */
 import { ProcessDefinition } from '@kogito-apps/process-definition-list';
 import { getProcessSchema, getCustomForm, startProcessInstance } from '../apis';
-import { CustomForm } from '@kogito-apps/process-form';
+import { CustomForm } from '@kogito-apps/components-common/dist/types';
 
 export interface ProcessFormGatewayApi {
   getProcessFormSchema(processDefinitionData: ProcessDefinition): Promise<any>;

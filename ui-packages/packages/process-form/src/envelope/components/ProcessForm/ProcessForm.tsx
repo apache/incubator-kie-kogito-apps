@@ -25,10 +25,13 @@ import { ProcessDefinition, ProcessFormDriver } from '../../../api';
 import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 import { ServerErrors } from '@kogito-apps/components-common/dist/components/ServerErrors';
 import { FormRenderer } from '@kogito-apps/components-common/dist/components/FormRenderer';
-import { FormRendererApi } from '@kogito-apps/components-common/dist/types';
+import {
+  CustomForm,
+  FormRendererApi
+} from '@kogito-apps/components-common/dist/types';
 import { FormAction } from '@kogito-apps/components-common/dist/components/utils';
 import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
-import { CustomForm } from 'packages/process-form/src/types';
+
 export interface ProcessFormProps {
   processDefinition: ProcessDefinition;
   driver: ProcessFormDriver;

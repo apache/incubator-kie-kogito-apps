@@ -23,7 +23,8 @@ import {
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { ProcessFormGatewayApi } from '../../../channel/ProcessForm/ProcessFormGatewayApi';
 import { useProcessFormGatewayApi } from '../../../channel/ProcessForm/ProcessFormContext';
-import { EmbeddedProcessForm, CustomForm } from '@kogito-apps/process-form';
+import { EmbeddedProcessForm } from '@kogito-apps/process-form';
+import { CustomForm } from '@kogito-apps/components-common/dist/types';
 import { ProcessDefinition } from '@kogito-apps/process-definition-list';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 

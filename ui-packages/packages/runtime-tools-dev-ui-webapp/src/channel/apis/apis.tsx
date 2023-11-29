@@ -36,7 +36,7 @@ import {
   CloudEventRequest,
   KOGITO_BUSINESS_KEY
 } from '@kogito-apps/cloud-event-form/dist';
-import { CustomForm } from 'packages/process-form/dist';
+import { CustomForm } from '@kogito-apps/components-common/dist/types';
 
 //Rest Api to Cancel multiple Jobs
 export const performMultipleCancel = async (

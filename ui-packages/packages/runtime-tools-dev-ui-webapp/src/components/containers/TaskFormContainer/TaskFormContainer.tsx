@@ -23,7 +23,8 @@ import {
 } from '@kogito-apps/ouia-tools/dist/utils/OuiaUtils';
 import { GraphQL } from '@kogito-apps/consoles-common/dist/graphql';
 import UserTaskInstance = GraphQL.UserTaskInstance;
-import { EmbeddedTaskForm, CustomForm } from '@kogito-apps/task-form';
+import { EmbeddedTaskForm } from '@kogito-apps/task-form';
+import { CustomForm } from '@kogito-apps/components-common/dist/types';
 import { useTaskFormGatewayApi } from '../../../channel/TaskForms/TaskFormContext';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 

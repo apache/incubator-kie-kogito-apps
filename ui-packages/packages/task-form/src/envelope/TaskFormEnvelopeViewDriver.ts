@@ -18,7 +18,7 @@
  */
 import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
 import { TaskFormChannelApi, TaskFormDriver } from '../api';
-import { CustomForm } from '../types';
+import { CustomForm } from '@kogito-apps/components-common/dist/types';
 
 /**
  * Implementation of TaskFormDriver to be used on TaskFormEnvelopeView

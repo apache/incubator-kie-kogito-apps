@@ -30,7 +30,7 @@ import {
   FormOpened
 } from '@kogito-apps/form-displayer';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
-import { CustomForm } from '../../../types';
+import { CustomForm } from '@kogito-apps/components-common/dist/types';
 import { generateFormData } from '../utils/TaskFormDataUtils';
 import { TaskFormDriver, User } from '../../../api';
 import { Stack, StackItem } from '@patternfly/react-core/layouts/Stack';
