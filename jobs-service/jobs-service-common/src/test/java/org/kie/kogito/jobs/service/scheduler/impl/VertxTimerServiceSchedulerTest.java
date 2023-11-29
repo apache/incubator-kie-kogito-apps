@@ -29,7 +29,7 @@ import org.kie.kogito.jobs.service.job.DelegateJob;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobDetailsContext;
 import org.kie.kogito.jobs.service.model.ManageableJobHandle;
-import org.kie.kogito.jobs.service.stream.JobStreams;
+import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Job;
 import org.kie.kogito.timer.JobContext;
@@ -62,7 +62,7 @@ class VertxTimerServiceSchedulerTest {
     private JobExecutorResolver jobExecutorResolver;
 
     @Mock
-    private JobStreams jobStreams;
+    private JobEventPublisher jobStreams;
 
     @Captor
     private ArgumentCaptor<JobDetails> jobCaptor;

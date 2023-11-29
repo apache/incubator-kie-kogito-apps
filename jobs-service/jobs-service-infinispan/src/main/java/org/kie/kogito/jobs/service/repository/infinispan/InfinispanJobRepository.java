@@ -35,7 +35,7 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseReactiveJobRepository;
-import org.kie.kogito.jobs.service.stream.JobStreams;
+import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 
 import io.vertx.core.Vertx;
 
@@ -58,7 +58,7 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
 
     @Inject
     public InfinispanJobRepository(Vertx vertx,
-            JobStreams jobStreams,
+            JobEventPublisher jobStreams,
             RemoteCacheManager remoteCacheManager) {
         super(vertx, jobStreams);
         this.remoteCacheManager = remoteCacheManager;

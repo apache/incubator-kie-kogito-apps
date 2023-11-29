@@ -33,7 +33,7 @@ import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
-import org.kie.kogito.jobs.service.stream.JobStreams;
+import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 
 import io.quarkus.arc.DefaultBean;
@@ -53,7 +53,7 @@ public class InMemoryJobRepository extends BaseReactiveJobRepository implements 
     }
 
     @Inject
-    public InMemoryJobRepository(Vertx vertx, JobStreams jobStreams) {
+    public InMemoryJobRepository(Vertx vertx, JobEventPublisher jobStreams) {
         super(vertx, jobStreams);
     }
 

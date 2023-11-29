@@ -30,7 +30,7 @@ import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
-import org.kie.kogito.jobs.service.stream.JobStreams;
+import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 
 import io.vertx.core.Vertx;
 
@@ -38,9 +38,9 @@ public abstract class BaseReactiveJobRepository implements ReactiveJobRepository
 
     private Vertx vertx;
 
-    private JobStreams jobStreams;
+    private JobEventPublisher jobStreams;
 
-    protected BaseReactiveJobRepository(Vertx vertx, JobStreams jobStreams) {
+    protected BaseReactiveJobRepository(Vertx vertx, JobEventPublisher jobStreams) {
         this.vertx = vertx;
         this.jobStreams = jobStreams;
     }

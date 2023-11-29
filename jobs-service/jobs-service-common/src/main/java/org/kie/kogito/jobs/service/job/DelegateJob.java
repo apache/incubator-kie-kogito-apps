@@ -24,7 +24,7 @@ import org.kie.kogito.jobs.service.exception.JobExecutionException;
 import org.kie.kogito.jobs.service.executor.JobExecutorResolver;
 import org.kie.kogito.jobs.service.model.JobDetailsContext;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
-import org.kie.kogito.jobs.service.stream.JobStreams;
+import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 import org.kie.kogito.timer.Job;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,9 +40,9 @@ public class DelegateJob implements Job<JobDetailsContext> {
 
     private final JobExecutorResolver jobExecutorResolver;
 
-    private final JobStreams jobStreams;
+    private final JobEventPublisher jobStreams;
 
-    public DelegateJob(JobExecutorResolver executorResolver, JobStreams jobStreams) {
+    public DelegateJob(JobExecutorResolver executorResolver, JobEventPublisher jobStreams) {
         this.jobExecutorResolver = executorResolver;
         this.jobStreams = jobStreams;
     }

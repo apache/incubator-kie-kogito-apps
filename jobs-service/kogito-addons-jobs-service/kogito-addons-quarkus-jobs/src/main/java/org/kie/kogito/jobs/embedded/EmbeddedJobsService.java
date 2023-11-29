@@ -18,7 +18,6 @@
  */
 package org.kie.kogito.jobs.embedded;
 
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -33,10 +32,11 @@ import org.kie.kogito.jobs.service.api.Job;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.scheduler.ReactiveJobScheduler;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.smallrye.mutiny.Uni;
+import io.smallrye.mutiny.infrastructure.Infrastructure;
 
 @ApplicationScoped
 public class EmbeddedJobsService implements JobsService {
@@ -55,77 +55,36 @@ public class EmbeddedJobsService implements JobsService {
         return null;
     }
 
-    private class BlockingJobSubscriber implements Subscriber<JobDetails> {
-
-        private CountDownLatch latch;
-        private String outcome;
-        private Throwable exception;
-
-        public BlockingJobSubscriber() {
-            latch = new CountDownLatch(1);
-        }
-
-        @Override
-        public void onSubscribe(Subscription s) {
-            s.request(1L);
-        }
-
-        @Override
-        public void onNext(JobDetails t) {
-            LOGGER.info("BlockingJobSubscriber::onNext {}", t);
-            outcome = t.getId();
-        }
-
-        @Override
-        public void onError(Throwable t) {
-            exception = t;
-            LOGGER.info("BlockingJobSubscriber::onError {}", t);
-            latch.countDown();
-        }
-
-        @Override
-        public void onComplete() {
-            LOGGER.info("BlockingJobSubscriber::onComplete");
-            latch.countDown();
-        }
-
-        public String get() {
-            try {
-                latch.await();
-                if (exception != null) {
-                    throw new RuntimeException(exception);
-                }
-                LOGGER.info("BlockingJobSubscriber::get {}", outcome);
-                return outcome;
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-    }
-
     @Override
     public String scheduleProcessInstanceJob(ProcessInstanceJobDescription description) {
-        LOGGER.info("Embedded ScheduleProcessJob: {}", description);
-        Job job = Job.builder()
-                .id(description.id())
-                .correlationId(description.id())
-                .recipient(new InVMRecipient(new InVMPayloadData(description)))
-                .schedule(JobCallbackResourceDef.buildSchedule(description))
-                .build();
+        try {
+            Job job = Job.builder()
+                    .id(description.id())
+                    .correlationId(description.id())
+                    .recipient(new InVMRecipient(new InVMPayloadData(description)))
+                    .schedule(JobCallbackResourceDef.buildSchedule(description))
+                    .build();
 
-        JobDetails jobDetails = JobDetailsAdapter.from(job);
-        BlockingJobSubscriber subscriber = new BlockingJobSubscriber();
-        scheduler.schedule(jobDetails).subscribe(subscriber);
-        String outcome = subscriber.get();
-        LOGGER.info("Embedded ScheduleProcessJob: {} scheduled", outcome);
-        return outcome;
+            JobDetails jobDetails = JobDetailsAdapter.from(job);
+            LOGGER.info("Embedded ScheduleProcessJob: {}", jobDetails);
+
+            String outcome = null;
+
+            JobDetails uni = Uni.createFrom().publisher(scheduler.schedule(jobDetails)).runSubscriptionOn(Infrastructure.getDefaultWorkerPool()).subscribe().asCompletionStage().get();
+            outcome = uni.getId();
+
+            LOGGER.debug("Embedded ScheduleProcessJob: {} scheduled", outcome);
+            return outcome;
+        } catch (InterruptedException | ExecutionException e) {
+            LOGGER.error("interrupted execution", e);
+            return null;
+        }
     }
 
     @Override
     public boolean cancelJob(String jobId) {
         try {
-            LOGGER.info("Embedded cancelJob: {}", jobId);
+            LOGGER.debug("Embedded cancelJob: {}", jobId);
             return JobStatus.CANCELED.equals(scheduler.cancel(jobId).toCompletableFuture().get().getStatus());
         } catch (InterruptedException | ExecutionException e) {
             return false;

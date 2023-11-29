@@ -30,7 +30,7 @@ import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseReactiveJobRepository;
 import org.kie.kogito.jobs.service.repository.marshaller.JobDetailsMarshaller;
-import org.kie.kogito.jobs.service.stream.JobStreams;
+import org.kie.kogito.jobs.service.stream.JobStreamsEventPublisher;
 
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 
@@ -87,7 +87,7 @@ public class MongoDBJobRepository extends BaseReactiveJobRepository implements R
     }
 
     @Inject
-    public MongoDBJobRepository(Vertx vertx, JobStreams jobStreams, ReactiveMongoClient mongoClient,
+    public MongoDBJobRepository(Vertx vertx, JobStreamsEventPublisher jobStreams, ReactiveMongoClient mongoClient,
             @ConfigProperty(name = DATABASE_PROPERTY) String database,
             JobDetailsMarshaller jobDetailsMarshaller) {
         super(vertx, jobStreams);
