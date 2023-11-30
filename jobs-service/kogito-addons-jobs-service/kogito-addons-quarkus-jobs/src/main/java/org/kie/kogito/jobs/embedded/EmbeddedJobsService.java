@@ -66,7 +66,7 @@ public class EmbeddedJobsService implements JobsService {
                     .build();
 
             JobDetails jobDetails = JobDetailsAdapter.from(job);
-            LOGGER.info("Embedded ScheduleProcessJob: {}", jobDetails);
+            LOGGER.debug("Embedded ScheduleProcessJob: {}", jobDetails);
 
             String outcome = null;
 

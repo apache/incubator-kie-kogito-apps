@@ -80,7 +80,7 @@ public class JobInVMEventPublisher implements JobEventPublisher {
     @Override
     public JobExecutionResponse publishJobError(JobExecutionResponse response) {
         try {
-            LOGGER.info("publishJobError {}", response);
+            LOGGER.debug("publishJobError {}", response);
 
             ErrorHandling.skipErrorPublisherBuilder(scheduler::handleJobExecutionError, response)
                     .findFirst()
@@ -101,7 +101,7 @@ public class JobInVMEventPublisher implements JobEventPublisher {
     @Override
     public JobExecutionResponse publishJobSuccess(JobExecutionResponse response) {
         try {
-            LOGGER.info("publishJobSuccess {}", response);
+            LOGGER.debug("publishJobSuccess {}", response);
             ErrorHandling.skipErrorPublisherBuilder(scheduler::handleJobExecutionSuccess, response)
                     .findFirst()
                     .run()
@@ -121,7 +121,7 @@ public class JobInVMEventPublisher implements JobEventPublisher {
     @Override
     public JobDetails publishJobStatusChange(JobDetails jobDetails) {
         try {
-            LOGGER.info("publishJobStatusChange {}", jobDetails);
+            LOGGER.debug("publishJobStatusChange {}", jobDetails);
             if (eventPublishers.isEmpty()) {
                 return jobDetails;
             }
@@ -135,7 +135,7 @@ public class JobInVMEventPublisher implements JobEventPublisher {
 
     public void observe(@ObservesAsync EmbeddedJobServiceEvent serviceEvent) {
         JobDetails jobDetails = serviceEvent.getJobDetails();
-        LOGGER.info("Emmit in-vm publishJobStatusChange {}", jobDetails);
+        LOGGER.debug("Emmit in-vm publishJobStatusChange {}", jobDetails);
         try {
             ScheduledJob scheduledJob = ScheduledJobAdapter.of(jobDetails);
             byte[] jsonContent = objectMapper.writeValueAsBytes(scheduledJob);
