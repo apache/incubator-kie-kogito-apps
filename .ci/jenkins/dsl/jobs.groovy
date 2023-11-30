@@ -136,12 +136,12 @@ Closure setupSonarProjectKeyEnv = { Closure paramsGetter ->
 
 Closure nightlyJobParamsGetter = isMainStream() ? JobParamsUtils.DEFAULT_PARAMS_GETTER : setup4AMCronTriggerJobParamsGetter
 KogitoJobUtils.createNightlyBuildChainBuildAndDeployJobForCurrentRepo(this, '', true, setupAdditionalTimeout(JobParamsUtils.DEFAULT_PARAMS_GETTER))
-setupSpecificBuildChainNightlyJob('sonarcloud', setupAdditionalTimeout(setupSonarProjectKeyEnv(nightlyJobParamsGetter)))
+// setupSpecificBuildChainNightlyJob('sonarcloud', setupAdditionalTimeout(setupSonarProjectKeyEnv(nightlyJobParamsGetter)))
 setupSpecificBuildChainNightlyJob('native', nightlyJobParamsGetter)
-setupNightlyQuarkusIntegrationJob('quarkus-main', nightlyJobParamsGetter)
-setupNightlyQuarkusIntegrationJob('quarkus-branch', nightlyJobParamsGetter)
-setupNightlyQuarkusIntegrationJob('quarkus-lts', nightlyJobParamsGetter)
-setupNightlyQuarkusIntegrationJob('native-lts', nightlyJobParamsGetter)
+// setupNightlyQuarkusIntegrationJob('quarkus-main', nightlyJobParamsGetter)
+// setupNightlyQuarkusIntegrationJob('quarkus-branch', nightlyJobParamsGetter)
+// setupNightlyQuarkusIntegrationJob('quarkus-lts', nightlyJobParamsGetter)
+// setupNightlyQuarkusIntegrationJob('native-lts', nightlyJobParamsGetter)
 
 // Release jobs
 setupReleaseDeployJob()
