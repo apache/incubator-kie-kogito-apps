@@ -23,27 +23,31 @@ import org.kie.kogito.jobs.service.api.PayloadData;
 
 public class InVMPayloadData extends PayloadData<ProcessInstanceJobDescription> {
 
-    private ProcessInstanceJobDescription data;
+    private ProcessInstanceJobDescription jobDescription;
 
     public InVMPayloadData() {
         // do nothing
     }
 
-    public void setData(ProcessInstanceJobDescription data) {
-        this.data = data;
+    public void setJobDescription(ProcessInstanceJobDescription jobDescription) {
+        this.jobDescription = jobDescription;
     }
-
-    public InVMPayloadData(ProcessInstanceJobDescription data) {
-        this.data = data;
+    
+    public ProcessInstanceJobDescription getJobDescription() {
+        return jobDescription;
     }
 
     @Override
     public ProcessInstanceJobDescription getData() {
-        return data;
+        return jobDescription;
+    }
+
+    public InVMPayloadData(ProcessInstanceJobDescription data) {
+        this.jobDescription = data;
     }
 
     @Override
     public String toString() {
-        return "InVMPayloadData [data=" + data + "]";
+        return "InVMPayloadData [data=" + jobDescription + "]";
     }
 }

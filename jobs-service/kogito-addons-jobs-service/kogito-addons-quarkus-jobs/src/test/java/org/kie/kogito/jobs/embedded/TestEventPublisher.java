@@ -18,36 +18,44 @@
  */
 package org.kie.kogito.jobs.embedded;
 
-import org.kie.kogito.jobs.service.api.Recipient;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
-public class InVMRecipient extends Recipient<InVMPayloadData> {
+import javax.enterprise.context.ApplicationScoped;
 
-    private InVMPayloadData data;
+import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.EventPublisher;
 
-    public InVMRecipient() {
-        // do nothing
+@ApplicationScoped
+public class TestEventPublisher implements EventPublisher {
+    private List<DataEvent<?>> events;
+
+    private CountDownLatch latch;
+
+    public List<DataEvent<?>> getEvents() {
+        return events;
     }
 
-    public void setData(InVMPayloadData data) {
-        this.data = data;
-    }
-
-    public InVMPayloadData getData() {
-        return data;
-    }
-
-    public InVMRecipient(InVMPayloadData data) {
-        this.data = data;
-    }
-
-    @Override
-    public InVMPayloadData getPayload() {
-        return data;
+    public TestEventPublisher() {
+        events = new ArrayList<>();
     }
 
     @Override
-    public String toString() {
-        return "InVMRecipient [data=" + data + "]";
+    public void publish(DataEvent<?> event) {
+        events.add(event);
+        latch.countDown();
+    }
+
+    @Override
+    public void publish(Collection<DataEvent<?>> events) {
+        events.addAll(events);
+        events.forEach(e -> latch.countDown());
+    }
+
+    public void expectedEvents(int numOfEvents) {
+        latch = new CountDownLatch(numOfEvents);
     }
 
 }

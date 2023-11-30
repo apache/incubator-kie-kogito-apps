@@ -29,7 +29,7 @@
             <groupId>org.kie.kogito</groupId>
             <artifactId>jobs-service-internal-api</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.kie.kogito</groupId>
             <artifactId>kogito-services</artifactId>
@@ -55,7 +55,27 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <!-- Testing dependencies -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId> quarkus-junit5-mockito</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.kie.kogito</groupId>
+            <artifactId>jobs-service-inmemory</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 

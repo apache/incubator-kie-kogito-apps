@@ -18,36 +18,33 @@
  */
 package org.kie.kogito.jobs.embedded;
 
-import org.kie.kogito.jobs.service.api.Recipient;
+import javax.enterprise.context.ApplicationScoped;
 
-public class InVMRecipient extends Recipient<InVMPayloadData> {
+import org.kie.kogito.Application;
+import org.kie.kogito.Config;
+import org.kie.kogito.KogitoEngine;
+import org.kie.kogito.uow.UnitOfWork;
+import org.kie.kogito.uow.UnitOfWorkManager;
+import org.mockito.Mockito;
 
-    private InVMPayloadData data;
+@ApplicationScoped
+public class TestApplication implements Application {
 
-    public InVMRecipient() {
-        // do nothing
-    }
-
-    public void setData(InVMPayloadData data) {
-        this.data = data;
-    }
-
-    public InVMPayloadData getData() {
-        return data;
-    }
-
-    public InVMRecipient(InVMPayloadData data) {
-        this.data = data;
+    @Override
+    public Config config() {
+        return Mockito.mock(Config.class);
     }
 
     @Override
-    public InVMPayloadData getPayload() {
-        return data;
+    public <T extends KogitoEngine> T get(Class<T> clazz) {
+        return (T) Mockito.mock(KogitoEngine.class);
     }
 
     @Override
-    public String toString() {
-        return "InVMRecipient [data=" + data + "]";
+    public UnitOfWorkManager unitOfWorkManager() {
+        UnitOfWorkManager uowm = Mockito.mock(UnitOfWorkManager.class);
+        Mockito.when(uowm.newUnitOfWork()).thenReturn(Mockito.mock(UnitOfWork.class));
+        return uowm;
     }
 
 }
