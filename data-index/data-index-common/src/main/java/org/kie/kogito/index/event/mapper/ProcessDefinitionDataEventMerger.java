@@ -18,24 +18,26 @@
  */
 package org.kie.kogito.index.event.mapper;
 
+import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.event.process.NodeDefinition;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionEventBody;
+import org.kie.kogito.index.json.JsonUtils;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessDefinition;
 
-import static java.lang.String.valueOf;
-import static java.util.Optional.ofNullable;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import static java.util.stream.Collectors.toList;
-import static java.util.stream.Collectors.toMap;
 
 @ApplicationScoped
 public class ProcessDefinitionDataEventMerger implements ProcessDefinitionEventMerger {
@@ -93,9 +95,19 @@ public class ProcessDefinitionDataEventMerger implements ProcessDefinitionEventM
         return current;
     }
 
-    private static Map<String, String> toStringMap(Map<String, ?> input) {
-        return ofNullable(input)
-                .map(meta -> meta.entrySet().stream().collect(toMap(Map.Entry::getKey, entry -> valueOf(entry.getValue()))))
-                .orElse(null);
+    public static Map<String, String> toStringMap(Map<String, ?> input) {
+        return input.entrySet().stream()
+                .map(entry -> {
+                    if (String.class.isInstance(entry.getValue())) {
+                        return entry;
+                    }
+                    String value = null;
+                    try {
+                        value = JsonUtils.getObjectMapper().writeValueAsString(entry.getValue());
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return new AbstractMap.SimpleEntry<>(entry.getKey(), value);
+                }).collect(Collectors.toMap(Map.Entry::getKey, e -> (String) e.getValue()));
     }
 }

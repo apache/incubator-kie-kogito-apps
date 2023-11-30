@@ -33,8 +33,6 @@ import java.util.stream.IntStream;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -49,6 +47,9 @@ import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.index.test.TestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;

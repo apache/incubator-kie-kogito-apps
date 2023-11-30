@@ -1,9 +1,4 @@
 {
-  "id": "717af02d-645a-4b27-8058-b67ff1fa8edb",
-  "source": "http://localhost:8080/jsongreet",
-  "type": "ProcessDefinitionEvent",
-  "time": "2023-10-19T10:18:01.540311-03:00",
-  "data": {
     "id": "jsongreet",
     "name": "Greeting workflow",
     "description": "JSON based greeting workflow",
@@ -15,9 +10,9 @@
       "cloudevents"
     ],
     "annotations": [
+      "test1",
       "test2",
-      "test3",
-      "test1"
+      "test3"
     ],
     "endpoint": "http://localhost:8080/jsongreet",
     "source": null,
@@ -156,7 +151,4 @@
         }
       }
     ]
-  },
-  "specversion": "1.0",
-  "kogitoprocid": "jsongreet"
 }

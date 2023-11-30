@@ -124,8 +124,11 @@ public class KogitoIndexEventConverter implements MessageConverter {
     }
 
     private ProcessDefinitionDataEvent buildProcessDefinitionEvent(CloudEvent cloudEvent) throws IOException {
-        ProcessDefinitionDataEvent event = objectMapper.convertValue(cloudEvent, ProcessDefinitionDataEvent.class);
-        event.setData(objectMapper.readValue(cloudEvent.getData().toBytes(), ProcessDefinitionEventBody.class));
+        ProcessDefinitionDataEvent event = new ProcessDefinitionDataEvent();
+        applyCloudEventAttributes(cloudEvent, event);
+        if (cloudEvent.getData() != null) {
+            event.setData(objectMapper.readValue(cloudEvent.getData().toBytes(), ProcessDefinitionEventBody.class));
+        }
         return event;
     }
 
