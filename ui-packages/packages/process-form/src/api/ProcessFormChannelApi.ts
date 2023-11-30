@@ -17,12 +17,16 @@
  * under the License.
  */
 import { CustomForm } from '@kogito-apps/components-common/dist/types';
+import { FormInfo } from '@kogito-apps/forms-list/dist/api';
 import { ProcessDefinition } from './ProcessFormEnvelopeApi';
 
 export interface ProcessFormChannelApi {
   processForm__getProcessFormSchema(
     processDefinitionData: ProcessDefinition
   ): Promise<Record<string, any>>;
+  processForm__getCustomFormList(
+    processDefinitionData: ProcessDefinition
+  ): Promise<FormInfo[]>;
   processForm__getCustomForm(
     processDefinitionData: ProcessDefinition
   ): Promise<CustomForm>;

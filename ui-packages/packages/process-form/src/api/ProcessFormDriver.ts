@@ -17,6 +17,7 @@
  * under the License.
  */
 import { CustomForm } from '@kogito-apps/components-common/dist/types';
+import { FormInfo } from '@kogito-apps/forms-list/dist/api';
 import { ProcessDefinition } from './ProcessFormEnvelopeApi';
 
 /**
@@ -26,6 +27,9 @@ export interface ProcessFormDriver {
   getProcessFormSchema(
     processDefinitionData: ProcessDefinition
   ): Promise<Record<string, any>>;
+  getCustomFormList(
+    processDefinitionData: ProcessDefinition
+  ): Promise<FormInfo[]>;
   getCustomForm(processDefinitionData: ProcessDefinition): Promise<CustomForm>;
   startProcess(formData: any): Promise<void>;
 }

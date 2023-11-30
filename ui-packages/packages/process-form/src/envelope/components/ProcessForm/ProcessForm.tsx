@@ -31,17 +31,20 @@ import {
 } from '@kogito-apps/components-common/dist/types';
 import { FormAction } from '@kogito-apps/components-common/dist/components/utils';
 import { Bullseye } from '@patternfly/react-core/dist/js/layouts/Bullseye';
+import CustomProcessFormDisplayer from './CustomProcessFormDisplayer';
 
 export interface ProcessFormProps {
   processDefinition: ProcessDefinition;
   driver: ProcessFormDriver;
   isEnvelopeConnectedToChannel: boolean;
+  targetOrigin: string;
 }
 
 const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
   processDefinition,
   driver,
   isEnvelopeConnectedToChannel,
+  targetOrigin,
   ouiaId,
   ouiaSafe
 }) => {
@@ -69,8 +72,15 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
     try {
       const schema = await driver.getProcessFormSchema(processDefinition);
       setProcessFormSchema(schema);
-      const customForm = await driver.getCustomForm(processDefinition);
-      setProcessCustomForm(customForm);
+      const availableForms = await driver.getCustomFormList(processDefinition);
+      if (
+        availableForms
+          .map((form) => form.name)
+          .includes(processDefinition.processName)
+      ) {
+        const customForm = await driver.getCustomForm(processDefinition);
+        setProcessCustomForm(customForm);
+      }
     } catch (errorContent) {
       setError(errorContent);
     } finally {
@@ -119,7 +129,19 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
       </div>
     );
   } else {
-    return <div>olala</div>;
+    return (
+      <CustomProcessFormDisplayer
+        {...componentOuiaProps(
+          ouiaId,
+          'process-form',
+          ouiaSafe ? ouiaSafe : !isLoading
+        )}
+        schema={processFormSchema}
+        customForm={processCustomForm}
+        driver={driver}
+        targetOrigin={targetOrigin}
+      />
+    );
   }
 };
 

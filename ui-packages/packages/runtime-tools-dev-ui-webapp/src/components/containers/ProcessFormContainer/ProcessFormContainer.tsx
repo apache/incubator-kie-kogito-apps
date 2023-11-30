@@ -25,6 +25,7 @@ import { ProcessFormGatewayApi } from '../../../channel/ProcessForm/ProcessFormG
 import { useProcessFormGatewayApi } from '../../../channel/ProcessForm/ProcessFormContext';
 import { EmbeddedProcessForm } from '@kogito-apps/process-form';
 import { CustomForm } from '@kogito-apps/components-common/dist/types';
+import { FormInfo } from '@kogito-apps/forms-list/dist/api';
 import { ProcessDefinition } from '@kogito-apps/process-definition-list';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 
@@ -50,6 +51,11 @@ const ProcessFormContainer: React.FC<ProcessFormContainerProps & OUIAProps> = ({
           processDefinitionData: ProcessDefinition
         ): Promise<any> {
           return gatewayApi.getProcessFormSchema(processDefinitionData);
+        },
+        getCustomFormList(
+          processDefinitionData: ProcessDefinition
+        ): Promise<FormInfo[]> {
+          return gatewayApi.getCustomFormList(processDefinitionData);
         },
         getCustomForm(
           processDefinitionData: ProcessDefinition

@@ -23,6 +23,7 @@ import {
   ProcessFormDriver
 } from '../api';
 import { CustomForm } from '@kogito-apps/components-common/dist/types';
+import { FormInfo } from '@kogito-apps/forms-list/dist/api';
 
 /**
  * Implementation of ProcessFormDriver to be used on ProcessFormEnvelopeView
@@ -36,6 +37,14 @@ export class ProcessFormEnvelopeViewDriver implements ProcessFormDriver {
     processDefinitionData: ProcessDefinition
   ): Promise<Record<string, any>> {
     return this.channelApi.requests.processForm__getProcessFormSchema(
+      processDefinitionData
+    );
+  }
+
+  getCustomFormList(
+    processDefinitionData: ProcessDefinition
+  ): Promise<FormInfo[]> {
+    return this.channelApi.requests.processForm__getCustomFormList(
       processDefinitionData
     );
   }

@@ -22,6 +22,7 @@ import {
   ProcessFormDriver
 } from '../api';
 import { CustomForm } from '@kogito-apps/components-common/dist/types';
+import { FormInfo } from '@kogito-apps/forms-list/dist/api';
 
 export class EmbeddedProcessFormChannelApiImpl
   implements ProcessFormChannelApi
@@ -32,6 +33,12 @@ export class EmbeddedProcessFormChannelApiImpl
     processDefinitionData: ProcessDefinition
   ): Promise<Record<string, any>> {
     return this.driver.getProcessFormSchema(processDefinitionData);
+  }
+
+  processForm__getCustomFormList(
+    processDefinitionData: ProcessDefinition
+  ): Promise<FormInfo[]> {
+    return this.driver.getCustomFormList(processDefinitionData);
   }
 
   processForm__getCustomForm(
