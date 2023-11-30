@@ -20,7 +20,7 @@ package org.kie.kogito.index.event.mapper;
 
 import java.net.URI;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;

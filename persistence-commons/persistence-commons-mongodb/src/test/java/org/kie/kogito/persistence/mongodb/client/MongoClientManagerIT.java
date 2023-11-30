@@ -18,7 +18,7 @@
  */
 package org.kie.kogito.persistence.mongodb.client;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.bson.Document;
 import org.junit.jupiter.api.Test;

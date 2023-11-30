@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 import org.kie.kogito.persistence.reporting.database.DatabaseManager;
 import org.kie.kogito.persistence.reporting.database.sqlbuilders.Context;

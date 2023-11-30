@@ -21,7 +21,7 @@ package org.kie.kogito.jobs.service.repository.postgresql;
 import java.time.OffsetDateTime;
 import java.util.concurrent.atomic.AtomicReference;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

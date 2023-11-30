@@ -22,9 +22,9 @@ import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.function.Function;
 
-import javax.persistence.LockModeType;
-import javax.persistence.PersistenceException;
-import javax.transaction.Transactional;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.PersistenceException;
+import jakarta.transaction.Transactional;
 
 import org.kie.kogito.index.postgresql.model.AbstractEntity;
 import org.kie.kogito.persistence.api.Storage;

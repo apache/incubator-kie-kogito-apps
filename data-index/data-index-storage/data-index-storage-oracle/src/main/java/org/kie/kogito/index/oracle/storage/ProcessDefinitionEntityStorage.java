@@ -20,10 +20,10 @@ package org.kie.kogito.index.oracle.storage;
 
 import java.util.Optional;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
 
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.oracle.mapper.ProcessDefinitionEntityMapper;

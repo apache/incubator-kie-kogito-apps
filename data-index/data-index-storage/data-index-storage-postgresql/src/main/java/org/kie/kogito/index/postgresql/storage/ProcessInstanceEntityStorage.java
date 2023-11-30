@@ -18,8 +18,8 @@
  */
 package org.kie.kogito.index.postgresql.storage;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.postgresql.mapper.ProcessInstanceEntityMapper;

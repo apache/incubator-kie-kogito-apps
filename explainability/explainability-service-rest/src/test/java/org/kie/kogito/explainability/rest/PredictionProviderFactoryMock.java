@@ -20,7 +20,7 @@ package org.kie.kogito.explainability.rest;
 
 import java.util.Collection;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.explainability.PredictionProviderFactory;
 import org.kie.kogito.explainability.api.HasNameValue;

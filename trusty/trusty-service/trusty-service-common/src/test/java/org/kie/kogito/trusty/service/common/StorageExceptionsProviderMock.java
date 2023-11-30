@@ -18,7 +18,7 @@
  */
 package org.kie.kogito.trusty.service.common;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.trusty.storage.api.StorageExceptionsProvider;
 

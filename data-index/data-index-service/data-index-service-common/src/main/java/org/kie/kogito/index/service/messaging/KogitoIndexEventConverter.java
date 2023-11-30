@@ -22,8 +22,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.function.Supplier;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.event.AbstractDataEvent;

@@ -20,11 +20,11 @@ package org.kie.kogito.index.postgresql.storage;
 
 import java.util.Optional;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.LockModeType;
-import javax.transaction.Transactional;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.LockModeType;
+import jakarta.transaction.Transactional;
 
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.postgresql.mapper.ProcessDefinitionEntityMapper;

@@ -18,8 +18,8 @@
  */
 package org.kie.kogito.jobs.service.validation;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.kie.kogito.jobs.service.api.Job;

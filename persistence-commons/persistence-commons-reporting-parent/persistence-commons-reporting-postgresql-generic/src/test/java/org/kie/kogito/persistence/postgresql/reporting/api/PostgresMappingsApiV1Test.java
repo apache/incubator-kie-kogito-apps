@@ -21,7 +21,7 @@ package org.kie.kogito.persistence.postgresql.reporting.api;
 import java.util.Collection;
 import java.util.List;
 
-import javax.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

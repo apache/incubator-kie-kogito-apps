@@ -20,7 +20,7 @@ package org.kie.kogito.jobs.service.messaging.http.stream;
 
 import java.util.Optional;
 
-import javax.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.HttpHeaders;
 
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.jobs.service.stream.AbstractJobStreamsTest;

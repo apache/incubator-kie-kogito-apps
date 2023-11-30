@@ -22,7 +22,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Optional;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.IntervalTrigger;

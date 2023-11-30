@@ -18,7 +18,7 @@
  */
 package org.kie.kogito.persistence.protobuf;
 
-import javax.enterprise.event.Event;
+import jakarta.enterprise.event.Event;
 
 import org.infinispan.protostream.FileDescriptorSource;
 import org.junit.jupiter.api.BeforeEach;

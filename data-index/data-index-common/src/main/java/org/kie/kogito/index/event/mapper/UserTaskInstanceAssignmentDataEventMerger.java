@@ -20,7 +20,7 @@ package org.kie.kogito.index.event.mapper;
 
 import java.util.HashSet;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentEventBody;
