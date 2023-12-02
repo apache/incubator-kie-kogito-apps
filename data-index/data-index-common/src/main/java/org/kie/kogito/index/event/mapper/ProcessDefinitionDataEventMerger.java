@@ -28,13 +28,14 @@ import java.util.stream.Collectors;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.kie.kogito.event.process.NodeDefinition;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionEventBody;
 import org.kie.kogito.index.json.JsonUtils;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessDefinition;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import static java.util.stream.Collectors.toList;
 
