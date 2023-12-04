@@ -19,7 +19,7 @@
 import { FormFooter } from '@kogito-apps/components-common/dist/components/FormFooter';
 import { FormAction } from '@kogito-apps/components-common/dist/components/utils';
 import {
-  CustomForm,
+  Form,
   FormOpened,
   FormOpenedState,
   FormSubmitResponseType
@@ -37,7 +37,7 @@ import uuidv4 from 'uuid';
 
 export interface CustomProcessFormDisplayerProps {
   schema: Record<string, any>;
-  customForm: CustomForm;
+  customForm: Form;
   driver: ProcessFormDriver;
   targetOrigin: string;
 }

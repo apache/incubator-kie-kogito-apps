@@ -23,17 +23,14 @@ import {
   startProcessInstance,
   getForms
 } from '../apis';
-import {
-  CustomForm,
-  FormInfo
-} from '@kogito-apps/components-common/dist/types';
+import { Form, FormInfo } from '@kogito-apps/components-common/dist/types';
 
 export interface ProcessFormGatewayApi {
   getProcessFormSchema(processDefinitionData: ProcessDefinition): Promise<any>;
   getCustomFormList(
     processDefinitionData: ProcessDefinition
   ): Promise<FormInfo[]>;
-  getCustomForm(processDefinitionData: ProcessDefinition): Promise<CustomForm>;
+  getCustomForm(processDefinitionData: ProcessDefinition): Promise<Form>;
   startProcess(
     formData: any,
     processDefinitionData: ProcessDefinition
@@ -68,7 +65,7 @@ export class ProcessFormGatewayApiImpl implements ProcessFormGatewayApi {
     return getForms([processDefinitionData.processName]);
   }
 
-  getCustomForm(processDefinitionData: ProcessDefinition): Promise<CustomForm> {
+  getCustomForm(processDefinitionData: ProcessDefinition): Promise<Form> {
     return getCustomForm(processDefinitionData);
   }
 

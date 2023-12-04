@@ -49,12 +49,6 @@ export type FormResources = {
   styles: Record<string, string>;
 };
 
-export type CustomForm = {
-  formInfo: FormInfo;
-  source: string;
-  configuration: FormConfiguration;
-};
-
 export interface FormDisplayerInitArgs {
   form: Form;
   data?: any;

@@ -16,10 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import {
-  CustomForm,
-  FormInfo
-} from '@kogito-apps/components-common/dist/types';
+import { Form, FormInfo } from '@kogito-apps/components-common/dist/types';
 import { ProcessDefinition } from './ProcessFormEnvelopeApi';
 
 /**
@@ -32,6 +29,6 @@ export interface ProcessFormDriver {
   getCustomFormList(
     processDefinitionData: ProcessDefinition
   ): Promise<FormInfo[]>;
-  getCustomForm(processDefinitionData: ProcessDefinition): Promise<CustomForm>;
+  getCustomForm(processDefinitionData: ProcessDefinition): Promise<Form>;
   startProcess(formData: any): Promise<void>;
 }

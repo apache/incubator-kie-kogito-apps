@@ -26,7 +26,7 @@ import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/Ko
 import { ServerErrors } from '@kogito-apps/components-common/dist/components/ServerErrors';
 import { FormRenderer } from '@kogito-apps/components-common/dist/components/FormRenderer';
 import {
-  CustomForm,
+  Form,
   FormRendererApi
 } from '@kogito-apps/components-common/dist/types';
 import { FormAction } from '@kogito-apps/components-common/dist/components/utils';
@@ -50,7 +50,7 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
 }) => {
   const formRendererApi = React.useRef<FormRendererApi>();
   const [processFormSchema, setProcessFormSchema] = useState<any>({});
-  const [processCustomForm, setProcessCustomForm] = useState<CustomForm>(null);
+  const [processCustomForm, setProcessCustomForm] = useState<Form>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>(null);
 
