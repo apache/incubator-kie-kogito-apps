@@ -22,8 +22,10 @@ import {
   ProcessFormChannelApi,
   ProcessFormDriver
 } from '../api';
-import { CustomForm } from '@kogito-apps/components-common/dist/types';
-import { FormInfo } from '@kogito-apps/forms-list/dist/api';
+import {
+  CustomForm,
+  FormInfo
+} from '@kogito-apps/components-common/dist/types';
 
 /**
  * Implementation of ProcessFormDriver to be used on ProcessFormEnvelopeView

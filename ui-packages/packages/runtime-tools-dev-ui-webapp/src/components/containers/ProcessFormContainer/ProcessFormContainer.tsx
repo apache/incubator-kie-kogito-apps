@@ -24,8 +24,10 @@ import {
 import { ProcessFormGatewayApi } from '../../../channel/ProcessForm/ProcessFormGatewayApi';
 import { useProcessFormGatewayApi } from '../../../channel/ProcessForm/ProcessFormContext';
 import { EmbeddedProcessForm } from '@kogito-apps/process-form';
-import { CustomForm } from '@kogito-apps/components-common/dist/types';
-import { FormInfo } from '@kogito-apps/forms-list/dist/api';
+import {
+  CustomForm,
+  FormInfo
+} from '@kogito-apps/components-common/dist/types';
 import { ProcessDefinition } from '@kogito-apps/process-definition-list';
 import { useDevUIAppContext } from '../../contexts/DevUIAppContext';
 

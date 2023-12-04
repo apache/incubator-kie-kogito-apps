@@ -24,6 +24,10 @@ export interface FormRendererApi {
   doReset: () => void;
 }
 
+export interface FormFilter {
+  formNames: string[];
+}
+
 export enum FormType {
   HTML = 'HTML',
   TSX = 'TSX'
@@ -50,3 +54,54 @@ export type CustomForm = {
   source: string;
   configuration: FormConfiguration;
 };
+
+export interface FormDisplayerInitArgs {
+  form: Form;
+  data?: any;
+  context?: Record<string, any>;
+}
+
+export type FormSubmitContext = {
+  params?: Record<string, string>;
+};
+
+export enum FormOpenedState {
+  OPENED = 'opened',
+  ERROR = 'error'
+}
+
+export type FormOpened = {
+  state: FormOpenedState;
+  size: FormSize;
+};
+
+export type FormSize = {
+  width: number;
+  height: number;
+};
+
+export enum FormSubmitResponseType {
+  SUCCESS = 'success',
+  FAILURE = 'failure'
+}
+
+export type FormSubmitResponse = {
+  type: FormSubmitResponseType;
+  info: any;
+};
+
+export interface Association {
+  origin: string;
+  envelopeServerId: string;
+}
+
+export interface Form {
+  formInfo: FormInfo;
+  source: string;
+  configuration: FormConfiguration;
+}
+
+export interface FormContent {
+  source: string;
+  configuration: FormConfiguration;
+}

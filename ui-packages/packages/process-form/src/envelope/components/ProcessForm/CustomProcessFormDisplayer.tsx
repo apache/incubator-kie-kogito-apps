@@ -18,13 +18,13 @@
  */
 import { FormFooter } from '@kogito-apps/components-common/dist/components/FormFooter';
 import { FormAction } from '@kogito-apps/components-common/dist/components/utils';
-import { CustomForm } from '@kogito-apps/components-common/dist/types';
 import {
-  FormDisplayerApi,
+  CustomForm,
   FormOpened,
   FormOpenedState,
   FormSubmitResponseType
-} from '@kogito-apps/form-displayer/dist/api';
+} from '@kogito-apps/components-common/dist/types';
+import { FormDisplayerApi } from '@kogito-apps/form-displayer/dist/api';
 import { EmbeddedFormDisplayer } from '@kogito-apps/form-displayer/dist/embedded';
 import {
   OUIAProps,

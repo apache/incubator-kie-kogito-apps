@@ -24,10 +24,13 @@ import {
   TriggerableNode
 } from '@kogito-apps/management-console-shared/dist/types';
 import { OperationType } from '@kogito-apps/management-console-shared/dist/components/BulkList';
-import { FormInfo } from '@kogito-apps/forms-list';
 import axios from 'axios';
 import uuidv4 from 'uuid';
-import { Form, FormContent } from '@kogito-apps/form-details';
+import {
+  Form,
+  FormContent,
+  FormInfo
+} from '@kogito-apps/components-common/dist/types';
 import SwaggerParser from '@apidevtools/swagger-parser';
 import { createProcessDefinitionList } from '../../utils/Utils';
 import { ProcessDefinition } from '@kogito-apps/process-definition-list';
