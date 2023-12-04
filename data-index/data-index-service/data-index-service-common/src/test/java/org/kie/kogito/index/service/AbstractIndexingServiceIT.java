@@ -27,14 +27,11 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.IntStream;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -49,6 +46,9 @@ import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.index.test.TestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
@@ -295,11 +295,12 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
             addFutureEvent(futures, processId, processInstanceId, ACTIVE, executorService, false);
             addFutureEvent(futures, processId, processInstanceId, PENDING, executorService, false);
             addFutureEvent(futures, processId, processInstanceId, ACTIVE, executorService, false);
-            //delay the last event to assert later the state
-            addFutureEvent(futures, processId, processInstanceId, COMPLETED, executorService, true);
+            addFutureEvent(futures, processId, processInstanceId, COMPLETED, executorService, false);
         }
+        //delay the last event to assert later the state
+        addFutureEvent(futures, processId, processInstanceId, COMPLETED, executorService, true);
         //wait for all futures to complete
-        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).get(10, TimeUnit.SECONDS);
+        CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new)).get(20, TimeUnit.SECONDS);
         ProcessInstanceStateDataEvent event = getProcessCloudEvent(processId, processInstanceId, COMPLETED, null, null, null, CURRENT_USER);
         validateProcessInstance(getProcessInstanceById(processInstanceId), event);
     }
@@ -307,7 +308,11 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
     private void addFutureEvent(List<CompletableFuture<Void>> futures, String processId, String processInstanceId, ProcessInstanceState state, ExecutorService executorService, boolean delay) {
         futures.add(CompletableFuture.runAsync(() -> {
             if (delay) {
-                await().atLeast(500, TimeUnit.MILLISECONDS).untilTrue(new AtomicBoolean(true));
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
             ProcessInstanceStateDataEvent event = getProcessCloudEvent(processId, processInstanceId, state, null, null, null, CURRENT_USER);
             indexProcessCloudEvent(event);

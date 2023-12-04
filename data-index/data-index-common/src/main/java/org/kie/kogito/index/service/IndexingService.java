@@ -78,20 +78,7 @@ public class IndexingService {
     //retry in case of rare but possible race condition during the insert for the first registry
     @Retry(maxRetries = 3, delay = 300, jitter = 100, retryOn = ConcurrentModificationException.class)
     public void indexProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
-        ProcessInstance pi = handleProcessInstanceEvent(event);
-
-        ProcessDefinition definition = pi.getDefinition();
-
-        //todo: can be removed
-        handleProcessDefinition(definition);
-    }
-
-    @Retry(maxRetries = 3, delay = 300, jitter = 100, retryOn = ConcurrentModificationException.class)
-    public void handleProcessDefinition(ProcessDefinition definition) {
-        if (definition != null && !manager.getProcessDefinitionsCache().containsKey(definition.getKey())) {
-            manager.getProcessDefinitionsCache().put(definition.getKey(), definition);
-            LOGGER.debug("Stored Process Definition: {}", definition);
-        }
+        handleProcessInstanceEvent(event);
     }
 
     private ProcessInstance handleProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
