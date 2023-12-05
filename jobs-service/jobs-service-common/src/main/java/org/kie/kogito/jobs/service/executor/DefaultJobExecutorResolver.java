@@ -18,11 +18,11 @@
  */
 package org.kie.kogito.jobs.service.executor;
 
+import org.kie.kogito.jobs.service.model.JobDetails;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-
-import org.kie.kogito.jobs.service.model.JobDetails;
 
 @ApplicationScoped
 public class DefaultJobExecutorResolver implements JobExecutorResolver {

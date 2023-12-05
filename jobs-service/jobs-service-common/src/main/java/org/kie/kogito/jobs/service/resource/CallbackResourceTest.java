@@ -21,6 +21,10 @@ package org.kie.kogito.jobs.service.resource;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
@@ -28,10 +32,6 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
-
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 @Path("/callback")
 public class CallbackResourceTest {
