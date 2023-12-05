@@ -18,17 +18,17 @@
  */
 package org.kie.kogito.jobs.service.resource;
 
-import jakarta.enterprise.event.Event;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.POST;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.core.Response;
-
 import org.kie.kogito.jobs.service.management.ReleaseLeaderEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.smallrye.mutiny.Uni;
+
+import jakarta.enterprise.event.Event;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.Response;
 
 @Path("/management")
 public class JobServiceManagementResource {
