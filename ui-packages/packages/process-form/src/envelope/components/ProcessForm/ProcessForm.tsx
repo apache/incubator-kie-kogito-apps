@@ -69,23 +69,34 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
   }, [isEnvelopeConnectedToChannel]);
 
   const init = async (): Promise<void> => {
-    try {
-      const schema = await driver.getProcessFormSchema(processDefinition);
-      setProcessFormSchema(schema);
-      const availableForms = await driver.getCustomFormList(processDefinition);
-      if (
-        availableForms
-          .map((form) => form.name)
-          .includes(processDefinition.processName)
-      ) {
-        const customForm = await driver.getCustomForm(processDefinition);
-        setProcessCustomForm(customForm);
+    const customFormPromise: Promise<void> = new Promise<void>((resolve) => {
+      driver
+        .getCustomForm(processDefinition)
+        .then((customForm) => {
+          setProcessCustomForm(customForm);
+          resolve();
+        })
+        .catch((error) => resolve());
+    });
+
+    const schemaPromise: Promise<void> = new Promise<void>(
+      (resolve, reject) => {
+        driver
+          .getProcessFormSchema(processDefinition)
+          .then((schema) => {
+            setProcessFormSchema(schema);
+            resolve();
+          })
+          .catch((error) => {
+            setError(error);
+            reject(error);
+          });
       }
-    } catch (errorContent) {
-      setError(errorContent);
-    } finally {
+    );
+
+    Promise.all([customFormPromise, schemaPromise]).finally(() => {
       setIsLoading(false);
-    }
+    });
   };
 
   const onSubmit = (value: any): void => {
