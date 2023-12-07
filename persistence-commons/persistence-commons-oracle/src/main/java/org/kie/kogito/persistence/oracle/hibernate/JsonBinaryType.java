@@ -64,12 +64,12 @@ public class JsonBinaryType implements UserType<JsonNode> {
     @Override
     public JsonNode nullSafeGet(ResultSet rs, int position, SharedSessionContractImplementor session, Object owner)
             throws HibernateException, SQLException {
-        final Blob json = rs.getBlob(position);
-        if (json.length() == 0) {
+        final Blob blob = rs.getBlob(position);
+        if (blob == null || blob.length() == 0) {
             return null;
         }
         try {
-            return mapper.readTree(json.getBinaryStream());
+            return mapper.readTree(blob.getBinaryStream());
         } catch (final Exception ex) {
             throw new RuntimeException("Failed to convert String to JSON: " + ex.getMessage(), ex);
         }
