@@ -20,10 +20,10 @@ package org.kie.kogito.index.protobuf;
 
 import java.io.IOException;
 
+import org.infinispan.protostream.FileDescriptorSource;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
-
-import org.infinispan.protostream.FileDescriptorSource;
 
 @ApplicationScoped
 public class ProtostreamProducer {

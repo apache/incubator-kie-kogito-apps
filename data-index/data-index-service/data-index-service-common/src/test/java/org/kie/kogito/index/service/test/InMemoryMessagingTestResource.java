@@ -23,7 +23,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
-
 import io.smallrye.reactive.messaging.memory.InMemoryConnector;
 
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_JOBS_EVENTS;

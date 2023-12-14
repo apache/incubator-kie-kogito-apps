@@ -21,11 +21,11 @@ package org.kie.kogito.swf.tools.custom.dashboard.converter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
+
 import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.ParamConverterProvider;
 import jakarta.ws.rs.ext.Provider;
-
-import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
 
 @Provider
 public class CustomDashboardFilterParamConverterProvider implements ParamConverterProvider {

@@ -22,6 +22,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
+import org.kie.kogito.index.postgresql.model.AbstractEntity;
+import org.kie.kogito.persistence.api.query.AttributeFilter;
+import org.kie.kogito.persistence.api.query.AttributeSort;
+import org.kie.kogito.persistence.api.query.Query;
+import org.kie.kogito.persistence.api.query.SortDirection;
+
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
@@ -30,14 +38,6 @@ import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.metamodel.Attribute;
-
-import org.kie.kogito.index.postgresql.model.AbstractEntity;
-import org.kie.kogito.persistence.api.query.AttributeFilter;
-import org.kie.kogito.persistence.api.query.AttributeSort;
-import org.kie.kogito.persistence.api.query.Query;
-import org.kie.kogito.persistence.api.query.SortDirection;
-
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
 import static java.util.stream.Collectors.toList;
 

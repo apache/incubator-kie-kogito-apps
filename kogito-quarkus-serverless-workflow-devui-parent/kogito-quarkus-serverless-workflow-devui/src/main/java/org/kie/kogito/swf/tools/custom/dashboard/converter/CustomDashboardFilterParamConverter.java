@@ -22,10 +22,10 @@ import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
+import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
+
 import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.Provider;
-
-import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
 
 @Provider
 public class CustomDashboardFilterParamConverter implements ParamConverter<CustomDashboardFilter> {

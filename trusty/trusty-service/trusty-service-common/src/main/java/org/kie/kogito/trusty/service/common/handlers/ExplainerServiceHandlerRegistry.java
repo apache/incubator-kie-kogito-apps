@@ -20,12 +20,12 @@ package org.kie.kogito.trusty.service.common.handlers;
 
 import java.util.Optional;
 
+import org.kie.kogito.explainability.api.BaseExplainabilityResult;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-
-import org.kie.kogito.explainability.api.BaseExplainabilityResult;
 
 @ApplicationScoped
 public class ExplainerServiceHandlerRegistry {

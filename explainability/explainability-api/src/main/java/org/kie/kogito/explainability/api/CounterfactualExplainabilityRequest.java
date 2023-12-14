@@ -21,11 +21,11 @@ package org.kie.kogito.explainability.api;
 import java.util.Collection;
 import java.util.Objects;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CounterfactualExplainabilityRequest extends BaseExplainabilityRequest {

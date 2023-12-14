@@ -25,10 +25,6 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import mutiny.zero.flow.adapters.AdaptersToReactiveStreams;
-
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
@@ -45,6 +41,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.cloudevents.CloudEvent;
 import io.smallrye.mutiny.operators.multi.processors.BroadcastProcessor;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import mutiny.zero.flow.adapters.AdaptersToReactiveStreams;
 
 @ApplicationScoped
 public class ExplainabilityMessagingHandler {

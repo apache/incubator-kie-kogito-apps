@@ -22,10 +22,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Observes;
-import jakarta.enterprise.inject.Instance;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.Application;
 import org.kie.kogito.index.api.KogitoRuntimeClient;
@@ -38,6 +34,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.quarkus.runtime.StartupEvent;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.inject.Instance;
 
 import static java.lang.String.format;
 

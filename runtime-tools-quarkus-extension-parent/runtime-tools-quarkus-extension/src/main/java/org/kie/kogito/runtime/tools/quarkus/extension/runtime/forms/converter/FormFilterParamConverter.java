@@ -22,10 +22,10 @@ import java.util.Collections;
 import java.util.StringTokenizer;
 import java.util.stream.Collectors;
 
+import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormFilter;
+
 import jakarta.ws.rs.ext.ParamConverter;
 import jakarta.ws.rs.ext.Provider;
-
-import org.kie.kogito.runtime.tools.quarkus.extension.runtime.forms.model.FormFilter;
 
 @Provider
 public class FormFilterParamConverter implements ParamConverter<FormFilter> {

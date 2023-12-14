@@ -22,6 +22,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
 
+import org.kie.kogito.index.oracle.model.AbstractEntity;
+import org.kie.kogito.persistence.api.query.AttributeFilter;
+import org.kie.kogito.persistence.api.query.AttributeSort;
+import org.kie.kogito.persistence.api.query.Query;
+import org.kie.kogito.persistence.api.query.SortDirection;
+
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
@@ -30,14 +38,6 @@ import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import jakarta.persistence.metamodel.Attribute;
-
-import org.kie.kogito.index.oracle.model.AbstractEntity;
-import org.kie.kogito.persistence.api.query.AttributeFilter;
-import org.kie.kogito.persistence.api.query.AttributeSort;
-import org.kie.kogito.persistence.api.query.Query;
-import org.kie.kogito.persistence.api.query.SortDirection;
-
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
 import static java.util.stream.Collectors.toList;
 
@@ -184,6 +184,7 @@ public class OracleQuery<E extends AbstractEntity, T> implements Query<T> {
                 .map(Attribute::getName)
                 .anyMatch(pluralAttribute -> pluralAttribute.equals(attribute));
     }
+
     private List<Predicate> getRecursivePredicate(AttributeFilter<?> filter, Root<E> root, CriteriaBuilder builder) {
         return ((List<AttributeFilter<?>>) filter.getValue())
                 .stream()

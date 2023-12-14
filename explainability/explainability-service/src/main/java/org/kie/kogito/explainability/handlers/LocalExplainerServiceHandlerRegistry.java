@@ -22,14 +22,14 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
+import org.kie.kogito.explainability.api.BaseExplainabilityRequest;
+import org.kie.kogito.explainability.api.BaseExplainabilityResult;
+import org.kie.kogito.explainability.local.LocalExplainer;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Any;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
-
-import org.kie.kogito.explainability.api.BaseExplainabilityRequest;
-import org.kie.kogito.explainability.api.BaseExplainabilityResult;
-import org.kie.kogito.explainability.local.LocalExplainer;
 
 @ApplicationScoped
 public class LocalExplainerServiceHandlerRegistry {

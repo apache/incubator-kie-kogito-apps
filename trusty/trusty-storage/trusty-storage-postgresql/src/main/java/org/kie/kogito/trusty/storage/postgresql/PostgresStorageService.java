@@ -18,11 +18,6 @@
  */
 package org.kie.kogito.trusty.storage.postgresql;
 
-import jakarta.annotation.Priority;
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Alternative;
-import jakarta.inject.Inject;
-
 import org.kie.kogito.explainability.api.CounterfactualExplainabilityRequest;
 import org.kie.kogito.explainability.api.CounterfactualExplainabilityResult;
 import org.kie.kogito.explainability.api.LIMEExplainabilityResult;
@@ -32,6 +27,11 @@ import org.kie.kogito.trusty.storage.api.model.decision.DMNModelWithMetadata;
 import org.kie.kogito.trusty.storage.api.model.decision.Decision;
 
 import io.quarkus.arc.properties.IfBuildProperty;
+
+import jakarta.annotation.Priority;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Alternative;
+import jakarta.inject.Inject;
 
 import static java.lang.String.format;
 import static org.kie.kogito.persistence.api.factory.Constants.PERSISTENCE_TYPE_PROPERTY;

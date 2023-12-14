@@ -46,7 +46,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import static java.lang.String.format;
 import static java.util.stream.Collectors.joining;
-import static org.apache.commons.lang3.ArrayUtils.insert;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 
 public class GraphQLUtils {

@@ -21,9 +21,6 @@ package org.kie.kogito.trusty.service.common.messaging.outgoing;
 import java.net.URI;
 import java.util.Optional;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import mutiny.zero.flow.adapters.AdaptersToReactiveStreams;
-
 import org.eclipse.microprofile.reactive.messaging.Outgoing;
 import org.kie.kogito.event.cloudevents.utils.CloudEventUtils;
 import org.kie.kogito.explainability.api.BaseExplainabilityRequest;
@@ -32,6 +29,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.smallrye.mutiny.operators.multi.processors.BroadcastProcessor;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import mutiny.zero.flow.adapters.AdaptersToReactiveStreams;
 
 @ApplicationScoped
 public class ExplainabilityRequestProducer {

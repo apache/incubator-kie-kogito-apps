@@ -21,10 +21,6 @@ package org.kie.kogito.jobs.service.repository.mongodb;
 import java.time.ZonedDateTime;
 import java.util.concurrent.CompletionStage;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Observes;
-import jakarta.inject.Inject;
-
 import org.bson.Document;
 import org.bson.json.JsonWriterSettings;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -45,6 +41,10 @@ import io.quarkus.runtime.StartupEvent;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 
 import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;

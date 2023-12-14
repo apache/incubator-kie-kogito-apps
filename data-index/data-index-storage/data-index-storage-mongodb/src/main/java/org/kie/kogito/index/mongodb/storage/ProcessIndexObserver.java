@@ -18,14 +18,14 @@
  */
 package org.kie.kogito.index.mongodb.storage;
 
+import org.kie.kogito.index.storage.DataIndexStorageService;
+import org.kie.kogito.persistence.mongodb.index.IndexCreateOrUpdateEvent;
+import org.kie.kogito.persistence.mongodb.index.ProcessIndexEvent;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.event.Observes;
 import jakarta.inject.Inject;
-
-import org.kie.kogito.index.storage.DataIndexStorageService;
-import org.kie.kogito.persistence.mongodb.index.IndexCreateOrUpdateEvent;
-import org.kie.kogito.persistence.mongodb.index.ProcessIndexEvent;
 
 import static org.kie.kogito.index.mongodb.Constants.getDomainCollectionName;
 

@@ -18,15 +18,15 @@
  */
 package org.kie.kogito.jobs.service.repository.mongodb.marshaller;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.repository.marshaller.JobDetailsMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 
 import io.vertx.core.json.JsonObject;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class MongoDBJobDetailsMarshaller extends JobDetailsMarshaller {

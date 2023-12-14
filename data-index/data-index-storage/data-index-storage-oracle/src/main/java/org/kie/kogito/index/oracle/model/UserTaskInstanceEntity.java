@@ -23,6 +23,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.Type;
+import org.kie.kogito.persistence.oracle.hibernate.JsonBinaryType;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -34,14 +41,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-import org.kie.kogito.persistence.oracle.hibernate.JsonBinaryType;
 
 @Entity(name = "tasks")
 @Table(name = "tasks")

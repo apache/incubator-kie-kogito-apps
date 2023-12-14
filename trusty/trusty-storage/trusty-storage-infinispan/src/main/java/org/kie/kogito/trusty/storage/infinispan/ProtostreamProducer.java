@@ -20,13 +20,13 @@ package org.kie.kogito.trusty.storage.infinispan;
 
 import java.io.IOException;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Produces;
-import jakarta.inject.Inject;
-
 import org.infinispan.protostream.FileDescriptorSource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Produces;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class ProtostreamProducer {

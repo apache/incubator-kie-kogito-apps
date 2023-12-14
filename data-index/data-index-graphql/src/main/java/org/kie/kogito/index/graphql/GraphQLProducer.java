@@ -18,11 +18,10 @@
  */
 package org.kie.kogito.index.graphql;
 
+import graphql.GraphQL;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
-
-import graphql.GraphQL;
 
 @ApplicationScoped
 public class GraphQLProducer {

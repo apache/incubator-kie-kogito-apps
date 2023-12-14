@@ -18,6 +18,10 @@
  */
 package org.kie.kogito.swf.tools.custom.dashboard;
 
+import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -26,10 +30,6 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.QueryParam;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
-import org.kie.kogito.swf.tools.custom.dashboard.model.CustomDashboardFilter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static jakarta.ws.rs.core.Response.Status.INTERNAL_SERVER_ERROR;
 

@@ -21,19 +21,20 @@ package org.kie.kogito.jobs.service.repository.infinispan;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Event;
-import jakarta.enterprise.event.Observes;
-import jakarta.enterprise.inject.Instance;
-import jakarta.enterprise.inject.Produces;
-import jakarta.interceptor.Interceptor;
-import jakarta.annotation.Priority;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.Readiness;
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.kie.kogito.infinispan.health.InfinispanHealthCheck;
 
 import io.quarkus.runtime.StartupEvent;
+
+import jakarta.annotation.Priority;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Event;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Produces;
+import jakarta.interceptor.Interceptor;
 
 import static org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfiguration.Caches.JOB_DETAILS;
 

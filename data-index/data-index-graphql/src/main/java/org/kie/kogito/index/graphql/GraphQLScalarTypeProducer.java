@@ -18,11 +18,10 @@
  */
 package org.kie.kogito.index.graphql;
 
+import graphql.schema.GraphQLScalarType;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
-
-import graphql.schema.GraphQLScalarType;
 
 @ApplicationScoped
 public class GraphQLScalarTypeProducer {

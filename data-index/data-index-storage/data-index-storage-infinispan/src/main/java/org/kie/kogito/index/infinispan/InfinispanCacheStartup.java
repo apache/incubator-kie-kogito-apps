@@ -18,13 +18,13 @@
  */
 package org.kie.kogito.index.infinispan;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-
-import jakarta.annotation.PostConstruct;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 
 import io.quarkus.runtime.Startup;
+
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 @Startup
