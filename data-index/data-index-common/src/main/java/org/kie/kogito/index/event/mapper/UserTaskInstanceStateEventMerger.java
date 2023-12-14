@@ -19,6 +19,7 @@
 package org.kie.kogito.index.event.mapper;
 
 import java.net.URI;
+import java.util.List;
 
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
@@ -43,7 +44,13 @@ public class UserTaskInstanceStateEventMerger implements UserTaskInstanceEventMe
     }
 
     @Override
+<<<<<<< HEAD
     public UserTaskInstance merge(UserTaskInstance task, UserTaskInstanceDataEvent<?> data) {
+=======
+    public void merge(UserTaskInstance task, UserTaskInstanceDataEvent<?> data) {
+        List<String> finalState = List.of("Completed", "Aborted");
+
+>>>>>>> 55104cd12 (fix user task events)
         UserTaskInstanceStateDataEvent event = (UserTaskInstanceStateDataEvent) data;
         LOGGER.debug("value before merging: {}", task);
         task.setId(event.getData().getUserTaskInstanceId());
@@ -55,9 +62,9 @@ public class UserTaskInstanceStateEventMerger implements UserTaskInstanceEventMe
         task.setDescription(event.getData().getUserTaskDescription());
         task.setState(event.getData().getState());
         task.setPriority(event.getData().getUserTaskPriority());
-        if (event.getData().getEventType() == null || "Ready".equals(event.getData().getEventType())) {
+        if (task.getStarted() == null) {
             task.setStarted(toZonedDateTime(event.getData().getEventDate()));
-        } else if ("Completed".equals(event.getData().getEventType())) {
+        } else if (finalState.contains(event.getData().getEventType())) {
             task.setCompleted(toZonedDateTime(event.getData().getEventDate()));
         }
 
