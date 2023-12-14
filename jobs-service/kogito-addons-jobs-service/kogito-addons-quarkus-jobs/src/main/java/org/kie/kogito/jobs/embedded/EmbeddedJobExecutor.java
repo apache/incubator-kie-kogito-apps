@@ -61,7 +61,8 @@ public class EmbeddedJobExecutor implements JobExecutor {
         return Uni.createFrom().item(command::execute)
                 .onFailure()
                 .transform(
-                        unexpected -> new JobExecutionException(jobDetails.getId(), "Unexpected error when executing Embedded request for job: " + jobDetails.getId() + ". " + unexpected.getMessage(), unexpected))
+                        unexpected -> new JobExecutionException(jobDetails.getId(), "Unexpected error when executing Embedded request for job: " + jobDetails.getId() + ". " + unexpected.getMessage(),
+                                unexpected))
                 .onItem()
                 .transform(res -> JobExecutionResponse.builder()
                         .message("Embedded job executed")

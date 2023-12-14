@@ -32,7 +32,7 @@ public class InVMPayloadData extends PayloadData<ProcessInstanceJobDescription> 
     public void setJobDescription(ProcessInstanceJobDescription jobDescription) {
         this.jobDescription = jobDescription;
     }
-    
+
     public ProcessInstanceJobDescription getJobDescription() {
         return jobDescription;
     }

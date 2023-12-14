@@ -39,7 +39,7 @@ public class TestProcesses implements Processes {
         Process<? extends Model> process = Mockito.mock(Process.class);
         ProcessInstances instances = Mockito.mock(ProcessInstances.class);
         Mockito.when(process.instances()).thenReturn(instances);
-        
+
         Mockito.when(instances.findById(Mockito.any())).thenReturn(Optional.of(Mockito.mock(ProcessInstance.class)));
         return process;
     }
