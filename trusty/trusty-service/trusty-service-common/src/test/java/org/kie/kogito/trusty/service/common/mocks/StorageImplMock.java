@@ -21,7 +21,7 @@ package org.kie.kogito.trusty.service.common.mocks;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.ws.rs.NotFoundException;
+import jakarta.ws.rs.NotFoundException;
 
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;

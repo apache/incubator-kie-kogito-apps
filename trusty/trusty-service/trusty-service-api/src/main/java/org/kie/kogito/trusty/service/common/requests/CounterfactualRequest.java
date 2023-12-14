@@ -21,7 +21,7 @@ package org.kie.kogito.trusty.service.common.requests;
 import java.util.List;
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.kie.kogito.explainability.api.CounterfactualSearchDomain;
 import org.kie.kogito.explainability.api.NamedTypedValue;

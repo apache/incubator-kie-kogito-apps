@@ -18,8 +18,8 @@
  */
 package org.kie.kogito.persistence.mongodb.client;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.bson.Document;
 import org.eclipse.microprofile.config.ConfigProvider;

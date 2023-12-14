@@ -18,7 +18,7 @@
  */
 package org.kie.kogito.index.mongodb.query;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.kie.kogito.index.mongodb.model.ProcessIdEntity;

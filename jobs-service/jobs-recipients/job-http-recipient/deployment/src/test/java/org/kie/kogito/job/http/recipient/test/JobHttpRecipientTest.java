@@ -18,7 +18,7 @@
  */
 package org.kie.kogito.job.http.recipient.test;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.jboss.shrinkwrap.api.ShrinkWrap;

@@ -18,9 +18,8 @@
  */
 package org.kie.kogito.index.vertx;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import io.quarkus.arc.properties.IfBuildProperty;
 import io.quarkus.vertx.web.Route;
@@ -28,7 +27,7 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.graphql.ApolloWSHandler;
 import io.vertx.ext.web.handler.graphql.GraphQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphQLHandlerOptions;
-
+import jakarta.annotation.PostConstruct;
 import graphql.GraphQL;
 
 import static io.quarkus.vertx.web.Route.HttpMethod.GET;

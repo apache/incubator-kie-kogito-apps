@@ -21,7 +21,7 @@ package org.kie.kogito.index.oracle.mapper;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

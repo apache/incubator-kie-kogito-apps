@@ -18,9 +18,9 @@
  */
 package org.kie.kogito.persistence.postgresql.reporting.bootstrap;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.inject.Inject;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.persistence.postgresql.reporting.database.BasePostgresDatabaseManagerImpl;

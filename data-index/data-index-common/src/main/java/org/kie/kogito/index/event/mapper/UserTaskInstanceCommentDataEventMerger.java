@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.event.usertask.UserTaskInstanceCommentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceCommentEventBody;

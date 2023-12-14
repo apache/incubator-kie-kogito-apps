@@ -18,10 +18,10 @@
  */
 package org.kie.kogito.trusty.storage.redis;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
 
+import jakarta.annotation.PostConstruct;
 import org.kie.kogito.explainability.api.CounterfactualExplainabilityResult;
 import org.kie.kogito.persistence.redis.index.RedisCreateIndexEvent;
 import org.kie.kogito.persistence.redis.index.RedisIndexManager;

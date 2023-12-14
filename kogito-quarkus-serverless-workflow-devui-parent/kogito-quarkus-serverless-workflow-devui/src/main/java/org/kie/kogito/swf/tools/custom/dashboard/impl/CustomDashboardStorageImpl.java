@@ -43,7 +43,7 @@ import java.util.TimeZone;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;

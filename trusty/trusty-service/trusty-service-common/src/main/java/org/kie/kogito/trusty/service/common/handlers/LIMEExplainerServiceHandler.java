@@ -18,8 +18,8 @@
  */
 package org.kie.kogito.trusty.service.common.handlers;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import org.kie.kogito.explainability.api.BaseExplainabilityResult;
 import org.kie.kogito.explainability.api.LIMEExplainabilityResult;

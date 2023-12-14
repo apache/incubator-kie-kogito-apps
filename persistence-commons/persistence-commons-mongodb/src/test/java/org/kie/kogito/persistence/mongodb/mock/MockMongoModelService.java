@@ -18,7 +18,7 @@
  */
 package org.kie.kogito.persistence.mongodb.mock;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.persistence.mongodb.model.MongoEntityMapper;
 import org.kie.kogito.persistence.mongodb.storage.MongoModelService;

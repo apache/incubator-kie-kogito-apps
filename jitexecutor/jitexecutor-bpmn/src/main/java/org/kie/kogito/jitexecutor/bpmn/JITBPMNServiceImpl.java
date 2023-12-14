@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.drools.io.InputStreamResource;
 import org.jbpm.bpmn2.xml.BPMNDISemanticModule;

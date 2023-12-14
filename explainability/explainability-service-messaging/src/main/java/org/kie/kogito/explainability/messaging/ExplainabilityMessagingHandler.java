@@ -25,8 +25,9 @@ import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import mutiny.zero.flow.adapters.AdaptersToReactiveStreams;
 
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.eclipse.microprofile.reactive.messaging.Message;
@@ -133,6 +134,6 @@ public class ExplainabilityMessagingHandler {
 
     @Outgoing("trusty-explainability-result")
     public Publisher<String> getEventPublisher() {
-        return eventSubject.toHotStream();
+        return AdaptersToReactiveStreams.publisher(eventSubject.toHotStream());
     }
 }

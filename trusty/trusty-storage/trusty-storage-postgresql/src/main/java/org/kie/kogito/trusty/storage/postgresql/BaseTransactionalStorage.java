@@ -20,7 +20,7 @@ package org.kie.kogito.trusty.storage.postgresql;
 
 import java.util.Map;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.Query;

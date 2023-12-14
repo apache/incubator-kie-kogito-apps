@@ -20,8 +20,8 @@ package org.kie.kogito.persistence.postgresql;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.transaction.Transactional;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

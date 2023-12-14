@@ -22,7 +22,7 @@ import java.util.Collections;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import javax.enterprise.inject.Instance;
+import jakarta.enterprise.inject.Instance;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

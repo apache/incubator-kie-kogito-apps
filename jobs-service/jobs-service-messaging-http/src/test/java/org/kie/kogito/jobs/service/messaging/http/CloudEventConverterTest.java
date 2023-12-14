@@ -21,7 +21,7 @@ package org.kie.kogito.jobs.service.messaging.http;
 import java.net.URI;
 import java.time.OffsetDateTime;
 
-import javax.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.HttpHeaders;
 
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.eclipse.microprofile.reactive.messaging.Metadata;

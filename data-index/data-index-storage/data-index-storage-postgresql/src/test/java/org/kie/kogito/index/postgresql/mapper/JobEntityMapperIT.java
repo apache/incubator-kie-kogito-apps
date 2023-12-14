@@ -20,7 +20,7 @@ package org.kie.kogito.index.postgresql.mapper;
 
 import java.time.ZonedDateTime;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
