@@ -1,3 +1,21 @@
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
@@ -16,8 +34,6 @@ module.exports = {
     'resources/form-displayer': './src/resources/form-displayer.ts',
     'resources/serverless-workflow-text-editor-envelope':
       './src/resources/ServerlessWorkflowTextEditorEnvelopeApp.ts',
-    'resources/serverless-workflow-mermaid-viewer-envelope':
-      './src/resources/ServerlessWorkflowMermaidViewerEnvelopeApp.ts',
     'resources/serverless-workflow-combined-editor-envelope':
       './src/resources/ServerlessWorkflowCombinedEditorEnvelopeApp.ts',
     'resources/serverless-workflow-diagram-editor-envelope':
@@ -25,7 +41,7 @@ module.exports = {
   },
   plugins: [
     new MonacoWebpackPlugin({
-      languages: ['typescript', 'json'],
+      languages: ['typescript', 'json', 'html'],
       customLanguages: [
         {
           label: 'yaml',
@@ -62,11 +78,43 @@ module.exports = {
     new FileManagerPlugin({
       events: {
         onEnd: {
-          mkdir: ['./dist/resources/webapp/'],
+          mkdir: [
+            './dist/resources/webapp',
+            './dist/webapp/',
+            './dist/webapp/fonts/'
+          ],
           copy: [
-            { source: './dist/*.js', destination: './dist/resources/webapp/' },
-            { source: './dist/*.map', destination: './dist/resources/webapp/' },
-            { source: './dist/fonts', destination: './dist/resources/webapp/' },
+            {
+              source: './dist/envelope.js',
+              destination: './dist/resources/webapp/'
+            },
+            {
+              source: './dist/envelope.js.map',
+              destination: './dist/resources/webapp/'
+            },
+            {
+              source: './dist/standalone.js',
+              destination: './dist/resources/webapp/'
+            },
+            {
+              source: './dist/standalone.js.map',
+              destination: './dist/resources/webapp/'
+            },
+            {
+              source: './dist/*.js',
+              destination: './dist/webapp/',
+              globOptions: {
+                ignore: ['./dist/envelope.js', './dist/standalone.js']
+              }
+            },
+            {
+              source: './dist/*.map',
+              destination: './dist/webapp/',
+              globOptions: {
+                ignore: ['./dist/envelope.js.map', './dist/standalone.js.map']
+              }
+            },
+            { source: './dist/fonts', destination: './dist/webapp/fonts/' },
             {
               source: './dist/monitoring-webapp',
               destination: './dist/resources/webapp/monitoring-webapp'
@@ -74,8 +122,13 @@ module.exports = {
             {
               source: './dist/custom-dashboard-view',
               destination: './dist/resources/webapp/custom-dashboard-view'
+            },
+            {
+              source: './dist/diagram',
+              destination: './dist/resources/diagram'
             }
-          ]
+          ],
+          delete: ['./dist/*.js*', './dist/fonts', './dist/standalone']
         }
       }
     }),

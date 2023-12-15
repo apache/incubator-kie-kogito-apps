@@ -1,19 +1,21 @@
-/*
- * Copyright 2022 Red Hat, Inc. and/or its affiliates.
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   EmbeddedEditor,
@@ -42,9 +44,8 @@ import {
 } from '@kie-tools-core/editor/dist/channel';
 import {
   SwfCombinedEditorChannelApiImpl,
-  SwfFeatureToggleChannelApiImpl,
   SwfPreviewOptionsChannelApiImpl
-} from '@kie-tools/serverless-workflow-combined-editor/dist/impl';
+} from '@kie-tools/serverless-workflow-combined-editor/dist/channel';
 import { useController } from '../../../hooks/useController';
 import { ProcessInstance } from '@kogito-apps/management-console-shared/dist/types';
 import { MessageBusClientApi } from '@kie-tools-core/envelope-bus/dist/api';
@@ -52,14 +53,12 @@ import { ServerlessWorkflowCombinedEditorChannelApi } from '@kie-tools/serverles
 import { ServerlessWorkflowCombinedEditorEnvelopeApi } from '@kie-tools/serverless-workflow-combined-editor/dist/api/ServerlessWorkflowCombinedEditorEnvelopeApi';
 interface ISwfCombinedEditorProps {
   workflowInstance: Pick<ProcessInstance, 'source' | 'nodes' | 'error'>;
-  isStunnerEnabled: boolean;
   width?: number;
   height?: number;
 }
 
 const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
   workflowInstance,
-  isStunnerEnabled,
   width,
   height,
   ouiaId,
@@ -129,14 +128,6 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
     [stateControl, embeddedFile]
   );
 
-  const swfFeatureToggleChannelApiImpl = useMemo(
-    () =>
-      new SwfFeatureToggleChannelApiImpl({
-        stunnerEnabled: isStunnerEnabled
-      }),
-    [isStunnerEnabled]
-  );
-
   const swfPreviewOptionsChannelApiImpl = useMemo(
     () =>
       new SwfPreviewOptionsChannelApiImpl({
@@ -147,19 +138,11 @@ const SwfCombinedEditor: React.FC<ISwfCombinedEditorProps & OUIAProps> = ({
 
   const apiImpl = useMemo(
     () =>
-      new SwfCombinedEditorChannelApiImpl(
-        channelApiImpl,
-        swfFeatureToggleChannelApiImpl,
-        null,
-        null,
-        swfPreviewOptionsChannelApiImpl,
-        null
-      ),
-    [
-      channelApiImpl,
-      swfFeatureToggleChannelApiImpl,
-      swfPreviewOptionsChannelApiImpl
-    ]
+      new SwfCombinedEditorChannelApiImpl({
+        defaultApiImpl: channelApiImpl,
+        swfPreviewOptionsChannelApiImpl
+      }),
+    [channelApiImpl, swfPreviewOptionsChannelApiImpl]
   );
 
   useEffect(() => {

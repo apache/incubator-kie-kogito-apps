@@ -1,19 +1,21 @@
 /*
- * Copyright 2023 Red Hat, Inc. and/or its affiliates.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 package org.kie.kogito.index.addon;
 
 import java.io.IOException;
@@ -26,15 +28,15 @@ import javax.transaction.Transactional;
 
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.EventPublisher;
+import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
-import org.kie.kogito.event.process.UserTaskInstanceDataEvent;
-import org.kie.kogito.index.event.ProcessInstanceEventMapper;
-import org.kie.kogito.index.event.UserTaskInstanceEventMapper;
+import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.service.IndexingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.kie.kogito.event.process.ProcessDefinitionDataEvent.PROCESS_DEFINITION_EVENT;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 
 @ApplicationScoped
@@ -50,15 +52,29 @@ public class DataIndexEventPublisher implements EventPublisher {
     public void publish(DataEvent<?> event) {
         LOGGER.debug("Sending event to embedded data index: {}", event);
         switch (event.getType()) {
-            case "ProcessInstanceEvent":
-                indexingService.indexProcessInstance(new ProcessInstanceEventMapper().apply((ProcessInstanceDataEvent) event));
+            case PROCESS_DEFINITION_EVENT:
+                indexingService.indexProcessDefinition((ProcessDefinitionDataEvent) event);
                 break;
-            case "UserTaskInstanceEvent":
-                indexingService.indexUserTaskInstance(new UserTaskInstanceEventMapper().apply((UserTaskInstanceDataEvent) event));
+            case "ProcessInstanceErrorDataEvent":
+            case "ProcessInstanceNodeDataEvent":
+            case "ProcessInstanceSLADataEvent":
+            case "ProcessInstanceStateDataEvent":
+            case "ProcessInstanceVariableDataEvent":
+                indexingService.indexProcessInstanceEvent((ProcessInstanceDataEvent<?>) event);
+                break;
+            case "UserTaskInstanceAssignmentDataEvent":
+            case "UserTaskInstanceAttachmentDataEvent":
+            case "UserTaskInstanceCommentDataEvent":
+            case "UserTaskInstanceDeadlineDataEvent":
+            case "UserTaskInstanceStateDataEvent":
+            case "UserTaskInstanceVariableDataEvent":
+                indexingService.indexUserTaskInstanceEvent((UserTaskInstanceDataEvent<?>) event);
                 break;
             case "JobEvent":
                 try {
-                    indexingService.indexJob(getObjectMapper().readValue(new String((byte[]) event.getData()), Job.class));
+                    Job job = getObjectMapper().readValue(new String((byte[]) event.getData()), Job.class);
+                    job.setEndpoint(event.getSource() == null ? null : event.getSource().toString());
+                    indexingService.indexJob(job);
                 } catch (IOException e) {
                     throw new UncheckedIOException(e);
                 }

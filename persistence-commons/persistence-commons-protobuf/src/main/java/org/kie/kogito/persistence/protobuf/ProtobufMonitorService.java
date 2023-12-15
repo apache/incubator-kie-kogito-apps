@@ -1,27 +1,30 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.kie.kogito.persistence.protobuf;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
+import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.WatchEvent;
 import java.nio.file.WatchKey;
@@ -74,16 +77,22 @@ public class ProtobufMonitorService {
     public void startMonitoring() {
         if (protoFiles.isPresent()) {
             String folderPath = protoFiles.get();
-            File protoFolder = new File(folderPath);
-            if (!protoFolder.exists()) {
-                throw new ProtobufFileMonitorException(format("Could not find proto files folder at: %s", folderPath));
+            Path protoFolder = Paths.get(folderPath);
+            if (!Files.exists(protoFolder)) {
+                LOGGER.warn("Could not find proto files folder at: {}. Disabling ProtobufMonitorService", folderPath);
+                return;
             }
 
-            registerFilesFromFolder(protoFolder.toPath());
+            if (!Files.isReadable(protoFolder)) {
+                LOGGER.warn("The folder {} does not have read access. Cannot register protofiles from that folder", folderPath);
+                return;
+            }
 
+            LOGGER.info("The folder {} is being used to registering files", folderPath);
+            registerFilesFromFolder(protoFolder);
             if (Boolean.TRUE.equals(monitor)) {
                 executorService = Executors.newSingleThreadExecutor();
-                executorService.submit(new FolderWatcher(registerProtoFile(), protoFolder.toPath()));
+                executorService.submit(new FolderWatcher(registerProtoFile(), protoFolder));
             }
         }
     }

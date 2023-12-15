@@ -1,17 +1,20 @@
 /*
- * Copyright 2021 Red Hat, Inc. and/or its affiliates.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.kie.kogito.index;
 
@@ -25,6 +28,7 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonNode;
@@ -274,6 +278,7 @@ public abstract class AbstractProcessDataIndexIT {
 
     public void testProcessGatewayAPI() throws IOException {
         String pId2 = createTestProcessInstance();
+
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> getProcessInstanceById(pId2, "ACTIVE"));
@@ -471,6 +476,18 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("$.size()", is(1))
                         .body("[0].content", is(commentContent)));
 
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                                "id description priority potentialGroups comments {id content updatedBy updatedAt} } }\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.UserTaskInstances[0].comments", notNullValue())
+                        .body("data.UserTaskInstances[0].comments.size()", is(1))
+                        .extract().jsonPath().getMap("data.UserTaskInstances[0].comments[0]"));
+
         Map<String, String> commentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
                 .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
                         "id description priority potentialGroups comments {id content updatedBy updatedAt} } }\"}")
@@ -482,6 +499,7 @@ public abstract class AbstractProcessDataIndexIT {
                 .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"))
                 .body("data.UserTaskInstances[0].comments.size()", is(1))
                 .extract().jsonPath().getMap("data.UserTaskInstances[0].comments[0]");
+
         checkExpectedCreatedItemData(commentCreationResult, commentMap);
         String commentNewContent = "commentNewContent";
         String commentUpdateResult = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
@@ -569,18 +587,23 @@ public abstract class AbstractProcessDataIndexIT {
                         .body("$.size()", is(1))
                         .body("[0].name", is(attachmentName)));
 
-        Map<String, String> attachmentMap = given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
-                        "id description priority potentialGroups attachments {id name content updatedBy updatedAt} } }\"}")
-                .when().post("/graphql")
-                .then()
-                .statusCode(200)
-                .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
-                .body("data.UserTaskInstances[0].priority", equalTo("low"))
-                .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"))
-                .body("data.UserTaskInstances[0].attachments.size()", is(1))
-                .body("data.UserTaskInstances[0].attachments[0].name", equalTo(attachmentName))
-                .extract().jsonPath().getMap("data.UserTaskInstances[0].attachments[0]");
+        AtomicReference<Map<String, String>> attachmentMapRef = new AtomicReference<>();
+        await()
+                .atMost(TIMEOUT)
+                .untilAsserted(() -> attachmentMapRef.set(given().spec(dataIndexSpec()).contentType(ContentType.JSON)
+                        .body("{ \"query\" : \"{ UserTaskInstances (where: { processInstanceId: {equal: \\\"" + processInstanceId + "\\\"}}) { " +
+                                "id description priority potentialGroups attachments {id name content updatedBy updatedAt} } }\"}")
+                        .when().post("/graphql")
+                        .then()
+                        .statusCode(200)
+                        .body("data.UserTaskInstances[0].description", equalTo("NewDescription"))
+                        .body("data.UserTaskInstances[0].priority", equalTo("low"))
+                        .body("data.UserTaskInstances[0].potentialGroups[0]", equalTo("managers"))
+                        .body("data.UserTaskInstances[0].attachments.size()", is(1))
+                        .body("data.UserTaskInstances[0].attachments[0].name", equalTo(attachmentName))
+                        .extract().jsonPath().getMap("data.UserTaskInstances[0].attachments[0]")));
+
+        Map<String, String> attachmentMap = attachmentMapRef.get();
 
         checkExpectedCreatedItemData(attachmentCreationResult, attachmentMap);
 

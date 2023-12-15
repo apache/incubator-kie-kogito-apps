@@ -1,19 +1,21 @@
 /*
- * Copyright 2023 Red Hat, Inc. and/or its affiliates.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
-
 package org.kie.kogito.index.addon;
 
 import java.io.UncheckedIOException;
@@ -24,9 +26,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.event.AbstractDataEvent;
 import org.kie.kogito.event.DataEvent;
-import org.kie.kogito.event.process.ProcessInstanceDataEvent;
+import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
 import org.kie.kogito.index.model.Job;
-import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.service.IndexingService;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -70,13 +71,14 @@ public class DataIndexEventPublisherTest {
 
     @Test
     void onProcessInstanceEvent() {
-        ArgumentCaptor<ProcessInstance> eventCaptor = ArgumentCaptor.forClass(ProcessInstance.class);
-        ProcessInstanceDataEvent event = getProcessCloudEvent(PROCESS_ID, PROCESS_INSTANCE_ID, COMPLETED,
+
+        ArgumentCaptor<ProcessInstanceStateDataEvent> eventCaptor = ArgumentCaptor.forClass(ProcessInstanceStateDataEvent.class);
+        ProcessInstanceStateDataEvent event = getProcessCloudEvent(PROCESS_ID, PROCESS_INSTANCE_ID, COMPLETED,
                 ROOT_PROCESS_INSTANCE_ID, ROOT_PROCESS_ID, ROOT_PROCESS_INSTANCE_ID, "currentUser");
 
         dataIndexEventPublisher.publish(event);
 
-        verify(indexingService).indexProcessInstance(eventCaptor.capture());
+        verify(indexingService).indexProcessInstanceEvent(eventCaptor.capture());
     }
 
     @Test

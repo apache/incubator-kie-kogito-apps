@@ -1,23 +1,29 @@
 /*
- * Copyright 2023 Red Hat, Inc. and/or its affiliates.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.kie.kogito.index.model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 public class ProcessDefinition {
 
@@ -29,7 +35,9 @@ public class ProcessDefinition {
     private Set<String> addons;
     private String endpoint;
     private String source;
-
+    private String description;
+    private Set<String> annotations;
+    private Map<String, String> metadata;
     private List<Node> nodes;
 
     public String getId() {
@@ -109,7 +117,35 @@ public class ProcessDefinition {
     }
 
     public static String toKey(String processId, String version) {
-        return String.format("%s-%s", processId, version);
+        return processId + "$v:" + version;
+    }
+
+    public static String[] fromKey(String key) {
+        return Optional.ofNullable(key).map(k -> k.split(Pattern.quote("$v:"))).orElse(new String[0]);
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Set<String> getAnnotations() {
+        return annotations;
+    }
+
+    public void setAnnotations(Set<String> annotations) {
+        this.annotations = annotations;
+    }
+
+    public Map<String, String> getMetadata() {
+        return metadata;
+    }
+
+    public void setMetadata(Map<String, String> metadata) {
+        this.metadata = metadata;
     }
 
     @Override

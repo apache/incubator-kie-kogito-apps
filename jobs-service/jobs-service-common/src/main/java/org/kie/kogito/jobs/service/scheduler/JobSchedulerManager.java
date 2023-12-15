@@ -1,29 +1,31 @@
 /*
- * Copyright 2020 Red Hat, Inc. and/or its affiliates.
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ *   http://www.apache.org/licenses/LICENSE-2.0
  *
- *       http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
  */
 package org.kie.kogito.jobs.service.scheduler;
 
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicLong;
 
-import javax.annotation.Priority;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.interceptor.Interceptor;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
@@ -37,7 +39,6 @@ import org.kie.kogito.jobs.service.utils.ErrorHandling;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.quarkus.runtime.StartupEvent;
 import io.vertx.mutiny.core.Vertx;
 
 @ApplicationScoped
@@ -73,26 +74,45 @@ public class JobSchedulerManager {
 
     @Inject
     Vertx vertx;
-    private AtomicBoolean enabled = new AtomicBoolean(false);
+    final AtomicBoolean enabled = new AtomicBoolean(false);
 
-    void onStartup(@Observes @Priority(Interceptor.Priority.PLATFORM_AFTER) StartupEvent startupEvent) {
-        if (loadJobIntervalInMinutes > schedulerChunkInMinutes) {
-            LOGGER.warn("The loadJobIntervalInMinutes ({}) cannot be greater than schedulerChunkInMinutes ({}), " +
-                    "setting value {} for both",
-                    loadJobIntervalInMinutes,
-                    schedulerChunkInMinutes,
-                    schedulerChunkInMinutes);
-            loadJobIntervalInMinutes = schedulerChunkInMinutes;
+    final AtomicLong periodicTimerIdForLoadJobs = new AtomicLong(-1l);
+
+    private void startJobsLoadingFromRepositoryTask() {
+        //guarantee it starts the task just in case it is not already active
+        if (periodicTimerIdForLoadJobs.get() < 0) {
+            if (loadJobIntervalInMinutes > schedulerChunkInMinutes) {
+                LOGGER.warn("The loadJobIntervalInMinutes ({}) cannot be greater than schedulerChunkInMinutes ({}), " +
+                        "setting value {} for both",
+                        loadJobIntervalInMinutes,
+                        schedulerChunkInMinutes,
+                        schedulerChunkInMinutes);
+                loadJobIntervalInMinutes = schedulerChunkInMinutes;
+            }
+            //first execution
+            vertx.runOnContext(this::loadJobDetails);
+            //next executions to run periodically
+            periodicTimerIdForLoadJobs.set(vertx.setPeriodic(TimeUnit.MINUTES.toMillis(loadJobIntervalInMinutes), id -> loadJobDetails()));
         }
-
-        //first execution
-        vertx.runOnContext(this::loadJobDetails);
-        //periodic execution
-        vertx.setPeriodic(TimeUnit.MINUTES.toMillis(loadJobIntervalInMinutes), id -> loadJobDetails());
     }
 
-    protected void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
-        this.enabled.set(event.isEnabled());
+    private void cancelJobsLoadingFromRepositoryTask() {
+        if (periodicTimerIdForLoadJobs.get() > 0) {
+            vertx.cancelTimer(periodicTimerIdForLoadJobs.get());
+            //negative id indicates this is not active anymore
+            periodicTimerIdForLoadJobs.set(-1);
+        }
+    }
+
+    protected synchronized void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
+        boolean wasEnabled = enabled.getAndSet(event.isEnabled());
+        if (enabled.get() && !wasEnabled) {
+            // good, avoid starting twice if we receive two consecutive enabled = true
+            startJobsLoadingFromRepositoryTask();
+        } else if (!enabled.get()) {
+            // but only cancel if we receive enabled = false, otherwise with two consecutive enable we are also cancelling.
+            cancelJobsLoadingFromRepositoryTask();
+        }
     }
 
     //Runs periodically loading the jobs from the repository in chunks
