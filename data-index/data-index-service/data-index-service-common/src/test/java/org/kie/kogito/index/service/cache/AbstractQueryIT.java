@@ -57,14 +57,14 @@ public abstract class AbstractQueryIT {
 
     @BeforeEach
     void setup() {
-        cacheService.getProcessDefinitionsCache().clear();
-        cacheService.getProcessInstancesCache().clear();
+        cacheService.getProcessDefinitionStorage().clear();
+        cacheService.getProcessInstanceStorage().clear();
     }
 
     @AfterEach
     void tearDown() {
-        cacheService.getProcessDefinitionsCache().clear();
-        cacheService.getProcessInstancesCache().clear();
+        cacheService.getProcessDefinitionStorage().clear();
+        cacheService.getProcessInstanceStorage().clear();
     }
 
     @Test
@@ -74,8 +74,8 @@ public abstract class AbstractQueryIT {
         String subProcessId = processId + "_sub";
         String subProcessInstanceId = UUID.randomUUID().toString();
         ProcessInstance processInstance = getProcessInstance(processId, processInstanceId, ACTIVE.ordinal(), null, null);
-        cacheService.getProcessInstancesCache().put(processInstanceId, processInstance);
-        cacheService.getProcessInstancesCache().put(subProcessInstanceId, getProcessInstance(subProcessId, subProcessInstanceId, COMPLETED.ordinal(), processInstanceId, processId));
+        cacheService.getProcessInstanceStorage().put(processInstanceId, processInstance);
+        cacheService.getProcessInstanceStorage().put(subProcessInstanceId, getProcessInstance(subProcessId, subProcessInstanceId, COMPLETED.ordinal(), processInstanceId, processId));
 
         queryAndAssert(in("state", asList(ACTIVE.ordinal(), COMPLETED.ordinal())), processInstanceId, subProcessInstanceId);
         queryAndAssert(equalTo("state", ACTIVE.ordinal()), processInstanceId);
@@ -103,7 +103,7 @@ public abstract class AbstractQueryIT {
     }
 
     private void queryAndAssert(AttributeFilter filter, String... ids) {
-        List<ProcessInstance> instances = cacheService.getProcessInstancesCache().query().filter(singletonList(filter)).execute();
+        List<ProcessInstance> instances = cacheService.getProcessInstanceStorage().query().filter(singletonList(filter)).execute();
         assertThat(instances).hasSize(ids == null ? 0 : ids.length).extracting("id").containsExactlyInAnyOrder(ids);
     }
 }

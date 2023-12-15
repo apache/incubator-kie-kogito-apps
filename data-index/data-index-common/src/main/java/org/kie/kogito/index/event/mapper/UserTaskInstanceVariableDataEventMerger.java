@@ -38,7 +38,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class UserTaskInstanceVariableDataEventMerger implements UserTaskInstanceEventMerger {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProcessInstanceVariableDataEventMerger.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserTaskInstanceVariableDataEventMerger.class);
 
     @Override
     public boolean accept(Object event) {

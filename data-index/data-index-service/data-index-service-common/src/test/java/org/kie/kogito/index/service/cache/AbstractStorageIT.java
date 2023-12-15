@@ -45,7 +45,7 @@ public abstract class AbstractStorageIT {
         String processInstanceId = UUID.randomUUID().toString();
 
         CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
-        Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
+        Storage<String, ProcessInstance> cache = cacheService.getProcessInstanceStorage();
         cache.objectCreatedListener().subscribe().with(pi -> cf.complete(pi));
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
 
@@ -59,7 +59,7 @@ public abstract class AbstractStorageIT {
         String processInstanceId = UUID.randomUUID().toString();
 
         CompletableFuture<ProcessInstance> cf = new CompletableFuture<>();
-        Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
+        Storage<String, ProcessInstance> cache = cacheService.getProcessInstanceStorage();
         cache.objectUpdatedListener().subscribe().with(pi -> cf.complete(pi));
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.COMPLETED.ordinal(), null, null));
@@ -74,7 +74,7 @@ public abstract class AbstractStorageIT {
         String processInstanceId = UUID.randomUUID().toString();
 
         CompletableFuture<String> cf = new CompletableFuture<>();
-        Storage<String, ProcessInstance> cache = cacheService.getProcessInstancesCache();
+        Storage<String, ProcessInstance> cache = cacheService.getProcessInstanceStorage();
         cache.objectRemovedListener().subscribe().with(id -> cf.complete(id));
         cache.put(processInstanceId, getProcessInstance(processId, processInstanceId, ProcessInstanceState.ACTIVE.ordinal(), null, null));
         cache.remove(processInstanceId);
@@ -85,7 +85,7 @@ public abstract class AbstractStorageIT {
 
     @AfterEach
     void tearDown() {
-        cacheService.getProcessDefinitionsCache().clear();
-        cacheService.getProcessInstancesCache().clear();
+        cacheService.getProcessDefinitionStorage().clear();
+        cacheService.getProcessInstanceStorage().clear();
     }
 }

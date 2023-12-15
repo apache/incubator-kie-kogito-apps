@@ -193,6 +193,17 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-common</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-storage-api</artifactId>
                 <version>${project.version}</version>
                 <type>test-jar</type>
@@ -232,6 +243,17 @@
             <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-storage-oracle</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-jpa</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
@@ -509,26 +531,7 @@
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-oracle</artifactId>
-                <version>${project.version}</version>
-                <classifier>javadoc</classifier>
-            </dependency>
-
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-oracle</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-oracle</artifactId>
-                <version>${project.version}</version>
-                <classifier>sources</classifier>
-            </dependency>
-
-            <dependency>
+           <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>persistence-commons-redis</artifactId>
                 <version>${project.version}</version>

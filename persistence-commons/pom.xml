@@ -53,7 +53,6 @@
         <module>persistence-commons-infinispan</module>
         <module>persistence-commons-mongodb</module>
         <module>persistence-commons-redis</module>
-        <module>persistence-commons-oracle</module>
         <module>persistence-commons-reporting-parent</module>
       </modules>
     </profile>
