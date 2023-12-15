@@ -4,12 +4,13 @@ type: specs.openrewrite.org/v1beta/recipe
 recipeList:
 - org.openrewrite.maven.ChangePropertyValue: {
     key: version.io.quarkus,
-    newValue: 3.0.0.Final
+    newValue: 3.2.9.Final
   }
 - org.openrewrite.maven.ChangePropertyValue: {
     key: version.org.optaplanner,
     newValue: 9.44.0.Final
   }
+- org.kie.kogito-apps.Quarkus3Migration
 - org.kie.ManagedDependencies
 - io.quarkus.updates.core.quarkus30.UpgradeQuarkiverse
 - org.openrewrite.java.migrate.jakarta.JavaxActivationMigrationToJakartaActivation
@@ -62,9 +63,18 @@ tags: [
   quarkus
 ]
 ---
-description: Update all managed dependencies based on dependency updates from Quarkus.
+type: specs.openrewrite.org/v1beta/recipe
+name: org.kie.kogito-apps.Quarkus3Migration
+displayName: All Quarkus 3 Migration for Kogito-Apps project
+recipeList:
+- org.openrewrite.maven.ChangePropertyValue: {
+    newValue: 1.5.5.Final,
+    key: version.org.mapstruct
+  }
+---
 name: org.kie.ManagedDependencies
-displayName: Update Managed Dependencies
+description: Update all managed dependencies based on dependency updates from Quarkus.
+type: specs.openrewrite.org/v1beta/recipe
 recipeList:
 - org.openrewrite.maven.ChangeManagedDependencyGroupIdAndArtifactId: {
     oldGroupId: javax.activation,
@@ -449,7 +459,7 @@ recipeList:
     newGroupId: org.keycloak,
     newArtifactId: keycloak-admin-client-jakarta
   }
-type: specs.openrewrite.org/v1beta/recipe
+displayName: Update Managed Dependencies
 ---
 type: specs.openrewrite.org/v1beta/recipe
 name: io.quarkus.updates.core.quarkus30.UpgradeQuarkiverse
