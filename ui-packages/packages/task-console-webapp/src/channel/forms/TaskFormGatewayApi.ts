@@ -84,7 +84,7 @@ export class TaskFormGatewayApiImpl implements TaskFormGatewayApi {
     });
   }
 
-  getCustomForm(userTask: UserTaskInstance): Promise<CustomForm> {
+  getCustomForm(userTask: UserTaskInstance): Promise<Form> {
     return Promise.reject();
   }
 }
