@@ -23,8 +23,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.app.audit.api.SubsystemConstants;
 import org.kie.kogito.event.EventPublisher;
@@ -37,6 +35,8 @@ import org.slf4j.LoggerFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
+
+import jakarta.inject.Inject;
 
 import static io.restassured.RestAssured.given;
 

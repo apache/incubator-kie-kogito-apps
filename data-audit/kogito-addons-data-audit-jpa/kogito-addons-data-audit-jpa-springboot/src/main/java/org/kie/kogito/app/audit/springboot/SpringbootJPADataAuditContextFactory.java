@@ -18,12 +18,12 @@
  */
 package org.kie.kogito.app.audit.springboot;
 
-import javax.persistence.EntityManager;
-
 import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import jakarta.persistence.EntityManager;
 
 @Component
 public class SpringbootJPADataAuditContextFactory implements DataAuditContextFactory {

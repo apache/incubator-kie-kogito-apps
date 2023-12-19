@@ -18,10 +18,6 @@
  */
 package org.kie.kogito.app.audit.quarkus;
 
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
 import org.kie.kogito.app.audit.api.DataAuditQueryService;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 
@@ -32,6 +28,9 @@ import io.vertx.ext.web.handler.graphql.GraphQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphQLHandlerOptions;
 
 import graphql.GraphQL;
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 import static io.quarkus.vertx.web.Route.HttpMethod.GET;
 import static io.quarkus.vertx.web.Route.HttpMethod.POST;

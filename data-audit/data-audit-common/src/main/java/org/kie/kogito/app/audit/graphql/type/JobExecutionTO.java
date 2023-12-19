@@ -18,7 +18,6 @@
  */
 package org.kie.kogito.app.audit.graphql.type;
 
-import java.math.BigInteger;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -54,13 +53,13 @@ public class JobExecutionTO {
     }
 
     public JobExecutionTO(String jobId, Date expirationtime, Integer priority, String processInstanceId, String nodeInstanceId,
-            BigInteger repeatInterval, Integer repeatLimit, String scheduledId, Integer retries, String status, Integer executionCounter, Date eventDate) {
+            Long repeatInterval, Integer repeatLimit, String scheduledId, Integer retries, String status, Integer executionCounter, Date eventDate) {
         this.jobId = jobId;
         this.expirationTime = OffsetDateTime.ofInstant(expirationtime.toInstant(), ZoneId.of("UTC"));
         this.priority = priority;
         this.processInstanceId = processInstanceId;
         this.nodeInstanceId = nodeInstanceId;
-        this.repeatInterval = repeatInterval != null ? repeatInterval.longValue() : null;
+        this.repeatInterval = repeatInterval;
         this.repeatLimit = repeatLimit;
         this.scheduledId = scheduledId;
         this.retries = retries;

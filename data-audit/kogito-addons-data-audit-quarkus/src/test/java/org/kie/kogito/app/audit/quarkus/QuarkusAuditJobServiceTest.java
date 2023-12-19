@@ -21,8 +21,6 @@ package org.kie.kogito.app.audit.quarkus;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -34,6 +32,8 @@ import org.kie.kogito.jobs.service.model.JobStatus;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
+
+import jakarta.inject.Inject;
 
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;

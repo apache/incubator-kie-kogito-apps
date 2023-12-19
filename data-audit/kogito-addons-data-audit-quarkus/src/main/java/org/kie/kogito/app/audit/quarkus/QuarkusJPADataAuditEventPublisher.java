@@ -20,11 +20,6 @@ package org.kie.kogito.app.audit.quarkus;
 
 import java.util.Collection;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-import javax.transaction.Transactional.TxType;
-
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 import org.kie.kogito.event.DataEvent;
@@ -34,6 +29,11 @@ import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import jakarta.transaction.Transactional.TxType;
 
 @ApplicationScoped
 public class QuarkusJPADataAuditEventPublisher implements EventPublisher {

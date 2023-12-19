@@ -20,13 +20,14 @@ package org.kie.kogito.app.audit.jpa.queries;
 
 import java.io.InputStream;
 
-import javax.persistence.EntityManager;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import jakarta.persistence.EntityManager;
 
 public class MappingFile {
 

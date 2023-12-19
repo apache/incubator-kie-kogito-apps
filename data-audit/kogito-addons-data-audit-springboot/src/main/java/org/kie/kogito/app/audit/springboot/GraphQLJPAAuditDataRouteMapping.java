@@ -20,8 +20,6 @@ package org.kie.kogito.app.audit.springboot;
 
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.kie.kogito.app.audit.api.DataAuditQueryService;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import graphql.ExecutionResult;
+import jakarta.annotation.PostConstruct;
 
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_PATH;
 

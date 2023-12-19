@@ -21,13 +21,12 @@ package org.kie.kogito.app.audit.jpa.queries;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-
 import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.jpa.queries.mapper.PojoMapper;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQuery;
 
 import graphql.schema.DataFetchingEnvironment;
+import jakarta.persistence.EntityManager;
 
 public class JPASimpleNamedQuery<T> extends JPAAbstractQuery<T> implements GraphQLSchemaQuery<List<T>> {
 

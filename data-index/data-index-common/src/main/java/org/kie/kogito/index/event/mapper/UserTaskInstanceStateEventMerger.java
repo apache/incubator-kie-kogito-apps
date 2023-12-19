@@ -44,13 +44,9 @@ public class UserTaskInstanceStateEventMerger implements UserTaskInstanceEventMe
     }
 
     @Override
-<<<<<<< HEAD
     public UserTaskInstance merge(UserTaskInstance task, UserTaskInstanceDataEvent<?> data) {
-=======
-    public void merge(UserTaskInstance task, UserTaskInstanceDataEvent<?> data) {
         List<String> finalState = List.of("Completed", "Aborted");
 
->>>>>>> 55104cd12 (fix user task events)
         UserTaskInstanceStateDataEvent event = (UserTaskInstanceStateDataEvent) data;
         LOGGER.debug("value before merging: {}", task);
         task.setId(event.getData().getUserTaskInstanceId());

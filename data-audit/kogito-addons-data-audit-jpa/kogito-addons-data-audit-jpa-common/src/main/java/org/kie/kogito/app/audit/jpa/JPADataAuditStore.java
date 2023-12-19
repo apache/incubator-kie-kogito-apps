@@ -27,8 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import javax.persistence.EntityManager;
-
 import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.jpa.model.AbstractProcessInstanceLog;
 import org.kie.kogito.app.audit.jpa.model.AbstractUserTaskInstanceLog;
@@ -70,6 +68,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
+import jakarta.persistence.EntityManager;
 
 public class JPADataAuditStore implements DataAuditStore {
 

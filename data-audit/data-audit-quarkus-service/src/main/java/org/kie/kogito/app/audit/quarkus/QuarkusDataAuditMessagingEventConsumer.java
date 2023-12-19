@@ -18,10 +18,6 @@
  */
 package org.kie.kogito.app.audit.quarkus;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.event.job.JobInstanceDataEvent;
@@ -31,6 +27,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.smallrye.common.annotation.Blocking;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import static org.kie.kogito.app.audit.api.SubsystemConstants.KOGITO_JOBS_EVENTS;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.KOGITO_PROCESSINSTANCES_EVENTS;
