@@ -6,6 +6,7 @@ exports[`ProcessFormEnvelopeView tests Snapshot 1`] = `
     Object {
       "notifications": Object {},
       "requests": Object {
+        "processForm__getCustomForm": [MockFunction],
         "processForm__getProcessFormSchema": [MockFunction],
         "processForm__startProcess": [MockFunction],
       },
@@ -22,6 +23,7 @@ exports[`ProcessFormEnvelopeView tests Snapshot 1`] = `
         "channelApi": Object {
           "notifications": Object {},
           "requests": Object {
+            "processForm__getCustomForm": [MockFunction],
             "processForm__getProcessFormSchema": [MockFunction],
             "processForm__startProcess": [MockFunction],
           },
