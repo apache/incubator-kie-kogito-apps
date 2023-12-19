@@ -14,6 +14,7 @@ exports[`ProcessFormEnvelopeView tests Snapshot 1`] = `
       "unsubscribe": [MockFunction],
     }
   }
+  targetOrigin="http://localhost:4000"
 >
   <MockedProcessForm
     driver={
@@ -37,6 +38,7 @@ exports[`ProcessFormEnvelopeView tests Snapshot 1`] = `
         "processName": "process1",
       }
     }
+    targetOrigin="http://localhost:4000"
   />
 </ForwardRef>
 `;

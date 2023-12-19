@@ -54,6 +54,7 @@ const getProcessFormDriver = (schema?: any): ProcessFormDriver => {
   driverGetProcessFormSchemaSpy = jest.spyOn(driver, 'getProcessFormSchema');
   driverGetProcessFormSchemaSpy.mockReturnValue(Promise.resolve(schema));
   props.driver = driver;
+  props.targetOrigin = 'http://localhost:4000/hiring';
   return driver;
 };
 
@@ -70,7 +71,8 @@ describe('ProcessForm Test', () => {
       processDefinition: {
         processName: 'process1',
         endpoint: 'http://localhost:4000/hiring'
-      }
+      },
+      targetOrigin: 'http://localhost:4000/hiring'
     };
   });
 
