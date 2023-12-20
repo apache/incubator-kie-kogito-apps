@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   componentOuiaProps,
   OUIAProps
@@ -60,15 +60,10 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
     }
   ];
 
-  useEffect(() => {
+  const init = useCallback(async (): Promise<void> => {
     if (!isEnvelopeConnectedToChannel) {
-      setIsLoading(true);
       return;
     }
-    init();
-  }, [isEnvelopeConnectedToChannel]);
-
-  const init = async (): Promise<void> => {
     const customFormPromise: Promise<void> = new Promise<void>((resolve) => {
       driver
         .getCustomForm(processDefinition)
@@ -97,7 +92,15 @@ const ProcessForm: React.FC<ProcessFormProps & OUIAProps> = ({
     Promise.all([customFormPromise, schemaPromise]).finally(() => {
       setIsLoading(false);
     });
-  };
+  }, [driver, isEnvelopeConnectedToChannel, processDefinition]);
+
+  useEffect(() => {
+    if (!isEnvelopeConnectedToChannel) {
+      setIsLoading(true);
+      return;
+    }
+    init();
+  }, [init, isEnvelopeConnectedToChannel]);
 
   const onSubmit = (value: any): void => {
     driver.startProcess(value).then(() => {

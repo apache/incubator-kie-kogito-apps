@@ -49,10 +49,13 @@ jest.mock('@kogito-apps/components-common/dist/components/FormRenderer', () =>
 
 let props: ProcessFormProps;
 let driverGetProcessFormSchemaSpy;
-const getProcessFormDriver = (schema?: any): ProcessFormDriver => {
+let driverGetProcessCustomFormSpy;
+const getProcessFormDriver = (schema?: any, form?: any): ProcessFormDriver => {
   const driver = new MockedProcessFormDriver();
   driverGetProcessFormSchemaSpy = jest.spyOn(driver, 'getProcessFormSchema');
   driverGetProcessFormSchemaSpy.mockReturnValue(Promise.resolve(schema));
+  driverGetProcessCustomFormSpy = jest.spyOn(driver, 'getCustomForm');
+  driverGetProcessCustomFormSpy.mockReturnValue(Promise.resolve(form));
   props.driver = driver;
   props.targetOrigin = 'http://localhost:4000/hiring';
   return driver;
@@ -108,6 +111,7 @@ describe('ProcessForm Test', () => {
     expect(wrapper).toMatchSnapshot();
 
     expect(driver.getProcessFormSchema).toHaveBeenCalled();
+    expect(driver.getCustomForm).toHaveBeenCalled();
 
     const ProcessForm = wrapper.find('FormRenderer');
     expect(ProcessForm.exists()).toBeTruthy();

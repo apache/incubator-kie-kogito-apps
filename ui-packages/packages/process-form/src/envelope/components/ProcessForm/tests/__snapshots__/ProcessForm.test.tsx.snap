@@ -93,6 +93,22 @@ exports[`ProcessForm Test Process Form rendering 1`] = `
 <ProcessForm
   driver={
     Object {
+      "getCustomForm": [MockFunction] {
+        "calls": Array [
+          Array [
+            Object {
+              "endpoint": "http://localhost:4000/hiring",
+              "processName": "process1",
+            },
+          ],
+        ],
+        "results": Array [
+          Object {
+            "type": "return",
+            "value": Promise {},
+          },
+        ],
+      },
       "getProcessFormSchema": [MockFunction] {
         "calls": Array [
           Array [
@@ -119,6 +135,7 @@ exports[`ProcessForm Test Process Form rendering 1`] = `
       "processName": "process1",
     }
   }
+  targetOrigin="http://localhost:4000/hiring"
 >
   <div
     data-ouia-component-type="process-form"
