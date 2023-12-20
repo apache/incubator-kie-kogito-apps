@@ -20,12 +20,12 @@ package org.kie.kogito.persistence.postgresql.model;
 
 import java.util.Objects;
 
-import org.hibernate.annotations.Type;
-import org.kie.kogito.persistence.postgresql.hibernate.JsonBinaryType;
+import org.kie.kogito.persistence.postgresql.hibernate.JsonBinaryConverter;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
@@ -47,7 +47,7 @@ public class CacheEntity {
     @Column(nullable = false)
     private String key;
 
-    @Type(JsonBinaryType.class)
+    @Convert(converter = JsonBinaryConverter.class)
     @Column(name = "json_value", columnDefinition = "jsonb")
     private ObjectNode value;
 

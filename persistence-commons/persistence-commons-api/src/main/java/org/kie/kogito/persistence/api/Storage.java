@@ -54,11 +54,6 @@ public interface Storage<K, V> extends StorageFetcher<K, V> {
     Map<K, V> entries();
 
     /**
-     * Erase all the elements in the storage.
-     */
-    void clear();
-
-    /**
      * Gets the root type for the storage.
      *
      * @return The root type for the storage.

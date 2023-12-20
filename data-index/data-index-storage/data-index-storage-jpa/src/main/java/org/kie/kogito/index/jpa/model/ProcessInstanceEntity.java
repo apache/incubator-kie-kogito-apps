@@ -23,16 +23,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
-import org.kie.kogito.persistence.postgresql.hibernate.JsonBinaryType;
+import org.kie.kogito.persistence.postgresql.hibernate.JsonBinaryConverter;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -57,7 +55,6 @@ public class ProcessInstanceEntity extends AbstractEntity {
     @ElementCollection
     @JoinColumn(name = "process_id")
     @CollectionTable(name = "processes_roles", joinColumns = @JoinColumn(name = "process_id", foreignKey = @ForeignKey(name = "fk_processes_roles_processes")))
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name = "role", nullable = false)
     private Set<String> roles;
     @Column(name = "startTime")
@@ -72,7 +69,7 @@ public class ProcessInstanceEntity extends AbstractEntity {
     private String createdBy;
 
     private String updatedBy;
-    @Type(JsonBinaryType.class)
+    @Convert(converter = JsonBinaryConverter.class)
     @Column(columnDefinition = "jsonb")
     private ObjectNode variables;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "processInstance")
@@ -82,7 +79,6 @@ public class ProcessInstanceEntity extends AbstractEntity {
     @ElementCollection
     @JoinColumn(name = "process_id")
     @CollectionTable(name = "processes_addons", joinColumns = @JoinColumn(name = "process_id", foreignKey = @ForeignKey(name = "fk_processes_addons_processes")))
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name = "addon", nullable = false)
     private Set<String> addons;
     @Embedded

@@ -43,7 +43,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>persistence-commons-postgresql</artifactId>
+      <artifactId>persistence-commons-jpa</artifactId>
     </dependency>
     <dependency>
       <groupId>org.mapstruct</groupId>

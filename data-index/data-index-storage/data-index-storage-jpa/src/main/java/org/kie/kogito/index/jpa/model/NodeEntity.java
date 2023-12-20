@@ -56,7 +56,6 @@ public class NodeEntity extends AbstractEntity {
             foreignKey = @ForeignKey(name = "fk_definitions_nodes_metadata_definitions_nodes"))
     @MapKeyColumn(name = "key")
     @Column(name = "value")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Map<String, String> metadata;
 
     @Id

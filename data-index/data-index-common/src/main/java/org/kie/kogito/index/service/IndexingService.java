@@ -92,14 +92,9 @@ public class IndexingService {
     //retry in case of rare but possible race condition during the insert for the first registry
     @Retry(maxRetries = 3, delay = 300, jitter = 100, retryOn = ConcurrentModificationException.class)
     public void indexProcessDefinition(ProcessDefinitionDataEvent definitionDataEvent) {
-        String key = ProcessDefinition.toKey(definitionDataEvent.getKogitoProcessId(), definitionDataEvent.getData().getVersion());
-        ProcessDefinition definition = manager.getProcessDefinitionStorage().get(key);
-        if (definition == null) {
-            definition = new ProcessDefinition();
-            definition.setId(definitionDataEvent.getKogitoProcessId());
-            definition.setVersion(definitionDataEvent.getData().getVersion());
-        }
-        manager.getProcessDefinitionStorage().put(key, ProcessDefinitionHelper.merge(definition, definitionDataEvent));
+        ProcessDefinition definition = ProcessDefinitionHelper
+                .merge(manager.getProcessDefinitionStorage().get(ProcessDefinition.toKey(definitionDataEvent.getKogitoProcessId(), definitionDataEvent.getData().getVersion())), definitionDataEvent);
+        manager.getProcessDefinitionStorage().put(definition.getKey(), definition);
     }
 
     //retry in case of rare but possible race condition during the insert for the first registry

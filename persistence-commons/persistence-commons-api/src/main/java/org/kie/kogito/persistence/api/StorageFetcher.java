@@ -52,4 +52,10 @@ public interface StorageFetcher<K, V> {
      * @return The element.
      */
     V get(K key);
+
+    /**
+     * Erase all the elements in the storage.
+     */
+    void clear();
+
 }

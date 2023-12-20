@@ -33,6 +33,7 @@ import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateEventBody;
 import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceVariableEventBody;
+import org.kie.kogito.index.CommonUtils;
 import org.kie.kogito.index.DateTimeUtils;
 import org.kie.kogito.index.jpa.mapper.UserTaskInstanceEntityMapper;
 import org.kie.kogito.index.jpa.model.AttachmentEntity;
@@ -42,12 +43,14 @@ import org.kie.kogito.index.jpa.model.UserTaskInstanceEntityRepository;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.index.storage.UserTaskInstanceStorage;
 import org.kie.kogito.jackson.utils.JsonObjectUtils;
+import org.kie.kogito.jackson.utils.ObjectMapperFactory;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.net.UrlEscapers;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import static java.lang.String.format;
 import static org.kie.kogito.index.DateTimeUtils.toZonedDateTime;
@@ -73,6 +76,7 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Use
     }
 
     @Override
+    @Transactional
     public void indexAssignment(UserTaskInstanceAssignmentDataEvent event) {
         UserTaskInstanceAssignmentEventBody body = event.getData();
         UserTaskInstanceEntity userTaskInstance = findOrInit(event.getKogitoUserTaskInstanceId());
@@ -97,6 +101,7 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Use
     }
 
     @Override
+    @Transactional
     public void indexAttachment(UserTaskInstanceAttachmentDataEvent event) {
         UserTaskInstanceEntity userTaskInstance = findOrInit(event.getKogitoUserTaskInstanceId());
         UserTaskInstanceAttachmentEventBody body = event.getData();
@@ -106,6 +111,7 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Use
             case UserTaskInstanceAttachmentEventBody.EVENT_TYPE_CHANGE:
                 AttachmentEntity attachment = attachments.stream().filter(e -> e.getId().equals(body.getAttachmentId())).findAny().orElseGet(() -> {
                     AttachmentEntity newAttachment = new AttachmentEntity();
+                    newAttachment.setUserTask(userTaskInstance);
                     attachments.add(newAttachment);
                     return newAttachment;
                 });
@@ -122,11 +128,13 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Use
     }
 
     @Override
+    @Transactional
     public void indexDeadline(UserTaskInstanceDeadlineDataEvent event) {
         findOrInit(event.getKogitoUserTaskInstanceId());
     }
 
     @Override
+    @Transactional
     public void indexState(UserTaskInstanceStateDataEvent event) {
         UserTaskInstanceStateEventBody body = event.getData();
         UserTaskInstanceEntity task = findOrInit(event.getKogitoUserTaskInstanceId());
@@ -138,10 +146,10 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Use
         task.setDescription(body.getUserTaskDescription());
         task.setState(body.getState());
         task.setPriority(body.getUserTaskPriority());
-        if (event.getData().getEventType() == null || event.getData().getEventType() == 1) {
-            task.setStarted(toZonedDateTime(body.getEventDate()));
-        } else if (event.getData().getEventType() == 2) {
-            task.setCompleted(toZonedDateTime(body.getEventDate()));
+        if (task.getStarted() == null) {
+            task.setStarted(toZonedDateTime(event.getData().getEventDate()));
+        } else if (CommonUtils.isTaskCompleted(event.getData().getEventType())) {
+            task.setCompleted(toZonedDateTime(event.getData().getEventDate()));
         }
         task.setActualOwner(event.getData().getActualOwner());
         task.setEndpoint(
@@ -156,6 +164,7 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Use
     }
 
     @Override
+    @Transactional
     public void indexComment(UserTaskInstanceCommentDataEvent event) {
         UserTaskInstanceCommentEventBody body = event.getData();
         UserTaskInstanceEntity userTaskInstance = findOrInit(event.getKogitoUserTaskInstanceId());
@@ -165,6 +174,7 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Use
             case UserTaskInstanceCommentEventBody.EVENT_TYPE_CHANGE:
                 CommentEntity comment = comments.stream().filter(e -> e.getId().equals(body.getCommentId())).findAny().orElseGet(() -> {
                     CommentEntity newComment = new CommentEntity();
+                    newComment.setUserTask(userTaskInstance);
                     comments.add(newComment);
                     return newComment;
                 });
@@ -181,11 +191,24 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Use
     }
 
     @Override
+    @Transactional
     public void indexVariable(UserTaskInstanceVariableDataEvent event) {
         UserTaskInstanceEntity userTaskInstance = findOrInit(event.getKogitoUserTaskInstanceId());
         UserTaskInstanceVariableEventBody body = event.getData();
-        ObjectNode objectNode = body.getVariableType().equals("INPUT") ? userTaskInstance.getInputs() : userTaskInstance.getOutputs();
-        objectNode.set(body.getVariableName(), JsonObjectUtils.fromValue(body.getVariableValue()));
+        if (body.getVariableType().equals("INPUT")) {
+            ObjectNode objectNode = userTaskInstance.getInputs();
+            if (objectNode == null) {
+                objectNode = ObjectMapperFactory.get().createObjectNode();
+            }
+            objectNode.set(body.getVariableName(), JsonObjectUtils.fromValue(body.getVariableValue()));
+            userTaskInstance.setInputs(objectNode);
+        } else {
+            ObjectNode objectNode = userTaskInstance.getOutputs();
+            if (objectNode == null) {
+                objectNode = ObjectMapperFactory.get().createObjectNode();
+            }
+            objectNode.set(body.getVariableName(), JsonObjectUtils.fromValue(body.getVariableValue()));
+            userTaskInstance.setOutputs(objectNode);
+        }
     }
-
 }

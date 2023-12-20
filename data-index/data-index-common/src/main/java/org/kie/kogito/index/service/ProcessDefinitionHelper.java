@@ -43,8 +43,19 @@ import static java.util.stream.Collectors.toList;
 public class ProcessDefinitionHelper {
 
     public static ProcessDefinition merge(ProcessDefinition instance, ProcessDefinitionDataEvent event) {
+        if (event == null) {
+            return instance;
+        }
         ProcessDefinitionEventBody data = event.getData();
+        if (data == null) {
+            return instance;
+        }
+        if (instance == null) {
+            instance = new ProcessDefinition();
+        }
+        instance.setId(doMerge(data.getId(), instance.getId()));
         instance.setName(doMerge(data.getName(), instance.getName()));
+        instance.setVersion(doMerge(data.getVersion(), instance.getVersion()));
         instance.setAddons(doMerge(data.getAddons(), instance.getAddons()));
         instance.setRoles(doMerge(data.getRoles(), instance.getRoles()));
         instance.setType(doMerge(data.getType(), instance.getType()));

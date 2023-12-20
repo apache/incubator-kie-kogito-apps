@@ -19,7 +19,6 @@
 package org.kie.kogito.index.jpa.storage;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
@@ -42,9 +41,13 @@ import org.kie.kogito.index.model.MilestoneStatus;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.storage.ProcessInstanceStorage;
 import org.kie.kogito.jackson.utils.JsonObjectUtils;
+import org.kie.kogito.jackson.utils.ObjectMapperFactory;
+
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import static org.kie.kogito.event.process.ProcessInstanceNodeEventBody.EVENT_TYPE_ENTER;
 import static org.kie.kogito.event.process.ProcessInstanceNodeEventBody.EVENT_TYPE_EXIT;
@@ -62,31 +65,34 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Proc
     }
 
     @Override
+    @Transactional
     public void indexError(ProcessInstanceErrorDataEvent event) {
         indexError(event.getData());
-
     }
 
     @Override
+    @Transactional
     public void indexNode(ProcessInstanceNodeDataEvent event) {
         indexNode(event.getData());
     }
 
     @Override
+    @Transactional
     public void indexSLA(ProcessInstanceSLADataEvent event) {
         indexSLA(event.getData());
 
     }
 
     @Override
+    @Transactional
     public void indexState(ProcessInstanceStateDataEvent event) {
         indexState(event.getData(), event.getKogitoAddons() == null ? Set.of() : Set.of(event.getKogitoAddons().split(",")), event.getSource() == null ? null : event.getSource().toString());
     }
 
     @Override
+    @Transactional
     public void indexVariable(ProcessInstanceVariableDataEvent event) {
         indexVariable(event.getData());
-
     }
 
     private ProcessInstanceEntity findOrInit(String processId, String processInstanceId) {
@@ -94,8 +100,8 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Proc
             ProcessInstanceEntity pi = new ProcessInstanceEntity();
             pi.setProcessId(processId);
             pi.setId(processInstanceId);
-            pi.setMilestones(new ArrayList<>());
             pi.setNodes(new ArrayList<>());
+            pi.setMilestones(new ArrayList<>());
             repository.persist(pi);
             return pi;
         });
@@ -104,6 +110,10 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Proc
     private void indexError(ProcessInstanceErrorEventBody error) {
         ProcessInstanceEntity pi = findOrInit(error.getProcessId(), error.getProcessInstanceId());
         ProcessInstanceErrorEntity errorEntity = pi.getError();
+        if (errorEntity == null) {
+            errorEntity = new ProcessInstanceErrorEntity();
+            pi.setError(errorEntity);
+        }
         errorEntity.setMessage(error.getErrorMessage());
         errorEntity.setNodeDefinitionId(error.getNodeDefinitionId());
         repository.flush();
@@ -111,18 +121,18 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Proc
 
     private void indexNode(ProcessInstanceNodeEventBody data) {
         ProcessInstanceEntity pi = findOrInit(data.getProcessId(), data.getProcessInstanceId());
-        List<NodeInstanceEntity> nodes = pi.getNodes();
-        nodes.stream().filter(n -> n.getId().equals(data.getNodeInstanceId())).findAny().ifPresentOrElse(n -> updateNode(n, data), () -> nodes.add(createNode(data)));
-
+        pi.getNodes().stream().filter(n -> n.getId().equals(data.getNodeInstanceId())).findAny().ifPresentOrElse(n -> updateNode(n, data), () -> createNode(pi, data));
         if ("MilestoneNode".equals(data.getNodeType())) {
-            List<MilestoneEntity> milestones = pi.getMilestones();
-            milestones.stream().filter(n -> n.getId().equals(data.getNodeInstanceId())).findAny().ifPresentOrElse(n -> updateMilestone(n, data), () -> milestones.add(createMilestone(data)));
+            pi.getMilestones().stream().filter(n -> n.getId().equals(data.getNodeInstanceId())).findAny().ifPresentOrElse(n -> updateMilestone(n, data), () -> createMilestone(pi, data));
         }
         repository.flush();
     }
 
-    private MilestoneEntity createMilestone(ProcessInstanceNodeEventBody data) {
-        return updateMilestone(new MilestoneEntity(), data);
+    private MilestoneEntity createMilestone(ProcessInstanceEntity pi, ProcessInstanceNodeEventBody data) {
+        MilestoneEntity milestone = new MilestoneEntity();
+        milestone.setProcessInstance(pi);
+        pi.getMilestones().add(milestone);
+        return updateMilestone(milestone, data);
     }
 
     private MilestoneEntity updateMilestone(MilestoneEntity milestone, ProcessInstanceNodeEventBody body) {
@@ -132,8 +142,11 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Proc
         return milestone;
     }
 
-    private NodeInstanceEntity createNode(ProcessInstanceNodeEventBody data) {
-        return updateNode(new NodeInstanceEntity(), data);
+    private NodeInstanceEntity createNode(ProcessInstanceEntity pi, ProcessInstanceNodeEventBody data) {
+        NodeInstanceEntity node = new NodeInstanceEntity();
+        pi.getNodes().add(node);
+        node.setProcessInstance(pi);
+        return updateNode(node, data);
     }
 
     private NodeInstanceEntity updateNode(NodeInstanceEntity nodeInstance, ProcessInstanceNodeEventBody body) {
@@ -175,7 +188,7 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Proc
         if (data.getEventType() == null || data.getEventType() == ProcessInstanceStateEventBody.EVENT_TYPE_STARTED) {
             pi.setStart(toZonedDateTime(data.getEventDate()));
             pi.setCreatedBy(data.getEventUser());
-        } else if (data.getEventType() == ProcessInstanceStateEventBody.EVENT_TYPE_STARTED) {
+        } else if (data.getEventType() == ProcessInstanceStateEventBody.EVENT_TYPE_ENDED) {
             pi.setEnd(toZonedDateTime(data.getEventDate()));
         }
         pi.setBusinessKey(data.getBusinessKey());
@@ -187,8 +200,14 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Proc
     }
 
     private void indexVariable(ProcessInstanceVariableEventBody data) {
-        findOrInit(data.getProcessId(), data.getProcessInstanceId()).getVariables().set(data.getVariableName(), JsonObjectUtils.fromValue(data.getVariableValue()));
+        ProcessInstanceEntity pi = findOrInit(data.getProcessId(), data.getProcessInstanceId());
+        ObjectNode node = pi.getVariables();
+        if (node == null) {
+            node = ObjectMapperFactory.get().createObjectNode();
+        }
+        node.set(data.getVariableName(), JsonObjectUtils.fromValue(data.getVariableValue()));
+        // Object node is not tracked, need explicit set
+        pi.setVariables(node);
         repository.flush();
     }
-
 }

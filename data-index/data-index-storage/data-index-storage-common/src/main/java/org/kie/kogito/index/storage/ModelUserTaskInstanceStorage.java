@@ -1,5 +1,7 @@
 package org.kie.kogito.index.storage;
 
+import java.util.ArrayList;
+
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceCommentDataEvent;
@@ -66,6 +68,17 @@ public class ModelUserTaskInstanceStorage extends ModelStorageFetcher<UserTaskIn
     }
 
     private <T extends UserTaskInstanceDataEvent<?>> void index(T event, UserTaskInstanceEventMerger merger) {
-        storage.put(event.getKogitoProcessId(), merger.merge(storage.get(event.getKogitoProcessInstanceId()), event));
+        UserTaskInstance taskInstance = storage.get(event.getKogitoUserTaskInstanceId());
+        if (taskInstance == null) {
+            taskInstance = new UserTaskInstance();
+            taskInstance.setId(event.getKogitoUserTaskInstanceId());
+            taskInstance.setProcessInstanceId(event.getKogitoProcessInstanceId());
+            taskInstance.setProcessId(event.getKogitoProcessId());
+            taskInstance.setRootProcessId(event.getKogitoRootProcessId());
+            taskInstance.setRootProcessInstanceId(event.getKogitoRootProcessInstanceId());
+            taskInstance.setAttachments(new ArrayList<>());
+            taskInstance.setComments(new ArrayList<>());
+        }
+        storage.put(event.getKogitoUserTaskInstanceId(), merger.merge(taskInstance, event));
     }
 }

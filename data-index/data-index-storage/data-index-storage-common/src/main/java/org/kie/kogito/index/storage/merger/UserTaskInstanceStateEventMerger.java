@@ -22,6 +22,7 @@ import java.net.URI;
 
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
+import org.kie.kogito.index.CommonUtils;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -50,12 +51,11 @@ public class UserTaskInstanceStateEventMerger implements UserTaskInstanceEventMe
         task.setDescription(event.getData().getUserTaskDescription());
         task.setState(event.getData().getState());
         task.setPriority(event.getData().getUserTaskPriority());
-        if (event.getData().getEventType() == null || event.getData().getEventType() == 1) {
+        if (task.getStarted() == null) {
             task.setStarted(toZonedDateTime(event.getData().getEventDate()));
-        } else if (event.getData().getEventType() == 2) {
+        } else if (CommonUtils.isTaskCompleted(event.getData().getEventType())) {
             task.setCompleted(toZonedDateTime(event.getData().getEventDate()));
         }
-
         task.setActualOwner(event.getData().getActualOwner());
         task.setEndpoint(
                 event.getSource() == null ? null : getEndpoint(event.getSource(), event.getData().getProcessInstanceId(), event.getData().getUserTaskName(), event.getData().getUserTaskInstanceId()));

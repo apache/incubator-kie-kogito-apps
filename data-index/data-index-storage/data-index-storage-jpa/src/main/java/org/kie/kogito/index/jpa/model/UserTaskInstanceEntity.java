@@ -23,16 +23,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Type;
-import org.kie.kogito.persistence.postgresql.hibernate.JsonBinaryType;
+import org.kie.kogito.persistence.postgresql.hibernate.JsonBinaryConverter;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -56,13 +54,11 @@ public class UserTaskInstanceEntity extends AbstractEntity {
     private String actualOwner;
     @ElementCollection
     @JoinColumn(name = "task_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @CollectionTable(name = "tasks_admin_groups", joinColumns = @JoinColumn(name = "task_id", foreignKey = @ForeignKey(name = "fk_tasks_admin_groups_tasks")))
     @Column(name = "group_id", nullable = false)
     private Set<String> adminGroups;
     @ElementCollection
     @JoinColumn(name = "task_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @CollectionTable(name = "tasks_admin_users", joinColumns = @JoinColumn(name = "task_id", foreignKey = @ForeignKey(name = "fk_tasks_admin_users_tasks")))
     @Column(name = "user_id", nullable = false)
     private Set<String> adminUsers;
@@ -70,19 +66,16 @@ public class UserTaskInstanceEntity extends AbstractEntity {
     private ZonedDateTime started;
     @ElementCollection
     @JoinColumn(name = "task_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @CollectionTable(name = "tasks_excluded_users", joinColumns = @JoinColumn(name = "task_id", foreignKey = @ForeignKey(name = "fk_tasks_excluded_users_tasks")))
     @Column(name = "user_id", nullable = false)
     private Set<String> excludedUsers;
     @ElementCollection
     @JoinColumn(name = "task_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @CollectionTable(name = "tasks_potential_groups", joinColumns = @JoinColumn(name = "task_id", foreignKey = @ForeignKey(name = "fk_tasks_potential_groups_tasks")))
     @Column(name = "group_id", nullable = false)
     private Set<String> potentialGroups;
     @ElementCollection
     @JoinColumn(name = "task_id")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @CollectionTable(name = "tasks_potential_users", joinColumns = @JoinColumn(name = "task_id", foreignKey = @ForeignKey(name = "fk_tasks_potential_users_tasks")))
     @Column(name = "user_id", nullable = false)
     private Set<String> potentialUsers;
@@ -91,10 +84,10 @@ public class UserTaskInstanceEntity extends AbstractEntity {
     private String processId;
     private String rootProcessId;
     private String rootProcessInstanceId;
-    @Type(JsonBinaryType.class)
+    @Convert(converter = JsonBinaryConverter.class)
     @Column(columnDefinition = "jsonb")
     private ObjectNode inputs;
-    @Type(JsonBinaryType.class)
+    @Convert(converter = JsonBinaryConverter.class)
     @Column(columnDefinition = "jsonb")
     private ObjectNode outputs;
     private String endpoint;

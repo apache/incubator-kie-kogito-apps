@@ -531,6 +531,17 @@
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>persistence-commons-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>persistence-commons-jpa</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
            <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>persistence-commons-redis</artifactId>

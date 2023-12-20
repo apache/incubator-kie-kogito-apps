@@ -27,6 +27,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.storage.DataIndexStorageService;
+import org.kie.kogito.persistence.api.StorageService;
 import org.kie.kogito.persistence.api.query.AttributeFilter;
 
 import jakarta.inject.Inject;
@@ -36,6 +37,7 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.index.model.ProcessInstanceState.ACTIVE;
 import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
+import static org.kie.kogito.index.storage.Constants.PROCESS_INSTANCES_STORAGE;
 import static org.kie.kogito.index.test.TestUtils.getProcessInstance;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.between;
 import static org.kie.kogito.persistence.api.query.QueryFilterFactory.contains;
@@ -54,6 +56,9 @@ public abstract class AbstractQueryIT {
 
     @Inject
     public DataIndexStorageService cacheService;
+
+    @Inject
+    public StorageService storageService;
 
     @BeforeEach
     void setup() {
@@ -74,8 +79,9 @@ public abstract class AbstractQueryIT {
         String subProcessId = processId + "_sub";
         String subProcessInstanceId = UUID.randomUUID().toString();
         ProcessInstance processInstance = getProcessInstance(processId, processInstanceId, ACTIVE.ordinal(), null, null);
-        cacheService.getProcessInstanceStorage().put(processInstanceId, processInstance);
-        cacheService.getProcessInstanceStorage().put(subProcessInstanceId, getProcessInstance(subProcessId, subProcessInstanceId, COMPLETED.ordinal(), processInstanceId, processId));
+        storageService.getCache(PROCESS_INSTANCES_STORAGE, ProcessInstance.class).put(processInstanceId, processInstance);
+        storageService.getCache(PROCESS_INSTANCES_STORAGE, ProcessInstance.class).put(subProcessInstanceId,
+                getProcessInstance(subProcessId, subProcessInstanceId, COMPLETED.ordinal(), processInstanceId, processId));
 
         queryAndAssert(in("state", asList(ACTIVE.ordinal(), COMPLETED.ordinal())), processInstanceId, subProcessInstanceId);
         queryAndAssert(equalTo("state", ACTIVE.ordinal()), processInstanceId);

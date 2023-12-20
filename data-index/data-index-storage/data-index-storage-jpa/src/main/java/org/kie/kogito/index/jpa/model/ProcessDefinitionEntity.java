@@ -23,9 +23,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -58,7 +55,6 @@ public class ProcessDefinitionEntity extends AbstractEntity {
     @JoinColumn(name = "id")
     @CollectionTable(name = "definitions_roles", joinColumns = { @JoinColumn(name = "process_id"),
             @JoinColumn(name = "process_version") }, foreignKey = @ForeignKey(name = "fk_definitions_roles_definitions"))
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name = "role", nullable = false)
     private Set<String> roles;
 
@@ -66,7 +62,6 @@ public class ProcessDefinitionEntity extends AbstractEntity {
     @JoinColumn(name = "id")
     @CollectionTable(name = "definitions_addons", joinColumns = { @JoinColumn(name = "process_id"),
             @JoinColumn(name = "process_version") }, foreignKey = @ForeignKey(name = "fk_definitions_addons_definitions"))
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name = "addon", nullable = false)
     private Set<String> addons;
 
@@ -78,7 +73,6 @@ public class ProcessDefinitionEntity extends AbstractEntity {
     @JoinColumn(name = "id")
     @CollectionTable(name = "definitions_annotations", joinColumns = { @JoinColumn(name = "process_id", referencedColumnName = "id"),
             @JoinColumn(name = "process_version", referencedColumnName = "version") }, foreignKey = @ForeignKey(name = "fk_definitions_annotations"))
-    @OnDelete(action = OnDeleteAction.CASCADE)
     @Column(name = "value")
     private Set<String> annotations;
     @ElementCollection
@@ -88,7 +82,6 @@ public class ProcessDefinitionEntity extends AbstractEntity {
             foreignKey = @ForeignKey(name = "fk_definitions_metadata"))
     @MapKeyColumn(name = "key")
     @Column(name = "value")
-    @OnDelete(action = OnDeleteAction.CASCADE)
     private Map<String, String> metadata;
 
     @Override

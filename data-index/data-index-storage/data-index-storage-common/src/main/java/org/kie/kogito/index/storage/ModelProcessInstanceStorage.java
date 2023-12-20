@@ -52,6 +52,12 @@ public class ModelProcessInstanceStorage extends ModelStorageFetcher<ProcessInst
     }
 
     private <T extends ProcessInstanceDataEvent<?>> void index(T event, ProcessInstanceEventMerger merger) {
-        storage.put(event.getKogitoProcessId(), merger.merge(storage.get(event.getKogitoProcessInstanceId()), event));
+        ProcessInstance processInstance = storage.get(event.getKogitoProcessInstanceId());
+        if (processInstance == null) {
+            processInstance = new ProcessInstance();
+            processInstance.setId(event.getKogitoProcessInstanceId());
+            processInstance.setProcessId(event.getKogitoProcessId());
+        }
+        storage.put(event.getKogitoProcessInstanceId(), merger.merge(processInstance, event));
     }
 }

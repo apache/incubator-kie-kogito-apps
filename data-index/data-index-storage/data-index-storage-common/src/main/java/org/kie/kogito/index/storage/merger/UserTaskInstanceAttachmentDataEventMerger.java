@@ -39,8 +39,11 @@ public class UserTaskInstanceAttachmentDataEventMerger implements UserTaskInstan
         UserTaskInstanceAttachmentDataEvent event = (UserTaskInstanceAttachmentDataEvent) data;
         UserTaskInstanceAttachmentEventBody body = event.getData();
 
-        List<Attachment> attachments = Optional.ofNullable(userTaskInstance.getAttachments()).orElse(new ArrayList<>());
-        userTaskInstance.setAttachments(attachments);
+        List<Attachment> attachments = userTaskInstance.getAttachments();
+        if (attachments == null) {
+            attachments = new ArrayList<>();
+            userTaskInstance.setAttachments(attachments);
+        }
 
         switch (body.getEventType()) {
             case UserTaskInstanceAttachmentEventBody.EVENT_TYPE_ADDED:

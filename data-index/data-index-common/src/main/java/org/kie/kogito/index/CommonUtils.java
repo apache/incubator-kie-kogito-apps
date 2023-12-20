@@ -16,11 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.kie.kogito.index;
 
-package org.kie.kogito.index.event.mapper;
+import java.util.Set;
 
-public interface Merger<I, R> {
-    boolean accept(Object input);
+public class CommonUtils {
 
-    R merge(R instance, I input);
+    private static final Set<String> finalStates = Set.of("Completed", "Aborted");
+
+    public static boolean isTaskCompleted(String status) {
+        return finalStates.contains(status);
+    }
+
 }

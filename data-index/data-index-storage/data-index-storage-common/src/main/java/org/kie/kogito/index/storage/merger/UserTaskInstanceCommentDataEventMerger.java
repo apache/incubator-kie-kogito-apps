@@ -37,9 +37,11 @@ public class UserTaskInstanceCommentDataEventMerger implements UserTaskInstanceE
     public UserTaskInstance merge(UserTaskInstance userTaskInstance, UserTaskInstanceDataEvent<?> data) {
         UserTaskInstanceCommentDataEvent event = (UserTaskInstanceCommentDataEvent) data;
         UserTaskInstanceCommentEventBody body = event.getData();
-        List<Comment> comments = Optional.ofNullable(userTaskInstance.getComments()).orElse(new ArrayList<>());
-        userTaskInstance.setComments(comments);
-
+        List<Comment> comments = userTaskInstance.getComments();
+        if (comments == null) {
+            comments = new ArrayList<>();
+            userTaskInstance.setComments(comments);
+        }
         switch (body.getEventType()) {
             case UserTaskInstanceCommentEventBody.EVENT_TYPE_ADDED:
             case UserTaskInstanceCommentEventBody.EVENT_TYPE_CHANGE:
@@ -63,5 +65,4 @@ public class UserTaskInstanceCommentDataEventMerger implements UserTaskInstanceE
         }
         return userTaskInstance;
     }
-
 }

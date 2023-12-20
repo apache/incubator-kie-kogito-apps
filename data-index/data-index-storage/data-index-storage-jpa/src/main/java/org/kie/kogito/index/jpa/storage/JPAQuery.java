@@ -41,7 +41,7 @@ import jakarta.persistence.metamodel.Attribute;
 
 import static java.util.stream.Collectors.toList;
 
-public class JPASqlQuery<K, E extends AbstractEntity, T> implements Query<T> {
+public class JPAQuery<K, E extends AbstractEntity, T> implements Query<T> {
 
     private PanacheRepositoryBase<E, K> repository;
     private Integer limit;
@@ -51,7 +51,7 @@ public class JPASqlQuery<K, E extends AbstractEntity, T> implements Query<T> {
     private Class<E> entityClass;
     private Function<E, T> mapper;
 
-    public JPASqlQuery(PanacheRepositoryBase<E, K> repository, Function<E, T> mapper, Class<E> entityClass) {
+    public JPAQuery(PanacheRepositoryBase<E, K> repository, Function<E, T> mapper, Class<E> entityClass) {
         this.repository = repository;
         this.mapper = mapper;
         this.entityClass = entityClass;

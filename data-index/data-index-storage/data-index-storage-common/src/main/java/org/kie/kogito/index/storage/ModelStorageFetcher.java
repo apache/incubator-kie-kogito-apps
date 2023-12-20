@@ -39,4 +39,8 @@ public abstract class ModelStorageFetcher<V> implements StorageFetcher<String, V
         return storage.get(key);
     }
 
+    @Override
+    public void clear() {
+        storage.clear();
+    }
 }
