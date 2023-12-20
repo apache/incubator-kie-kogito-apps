@@ -27,7 +27,7 @@ import { EnvelopeClient } from '@kie-tools-core/envelope-bus/dist/envelope';
 import { UserTaskInstance } from '@kogito-apps/task-console-shared';
 import { TaskFormChannelApi, TaskFormEnvelopeApi } from '../../../api';
 import { TaskFormEnvelopeViewApi } from '../../TaskFormEnvelopeView';
-import { Form, FormType } from '../../../types';
+import { Form, FormType } from '@kogito-apps/components-common/dist';
 
 export const testUserTask: UserTaskInstance = {
   id: '45a73767-5da3-49bf-9c40-d533c3e77ef3',
