@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.event.mapper;
+package org.kie.kogito.index.storage.merger;
 
 import java.util.HashSet;
 
@@ -29,11 +29,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class UserTaskInstanceAssignmentDataEventMerger implements UserTaskInstanceEventMerger {
-
-    @Override
-    public boolean accept(Object event) {
-        return event instanceof UserTaskInstanceAssignmentDataEvent;
-    }
 
     @Override
     public UserTaskInstance merge(UserTaskInstance userTaskInstance, UserTaskInstanceDataEvent<?> data) {

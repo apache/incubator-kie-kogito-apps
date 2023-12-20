@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.event.mapper;
+package org.kie.kogito.index.service;
 
 import java.util.AbstractMap;
 import java.util.Collection;
@@ -40,24 +40,11 @@ import jakarta.enterprise.context.ApplicationScoped;
 import static java.util.stream.Collectors.toList;
 
 @ApplicationScoped
-public class ProcessDefinitionDataEventMerger implements ProcessDefinitionEventMerger {
-    @Override
-    public boolean accept(Object input) {
-        return input != null && input instanceof ProcessDefinitionDataEvent;
-    }
+public class ProcessDefinitionHelper {
 
-    @Override
-    public ProcessDefinition merge(ProcessDefinition instance, ProcessDefinitionDataEvent event) {
+    public static ProcessDefinition merge(ProcessDefinition instance, ProcessDefinitionDataEvent event) {
         ProcessDefinitionEventBody data = event.getData();
-        if (event == null || data == null) {
-            return instance;
-        }
-        if (instance == null) {
-            instance = new ProcessDefinition();
-        }
-        instance.setId(doMerge(data.getId(), instance.getId()));
         instance.setName(doMerge(data.getName(), instance.getName()));
-        instance.setVersion(doMerge(data.getVersion(), instance.getVersion()));
         instance.setAddons(doMerge(data.getAddons(), instance.getAddons()));
         instance.setRoles(doMerge(data.getRoles(), instance.getRoles()));
         instance.setType(doMerge(data.getType(), instance.getType()));
@@ -69,14 +56,14 @@ public class ProcessDefinitionDataEventMerger implements ProcessDefinitionEventM
         return instance;
     }
 
-    private List<Node> nodeDefinitions(ProcessDefinitionEventBody data) {
+    private static List<Node> nodeDefinitions(ProcessDefinitionEventBody data) {
         if (data.getNodes() == null && data.getNodes().isEmpty()) {
             return Collections.emptyList();
         }
-        return data.getNodes().stream().map(this::nodeDefinition).collect(toList());
+        return data.getNodes().stream().map(ProcessDefinitionHelper::nodeDefinition).collect(toList());
     }
 
-    private Node nodeDefinition(NodeDefinition definition) {
+    private static Node nodeDefinition(NodeDefinition definition) {
         Node node = new Node();
         node.setId(definition.getId());
         node.setName(definition.getName());
@@ -86,8 +73,8 @@ public class ProcessDefinitionDataEventMerger implements ProcessDefinitionEventM
         return node;
     }
 
-    private <T> T doMerge(T incoming, T current) {
-        boolean notEmpty = (incoming instanceof Collection) ? !((Collection) incoming).isEmpty() : incoming != null;
+    private static <T> T doMerge(T incoming, T current) {
+        boolean notEmpty = (incoming instanceof Collection) ? !((Collection<?>) incoming).isEmpty() : incoming != null;
         boolean notEquals = !Objects.deepEquals(incoming, current);
         if (notEmpty && notEquals) {
             return incoming;
@@ -95,7 +82,7 @@ public class ProcessDefinitionDataEventMerger implements ProcessDefinitionEventM
         return current;
     }
 
-    public static Map<String, String> toStringMap(Map<String, ?> input) {
+    private static Map<String, String> toStringMap(Map<String, ?> input) {
         if (input == null) {
             return null;
         }

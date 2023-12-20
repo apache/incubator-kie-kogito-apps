@@ -16,17 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.storage;
+package org.kie.kogito.index.storage.merger;
 
-import org.kie.kogito.event.process.ProcessInstanceDataEvent;
-import org.kie.kogito.index.model.ProcessInstance;
+import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
+import org.kie.kogito.index.model.UserTaskInstance;
 
-public class ProcessInstanceSLADataEventMerger extends ProcessInstanceEventMerger {
-
-    @Override
-    public ProcessInstance merge(ProcessInstance pi, ProcessInstanceDataEvent<?> event) {
-        // do nothing
-        return pi;
-    }
+public interface UserTaskInstanceEventMerger extends Merger<UserTaskInstanceDataEvent<?>, UserTaskInstance> {
 
 }

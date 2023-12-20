@@ -53,8 +53,8 @@ public class ModelDataIndexStorageService implements DataIndexStorageService {
     }
 
     @Override
-    public Storage<String, UserTaskInstance> getUserTaskInstanceStorage() {
-        return storageService.getCache(USER_TASK_INSTANCES_STORAGE, UserTaskInstance.class);
+    public UserTaskInstanceStorage getUserTaskInstanceStorage() {
+        return new ModelUserTaskInstanceStorage(storageService.getCache(USER_TASK_INSTANCES_STORAGE, UserTaskInstance.class));
     }
 
     @Override

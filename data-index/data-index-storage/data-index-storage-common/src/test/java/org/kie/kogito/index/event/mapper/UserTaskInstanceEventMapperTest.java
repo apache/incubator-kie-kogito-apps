@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.event;
+package org.kie.kogito.index.event.mapper;
 
 import java.net.URI;
 import java.util.UUID;
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.kie.kogito.index.event.mapper.UserTaskInstanceStateEventMerger;
+import org.kie.kogito.index.storage.merger.UserTaskInstanceStateEventMerger;
 
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;

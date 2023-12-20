@@ -16,11 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.event.mapper;
+package org.kie.kogito.index.storage.merger;
 
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.model.UserTaskInstance;
 
-public interface UserTaskInstanceEventMerger extends Merger<UserTaskInstanceDataEvent<?>, UserTaskInstance> {
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class UserTaskInstanceDeadlineDataEventMerger implements UserTaskInstanceEventMerger {
+
+    @Override
+    public UserTaskInstance merge(UserTaskInstance userTaskInstance, UserTaskInstanceDataEvent<?> data) {
+        // do nothing
+        return userTaskInstance;
+    }
 
 }

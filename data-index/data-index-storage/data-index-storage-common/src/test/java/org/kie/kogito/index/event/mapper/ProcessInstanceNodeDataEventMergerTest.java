@@ -11,7 +11,7 @@ import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceNodeEventBody;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.storage.ProcessInstanceNodeDataEventMerger;
+import org.kie.kogito.index.storage.merger.ProcessInstanceNodeDataEventMerger;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.event.process.ProcessInstanceNodeEventBody.EVENT_TYPE_ENTER;

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.storage;
+package org.kie.kogito.index.storage.merger;
 
 import java.util.HashMap;
 import java.util.Map;

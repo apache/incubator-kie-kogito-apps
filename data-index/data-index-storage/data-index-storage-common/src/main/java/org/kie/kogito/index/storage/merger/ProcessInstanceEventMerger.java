@@ -16,27 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.storage;
+package org.kie.kogito.index.storage.merger;
 
-import org.kie.kogito.index.model.Job;
-import org.kie.kogito.index.model.ProcessDefinition;
-import org.kie.kogito.persistence.api.Storage;
+import java.util.ArrayList;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.kie.kogito.event.process.ProcessInstanceDataEvent;
+import org.kie.kogito.index.model.ProcessInstance;
 
-public interface DataIndexStorageService {
+public abstract class ProcessInstanceEventMerger implements Merger<ProcessInstanceDataEvent<?>, ProcessInstance> {
 
-    Storage<String, ProcessDefinition> getProcessDefinitionStorage();
-
-    ProcessInstanceStorage getProcessInstanceStorage();
-
-    UserTaskInstanceStorage getUserTaskInstanceStorage();
-
-    Storage<String, Job> getJobsStorage();
-
-    Storage<String, ObjectNode> getDomainModelCache(String processId);
-
-    String getDomainModelCacheName(String processId);
-
-    Storage<String, String> getProcessIdModelCache();
+    protected ProcessInstance getOrNew(ProcessInstance pi, ProcessInstanceDataEvent<?> event) {
+        if (pi == null) {
+            pi = new ProcessInstance();
+            pi.setId(event.getKogitoProcessInstanceId());
+            pi.setProcessId(event.getKogitoProcessId());
+            pi.setMilestones(new ArrayList<>());
+            pi.setNodes(new ArrayList<>());
+        }
+        return pi;
+    }
 }

@@ -20,9 +20,9 @@ package org.kie.kogito.index.jpa.storage;
 
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessDefinition;
-import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.index.storage.ProcessInstanceStorage;
+import org.kie.kogito.index.storage.UserTaskInstanceStorage;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.StorageService;
 
@@ -34,7 +34,6 @@ import jakarta.inject.Inject;
 import static org.kie.kogito.index.storage.Constants.JOBS_STORAGE;
 import static org.kie.kogito.index.storage.Constants.PROCESS_DEFINITIONS_STORAGE;
 import static org.kie.kogito.index.storage.Constants.PROCESS_ID_MODEL_STORAGE;
-import static org.kie.kogito.index.storage.Constants.USER_TASK_INSTANCES_STORAGE;
 
 @ApplicationScoped
 public class JPADataIndexStorageService implements DataIndexStorageService {
@@ -44,6 +43,9 @@ public class JPADataIndexStorageService implements DataIndexStorageService {
 
     @Inject
     ProcessInstanceStorage processInstanceStorage;
+
+    @Inject
+    UserTaskInstanceStorage userTaskInstanceStorage;
 
     @Override
     public Storage<String, ProcessDefinition> getProcessDefinitionStorage() {
@@ -56,8 +58,8 @@ public class JPADataIndexStorageService implements DataIndexStorageService {
     }
 
     @Override
-    public Storage<String, UserTaskInstance> getUserTaskInstanceStorage() {
-        return storageService.getCache(USER_TASK_INSTANCES_STORAGE, UserTaskInstance.class);
+    public UserTaskInstanceStorage getUserTaskInstanceStorage() {
+        return userTaskInstanceStorage;
     }
 
     @Override

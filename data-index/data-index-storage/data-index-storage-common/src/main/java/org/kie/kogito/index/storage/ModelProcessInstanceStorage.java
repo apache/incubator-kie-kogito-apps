@@ -7,6 +7,12 @@ import org.kie.kogito.event.process.ProcessInstanceSLADataEvent;
 import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceVariableDataEvent;
 import org.kie.kogito.index.model.ProcessInstance;
+import org.kie.kogito.index.storage.merger.ProcessInstanceErrorDataEventMerger;
+import org.kie.kogito.index.storage.merger.ProcessInstanceEventMerger;
+import org.kie.kogito.index.storage.merger.ProcessInstanceNodeDataEventMerger;
+import org.kie.kogito.index.storage.merger.ProcessInstanceSLADataEventMerger;
+import org.kie.kogito.index.storage.merger.ProcessInstanceStateDataEventMerger;
+import org.kie.kogito.index.storage.merger.ProcessInstanceVariableDataEventMerger;
 import org.kie.kogito.persistence.api.Storage;
 
 public class ModelProcessInstanceStorage extends ModelStorageFetcher<ProcessInstance> implements ProcessInstanceStorage {
@@ -46,6 +52,6 @@ public class ModelProcessInstanceStorage extends ModelStorageFetcher<ProcessInst
     }
 
     private <T extends ProcessInstanceDataEvent<?>> void index(T event, ProcessInstanceEventMerger merger) {
-        storage.put(event.getKogitoProcessId(), errorMerger.merge(storage.get(event.getKogitoProcessInstanceId()), event));
+        storage.put(event.getKogitoProcessId(), merger.merge(storage.get(event.getKogitoProcessInstanceId()), event));
     }
 }

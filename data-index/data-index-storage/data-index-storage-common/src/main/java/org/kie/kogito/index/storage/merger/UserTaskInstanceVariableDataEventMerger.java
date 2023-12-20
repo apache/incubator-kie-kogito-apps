@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.event.mapper;
+package org.kie.kogito.index.storage.merger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,11 +39,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class UserTaskInstanceVariableDataEventMerger implements UserTaskInstanceEventMerger {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserTaskInstanceVariableDataEventMerger.class);
-
-    @Override
-    public boolean accept(Object event) {
-        return event instanceof UserTaskInstanceVariableDataEvent;
-    }
 
     @Override
     public UserTaskInstance merge(UserTaskInstance userTaskInstance, UserTaskInstanceDataEvent<?> data) {

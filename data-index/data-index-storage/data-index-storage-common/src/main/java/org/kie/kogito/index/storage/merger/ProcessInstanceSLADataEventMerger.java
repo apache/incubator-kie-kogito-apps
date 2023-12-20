@@ -16,26 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.event.mapper;
+package org.kie.kogito.index.storage.merger;
 
-import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceDeadlineDataEvent;
-import org.kie.kogito.index.model.UserTaskInstance;
+import org.kie.kogito.event.process.ProcessInstanceDataEvent;
+import org.kie.kogito.index.model.ProcessInstance;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
-public class UserTaskInstanceDeadlineDataEventMerger implements UserTaskInstanceEventMerger {
+public class ProcessInstanceSLADataEventMerger extends ProcessInstanceEventMerger {
 
     @Override
-    public boolean accept(Object event) {
-        return event instanceof UserTaskInstanceDeadlineDataEvent;
-    }
-
-    @Override
-    public UserTaskInstance merge(UserTaskInstance userTaskInstance, UserTaskInstanceDataEvent<?> data) {
+    public ProcessInstance merge(ProcessInstance pi, ProcessInstanceDataEvent<?> event) {
         // do nothing
-        return userTaskInstance;
+        return pi;
     }
 
 }

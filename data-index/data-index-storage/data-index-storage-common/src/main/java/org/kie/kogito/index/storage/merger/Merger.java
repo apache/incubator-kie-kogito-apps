@@ -16,25 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.storage;
+package org.kie.kogito.index.storage.merger;
 
-import java.util.ArrayList;
+public interface Merger<I, R> {
 
-import org.kie.kogito.event.process.ProcessInstanceDataEvent;
-import org.kie.kogito.index.model.ProcessInstance;
-
-public abstract class ProcessInstanceEventMerger {
-
-    protected ProcessInstance getOrNew(ProcessInstance pi, ProcessInstanceDataEvent<?> event) {
-        if (pi == null) {
-            pi = new ProcessInstance();
-            pi.setId(event.getKogitoProcessInstanceId());
-            pi.setProcessId(event.getKogitoProcessId());
-            pi.setMilestones(new ArrayList<>());
-            pi.setNodes(new ArrayList<>());
-        }
-        return pi;
-    }
-
-    public abstract ProcessInstance merge(ProcessInstance instance, ProcessInstanceDataEvent<?> input);
+    R merge(R instance, I input);
 }
