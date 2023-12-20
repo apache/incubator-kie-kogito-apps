@@ -26,6 +26,7 @@ import { mount } from 'enzyme';
 import { MockedProcessFormDriver } from '../../../../embedded/tests/mocks/Mocks';
 import { KogitoSpinner } from '@kogito-apps/components-common/dist/components/KogitoSpinner';
 import { ConfirmTravelForm } from './mocks/ConfirmTravelForm';
+import MockedCustomProcessFormDisplayer from '../__mocks__/CustomProcessFormDisplayer';
 
 const MockedComponent = (): React.ReactElement => {
   return <></>;
@@ -46,6 +47,8 @@ jest.mock('@kogito-apps/components-common/dist/components/FormRenderer', () =>
     }
   })
 );
+
+jest.mock('../CustomProcessFormDisplayer');
 
 let props: ProcessFormProps;
 let driverGetProcessFormSchemaSpy;
@@ -132,5 +135,29 @@ describe('ProcessForm Test', () => {
       wait();
     });
     expect(driverStartProcessSpy).toHaveBeenCalled();
+  });
+
+  it('Process Custom Form rendering', async () => {
+    const schema = _.cloneDeep(ConfirmTravelForm);
+    const form = <div>form mock</div>;
+    const driver = getProcessFormDriver(schema, form);
+    let wrapper;
+    await act(async () => {
+      wrapper = getProcessFormWrapper();
+      wait();
+    });
+    wrapper = wrapper.update().find('ProcessForm');
+
+    expect(wrapper).toMatchSnapshot();
+
+    expect(driver.getProcessFormSchema).toHaveBeenCalled();
+    expect(driver.getCustomForm).toHaveBeenCalled();
+
+    const MockedCustomProcessFormDisplayer = wrapper.find(
+      'MockedCustomProcessFormDisplayer'
+    );
+    expect(MockedCustomProcessFormDisplayer.props().customForm).toStrictEqual(
+      form
+    );
   });
 });
