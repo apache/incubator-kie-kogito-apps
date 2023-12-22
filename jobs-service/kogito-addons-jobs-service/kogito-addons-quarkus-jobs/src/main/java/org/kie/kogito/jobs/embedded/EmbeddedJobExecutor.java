@@ -18,9 +18,6 @@
  */
 package org.kie.kogito.jobs.embedded;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
 import org.kie.kogito.Application;
 import org.kie.kogito.Model;
 import org.kie.kogito.jobs.service.api.Recipient;
@@ -34,6 +31,9 @@ import org.kie.kogito.process.Processes;
 import org.kie.kogito.services.jobs.impl.TriggerJobCommand;
 
 import io.smallrye.mutiny.Uni;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
 @ApplicationScoped
 public class EmbeddedJobExecutor implements JobExecutor {

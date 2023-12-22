@@ -18,7 +18,7 @@
  */
 package org.kie.kogito.jobs.embedded;
 
-import javax.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.context.ApplicationScoped;
 
 import org.kie.kogito.Application;
 import org.kie.kogito.Config;

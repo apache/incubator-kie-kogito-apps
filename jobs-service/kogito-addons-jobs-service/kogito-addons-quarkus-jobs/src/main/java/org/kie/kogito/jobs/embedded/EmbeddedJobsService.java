@@ -20,9 +20,6 @@ package org.kie.kogito.jobs.embedded;
 
 import java.util.concurrent.ExecutionException;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
-
 import org.kie.kogito.jobs.JobsService;
 import org.kie.kogito.jobs.ProcessInstanceJobDescription;
 import org.kie.kogito.jobs.ProcessJobDescription;
@@ -37,6 +34,11 @@ import org.slf4j.LoggerFactory;
 
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
+
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+import static mutiny.zero.flow.adapters.AdaptersToFlow.publisher;
 
 @ApplicationScoped
 public class EmbeddedJobsService implements JobsService {
@@ -70,7 +72,7 @@ public class EmbeddedJobsService implements JobsService {
 
             String outcome = null;
 
-            JobDetails uni = Uni.createFrom().publisher(scheduler.schedule(jobDetails)).runSubscriptionOn(Infrastructure.getDefaultWorkerPool()).subscribe().asCompletionStage().get();
+            JobDetails uni = Uni.createFrom().publisher(publisher(scheduler.schedule(jobDetails))).runSubscriptionOn(Infrastructure.getDefaultWorkerPool()).subscribe().asCompletionStage().get();
             outcome = uni.getId();
 
             LOGGER.debug("Embedded ScheduleProcessJob: {} scheduled", outcome);

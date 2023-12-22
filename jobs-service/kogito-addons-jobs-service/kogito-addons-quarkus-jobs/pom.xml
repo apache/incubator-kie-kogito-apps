@@ -6,15 +6,13 @@
     <parent>
         <artifactId>kogito-addons-jobs-service</artifactId>
         <groupId>org.kie.kogito</groupId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>999-SNAPSHOT</version>
     </parent>
-
 
     <artifactId>kogito-addons-quarkus-jobs</artifactId>
 
     <name>Jobs Collocated Quarkus Addon - Runtime</name>
     <description>Run Jobs Service embedded with the application.</description>
-
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -68,7 +66,7 @@
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
-            <artifactId> quarkus-junit5-mockito</artifactId>
+            <artifactId>quarkus-junit5-mockito</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

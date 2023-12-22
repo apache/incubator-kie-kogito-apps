@@ -45,7 +45,6 @@ import org.reactivestreams.Publisher;
 import io.smallrye.mutiny.Multi;
 
 import static mutiny.zero.flow.adapters.AdaptersToFlow.publisher;
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
