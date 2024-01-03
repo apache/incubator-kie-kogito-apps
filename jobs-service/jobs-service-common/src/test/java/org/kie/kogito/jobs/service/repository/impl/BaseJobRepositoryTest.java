@@ -56,7 +56,7 @@ public abstract class BaseJobRepositoryTest {
         createAndSaveJob(ID);
     }
 
-    public JobEventPublisher mockJobStreams() {
+    public JobEventPublisher mockJobEventPublisher() {
         final JobEventPublisher mock = mock(JobEventPublisher.class);
         lenient().when(mock.publishJobStatusChange(any(JobDetails.class))).thenAnswer(a -> a.getArgument(0));
         lenient().when(mock.publishJobSuccess(any(JobExecutionResponse.class))).thenAnswer(a -> a.getArgument(0));

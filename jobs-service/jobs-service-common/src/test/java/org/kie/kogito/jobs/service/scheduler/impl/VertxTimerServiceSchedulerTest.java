@@ -62,7 +62,7 @@ class VertxTimerServiceSchedulerTest {
     private JobExecutorResolver jobExecutorResolver;
 
     @Mock
-    private JobEventPublisher jobStreams;
+    private JobEventPublisher jobEventPublisher;
 
     @Captor
     private ArgumentCaptor<JobDetails> jobCaptor;
@@ -110,7 +110,7 @@ class VertxTimerServiceSchedulerTest {
         trigger = new PointInTimeTrigger(timestamp, null, null);
         jobDetails = JobDetails.builder().build();
         context = new JobDetailsContext(jobDetails);
-        job = new DelegateJob(jobExecutorResolver, jobStreams);
+        job = new DelegateJob(jobExecutorResolver, jobEventPublisher);
         return tested.scheduleJob(job, context, trigger);
     }
 

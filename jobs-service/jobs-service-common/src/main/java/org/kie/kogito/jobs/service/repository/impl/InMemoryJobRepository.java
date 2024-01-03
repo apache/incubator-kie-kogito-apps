@@ -53,8 +53,8 @@ public class InMemoryJobRepository extends BaseReactiveJobRepository implements 
     }
 
     @Inject
-    public InMemoryJobRepository(Vertx vertx, JobEventPublisher jobStreams) {
-        super(vertx, jobStreams);
+    public InMemoryJobRepository(Vertx vertx, JobEventPublisher jobEventPublisher) {
+        super(vertx, jobEventPublisher);
     }
 
     @Override

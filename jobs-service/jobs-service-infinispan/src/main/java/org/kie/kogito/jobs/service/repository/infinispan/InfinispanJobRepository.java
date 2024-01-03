@@ -58,9 +58,9 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
 
     @Inject
     public InfinispanJobRepository(Vertx vertx,
-            JobEventPublisher jobStreams,
+            JobEventPublisher jobEventPublisher,
             RemoteCacheManager remoteCacheManager) {
-        super(vertx, jobStreams);
+        super(vertx, jobEventPublisher);
         this.remoteCacheManager = remoteCacheManager;
     }
 

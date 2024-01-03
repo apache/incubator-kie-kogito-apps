@@ -20,8 +20,6 @@ package org.kie.kogito.jobs.embedded;
 
 import java.util.List;
 
-import jakarta.inject.Inject;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.event.DataEvent;
@@ -30,6 +28,8 @@ import org.kie.kogito.jobs.JobsService;
 import org.kie.kogito.jobs.ProcessInstanceJobDescription;
 
 import io.quarkus.test.junit.QuarkusTest;
+
+import jakarta.inject.Inject;
 
 @QuarkusTest
 public class EmbeddedJobsServiceTests {

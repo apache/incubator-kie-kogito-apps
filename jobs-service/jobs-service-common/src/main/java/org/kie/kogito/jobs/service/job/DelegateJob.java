@@ -40,11 +40,11 @@ public class DelegateJob implements Job<JobDetailsContext> {
 
     private final JobExecutorResolver jobExecutorResolver;
 
-    private final JobEventPublisher jobStreams;
+    private final JobEventPublisher jobEventPublisher;
 
-    public DelegateJob(JobExecutorResolver executorResolver, JobEventPublisher jobStreams) {
+    public DelegateJob(JobExecutorResolver executorResolver, JobEventPublisher jobEventPublisher) {
         this.jobExecutorResolver = executorResolver;
-        this.jobStreams = jobStreams;
+        this.jobEventPublisher = jobEventPublisher;
     }
 
     @Override
@@ -55,11 +55,11 @@ public class DelegateJob implements Job<JobDetailsContext> {
                 .map(jobExecutorResolver::get)
                 .map(executor -> executor.execute(ctx.getJobDetails()))
                 .orElseThrow(() -> new IllegalStateException("JobDetails cannot be null from context " + ctx))
-                .onItem().invoke(jobStreams::publishJobSuccess)
+                .onItem().invoke(jobEventPublisher::publishJobSuccess)
                 .onFailure(JobExecutionException.class).invoke(ex -> {
                     String jobId = ((JobExecutionException) ex).getJobId();
                     LOGGER.error("Error executing job {}", jobId, ex);
-                    jobStreams.publishJobError(JobExecutionResponse.builder()
+                    jobEventPublisher.publishJobError(JobExecutionResponse.builder()
                             .message(ex.getMessage())
                             .now()
                             .jobId(jobId)

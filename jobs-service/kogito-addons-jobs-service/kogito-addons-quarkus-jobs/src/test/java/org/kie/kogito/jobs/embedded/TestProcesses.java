@@ -22,14 +22,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import org.kie.kogito.Model;
 import org.kie.kogito.process.Process;
 import org.kie.kogito.process.ProcessInstance;
 import org.kie.kogito.process.ProcessInstances;
 import org.kie.kogito.process.Processes;
 import org.mockito.Mockito;
+
+import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class TestProcesses implements Processes {

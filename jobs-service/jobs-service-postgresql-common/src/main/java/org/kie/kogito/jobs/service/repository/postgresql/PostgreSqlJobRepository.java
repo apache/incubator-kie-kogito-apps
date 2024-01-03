@@ -74,9 +74,9 @@ public class PostgreSqlJobRepository extends BaseReactiveJobRepository implement
     }
 
     @Inject
-    public PostgreSqlJobRepository(Vertx vertx, JobEventPublisher jobStreams, PgPool client,
+    public PostgreSqlJobRepository(Vertx vertx, JobEventPublisher jobEventPublisher, PgPool client,
             TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller) {
-        super(vertx, jobStreams);
+        super(vertx, jobEventPublisher);
         this.client = client;
         this.triggerMarshaller = triggerMarshaller;
         this.recipientMarshaller = recipientMarshaller;

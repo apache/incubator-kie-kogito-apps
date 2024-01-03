@@ -18,14 +18,14 @@
  */
 package org.kie.kogito.jobs.embedded;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
 import org.kie.kogito.Application;
 import org.kie.kogito.Config;
 import org.kie.kogito.KogitoEngine;
 import org.kie.kogito.uow.UnitOfWork;
 import org.kie.kogito.uow.UnitOfWorkManager;
 import org.mockito.Mockito;
+
+import jakarta.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public class TestApplication implements Application {

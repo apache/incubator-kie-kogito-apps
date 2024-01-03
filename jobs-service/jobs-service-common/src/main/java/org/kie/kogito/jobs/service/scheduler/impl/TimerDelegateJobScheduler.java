@@ -52,7 +52,7 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
 
     private VertxTimerServiceScheduler delegate;
 
-    private JobEventPublisher jobStreams;
+    private JobEventPublisher jobEventPublisher;
 
     protected TimerDelegateJobScheduler() {
     }
@@ -64,11 +64,11 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
             @ConfigProperty(name = "kogito.jobs-service.schedulerChunkInMinutes", defaultValue = "10") long schedulerChunkInMinutes,
             @ConfigProperty(name = "kogito.jobs-service.forceExecuteExpiredJobs", defaultValue = "true") boolean forceExecuteExpiredJobs,
             JobExecutorResolver jobExecutorResolver, VertxTimerServiceScheduler delegate,
-            JobEventPublisher jobStreams) {
+            JobEventPublisher jobEventPublisher) {
         super(jobRepository, backoffRetryMillis, maxIntervalLimitToRetryMillis, schedulerChunkInMinutes, forceExecuteExpiredJobs);
         this.jobExecutorResolver = jobExecutorResolver;
         this.delegate = delegate;
-        this.jobStreams = jobStreams;
+        this.jobEventPublisher = jobEventPublisher;
     }
 
     @Override
@@ -76,7 +76,7 @@ public class TimerDelegateJobScheduler extends BaseTimerJobScheduler {
         LOGGER.debug("Job Scheduling {}", job);
         return ReactiveStreams
                 .of(job)
-                .map(j -> delegate.scheduleJob(new DelegateJob(jobExecutorResolver, jobStreams), new JobDetailsContext(j),
+                .map(j -> delegate.scheduleJob(new DelegateJob(jobExecutorResolver, jobEventPublisher), new JobDetailsContext(j),
                         trigger.orElse(j.getTrigger())));
     }
 
