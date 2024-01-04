@@ -24,8 +24,8 @@ import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.event.AbstractDataEvent;
 import org.kie.kogito.event.EventPublisher;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.jobs.service.adapter.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
@@ -139,7 +139,7 @@ public class JobInVMEventPublisher implements JobEventPublisher {
         try {
             ScheduledJob scheduledJob = ScheduledJobAdapter.of(jobDetails);
             byte[] jsonContent = objectMapper.writeValueAsBytes(scheduledJob);
-            EventPublisherJobDataEvent event = new EventPublisherJobDataEvent(JOB_EVENT_TYPE,
+            JobInstanceDataEvent event = new JobInstanceDataEvent(JOB_EVENT_TYPE,
                     url + RestApiConstants.JOBS_PATH,
                     jsonContent,
                     scheduledJob.getProcessInstanceId(),
@@ -151,20 +151,6 @@ public class JobInVMEventPublisher implements JobEventPublisher {
             eventPublishers.forEach(e -> e.publish(event));
         } catch (Exception e) {
             LOGGER.error("Job status change propagation has failed at eventPublisher: " + eventPublishers.getClass() + " execution.", e);
-        }
-    }
-
-    public static class EventPublisherJobDataEvent extends AbstractDataEvent<byte[]> {
-        public EventPublisherJobDataEvent(String type,
-                String source,
-                byte[] data,
-                String kogitoProcessInstanceId,
-                String kogitoRootProcessInstanceId,
-                String kogitoProcessId,
-                String kogitoRootProcessId,
-                String kogitoIdentity) {
-            super(type, source, data, kogitoProcessInstanceId, kogitoRootProcessInstanceId, kogitoProcessId,
-                    kogitoRootProcessId, null, kogitoIdentity);
         }
     }
 }

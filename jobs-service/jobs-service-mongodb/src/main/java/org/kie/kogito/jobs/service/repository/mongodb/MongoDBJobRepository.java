@@ -88,8 +88,8 @@ public class MongoDBJobRepository extends BaseReactiveJobRepository implements R
 
     @Inject
     public MongoDBJobRepository(Vertx vertx, JobEventPublisher jobEventPublisher, ReactiveMongoClient mongoClient,
-                                @ConfigProperty(name = DATABASE_PROPERTY) String database,
-                                JobDetailsMarshaller jobDetailsMarshaller) {
+            @ConfigProperty(name = DATABASE_PROPERTY) String database,
+            JobDetailsMarshaller jobDetailsMarshaller) {
         super(vertx, jobEventPublisher);
         this.jobDetailsMarshaller = jobDetailsMarshaller;
         this.collection = mongoClient.getDatabase(database).getCollection(JOB_DETAILS_COLLECTION);
