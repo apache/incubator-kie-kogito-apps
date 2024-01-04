@@ -36,11 +36,13 @@ import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Alternative;
 import jakarta.inject.Inject;
 
 import static mutiny.zero.flow.adapters.AdaptersToFlow.publisher;
 
 @ApplicationScoped
+@Alternative
 public class EmbeddedJobsService implements JobsService {
     private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddedJobsService.class);
 

@@ -33,9 +33,11 @@ import org.kie.kogito.services.jobs.impl.TriggerJobCommand;
 import io.smallrye.mutiny.Uni;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Alternative;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
+@Alternative
 public class EmbeddedJobExecutor implements JobExecutor {
 
     @Inject
