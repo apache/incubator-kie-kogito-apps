@@ -20,6 +20,8 @@ package org.kie.kogito.app.audit.jpa;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Date;
@@ -70,6 +72,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
 
 public class JPADataAuditStore implements DataAuditStore {
 
@@ -396,5 +399,7 @@ public class JPADataAuditStore implements DataAuditStore {
             return null;
         }
     }
+
+    
 
 }
