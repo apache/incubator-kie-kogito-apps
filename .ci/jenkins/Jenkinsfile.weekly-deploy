@@ -1,0 +1,260 @@
+import org.jenkinsci.plugins.workflow.libs.Library
+@Library('jenkins-pipeline-shared-libraries')_
+
+import org.kie.jenkins.MavenCommand
+import org.kie.jenkins.MavenStagingHelper
+
+deployProperties = [:]
+
+pipeline {
+    agent {
+        docker {
+            image env.AGENT_DOCKER_BUILDER_IMAGE
+            args env.AGENT_DOCKER_BUILDER_ARGS
+        }
+    }
+
+    options {
+        timestamps()
+        timeout(time: 210, unit: 'MINUTES')
+    }
+
+    // parameters {
+    // For parameters, check into ./dsl/jobs.groovy file
+    // }
+
+    environment {
+        // Static env is defined into ./dsl/jobs.groovy file
+
+        KOGITO_CI_EMAIL_TO = credentials("${JENKINS_EMAIL_CREDS_ID}")
+
+        MAVEN_DEPLOY_LOCAL_DIR = "/tmp/maven_deploy_dir"
+    }
+
+    stages {
+        stage('Initialize') {
+            steps {
+                script {
+                    cleanWs(disableDeferredWipeout: true)
+
+                    if (params.DISPLAY_NAME) {
+                        currentBuild.displayName = params.DISPLAY_NAME
+                    }
+
+                    dir(getRepoName()) {
+                        checkoutRepo()
+                    }
+                }
+            }
+            post {
+                success {
+                    script {
+                        setDeployPropertyIfNeeded('git.branch', getBuildBranch())
+                        setDeployPropertyIfNeeded('git.author', getGitAuthor())
+                        setDeployPropertyIfNeeded('project.version', getProjectVersion())
+                        setDeployPropertyIfNeeded('release', isRelease())
+                    }
+                }
+            }
+        }
+        stage('Update project version') {
+            when {
+                expression { return getProjectVersion() }
+            }
+            steps {
+                script {
+                    dir(getRepoName()) {
+                        configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
+                            maven.mvnVersionsUpdateParentAndChildModules(
+                                getMavenCommand().withSettingsXmlFile(MAVEN_SETTINGS_FILE),
+                                getProjectVersion(),
+                                !isRelease()
+                            )
+                        }
+                    }
+                }
+            }
+        }
+        stage('sleep') {
+            steps {
+                sh 'sleep 6000'
+            }
+        }
+        // stage('Deploy kogito-apps locally') {
+        //     steps {
+        //         script {
+        //             dir(getRepoName()){
+        //                 runMavenDeploy(params.SKIP_TESTS, true)
+        //             }
+        //         }
+        //     }
+        //     post {
+        //         always {
+        //             script {
+        //                 saveReports()
+        //                 util.archiveConsoleLog()
+        //             }
+        //         }
+        //     }
+        // }
+        // stage('Upload artifacts to given repository') {
+        //     when {
+        //         expression { return !isRelease() && shouldDeployToRepository() }
+        //     }
+        //     steps {
+        //         script {
+        //             // Deploy to specific repository with credentials
+        //             maven.uploadLocalArtifacts(env.MAVEN_REPO_CREDS_ID, getLocalDeploymentFolder(), getMavenRepoZipUrl())
+        //         }
+        //     }
+        // }
+        // stage('Stage artifacts') {
+        //     when {
+        //         expression { return shouldStageArtifacts() }
+        //     }
+        //     steps {
+        //         script {
+        //             dir(getRepoName()){
+        //                 // Stage release artifacts
+        //                 runMavenStage()
+        //             }
+        //         }
+        //     }
+        // }
+    }
+    post {
+        always {
+            script {
+                def propertiesStr = deployProperties.collect { entry ->  "${entry.key}=${entry.value}" }.join('\n')
+                writeFile(text: propertiesStr, file: 'deployment.properties')
+                archiveArtifacts(artifacts: 'deployment.properties')
+            }
+        }
+        unsuccessful {
+            sendNotification()
+        }
+        cleanup {
+            script {
+                util.cleanNode()
+            }
+        }
+    }
+}
+
+void sendNotification() {
+    if (params.SEND_NOTIFICATION) {
+        mailer.sendMarkdownTestSummaryNotification('Deploy', "[${getBuildBranch()}] Kogito Apps", [env.KOGITO_CI_EMAIL_TO])
+    } else {
+        echo 'No notification sent per configuration'
+    }
+}
+
+void saveReports() {
+    // Remove `node_modules` to avoid heap space issues with junit command thereafter
+    // Related to https://github.com/jenkinsci/junit-plugin/issues/478 and https://github.com/jenkinsci/junit-plugin/issues/467
+    sh 'find . -type d -name node_modules -exec rm -rf {} \\; || true'
+    junit(testResults: '**/junit.xml, **/target/surefire-reports/**/*.xml, **/target/failsafe-reports/**/*.xml, **/target/invoker-reports/**/*.xml', allowEmptyResults: true)
+    archiveArtifacts artifacts: '**/*.log,**/cypress/screenshots/**,**/cypress/videos/**', allowEmptyArchive: true
+}
+
+void checkoutRepo(String date = '') {
+    deleteDir()
+    checkout(githubscm.resolveRepository(getRepoName(), getGitAuthor(), getBuildBranch(), false, getGitAuthorCredsId()))
+    if (date) {
+        sh "git checkout 'git rev-list -n 1 --before=\"${date}\" main'"
+    }
+}
+
+boolean isSpecificArtifactsUpload() {
+    return env.MAVEN_DEPLOY_REPOSITORY && env.MAVEN_REPO_CREDS_ID
+}
+
+boolean shouldStageArtifacts() {
+    return isRelease()
+}
+
+boolean shouldDeployToRepository() {
+    return env.MAVEN_DEPLOY_REPOSITORY && env.MAVEN_REPO_CREDS_ID && getGitAuthor() == 'apache'
+}
+
+boolean isRelease() {
+    return env.RELEASE ? env.RELEASE.toBoolean() : false
+}
+
+String getRepoName() {
+    return env.REPO_NAME
+}
+
+String getGitAuthor() {
+    // GIT_AUTHOR can be env or param
+    return "${GIT_AUTHOR}"
+}
+
+String getGitAuthorCredsId() {
+    return env.GIT_AUTHOR_CREDS_ID
+}
+
+String getBuildBranch() {
+    return params.BUILD_BRANCH_NAME
+}
+
+String getProjectVersion() {
+    return params.PROJECT_VERSION
+}
+
+String getPRBranch() {
+    return params.KOGITO_PR_BRANCH
+}
+
+void setDeployPropertyIfNeeded(String key, def value) {
+    if (value) {
+        deployProperties[key] = value
+    }
+}
+
+MavenCommand getMavenCommand() {
+    return new MavenCommand(this, ['-fae', '-ntp'])
+            .withOptions(env.BUILD_MVN_OPTS ? [ env.BUILD_MVN_OPTS ] : [])
+            .withProperty('full')
+}
+
+void runMavenDeploy(boolean skipTests = true, boolean localDeployment = false) {
+    mvnCmd = getMavenCommand()
+
+    if (localDeployment) {
+        mvnCmd.withLocalDeployFolder(getLocalDeploymentFolder())
+    } else if (env.MAVEN_DEPLOY_REPOSITORY) {
+        mvnCmd.withDeployRepository(env.MAVEN_DEPLOY_REPOSITORY)
+    }
+
+    configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
+        mvnCmd.withProperty('maven.test.failure.ignore', true)
+            .withOptions(env.BUILD_MVN_OPTS_CURRENT ? [ env.BUILD_MVN_OPTS_CURRENT ] : [])
+            .withOptions(env.KOGITO_APPS_BUILD_MVN_OPTS ? [ env.KOGITO_APPS_BUILD_MVN_OPTS ] : [])
+            .skipTests(skipTests)
+            .withSettingsXmlFile(MAVEN_SETTINGS_FILE)
+            .run('clean deploy')
+    }
+}
+
+void runMavenStage() {
+    configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
+        MavenStagingHelper stagingHelper = getStagingHelper(getMavenCommand().withSettingsXmlFile(MAVEN_SETTINGS_FILE))
+        deployProperties.putAll(stagingHelper.stageLocalArtifacts(env.NEXUS_STAGING_PROFILE_ID, getLocalDeploymentFolder()))
+        stagingHelper.promoteStagingRepository(env.NEXUS_BUILD_PROMOTION_PROFILE_ID)
+    }
+}
+
+MavenStagingHelper getStagingHelper(MavenCommand mavenCommand) {
+    return new MavenStagingHelper(this, mavenCommand)
+            .withNexusReleaseUrl(env.NEXUS_RELEASE_URL)
+            .withNexusReleaseRepositoryId(env.NEXUS_RELEASE_REPOSITORY_ID)
+}
+
+String getLocalDeploymentFolder() {
+    return "${env.MAVEN_DEPLOY_LOCAL_DIR}/${getRepoName()}"
+}
+
+String getMavenRepoZipUrl() {
+    return "${env.MAVEN_DEPLOY_REPOSITORY.replaceAll('/content/', '/service/local/').replaceFirst('/*$', '')}/content-compressed"
+}
