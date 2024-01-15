@@ -161,7 +161,7 @@ void checkoutRepo(String date = '') {
     deleteDir()
     checkout(githubscm.resolveRepository(getRepoName(), getGitAuthor(), getBuildBranch(), false, getGitAuthorCredsId()))
     if (date) {
-        sh "git checkout `git rev-list -n 1 --before=\"${date}\" ${getBuildBranch()}`"
+        sh "git fetch && git checkout `git rev-list -n 1 --before=\"${date}\" ${getBuildBranch()}`"
     }
 }
 
