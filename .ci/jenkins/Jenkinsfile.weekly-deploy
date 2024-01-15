@@ -42,7 +42,7 @@ pipeline {
                     }
 
                     dir(getRepoName()) {
-                        checkoutRepo()
+                        checkoutRepo(getCheckoutDate())
                     }
                 }
             }
@@ -143,7 +143,7 @@ pipeline {
 
 void sendNotification() {
     if (params.SEND_NOTIFICATION) {
-        mailer.sendMarkdownTestSummaryNotification('Deploy', "[${getBuildBranch()}] Kogito Apps", [env.KOGITO_CI_EMAIL_TO])
+        mailer.sendMarkdownTestSummaryNotification('Weekly Deploy', "[${getBuildBranch()}] Kogito Apps", [env.KOGITO_CI_EMAIL_TO])
     } else {
         echo 'No notification sent per configuration'
     }
@@ -257,4 +257,9 @@ String getLocalDeploymentFolder() {
 
 String getMavenRepoZipUrl() {
     return "${env.MAVEN_DEPLOY_REPOSITORY.replaceAll('/content/', '/service/local/').replaceFirst('/*$', '')}/content-compressed"
+}
+
+String getCheckoutDate() {
+    currentDate = sh(returnStdout: true, script: 'date -u "+%Y-%m-%d"').trim()
+    return currentDate + ' 21:00'
 }
