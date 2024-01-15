@@ -70,7 +70,7 @@ public class ProcessDefinitionDataEventMerger implements ProcessDefinitionEventM
     }
 
     private List<Node> nodeDefinitions(ProcessDefinitionEventBody data) {
-        if (data.getNodes() == null && data.getNodes().isEmpty()) {
+        if (data.getNodes() == null || data.getNodes().isEmpty()) {
             return Collections.emptyList();
         }
         return data.getNodes().stream().map(this::nodeDefinition).collect(toList());
