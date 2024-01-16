@@ -296,11 +296,6 @@ void setupWeeklyDeployJob() {
         MAVEN_DEPENDENCIES_REPOSITORY: "${MAVEN_ARTIFACTS_REPOSITORY}",
         MAVEN_DEPLOY_REPOSITORY: "${MAVEN_ARTIFACTS_UPLOAD_REPOSITORY_URL}",
         MAVEN_REPO_CREDS_ID: "${MAVEN_ARTIFACTS_UPLOAD_REPOSITORY_CREDS_ID}",
-
-        NEXUS_RELEASE_URL: "${MAVEN_NEXUS_RELEASE_URL}",
-        NEXUS_RELEASE_REPOSITORY_ID: "${MAVEN_NEXUS_RELEASE_REPOSITORY}",
-        NEXUS_STAGING_PROFILE_ID: "${MAVEN_NEXUS_STAGING_PROFILE_ID}",
-        NEXUS_BUILD_PROMOTION_PROFILE_ID: "${MAVEN_NEXUS_BUILD_PROMOTION_PROFILE_ID}",
     ])
     KogitoJobTemplate.createPipelineJob(this, jobParams)?.with {
         parameters {
@@ -309,8 +304,6 @@ void setupWeeklyDeployJob() {
             stringParam('BUILD_BRANCH_NAME', "${GIT_BRANCH}", 'Set the Git branch to checkout')
 
             booleanParam('SKIP_TESTS', false, 'Skip tests')
-
-            booleanParam('IS_RELEASE', false, 'Is release')
 
             stringParam('PROJECT_VERSION', '', 'Project version')
 
