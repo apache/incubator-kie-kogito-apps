@@ -52,7 +52,6 @@ pipeline {
                         setDeployPropertyIfNeeded('git.branch', getBuildBranch())
                         setDeployPropertyIfNeeded('git.author', getGitAuthor())
                         setDeployPropertyIfNeeded('project.version', getProjectVersion())
-                        setDeployPropertyIfNeeded('release', isRelease())
                     }
                 }
             }
