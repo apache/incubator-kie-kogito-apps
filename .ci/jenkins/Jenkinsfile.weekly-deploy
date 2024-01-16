@@ -64,21 +64,29 @@ pipeline {
             steps {
                 script {
                     dir(getRepoName()) {
-                        configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
-                            maven.mvnVersionsUpdateParentAndChildModules(
-                                getMavenCommand().withSettingsXmlFile(MAVEN_SETTINGS_FILE),
-                                getProjectVersion(),
-                                true
-                            )
+                        withCredentials([usernamePassword(credentialsId: mavenDeployRepositoryCredsId, usernameVariable: 'REPOSITORY_USER', passwordVariable: 'REPOSITORY_TOKEN')]) {
+                            configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
+                                maven.mvnVersionsUpdateParentAndChildModules(
+                                    getMavenCommand().withSettingsXmlFile(MAVEN_SETTINGS_FILE).withProperty('apache.snapshot.repository.username', REPOSITORY_USER).withProperty('apache.snapshot.repository.password', REPOSITORY_TOKEN),
+                                    getProjectVersion(),
+                                    true
+                                )
+                            }
                         }
                     }
                 }
             }
         }
 
-        stage('sleep') {
+        stage('debug') {
             steps {
-                sh 'sleep 6000'
+                script {
+                    dir(getRepoName()) {
+                        sh 'git status'
+                        sh 'cat pom.xml'
+                        sh 'sleep 6000'
+                    }
+                }
             }
         }
 
@@ -86,7 +94,16 @@ pipeline {
             steps {
                 script {
                     dir(getRepoName()){
-                        runMavenDeploy(params.SKIP_TESTS, true)
+                        mvnCmd = getMavenCommand()
+                        mvnCmd.withLocalDeployFolder(getLocalDeploymentFolder())
+                        configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
+                            mvnCmd.withProperty('maven.test.failure.ignore', true)
+                                .withOptions(env.BUILD_MVN_OPTS_CURRENT ? [ env.BUILD_MVN_OPTS_CURRENT ] : [])
+                                .withOptions(env.KOGITO_APPS_BUILD_MVN_OPTS ? [ env.KOGITO_APPS_BUILD_MVN_OPTS ] : [])
+                                .skipTests(skipTests)
+                                .withSettingsXmlFile(MAVEN_SETTINGS_FILE)
+                                .run('clean deploy')
+                        }
                     }
                 }
             }
@@ -123,7 +140,6 @@ pipeline {
                 }
             }
         }
-
     }
     post {
         always {
