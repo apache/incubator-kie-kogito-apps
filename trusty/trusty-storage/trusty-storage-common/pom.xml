@@ -25,12 +25,16 @@
   <parent>
     <artifactId>trusty-storage</artifactId>
     <groupId>org.kie.kogito</groupId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>999-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <name>Kogito Apps :: Trusty Storage Common</name>
   <artifactId>trusty-storage-common</artifactId>
+
+  <properties>
+    <java.module.name>org.kie.kogito.trusty.storage.common</java.module.name>
+  </properties>
 
   <dependencies>
     <dependency>

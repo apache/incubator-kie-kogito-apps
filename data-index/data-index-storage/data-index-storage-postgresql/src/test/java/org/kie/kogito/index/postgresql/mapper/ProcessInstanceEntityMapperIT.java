@@ -21,24 +21,25 @@ package org.kie.kogito.index.postgresql.mapper;
 import java.time.ZonedDateTime;
 import java.util.Set;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.index.jpa.mapper.ProcessInstanceEntityMapper;
+import org.kie.kogito.index.jpa.model.MilestoneEntity;
+import org.kie.kogito.index.jpa.model.MilestoneEntityId;
+import org.kie.kogito.index.jpa.model.NodeInstanceEntity;
+import org.kie.kogito.index.jpa.model.ProcessInstanceEntity;
+import org.kie.kogito.index.jpa.model.ProcessInstanceErrorEntity;
 import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
-import org.kie.kogito.index.postgresql.model.MilestoneEntity;
-import org.kie.kogito.index.postgresql.model.MilestoneEntityId;
-import org.kie.kogito.index.postgresql.model.NodeInstanceEntity;
-import org.kie.kogito.index.postgresql.model.ProcessInstanceEntity;
-import org.kie.kogito.index.postgresql.model.ProcessInstanceErrorEntity;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.quarkus.test.junit.QuarkusTest;
+
+import jakarta.inject.Inject;
 
 import static java.util.Collections.singleton;
 import static java.util.Collections.singletonList;

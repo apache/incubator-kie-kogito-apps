@@ -21,25 +21,26 @@ package org.kie.kogito.index.postgresql.storage;
 import java.util.List;
 import java.util.function.Function;
 
-import javax.persistence.EntityManager;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.kie.kogito.index.jpa.model.ProcessInstanceEntity;
+import org.kie.kogito.index.jpa.storage.JPAQuery;
 import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.postgresql.model.ProcessInstanceEntity;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Order;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 
 import static java.util.Arrays.asList;
 import static java.util.Collections.emptyList;
@@ -83,7 +84,7 @@ class DomainQueryTest {
 
     @Test
     void testNoParameters() {
-        PostgreSqlQuery query = new PostgreSqlQuery(repository, Function.identity(), rootType);
+        JPAQuery query = new JPAQuery(repository, Function.identity(), rootType);
 
         query.execute();
 
@@ -96,7 +97,7 @@ class DomainQueryTest {
 
     @Test
     void testEmptyParameters() {
-        PostgreSqlQuery query = new PostgreSqlQuery(repository, Function.identity(), rootType);
+        JPAQuery query = new JPAQuery(repository, Function.identity(), rootType);
         query.filter(emptyList());
         query.sort(emptyList());
 
@@ -111,7 +112,7 @@ class DomainQueryTest {
 
     @Test
     void testPagination() {
-        PostgreSqlQuery query = new PostgreSqlQuery(repository, Function.identity(), rootType);
+        JPAQuery query = new JPAQuery(repository, Function.identity(), rootType);
         query.limit(10);
         query.offset(0);
 
@@ -148,7 +149,7 @@ class DomainQueryTest {
             return order;
         });
 
-        PostgreSqlQuery query = new PostgreSqlQuery(repository, Function.identity(), rootType);
+        JPAQuery query = new JPAQuery(repository, Function.identity(), rootType);
         query.sort(asList(orderBy("name", DESC), orderBy("date", ASC)));
 
         query.execute();

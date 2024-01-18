@@ -20,12 +20,12 @@
 
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>kogito-apps</artifactId>
         <groupId>org.kie.kogito</groupId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>999-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -72,6 +72,17 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
+                <artifactId>jobs-service-postgresql-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jobs-service-postgresql-common</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
                 <artifactId>jobs-service-postgresql</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -114,6 +125,82 @@
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-quarkus-jobs</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-quarkus-jobs</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <!-- Data Audit-->
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-audit-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-audit-common-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-audit-quarkus-tck</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-audit-quarkus-tck</artifactId>
+                <version>${project.version}</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-audit-springboot-tck</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-audit-springboot-tck</artifactId>
+                <version>${project.version}</version>
+                <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-audit-quarkus-service</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-data-audit-quarkus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-data-audit-springboot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <!-- Data Audit JPA Implementation-->
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-data-audit-jpa-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-data-audit-jpa-quarkus</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-data-audit-jpa-springboot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
 
             <!-- Data Index -->
             <dependency>
@@ -125,6 +212,17 @@
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-storage-api</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-common</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -172,6 +270,17 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-jpa</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-storage-postgresql</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -288,47 +397,51 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>kogito-addons-quarkus-data-index-persistence-common-runtime</artifactId>
+                <artifactId>
+                    kogito-addons-quarkus-data-index-persistence-common-runtime</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>kogito-addons-quarkus-data-index-persistence-common-runtime</artifactId>
+                <artifactId>
+                    kogito-addons-quarkus-data-index-persistence-common-runtime</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>kogito-addons-quarkus-data-index-persistence-common-deployment</artifactId>
+                <artifactId>
+                    kogito-addons-quarkus-data-index-persistence-common-deployment</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>kogito-addons-quarkus-data-index-persistence-common-deployment</artifactId>
+                <artifactId>
+                    kogito-addons-quarkus-data-index-persistence-common-deployment</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
             <dependency>
-              <groupId>org.kie.kogito</groupId>
-              <artifactId>kogito-addons-quarkus-data-index-common-runtime</artifactId>
-              <version>${project.version}</version>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-common-runtime</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-              <groupId>org.kie.kogito</groupId>
-              <artifactId>kogito-addons-quarkus-data-index-common-runtime</artifactId>
-              <version>${project.version}</version>
-              <classifier>sources</classifier>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-common-runtime</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
             </dependency>
             <dependency>
-              <groupId>org.kie.kogito</groupId>
-              <artifactId>kogito-addons-quarkus-data-index-common-deployment</artifactId>
-              <version>${project.version}</version>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-common-deployment</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-              <groupId>org.kie.kogito</groupId>
-              <artifactId>kogito-addons-quarkus-data-index-common-deployment</artifactId>
-              <version>${project.version}</version>
-              <classifier>sources</classifier>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-common-deployment</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
             </dependency>
 
 
@@ -442,24 +555,16 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-oracle</artifactId>
-                <version>${project.version}</version>
-                <classifier>javadoc</classifier>
-            </dependency>
-
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-oracle</artifactId>
+                <artifactId>persistence-commons-jpa</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-oracle</artifactId>
+                <artifactId>persistence-commons-jpa</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
-
-            <dependency>
+           <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>persistence-commons-redis</artifactId>
                 <version>${project.version}</version>
@@ -506,55 +611,55 @@
                 <version>${project.version}</version>
                 <classifier>javadoc</classifier>
             </dependency>
-          <!-- JitExecutor - Common -->
-          <dependency>
-            <groupId>org.kie.kogito</groupId>
-            <artifactId>jitexecutor-common</artifactId>
-            <version>${project.version}</version>
-          </dependency>
-          <dependency>
-            <groupId>org.kie.kogito</groupId>
-            <artifactId>jitexecutor-common</artifactId>
-            <version>${project.version}</version>
-            <classifier>sources</classifier>
-          </dependency>
-          <dependency>
-            <groupId>org.kie.kogito</groupId>
-            <artifactId>jitexecutor-common</artifactId>
-            <version>${project.version}</version>
-            <classifier>javadoc</classifier>
-          </dependency>
-          <dependency>
-            <groupId>org.kie.kogito</groupId>
-            <artifactId>jitexecutor-common</artifactId>
-            <version>${project.version}</version>
-            <type>test-jar</type>
-            <scope>test</scope>
-          </dependency>
+            <!-- JitExecutor - Common -->
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-common</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-common</artifactId>
+                <version>${project.version}</version>
+                <classifier>javadoc</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-common</artifactId>
+                <version>${project.version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
+            </dependency>
             <!-- JitExecutor - BPMN -->
             <dependency>
-              <groupId>org.kie.kogito</groupId>
-              <artifactId>jitexecutor-bpmn</artifactId>
-              <version>${project.version}</version>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-bpmn</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
-              <groupId>org.kie.kogito</groupId>
-              <artifactId>jitexecutor-bpmn</artifactId>
-              <version>${project.version}</version>
-              <classifier>sources</classifier>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-bpmn</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
             </dependency>
             <dependency>
-              <groupId>org.kie.kogito</groupId>
-              <artifactId>jitexecutor-bpmn</artifactId>
-              <version>${project.version}</version>
-              <classifier>javadoc</classifier>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-bpmn</artifactId>
+                <version>${project.version}</version>
+                <classifier>javadoc</classifier>
             </dependency>
             <dependency>
-              <groupId>org.kie.kogito</groupId>
-              <artifactId>jitexecutor-bpmn</artifactId>
-              <version>${project.version}</version>
-              <type>test-jar</type>
-              <scope>test</scope>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-bpmn</artifactId>
+                <version>${project.version}</version>
+                <type>test-jar</type>
+                <scope>test</scope>
             </dependency>
             <!-- JitExecutor - DMN -->
             <dependency>

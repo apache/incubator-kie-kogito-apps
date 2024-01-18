@@ -21,8 +21,6 @@ package org.kie.kogito.index.service.messaging;
 import java.time.Duration;
 import java.util.Collection;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,6 +28,8 @@ import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
 
 import io.restassured.http.ContentType;
+
+import jakarta.inject.Inject;
 
 import static io.restassured.RestAssured.given;
 import static org.awaitility.Awaitility.await;
@@ -49,9 +49,9 @@ public abstract class AbstractDomainMessagingConsumerIT {
     @BeforeEach
     void setup() throws Exception {
         protobufService.registerProtoBufferType(getTestProtobufFileContent());
-        cacheService.getProcessDefinitionsCache().clear();
-        cacheService.getProcessInstancesCache().clear();
-        cacheService.getUserTaskInstancesCache().clear();
+        cacheService.getProcessDefinitionStorage().clear();
+        cacheService.getProcessInstanceStorage().clear();
+        cacheService.getUserTaskInstanceStorage().clear();
         if (cacheService.getDomainModelCache("travels") != null) {
             cacheService.getDomainModelCache("travels").clear();
         }
@@ -59,9 +59,9 @@ public abstract class AbstractDomainMessagingConsumerIT {
 
     @AfterEach
     void close() {
-        cacheService.getProcessDefinitionsCache().clear();
-        cacheService.getProcessInstancesCache().clear();
-        cacheService.getUserTaskInstancesCache().clear();
+        cacheService.getProcessDefinitionStorage().clear();
+        cacheService.getProcessInstanceStorage().clear();
+        cacheService.getUserTaskInstanceStorage().clear();
         if (cacheService.getDomainModelCache("travels") != null) {
             cacheService.getDomainModelCache("travels").clear();
         }

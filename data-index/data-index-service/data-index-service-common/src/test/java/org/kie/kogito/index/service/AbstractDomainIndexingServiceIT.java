@@ -25,8 +25,6 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import javax.inject.Inject;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
@@ -37,6 +35,8 @@ import org.kie.kogito.index.test.TestUtils;
 import org.kie.kogito.persistence.protobuf.ProtobufService;
 
 import io.restassured.http.ContentType;
+
+import jakarta.inject.Inject;
 
 import static io.restassured.RestAssured.given;
 import static java.util.Arrays.asList;
@@ -709,9 +709,9 @@ public abstract class AbstractDomainIndexingServiceIT extends AbstractIndexingSe
                 .body("data.Deals[0].metadata.userTasks[0].started", is(formatDateTime(event.getData().getEventDate())))
                 .body("data.Deals[0].metadata.userTasks[0].lastUpdate", anything());
 
-        event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state, "kogito", 2);
+        event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state, "kogito", "Completed");
         UserTaskInstanceStateEventBody body = UserTaskInstanceStateEventBody.create()
-                .eventType(2)
+                .eventType("Completed")
                 .userTaskInstanceId(taskId)
                 .state("Completed")
                 .userTaskName("TaskName")

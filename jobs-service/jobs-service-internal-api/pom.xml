@@ -26,12 +26,16 @@
     <parent>
         <groupId>org.kie.kogito</groupId>
         <artifactId>jobs-service</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
+        <version>999-SNAPSHOT</version>
     </parent>
 
     <artifactId>jobs-service-internal-api</artifactId>
     <name>Kogito Apps :: Jobs Service :: Internal :: API</name>
     <description>Jobs Service Internal API</description>
+
+    <properties>
+        <java.module.name>org.kie.kogito.job.service</java.module.name>
+    </properties>
 
     <dependencies>
         <dependency>

@@ -25,12 +25,16 @@
   <parent>
     <artifactId>explainability</artifactId>
     <groupId>org.kie.kogito</groupId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>999-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <name>Kogito Apps :: Explainability Service Messaging</name>
   <artifactId>explainability-service-messaging</artifactId>
+
+  <properties>
+    <java.module.name>org.kie.kogito.explainability.messaging</java.module.name>
+  </properties>
 
   <dependencies>
     <dependency>

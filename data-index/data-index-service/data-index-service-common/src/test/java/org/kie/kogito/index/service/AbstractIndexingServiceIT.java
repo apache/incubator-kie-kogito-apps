@@ -29,9 +29,6 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
-import javax.inject.Inject;
-import javax.transaction.Transactional;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -49,6 +46,9 @@ import org.slf4j.LoggerFactory;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
@@ -113,10 +113,10 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
     @AfterEach
     @Transactional
     void tearDown() {
-        cacheService.getJobsCache().clear();
-        cacheService.getProcessDefinitionsCache().clear();
-        cacheService.getProcessInstancesCache().clear();
-        cacheService.getUserTaskInstancesCache().clear();
+        cacheService.getJobsStorage().clear();
+        cacheService.getProcessDefinitionStorage().clear();
+        cacheService.getProcessInstanceStorage().clear();
+        cacheService.getUserTaskInstanceStorage().clear();
     }
 
     @Test
@@ -399,18 +399,18 @@ public abstract class AbstractIndexingServiceIT extends AbstractIndexingIT {
                 event);
 
         state = "Completed";
-        event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state, "kogito", 2);
+        event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state, "kogito", "Completed");
         indexUserTaskCloudEvent(event);
 
         validateUserTaskInstance(
                 getUserTaskInstanceByIdAndCompleted(taskId, formatDateTime(event.getData().getEventDate())), event);
 
-        event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state, "admin", 2);
+        event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state, "admin", "Completed");
         indexUserTaskCloudEvent(event);
 
         validateUserTaskInstance(getUserTaskInstanceByIdAndActualOwner(taskId, "admin"), event);
 
-        event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state, null, 2);
+        event = getUserTaskCloudEvent(taskId, processId, processInstanceId, null, null, state, null, "Completed");
         LOGGER.info("event {}", event);
         indexUserTaskCloudEvent(event);
 

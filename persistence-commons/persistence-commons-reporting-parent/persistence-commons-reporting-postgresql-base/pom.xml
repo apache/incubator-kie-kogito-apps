@@ -25,12 +25,16 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>persistence-commons-reporting-parent</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>999-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>persistence-commons-reporting-postgresql-base</artifactId>
   <name>Kogito Apps :: Persistence Commons :: Reporting :: PostgreSQL base</name>
+
+  <properties>
+    <java.module.name>org.kie.kogito.persistence.postgresql.reporting</java.module.name>
+  </properties>
 
   <dependencies>
     <dependency>

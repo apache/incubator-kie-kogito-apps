@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>kogito-apps-build-parent</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>999-SNAPSHOT</version>
     <relativePath>../kogito-apps-build-parent/pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -35,6 +35,7 @@
   <name>Kogito Apps :: UI Packages</name>
 
   <properties>
+    <java.module.name>org.kie.kogito.apps.ui</java.module.name>
     <sonar.sources>${project.basedir}/packages</sonar.sources>
     <sonar.inclusions>packages/*/src/**</sonar.inclusions>
     <sonar.exclusions>**/__mocks__/**,**/mocks/**,**/tests/utils/**,**/*.stories.tsx,**/graphql/types.tsx,**/graphql/graphql.schema.json,**/index.tsx,*.js,**/resources/**</sonar.exclusions>

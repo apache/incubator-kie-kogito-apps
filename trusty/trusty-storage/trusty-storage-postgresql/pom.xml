@@ -25,12 +25,16 @@
   <parent>
     <artifactId>trusty-storage</artifactId>
     <groupId>org.kie.kogito</groupId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>999-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>trusty-storage-postgresql</artifactId>
   <name>Kogito Apps :: Trusty Storage PostgreSQL</name>
+
+  <properties>
+    <java.module.name>org.kie.kogito.trusty.storage.postgresql</java.module.name>
+  </properties>
 
   <dependencies>
     <dependency>

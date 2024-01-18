@@ -25,12 +25,16 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>data-index-storage</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <version>999-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
   <artifactId>data-index-storage-infinispan</artifactId>
   <name>Kogito Apps :: Data Index Storage Infinispan</name>
+
+  <properties>
+    <java.module.name>org.kie.kogito.index.infinispan</java.module.name>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -44,6 +48,10 @@
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>persistence-commons-protobuf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>data-index-storage-common</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
