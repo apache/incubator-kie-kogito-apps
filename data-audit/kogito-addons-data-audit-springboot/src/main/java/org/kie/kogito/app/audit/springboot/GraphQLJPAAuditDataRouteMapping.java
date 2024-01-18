@@ -20,7 +20,9 @@ package org.kie.kogito.app.audit.springboot;
 
 import java.util.Map;
 
+import org.kie.kogito.app.audit.api.DataAuditQuery;
 import org.kie.kogito.app.audit.api.DataAuditQueryService;
+import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -31,10 +33,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
-import graphql.ExecutionResult;
-import jakarta.annotation.PostConstruct;
+import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_QUERY_PATH;
+import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_REGISTRY_PATH;
+import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchemaManagerInstance;
 
-import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_PATH;
+import graphql.ExecutionResult;
+import jakarta.annotation.PostConstruct;;
 
 @RestController
 @Transactional
@@ -45,16 +49,23 @@ public class GraphQLJPAAuditDataRouteMapping {
     @Autowired
     DataAuditContextFactory dataAuditContextFactory;
 
+    private DataAuditStoreProxyService dataAuditStoreProxyService;
+
     @PostConstruct
     public void init() {
         dataAuditQueryService = DataAuditQueryService.newAuditQuerySerice();
-
+        dataAuditStoreProxyService = DataAuditStoreProxyService.newAuditStoreService();
+        graphQLSchemaManagerInstance().rebuildDefinitions(dataAuditContextFactory.newDataAuditContext());
     }
 
-    @PostMapping(value = DATA_AUDIT_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = DATA_AUDIT_QUERY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public Map<String, Object> executeQuery(@RequestBody JsonNode query) {
         ExecutionResult executionResult = dataAuditQueryService.executeQuery(dataAuditContextFactory.newDataAuditContext(), query.get("query").asText());
         return executionResult.toSpecification();
     }
 
+    @PostMapping(value = DATA_AUDIT_REGISTRY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void registerQuery(@RequestBody DataAuditQuery dataAuditQuery) {
+        dataAuditStoreProxyService.storeQuery(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
+    }
 }

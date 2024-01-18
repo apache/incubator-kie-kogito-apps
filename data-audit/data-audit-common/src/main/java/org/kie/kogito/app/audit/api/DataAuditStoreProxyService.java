@@ -39,6 +39,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.kie.kogito.app.audit.api.TypeCheck.typeCheckOf;
+import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchemaManagerInstance;
 
 public class DataAuditStoreProxyService {
 
@@ -80,5 +81,11 @@ public class DataAuditStoreProxyService {
         DataAuditStore service = ServiceLoader.load(DataAuditStore.class).findFirst().orElseThrow(() -> new RuntimeException("DataAuditStore implementation not found"));
         LOGGER.debug("Creating new Data Audit Store proxy service with {}", service);
         return new DataAuditStoreProxyService(service);
+    }
+
+    public void storeQuery(DataAuditContext newDataAuditContext, DataAuditQuery dataAuditQuery) {
+        LOGGER.info("Store query {}", dataAuditQuery);
+        auditStoreService.storeQuery(newDataAuditContext, dataAuditQuery);
+        graphQLSchemaManagerInstance().registerQuery(newDataAuditContext, dataAuditQuery);
     }
 }

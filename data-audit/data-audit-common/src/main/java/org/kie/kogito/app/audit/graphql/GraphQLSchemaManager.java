@@ -18,18 +18,27 @@
  */
 package org.kie.kogito.app.audit.graphql;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
+import java.util.stream.Collectors;
 
+import org.kie.kogito.app.audit.api.DataAuditContext;
+import org.kie.kogito.app.audit.api.DataAuditQuery;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQuery;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQueryProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static graphql.schema.idl.RuntimeWiring.newRuntimeWiring;
+
+import graphql.ExecutionInput;
+import graphql.ExecutionResult;
+import graphql.GraphQL;
 import graphql.language.FieldDefinition;
 import graphql.language.ObjectTypeDefinition;
 import graphql.scalars.ExtendedScalars;
@@ -39,8 +48,6 @@ import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
 
-import static graphql.schema.idl.RuntimeWiring.newRuntimeWiring;
-
 public class GraphQLSchemaManager {
 
     private static final GraphQLSchemaManager INSTANCE = new GraphQLSchemaManager();
@@ -49,12 +56,20 @@ public class GraphQLSchemaManager {
 
     private GraphQLSchema graphQLSchema;
 
+    private GraphQL graphQL;
+
+    private List<String> graphQLdefinitions;
+
     public static GraphQLSchemaManager graphQLSchemaManagerInstance() {
         return INSTANCE;
     }
 
     private GraphQLSchemaManager() {
+        this.graphQLdefinitions = new ArrayList<>();
+    }
 
+    public void rebuildDefinitions(DataAuditContext dataAuditContext) {
+        LOGGER.debug("Rebuilding graphQL definitions");
         RuntimeWiring.Builder runtimeWiringBuilder = newRuntimeWiring();
 
         runtimeWiringBuilder.scalar(ExtendedScalars.GraphQLBigInteger);
@@ -77,14 +92,18 @@ public class GraphQLSchemaManager {
 
         ServiceLoader.load(GraphQLSchemaQueryProvider.class, classLoader).forEach(queryProvider -> {
             graphqlSchemas.addAll(List.of(queryProvider.graphQLQueryExtension()));
-            for (GraphQLSchemaQuery<?> query : queryProvider.queries()) {
+            for (GraphQLSchemaQuery query : queryProvider.queries(dataAuditContext)) {
                 runtimeWiringBuilder.type("Query", builder -> builder.dataFetcher(query.name(), query::fetch));
             }
         });
 
+        List<InputStream> data = new ArrayList<>();
+        data.addAll(graphqlSchemas.stream().map(this::toInputStream).collect(Collectors.toList()));
+        data.addAll(this.graphQLdefinitions.stream().map(String::getBytes).map(ByteArrayInputStream::new).collect(Collectors.toList()));
+
         // now we have all of definitions
         List<FieldDefinition> queryDefinitions = new ArrayList<>();
-        for (String graphQLSchema : graphqlSchemas) {
+        for (InputStream graphQLSchema : data) {
             TypeDefinitionRegistry newTypes = readDefintionRegistry(graphQLSchema);
 
             // for allowing extension of the schema we need to merge this object manually
@@ -103,22 +122,47 @@ public class GraphQLSchemaManager {
         SchemaGenerator schemaGenerator = new SchemaGenerator();
         // we merge the query object
         typeDefinitionRegistry.add(ObjectTypeDefinition.newObjectTypeDefinition().name("Query").fieldDefinitions(queryDefinitions).build());
-        graphQLSchema = schemaGenerator.makeExecutableSchema(typeDefinitionRegistry, runtimeWiring);
+        GraphQLSchema newGraphQLSchema = schemaGenerator.makeExecutableSchema(typeDefinitionRegistry, runtimeWiring);
+        GraphQL newGraphQL = GraphQL.newGraphQL(newGraphQLSchema).build();
 
+        // we got to this point then everything is validated
+        this.graphQLSchema = newGraphQLSchema;
+        this.graphQL = newGraphQL;
+        LOGGER.debug("Succesfuly rebuilding graphQL definitions");
     }
 
-    private TypeDefinitionRegistry readDefintionRegistry(String graphQLSchema) {
-        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(graphQLSchema)) {
-            SchemaParser schemaParser = new SchemaParser();
-            return schemaParser.parse(is);
+    private InputStream toInputStream(String classpathFile) {
+        try (InputStream is = Thread.currentThread().getContextClassLoader().getResourceAsStream(classpathFile)) {
+            return new ByteArrayInputStream(is.readAllBytes());
         } catch (IOException e) {
             LOGGER.error("could not find or process {}", graphQLSchema, e);
-            return new TypeDefinitionRegistry();
+            return new ByteArrayInputStream(new byte[0]);
         }
+    }
+
+    private TypeDefinitionRegistry readDefintionRegistry(InputStream inputStream) {
+        SchemaParser schemaParser = new SchemaParser();
+        return schemaParser.parse(inputStream);
+    }
+
+    public GraphQL getGraphQL() {
+        return graphQL;
     }
 
     public GraphQLSchema getGraphQLSchema() {
         return graphQLSchema;
+    }
+
+    public ExecutionResult execute(ExecutionInput executionInput) {
+        return graphQL.execute(executionInput);
+    }
+
+    public void registerQuery(DataAuditContext dataAuditContext, DataAuditQuery dataAuditQuery) {
+        String graphQLDefinition = dataAuditQuery.getGraphQLDefinition();
+        TypeDefinitionRegistry registry = readDefintionRegistry(new ByteArrayInputStream(graphQLDefinition.getBytes()));
+        LOGGER.debug("Registering data audit query: {}", registry.getType("Query"));
+        this.graphQLdefinitions.add(graphQLDefinition);
+        rebuildDefinitions(dataAuditContext);
     }
 
 }

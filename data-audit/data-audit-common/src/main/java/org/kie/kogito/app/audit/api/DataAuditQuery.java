@@ -18,17 +18,41 @@
  */
 package org.kie.kogito.app.audit.api;
 
-public final class SubsystemConstants {
+public class DataAuditQuery {
 
-    private SubsystemConstants() {
-        // do nothing
+    private String identifier;
+
+    private String graphQLDefinition;
+
+    private String query;
+
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public static final String DATA_AUDIT_PATH = "/data-audit";
-    public static final String DATA_AUDIT_QUERY_PATH = "/data-audit/q";
-    public static final String DATA_AUDIT_REGISTRY_PATH = "/data-audit/r";
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
+    }
 
-    public static final String KOGITO_PROCESSINSTANCES_EVENTS = "kogito-processinstances-events";
-    public static final String KOGITO_USERTASKINSTANCES_EVENTS = "kogito-usertaskinstances-events";
-    public static final String KOGITO_JOBS_EVENTS = "kogito-jobs-events";
+    public String getGraphQLDefinition() {
+        return graphQLDefinition;
+    }
+
+    public void setGraphQLDefinition(String graphQLDefinition) {
+        this.graphQLDefinition = graphQLDefinition;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    @Override
+    public String toString() {
+        return "DataAuditQuery [identifier=" + identifier + ", graphQLDefinition=" + graphQLDefinition + ", query=" + query + "]";
+    }
+
 }

@@ -25,7 +25,6 @@ Data Audit «SpringBoot»: Provides the wiring to use Data Audit with SpringBoot
 
 Now we have and implementation examples
 
-
 Data Audit JPA Common: Provides the common exension not depending on the runtime
 Data Audit JPA «Quarkus»: Provides the wiring between the specific implementation and Quarkus System
 Data Audit JPA «SpringBoot»: Provides the wiring between the specific implementation and Springboot colocated system
@@ -35,9 +34,11 @@ Data Audit JPA «SpringBoot»: Provides the wiring between the specific implemen
 
 The way to retrieve information from the data audit is using GraphQL. This way we can abstract how the information is retrieved and allow different needs depending on the user.
 
+The Path is ${HOST}/data-audit/q for sending GraphQL queries.
+
 ## JPA implementation
 
-The jpa implementation allows you to store those events to be stored in a database.
+The jpa implementation allows you to store those events to be stored in a database. The only thing required in this case is to setup the datasource.
 
 ## Extension Points
 
@@ -54,7 +55,7 @@ org.kie.kogito.app.audit.spi.GraphQLSchemaQueryProvider: this allow the subsyste
 
 ## How to use in with Quarkus/Springboot
 
-You need to add two different dependencies to your project.
+You need to add two different dependencies to your project (collocated service)
 
 	<dependency>
 	    <groupId>org.kie.kogito</groupId>
@@ -66,8 +67,6 @@ You need to add two different dependencies to your project.
 	    <artifactId>kogito-addons-data-audit-jpa-<runtime></artifactId>
 	    <version>${version}</version>
 	</dependency>
-
-
 
 
 The first dependency is related how to you want to deploy it. In this case as collocated/embedded service

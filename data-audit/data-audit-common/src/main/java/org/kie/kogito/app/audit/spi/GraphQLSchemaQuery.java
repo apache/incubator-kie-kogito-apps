@@ -20,7 +20,7 @@ package org.kie.kogito.app.audit.spi;
 
 import graphql.schema.DataFetchingEnvironment;
 
-public interface GraphQLSchemaQuery<T> {
+public interface GraphQLSchemaQuery {
 
     String name();
 

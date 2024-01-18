@@ -18,25 +18,32 @@
  */
 package org.kie.kogito.app.audit.quarkus;
 
+import org.kie.kogito.app.audit.api.DataAuditQuery;
 import org.kie.kogito.app.audit.api.DataAuditQueryService;
+import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 
 import io.quarkus.vertx.web.Route;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.graphql.ExecutionInputBuilderWithContext;
 import io.vertx.ext.web.handler.graphql.GraphQLHandler;
 import io.vertx.ext.web.handler.graphql.GraphQLHandlerOptions;
 
+import static io.quarkus.vertx.web.Route.HttpMethod.GET;
+import static io.quarkus.vertx.web.Route.HttpMethod.POST;
+import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_QUERY_PATH;
+import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_REGISTRY_PATH;
+import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchemaManagerInstance;
+
 import graphql.GraphQL;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-
-import static io.quarkus.vertx.web.Route.HttpMethod.GET;
-import static io.quarkus.vertx.web.Route.HttpMethod.POST;
-import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_PATH;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class GraphQLJPADataAuditRouter {
 
     GraphQL graphQL;
@@ -46,20 +53,43 @@ public class GraphQLJPADataAuditRouter {
     @Inject
     DataAuditContextFactory dataAuditContextFactory;
 
+    private DataAuditQueryService dataAuditQueryService;
+
+    private DataAuditStoreProxyService dataAuditStoreProxyService;
+
     @PostConstruct
     public void init() {
-        graphQL = GraphQL.newGraphQL(DataAuditQueryService.newAuditQuerySerice().getGraphQLSchema()).build();
-        graphQLHandler = GraphQLHandler.create(graphQL, new GraphQLHandlerOptions());
+        graphQLSchemaManagerInstance().rebuildDefinitions(dataAuditContextFactory.newDataAuditContext());
+        dataAuditQueryService = DataAuditQueryService.newAuditQuerySerice();
+        dataAuditStoreProxyService = DataAuditStoreProxyService.newAuditStoreService();
+        graphQLHandler = GraphQLHandler.create(dataAuditQueryService.getGraphQL(), new GraphQLHandlerOptions());
     }
 
-    @Route(path = DATA_AUDIT_PATH, type = Route.HandlerType.BLOCKING, order = 2, methods = { GET })
+    @Route(path = DATA_AUDIT_QUERY_PATH, type = Route.HandlerType.BLOCKING, order = 2, methods = { GET })
     public void blockingGraphQLHandlerGet(RoutingContext rc) {
         graphQLHandler.beforeExecute(this::beforeExecuteHTTP).handle(rc);
     }
 
-    @Route(path = DATA_AUDIT_PATH, type = Route.HandlerType.BLOCKING, order = 2, methods = { POST })
+    @Route(path = DATA_AUDIT_QUERY_PATH, type = Route.HandlerType.BLOCKING, order = 2, methods = { POST })
     public void blockingGraphQLHandlerPost(RoutingContext rc) {
         graphQLHandler.beforeExecute(this::beforeExecuteHTTP).handle(rc);
+    }
+
+    @Route(path = DATA_AUDIT_REGISTRY_PATH, type = Route.HandlerType.BLOCKING, order = 2, methods = { POST })
+    public void blockingRegistryHandlerPost(RoutingContext rc) {
+        try {
+            JsonObject jsonObject = rc.body().asJsonObject();
+            DataAuditQuery dataAuditQuery = new DataAuditQuery();
+            dataAuditQuery.setIdentifier(jsonObject.getString("identifier"));
+            dataAuditQuery.setGraphQLDefinition(jsonObject.getString("graphQLDefinition"));
+            dataAuditQuery.setQuery(jsonObject.getString("query"));
+            dataAuditStoreProxyService.storeQuery(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
+            graphQLHandler = GraphQLHandler.create(dataAuditQueryService.getGraphQL(), new GraphQLHandlerOptions());
+            rc.response().setStatusCode(200).end();
+        } catch (Exception e) {
+            rc.response().setStatusCode(400).end();
+        }
+
     }
 
     private void beforeExecuteHTTP(ExecutionInputBuilderWithContext<RoutingContext> config) {
