@@ -164,13 +164,14 @@ public abstract class AbstractProcessDataIndexIT {
         await()
                 .atMost(TIMEOUT)
                 .untilAsserted(() -> given().spec(dataIndexSpec()).contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"{ProcessDefinitions{ id, version, name } }\" }")
+                        .body("{ \"query\" : \"{ProcessDefinitions{ id, version, name, source} }\" }")
                         .when().post("/graphql")
                         .then().statusCode(200)
                         .body("data.ProcessDefinitions.size()", is(1))
                         .body("data.ProcessDefinitions[0].id", is("approvals"))
                         .body("data.ProcessDefinitions[0].version", is("1.0"))
-                        .body("data.ProcessDefinitions[0].name", is("approvals")));
+                        .body("data.ProcessDefinitions[0].name", is("approvals"))
+                        .body("data.ProcessDefinitions[0].source", notNullValue()));
 
         await()
                 .atMost(TIMEOUT)
