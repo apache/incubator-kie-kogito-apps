@@ -283,7 +283,7 @@ void setupReleasePromoteJob() {
 }
 
 void setupWeeklyDeployJob() {
-    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-apps-weekly-deploy', JobType.OTHER, "${jenkins_path}/Jenkinsfile.weekly-deploy", 'Kogito Apps Weekly Deploy')
+    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-apps.weekly-deploy', JobType.OTHER, "${jenkins_path}/Jenkinsfile.weekly-deploy", 'Kogito Apps Weekly Deploy')
     JobParamsUtils.setupJobParamsAgentDockerBuilderImageConfiguration(this, jobParams)
     jobParams.env.putAll([
         JENKINS_EMAIL_CREDS_ID: "${JENKINS_EMAIL_CREDS_ID}",
@@ -305,7 +305,8 @@ void setupWeeklyDeployJob() {
 
             booleanParam('SKIP_TESTS', false, 'Skip tests')
 
-            stringParam('PROJECT_VERSION', '', 'Project version')
+
+            stringParam('GIT_CHECKOUT_DATETIME', '', 'Git checkout date and time - (Y-m-d H:i)')
 
             booleanParam('SEND_NOTIFICATION', false, 'In case you want the pipeline to send a notification on CI channel for this run.')
         }

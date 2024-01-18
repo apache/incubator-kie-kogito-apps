@@ -42,7 +42,7 @@ pipeline {
                     }
 
                     dir(getRepoName()) {
-                        checkoutRepo(getCheckoutDate())
+                        checkoutRepo()
                     }
                 }
             }
@@ -57,53 +57,21 @@ pipeline {
             }
         }
         stage('Update project version') {
-            when {
-                expression { return getProjectVersion() }
-            }
             steps {
                 script {
-                    dir(getRepoName()) {
-                        withCredentials([usernamePassword(credentialsId: mavenDeployRepositoryCredsId, usernameVariable: 'REPOSITORY_USER', passwordVariable: 'REPOSITORY_TOKEN')]) {
-                            configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
-                                maven.mvnVersionsUpdateParentAndChildModules(
-                                    getMavenCommand().withSettingsXmlFile(MAVEN_SETTINGS_FILE).withProperty('apache.snapshot.repository.username', REPOSITORY_USER).withProperty('apache.snapshot.repository.password', REPOSITORY_TOKEN),
-                                    getProjectVersion(),
-                                    true
-                                )
-                            }
-                        }
-                    }
+                    maven.mvnVersionsUpdateParentAndChildModules(
+                        getMavenCommand(),
+                        getProjectVersion(),
+                        true
+                    )
                 }
             }
         }
 
-        stage('debug') {
+        stage('Build & Test & Deploy locally') {
             steps {
                 script {
-                    dir(getRepoName()) {
-                        sh 'git status'
-                        sh 'cat pom.xml'
-                        sh 'sleep 6000'
-                    }
-                }
-            }
-        }
-
-        stage('Deploy kogito-apps locally') {
-            steps {
-                script {
-                    dir(getRepoName()){
-                        mvnCmd = getMavenCommand()
-                        mvnCmd.withLocalDeployFolder(getLocalDeploymentFolder())
-                        configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
-                            mvnCmd.withProperty('maven.test.failure.ignore', true)
-                                .withOptions(env.BUILD_MVN_OPTS_CURRENT ? [ env.BUILD_MVN_OPTS_CURRENT ] : [])
-                                .withOptions(env.KOGITO_APPS_BUILD_MVN_OPTS ? [ env.KOGITO_APPS_BUILD_MVN_OPTS ] : [])
-                                .skipTests(skipTests)
-                                .withSettingsXmlFile(MAVEN_SETTINGS_FILE)
-                                .run('clean deploy')
-                        }
-                    }
+                    runMavenLocalDeploy(params.SKIP_TESTS)
                 }
             }
             post {
@@ -116,25 +84,36 @@ pipeline {
             }
         }
 
-        stage('Upload artifacts to repository') {
+        stage('Upload artifacts to given repository') {
             when {
                 expression { return shouldDeployToRepository() }
             }
             steps {
                 script {
-                    dir(getRepoName()) {
-                        withCredentials([usernamePassword(credentialsId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, usernameVariable: 'REPOSITORY_USER', passwordVariable: 'REPOSITORY_TOKEN')]) {
-                            configFileProvider([configFile(fileId: settingsXmlId, variable: 'MAVEN_SETTINGS_FILE')]) {
-                                new MavenCommand(this)
-                                    .withSettingsXmlFile(MAVEN_SETTINGS_FILE)
-                                    .withProperty('wagon.source', "file://${getLocalDeploymentFolder()}")
-                                    .withProperty('wagon.target', env.MAVEN_DEPLOY_REPOSITORY)
-                                    .withProperty('wagon.targetId', 'apache-snapshots-repository')
-                                    .withProperty('apache.snapshot.repository.username', REPOSITORY_USER)
-                                    .withProperty('apache.snapshot.repository.password', REPOSITORY_TOKEN)
-                                    .run("org.codehaus.mojo:wagon-maven-plugin:2.0.2:merge-maven-repos")
-                            }
+                    withCredentials([usernamePassword(credentialsId: env.MAVEN_REPO_CREDS_ID, usernameVariable: 'REPOSITORY_USER', passwordVariable: 'REPOSITORY_TOKEN')]) {
+                        configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]) {
+                            getMavenCommand()
+                                .withSettingsXmlFile(MAVEN_SETTINGS_FILE)
+                                .withProperty('wagon.source', "file://${getLocalDeploymentFolder()}")
+                                .withProperty('wagon.target', env.MAVEN_DEPLOY_REPOSITORY)
+                                .withProperty('wagon.targetId', 'apache-snapshots-repository')
+                                .withProperty('apache.snapshot.repository.username', REPOSITORY_USER)
+                                .withProperty('apache.snapshot.repository.password', REPOSITORY_TOKEN)
+                                .run("org.codehaus.mojo:wagon-maven-plugin:2.0.2:merge-maven-repos")
                         }
+                    }
+                }
+            }
+        }
+
+        stage('Create and push a new tag') {
+            steps {
+                script {
+                    projectVersion = getProjectVersion(false)
+                    dir(getRepoName()) {
+                        githubscm.setUserConfigFromCreds(getGitAuthorPushCredsId())
+                        githubscm.tagRepository(projectVersion)
+                        githubscm.pushRemoteTag('origin', projectVersion, getGitAuthorPushCredsId())
                     }
                 }
             }
@@ -175,11 +154,14 @@ void saveReports() {
     archiveArtifacts artifacts: '**/*.log,**/cypress/screenshots/**,**/cypress/videos/**', allowEmptyArchive: true
 }
 
-void checkoutRepo(String date = '') {
+void checkoutRepo() {
     deleteDir()
     checkout(githubscm.resolveRepository(getRepoName(), getGitAuthor(), getBuildBranch(), false, getGitAuthorCredsId()))
-    if (date) {
-        sh "git fetch && git checkout `git rev-list -n 1 --before=\"${date}\" ${getBuildBranch()}`"
+    // need to manually checkout branch since on a detached branch after checkout command
+    sh "git checkout ${getBuildBranch()}"
+    checkoutDatetime = getCheckoutDatetime()
+    if (checkoutDatetime) {
+        sh "git checkout `git rev-list -n 1 --before=\"${checkoutDatetime}\" ${getBuildBranch()}`"
     }
 }
 
@@ -208,23 +190,22 @@ String getBuildBranch() {
     return params.BUILD_BRANCH_NAME
 }
 
-String getProjectVersion() {
-    return params.PROJECT_VERSION
-}
-
 void setDeployPropertyIfNeeded(String key, def value) {
     if (value) {
         deployProperties[key] = value
     }
 }
 
-MavenCommand getMavenCommand() {
-    return new MavenCommand(this, ['-fae', '-ntp'])
-            .withOptions(env.BUILD_MVN_OPTS ? [ env.BUILD_MVN_OPTS ] : [])
-            .withProperty('full')
+MavenCommand getMavenCommand(String directory = '') {
+    directory = directory ?: getRepoName()
+    def mvnCmd = new MavenCommand(this, ['-fae', '-ntp'])
+                .withOptions(env.BUILD_MVN_OPTS ? [ env.BUILD_MVN_OPTS ] : [])
+                .inDirectory(directory)
+                .withProperty('full')
+    return mvnCmd
 }
 
-void runMavenDeploy(boolean skipTests = true) {
+void runMavenLocalDeploy(boolean skipTests = true) {
     mvnCmd = getMavenCommand()
     mvnCmd.withLocalDeployFolder(getLocalDeploymentFolder())
 
@@ -242,11 +223,19 @@ String getLocalDeploymentFolder() {
     return "${env.MAVEN_DEPLOY_LOCAL_DIR}/${getRepoName()}"
 }
 
-String getMavenRepoZipUrl() {
-    return "${env.MAVEN_DEPLOY_REPOSITORY.replaceAll('/content/', '/service/local/').replaceFirst('/*$', '')}/content-compressed"
+String getCheckoutDatetime() {
+    return params.GIT_CHECKOUT_DATETIME
 }
 
-String getCheckoutDate() {
-    currentDate = sh(returnStdout: true, script: 'date -u "+%Y-%m-%d"').trim()
-    return currentDate + ' 21:00'
+String getProjectVersionDate() {
+    date = (getCheckoutDatetime() =~ /(\d{4}-\d{2}-\d{2})/)[0][0]
+    return date.replace('-', '')
+}
+
+String getProjectVersion(boolean keepSnapshotSuffix = true) {
+    version = maven.mvnGetVersionProperty(getMavenCommand(), 'project.parent.version')
+    if (keepSnapshotSuffix) {
+        return version.replace("-SNAPSHOT", "-${getProjectVersionDate()}-SNAPSHOT")
+    }
+    return version.replace("-SNAPSHOT", "-${getProjectVersionDate()}")
 }
