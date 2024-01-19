@@ -16,7 +16,7 @@ pipeline {
 
     options {
         timestamps()
-        timeout(time: 210, unit: 'MINUTES')
+        timeout(time: 600, unit: 'MINUTES')
     }
 
     // parameters {
@@ -44,6 +44,8 @@ pipeline {
                     dir(getRepoName()) {
                         checkoutRepo()
                     }
+
+                    env.PROJECT_VERSION = maven.mvnGetVersionProperty(getMavenCommand(), 'project.parent.version')
                 }
             }
             post {
@@ -228,14 +230,14 @@ String getCheckoutDatetime() {
 }
 
 String getProjectVersionDate() {
-    date = (getCheckoutDatetime() =~ /(\d{4}-\d{2}-\d{2})/)[0][0]
-    return date.replace('-', '')
+    def projectVersionDate = (getCheckoutDatetime() =~ /(\d{4}-\d{2}-\d{2})/)[0][0]
+    return projectVersionDate.replace('-', '')
 }
 
 String getProjectVersion(boolean keepSnapshotSuffix = true) {
-    version = maven.mvnGetVersionProperty(getMavenCommand(), 'project.parent.version')
+    def projectVersion = env.PROJECT_VERSION
     if (keepSnapshotSuffix) {
-        return version.replace("-SNAPSHOT", "-${getProjectVersionDate()}-SNAPSHOT")
+        return projectVersion.replace("-SNAPSHOT", "-${getProjectVersionDate()}-SNAPSHOT")
     }
-    return version.replace("-SNAPSHOT", "-${getProjectVersionDate()}")
+    return projectVersion.replace("-SNAPSHOT", "-${getProjectVersionDate()}")
 }
