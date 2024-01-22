@@ -22,7 +22,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
 import java.util.stream.Collectors;
@@ -58,14 +60,14 @@ public class GraphQLSchemaManager {
 
     private GraphQL graphQL;
 
-    private List<String> graphQLdefinitions;
+    private Map<String, String> graphQLdefinitions;
 
     public static GraphQLSchemaManager graphQLSchemaManagerInstance() {
         return INSTANCE;
     }
 
     private GraphQLSchemaManager() {
-        this.graphQLdefinitions = new ArrayList<>();
+        this.graphQLdefinitions = new HashMap<>();
     }
 
     public void rebuildDefinitions(DataAuditContext dataAuditContext) {
@@ -99,7 +101,7 @@ public class GraphQLSchemaManager {
 
         List<InputStream> data = new ArrayList<>();
         data.addAll(graphqlSchemas.stream().map(this::toInputStream).collect(Collectors.toList()));
-        data.addAll(this.graphQLdefinitions.stream().map(String::getBytes).map(ByteArrayInputStream::new).collect(Collectors.toList()));
+        data.addAll(this.graphQLdefinitions.values().stream().map(String::getBytes).map(ByteArrayInputStream::new).collect(Collectors.toList()));
 
         // now we have all of definitions
         List<FieldDefinition> queryDefinitions = new ArrayList<>();
@@ -160,8 +162,8 @@ public class GraphQLSchemaManager {
     public void registerQuery(DataAuditContext dataAuditContext, DataAuditQuery dataAuditQuery) {
         String graphQLDefinition = dataAuditQuery.getGraphQLDefinition();
         TypeDefinitionRegistry registry = readDefintionRegistry(new ByteArrayInputStream(graphQLDefinition.getBytes()));
-        LOGGER.debug("Registering data audit query: {}", registry.getType("Query"));
-        this.graphQLdefinitions.add(graphQLDefinition);
+        LOGGER.debug("Registering data audit query {} with definition {}", dataAuditQuery.getIdentifier(), registry.getType("Query"));
+        this.graphQLdefinitions.put(dataAuditQuery.getIdentifier(), dataAuditQuery.getGraphQLDefinition());
         rebuildDefinitions(dataAuditContext);
     }
 
