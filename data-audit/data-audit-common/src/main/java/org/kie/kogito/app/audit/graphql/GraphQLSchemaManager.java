@@ -46,6 +46,7 @@ import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
+import graphql.schema.idl.SchemaPrinter;
 import graphql.schema.idl.TypeDefinitionRegistry;
 
 import static graphql.schema.idl.RuntimeWiring.newRuntimeWiring;
@@ -157,6 +158,11 @@ public class GraphQLSchemaManager {
 
     public ExecutionResult execute(ExecutionInput executionInput) {
         return graphQL.execute(executionInput);
+    }
+
+    public String getGraphQLSchemaDefinition() {
+        SchemaPrinter printer = new SchemaPrinter();
+        return printer.print(graphQL.getGraphQLSchema());
     }
 
     public void registerQuery(DataAuditContext dataAuditContext, DataAuditQuery dataAuditQuery) {

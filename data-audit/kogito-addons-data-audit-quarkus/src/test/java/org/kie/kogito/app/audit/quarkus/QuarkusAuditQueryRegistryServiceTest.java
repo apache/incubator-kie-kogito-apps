@@ -21,6 +21,7 @@ package org.kie.kogito.app.audit.quarkus;
 import java.util.List;
 import java.util.Map;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -163,5 +164,18 @@ public class QuarkusAuditQueryRegistryServiceTest {
         assertThat(response)
                 .hasSize(10);
 
+    }
+
+    @Test
+    public void testPrintSchema() {
+        given()
+                .when()
+                .get(SubsystemConstants.DATA_AUDIT_REGISTRY_PATH)
+                .then()
+                .log()
+                .body()
+                .assertThat()
+                .statusCode(200)
+                .body(Matchers.notNullValue());
     }
 }

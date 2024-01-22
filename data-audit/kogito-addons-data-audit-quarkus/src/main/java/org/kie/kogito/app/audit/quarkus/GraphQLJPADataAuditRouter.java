@@ -92,6 +92,11 @@ public class GraphQLJPADataAuditRouter {
 
     }
 
+    @Route(path = DATA_AUDIT_REGISTRY_PATH, type = Route.HandlerType.BLOCKING, order = 2, methods = { GET })
+    public void blockingRegistryHandlerGet(RoutingContext rc) {
+        rc.response().setStatusCode(200).end(graphQLSchemaManagerInstance().getGraphQLSchemaDefinition());
+    }
+
     private void beforeExecuteHTTP(ExecutionInputBuilderWithContext<RoutingContext> config) {
         config.builder().localContext(dataAuditContextFactory.newDataAuditContext());
     }
