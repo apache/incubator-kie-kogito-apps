@@ -33,12 +33,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
+import graphql.ExecutionResult;
+import jakarta.annotation.PostConstruct;
+
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_QUERY_PATH;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_REGISTRY_PATH;
 import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchemaManagerInstance;
-
-import graphql.ExecutionResult;
-import jakarta.annotation.PostConstruct;;
 
 @RestController
 @Transactional

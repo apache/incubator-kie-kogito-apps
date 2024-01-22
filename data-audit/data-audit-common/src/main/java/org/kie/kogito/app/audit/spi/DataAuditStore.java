@@ -63,6 +63,6 @@ public interface DataAuditStore {
 
     void storeQuery(DataAuditContext context, DataAuditQuery dataAuditQuery);
 
-    List<DataAuditQuery> findQueries(DataAuditContext context); 
+    List<DataAuditQuery> findQueries(DataAuditContext context);
 
 }

@@ -33,13 +33,13 @@ import org.kie.kogito.jobs.service.model.JobStatus;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
 
+import jakarta.inject.Inject;
+
 import static io.restassured.RestAssured.given;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.kie.kogito.app.audit.quarkus.DataAuditTestUtils.deriveNewState;
 import static org.kie.kogito.app.audit.quarkus.DataAuditTestUtils.newJobEvent;
 import static org.kie.kogito.app.audit.quarkus.DataAuditTestUtils.wrapQuery;
-
-import jakarta.inject.Inject;
 
 @QuarkusTest
 @TestInstance(Lifecycle.PER_CLASS)

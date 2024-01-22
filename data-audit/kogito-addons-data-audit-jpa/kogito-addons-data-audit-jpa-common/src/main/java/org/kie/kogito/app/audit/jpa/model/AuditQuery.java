@@ -18,7 +18,6 @@
  */
 package org.kie.kogito.app.audit.jpa.model;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

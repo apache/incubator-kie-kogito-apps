@@ -34,8 +34,6 @@ import org.kie.kogito.app.audit.spi.GraphQLSchemaQueryProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static graphql.schema.idl.RuntimeWiring.newRuntimeWiring;
-
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
 import graphql.GraphQL;
@@ -47,6 +45,8 @@ import graphql.schema.idl.RuntimeWiring;
 import graphql.schema.idl.SchemaGenerator;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
+
+import static graphql.schema.idl.RuntimeWiring.newRuntimeWiring;
 
 public class GraphQLSchemaManager {
 
