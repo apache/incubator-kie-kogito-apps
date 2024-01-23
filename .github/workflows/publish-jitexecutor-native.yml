@@ -28,12 +28,14 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=current_date::$(date +'%Y%m%d')"
+        shell: bash
 
       - name: Set version
         id: version
         run: |
           version="$(echo '${{ env.KOGITO_RUNTIME_VERSION }}' | sed 's/YYYYMMDD/${{ steps.date.outputs.current_date }}/g')"
           echo "::set-output name=version::$version"
+        shell: bash
 
       - name: "Set long paths for Windows"
         if: runner.os == 'Windows'
