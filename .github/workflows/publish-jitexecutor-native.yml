@@ -98,9 +98,8 @@ jobs:
 
       - name: "Setup GraalVM"
         if: runner.os == 'Windows'
-        uses: graalvm/setup-graalvm@babc303d7e5b8f3062a94b90b49c3444cf291633 #v1
+        uses: graalvm/setup-graalvm@v1
         with:
-          version: "22.3.0"
           java-version: "17"
           components: "native-image"
 
