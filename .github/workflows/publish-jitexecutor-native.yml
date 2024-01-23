@@ -32,7 +32,7 @@ jobs:
 
       - name: Set version
         id: version
-        run: echo "VERSION=$('${{ env.KOGITO_RUNTIME_VERSION }}' | sed 's/YYYYMMDD/${{ steps.date.outputs.CURRENT_DATE }}/g')" >> "$GITHUB_OUTPUT"
+        run: echo "VERSION=$(echo '${{ env.KOGITO_RUNTIME_VERSION }}' | sed 's/YYYYMMDD/${{ steps.date.outputs.CURRENT_DATE }}/g')" >> "$GITHUB_OUTPUT"
         shell: bash
 
       - name: "Set long paths for Windows"
