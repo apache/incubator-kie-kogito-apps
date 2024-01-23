@@ -61,11 +61,11 @@ jobs:
         if: runner.os == 'macOS'
         run: |
           brew install make && \
-          wget https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-22.3.0/graalvm-ce-java11-darwin-amd64-22.3.0.tar.gz && \
-          tar -xzf graalvm-ce-java11-darwin-amd64-22.3.0.tar.gz && \
-          sudo mv graalvm-ce-java11-22.3.0 /Library/Java/JavaVirtualMachines/graalvm-ce-java11-darwin-amd64-22.3.0
-          export PATH=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-darwin-amd64-22.3.0/Contents/Home/bin:$PATH && \
-          export GRAALVM_HOME=/Library/Java/JavaVirtualMachines/graalvm-ce-java11-darwin-amd64-22.3.0/Contents/Home && \
+          wget https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_macos-x64_bin.tar.gz && \
+          tar -xzf graalvm-community-jdk-17.0.9_macos-x64_bin.tar.gz && \
+          sudo mv graalvm-community-openjdk-17.0.9+9.1 /Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1
+          export PATH=/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1/Contents/Home/bin:$PATH && \
+          export GRAALVM_HOME=/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1/Contents/Home && \
           gu install native-image && \
           mvn clean package -B -ntp -DskipTests -f ./jitexecutor && mvn clean package -B -ntp -DskipTests -Pnative -am -f ./jitexecutor
 
