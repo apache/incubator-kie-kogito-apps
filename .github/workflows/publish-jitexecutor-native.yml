@@ -32,7 +32,7 @@ jobs:
 
       - name: Set version
         id: version
-        run: echo "VERSION=$('${{ env.KOGITO_RUNTIME_VERSION }}' | sed 's/YYYYMMDD/${{ steps.date.outputs.current_date }}/g')" >> "$GITHUB_OUTPUT"
+        run: echo "VERSION=$('${{ env.KOGITO_RUNTIME_VERSION }}' | sed 's/YYYYMMDD/${{ steps.date.outputs.CURRENT_DATE }}/g')" >> "$GITHUB_OUTPUT"
         shell: bash
 
       - name: "Set long paths for Windows"
@@ -43,7 +43,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: apache/incubator-kie-kogito-apps
-          ref: ${{ steps.version.outputs.version }}
+          ref: ${{ steps.version.outputs.VERSION }}
 
       - name: "Set up Maven"
         uses: stCarolas/setup-maven@v4.5
@@ -114,10 +114,10 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: jitexecutor_${{ runner.os }}
-          path: ./jitexecutor/jitexecutor-runner/target/jitexecutor-runner-${{ steps.version.outputs.version }}-run*
+          path: ./jitexecutor/jitexecutor-runner/target/jitexecutor-runner-${{ steps.version.outputs.VERSION }}-run*
 
     outputs:
-      package_version: ${{ steps.version.outputs.version }}
+      package_version: ${{ steps.version.outputs.VERSION }}
 
   pack_and_publish:
     runs-on: ubuntu-latest
