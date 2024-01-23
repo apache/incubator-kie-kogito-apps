@@ -32,7 +32,7 @@ jobs:
       - name: Set version
         id: version
         run: |
-          version="$(sed 's/YYYYMMDD/${{ steps.date.outputs.current_date }}/g' ${{ env.KOGITO_RUNTIME_VERSION }})"
+          version="$(echo '${{ env.KOGITO_RUNTIME_VERSION }}' | sed 's/YYYYMMDD/${{ steps.date.outputs.current_date }}/g')"
           echo "::set-output name=version::$version"
 
       - name: "Set long paths for Windows"
