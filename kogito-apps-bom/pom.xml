@@ -259,17 +259,6 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-storage-oracle</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-storage-oracle</artifactId>
-                <version>${project.version}</version>
-                <classifier>sources</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-storage-jpa</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -359,17 +348,6 @@
             <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-service-mongodb</artifactId>
-                <version>${project.version}</version>
-                <classifier>sources</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-service-oracle</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-service-oracle</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
