@@ -16,19 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.app.audit.api;
 
-public final class SubsystemConstants {
+package org.kie.kogito.app.audit.graphql;
 
-    private SubsystemConstants() {
-        // do nothing
-    }
+import java.util.Map;
 
-    public static final String DATA_AUDIT_PATH = "/data-audit";
-    public static final String DATA_AUDIT_QUERY_PATH = DATA_AUDIT_PATH + "/q";
-    public static final String DATA_AUDIT_REGISTRY_PATH = DATA_AUDIT_PATH + "/r";
+import graphql.GraphQL;
+import graphql.schema.GraphQLSchema;
 
-    public static final String KOGITO_PROCESSINSTANCES_EVENTS = "kogito-processinstances-events";
-    public static final String KOGITO_USERTASKINSTANCES_EVENTS = "kogito-usertaskinstances-events";
-    public static final String KOGITO_JOBS_EVENTS = "kogito-jobs-events";
+public record GraphQLSchemaBuild(GraphQLSchema graphQLSchema, GraphQL graphQL, Map<String, String> additionalDefinitions) {
+
 }

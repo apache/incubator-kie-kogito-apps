@@ -22,12 +22,12 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.ServiceLoader;
-import java.util.stream.Collectors;
 
 import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.api.DataAuditQuery;
@@ -71,7 +71,7 @@ public class GraphQLSchemaManager {
         this.graphQLdefinitions = new HashMap<>();
     }
 
-    public void rebuildDefinitions(DataAuditContext dataAuditContext) {
+    public GraphQLSchemaBuild rebuildDefinitions(DataAuditContext dataAuditContext, Map<String, String> additionalDefinitions) {
         LOGGER.debug("Rebuilding graphQL definitions");
         RuntimeWiring.Builder runtimeWiringBuilder = newRuntimeWiring();
 
@@ -101,13 +101,13 @@ public class GraphQLSchemaManager {
         });
 
         List<InputStream> data = new ArrayList<>();
-        data.addAll(graphqlSchemas.stream().map(this::toInputStream).collect(Collectors.toList()));
-        data.addAll(this.graphQLdefinitions.values().stream().map(String::getBytes).map(ByteArrayInputStream::new).collect(Collectors.toList()));
+        data.addAll(graphqlSchemas.stream().map(this::toInputStream).toList());
+        data.addAll(additionalDefinitions.values().stream().map(String::getBytes).map(ByteArrayInputStream::new).toList());
 
         // now we have all of definitions
         List<FieldDefinition> queryDefinitions = new ArrayList<>();
         for (InputStream graphQLSchema : data) {
-            TypeDefinitionRegistry newTypes = readDefintionRegistry(graphQLSchema);
+            TypeDefinitionRegistry newTypes = readDefinitionRegistry(graphQLSchema);
 
             // for allowing extension of the schema we need to merge this object manually
             // we remove it from the new Types and aggregate in temporal list so we can add this at the end
@@ -128,10 +128,8 @@ public class GraphQLSchemaManager {
         GraphQLSchema newGraphQLSchema = schemaGenerator.makeExecutableSchema(typeDefinitionRegistry, runtimeWiring);
         GraphQL newGraphQL = GraphQL.newGraphQL(newGraphQLSchema).build();
 
-        // we got to this point then everything is validated
-        this.graphQLSchema = newGraphQLSchema;
-        this.graphQL = newGraphQL;
         LOGGER.debug("Succesfuly rebuilding graphQL definitions");
+        return new GraphQLSchemaBuild(newGraphQLSchema, newGraphQL, additionalDefinitions);
     }
 
     private InputStream toInputStream(String classpathFile) {
@@ -143,7 +141,7 @@ public class GraphQLSchemaManager {
         }
     }
 
-    private TypeDefinitionRegistry readDefintionRegistry(InputStream inputStream) {
+    private TypeDefinitionRegistry readDefinitionRegistry(InputStream inputStream) {
         SchemaParser schemaParser = new SchemaParser();
         return schemaParser.parse(inputStream);
     }
@@ -165,12 +163,24 @@ public class GraphQLSchemaManager {
         return printer.print(graphQL.getGraphQLSchema());
     }
 
-    public void registerQuery(DataAuditContext dataAuditContext, DataAuditQuery dataAuditQuery) {
+    public void init(DataAuditContext dataAuditContext) {
+        setGraphQLSchemaBuild(rebuildDefinitions(dataAuditContext, new HashMap<>()));
+    }
+
+    public GraphQLSchemaBuild registerQuery(DataAuditContext dataAuditContext, DataAuditQuery dataAuditQuery) {
         String graphQLDefinition = dataAuditQuery.getGraphQLDefinition();
-        TypeDefinitionRegistry registry = readDefintionRegistry(new ByteArrayInputStream(graphQLDefinition.getBytes()));
+        TypeDefinitionRegistry registry = readDefinitionRegistry(new ByteArrayInputStream(graphQLDefinition.getBytes()));
         LOGGER.debug("Registering data audit query {} with definition {}", dataAuditQuery.getIdentifier(), registry.getType("Query"));
         this.graphQLdefinitions.put(dataAuditQuery.getIdentifier(), dataAuditQuery.getGraphQLDefinition());
-        rebuildDefinitions(dataAuditContext);
+        Map<String, String> additionalDefinitions = new HashMap<>(this.graphQLdefinitions);
+        additionalDefinitions.put(dataAuditQuery.getIdentifier(), dataAuditQuery.getGraphQLDefinition());
+        return rebuildDefinitions(dataAuditContext, additionalDefinitions);
+    }
+
+    public void setGraphQLSchemaBuild(GraphQLSchemaBuild build) {
+        this.graphQL = build.graphQL();
+        this.graphQLSchema = build.graphQLSchema();
+        this.graphQLdefinitions = build.additionalDefinitions();
     }
 
 }

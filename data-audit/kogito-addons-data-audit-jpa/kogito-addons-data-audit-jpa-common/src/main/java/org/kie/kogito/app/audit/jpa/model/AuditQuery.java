@@ -31,10 +31,10 @@ public class AuditQuery {
     @Column(name = "identifier", nullable = false)
     private String identifier;
 
-    @Column(name = "graph_ql_definition", nullable = false)
+    @Column(name = "graph_ql_definition", nullable = false, length = 5000)
     private String graphQLDefinition;
 
-    @Column(name = "query", nullable = false)
+    @Column(name = "query", nullable = false, length = 5000)
     private String query;
 
     public String getIdentifier() {

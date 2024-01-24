@@ -34,7 +34,42 @@ Data Audit JPA «SpringBoot»: Provides the wiring between the specific implemen
 
 The way to retrieve information from the data audit is using GraphQL. This way we can abstract how the information is retrieved and allow different needs depending on the user.
 
-The Path is ${HOST}/data-audit/q for sending GraphQL queries.
+The Path is `${HOST}/data-audit/q` for sending GraphQL queries.
+
+### Example
+
+Execute a registered query, eg. `GetAllProcessInstancesState` with a definition of data fields that should be returned:
+
+```
+curl -H "Content-Type: application/json" -H "Accept: application/json" -s -X POST http://${HOST}/data-audit/q/ -d '
+{
+    "query": "{GetAllProcessInstancesState {eventId, processInstanceId, eventType, eventDate}}"
+}'|jq
+```
+
+To retrieve the GraphQL schema definition including a list of all registered queries, run a GET command to the `${HOST}/data-audit/r` endpoint. This endpoint can also be used to register new queries.
+
+### Example
+
+Register a new query with a complex data type:
+
+```
+curl -H "Content-Type: application/json" -H "Accept: application/json" -s -X POST http://${HOST}/data-audit/r/ -d '
+{
+    "identifier" : "tests",
+    "graphQLDefinition" : "type EventTest { jobId : String, processInstanceId: String} type Query { tests (pagination: Pagination) : [ EventTest ] } ",
+    "query" : "SELECT o.job_id, o.process_instance_id FROM job_execution_log o"
+}'
+```
+
+Once registered, the new query can be executed similar to the pre-registered ones using the `${HOST}/data-audit/q` endpoint:
+
+```
+curl -H "Content-Type: application/json" -H "Accept: application/json" -s -X POST http://${HOST}/data-audit/q/ -d '
+{
+    "query": "{tests {jobId, processInstanceId}}"
+}'|jq
+```
 
 ## JPA implementation
 

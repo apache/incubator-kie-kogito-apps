@@ -23,10 +23,13 @@ import java.util.Map;
 import org.kie.kogito.app.audit.api.DataAuditQuery;
 import org.kie.kogito.app.audit.api.DataAuditQueryService;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
+import org.kie.kogito.app.audit.graphql.GraphQLSchemaBuild;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +40,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import graphql.ExecutionResult;
 import jakarta.annotation.PostConstruct;
 
+import static java.util.Collections.emptyMap;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_QUERY_PATH;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_REGISTRY_PATH;
 import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchemaManagerInstance;
@@ -56,7 +60,7 @@ public class GraphQLJPAAuditDataRouteMapping {
     public void init() {
         dataAuditQueryService = DataAuditQueryService.newAuditQuerySerice();
         dataAuditStoreProxyService = DataAuditStoreProxyService.newAuditStoreService();
-        graphQLSchemaManagerInstance().rebuildDefinitions(dataAuditContextFactory.newDataAuditContext());
+        graphQLSchemaManagerInstance().init(dataAuditContextFactory.newDataAuditContext());
     }
 
     @PostMapping(value = DATA_AUDIT_QUERY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -68,6 +72,14 @@ public class GraphQLJPAAuditDataRouteMapping {
     @PostMapping(value = DATA_AUDIT_REGISTRY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public void registerQuery(@RequestBody DataAuditQuery dataAuditQuery) {
         dataAuditStoreProxyService.storeQuery(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
+        GraphQLSchemaBuild build = graphQLSchemaManagerInstance().registerQuery(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
+
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                graphQLSchemaManagerInstance().setGraphQLSchemaBuild(build);
+            }
+        });
     }
 
     @GetMapping(path = DATA_AUDIT_REGISTRY_PATH)

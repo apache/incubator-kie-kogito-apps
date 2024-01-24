@@ -21,6 +21,7 @@ package org.kie.kogito.app.audit.quarkus;
 import org.kie.kogito.app.audit.api.DataAuditQuery;
 import org.kie.kogito.app.audit.api.DataAuditQueryService;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
+import org.kie.kogito.app.audit.graphql.GraphQLSchemaBuild;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 
 import io.quarkus.vertx.web.Route;
@@ -34,10 +35,14 @@ import graphql.GraphQL;
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Status;
+import jakarta.transaction.Synchronization;
+import jakarta.transaction.TransactionSynchronizationRegistry;
 import jakarta.transaction.Transactional;
 
 import static io.quarkus.vertx.web.Route.HttpMethod.GET;
 import static io.quarkus.vertx.web.Route.HttpMethod.POST;
+import static java.util.Collections.emptyMap;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_QUERY_PATH;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_REGISTRY_PATH;
 import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchemaManagerInstance;
@@ -57,9 +62,12 @@ public class GraphQLJPADataAuditRouter {
 
     private DataAuditStoreProxyService dataAuditStoreProxyService;
 
+    @Inject
+    TransactionSynchronizationRegistry registry;
+
     @PostConstruct
     public void init() {
-        graphQLSchemaManagerInstance().rebuildDefinitions(dataAuditContextFactory.newDataAuditContext());
+        graphQLSchemaManagerInstance().init(dataAuditContextFactory.newDataAuditContext());
         dataAuditQueryService = DataAuditQueryService.newAuditQuerySerice();
         dataAuditStoreProxyService = DataAuditStoreProxyService.newAuditStoreService();
         graphQLHandler = GraphQLHandler.create(dataAuditQueryService.getGraphQL(), new GraphQLHandlerOptions());
@@ -84,10 +92,27 @@ public class GraphQLJPADataAuditRouter {
             dataAuditQuery.setGraphQLDefinition(jsonObject.getString("graphQLDefinition"));
             dataAuditQuery.setQuery(jsonObject.getString("query"));
             dataAuditStoreProxyService.storeQuery(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
-            graphQLHandler = GraphQLHandler.create(dataAuditQueryService.getGraphQL(), new GraphQLHandlerOptions());
+            GraphQLSchemaBuild build = graphQLSchemaManagerInstance().registerQuery(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
+            registry.registerInterposedSynchronization(new Synchronization() {
+
+                @Override
+                public void beforeCompletion() {
+                    // do nothing
+                }
+
+                @Override
+                public void afterCompletion(int status) {
+                    if (status != Status.STATUS_COMMITTED) {
+                        return;
+                    }
+                    graphQLSchemaManagerInstance().setGraphQLSchemaBuild(build);
+                    graphQLHandler = GraphQLHandler.create(dataAuditQueryService.getGraphQL(), new GraphQLHandlerOptions());
+                }
+            });
+
             rc.response().setStatusCode(200).end();
         } catch (Exception e) {
-            rc.response().setStatusCode(400).end();
+            rc.response().setStatusCode(400).end(e.getLocalizedMessage());
         }
 
     }
