@@ -414,7 +414,7 @@ public class JPADataAuditStore implements DataAuditStore {
     @Override
     public List<DataAuditQuery> findQueries(DataAuditContext context) {
         EntityManager entityManager = context.getContext();
-        List<AuditQuery> queries = entityManager.createNamedQuery("SELECT o FROM AuditQuery o", AuditQuery.class).getResultList();
+        List<AuditQuery> queries = entityManager.createQuery("SELECT o FROM AuditQuery o", AuditQuery.class).getResultList();
         return queries.stream().map(this::to).collect(Collectors.toList());
     }
 

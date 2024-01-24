@@ -170,7 +170,6 @@ public class GraphQLSchemaManager {
         String graphQLDefinition = dataAuditQuery.getGraphQLDefinition();
         TypeDefinitionRegistry registry = readDefinitionRegistry(new ByteArrayInputStream(graphQLDefinition.getBytes()));
         LOGGER.debug("Registering data audit query {} with definition {}", dataAuditQuery.getIdentifier(), registry.getType("Query"));
-        this.graphQLdefinitions.put(dataAuditQuery.getIdentifier(), dataAuditQuery.getGraphQLDefinition());
         Map<String, String> additionalDefinitions = new HashMap<>(this.graphQLdefinitions);
         additionalDefinitions.put(dataAuditQuery.getIdentifier(), dataAuditQuery.getGraphQLDefinition());
         return rebuildDefinitions(dataAuditContext, additionalDefinitions);

@@ -46,7 +46,7 @@ import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchem
 
 @RestController
 @Transactional
-public class GraphQLJPAAuditDataRouteMapping {
+public class GraphQLAuditDataRouteMapping {
 
     private DataAuditQueryService dataAuditQueryService;
 

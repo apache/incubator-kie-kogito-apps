@@ -24,8 +24,10 @@ import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
+@Transactional
 public class QuarkusJPADataAuditContextFactory implements DataAuditContextFactory {
 
     @PersistenceContext

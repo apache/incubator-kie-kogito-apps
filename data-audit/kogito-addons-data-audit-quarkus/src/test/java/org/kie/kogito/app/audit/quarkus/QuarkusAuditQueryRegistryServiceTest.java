@@ -21,12 +21,15 @@ package org.kie.kogito.app.audit.quarkus;
 import java.util.List;
 import java.util.Map;
 
+import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.TestInstance.Lifecycle;
+import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
 import org.kie.kogito.app.audit.api.SubsystemConstants;
+import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
@@ -53,6 +56,9 @@ public class QuarkusAuditQueryRegistryServiceTest {
 
     @Inject
     EventPublisher publisher;
+
+    @Inject
+    DataAuditContextFactory contextFactory;
 
     @BeforeAll
     public void init() throws Exception {
@@ -216,13 +222,13 @@ public class QuarkusAuditQueryRegistryServiceTest {
     }
 
     @Test
-    public void testQueryRegistrationFailure() {
+    public void testQuerySQLRegistrationFailure() {
 
         String q = " ".repeat(6000);
 
         String body = "{\n"
-                + "    \"identifier\": \"GetAllStates\",\n"
-                + "    \"graphQLDefinition\": \"type AllStates {eventId: String, processInstanceId: String, processId: String, state: String, eventType: String, eventDate: DateTime } type Query {GetAllStates(pagination:Pagination) : [AllStates]}\",\n"
+                + "    \"identifier\": \"ErrorSQLQuery\",\n"
+                + "    \"graphQLDefinition\": \"type ErrorSQLQuery {eventId: String, processInstanceId: String, processId: String, state: String, eventType: String, eventDate: DateTime } type Query {GetAllStates(pagination:Pagination) : [AllStates]}\",\n"
                 + "    \"query\": \"" + q + "\" }";
 
         String graphQLBefore = given()
@@ -259,6 +265,11 @@ public class QuarkusAuditQueryRegistryServiceTest {
                 .extract().asString();
 
         assertEquals(graphQLAfter, graphQLBefore);
+        Assertions.assertThat(graphQLAfter).doesNotContain("ErrorSQLQuery");
+
+        Assertions.assertThat(DataAuditStoreProxyService.newAuditStoreService().findQueries(contextFactory.newDataAuditContext()))
+                .extracting(e -> e.getIdentifier())
+                .doesNotContain("ErrorSQLQuery");
 
     }
 
@@ -268,8 +279,8 @@ public class QuarkusAuditQueryRegistryServiceTest {
         String q = " ".repeat(1000);
 
         String body = "{\n"
-                + "    \"identifier\": \"GetAllStates\",\n"
-                + "    \"graphQLDefinition\": \"type AllStates {eventId: processInstanceId: String, processId: String, state: String, eventType: String, eventDate: DateTime } type Query {GetAllStates(pagination:Pagination) : [AllStates]}\",\n"
+                + "    \"identifier\": \"ErrorGraphQLQuery\",\n"
+                + "    \"graphQLDefinition\": \"type ErrorGraphQLQuery {eventId: processInstanceId: String, processId: String, state: String, eventType: String, eventDate: DateTime } type Query {GetAllStates(pagination:Pagination) : [AllStates]}\",\n"
                 + "    \"query\": \"" + q + "\" }";
 
         String graphQLBefore = given()
@@ -306,7 +317,11 @@ public class QuarkusAuditQueryRegistryServiceTest {
                 .extract().asString();
 
         assertEquals(graphQLAfter, graphQLBefore);
+        Assertions.assertThat(graphQLAfter).doesNotContain("ErrorGraphQLQuery");
 
+        Assertions.assertThat(DataAuditStoreProxyService.newAuditStoreService().findQueries(contextFactory.newDataAuditContext()))
+                .extracting(e -> e.getIdentifier())
+                .doesNotContain("ErrorGraphQLQuery");
     }
 
     @Test

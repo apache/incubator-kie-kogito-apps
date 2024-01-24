@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.app.audit.api;
 
+import java.util.List;
 import java.util.ServiceLoader;
 
 import org.kie.kogito.app.audit.spi.DataAuditStore;
@@ -85,6 +86,9 @@ public class DataAuditStoreProxyService {
     public void storeQuery(DataAuditContext newDataAuditContext, DataAuditQuery dataAuditQuery) {
         LOGGER.info("Store query {}", dataAuditQuery);
         auditStoreService.storeQuery(newDataAuditContext, dataAuditQuery);
+    }
 
+    public List<DataAuditQuery> findQueries(DataAuditContext context) {
+        return auditStoreService.findQueries(context);
     }
 }

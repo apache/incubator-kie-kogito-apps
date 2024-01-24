@@ -48,7 +48,7 @@ import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchem
 
 @ApplicationScoped
 @Transactional
-public class GraphQLJPADataAuditRouter {
+public class GraphQLDataAuditRouter {
 
     GraphQL graphQL;
 
