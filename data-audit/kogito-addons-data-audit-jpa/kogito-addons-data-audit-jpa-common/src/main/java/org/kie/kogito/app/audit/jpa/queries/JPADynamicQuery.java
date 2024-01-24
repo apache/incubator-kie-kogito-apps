@@ -18,6 +18,9 @@
  */
 package org.kie.kogito.app.audit.jpa.queries;
 
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,6 +34,7 @@ import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
 import graphql.schema.GraphQLObjectType;
+import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchemaElement;
 import jakarta.persistence.EntityManager;
@@ -84,7 +88,7 @@ public class JPADynamicQuery extends JPAAbstractQuery<Object> implements GraphQL
 
     private Object toJsonObject(GraphQLSchemaElement element, Object data) {
         if (element instanceof GraphQLScalarType) {
-            return data;
+            return transform((GraphQLScalarType) element, data);
         } else if (element instanceof GraphQLObjectType) {
             return toComplexObject((GraphQLObjectType) element, (Object[]) data);
         }
@@ -95,9 +99,24 @@ public class JPADynamicQuery extends JPAAbstractQuery<Object> implements GraphQL
         Map<String, Object> newPojo = new HashMap<>();
         for (int i = 0; i < data.length; i++) {
             GraphQLFieldDefinition definition = type.getFieldDefinitions().get(i);
-            newPojo.put(definition.getName(), data[i]);
+            newPojo.put(definition.getName(), transform(definition.getType(), data[i]));
         }
         return newPojo;
+    }
+
+    private Object transform(GraphQLOutputType outputType, Object source) {
+        if (source == null) {
+            return null;
+        }
+        Object target = source;
+        if (outputType instanceof GraphQLScalarType) {
+            GraphQLScalarType scalarType = (GraphQLScalarType) outputType;
+            if ("DateTime".equals(scalarType.getName())) {
+                target = OffsetDateTime.ofInstant(((Timestamp) source).toInstant(), ZoneId.of("UTC"));
+            }
+
+        }
+        return target;
     }
 
 }

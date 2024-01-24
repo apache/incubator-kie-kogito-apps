@@ -112,6 +112,7 @@ public class GraphQLJPADataAuditRouter {
             rc.response().setStatusCode(200).end();
         } catch (Exception e) {
             rc.response().setStatusCode(400).end(e.getLocalizedMessage());
+            throw e;
         }
 
     }
