@@ -3,18 +3,10 @@ name: "Publish jitexecutor-native"
 on:
   schedule:
     - cron: '0 16 * * 0' # Every sunday at 4:00PM
-  workflow_dispatch:
-    inputs:
-      kogito_runtime_version:
-        description: "Kogito Runtime version"
-        required: true
   pull_request:
     paths:
-      - ".github/supporting-files/publish-jitexecutor-native"
-      - ".github/workflows/publish-jitexecutor-native.yml"
-
-env:
-  KOGITO_RUNTIME_VERSION: ${{ github.event.inputs.kogito_runtime_version || '999-20240119' }}
+      - ".github/supporting-files/publish_jitexecutor_native"
+      - ".github/workflows/publish_jitexecutor_native.yml"
 
 jobs:
   build_jitexecutor_native_binaries:
@@ -33,7 +25,7 @@ jobs:
       - name: Set version
         id: version
         run: | 
-          VERSION=$(echo '${{ env.KOGITO_RUNTIME_VERSION }}' | sed 's/YYYYMMDD/${{ steps.date.outputs.CURRENT_DATE }}/g')
+          VERSION="999-${{ steps.date.outputs.CURRENT_DATE }}"
           echo "TAG=$VERSION" >> "$GITHUB_OUTPUT"
           echo "PROJECT_VERSION=$VERSION-SNAPSHOT" >> "$GITHUB_OUTPUT"
         shell: bash
@@ -61,7 +53,7 @@ jobs:
           distribution: "zulu"
 
       - name: "Build macOS"
-        if: runner.os == 'macOS'
+        if: runner.os == 'macOS' && github.event_name != 'pull_request'
         run: |
           brew install make && \
           wget https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_macos-x64_bin.tar.gz && \
@@ -75,7 +67,7 @@ jobs:
           mvn clean package -B -ntp -DskipTests -f ./jitexecutor && mvn clean package -B -ntp -DskipTests -Pnative -am -f ./jitexecutor
 
       - name: "Build Linux"
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && github.event_name != 'pull_request'
         run: |
           sudo apt update && \
           sudo apt install -y \
@@ -111,7 +103,7 @@ jobs:
           components: "native-image"
 
       - name: "Build Windows"
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && github.event_name != 'pull_request'
         shell: cmd
         run: |
           mvn -B -e -ntp versions:update-parent '-DparentVersion=${{ steps.version.outputs.PROJECT_VERSION }}' -DallowSnapshots=true -DgenerateBackupPoms=false
@@ -119,6 +111,7 @@ jobs:
           mvn clean package -B -ntp -DskipTests -f ./jitexecutor && mvn clean package -B -ntp -DskipTests -Pnative -am -f ./jitexecutor
 
       - name: "Upload JIT Executor binary"
+        if: github.event_name != 'pull_request'
         uses: actions/upload-artifact@v3
         with:
           name: jitexecutor_${{ runner.os }}
@@ -156,11 +149,11 @@ jobs:
       - name: "Pack and publish"
         working-directory: ./.github/supporting-files/publish_jitexecutor_native
         env:
-          NPM_TOKEN: ""
+          NPM_TOKEN: ${{ secrets.KIEGROUP_NPM_TOKEN }}
         run: |
           mv ./dist/linux/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner ./dist/linux/jitexecutor
           mv ./dist/darwin/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner ./dist/darwin/jitexecutor
           mv ./dist/win32/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner.exe ./dist/win32/jitexecutor.exe
           npm version ${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-          #npm publish --access public
+          npm publish --access public
