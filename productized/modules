@@ -1,0 +1,12 @@
+pom.xml;data-audit,security-commons,management-console,trusty-ui,task-console,explainability,trusty,jitexecutor,runtime-tools-quarkus-extension-parent
+apps-integration-tests/pom.xml;integration-tests-jobs-service,integration-tests-trusty-audit,integration-tests-trusty-service
+apps-integration-tests/integration-tests-data-index-service/pom.xml;integration-tests-data-index-service-common,integration-tests-data-index-service-quarkus,integration-tests-data-index-service-springboot
+data-index/data-index-service/pom.xml;data-index-service-infinispan,data-index-service-mongodb,data-index-service-oracle
+data-index/data-index-storage/pom.xml;data-index-storage-common,data-index-storage-infinispan,data-index-storage-mongodb,data-index-storage-postgresql-reporting,data-index-storage-oracle
+data-index/kogito-addons-quarkus-data-index/pom.xml;kogito-addons-quarkus-data-index-infinispan,kogito-addons-quarkus-data-index-mongodb
+data-index/kogito-addons-quarkus-data-index/kogito-addons-quarkus-data-index-inmemory/pom.xml;integration-tests-process
+data-index/kogito-addons-quarkus-data-index/kogito-addons-quarkus-data-index-postgresql/pom.xml;integration-tests-process
+data-index/kogito-addons-quarkus-data-index-persistence/pom.xml;kogito-addons-quarkus-data-index-persistence-infinispan,kogito-addons-quarkus-data-index-persistence-mongodb
+data-index/kogito-addons-quarkus-data-index-persistence/kogito-addons-quarkus-data-index-persistence-postgresql/pom.xml;integration-tests-process
+jobs-service/pom.xml;jobs-service-infinispan,jobs-service-mongodb
+persistence-commons/pom.xml;persistence-commons-infinispan,persistence-commons-mongodb,persistence-commons-redis,persistence-commons-reporting-parent
