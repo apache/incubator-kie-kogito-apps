@@ -40,7 +40,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import graphql.ExecutionResult;
 import jakarta.annotation.PostConstruct;
 
-import static java.util.Collections.emptyMap;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_QUERY_PATH;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_REGISTRY_PATH;
 import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchemaManagerInstance;

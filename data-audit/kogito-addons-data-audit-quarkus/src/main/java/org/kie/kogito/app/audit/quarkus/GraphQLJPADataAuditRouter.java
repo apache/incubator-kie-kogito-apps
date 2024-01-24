@@ -42,7 +42,6 @@ import jakarta.transaction.Transactional;
 
 import static io.quarkus.vertx.web.Route.HttpMethod.GET;
 import static io.quarkus.vertx.web.Route.HttpMethod.POST;
-import static java.util.Collections.emptyMap;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_QUERY_PATH;
 import static org.kie.kogito.app.audit.api.SubsystemConstants.DATA_AUDIT_REGISTRY_PATH;
 import static org.kie.kogito.app.audit.graphql.GraphQLSchemaManager.graphQLSchemaManagerInstance;
