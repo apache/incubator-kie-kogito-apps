@@ -14,7 +14,7 @@ on:
       - ".github/workflows/publish-jitexecutor-native.yml"
 
 env:
-  KOGITO_RUNTIME_VERSION: ${{ github.event.inputs.kogito_runtime_version || '999-YYYYMMDD' }}
+  KOGITO_RUNTIME_VERSION: ${{ github.event.inputs.kogito_runtime_version || '999-20240120' }}
 
 jobs:
   build_jitexecutor_native_binaries:
@@ -32,7 +32,10 @@ jobs:
 
       - name: Set version
         id: version
-        run: echo "VERSION=$(echo '${{ env.KOGITO_RUNTIME_VERSION }}' | sed 's/YYYYMMDD/${{ steps.date.outputs.CURRENT_DATE }}/g')" >> "$GITHUB_OUTPUT"
+        run: | 
+          VERSION=$(echo '${{ env.KOGITO_RUNTIME_VERSION }}' | sed 's/YYYYMMDD/${{ steps.date.outputs.CURRENT_DATE }}/g')
+          echo "TAG=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "PROJECT_VERSION=$VERSION-SNAPSHOT" >> "$GITHUB_OUTPUT"
         shell: bash
 
       - name: "Set long paths for Windows"
@@ -43,7 +46,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: apache/incubator-kie-kogito-apps
-          ref: ${{ steps.version.outputs.VERSION }}
+          ref: ${{ steps.version.outputs.TAG }}
 
       - name: "Set up Maven"
         uses: stCarolas/setup-maven@v4.5
@@ -67,6 +70,8 @@ jobs:
           export PATH=/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1/Contents/Home/bin:$PATH && \
           export GRAALVM_HOME=/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1/Contents/Home && \
           gu install native-image && \
+          mvn versions:update-parent '-DparentVersion=${{ steps.version.outputs.PROJECT_VERSION }}' -DallowSnapshots=true -DgenerateBackupPoms=false
+          mvn versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn clean package -B -ntp -DskipTests -f ./jitexecutor && mvn clean package -B -ntp -DskipTests -Pnative -am -f ./jitexecutor
 
       - name: "Build Linux"
@@ -78,6 +83,8 @@ jobs:
           libgtk-3-dev \
           libappindicator3-dev \
           gir1.2-appindicator3-0.1 && \
+          mvn versions:update-parent '-DparentVersion=${{ steps.version.outputs.PROJECT_VERSION }}' -DallowSnapshots=true -DgenerateBackupPoms=false
+          mvn versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn clean package -B -ntp -DskipTests -f ./jitexecutor && mvn clean package -B -ntp -DskipTests -Pnative -am -f ./jitexecutor
 
       - name: "Configure Pagefile"
@@ -107,16 +114,18 @@ jobs:
         if: runner.os == 'Windows'
         shell: cmd
         run: |
+          mvn versions:update-parent '-DparentVersion=${{ steps.version.outputs.VERSION }}' -DallowSnapshots=true -DgenerateBackupPoms=false
+          mvn versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn clean package -B -ntp -DskipTests -f ./jitexecutor && mvn clean package -B -ntp -DskipTests -Pnative -am -f ./jitexecutor
 
       - name: "Upload JIT Executor binary"
         uses: actions/upload-artifact@v3
         with:
           name: jitexecutor_${{ runner.os }}
-          path: ./jitexecutor/jitexecutor-runner/target/jitexecutor-runner-${{ steps.version.outputs.VERSION }}-run*
+          path: ./jitexecutor/jitexecutor-runner/target/jitexecutor-runner-${{ steps.version.outputs.PROJECT_VERSION }}-run*
 
     outputs:
-      package_version: ${{ steps.version.outputs.VERSION }}
+      package_version: ${{ steps.version.outputs.PROJECT_VERSION }}
 
   pack_and_publish:
     runs-on: ubuntu-latest
@@ -152,6 +161,6 @@ jobs:
           mv ./dist/linux/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner ./dist/linux/jitexecutor
           mv ./dist/darwin/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner ./dist/darwin/jitexecutor
           mv ./dist/win32/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner.exe ./dist/win32/jitexecutor.exe
-          npm version ${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-SNAPSHOT
+          npm version ${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
           #npm publish --access public
