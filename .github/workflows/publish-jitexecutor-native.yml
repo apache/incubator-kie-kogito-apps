@@ -14,7 +14,7 @@ on:
       - ".github/workflows/publish-jitexecutor-native.yml"
 
 env:
-  KOGITO_RUNTIME_VERSION: ${{ github.event.inputs.kogito_runtime_version || '999-20240120' }}
+  KOGITO_RUNTIME_VERSION: ${{ github.event.inputs.kogito_runtime_version || '999-20240119' }}
 
 jobs:
   build_jitexecutor_native_binaries:
