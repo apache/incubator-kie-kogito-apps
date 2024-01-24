@@ -5,8 +5,8 @@ on:
     - cron: '0 16 * * 0' # Every sunday at 4:00PM
   pull_request:
     paths:
-      - ".github/supporting-files/publish_jitexecutor_native"
-      - ".github/workflows/publish_jitexecutor_native.yml"
+      - ".github/supporting-files/publish-jitexecutor-native"
+      - ".github/workflows/publish-jitexecutor-native.yml"
 
 jobs:
   build_jitexecutor_native_binaries:
