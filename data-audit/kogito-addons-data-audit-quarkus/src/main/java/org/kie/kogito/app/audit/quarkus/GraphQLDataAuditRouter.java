@@ -18,6 +18,9 @@
  */
 package org.kie.kogito.app.audit.quarkus;
 
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import org.kie.kogito.app.audit.api.DataAuditQuery;
 import org.kie.kogito.app.audit.api.DataAuditQueryService;
 import org.kie.kogito.app.audit.api.DataAuditStoreProxyService;
@@ -66,9 +69,12 @@ public class GraphQLDataAuditRouter {
 
     @PostConstruct
     public void init() {
-        graphQLSchemaManagerInstance().init(dataAuditContextFactory.newDataAuditContext());
-        dataAuditQueryService = DataAuditQueryService.newAuditQuerySerice();
         dataAuditStoreProxyService = DataAuditStoreProxyService.newAuditStoreService();
+        dataAuditQueryService = DataAuditQueryService.newAuditQuerySerice();
+
+        Map<String, String> queries =
+                dataAuditStoreProxyService.findQueries(dataAuditContextFactory.newDataAuditContext()).stream().collect(Collectors.toMap(e -> e.getIdentifier(), e -> e.getQuery()));
+        graphQLSchemaManagerInstance().init(dataAuditContextFactory.newDataAuditContext(), queries);
         graphQLHandler = GraphQLHandler.create(dataAuditQueryService.getGraphQL(), new GraphQLHandlerOptions());
     }
 

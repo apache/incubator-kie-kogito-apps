@@ -162,8 +162,8 @@ public class GraphQLSchemaManager {
         return printer.print(graphQL.getGraphQLSchema());
     }
 
-    public void init(DataAuditContext dataAuditContext) {
-        setGraphQLSchemaBuild(rebuildDefinitions(dataAuditContext, new HashMap<>()));
+    public void init(DataAuditContext dataAuditContext, Map<String, String> additionalQueries) {
+        setGraphQLSchemaBuild(rebuildDefinitions(dataAuditContext, additionalQueries));
     }
 
     public GraphQLSchemaBuild registerQuery(DataAuditContext dataAuditContext, DataAuditQuery dataAuditQuery) {

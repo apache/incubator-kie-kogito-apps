@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.app.audit.quarkus;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -103,8 +104,8 @@ public class QuarkusAuditQueryRegistryServiceTest {
     public void testRegisterQueryComplexType() {
 
         String body = "{"
-                + "\"identifier\" : \"tests\", "
-                + "\"graphQLDefinition\" : \"type EventTest { jobId : String, processInstanceId: String} type Query { tests (pagination: Pagination) : [ EventTest ] } \","
+                + "\"identifier\" : \"testsComplex\", "
+                + "\"graphQLDefinition\" : \"type EventTest { jobId : String, processInstanceId: String} type Query { testsComplex (pagination: Pagination) : [ EventTest ] } \","
                 + "\"query\" : \" SELECT o.job_id, o.process_instance_id FROM job_execution_log o \""
                 + "}";
 
@@ -119,7 +120,7 @@ public class QuarkusAuditQueryRegistryServiceTest {
                 .assertThat()
                 .statusCode(200);
 
-        String query = "{ tests { jobId, processInstanceId } }";
+        String query = "{ testsComplex { jobId, processInstanceId } }";
         query = wrapQuery(query);
 
         List<Map<String, Object>> response = given()
@@ -133,7 +134,7 @@ public class QuarkusAuditQueryRegistryServiceTest {
                 .assertThat()
                 .statusCode(200)
                 .and()
-                .extract().path("data.tests");
+                .extract().path("data.testsComplex");
 
         assertThat(response)
                 .hasSize(10);
@@ -144,8 +145,8 @@ public class QuarkusAuditQueryRegistryServiceTest {
     public void testRegisterQuerySimpleType() {
 
         String body = "{"
-                + "\"identifier\" : \"tests\", "
-                + "\"graphQLDefinition\" : \"type Query { tests (pagination: Pagination) : [ String ] } \","
+                + "\"identifier\" : \"testSimple\", "
+                + "\"graphQLDefinition\" : \"type Query { testSimple (pagination: Pagination) : [ String ] } \","
                 + "\"query\" : \" SELECT o.job_id FROM job_execution_log o \""
                 + "}";
 
@@ -160,7 +161,7 @@ public class QuarkusAuditQueryRegistryServiceTest {
                 .assertThat()
                 .statusCode(200);
 
-        String query = "{ tests }";
+        String query = "{ testSimple }";
         query = wrapQuery(query);
 
         List<Map<String, Object>> response = given()
@@ -174,7 +175,7 @@ public class QuarkusAuditQueryRegistryServiceTest {
                 .assertThat()
                 .statusCode(200)
                 .and()
-                .extract().path("data.tests");
+                .extract().path("data.testSimple");
 
         assertThat(response)
                 .hasSize(10);
@@ -185,8 +186,8 @@ public class QuarkusAuditQueryRegistryServiceTest {
     public void testRegisterQueryWithDateTime() {
 
         String body = "{\n"
-                + "    \"identifier\": \"GetAllStates\",\n"
-                + "    \"graphQLDefinition\": \"type AllStates {eventId: String, processInstanceId: String, processId: String, state: String, eventType: String, eventDate: DateTime } type Query {GetAllStates(pagination:Pagination) : [AllStates]}\",\n"
+                + "    \"identifier\": \"GetWithTime\",\n"
+                + "    \"graphQLDefinition\": \"type GetWithTimeType {eventId: String, processInstanceId: String, processId: String, state: String, eventType: String, eventDate: DateTime } type Query {GetWithTime(pagination:Pagination) : [GetWithTimeType]}\",\n"
                 + "    \"query\": \"SELECT log.event_id as eventId, log.process_instance_id as processInstanceId, log.process_id as processId, log.state as state, log.event_type as eventType, log.event_date as eventDate FROM Process_Instance_State_Log log group by log.event_id, log.event_type, log.event_date, log.process_id, log.process_instance_id, log.state order by processInstanceId, eventDate\" }";
 
         given()
@@ -200,7 +201,7 @@ public class QuarkusAuditQueryRegistryServiceTest {
                 .assertThat()
                 .statusCode(200);
 
-        String query = "{ GetAllStates  {eventId, eventDate} }";
+        String query = "{ GetWithTime  {eventId, eventDate, processInstanceId, state} }";
         query = wrapQuery(query);
 
         List<Map<String, Object>> response = given()
@@ -214,11 +215,11 @@ public class QuarkusAuditQueryRegistryServiceTest {
                 .assertThat()
                 .statusCode(200)
                 .and()
-                .extract().path("data.GetAllStates");
+                .extract().path("data.GetWithTime");
 
         assertThat(response)
-                .hasSize(1);
-
+                .extracting("eventDate")
+                .allSatisfy(OffsetDateTime.class::isInstance);
     }
 
     @Test

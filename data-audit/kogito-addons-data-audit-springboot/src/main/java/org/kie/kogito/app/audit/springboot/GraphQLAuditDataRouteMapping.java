@@ -19,6 +19,7 @@
 package org.kie.kogito.app.audit.springboot;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.kie.kogito.app.audit.api.DataAuditQuery;
 import org.kie.kogito.app.audit.api.DataAuditQueryService;
@@ -27,9 +28,11 @@ import org.kie.kogito.app.audit.graphql.GraphQLSchemaBuild;
 import org.kie.kogito.app.audit.spi.DataAuditContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -59,7 +62,10 @@ public class GraphQLAuditDataRouteMapping {
     public void init() {
         dataAuditQueryService = DataAuditQueryService.newAuditQuerySerice();
         dataAuditStoreProxyService = DataAuditStoreProxyService.newAuditStoreService();
-        graphQLSchemaManagerInstance().init(dataAuditContextFactory.newDataAuditContext());
+
+        Map<String, String> queries =
+                dataAuditStoreProxyService.findQueries(dataAuditContextFactory.newDataAuditContext()).stream().collect(Collectors.toMap(e -> e.getIdentifier(), e -> e.getQuery()));
+        graphQLSchemaManagerInstance().init(dataAuditContextFactory.newDataAuditContext(), queries);
     }
 
     @PostMapping(value = DATA_AUDIT_QUERY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -84,5 +90,10 @@ public class GraphQLAuditDataRouteMapping {
     @GetMapping(path = DATA_AUDIT_REGISTRY_PATH)
     public String blockingRegistryHandlerGet() {
         return graphQLSchemaManagerInstance().getGraphQLSchemaDefinition();
+    }
+
+    @ExceptionHandler({ Throwable.class })
+    public ResponseEntity<String> handleException(Throwable th) {
+        return ResponseEntity.badRequest().body(th.getLocalizedMessage());
     }
 }
