@@ -61,7 +61,7 @@ jobs:
           export PATH=/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1/Contents/Home/bin:$PATH && \
           export GRAALVM_HOME=/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1/Contents/Home && \
           gu install native-image && \
-          mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="${{ steps.version.outputs.PROJECT_VERSION }}" -DallowSnapshots=true -DgenerateBackupPoms=false
+          mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn clean package -B -ntp -DskipTests -f ./jitexecutor && mvn clean package -B -ntp -DskipTests -Pnative -am -f ./jitexecutor
 
@@ -74,7 +74,7 @@ jobs:
           libgtk-3-dev \
           libappindicator3-dev \
           gir1.2-appindicator3-0.1 && \
-          mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="${{ steps.version.outputs.PROJECT_VERSION }}" -DallowSnapshots=true -DgenerateBackupPoms=false
+          mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn clean package -B -ntp -DskipTests -f ./jitexecutor && mvn clean package -B -ntp -DskipTests -Pnative -am -f ./jitexecutor
 
@@ -105,7 +105,7 @@ jobs:
         if: runner.os == 'Windows'
         shell: cmd
         run: |
-          mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="${{ steps.version.outputs.PROJECT_VERSION }}" -DallowSnapshots=true -DgenerateBackupPoms=false
+          mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn clean package -B -ntp -DskipTests -f ./jitexecutor && mvn clean package -B -ntp -DskipTests -Pnative -am -f ./jitexecutor
 
