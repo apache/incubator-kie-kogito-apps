@@ -97,7 +97,7 @@ public class GraphQLDataAuditRouter {
             dataAuditQuery.setGraphQLDefinition(jsonObject.getString("graphQLDefinition"));
             dataAuditQuery.setQuery(jsonObject.getString("query"));
             dataAuditStoreProxyService.storeQuery(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
-            GraphQLSchemaBuild build = graphQLSchemaManagerInstance().registerQuery(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
+            GraphQLSchemaBuild build = graphQLSchemaManagerInstance().devireNewDataAuditQuerySchema(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
             registry.registerInterposedSynchronization(new Synchronization() {
 
                 @Override

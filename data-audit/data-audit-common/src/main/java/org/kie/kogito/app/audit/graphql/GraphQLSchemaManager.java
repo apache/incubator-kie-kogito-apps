@@ -166,7 +166,7 @@ public class GraphQLSchemaManager {
         setGraphQLSchemaBuild(rebuildDefinitions(dataAuditContext, additionalQueries));
     }
 
-    public GraphQLSchemaBuild registerQuery(DataAuditContext dataAuditContext, DataAuditQuery dataAuditQuery) {
+    public GraphQLSchemaBuild devireNewDataAuditQuerySchema(DataAuditContext dataAuditContext, DataAuditQuery dataAuditQuery) {
         String graphQLDefinition = dataAuditQuery.getGraphQLDefinition();
         TypeDefinitionRegistry registry = readDefinitionRegistry(new ByteArrayInputStream(graphQLDefinition.getBytes()));
         LOGGER.debug("Registering data audit query {} with definition {}", dataAuditQuery.getIdentifier(), registry.getType("Query"));

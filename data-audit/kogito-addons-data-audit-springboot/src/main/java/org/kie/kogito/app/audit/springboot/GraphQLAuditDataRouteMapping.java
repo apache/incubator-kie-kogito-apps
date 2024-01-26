@@ -77,7 +77,7 @@ public class GraphQLAuditDataRouteMapping {
     @PostMapping(value = DATA_AUDIT_REGISTRY_PATH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public void registerQuery(@RequestBody DataAuditQuery dataAuditQuery) {
         dataAuditStoreProxyService.storeQuery(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
-        GraphQLSchemaBuild build = graphQLSchemaManagerInstance().registerQuery(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
+        GraphQLSchemaBuild build = graphQLSchemaManagerInstance().devireNewDataAuditQuerySchema(dataAuditContextFactory.newDataAuditContext(), dataAuditQuery);
 
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
