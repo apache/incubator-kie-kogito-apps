@@ -122,8 +122,11 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build_jitexecutor_native_binaries]
     steps:
-      - name: "Checkout kie-tools"
+      - name: "Checkout kie-kogito-apps"
         uses: actions/checkout@v3
+        with:
+          repository: apache/incubator-kie-tools
+          ref: main
 
       - name: "Download Windows binary"
         uses: actions/download-artifact@v2
@@ -153,4 +156,4 @@ jobs:
           mv ./dist/win32/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner.exe ./dist/win32/jitexecutor.exe
           npm version ${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-          npm publish --access public
+          #npm publish --access public
