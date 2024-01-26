@@ -24,7 +24,7 @@ jobs:
       - name: Set version
         id: version
         run: | 
-          VERSION="999-20240125"
+          VERSION="999-20240119"
           echo "TAG=$VERSION" >> "$GITHUB_OUTPUT"
           echo "PROJECT_VERSION=$VERSION-SNAPSHOT" >> "$GITHUB_OUTPUT"
         shell: bash
