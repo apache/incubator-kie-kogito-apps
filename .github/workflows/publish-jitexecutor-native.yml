@@ -129,22 +129,22 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: jitexecutor_Windows
-          path: ./.github/supporting-files/publish-jitexecutor-native/dist/win32
+          path: ./.github/supporting-files/publish_jitexecutor_native/dist/win32
 
       - name: "Download macOS binary"
         uses: actions/download-artifact@v2
         with:
           name: jitexecutor_macOS
-          path: ./.github/supporting-files/publish-jitexecutor-native/dist/darwin
+          path: ./.github/supporting-files/publish_jitexecutor_native/dist/darwin
 
       - name: "Download Linux binary"
         uses: actions/download-artifact@v2
         with:
           name: jitexecutor_Linux
-          path: ./.github/supporting-files/publish-jitexecutor-native/dist/linux
+          path: ./.github/supporting-files/publish_jitexecutor_native/dist/linux
 
       - name: "Pack and publish"
-        working-directory: ./.github/supporting-files/publish-jitexecutor-native
+        working-directory: ./.github/supporting-files/publish_jitexecutor_native
         env:
           NPM_TOKEN: ${{ secrets.KIEGROUP_NPM_TOKEN }}
         run: |
