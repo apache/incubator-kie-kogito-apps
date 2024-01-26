@@ -27,6 +27,7 @@ jobs:
           VERSION="999-20240119"
           echo "TAG=$VERSION" >> "$GITHUB_OUTPUT"
           echo "PROJECT_VERSION=$VERSION-SNAPSHOT" >> "$GITHUB_OUTPUT"
+          echo "NPM_VERSION=999.0.0-20240119-SNAPSHOT" >> "$GITHUB_OUTPUT"
         shell: bash
 
       - name: "Set long paths for Windows"
@@ -117,6 +118,7 @@ jobs:
 
     outputs:
       package_version: ${{ steps.version.outputs.PROJECT_VERSION }}
+      npm_version: ${{ steps.version.outputs.NPM_VERSION }}
 
   pack_and_publish:
     runs-on: ubuntu-latest
@@ -151,6 +153,6 @@ jobs:
           mv ./dist/linux/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner ./dist/linux/jitexecutor
           mv ./dist/darwin/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner ./dist/darwin/jitexecutor
           mv ./dist/win32/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner.exe ./dist/win32/jitexecutor.exe
-          npm version ${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}
+          npm version ${{ needs.build_jitexecutor_native_binaries.outputs.npm_version }}
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
           #npm publish --access public
