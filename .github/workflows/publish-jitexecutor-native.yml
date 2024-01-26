@@ -3,9 +3,6 @@ name: "Publish jitexecutor-native"
 on:
   schedule:
     - cron: '0 16 * * 0' # Every sunday at 4:00PM
-  pull_request:
-    paths:
-      - ".github/workflows/publish-jitexecutor-native.yml"
 
 jobs:
   build_jitexecutor_native_binaries:
@@ -24,10 +21,10 @@ jobs:
       - name: Set version
         id: version
         run: | 
-          VERSION="999-20240119"
+          VERSION="999-${{ steps.date.outputs.CURRENT_DATE }}"
           echo "TAG=$VERSION" >> "$GITHUB_OUTPUT"
           echo "PROJECT_VERSION=$VERSION-SNAPSHOT" >> "$GITHUB_OUTPUT"
-          echo "NPM_VERSION=999.0.0-20240119-SNAPSHOT" >> "$GITHUB_OUTPUT"
+          echo "NPM_VERSION=999.0.0-${{ steps.date.outputs.CURRENT_DATE }}-SNAPSHOT" >> "$GITHUB_OUTPUT"
         shell: bash
 
       - name: "Set long paths for Windows"
@@ -155,4 +152,4 @@ jobs:
           mv ./dist/win32/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner.exe ./dist/win32/jitexecutor.exe
           npm version ${{ needs.build_jitexecutor_native_binaries.outputs.npm_version }}
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-          #npm publish --access public
+          npm publish --access public
