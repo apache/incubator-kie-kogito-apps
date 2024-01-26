@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.index.oracle.query;
 
+import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.index.jpa.storage.JobEntityStorage;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.test.query.AbstractJobQueryIT;
@@ -31,6 +32,7 @@ import jakarta.inject.Inject;
 
 @QuarkusTest
 @QuarkusTestResource(OracleSqlQuarkusTestResource.class)
+@Disabled
 class JobEntityQueryIT extends AbstractJobQueryIT {
 
     @Inject

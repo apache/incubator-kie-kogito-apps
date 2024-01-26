@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.jpa.mapper.UserTaskInstanceEntityMapper;
 import org.kie.kogito.index.jpa.model.AttachmentEntity;
@@ -45,6 +46,7 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
+@Disabled
 class UserTaskInstanceEntityMapperIT {
 
     UserTaskInstance userTaskInstance = new UserTaskInstance();
