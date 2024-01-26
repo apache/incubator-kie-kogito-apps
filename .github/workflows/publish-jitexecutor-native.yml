@@ -103,7 +103,7 @@ jobs:
 
       - name: "Build Windows"
         if: runner.os == 'Windows'
-        shell: cmd
+        shell: pwsh
         run: |
           mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
@@ -124,9 +124,6 @@ jobs:
     steps:
       - name: "Checkout kie-kogito-apps"
         uses: actions/checkout@v3
-        with:
-          repository: apache/incubator-kie-tools
-          ref: main
 
       - name: "Download Windows binary"
         uses: actions/download-artifact@v2
