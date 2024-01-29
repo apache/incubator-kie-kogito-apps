@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.index.oracle.query;
 
+import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.index.jpa.storage.JobEntityStorage;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.test.query.AbstractJobQueryIT;
@@ -30,6 +31,7 @@ import io.quarkus.test.junit.QuarkusTest;
 import jakarta.inject.Inject;
 
 @QuarkusTest
+@Disabled("Removing because of legal issues with Oracle driver")
 @QuarkusTestResource(OracleSqlQuarkusTestResource.class)
 class JobEntityQueryIT extends AbstractJobQueryIT {
 

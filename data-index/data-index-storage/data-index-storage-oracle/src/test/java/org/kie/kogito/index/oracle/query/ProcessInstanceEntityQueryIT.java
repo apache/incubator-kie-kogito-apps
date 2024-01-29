@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.index.oracle.query;
 
+import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
 import org.kie.kogito.index.test.query.AbstractProcessInstanceQueryIT;
 import org.kie.kogito.testcontainers.quarkus.OracleSqlQuarkusTestResource;
@@ -29,6 +30,7 @@ import jakarta.inject.Inject;
 
 @QuarkusTest
 @QuarkusTestResource(OracleSqlQuarkusTestResource.class)
+@Disabled("Removing because of legal issues with Oracle driver")
 class ProcessInstanceEntityQueryIT extends AbstractProcessInstanceQueryIT {
 
     @Inject

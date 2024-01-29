@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.index.oracle.query;
 
+import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.index.jpa.storage.UserTaskInstanceEntityStorage;
 import org.kie.kogito.index.test.query.AbstractUserTaskInstanceQueryIT;
 import org.kie.kogito.testcontainers.quarkus.OracleSqlQuarkusTestResource;
@@ -29,6 +30,7 @@ import jakarta.inject.Inject;
 
 @QuarkusTest
 @QuarkusTestResource(OracleSqlQuarkusTestResource.class)
+@Disabled("Removing because of legal issues with Oracle driver")
 class UserTaskInstanceEntityQueryIT extends AbstractUserTaskInstanceQueryIT {
 
     @Inject

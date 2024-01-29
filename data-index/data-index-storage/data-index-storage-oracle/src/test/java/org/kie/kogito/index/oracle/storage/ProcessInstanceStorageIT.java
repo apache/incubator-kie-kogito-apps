@@ -21,6 +21,7 @@ package org.kie.kogito.index.oracle.storage;
 import java.util.UUID;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.jpa.model.ProcessInstanceEntityRepository;
 import org.kie.kogito.index.model.ProcessInstanceState;
@@ -34,6 +35,7 @@ import jakarta.inject.Inject;
 
 @QuarkusTest
 @QuarkusTestResource(OracleSqlQuarkusTestResource.class)
+@Disabled("Removed because of legal issues with Oracle driver")
 public class ProcessInstanceStorageIT {
 
     @Inject

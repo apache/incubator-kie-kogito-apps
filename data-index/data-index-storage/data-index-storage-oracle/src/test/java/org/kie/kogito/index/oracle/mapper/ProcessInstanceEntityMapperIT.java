@@ -22,6 +22,7 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.jpa.mapper.ProcessInstanceEntityMapper;
 import org.kie.kogito.index.jpa.model.MilestoneEntity;
@@ -46,6 +47,7 @@ import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
+@Disabled("Removing because of legal issues with Oracle driver")
 class ProcessInstanceEntityMapperIT {
 
     ObjectMapper jsonMapper = new ObjectMapper();
