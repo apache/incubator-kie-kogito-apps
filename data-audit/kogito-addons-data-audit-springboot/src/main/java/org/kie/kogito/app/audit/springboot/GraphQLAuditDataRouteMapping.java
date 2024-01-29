@@ -64,7 +64,8 @@ public class GraphQLAuditDataRouteMapping {
         dataAuditStoreProxyService = DataAuditStoreProxyService.newAuditStoreService();
 
         Map<String, String> queries =
-                dataAuditStoreProxyService.findQueries(dataAuditContextFactory.newDataAuditContext()).stream().collect(Collectors.toMap(e -> e.getIdentifier(), e -> e.getQuery()));
+                dataAuditStoreProxyService.findQueries(dataAuditContextFactory.newDataAuditContext()).stream()
+                        .collect(Collectors.toMap(DataAuditQuery::getIdentifier, DataAuditQuery::getGraphQLDefinition));
         graphQLSchemaManagerInstance().init(dataAuditContextFactory.newDataAuditContext(), queries);
     }
 
