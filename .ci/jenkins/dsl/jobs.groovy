@@ -283,7 +283,7 @@ void setupReleasePromoteJob() {
 }
 
 void setupWeeklyDeployJob() {
-    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-apps.weekly-deploy', JobType.OTHER, "${jenkins_path}/Jenkinsfile.weekly-deploy", 'Kogito Apps Weekly Deploy')
+    def jobParams = JobParamsUtils.getBasicJobParams(this, 'kogito-apps.weekly-deploy', JobType.OTHER, "${jenkins_path}/Jenkinsfile.weekly.deploy", 'Kogito Apps Weekly Deploy')
     JobParamsUtils.setupJobParamsAgentDockerBuilderImageConfiguration(this, jobParams)
     jobParams.env.putAll([
         JENKINS_EMAIL_CREDS_ID: "${JENKINS_EMAIL_CREDS_ID}",
