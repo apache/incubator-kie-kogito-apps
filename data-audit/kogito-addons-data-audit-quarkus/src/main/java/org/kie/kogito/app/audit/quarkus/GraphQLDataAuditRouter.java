@@ -79,11 +79,6 @@ public class GraphQLDataAuditRouter {
         graphQLHandler = GraphQLHandler.create(dataAuditQueryService.getGraphQL(), new GraphQLHandlerOptions());
     }
 
-    @Route(path = DATA_AUDIT_QUERY_PATH, type = Route.HandlerType.BLOCKING, order = 2, methods = { GET })
-    public void blockingGraphQLHandlerGet(RoutingContext rc) {
-        graphQLHandler.beforeExecute(this::beforeExecuteHTTP).handle(rc);
-    }
-
     @Route(path = DATA_AUDIT_QUERY_PATH, type = Route.HandlerType.BLOCKING, order = 2, methods = { POST })
     public void blockingGraphQLHandlerPost(RoutingContext rc) {
         graphQLHandler.beforeExecute(this::beforeExecuteHTTP).handle(rc);
