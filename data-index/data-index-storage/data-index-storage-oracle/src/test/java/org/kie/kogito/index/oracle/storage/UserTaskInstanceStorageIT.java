@@ -18,42 +18,13 @@
  */
 package org.kie.kogito.index.oracle.storage;
 
-import java.util.UUID;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.jpa.model.UserTaskInstanceEntityRepository;
-import org.kie.kogito.index.model.UserTaskInstance;
-import org.kie.kogito.index.test.TestUtils;
+import org.kie.kogito.index.jpa.storage.AbstractUserTaskInstanceStorageIT;
 import org.kie.kogito.testcontainers.quarkus.OracleSqlQuarkusTestResource;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
-import jakarta.inject.Inject;
-
 @QuarkusTest
 @QuarkusTestResource(OracleSqlQuarkusTestResource.class)
-public class UserTaskInstanceStorageIT {
-
-    @Inject
-    UserTaskInstanceEntityRepository repository;
-
-    @Test
-    public void testUserTaskInstanceEntity() {
-        String taskId = UUID.randomUUID().toString();
-        String processInstanceId = UUID.randomUUID().toString();
-        UserTaskInstance userTaskInstance1 = TestUtils
-                .createUserTaskInstance(taskId, processInstanceId, RandomStringUtils.randomAlphabetic(5),
-                        UUID.randomUUID().toString(),
-                        RandomStringUtils.randomAlphabetic(10), "InProgress", 0L);
-        ObjectMapper objectMapper = new ObjectMapper();
-        ObjectNode node = objectMapper.createObjectNode();
-        node.put("test", "test");
-        userTaskInstance1.setInputs(node);
-    }
-
+public class UserTaskInstanceStorageIT extends AbstractUserTaskInstanceStorageIT {
 }

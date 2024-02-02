@@ -18,26 +18,15 @@
  */
 package org.kie.kogito.index.oracle.query;
 
-import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
-import org.kie.kogito.index.test.query.AbstractProcessInstanceQueryIT;
+import org.kie.kogito.index.jpa.query.AbstractProcessInstanceEntityQueryIT;
 import org.kie.kogito.testcontainers.quarkus.OracleSqlQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
-import jakarta.inject.Inject;
-
 @QuarkusTest
 @QuarkusTestResource(OracleSqlQuarkusTestResource.class)
-class ProcessInstanceEntityQueryIT extends AbstractProcessInstanceQueryIT {
-
-    @Inject
-    ProcessInstanceEntityStorage storage;
-
-    @Override
-    public ProcessInstanceEntityStorage getStorage() {
-        return storage;
-    }
+class ProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT {
 
     @Override
     protected Boolean isDateTimeAsLong() {

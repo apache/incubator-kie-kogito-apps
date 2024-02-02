@@ -16,15 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.postgresql.storage;
+package org.kie.kogito.index.jpa.query;
 
-import org.kie.kogito.index.jpa.storage.AbstractProcessInstanceStorageIT;
-import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
+import org.kie.kogito.index.jpa.storage.JobEntityStorage;
+import org.kie.kogito.index.model.Job;
+import org.kie.kogito.index.test.query.AbstractJobQueryIT;
+import org.kie.kogito.persistence.api.Storage;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
 
-@QuarkusTest
-@QuarkusTestResource(PostgreSqlQuarkusTestResource.class)
-public class ProcessInstanceStorageIT extends AbstractProcessInstanceStorageIT {
+public abstract class AbstractJobEntityQueryIT extends AbstractJobQueryIT {
+
+    @Inject
+    JobEntityStorage storage;
+
+    @Override
+    public Storage<String, Job> getStorage() {
+        return storage;
+    }
+
 }

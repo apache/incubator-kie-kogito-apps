@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.postgresql.storage;
+package org.kie.kogito.index.jpa.storage;
 
 import org.kie.kogito.index.jpa.model.AbstractEntity;
 import org.kie.kogito.persistence.api.Storage;

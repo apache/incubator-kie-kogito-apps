@@ -16,9 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.graphql;
+package org.kie.kogito.index.jpa.query;
 
-import graphql.schema.Coercing;
+import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
+import org.kie.kogito.index.model.ProcessDefinition;
+import org.kie.kogito.index.test.query.AbstractProcessDefinitionQueryIT;
+import org.kie.kogito.persistence.api.Storage;
 
-public interface DateTimeCoercing extends Coercing<Object, String> {
+import jakarta.inject.Inject;
+
+public abstract class AbstractProcessDefinitionEntityQueryIT extends AbstractProcessDefinitionQueryIT {
+
+    @Inject
+    ProcessDefinitionEntityStorage storage;
+
+    @Override
+    public Storage<String, ProcessDefinition> getStorage() {
+        return storage;
+    }
+
 }

@@ -281,6 +281,13 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-jpa</artifactId>
+                <version>${project.version}</version>
+                <classifier>test-jar</classifier>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-storage-postgresql</artifactId>
                 <version>${project.version}</version>
             </dependency>

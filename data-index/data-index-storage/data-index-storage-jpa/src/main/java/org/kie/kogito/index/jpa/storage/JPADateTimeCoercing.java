@@ -16,20 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.graphql;
+package org.kie.kogito.index.jpa.storage;
 
 import java.time.ZonedDateTime;
 
-import io.quarkus.arc.properties.IfBuildProperty;
+import org.kie.kogito.index.api.DateTimeCoercing;
+import org.kie.kogito.index.api.DefaultDateTimeCoercing;
+
 
 import graphql.language.StringValue;
 import jakarta.enterprise.context.ApplicationScoped;
 
-import static org.kie.kogito.persistence.api.factory.Constants.PERSISTENCE_TYPE_PROPERTY;
 
 @ApplicationScoped
-@IfBuildProperty(name = PERSISTENCE_TYPE_PROPERTY, stringValue = "oracle")
-public class OracleDateTimeCoercing extends DefaultDateTimeCoercing implements DateTimeCoercing {
+public class JPADateTimeCoercing extends DefaultDateTimeCoercing implements DateTimeCoercing {
 
     @Override
     public Object parseValue(Object input) {

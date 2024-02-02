@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.graphql;
+package org.kie.kogito.index.api;
 
 import java.time.DateTimeException;
 import java.time.Instant;

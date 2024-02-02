@@ -16,15 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.postgresql.storage;
+package org.kie.kogito.index.api;
 
-import org.kie.kogito.index.jpa.storage.AbstractProcessInstanceStorageIT;
-import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
+import graphql.schema.Coercing;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-
-@QuarkusTest
-@QuarkusTestResource(PostgreSqlQuarkusTestResource.class)
-public class ProcessInstanceStorageIT extends AbstractProcessInstanceStorageIT {
+public interface DateTimeCoercing extends Coercing<Object, String> {
 }

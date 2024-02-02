@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.postgresql.storage;
+package org.kie.kogito.index.jpa.storage;
 
 import java.util.List;
 import java.util.function.Function;
@@ -25,7 +25,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.index.jpa.model.ProcessInstanceEntity;
-import org.kie.kogito.index.jpa.storage.JPAQuery;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;

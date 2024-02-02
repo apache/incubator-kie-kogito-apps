@@ -21,7 +21,7 @@ package org.kie.kogito.index.service.graphql;
 import java.time.ZonedDateTime;
 
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.graphql.OracleDateTimeCoercing;
+import org.kie.kogito.index.oracle.OracleDateTimeCoercing;
 
 import graphql.language.StringValue;
 import graphql.schema.CoercingSerializeException;

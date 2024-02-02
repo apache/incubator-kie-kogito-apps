@@ -18,27 +18,14 @@
  */
 package org.kie.kogito.index.oracle.query;
 
-import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
-import org.kie.kogito.index.model.ProcessDefinition;
-import org.kie.kogito.index.test.query.AbstractProcessDefinitionQueryIT;
-import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.index.jpa.query.AbstractProcessDefinitionEntityQueryIT;
 import org.kie.kogito.testcontainers.quarkus.OracleSqlQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
-import jakarta.inject.Inject;
-
 @QuarkusTest
 @QuarkusTestResource(OracleSqlQuarkusTestResource.class)
-class ProcessDefinitionEntityQueryIT extends AbstractProcessDefinitionQueryIT {
-
-    @Inject
-    ProcessDefinitionEntityStorage storage;
-
-    @Override
-    public Storage<String, ProcessDefinition> getStorage() {
-        return storage;
-    }
+class ProcessDefinitionEntityQueryIT extends AbstractProcessDefinitionEntityQueryIT {
 
 }
