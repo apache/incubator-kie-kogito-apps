@@ -41,6 +41,6 @@
     <module>data-index-storage-infinispan</module>
     <module>data-index-storage-mongodb</module>
     <module>data-index-storage-postgresql-reporting</module>
-    <module>data-index-storage-oracle</module>
+    <module>data-index-storage-jdbc</module>
   </modules>
 </project>

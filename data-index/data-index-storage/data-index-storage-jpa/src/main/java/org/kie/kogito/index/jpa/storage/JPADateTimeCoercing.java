@@ -23,10 +23,8 @@ import java.time.ZonedDateTime;
 import org.kie.kogito.index.api.DateTimeCoercing;
 import org.kie.kogito.index.api.DefaultDateTimeCoercing;
 
-
 import graphql.language.StringValue;
 import jakarta.enterprise.context.ApplicationScoped;
-
 
 @ApplicationScoped
 public class JPADateTimeCoercing extends DefaultDateTimeCoercing implements DateTimeCoercing {

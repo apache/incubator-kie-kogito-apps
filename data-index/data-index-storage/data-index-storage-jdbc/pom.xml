@@ -29,11 +29,11 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>data-index-storage-oracle</artifactId>
-  <name>Kogito Apps :: Data Index Storage Oracle DB</name>
+  <artifactId>data-index-storage-jdbc</artifactId>
+  <name>Kogito Apps :: Data Index Storage JDBC</name>
 
   <properties>
-    <java.module.name>org.kie.kogito.index.oracle</java.module.name>
+    <java.module.name>org.kie.kogito.index.jdbc</java.module.name>
   </properties>
 
   <dependencies>
@@ -84,13 +84,6 @@
       <artifactId>kogito-quarkus-test-utils</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-    	<groupId>io.quarkiverse.openapi.generator</groupId>
-    	<artifactId>
-    		quarkus-openapi-generator-it-additional-properties
-    	</artifactId>
-    	<version>3.0.0-SNAPSHOT</version>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -115,42 +108,5 @@
     </plugins>
   </build>
 
-  <profiles>
-    <profile>
-      <id>schema</id>
-      <activation>
-        <property>
-          <name>generate.schema</name>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>exec-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>package</phase>
-                <goals>
-                  <goal>exec</goal>
-                </goals>
-              </execution>
-            </executions>
-            <configuration>
-              <executable>java</executable>
-              <arguments>
-                <argument>-classpath</argument>
-                <!-- automatically creates the classpath using all project dependencies,
-                     also adding the project build directory -->
-                <classpath/>
-                <argument>org.kie.kogito.index.oracle.schema.DDLSchemaExporter</argument>
-              </arguments>
-              <classpathScope>test</classpathScope>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 
 </project>
