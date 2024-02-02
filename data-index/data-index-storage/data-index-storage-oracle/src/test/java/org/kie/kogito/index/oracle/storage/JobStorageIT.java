@@ -19,13 +19,13 @@
 package org.kie.kogito.index.oracle.storage;
 
 import org.kie.kogito.index.jpa.storage.AbstractJobStorageIT;
-import org.kie.kogito.testcontainers.quarkus.OracleSqlQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-@QuarkusTestResource(OracleSqlQuarkusTestResource.class)
+@QuarkusTestResource(H2DatabaseTestResource.class)
 public class JobStorageIT extends AbstractJobStorageIT {
 
 }

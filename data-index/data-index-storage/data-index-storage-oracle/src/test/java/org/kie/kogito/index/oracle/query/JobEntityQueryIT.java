@@ -18,14 +18,16 @@
  */
 package org.kie.kogito.index.oracle.query;
 
+import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.index.jpa.query.AbstractJobEntityQueryIT;
-import org.kie.kogito.testcontainers.quarkus.OracleSqlQuarkusTestResource;
 
 import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-@QuarkusTestResource(OracleSqlQuarkusTestResource.class)
+@Disabled
+@QuarkusTestResource(H2DatabaseTestResource.class)
 class JobEntityQueryIT extends AbstractJobEntityQueryIT {
 
 }

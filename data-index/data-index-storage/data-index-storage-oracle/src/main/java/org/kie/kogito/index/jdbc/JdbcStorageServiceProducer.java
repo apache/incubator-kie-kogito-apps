@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.oracle;
+package org.kie.kogito.index.jdbc;
 
 import org.kie.kogito.index.jpa.storage.JPAStorageService;
 import org.kie.kogito.index.jpa.storage.JobEntityStorage;
@@ -34,12 +34,12 @@ import jakarta.enterprise.inject.Produces;
 
 import static org.kie.kogito.persistence.api.factory.Constants.PERSISTENCE_TYPE_PROPERTY;
 
-public class OracleStorageServiceProducer {
+public class JdbcStorageServiceProducer {
     @Produces
     @Alternative
     @Priority(1)
     @ApplicationScoped
-    @IfBuildProperty(name = PERSISTENCE_TYPE_PROPERTY, stringValue = "oracle")
+    @IfBuildProperty(name = PERSISTENCE_TYPE_PROPERTY, stringValue = "jdbc")
     StorageService PostgreSqlStorageService(final ProcessDefinitionEntityStorage definitionStorage,
             final ProcessInstanceEntityStorage processStorage,
             final JobEntityStorage jobStorage,

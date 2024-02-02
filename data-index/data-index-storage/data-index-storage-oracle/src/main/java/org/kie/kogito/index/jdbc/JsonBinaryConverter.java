@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.oracle;
+package org.kie.kogito.index.jdbc;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
