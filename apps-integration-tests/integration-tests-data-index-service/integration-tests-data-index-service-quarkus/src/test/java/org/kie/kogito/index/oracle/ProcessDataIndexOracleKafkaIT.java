@@ -18,7 +18,6 @@
  */
 package org.kie.kogito.index.oracle;
 
-import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.index.quarkus.kafka.OracleKafkaTestProfile;
 
 import io.quarkus.test.junit.QuarkusIntegrationTest;
@@ -26,6 +25,5 @@ import io.quarkus.test.junit.TestProfile;
 
 @QuarkusIntegrationTest
 @TestProfile(OracleKafkaTestProfile.class)
-@Disabled("Legal issue with oracle driver")
 public class ProcessDataIndexOracleKafkaIT extends AbstractProcessDataIndexOracleIT {
 }

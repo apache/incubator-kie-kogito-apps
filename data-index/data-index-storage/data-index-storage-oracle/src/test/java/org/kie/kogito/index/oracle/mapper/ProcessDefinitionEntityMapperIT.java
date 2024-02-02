@@ -21,7 +21,6 @@ package org.kie.kogito.index.oracle.mapper;
 import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.jpa.mapper.ProcessDefinitionEntityMapper;
 import org.kie.kogito.index.jpa.model.NodeEntity;
@@ -39,7 +38,6 @@ import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
-@Disabled("Removing because of legal issues with Oracle driver")
 class ProcessDefinitionEntityMapperIT {
 
     ProcessDefinition pd = new ProcessDefinition();

@@ -18,7 +18,6 @@
  */
 package org.kie.kogito.index.service;
 
-import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.index.service.test.KeycloakTestProfile;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -26,7 +25,6 @@ import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
 @TestProfile(KeycloakTestProfile.class)
-@Disabled("Legal issue with oracle driver")
 class KeycloakOracleIndexingServiceIT extends AbstractKeycloakIntegrationIndexingServiceIT {
 
 }

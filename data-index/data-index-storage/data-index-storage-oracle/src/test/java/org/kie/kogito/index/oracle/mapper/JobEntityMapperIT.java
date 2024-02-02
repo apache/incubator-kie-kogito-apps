@@ -21,7 +21,6 @@ package org.kie.kogito.index.oracle.mapper;
 import java.time.ZonedDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.jpa.mapper.JobEntityMapper;
 import org.kie.kogito.index.jpa.model.JobEntity;
@@ -34,7 +33,6 @@ import jakarta.inject.Inject;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @QuarkusTest
-@Disabled("Removing because of legal issues with Oracle driver")
 class JobEntityMapperIT {
 
     @Inject

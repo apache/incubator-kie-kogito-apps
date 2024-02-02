@@ -18,7 +18,6 @@
  */
 package org.kie.kogito.index.service.messaging;
 
-import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.index.service.test.InMemoryMessageTestProfile;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -26,7 +25,6 @@ import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
 @TestProfile(InMemoryMessageTestProfile.class)
-@Disabled("Legal issue with oracle driver")
 class OracleMessagingHttpConsumerIT extends AbstractMessagingHttpConsumerIT {
 
 }
