@@ -45,9 +45,9 @@
       <groupId>org.kie.kogito</groupId>
       <artifactId>kogito-events-core</artifactId>
     </dependency>
-     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx-graphql</artifactId>
+    <dependency>
+      <groupId>com.graphql-java</groupId>
+      <artifactId>graphql-java</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
