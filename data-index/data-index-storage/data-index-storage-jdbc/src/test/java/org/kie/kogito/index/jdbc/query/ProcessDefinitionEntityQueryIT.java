@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.oracle.query;
+package org.kie.kogito.index.jdbc.query;
 
-import org.kie.kogito.index.jpa.query.AbstractProcessInstanceEntityQueryIT;
+import org.kie.kogito.index.jpa.query.AbstractProcessDefinitionEntityQueryIT;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.h2.H2DatabaseTestResource;
@@ -26,10 +26,6 @@ import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
-class ProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT {
+class ProcessDefinitionEntityQueryIT extends AbstractProcessDefinitionEntityQueryIT {
 
-    @Override
-    protected Boolean isDateTimeAsLong() {
-        return false;
-    }
 }

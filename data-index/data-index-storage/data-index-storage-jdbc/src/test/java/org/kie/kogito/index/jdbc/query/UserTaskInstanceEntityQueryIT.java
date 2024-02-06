@@ -16,12 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.oracle.mapper;
+package org.kie.kogito.index.jdbc.query;
 
-import org.kie.kogito.index.jpa.mapper.AbstractJobEntityMapperIT;
+import org.kie.kogito.index.jpa.query.AbstractUserTaskInstanceEntityQueryIT;
 
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-class JobEntityMapperIT extends AbstractJobEntityMapperIT {
+@QuarkusTestResource(H2DatabaseTestResource.class)
+class UserTaskInstanceEntityQueryIT extends AbstractUserTaskInstanceEntityQueryIT {
+
 }

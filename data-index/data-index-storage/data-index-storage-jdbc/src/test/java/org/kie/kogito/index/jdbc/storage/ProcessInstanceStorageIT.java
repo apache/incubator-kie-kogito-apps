@@ -16,12 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.oracle.mapper;
+package org.kie.kogito.index.jdbc.storage;
 
-import org.kie.kogito.index.jpa.mapper.AbstractProcessDefinitionEntityMapperIT;
+import org.kie.kogito.index.jpa.storage.AbstractProcessInstanceStorageIT;
 
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-class ProcessDefinitionEntityMapperIT extends AbstractProcessDefinitionEntityMapperIT {
+@QuarkusTestResource(H2DatabaseTestResource.class)
+public class ProcessInstanceStorageIT extends AbstractProcessInstanceStorageIT {
 }

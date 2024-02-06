@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.oracle.storage;
+package org.kie.kogito.index.jdbc.storage;
 
-import org.kie.kogito.index.jpa.storage.AbstractJobStorageIT;
+import org.kie.kogito.index.jpa.storage.AbstractUserTaskInstanceStorageIT;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.h2.H2DatabaseTestResource;
@@ -26,6 +26,5 @@ import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 @QuarkusTestResource(H2DatabaseTestResource.class)
-public class JobStorageIT extends AbstractJobStorageIT {
-
+public class UserTaskInstanceStorageIT extends AbstractUserTaskInstanceStorageIT {
 }

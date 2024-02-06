@@ -16,18 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.oracle.query;
+package org.kie.kogito.index.jdbc.storage;
 
-import org.junit.jupiter.api.Disabled;
-import org.kie.kogito.index.jpa.query.AbstractProcessDefinitionEntityQueryIT;
+import org.kie.kogito.index.jpa.storage.AbstractProcessDefinitionStorageIT;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.h2.H2DatabaseTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-@Disabled
 @QuarkusTestResource(H2DatabaseTestResource.class)
-class ProcessDefinitionEntityQueryIT extends AbstractProcessDefinitionEntityQueryIT {
+class ProcessDefinitionStorageIT extends AbstractProcessDefinitionStorageIT {
 
 }

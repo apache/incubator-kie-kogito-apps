@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.oracle.mapper;
+package org.kie.kogito.index.jdbc.mapper;
 
 import org.kie.kogito.index.jpa.mapper.AbstractProcessInstanceEntityMapperIT;
 

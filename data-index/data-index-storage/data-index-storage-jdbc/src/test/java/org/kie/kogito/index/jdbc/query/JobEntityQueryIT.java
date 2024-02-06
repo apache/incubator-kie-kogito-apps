@@ -16,29 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.test.containers;
+package org.kie.kogito.index.jdbc.query;
 
-/**
- * This container wraps Data Index Service container
- */
-public class DataIndexOracleContainer extends AbstractDataIndexContainer {
-    public static final String NAME = "data-index-service-oracle";
+import org.kie.kogito.index.jpa.query.AbstractJobEntityQueryIT;
 
-    public DataIndexOracleContainer() {
-        super(NAME);
-    }
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
-    public void setDatabaseURL(String oracleURL, String username, String password) {
-        addEnv("QUARKUS_DATASOURCE_JDBC_URL", oracleURL);
-        addEnv("QUARKUS_DATASOURCE_USERNAME", username);
-        addEnv("QUARKUS_DATASOURCE_PASSWORD", password);
-        addEnv("QUARKUS_FLYWAY_MIGRATE_AT_START", "true");
-        addEnv("QUARKUS_FLYWAY_BASELINE_ON_MIGRATE", "true");
-    }
-
-    @Override
-    public String getResourceName() {
-        return NAME;
-    }
+@QuarkusTest
+@QuarkusTestResource(H2DatabaseTestResource.class)
+class JobEntityQueryIT extends AbstractJobEntityQueryIT {
 
 }
