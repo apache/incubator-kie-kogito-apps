@@ -80,6 +80,7 @@
 
         <!-- Mutiny Zero Flow Adapters -->
         <version.io.smallrye.reactive.mutiny-zero>1.0.0</version.io.smallrye.reactive.mutiny-zero>
+        <version.drools.util>${project.version}</version.drools.util>
     </properties>
 
     <build>
@@ -171,6 +172,11 @@
                                 <argument>${project.basedir}/target/generated-sources/annotations/org/kie/kogito/job/http/recipient/JobHttpRecipientRuntimeConfiguration.jdp</argument>
                                 <argument>${project.basedir}/target/generated-sources/annotations/org/kie/kogito/job/sink/recipient/JobSinkRecipientRuntimeConfiguration.jdp</argument>
                                 <argument>${project.basedir}/target/generated-sources/annotations/org/kie/kogito/addons/quarkus/jobs/service/embedded/KogitoAddonsQuarkusJobsServiceEmbeddedRuntimeConfig.jdp</argument>
+                                <argument>${project.basedir}/target/generated-sources/annotations/org/kie/kogito/index/addon/config/DataIndexBuildConfig.jdp</argument>
+                                <argument>${project.basedir}/target/generated-sources/annotations/org/kie/kogito/index/addon/config/DataIndexRuntimeConfig.jdp</argument>
+                                <argument>${project.basedir}/target/generated-sources/annotations/org/kie/kogito/index/addon/config/DataIndexUIClientRuntimeConfig.jdp</argument>
+                                <argument>${project.basedir}/target/generated-sources/annotations/org/kie/kogito/runtime/tools/quarkus/extension/runtime/config/DevConsoleRuntimeConfig.jdp</argument>
+                                <argument>${project.basedir}/target/generated-sources/annotations/org/kie/kogito/runtime/tools/quarkus/extension/runtime/config/UserConfig.jdp</argument>
                             </arguments>
                         </configuration>
                     </execution>
