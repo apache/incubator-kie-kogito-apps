@@ -29,41 +29,37 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>data-index-storage-jdbc</artifactId>
-  <name>Kogito Apps :: Data Index Storage JDBC</name>
+  <artifactId>data-index-storage-jpa-common</artifactId>
+  <name>Kogito Apps :: Data Index Storage JPA common classes</name>
 
   <properties>
-    <java.module.name>org.kie.kogito.index.jdbc</java.module.name>
+    <java.module.name>org.kie.kogito.index.jpa.common</java.module.name>
   </properties>
 
+ 
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>data-index-storage-jpa</artifactId>
-     </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-test-h2</artifactId>
-      <scope>test</scope>
+      <artifactId>data-index-storage-api</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jdbc-h2</artifactId>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>data-index-common</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>persistence-commons-jpa</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.mapstruct</groupId>
+      <artifactId>mapstruct</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-storage-api</artifactId>
       <type>test-jar</type>
       <scope>test</scope>
-      <version>${project.version}</version>
     </dependency>
-    <dependency>
-       <groupId>org.kie.kogito</groupId>
-       <artifactId>data-index-storage-jpa</artifactId>
-       <type>test-jar</type>
-       <scope>test</scope>
-       <version>${project.version}</version>
-     </dependency>
      <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5-mockito</artifactId>
@@ -85,28 +81,33 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-failsafe-plugin</artifactId>
+        <artifactId>maven-compiler-plugin</artifactId>
         <configuration>
-          <systemPropertyVariables>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-          </systemPropertyVariables>
+          <annotationProcessorPaths>
+            <path>
+              <groupId>org.mapstruct</groupId>
+              <artifactId>mapstruct-processor</artifactId>
+              <version>${version.org.mapstruct}</version>
+            </path>
+          </annotationProcessorPaths>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
-            <phase>test</phase>
             <goals>
-              <goal>integration-test</goal>
-              <goal>verify</goal>
+              <goal>test-jar</goal>
             </goals>
           </execution>
         </executions>
       </plugin>
     </plugins>
   </build>
-
-
 </project>
