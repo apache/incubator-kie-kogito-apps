@@ -23,6 +23,16 @@ metadata:
   keywords:
     - data-index
     - kogito
+    - processes
+    - workflows
+    - tasks
+    - jobs
+    - BPMN
+    - postgresql
   guide: https://quarkus.io/guides/kogito
   categories:
     - "business-automation"
+  status: "stable"
+  config:
+    - "kogito.data-index."
+    - "kogito.dataindex."

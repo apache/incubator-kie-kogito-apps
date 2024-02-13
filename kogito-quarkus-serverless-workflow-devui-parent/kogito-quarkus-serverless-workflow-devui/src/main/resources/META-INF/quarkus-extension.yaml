@@ -22,6 +22,7 @@ metadata:
   keywords:
     - "kogito"
     - "workflows"
+    - "dev-ui"
   guide: "https://quarkus.io/guides/kogito"
   categories:
     - "business-automation"

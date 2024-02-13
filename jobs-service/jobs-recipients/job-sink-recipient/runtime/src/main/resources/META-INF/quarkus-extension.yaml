@@ -21,4 +21,17 @@ name: Job Sink Recipient extension
 description: Handle the delivery of cloud events to a knative sink based on the information from the job recipient.
 metadata:
   keywords:
-    - Sink, SinkRecipient
+    - kogito
+    - processes
+    - BPMN
+    - workflows
+    - jobs
+    - Sink
+    - SinkRecipient
+    - cloudevents
+  guide: https://quarkus.io/guides/kogito
+  categories:
+    - "business-automation"
+  status: "stable"
+  config:
+    - "kogito.job.recipient.sink."
