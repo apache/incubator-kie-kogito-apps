@@ -17,7 +17,8 @@
 # under the License.
 #
 
-name: Kogito Runtime Tools
+name: jBPM Runtime Tools Quarkus Dev UI
+description: Enables the jBPM Runtime tools in Quarkus Dev UI
 metadata:
   keywords:
     - "kogito"

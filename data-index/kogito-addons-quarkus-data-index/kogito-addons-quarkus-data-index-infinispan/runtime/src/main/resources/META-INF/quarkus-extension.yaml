@@ -17,8 +17,8 @@
 # under the License.
 #
 
-name: Kogito Addons Quarkus Data Index Infinispan
-description: Kogito Data Index Infinispan Add-On
+name: Kogito Add-On Quarkus Data Index Infinispan
+description: Runs the Kogito Data Index embedded with Infinispan persistence
 metadata:
   keywords:
     - data-index

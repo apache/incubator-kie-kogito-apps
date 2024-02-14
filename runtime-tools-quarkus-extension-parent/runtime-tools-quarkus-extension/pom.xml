@@ -129,7 +129,7 @@
             <configuration>
               <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}</deployment>
               <capabilities>
-                <provides>org.kie.kogito.processes.dev-ui</provides>
+                <provides>org.jbpm.quarkus.dev-ui</provides>
               </capabilities>
             </configuration>
           </execution>

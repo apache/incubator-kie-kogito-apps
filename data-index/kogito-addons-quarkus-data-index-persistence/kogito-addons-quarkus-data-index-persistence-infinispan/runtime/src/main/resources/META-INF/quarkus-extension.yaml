@@ -17,8 +17,8 @@
 # under the License.
 #
 
-name: Kogito Addons Quarkus Data Index Persistence Infinispan
-description: Kogito Data Index Persistence Infinispan Add-On
+name: Kogito Data Index Persistence Infinispan Quarkus Add-On
+description: Add-On to colocate the Data Index Persistence (Infinispan) in your application.
 metadata:
   keywords:
     - data-index

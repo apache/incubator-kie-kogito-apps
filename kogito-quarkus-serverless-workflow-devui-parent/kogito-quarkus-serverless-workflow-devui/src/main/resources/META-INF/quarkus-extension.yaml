@@ -17,7 +17,9 @@
 # under the License.
 #
 
-name: Serverless Workflow Tools
+
+name: SonataFlow Runtime Tools Quarkus Dev UI
+description: Enables the SonataFlow Runtime tools in Quarkus Dev UI
 metadata:
   keywords:
     - "kogito"

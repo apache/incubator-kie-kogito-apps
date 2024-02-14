@@ -17,8 +17,8 @@
 # under the License.
 #
 
-name: Kogito Addons Quarkus Data Index Persistence MongoDB
-description: Kogito Data Index Persistence MongoDB Add-On
+name: Kogito Data Index Persistence MongoDB Quarkus Add-On
+description: Add-On to colocate the Data Index Persistence (MongoDb) in your application.
 metadata:
   keywords:
     - data-index

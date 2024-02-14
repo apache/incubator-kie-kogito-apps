@@ -17,8 +17,8 @@
 # under the License.
 #
 
-name: Kogito Addons Quarkus Data Index In-memory
-description: Kogito Data Index In-memory Add-On
+name: Kogito Data Index In-memory Quarkus Add-On
+description: Runs the Kogito Data Index embedded with In-memory persistence
 metadata:
   keywords:
     - data-index

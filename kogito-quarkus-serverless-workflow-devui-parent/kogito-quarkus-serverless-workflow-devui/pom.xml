@@ -134,7 +134,7 @@
             <configuration>
               <deployment>${project.groupId}:${project.artifactId}-deployment:${project.version}</deployment>
               <capabilities>
-                <provides>org.kie.kogito.serverless-workflow.dev-ui</provides>
+                <provides>org.sonataflow.quarkus.dev-ui</provides>
               </capabilities>
             </configuration>
           </execution>
