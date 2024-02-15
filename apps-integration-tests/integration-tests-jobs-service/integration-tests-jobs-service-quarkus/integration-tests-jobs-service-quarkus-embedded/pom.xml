@@ -72,6 +72,19 @@
         <artifactId>integration-tests-jobs-service-common-quarkus</artifactId>
         <type>test-jar</type>
     </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>kogito-addons-quarkus-common-deployment</artifactId>
+      <version>${project.version}</version>
+      <scope>test</scope>
+      <type>pom</type>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <!--  keep build order in place -->
     <dependency>
       <groupId>org.kie.kogito</groupId>
