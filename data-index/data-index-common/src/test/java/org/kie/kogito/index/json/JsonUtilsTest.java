@@ -29,20 +29,20 @@ public class JsonUtilsTest {
 
     @Test
     void testMergeWithDot() {
-        ObjectNode expected = ObjectMapperFactory.get().createObjectNode().set("Javier", ObjectMapperFactory.get().createObjectNode().put("ito", "manolo"));
-        assertThat(JsonUtils.mergeVariable("Javier.ito", "manolo", null)).isEqualTo(expected);
+        ObjectNode expected = ObjectMapperFactory.get().createObjectNode().set("key", ObjectMapperFactory.get().createObjectNode().put("user1", "manolo"));
+        assertThat(JsonUtils.mergeVariable("key.user1", "manolo", null)).isEqualTo(expected);
     }
 
     @Test
     void testSimpleMerge() {
-        ObjectNode expected = ObjectMapperFactory.get().createObjectNode().put("Javierito", "manolo");
-        assertThat(JsonUtils.mergeVariable("Javierito", "manolo", null)).isEqualTo(expected);
+        ObjectNode expected = ObjectMapperFactory.get().createObjectNode().put("user1", "manolo");
+        assertThat(JsonUtils.mergeVariable("user1", "manolo", null)).isEqualTo(expected);
     }
 
     @Test
     void testComplexMergeWithDot() {
-        ObjectNode expected = ObjectMapperFactory.get().createObjectNode().set("Javier", ObjectMapperFactory.get().createObjectNode().put("ito", "manolo").put("ato", "pepe"));
-        assertThat(JsonUtils.mergeVariable("Javier.ito", "manolo", ObjectMapperFactory.get().createObjectNode().set("Javier", ObjectMapperFactory.get().createObjectNode().put("ato", "pepe"))))
+        ObjectNode expected = ObjectMapperFactory.get().createObjectNode().set("key", ObjectMapperFactory.get().createObjectNode().put("user1", "manolo").put("user2", "pepe"));
+        assertThat(JsonUtils.mergeVariable("key.user1", "manolo", ObjectMapperFactory.get().createObjectNode().set("key", ObjectMapperFactory.get().createObjectNode().put("user2", "pepe"))))
                 .isEqualTo(expected);
     }
 }

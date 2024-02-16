@@ -56,17 +56,17 @@ public final class JsonUtils {
     }
 
     public static ObjectNode mergeVariable(String variableName, Object variableValue, ObjectNode variables) {
-        return (ObjectNode) MergeUtils.merge(getObjectNode(variableName, variableValue), variables);
+        return (ObjectNode) MergeUtils.merge(createObjectNode(variableName, variableValue), variables);
     }
 
-    private static ObjectNode getObjectNode(String variableName, Object variableValue) {
+    private static ObjectNode createObjectNode(String variableName, Object variableValue) {
         int indexOf = variableName.indexOf('.');
         ObjectNode result = ObjectMapperFactory.get().createObjectNode();
         if (indexOf == -1) {
             result.set(variableName, JsonObjectUtils.fromValue(variableValue));
         } else {
             String name = variableName.substring(0, indexOf);
-            result.set(name, getObjectNode(variableName.substring(indexOf + 1), variableValue));
+            result.set(name, createObjectNode(variableName.substring(indexOf + 1), variableValue));
         }
         return result;
     }
