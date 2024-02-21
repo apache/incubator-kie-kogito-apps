@@ -11,7 +11,7 @@
 
     <artifactId>kogito-addons-quarkus-jobs</artifactId>
 
-    <name>Jobs Collocated Quarkus Addon - Runtime</name>
+    <name>Jobs Collocated Quarkus Add-On - Runtime</name>
     <description>Run Jobs Service embedded with the application.</description>
 
     <properties>

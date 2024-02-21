@@ -397,49 +397,45 @@
                 <classifier>sources</classifier>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>
-                    kogito-addons-quarkus-data-index-persistence-common-runtime</artifactId>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-persistence-common-runtime</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>
-                    kogito-addons-quarkus-data-index-persistence-common-runtime</artifactId>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-persistence-common-runtime</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>
-                    kogito-addons-quarkus-data-index-persistence-common-deployment</artifactId>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-persistence-common-deployment</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>
-                    kogito-addons-quarkus-data-index-persistence-common-deployment</artifactId>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-persistence-common-deployment</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
+                <groupId>org.kie</groupId>
                 <artifactId>kogito-addons-quarkus-data-index-common-runtime</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
+                <groupId>org.kie</groupId>
                 <artifactId>kogito-addons-quarkus-data-index-common-runtime</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
+                <groupId>org.kie</groupId>
                 <artifactId>kogito-addons-quarkus-data-index-common-deployment</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
+                <groupId>org.kie</groupId>
                 <artifactId>kogito-addons-quarkus-data-index-common-deployment</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
