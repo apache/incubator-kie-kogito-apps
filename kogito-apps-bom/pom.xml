@@ -125,16 +125,61 @@
                 <classifier>sources</classifier>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
+                <groupId>org.kie</groupId>
                 <artifactId>kogito-addons-quarkus-jobs</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
+                <groupId>org.kie</groupId>
                 <artifactId>kogito-addons-quarkus-jobs</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-job-http-recipient-deployment</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-job-http-recipient-deployment</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-job-http-recipient</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-job-http-recipient</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-job-sink-recipient-deployment</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-job-sink-recipient-deployment</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-job-sink-recipient</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-job-sink-recipient</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+
             <!-- Data Audit-->
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -954,15 +999,40 @@
                 <version>${project.version}</version>
             </dependency>
 
+            <!-- jBPM Quarkus Dev UI-->
             <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>runtime-tools-quarkus-extension-deployment</artifactId>
+                <groupId>org.jbpm</groupId>
+                <artifactId>jbpm-quarkus-devui</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>runtime-tools-quarkus-extension</artifactId>
+                <groupId>org.jbpm</groupId>
+                <artifactId>jbpm-quarkus-devui-deployment</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+            <!-- SonataFlow Quarkus Dev UI -->
+            <dependency>
+                <groupId>org.sonataflow</groupId>
+                <artifactId>sonataflow-quarkus-devui</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.sonataflow</groupId>
+                <artifactId>sonataflow-quarkus-devui</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.sonataflow</groupId>
+                <artifactId>sonataflow-quarkus-devui-deployment</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.sonataflow</groupId>
+                <artifactId>sonataflow-quarkus-devui-deployment</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
             </dependency>
 
             <!-- UI packages -->
