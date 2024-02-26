@@ -152,4 +152,4 @@ jobs:
           mv ./dist/win32/jitexecutor-runner-${{ needs.build_jitexecutor_native_binaries.outputs.package_version }}-runner.exe ./dist/win32/jitexecutor.exe
           npm version ${{ needs.build_jitexecutor_native_binaries.outputs.npm_version }}
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
-          npm publish --access public
+          npm publish --tag dev --access public
