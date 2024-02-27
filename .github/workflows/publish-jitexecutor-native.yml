@@ -39,8 +39,9 @@ jobs:
             echo "NPM_VERSION=999.0.0-${{ steps.date.outputs.CURRENT_DATE }}-SNAPSHOT" >> "$GITHUB_OUTPUT"
             echo "NPM_TAG=dev" >> "$GITHUB_OUTPUT"
           else
-            echo "TAG=${{ github.event.inputs.kogito_runtime_version }}" >> "$GITHUB_OUTPUT"
-            echo "PROJECT_VERSION=${{ github.event.inputs.kogito_runtime_version }}" >> "$GITHUB_OUTPUT"
+            VERSION="${{ github.event.inputs.kogito_runtime_version }}"
+            echo "TAG=${VERSION//-SNAPSHOT/}" >> "$GITHUB_OUTPUT"
+            echo "PROJECT_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
             echo "NPM_VERSION=${{ github.event.inputs.npm_version }}" >> "$GITHUB_OUTPUT"
             echo "NPM_TAG=${{ github.event.inputs.npm_tag }}" >> "$GITHUB_OUTPUT"
           fi
