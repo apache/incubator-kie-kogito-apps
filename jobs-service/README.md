@@ -1,7 +1,7 @@
 
 # Jobs
 
-job service constitutes a subsystem within kogito workflow domain. This component is responsible for scheduling jobs. In the case of workflow this module takes care of timers such from boundary events, SLA, throw events relevant to timers. Also is used for things like human tasks notifications.
+job service represents a subsystem within kogito workflow domain. This component is responsible for scheduling jobs. In the case of workflow this module takes care of timers such from boundary events, SLA, throw events relevant to timers. Also is used for things like human tasks notifications.
 
 The system supports two different types of deployment:
 
@@ -37,7 +37,7 @@ For using in your project this you need first to include the dependency related 
 
 	
     <dependency>
-      <groupId>org.kie.kogito</groupId>
+      <groupId>org.kie</groupId>
       <artifactId>kogito-addons-quarkus-jobs-management</artifactId>
     </dependency>
     <dependency>
@@ -62,19 +62,21 @@ Here you have an example of this configuration:
 
 
 	
-	
-kogito.persistence.type=jdbc
-quarkus.datasource.db-kind=postgresql
-quarkus.datasource.username=kogito-user
-quarkus.datasource.password=kogito-pass
-quarkus.datasource.jdbc.url=${QUARKUS_DATASOURCE_JDBC_URL:jdbc:postgresql://localhost:5432/kogito}
-quarkus.datasource.reactive.url=${QUARKUS_DATASOURCE_REACTIVE_URL:postgresql://localhost:5432/kogito}
+
+	kogito.persistence.type=jdbc
+	quarkus.datasource.db-kind=postgresql
+	quarkus.datasource.username=kogito-user
+	quarkus.datasource.password=kogito-pass
+	quarkus.datasource.jdbc.url=${QUARKUS_DATASOURCE_JDBC_URL:jdbc:postgresql://localhost:5432/kogito}
+	quarkus.datasource.reactive.url=${QUARKUS_DATASOURCE_REACTIVE_URL:postgresql://localhost:5432/kogito}
 
 	
 
-Note: you need to us managed dependencies, otherwise you need to specify the version of the dependencies.
-Note: in case you are using other service like MongoDB, check you need to configure the storage with the proper properties. The components uses the common quarkus 
-Note: in the case of ddl scripts for pgsql you can find it in '''jobs-service-postgresql-common/src/main/resources/db/jobs-service'''
+> Note: you need to us managed dependencies, otherwise you need to specify the version of the dependencies.
+
+> Note: in case you are using other service like MongoDB, check you need to configure the storage with the proper properties. The components uses the common quarkus 
+
+> Note: in the case of ddl scripts for pgsql you can find it in `jobs-service-postgresql-common/src/main/resources/db/jobs-service`
 
 ## Distributed deployment
 
@@ -88,7 +90,7 @@ And you need to setup a few things in the client side of things:
 
 	
 
-kogito.jobs-service.url=http://localhost:8580
+	kogito.jobs-service.url=http://localhost:8580
 
 
 	
