@@ -18,8 +18,8 @@ At present for compact configuration it only support quarkus runtime. For distri
 
 ## Compact architecture
 
-The next dependency is added for quarkus and being able to use in-vm transport tier
-The next dependency is used to specify the storage of the data index and the transport tier at the same time.
+The next dependency is added for quarkus and being able to use in-vm transport tier.
+The same dependency is used to specify the storage of the data index and the transport tier at the same time.
 
 	
 
@@ -49,6 +49,13 @@ Current system
 
 ![data-index](docs/data-index.png "Data Index") 
 
+
+The concepts to understand the above picture are:
+*   Transport: the medium used to transfer events between the runtime and the data index service. The transport is http in distributed environments, or in-vm for compact architecture.
+*   Storage: the persistence tier of the data index component.
+*   Data index: the main component responsible for creating/updating the data index, and for providing query capabilities.
+
+
 ## Querying
 
 Data index support queries through graphQL (basic.schema.graphqls). For using the endpoint you just need to explore in your deployment the URI:
@@ -70,7 +77,7 @@ For distributed you need to specify and addons you will need to deploy the data 
 
 	
 
-of for quarkus
+or for quarkus
 	
 
      <dependency>
@@ -81,5 +88,5 @@ of for quarkus
 	
 
 More information about the Data Index images in here:
-[https://github.com/apache/incubator-kie-kogito-images?tab=readme-ov-file#kogito-data-index-component-images](https://github.com/apache/incubator-kie-kogito-images?tab=readme-ov-file#kogito-data-index-component-images images)
+[https://github.com/apache/incubator-kie-kogito-images?tab=readme-ov-file#kogito-data-index-component-images](https://github.com/apache/incubator-kie-kogito-images?tab=readme-ov-file#kogito-data-index-component-images)
 
