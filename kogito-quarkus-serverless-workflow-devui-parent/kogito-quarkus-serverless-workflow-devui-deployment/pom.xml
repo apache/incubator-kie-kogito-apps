@@ -25,12 +25,12 @@
 
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>kogito-quarkus-serverless-workflow-devui-parent</artifactId>
+    <artifactId>sonataflow-quarkus-devui-parent</artifactId>
     <version>999-SNAPSHOT</version>
   </parent>
 
-  <artifactId>kogito-quarkus-serverless-workflow-devui-deployment</artifactId>
-  <name>Kogito Apps :: Serverless Workflow Quarkus Dev UI Extension :: Deployment</name>
+  <artifactId>sonataflow-quarkus-devui-deployment</artifactId>
+  <name>Kogito Apps :: SonataFlow Quarkus Dev UI Extension :: Deployment</name>
 
   <properties>
     <path.to.webapp.app>../../ui-packages/packages/runtime-tools-dev-ui-webapp</path.to.webapp.app>
@@ -91,7 +91,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-quarkus-serverless-workflow-devui</artifactId>
+      <artifactId>sonataflow-quarkus-devui</artifactId>
       <version>${project.version}</version>
     </dependency>
     <dependency>
@@ -130,7 +130,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${basedir}/target/classes/dev-static/webapp</outputDirectory>
+              <outputDirectory>${basedir}/target/classes/dev-static/resources/webapp</outputDirectory>
               <resources>
                 <resource>
                   <directory>${path.to.webapp.app}/dist/resources/webapp</directory>
@@ -143,6 +143,7 @@
               </resources>
             </configuration>
           </execution>
+
           <execution>
             <id>copy-envelope-resources</id>
             <phase>process-resources</phase>
@@ -150,7 +151,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${basedir}/target/classes/dev-static/</outputDirectory>
+              <outputDirectory>${basedir}/target/classes/dev-static/resources</outputDirectory>
               <resources>
                 <resource>
                   <directory>${path.to.webapp.app}/dist/resources</directory>
@@ -170,6 +171,25 @@
                   <directory>${path.to.webapp.app}/dist/resources</directory>
                   <includes>
                     <include>diagram/</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>copy-index</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/classes/dev-static</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/target/classes/static</directory>
+                  <includes>
+                    <include>index.html</include>
                   </includes>
                 </resource>
               </resources>

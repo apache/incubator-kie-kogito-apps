@@ -20,6 +20,7 @@ package org.kie.kogito.index.storage.merger;
 
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
+import org.kie.kogito.index.CommonUtils;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.ProcessInstanceError;
 
@@ -30,12 +31,13 @@ public class ProcessInstanceErrorDataEventMerger extends ProcessInstanceEventMer
 
     @Override
     public ProcessInstance merge(ProcessInstance pi, ProcessInstanceDataEvent<?> data) {
-        pi = getOrNew(pi, data);
         ProcessInstanceErrorDataEvent event = (ProcessInstanceErrorDataEvent) data;
+        pi = getOrNew(pi, data, event.getData().getEventDate());
         ProcessInstanceError error = new ProcessInstanceError();
         error.setMessage(event.getData().getErrorMessage());
         error.setNodeDefinitionId(event.getData().getNodeDefinitionId());
         pi.setError(error);
+        pi.setState(CommonUtils.ERROR_STATE);
         return pi;
     }
 
