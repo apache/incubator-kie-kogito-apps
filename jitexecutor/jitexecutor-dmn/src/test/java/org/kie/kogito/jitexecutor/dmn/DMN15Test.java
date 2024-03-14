@@ -74,7 +74,7 @@ class DMN15Test {
 
     private static final CollectionType LIST_OF_MSGS = MAPPER.getTypeFactory()
             .constructCollectionType(List.class,
-                                     JITDMNMessage.class);
+                    JITDMNMessage.class);
 
     @BeforeAll
     public static void setup() {
@@ -131,12 +131,12 @@ class DMN15Test {
         validate(getModelFromIoUtils(modelFileName));
         String model = getModel(modelFileName);
         Map<String, Object> expectedValues = Map.of("forloopdates[0]", "2021-01-02",
-                                                    "forloopdates[1]", "2021-01-03",
-                                                    "forloopdates[2]", "2021-01-04");
+                "forloopdates[1]", "2021-01-03",
+                "forloopdates[2]", "2021-01-04");
         endpoint(model, expectedValues);
         expectedValues = Map.of("decisionResults.result[0][0]", "2021-01-02",
-                                "decisionResults.result[0][1]", "2021-01-03",
-                                "decisionResults.result[0][2]", "2021-01-04");
+                "decisionResults.result[0][1]", "2021-01-03",
+                "decisionResults.result[0][2]", "2021-01-04");
         result(model, expectedValues);
     }
 
@@ -146,14 +146,14 @@ class DMN15Test {
         validate(getModelFromIoUtils(modelFileName));
         String model = getModel(modelFileName);
         Map<String, Object> expectedValues = Map.of("listreplacenumbers[0]", 2,
-                                                    "listreplacenumbers[1]", 4,
-                                                    "listreplacenumbers[2]", 6,
-                                                    "listreplacenumbers[3]", 8);
+                "listreplacenumbers[1]", 4,
+                "listreplacenumbers[2]", 6,
+                "listreplacenumbers[3]", 8);
         endpoint(model, expectedValues);
         expectedValues = Map.of("decisionResults.result[0][0]", 2,
-                                "decisionResults.result[0][1]", 4,
-                                "decisionResults.result[0][2]", 6,
-                                "decisionResults.result[0][3]", 8);
+                "decisionResults.result[0][1]", 4,
+                "decisionResults.result[0][2]", 6,
+                "decisionResults.result[0][3]", 8);
         result(model, expectedValues);
     }
 
@@ -174,7 +174,7 @@ class DMN15Test {
         validate(getModelFromIoUtils(modelFileName));
         String model = getModel(modelFileName);
         Map<String, Object> expectedValues = Map.of("normal", "function normal( a, b )",
-                                                    "usingNormal", "2021-05-31T00:00:00Z");
+                "usingNormal", "2021-05-31T00:00:00Z");
         endpoint(model, expectedValues);
         result(model, Map.of("decisionResults.result[0]", "2021-05-31T00:00:00Z"));
     }
