@@ -1,7 +1,7 @@
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
- * distributed with this work for additional information
+ * distributed with this work for additional .debugrmation
  * regarding copyright ownership.  The ASF licenses this file
  * to you under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance
@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.drools.util.IoUtils;
+import org.jboss.logging.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.dmn.api.core.DMNDecisionResult;
@@ -38,8 +39,6 @@ import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
 import org.kie.kogito.jitexecutor.dmn.responses.JITDMNDecisionResult;
 import org.kie.kogito.jitexecutor.dmn.responses.JITDMNMessage;
 import org.kie.kogito.jitexecutor.dmn.responses.JITDMNResult;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -60,7 +59,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @QuarkusTest
 class DMN15Test {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DMN15Test.class);
+    private static final Logger LOG = Logger.getLogger(DMN15Test.class);
     private static final ObjectMapper MAPPER;
 
     static {
@@ -109,7 +108,7 @@ class DMN15Test {
                 .statusCode(200)
                 .extract()
                 .asString();
-        LOG.info("Validate response: {}", response);
+        LOG.debugf("Validate response: {}", response);
         List<JITDMNMessage> messages = MAPPER.readValue(response, LIST_OF_MSGS);
         assertEquals(0, messages.size());
 
@@ -217,7 +216,7 @@ class DMN15Test {
                 .statusCode(200)
                 .extract()
                 .asString();
-        LOG.info("Validate response: {}", response);
+        LOG.debugf("Validate response: {}", response);
         List<JITDMNMessage> messages = MAPPER.readValue(response, LIST_OF_MSGS);
         assertEquals(0, messages.size());
     }

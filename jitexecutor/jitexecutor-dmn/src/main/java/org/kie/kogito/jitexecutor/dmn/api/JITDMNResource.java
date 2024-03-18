@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jboss.logging.Logger;
 import org.kie.dmn.core.internal.utils.MarshallingStubUtils;
 import org.kie.kogito.jitexecutor.dmn.JITDMNService;
 import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
@@ -36,8 +37,12 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+import static org.kie.kogito.jitexecutor.dmn.api.DMNValidationResource.LINEBREAK;
+
 @Path("/jitdmn")
 public class JITDMNResource {
+
+    private static final Logger LOGGER = Logger.getLogger(JITDMNResource.class);
 
     @Inject
     JITDMNService jitdmnService;
@@ -46,6 +51,10 @@ public class JITDMNResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response jitdmn(JITDMNPayload payload) {
+        LOGGER.debug(LINEBREAK);
+        LOGGER.debug("jitdmn/");
+        LOGGER.debug(payload.toString());
+        LOGGER.debug(LINEBREAK);
         JITDMNResult evaluateAll = payload.getModel() != null ? jitdmnService.evaluateModel(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModel(payload, payload.getContext());
         Map<String, Object> restResulk = new HashMap<>();
         for (Entry<String, Object> kv : evaluateAll.getContext().getAll().entrySet()) {
@@ -59,6 +68,10 @@ public class JITDMNResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response jitdmnResult(JITDMNPayload payload) {
+        LOGGER.debug(LINEBREAK);
+        LOGGER.debug("jitdmn/dmnresult");
+        LOGGER.debug(payload.toString());
+        LOGGER.debug(LINEBREAK);
         JITDMNResult dmnResult = payload.getModel() != null ? jitdmnService.evaluateModel(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModel(payload, payload.getContext());
         return Response.ok(dmnResult).build();
     }
@@ -68,8 +81,13 @@ public class JITDMNResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response jitEvaluateAndExplain(JITDMNPayload payload) {
+        LOGGER.debug(LINEBREAK);
+        LOGGER.debug("jitdmn/evaluateAndExplain");
+        LOGGER.debug(payload.toString());
+        LOGGER.debug(LINEBREAK);
         DMNResultWithExplanation response =
                 payload.getModel() != null ? jitdmnService.evaluateModelAndExplain(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModelAndExplain(payload, payload.getContext());
         return Response.ok(response).build();
     }
+
 }
