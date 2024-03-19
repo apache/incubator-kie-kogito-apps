@@ -24,7 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.jboss.logging.Logger;
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNMessage;
 import org.kie.dmn.core.compiler.profiles.ExtendedDMNProfile;
@@ -36,6 +35,8 @@ import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
 import org.kie.kogito.jitexecutor.common.requests.ResourceWithURI;
 import org.kie.kogito.jitexecutor.dmn.responses.JITDMNMessage;
 import org.kie.kogito.jitexecutor.dmn.utils.ResolveByKey;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
@@ -47,7 +48,7 @@ import jakarta.ws.rs.core.Response;
 @Path("jitdmn/validate")
 public class DMNValidationResource {
 
-    private static final Logger LOGGER = Logger.getLogger(DMNValidationResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DMNValidationResource.class);
 
     static final String LINEBREAK = "******\n";
 

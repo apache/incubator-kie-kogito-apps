@@ -22,12 +22,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jboss.logging.Logger;
 import org.kie.dmn.core.internal.utils.MarshallingStubUtils;
 import org.kie.kogito.jitexecutor.dmn.JITDMNService;
 import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
 import org.kie.kogito.jitexecutor.dmn.responses.DMNResultWithExplanation;
 import org.kie.kogito.jitexecutor.dmn.responses.JITDMNResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
@@ -42,7 +43,7 @@ import static org.kie.kogito.jitexecutor.dmn.api.DMNValidationResource.LINEBREAK
 @Path("/jitdmn")
 public class JITDMNResource {
 
-    private static final Logger LOGGER = Logger.getLogger(JITDMNResource.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JITDMNResource.class);
 
     @Inject
     JITDMNService jitdmnService;
