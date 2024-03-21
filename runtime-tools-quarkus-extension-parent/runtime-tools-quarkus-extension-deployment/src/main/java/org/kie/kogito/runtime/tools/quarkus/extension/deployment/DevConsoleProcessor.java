@@ -131,7 +131,7 @@ public class DevConsoleProcessor {
                     .metadata("page", "Processes")
                     .title("Process Instances")
                     .icon("font-awesome-solid:diagram-project")
-                    .streamingLabelJsonRPCMethodName("queryProcessInstancesCount"));
+                    .dynamicLabelJsonRPCMethodName("queryProcessInstancesCount"));
 
             cardPageBuildItem.addPage(Page.webComponentPageBuilder()
                     .componentLink("qwc-jbpm-quarkus-devui.js")
