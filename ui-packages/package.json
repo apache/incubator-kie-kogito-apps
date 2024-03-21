@@ -13,8 +13,6 @@
     "test:e2e:trusty": "pnpm -r -F @kogito-apps/trusty test:e2e:trusty",
     "format:all": "pnpm -r format --stream --",
     "format:check": "prettier --check .",
-    "build:prod:swf": "pnpm -r -F @kogito-apps/runtime-tools-dev-ui-webapp... build:prod",
-    "test:swf": "pnpm --filter @kogito-apps/runtime-tools-dev-ui-webapp... test",
     "prepare": "cd .. && husky install"
   },
   "devDependencies": {
