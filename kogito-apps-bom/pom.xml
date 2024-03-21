@@ -982,18 +982,6 @@
                 <version>${project.version}</version>
             </dependency>
 
-            <!-- jBPM Quarkus Dev UI-->
-            <dependency>
-                <groupId>org.jbpm</groupId>
-                <artifactId>jbpm-quarkus-devui</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jbpm</groupId>
-                <artifactId>jbpm-quarkus-devui-deployment</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <!-- UI packages -->
             <dependency>
                 <groupId>org.kie.kogito</groupId>
