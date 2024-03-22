@@ -21,7 +21,6 @@ package org.kie.kogito.jitexecutor.dmn.api;
 import java.io.IOException;
 import java.util.List;
 
-import org.drools.util.IoUtils;
 import org.junit.jupiter.api.Test;
 import org.kie.dmn.api.core.DMNMessageType;
 import org.kie.kogito.jitexecutor.dmn.responses.JITDMNMessage;
@@ -38,7 +37,9 @@ import io.restassured.http.ContentType;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.kie.kogito.jitexecutor.dmn.TestingUtils.getModelFromIoUtils;
 
 @QuarkusTest
 public class DMNValidatorResourceTest {
@@ -54,7 +55,7 @@ public class DMNValidatorResourceTest {
 
     @Test
     public void test() throws IOException {
-        final String MODEL = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/loan.dmn")));
+        final String MODEL = getModelFromIoUtils("valid_models/DMNv1_x/loan.dmn");
         String response = given()
                 .contentType(ContentType.XML)
                 .body(MODEL)
@@ -66,7 +67,7 @@ public class DMNValidatorResourceTest {
                 .extract()
                 .asString();
 
-        LOG.info("Validate response: {}", response);
+        LOG.debug("Validate response: {}", response);
         List<JITDMNMessage> messages = MAPPER.readValue(response, LIST_OF_MSGS);
         assertEquals(1, messages.size());
         assertTrue(messages.stream().anyMatch(m -> m.getSourceId().equals("_E7994A2B-1189-4BE5-9382-891D48E87D47") &&
@@ -75,7 +76,7 @@ public class DMNValidatorResourceTest {
 
     @Test
     public void testOverlap() throws IOException {
-        final String MODEL = new String(IoUtils.readBytesFromInputStream(JITDMNResourceTest.class.getResourceAsStream("/loan_withOverlap.dmn")));
+        final String MODEL = getModelFromIoUtils("invalid_models/DMNv1_x/loan_withOverlap.dmn");
         String response = given()
                 .contentType(ContentType.XML)
                 .body(MODEL)
@@ -87,9 +88,9 @@ public class DMNValidatorResourceTest {
                 .extract()
                 .asString();
 
-        LOG.info("Validate response: {}", response);
+        LOG.debug("Validate response: {}", response);
         List<JITDMNMessage> messages = MAPPER.readValue(response, LIST_OF_MSGS);
-        assertTrue(messages.size() > 0);
+        assertFalse(messages.isEmpty());
         assertTrue(messages.stream().anyMatch(m -> m.getSourceId().equals("_E7994A2B-1189-4BE5-9382-891D48E87D47") &&
                 m.getMessageType().equals(DMNMessageType.DECISION_TABLE_OVERLAP_HITPOLICY_UNIQUE)));
     }
