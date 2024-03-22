@@ -81,11 +81,7 @@
     <module>jobs-service</module>
     <module>data-index</module>
     <module>data-audit</module>
-    <module>ui-packages</module>
     <module>security-commons</module>
-    <module>management-console</module>
-    <module>trusty-ui</module>
-    <module>task-console</module>
     <module>explainability</module>
     <module>trusty</module>
     <module>jitexecutor</module>
