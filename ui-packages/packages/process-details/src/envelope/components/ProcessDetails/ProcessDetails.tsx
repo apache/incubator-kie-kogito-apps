@@ -350,7 +350,7 @@ const ProcessDetails: React.FC<ProcessDetailsProps> = ({
         <FlexItem>
           <ProcessDetailsPanel processInstance={data} driver={driver} />
         </FlexItem>
-        {data.milestones.length > 0 && (
+        {data.milestones?.length > 0 && (
           <FlexItem>
             <ProcessDetailsMilestonesPanel milestones={data.milestones} />
           </FlexItem>
