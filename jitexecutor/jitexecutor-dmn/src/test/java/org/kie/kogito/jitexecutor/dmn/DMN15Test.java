@@ -20,6 +20,7 @@ package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
 
 import static io.restassured.RestAssured.given;
+import static java.util.Map.entry;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.jitexecutor.dmn.TestingUtils.MAPPER;
@@ -75,9 +77,10 @@ class DMN15Test {
     private void commonUnnamedImport(String importingModelRef, String importedModelRef) throws IOException {
         ResourceWithURI model1 = new ResourceWithURI(importingModelRef, getModelFromIoUtils(importingModelRef));
         ResourceWithURI model2 = new ResourceWithURI(importedModelRef, getModelFromIoUtils(importedModelRef));
-
+        Map<String, Object> context =
+                Map.of("A Person", Map.of("name", "John", "age", 47));
         JITDMNPayload jitdmnpayload = new JITDMNPayload(importingModelRef, List.of(model1, model2),
-                Collections.EMPTY_MAP);
+                                                        context);
         given()
                 .contentType(ContentType.JSON)
                 .body(jitdmnpayload)
@@ -100,8 +103,6 @@ class DMN15Test {
         List<JITDMNMessage> messages = MAPPER.readValue(response, LIST_OF_MSGS);
         assertEquals(0, messages.size());
 
-        Map<String, Object> context =
-                Map.of("A Person", Map.of("name", "John", "age", 47));
         jitdmnpayload = new JITDMNPayload(importingModelRef, List.of(model1, model2), context);
         given()
                 .contentType(ContentType.JSON)
@@ -207,5 +208,15 @@ class DMN15Test {
         LOG.debug("Validate response: {}", response);
         List<JITDMNMessage> messages = MAPPER.readValue(response, LIST_OF_MSGS);
         assertEquals(0, messages.size());
+    }
+
+    private static <K, V> Map<K, V> prototype(Map.Entry<K, V>... attributes) {
+        // as Stream.of(attributes).collect(toMap()); might fail due to some value=null, because toMap() uses java.util.HashMap.merge(HashMap.java:1224)
+        // need avoid Stream API
+        Map<K, V> result = new HashMap<>();
+        for ( Map.Entry<K, V> entry : attributes ) {
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
     }
 }
