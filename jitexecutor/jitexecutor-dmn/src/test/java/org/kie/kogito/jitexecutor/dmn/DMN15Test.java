@@ -19,11 +19,14 @@
 package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.databind.type.CollectionType;
+import io.quarkus.test.junit.QuarkusTest;
+import io.restassured.RestAssured;
+import io.restassured.http.ContentType;
+import io.restassured.response.ValidatableResponse;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
@@ -33,15 +36,7 @@ import org.kie.kogito.jitexecutor.dmn.responses.JITDMNMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.type.CollectionType;
-
-import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import io.restassured.response.ValidatableResponse;
-
 import static io.restassured.RestAssured.given;
-import static java.util.Map.entry;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.kie.kogito.jitexecutor.dmn.TestingUtils.MAPPER;
@@ -208,15 +203,5 @@ class DMN15Test {
         LOG.debug("Validate response: {}", response);
         List<JITDMNMessage> messages = MAPPER.readValue(response, LIST_OF_MSGS);
         assertEquals(0, messages.size());
-    }
-
-    private static <K, V> Map<K, V> prototype(Map.Entry<K, V>... attributes) {
-        // as Stream.of(attributes).collect(toMap()); might fail due to some value=null, because toMap() uses java.util.HashMap.merge(HashMap.java:1224)
-        // need avoid Stream API
-        Map<K, V> result = new HashMap<>();
-        for ( Map.Entry<K, V> entry : attributes ) {
-            result.put(entry.getKey(), entry.getValue());
-        }
-        return result;
     }
 }
