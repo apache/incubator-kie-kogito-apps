@@ -1,5 +1,5 @@
-pom.xml;data-audit,security-commons,management-console,trusty-ui,task-console,explainability,trusty,jitexecutor,runtime-tools-quarkus-extension-parent
-apps-integration-tests/pom.xml;integration-tests-jobs-service,integration-tests-trusty-audit,integration-tests-trusty-service
+pom.xml;data-audit,security-commons,explainability,trusty,jitexecutor
+apps-integration-tests/pom.xml;integration-tests-jobs-service,integration-tests-trusty-service
 apps-integration-tests/integration-tests-data-index-service/pom.xml;integration-tests-data-index-service-common,integration-tests-data-index-service-quarkus,integration-tests-data-index-service-springboot
 data-index/data-index-service/pom.xml;data-index-service-infinispan,data-index-service-mongodb
 data-index/data-index-storage/pom.xml;data-index-storage-common,data-index-storage-infinispan,data-index-storage-mongodb,data-index-storage-postgresql-reporting
