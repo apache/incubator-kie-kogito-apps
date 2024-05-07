@@ -1,0 +1,26 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>org.kie.kogito</groupId>
+    <artifactId>jitexecutor-native</artifactId>
+    <version>999-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>jitexecutor-native-darwin</artifactId>
+  <packaging>jar</packaging>
+  <name>Kogito Apps :: JIT Executor Native :: Darwin</name>
+
+  <properties>
+    <jitexecutor.native.skip>false</jitexecutor.native.skip>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>jitexecutor-runner</artifactId>
+    </dependency>
+  </dependencies>
+</project>

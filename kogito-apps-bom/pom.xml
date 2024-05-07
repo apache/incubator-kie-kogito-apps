@@ -968,6 +968,78 @@
                 <classifier>javadoc</classifier>
             </dependency>
 
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native</artifactId>
+                <version>${project.version}</version>
+                <classifier>javadoc</classifier>
+            </dependency>
+
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native-darwin</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native-darwin</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native-darwin</artifactId>
+                <version>${project.version}</version>
+                <classifier>javadoc</classifier>
+            </dependency>
+
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native-linux</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native-linux</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native-linux</artifactId>
+                <version>${project.version}</version>
+                <classifier>javadoc</classifier>
+            </dependency>
+
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native-win32</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native-win32</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jitexecutor-native-win32</artifactId>
+                <version>${project.version}</version>
+                <classifier>javadoc</classifier>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
