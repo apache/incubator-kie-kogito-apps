@@ -35,6 +35,7 @@
 
   <properties>
     <jitexecutor.native.skip>false</jitexecutor.native.skip>
+    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
   </properties>
 
   <dependencies>

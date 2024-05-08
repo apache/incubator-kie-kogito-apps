@@ -35,6 +35,7 @@
   <properties>
     <java.module.name>org.kie.kogito.jitexecutor.runner</java.module.name>
     <jitexecutor.native.skip>true</jitexecutor.native.skip>
+    <quarkus.package.type>native</quarkus.package.type>
   </properties>
 
   <build>
@@ -48,6 +49,7 @@
         </configuration>
         <executions>
           <execution>
+            <phase>compile</phase>
             <goals>
               <goal>build</goal>
             </goals>
@@ -56,30 +58,21 @@
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <configuration>
-          <skip>${jitexecutor.native.skip}</skip>
-          <systemPropertyVariables>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-            <!-- <quarkus.log.level>DEBUG</quarkus.log.level> -->
-          </systemPropertyVariables>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <configuration>
-          <skipAssembly>${jitexecutor.native.skip}</skipAssembly>
-          <descriptors>
-            <descriptor>src/assembly/image-build-zip.xml</descriptor>
-          </descriptors>
-        </configuration>
+        <artifactId>maven-jar-plugin</artifactId>
         <executions>
           <execution>
             <phase>package</phase>
             <goals>
-              <goal>single</goal>
+              <goal>jar</goal>
             </goals>
+            <configuration>
+              <classesDirectory>${project.build.directory}</classesDirectory>
+              <classifier>binaries</classifier>
+              <includes>
+                <include>jitexecutor-native-*-${project.version}-run*</include>
+              </includes>
+              <forceCreation>true</forceCreation>
+            </configuration>
           </execution>
         </executions>
       </plugin>
@@ -120,38 +113,5 @@
         <module>jitexecutor-native-linux</module>
       </modules>
     </profile>
-    <profile>
-      <id>native</id>
-      <activation>
-        <property>
-          <name>native</name>
-        </property>
-      </activation>
-      <properties>
-        <quarkus.package.type>native</quarkus.package.type>
-      </properties>
-      <build>
-        <plugins>
-          <plugin>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <executions>
-              <execution>
-                <goals>
-                  <goal>integration-test</goal>
-                  <goal>verify</goal>
-                </goals>
-                <configuration combine.self="override">
-                  <skip>${jitexecutor.native.skip}</skip>
-                  <systemProperties>
-                    <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                  </systemProperties>
-                </configuration>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
   </profiles>
-
 </project>
