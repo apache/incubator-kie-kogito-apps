@@ -1,13 +1,17 @@
 name: "Publish jitexecutor-native"
 
 on:
+  pull_request:
+    branches: ["**"]
+    paths:
+      - ".github/workflows/publish-jitexecutor-native.yml"
   workflow_dispatch:
     inputs:
       kogito_runtime_version:
         description: "Kogito Runtime version"
         required: true
   schedule:
-    - cron: '0 16 * * 0' # Every sunday at 4:00PM
+    - cron: "0 16 * * 0" # Every sunday at 4:00PM
 
 jobs:
   build_jitexecutor_native:
@@ -25,19 +29,15 @@ jobs:
 
       - name: Set version
         id: version
-        run: | 
+        run: |
           if [ ${{ github.event_name }} == "schedule" ]; then
             VERSION="999-${{ steps.date.outputs.CURRENT_DATE }}"
             echo "TAG=$VERSION" >> "$GITHUB_OUTPUT"
             echo "PROJECT_VERSION=$VERSION-SNAPSHOT" >> "$GITHUB_OUTPUT"
-            echo "NPM_VERSION=999.0.0-${{ steps.date.outputs.CURRENT_DATE }}-SNAPSHOT" >> "$GITHUB_OUTPUT"
-            echo "NPM_TAG=dev" >> "$GITHUB_OUTPUT"
           else
             VERSION="${{ github.event.inputs.kogito_runtime_version }}"
             echo "TAG=${VERSION//-SNAPSHOT/}" >> "$GITHUB_OUTPUT"
             echo "PROJECT_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
-            echo "NPM_VERSION=${{ github.event.inputs.npm_version }}" >> "$GITHUB_OUTPUT"
-            echo "NPM_TAG=${{ github.event.inputs.npm_tag }}" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
 
@@ -77,6 +77,12 @@ jobs:
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-darwin -am -Pjitexecutor-native
 
+      - name: "Publish macOS"
+        if: github.event_name != "pull_request" && runner.os == 'macOS'
+        shell: bash
+        run: |
+          echo "Publishing macOS..."
+
       - name: "Build Linux"
         if: runner.os == 'Linux'
         run: |
@@ -89,6 +95,12 @@ jobs:
           mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-linux -am -Pjitexecutor-native
+
+      - name: "Publish Linux"
+        if: github.event_name != "pull_request" && runner.os == 'Linux'
+        shell: bash
+        run: |
+          echo "Publishing Linux..."
 
       - name: "Configure Pagefile"
         if: runner.os == 'Windows'
@@ -120,6 +132,12 @@ jobs:
           mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-win32 -am -Pjitexecutor-native
+      
+      - name: "Publish Windows"
+        if: github.event_name != "pull_request" && runner.os == 'Windows'
+        shell: bash
+        run: |
+          echo "Publishing Windows..."
 
       - name: "Upload JIT Executor binary"
         uses: actions/upload-artifact@v4
