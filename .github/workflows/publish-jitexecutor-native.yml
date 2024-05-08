@@ -75,8 +75,7 @@ jobs:
           gu install native-image && \
           mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
-          mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-darwin -am
-          mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-darwin -Pnative,jitexecutor-native
+          mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-darwin -am -Pjitexecutor-native
 
       - name: "Build Linux"
         if: runner.os == 'Linux'
@@ -89,8 +88,7 @@ jobs:
           gir1.2-appindicator3-0.1 && \
           mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
-          mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-linux -am
-          mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-linux -Pnative,jitexecutor-native
+          mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-linux -am -Pjitexecutor-native
 
       - name: "Configure Pagefile"
         if: runner.os == 'Windows'
@@ -121,8 +119,7 @@ jobs:
         run: |
           mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
-          mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-win32 -am
-          mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-win32 -P='native,jitexecutor-native'
+          mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-win32 -am -Pjitexecutor-native
 
       - name: "Upload JIT Executor binary"
         uses: actions/upload-artifact@v4
