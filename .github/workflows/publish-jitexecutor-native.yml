@@ -78,7 +78,7 @@ jobs:
           mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-darwin -am -Pjitexecutor-native
 
       - name: "Publish macOS"
-        if: github.event_name != "pull_request" && runner.os == 'macOS'
+        if: github.event_name != 'pull_request' && runner.os == 'macOS'
         shell: bash
         run: |
           echo "Publishing macOS..."
@@ -97,7 +97,7 @@ jobs:
           mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-linux -am -Pjitexecutor-native
 
       - name: "Publish Linux"
-        if: github.event_name != "pull_request" && runner.os == 'Linux'
+        if: github.event_name != 'pull_request' && runner.os == 'Linux'
         shell: bash
         run: |
           echo "Publishing Linux..."
@@ -134,7 +134,7 @@ jobs:
           mvn clean install -B -ntp -DskipTests -pl jitexecutor-native/jitexecutor-native-win32 -am -Pjitexecutor-native
       
       - name: "Publish Windows"
-        if: github.event_name != "pull_request" && runner.os == 'Windows'
+        if: github.event_name != 'pull_request' && runner.os == 'Windows'
         shell: bash
         run: |
           echo "Publishing Windows..."
