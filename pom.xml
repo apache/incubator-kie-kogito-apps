@@ -58,8 +58,7 @@
   </build>
 
   <repositories>
-    <!-- Bootstrap repository to locate the parent pom when the parent pom has not been build
-    locally. -->
+    <!-- Bootstrap repository to locate the parent pom when the parent pom has not been build locally. -->
     <repository>
         <id>apache-public-repository-group</id>
         <name>Apache Public Repository Group</name>
