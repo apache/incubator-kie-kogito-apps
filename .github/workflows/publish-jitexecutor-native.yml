@@ -28,10 +28,16 @@ jobs:
         run: | 
           if [ ${{ github.event_name }} == "schedule" ]; then
             VERSION="999-${{ steps.date.outputs.CURRENT_DATE }}"
+            echo "TAG=$VERSION" >> "$GITHUB_OUTPUT"
             echo "PROJECT_VERSION=$VERSION-SNAPSHOT" >> "$GITHUB_OUTPUT"
+            echo "NPM_VERSION=999.0.0-${{ steps.date.outputs.CURRENT_DATE }}-SNAPSHOT" >> "$GITHUB_OUTPUT"
+            echo "NPM_TAG=dev" >> "$GITHUB_OUTPUT"
           else
-            VERSION=999-SNAPSHOT
+            VERSION="${{ github.event.inputs.kogito_runtime_version }}"
+            echo "TAG=${VERSION//-SNAPSHOT/}" >> "$GITHUB_OUTPUT"
             echo "PROJECT_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "NPM_VERSION=${{ github.event.inputs.npm_version }}" >> "$GITHUB_OUTPUT"
+            echo "NPM_TAG=${{ github.event.inputs.npm_tag }}" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
 
@@ -42,8 +48,8 @@ jobs:
       - name: "Checkout kie-kogito-apps"
         uses: actions/checkout@v4
         with:
-          repository: ljmotta/incubator-kie-kogito-apps
-          ref: main
+          repository: apache/incubator-kie-kogito-apps
+          ref: ${{ steps.version.outputs.TAG }}
 
       - name: "Set up Maven"
         uses: stCarolas/setup-maven@v5
