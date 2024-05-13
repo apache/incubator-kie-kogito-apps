@@ -82,8 +82,10 @@ jobs:
           wget https://github.com/graalvm/graalvm-ce-builds/releases/download/jdk-17.0.9/graalvm-community-jdk-17.0.9_macos-x64_bin.tar.gz && \
           tar -xzf graalvm-community-jdk-17.0.9_macos-x64_bin.tar.gz && \
           sudo mv graalvm-community-openjdk-17.0.9+9.1 /Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1
-          echo "/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1/Contents/Home/bin" >> $GITHUB_PATH && \
-          echo "GRAALVM_HOME=/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1/Contents/Home" >> $GITHUB_ENV && \
+          export GRAALVM_HOME=/Library/Java/JavaVirtualMachines/graalvm-community-openjdk-17.0.9+9.1/Contents/Home
+          export PATH=${GRAALVM_HOME}/bin:$PATH
+          echo "${GRAALVM_HOME}/bin" >> $GITHUB_PATH && \
+          echo "GRAALVM_HOME=${GRAALVM_HOME}" >> $GITHUB_ENV && \
           gu install native-image
 
       - name: "Setup MSCV"
