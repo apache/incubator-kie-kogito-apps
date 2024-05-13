@@ -5,6 +5,7 @@ on:
     branches: ["**"]
     paths:
       - ".github/workflows/publish-jitexecutor-native.yml"
+      - "jitexecutor-native/**"
   workflow_dispatch:
     inputs:
       kogito_runtime_version:
@@ -32,11 +33,14 @@ jobs:
         run: |
           if [ ${{ github.event_name }} == "schedule" ]; then
             VERSION="999-${{ steps.date.outputs.CURRENT_DATE }}"
-            echo "TAG=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "REF=$VERSION" >> "$GITHUB_OUTPUT"
             echo "PROJECT_VERSION=$VERSION-SNAPSHOT" >> "$GITHUB_OUTPUT"
+          elif [ ${{ github.event_name }} == "pull_request" ]; then
+            echo "REF=main" >> "$GITHUB_OUTPUT"
+            echo "PROJECT_VERSION=999-SNAPSHOT" >> "$GITHUB_OUTPUT"
           else
             VERSION="${{ github.event.inputs.kogito_runtime_version }}"
-            echo "TAG=${VERSION//-SNAPSHOT/}" >> "$GITHUB_OUTPUT"
+            echo "REF=${VERSION//-SNAPSHOT/}" >> "$GITHUB_OUTPUT"
             echo "PROJECT_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
@@ -49,7 +53,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: apache/incubator-kie-kogito-apps
-          ref: ${{ steps.version.outputs.TAG }}
+          ref: ${{ steps.version.outputs.REF }}
 
       - name: "Set up Maven"
         uses: stCarolas/setup-maven@v5
@@ -112,14 +116,14 @@ jobs:
           disk-root: "C:"
 
       - name: "Update versions (Linux and macOS)"
-        if: runner.os == 'Linux' || runner.os == 'macOS'
+        if: (runner.os == 'Linux' || runner.os == 'macOS') && github.event_name != 'pull_request'
         shell: bash
         run: |
           mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
           mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
 
       - name: "Update versions Windows"
-        if: runner.os == 'Windows'
+        if: runner.os == 'Windows' && github.event_name != 'pull_request'
         shell: pwsh
         run: |
           mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
