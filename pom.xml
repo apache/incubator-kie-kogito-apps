@@ -37,6 +37,23 @@
   <name>Kogito Apps</name>
   <description>Kogito Apps</description>
 
+  <organization>
+    <name>The Apache Software Foundation</name>
+    <url>https://apache.org/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <scm>
+    <connection>scm:git:https://github.com/apache/incubator-kie-kogito-apps.git</connection>
+    <developerConnection>scm:git:https://github.com/apache/incubator-kie-kogito-apps.git</developerConnection>
+    <url>https://github.com/apache/incubator-kie-kogito-apps</url>
+  </scm>
   <developers>
     <developer>
       <name>The Apache KIE Team</name>
