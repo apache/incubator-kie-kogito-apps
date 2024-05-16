@@ -11,8 +11,6 @@ on:
       kogito_runtime_version:
         description: "Kogito Runtime version"
         required: true
-  schedule:
-    - cron: "0 16 * * 0" # Every sunday at 4:00PM
 
 jobs:
   build_jitexecutor_native:
@@ -31,11 +29,7 @@ jobs:
       - name: Set version
         id: version
         run: |
-          if [ ${{ github.event_name }} == "schedule" ]; then
-            VERSION="999-${{ steps.date.outputs.CURRENT_DATE }}"
-            echo "REF=$VERSION" >> "$GITHUB_OUTPUT"
-            echo "PROJECT_VERSION=$VERSION-SNAPSHOT" >> "$GITHUB_OUTPUT"
-          elif [ ${{ github.event_name }} == "pull_request" ]; then
+          if [ ${{ github.event_name }} == "pull_request" ]; then
             echo "REF=main" >> "$GITHUB_OUTPUT"
             echo "PROJECT_VERSION=999-SNAPSHOT" >> "$GITHUB_OUTPUT"
           else
