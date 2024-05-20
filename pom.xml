@@ -108,6 +108,24 @@
     </pluginManagement>
   </build>
 
+  <repositories>
+    <!-- Bootstrap repository to locate the parent pom when the parent pom has not been build locally. -->
+    <repository>
+        <id>apache-public-repository-group</id>
+        <name>Apache Public Repository Group</name>
+        <url>https://repository.apache.org/content/groups/public/</url>
+        <layout>default</layout>
+        <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>daily</updatePolicy>
+        </snapshots>
+    </repository>
+  </repositories>
+
   <modules>
     <module>kogito-apps-bom</module>
     <module>kogito-apps-build-parent</module>
