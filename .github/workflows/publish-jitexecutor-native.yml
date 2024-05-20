@@ -30,10 +30,12 @@ jobs:
         id: version
         run: |
           if [ ${{ github.event_name }} == "pull_request" ]; then
-            echo "REF=main" >> "$GITHUB_OUTPUT"
+            echo "REPOSITORY=${{github.event.pull_request.head.repo.full_name}}" >> "$GITHUB_OUTPUT"
+            echo "REF=${{github.event.pull_request.head.ref}}" >> "$GITHUB_OUTPUT"
             echo "PROJECT_VERSION=999-SNAPSHOT" >> "$GITHUB_OUTPUT"
           else
             VERSION="${{ github.event.inputs.kogito_runtime_version }}"
+            echo "REPOSITORY=apache/incubator-kie-kogito-apps" >> "$GITHUB_OUTPUT"
             echo "REF=${VERSION//-SNAPSHOT/}" >> "$GITHUB_OUTPUT"
             echo "PROJECT_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
           fi
@@ -46,7 +48,7 @@ jobs:
       - name: "Checkout kie-kogito-apps"
         uses: actions/checkout@v4
         with:
-          repository: apache/incubator-kie-kogito-apps
+          repository: ${{ steps.version.outputs.REPOSITORY }}
           ref: ${{ steps.version.outputs.REF }}
 
       - name: "Set up Maven"
