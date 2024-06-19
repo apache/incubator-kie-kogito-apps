@@ -135,8 +135,8 @@ jobs:
         if: runner.os == 'macOS' && github.event_name != 'pull_request'
         shell: bash
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_USERNAME: ${{ secrets.NEXUS_USER }}
+          MAVEN_PASWORD: ${{ secrets.NEXUS_PW }}
         run: |
           mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-darwin -am -Pjitexecutor-native
 
@@ -150,8 +150,8 @@ jobs:
         if: runner.os == 'Linux' && github.event_name != 'pull_request'
         shell: bash
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_USERNAME: ${{ secrets.NEXUS_USER }}
+          MAVEN_PASWORD: ${{ secrets.NEXUS_PW }}
         run: |
           mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-linux -am -Pjitexecutor-native
 
@@ -165,8 +165,8 @@ jobs:
         if: runner.os == 'Windows' && github.event_name != 'pull_request'
         shell: pwsh
         env:
-          MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
-          MAVEN_PASWORD: ${{ secrets.MAVEN_PASSWORD }}
+          MAVEN_USERNAME: ${{ secrets.NEXUS_USER }}
+          MAVEN_PASWORD: ${{ secrets.NEXUS_PW }}
         run: |
           mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-win32 -am -Pjitexecutor-native
 
