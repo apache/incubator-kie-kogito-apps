@@ -20,9 +20,12 @@ package org.kie.kogito.index.test.quarkus;
 
 import org.kie.kogito.test.resources.TestResource;
 import org.kie.kogito.test.utils.SocketUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testcontainers.Testcontainers;
 
 public class KogitoServiceRandomPortTestResource implements TestResource {
+    private static final Logger LOGGER = LoggerFactory.getLogger(KogitoServiceRandomPortTestResource.class);
 
     public static final String NAME = "kogito-service";
 
@@ -37,13 +40,16 @@ public class KogitoServiceRandomPortTestResource implements TestResource {
 
     @Override
     public void start() {
+        LOGGER.info("KogitoServiceRandomPortTestResource.start: starting Kogito Service Random Port");
         if (httpPort == 0) {
             httpPort = SocketUtils.findAvailablePort();
         }
+        LOGGER.info("KogitoServiceRandomPortTestResource.start: http Port: {}", httpPort);
         Testcontainers.exposeHostPorts(httpPort);
         //the hostname for the container to access the host is "host.testcontainers.internal"
         //https://www.testcontainers.org/features/networking/#exposing-host-ports-to-the-container
         System.setProperty(KOGITO_SERVICE_URL, "http://host.testcontainers.internal:" + httpPort);
+        LOGGER.info("KogitoServiceRandomPortTestResource.start: KOGITO_SERVICE_URL:{}", "http://host.testcontainers.internal:" + httpPort);
     }
 
     @Override
