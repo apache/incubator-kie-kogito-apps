@@ -59,7 +59,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: "17"
-          distribution: "zulu"
+          distribution: "temurin"
           server-id: apache.releases.https
           server-username: ${{ secrets.NEXUS_STAGE_DEPLOYER_USER }}
           server-password: ${{ secrets.NEXUS_STAGE_DEPLOYER_PW }}
