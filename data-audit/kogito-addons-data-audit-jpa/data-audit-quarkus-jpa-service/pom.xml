@@ -25,7 +25,7 @@
     <parent>
         <artifactId>kogito-addons-data-audit-jpa</artifactId>
         <groupId>org.kie</groupId>
-        <version>999-SNAPSHOT</version>
+        <version>10.0.999-SNAPSHOT</version>
     </parent>
 
     <artifactId>data-audit-quarkus-jpa-service</artifactId>
