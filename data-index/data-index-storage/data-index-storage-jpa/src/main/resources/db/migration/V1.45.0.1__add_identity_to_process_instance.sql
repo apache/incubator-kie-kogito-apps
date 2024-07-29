@@ -17,6 +17,6 @@
  * under the License.
  */
 
-ALTER TABLE processes
+ALTER TABLE if exists processes
     ADD (created_by varchar(255),
         updated_by varchar(255));

@@ -17,4 +17,9 @@
  * under the License.
  */
 
-alter table processes alter column message character varying(4000)
+create table if not exists kogito_data_cache (
+    key varchar(255) not null,
+    name varchar(255) not null,
+    json_value varbinary(max),
+    primary key (key, name)
+);

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-create table attachments
+create table if not exists attachments
 (
     id         varchar(255) not null,
     content    varchar(255),
@@ -28,7 +28,7 @@ create table attachments
     CONSTRAINT attachment_pk PRIMARY KEY (id)
 );
 
-create table comments
+create table if not exists comments
 (
     id         varchar(255) not null,
     content    varchar(255),
@@ -38,21 +38,21 @@ create table comments
     CONSTRAINT comment_pk PRIMARY KEY (id)
 );
 
-create table jobs
+create table if not exists jobs
 (
     id                       varchar(255) not null,
     callback_endpoint        varchar(255),
     endpoint                 varchar(255),
-    execution_counter        NUMBER(10),
+    execution_counter        integer,
     expiration_time          timestamp,
     last_update              timestamp,
     node_instance_id         varchar(255),
-    priority                 NUMBER(10),
+    priority                 integer,
     process_id               varchar(255),
     process_instance_id      varchar(255),
-    repeat_interval          NUMBER(19),
-    repeat_limit             NUMBER(10),
-    retries                  NUMBER(10),
+    repeat_interval          bigint,
+    repeat_limit             integer,
+    retries                  integer,
     root_process_id          varchar(255),
     root_process_instance_id varchar(255),
     scheduled_id             varchar(255),
@@ -60,7 +60,7 @@ create table jobs
     CONSTRAINT jobs_pk PRIMARY KEY (id)
 );
 
-create table milestones
+create table if not exists milestones
 (
     id                  varchar(255) not null,
     process_instance_id varchar(255) not null,
@@ -69,7 +69,7 @@ create table milestones
     CONSTRAINT milestones_pk PRIMARY KEY (id, process_instance_id)
 );
 
-create table nodes
+create table if not exists nodes
 (
     id                  varchar(255) not null,
     definition_id       varchar(255),
@@ -82,7 +82,7 @@ create table nodes
     CONSTRAINT nodes_pk PRIMARY KEY (id)
 );
 
-create table processes
+create table if not exists processes
 (
     id                         varchar(255) not null,
     business_key               varchar(255),
@@ -97,37 +97,37 @@ create table processes
     root_process_id            varchar(255),
     root_process_instance_id   varchar(255),
     start_time                 timestamp,
-    state                      NUMBER(10),
-    variables                  blob,
+    state                      integer,
+    variables                  varbinary(max),
     CONSTRAINT processes_pk PRIMARY KEY (id),
     CONSTRAINT processes_variables_json CHECK (variables IS JSON)
 );
 
-create table processes_addons
+create table if not exists processes_addons
 (
     process_id varchar(255) not null,
     addon      varchar(255) not null,
     CONSTRAINT processes_addons_pk PRIMARY KEY (process_id, addon)
 );
 
-create table processes_roles
+create table if not exists processes_roles
 (
     process_id varchar(255) not null,
     role       varchar(255) not null,
     CONSTRAINT processes_roles_pk PRIMARY KEY (process_id, role)
 );
 
-create table tasks
+create table if not exists tasks
 (
     id                       varchar(255) not null,
     actual_owner             varchar(255),
     completed                timestamp,
     description              varchar(255),
     endpoint                 varchar(255),
-    inputs                   blob,
+    inputs                   varbinary(max),
     last_update              timestamp,
     name                     varchar(255),
-    outputs                  blob,
+    outputs                  varbinary(max),
     priority                 varchar(255),
     process_id               varchar(255),
     process_instance_id      varchar(255),
@@ -140,35 +140,35 @@ create table tasks
     CONSTRAINT inputs_json CHECK (inputs IS JSON),
     CONSTRAINT outputs_json CHECK (outputs IS JSON)
 );
-create table tasks_admin_groups
+create table if not exists tasks_admin_groups
 (
     task_id  varchar(255) not null,
     group_id varchar(255) not null,
     CONSTRAINT tasks_admin_groups_pk PRIMARY KEY (task_id, group_id)
 );
 
-create table tasks_admin_users
+create table if not exists tasks_admin_users
 (
     task_id varchar(255) not null,
     user_id varchar(255) not null,
     CONSTRAINT tasks_admin_users_pk PRIMARY KEY (task_id, user_id)
 );
 
-create table tasks_excluded_users
+create table if not exists tasks_excluded_users
 (
     task_id varchar(255) not null,
     user_id varchar(255) not null,
     CONSTRAINT tasks_excluded_users_pk PRIMARY KEY (task_id, user_id)
 );
 
-create table tasks_potential_groups
+create table if not exists tasks_potential_groups
 (
     task_id  varchar(255) not null,
     group_id varchar(255) not null,
     CONSTRAINT tasks_potential_groups_pk PRIMARY KEY (task_id, group_id)
 );
 
-create table tasks_potential_users
+create table if not exists tasks_potential_users
 (
     task_id varchar(255) not null,
     user_id varchar(255) not null,
