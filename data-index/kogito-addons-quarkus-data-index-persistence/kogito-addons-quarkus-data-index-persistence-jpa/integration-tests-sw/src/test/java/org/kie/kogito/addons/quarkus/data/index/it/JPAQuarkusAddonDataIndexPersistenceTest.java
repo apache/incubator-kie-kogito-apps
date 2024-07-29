@@ -24,6 +24,7 @@ import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
 import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
+import org.kie.kogito.index.model.ProcessInstance;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.h2.H2DatabaseTestResource;
@@ -32,7 +33,6 @@ import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 
 import jakarta.inject.Inject;
-import org.kie.kogito.index.model.ProcessInstance;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
