@@ -17,7 +17,7 @@
  * under the License.
  */
 
-create table if not exists definitions_nodes
+create table definitions_nodes
 (
     id              varchar2(255) not null,
     name            varchar2(255),
@@ -28,7 +28,7 @@ create table if not exists definitions_nodes
     primary key (id, process_id, process_version)
 );
 
-create table if not exists definitions_nodes_metadata
+create table definitions_nodes_metadata
 (
     node_id         varchar2(255) not null,
     process_id      varchar2(255) not null,

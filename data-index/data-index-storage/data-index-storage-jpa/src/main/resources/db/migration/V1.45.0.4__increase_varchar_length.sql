@@ -17,4 +17,4 @@
  * under the License.
  */
 
-alter table if exists processes alter column message character varying(4000)
+alter table processes alter column message character varying(4000)
