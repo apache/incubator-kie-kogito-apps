@@ -47,6 +47,7 @@ public class DMNEvaluator {
         Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
         DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
                 .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
+        dmnRuntime.addListener(new JITDMNListener());
         DMNModel dmnModel = dmnRuntime.getModels().get(0);
         return new DMNEvaluator(dmnModel, dmnRuntime);
     }

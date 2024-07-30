@@ -57,6 +57,31 @@ public class JITDMNServiceImplTest {
     }
 
     @Test
+    public void testDecisionTableModelEvaluation() throws IOException {
+        String decisionTableModel = getModelFromIoUtils("valid_models/DMNv1_x/LoanEligibility.dmn");
+        Map<String, Object> client = new HashMap<>();
+        client.put("age", 43);
+        client.put("salary", 1950);
+        client.put("existing payments", 100);
+
+        Map<String, Object> loan = new HashMap<>();
+        loan.put("duration", 15);
+        loan.put("installment", 180);
+        Map<String, Object> context = new HashMap<>();
+
+        context.put("Client", client);
+        context.put("Loan", loan);
+        context.put("SupremeDirector", "No");
+        context.put("Bribe", 10);
+        JITDMNResult dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertEquals("LoanEligibility", dmnResult.getModelName());
+        Assertions.assertEquals("https://github.com/kiegroup/kogito-examples/dmn-quarkus-listener-example", dmnResult.getNamespace());
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals("Yes", dmnResult.getDecisionResultByName("Eligibility").getResult());
+    }
+
+    @Test
     public void testExplainability() throws IOException {
         String allTypesModel = getModelFromIoUtils("valid_models/DMNv1_x/allTypes.dmn");
 
