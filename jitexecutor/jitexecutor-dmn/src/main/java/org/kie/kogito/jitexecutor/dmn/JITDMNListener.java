@@ -18,7 +18,14 @@
  */
 package org.kie.kogito.jitexecutor.dmn;
 
+import org.kie.dmn.api.core.event.AfterEvaluateAllEvent;
+import org.kie.dmn.api.core.event.AfterEvaluateBKMEvent;
+import org.kie.dmn.api.core.event.AfterEvaluateContextEntryEvent;
+import org.kie.dmn.api.core.event.AfterEvaluateDecisionEvent;
+import org.kie.dmn.api.core.event.AfterEvaluateDecisionServiceEvent;
 import org.kie.dmn.api.core.event.AfterEvaluateDecisionTableEvent;
+import org.kie.dmn.api.core.event.AfterInvokeBKMEvent;
+import org.kie.dmn.api.core.event.DMNEvent;
 import org.kie.dmn.api.core.event.DMNRuntimeEventListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +35,36 @@ public class JITDMNListener implements DMNRuntimeEventListener {
     private static final Logger LOGGER = LoggerFactory.getLogger(JITDMNListener.class);
 
     public void afterEvaluateDecisionTable(AfterEvaluateDecisionTableEvent event) {
-        LOGGER.info("After Evaluate Decision Table event {}", event);
+        logEvent(event);
+    }
+
+    public void afterEvaluateDecision(AfterEvaluateDecisionEvent event) {
+        logEvent(event);
+    }
+
+
+    public void afterEvaluateBKM(AfterEvaluateBKMEvent event) {
+        logEvent(event);
+    }
+
+    public void afterEvaluateContextEntry(AfterEvaluateContextEntryEvent event) {
+        logEvent(event);
+    }
+
+    public void afterEvaluateDecisionService(AfterEvaluateDecisionServiceEvent event) {
+        logEvent(event);
+    }
+
+    public void afterInvokeBKM(AfterInvokeBKMEvent event) {
+        logEvent(event);
+    }
+
+    public void afterEvaluateAll(AfterEvaluateAllEvent event) {
+        logEvent(event);
+    }
+
+    private void logEvent(DMNEvent toLog) {
+        LOGGER.info("{} event {}", toLog.getClass().getSimpleName(), toLog);
     }
 
 }

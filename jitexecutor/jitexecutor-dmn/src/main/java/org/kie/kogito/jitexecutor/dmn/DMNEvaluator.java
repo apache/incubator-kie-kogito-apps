@@ -23,12 +23,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
+import org.kie.dmn.api.core.event.DMNRuntimeEventListener;
 import org.kie.dmn.core.compiler.RuntimeTypeCheckOption;
 import org.kie.dmn.core.impl.DMNRuntimeImpl;
 import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
@@ -76,7 +78,14 @@ public class DMNEvaluator {
 
     public DMNResult evaluate(Map<String, Object> context) {
         DMNContext dmnContext = new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
-        return dmnRuntime.evaluateAll(dmnModel, dmnContext);
+        DMNResult toReturn = dmnRuntime.evaluateAll(dmnModel, dmnContext);
+        dmnRuntime.getListeners().forEach(new Consumer<DMNRuntimeEventListener>() {
+            @Override
+            public void accept(DMNRuntimeEventListener dmnRuntimeEventListener) {
+
+            }
+        });
+        return toReturn;
     }
 
     public static DMNEvaluator fromMultiple(MultipleResourcesPayload payload) {

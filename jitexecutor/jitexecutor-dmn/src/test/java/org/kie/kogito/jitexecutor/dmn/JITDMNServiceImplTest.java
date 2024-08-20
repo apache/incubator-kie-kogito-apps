@@ -82,6 +82,18 @@ public class JITDMNServiceImplTest {
     }
 
     @Test
+    public void testBoxedConditional() throws IOException {
+        String decisionTableModel = getModelFromIoUtils("valid_models/DMNv1_x/BoxedConditional.dmn");
+        Map<String, Object> context = new HashMap<>();
+        JITDMNResult dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertEquals("Drawing 1", dmnResult.getModelName());
+        Assertions.assertEquals("http://www.trisotech.com/definitions/_3404349f-5046-4ad3-ad15-7f1e27291ab5", dmnResult.getNamespace());
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals("if evaluation was true", dmnResult.getDecisionResultByName("If Then Else").getResult());
+    }
+
+    @Test
     public void testExplainability() throws IOException {
         String allTypesModel = getModelFromIoUtils("valid_models/DMNv1_x/allTypes.dmn");
 
