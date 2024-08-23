@@ -19,7 +19,7 @@ const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = merge(common, {
@@ -36,7 +36,7 @@ module.exports = merge(common, {
     new webpack.EnvironmentPlugin({
       KOGITO_ENV_MODE: 'PROD'
     }),
-    new CopyPlugin({ patterns: [{ from: "./resources", to: "./resources" }]}),
+    new CopyPlugin({ patterns: [{ from: './resources', to: './resources' }] })
   ],
   module: {
     rules: [
@@ -45,5 +45,10 @@ module.exports = merge(common, {
         use: [require.resolve('style-loader'), require.resolve('css-loader')]
       }
     ]
+  },
+  resolve: {
+    fallback: {
+      crypto: false // Disable polyfilling the 'crypto' module
+    }
   }
 });
