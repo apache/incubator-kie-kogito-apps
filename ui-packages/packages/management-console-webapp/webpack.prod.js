@@ -3,7 +3,7 @@ const { merge } = require('webpack-merge');
 const common = require('./webpack.common.js');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'production',
@@ -24,10 +24,17 @@ module.exports = merge(common, {
     rules: [
       {
         test: /\.(css|sass|scss)$/,
-        use: [ require.resolve('style-loader'),
-        require.resolve('css-loader'),
-        require.resolve('sass-loader')]
+        use: [
+          require.resolve('style-loader'),
+          require.resolve('css-loader'),
+          require.resolve('sass-loader')
+        ]
       }
     ]
+  },
+  resolve: {
+    fallback: {
+      crypto: false // Disable polyfilling the 'crypto' module
+    }
   }
 });
