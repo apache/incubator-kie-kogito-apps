@@ -88,14 +88,12 @@ pipeline {
             }
             steps {
                 script {
-                    dir(getRepoName()) {
-                        configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
-                            maven.mvnVersionsUpdateParentAndChildModules(
-                                getMavenCommand().withSettingsXmlFile(MAVEN_SETTINGS_FILE),
-                                getProjectVersion(),
-                                !isRelease()
-                            )
-                        }
+                    configFileProvider([configFile(fileId: env.MAVEN_SETTINGS_CONFIG_FILE_ID, variable: 'MAVEN_SETTINGS_FILE')]){
+                        maven.mvnVersionsUpdateParentAndChildModules(
+                            getMavenCommand().withSettingsXmlFile(MAVEN_SETTINGS_FILE),
+                            getProjectVersion(),
+                            !isRelease()
+                        )
                     }
                 }
             }
