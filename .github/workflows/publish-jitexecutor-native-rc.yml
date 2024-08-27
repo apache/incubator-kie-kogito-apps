@@ -10,6 +10,12 @@ on:
       release_candidate_version:
         description: "Release candidate version"
         required: true
+      drools_repository:
+        description: "Drools repository"
+        required: true
+      kogito_runtimes_repository:
+        description: "Kogito runtimes repository"
+        required: true
 
 jobs:
   build_jitexecutor_native:
@@ -54,15 +60,195 @@ jobs:
         with:
           gpg_private_key: ${{ secrets.GPG_KEY }}
 
+      - name: Setup maven settings (Linux and MacOS)
+        if: (runner.os == 'Linux' || runner.os == 'macOS')
+        env: 
+          WORKDIR_PATH: ${{ github.workspace }}
+          DROOLS_REPO: ${{ github.event.inputs.drools_repository }}
+          KOGITO_RUNTIMES_REPO: ${{ github.event.inputs.kogito_runtimes_repository }}
+        run: |
+          mkdir -p ${WORKDIR_PATH}/.m2
+          echo "<settings>
+           <servers>
+             <server>
+               <id>apache.releases.https</id>
+               <username>${{ secrets.NEXUS_STAGE_DEPLOYER_USER }}</username>
+               <password>${{ secrets.NEXUS_STAGE_DEPLOYER_PW }}</password>
+             </server>
+             <server>
+               <id>apache.snapshots.https</id>
+               <username>${{ secrets.NEXUS_USER }}</username>
+               <password>${{ secrets.NEXUS_PW }}</password>
+             </server>
+           </servers>
+           <profiles>
+            <profile>
+              <id>additional_repos</id>
+              <repositories>
+                <repository>
+                  <id>apache-kie-drools-staging-repository</id>
+                  <name>Apache KIE Drools Staging Repository</name>
+                  <url>${DROOLS_REPO}</url>
+                  <layout>default</layout>
+                  <releases>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </releases>
+                  <snapshots>
+                    <enabled>false</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </snapshots>
+                </repository>
+                <repository>
+                  <id>apache-kie-kogito-runtimes-staging-repository</id>
+                  <name>Apache KIE Kogito Runtimes Staging Repository</name>
+                  <url>${KOGITO_RUNTIMES_REPO}</url>
+                  <layout>default</layout>
+                  <releases>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </releases>
+                  <snapshots>
+                    <enabled>false</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </snapshots>
+                </repository>
+              </repositories>
+              <pluginRepositories>
+                <pluginRepository>
+                  <id>apache-kie-kogito-runtimes-staging-repository</id>
+                  <name>Apache KIE Kogito Runtimes Staging Repository</name>
+                  <url>${KOGITO_RUNTIMES_REPO}</url>
+                  <releases>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </releases>
+                  <snapshots>
+                    <enabled>false</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                  <id>apache-kie-drools-staging-repository</id>
+                  <name>Apache KIE Drools Staging Repository</name>
+                  <url>${DROOLS_REPO}</url>
+                  <releases>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </releases>
+                  <snapshots>
+                    <enabled>false</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </snapshots>
+                </pluginRepository>
+              </pluginRepositories>
+            </profile>
+          </profiles>
+          <activeProfiles>
+            <activeProfile>additional_repos</activeProfile>
+          </activeProfiles>
+          </settings>" > ${WORKDIR_PATH}/.m2/settings.xml
+
+      - name: Setup maven settings (Windows)
+        if: runner.os == 'Windows'
+        env: 
+          WORKDIR_PATH: ${{ github.workspace }}
+          DROOLS_REPO: ${{ github.event.inputs.drools_repository }}
+          KOGITO_RUNTIMES_REPO: ${{ github.event.inputs.kogito_runtimes_repository }}
+        shell: pwsh
+        run: |
+          New-Item -Name ".m2" -Path "$env:WORKDIR_PATH" -ItemType Directory
+          $contentToAdd = @"
+          <settings>
+           <servers>
+             <server>
+               <id>apache.releases.https</id>
+               <username>${{ secrets.NEXUS_STAGE_DEPLOYER_USER }}</username>
+               <password>${{ secrets.NEXUS_STAGE_DEPLOYER_PW }}</password>
+             </server>
+             <server>
+               <id>apache.snapshots.https</id>
+               <username>${{ secrets.NEXUS_USER }}</username>
+               <password>${{ secrets.NEXUS_PW }}</password>
+             </server>
+           </servers>
+           <profiles>
+            <profile>
+              <id>additional_repos</id>
+              <repositories>
+                <repository>
+                  <id>apache-kie-kogito-runtimes-staging-repository</id>
+                  <name>Apache KIE Kogito Runtimes Staging Repository</name>
+                  <url>$env:KOGITO_RUNTIMES_REPO</url>
+                  <layout>default</layout>
+                  <releases>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </releases>
+                  <snapshots>
+                    <enabled>false</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </snapshots>
+                </repository>
+                <repository>
+                  <id>apache-kie-drools-staging-repository</id>
+                  <name>Apache KIE Drools Staging Repository</name>
+                  <url>$env:DROOLS_REPO</url>
+                  <layout>default</layout>
+                  <releases>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </releases>
+                  <snapshots>
+                    <enabled>false</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </snapshots>
+                </repository>
+              </repositories>
+              <pluginRepositories>
+                <pluginRepository>
+                  <id>apache-kie-kogito-runtimes-staging-repository</id>
+                  <name>Apache KIE Kogito Runtimes Staging Repository</name>
+                  <url>$env:KOGITO_RUNTIMES_REPO</url>
+                  <releases>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </releases>
+                  <snapshots>
+                    <enabled>false</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </snapshots>
+                </pluginRepository>
+                <pluginRepository>
+                  <id>apache-kie-drools-staging-repository</id>
+                  <name>Apache KIE Drools Staging Repository</name>
+                  <url>$env:DROOLS_REPO</url>
+                  <releases>
+                    <enabled>true</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </releases>
+                  <snapshots>
+                    <enabled>false</enabled>
+                    <updatePolicy>never</updatePolicy>
+                  </snapshots>
+                </pluginRepository>
+              </pluginRepositories>
+            </profile>
+          </profiles>
+          <activeProfiles>
+            <activeProfile>additional_repos</activeProfile>
+          </activeProfiles>
+          </settings>
+          "@
+          Add-Content "$env:WORKDIR_PATH\.m2\settings.xml" $contentToAdd
+
       - name: "Set up JDK 17"
         uses: actions/setup-java@v4
         with:
           java-version: "17"
           distribution: "temurin"
-          server-id: apache.releases.https
-          server-username: ${{ secrets.NEXUS_STAGE_DEPLOYER_USER }}
-          server-password: ${{ secrets.NEXUS_STAGE_DEPLOYER_PW }}
-
+          overwrite-settings: false
+      
       - name: "Setup Linux"
         if: runner.os == 'Linux'
         run: |
@@ -112,16 +298,20 @@ jobs:
       - name: "Update versions (Linux and macOS)"
         if: (runner.os == 'Linux' || runner.os == 'macOS') && github.event_name != 'pull_request'
         shell: bash
+        env:
+          SETTINGS_FILE_PATH: ${{ github.workspace }}/.m2/settings.xml
         run: |
-          mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
-          mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
+          mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false -s ${SETTINGS_FILE_PATH}
+          mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false -s ${SETTINGS_FILE_PATH}
 
       - name: "Update versions Windows"
         if: runner.os == 'Windows' && github.event_name != 'pull_request'
         shell: pwsh
+        env:
+          SETTINGS_FILE_PATH: ${{ github.workspace }}\.m2\settings.xml
         run: |
-          mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false
-          mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false
+          mvn -B -fae -ntp -N -e versions:update-parent -DparentVersion="[${{ steps.version.outputs.PROJECT_VERSION }}]" -DallowSnapshots=true -DgenerateBackupPoms=false -s $env:SETTINGS_FILE_PATH
+          mvn -B -fae -ntp -N -e versions:update-child-modules -DallowSnapshots=true -DgenerateBackupPoms=false -s $env:SETTINGS_FILE_PATH
 
       - name: "Build macOS"
         if: runner.os == 'macOS' && github.event_name == 'pull_request'
@@ -132,8 +322,10 @@ jobs:
       - name: "Build and publish macOS"
         if: runner.os == 'macOS' && github.event_name != 'pull_request'
         shell: bash
+        env:
+          SETTINGS_FILE_PATH: ${{ github.workspace }}/.m2/settings.xml
         run: |
-          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-darwin -am -Pjitexecutor-native -Papache-release
+          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-darwin -am -Pjitexecutor-native -Papache-release -s ${SETTINGS_FILE_PATH}
 
       - name: "Build Linux"
         if: runner.os == 'Linux' && github.event_name == 'pull_request'
@@ -144,8 +336,10 @@ jobs:
       - name: "Build and Publish Linux"
         if: runner.os == 'Linux' && github.event_name != 'pull_request'
         shell: bash
+        env:
+          SETTINGS_FILE_PATH: ${{ github.workspace }}/.m2/settings.xml
         run: |
-          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-linux -am -Pjitexecutor-native -Papache-release
+          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-linux -am -Pjitexecutor-native -Papache-release -s ${SETTINGS_FILE_PATH}
 
       - name: "Build Windows"
         if: runner.os == 'Windows' && github.event_name == 'pull_request'
@@ -156,8 +350,10 @@ jobs:
       - name: "Build and Publish Windows"
         if: runner.os == 'Windows' && github.event_name != 'pull_request'
         shell: pwsh
+        env:
+          SETTINGS_FILE_PATH: ${{ github.workspace }}\.m2\settings.xml
         run: |
-          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-win32 -am -Pjitexecutor-native -Papache-release
+          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-win32 -am -Pjitexecutor-native -Papache-release -s $env:SETTINGS_FILE_PATH
 
       - name: "Upload JIT Executor binary"
         uses: actions/upload-artifact@v4
