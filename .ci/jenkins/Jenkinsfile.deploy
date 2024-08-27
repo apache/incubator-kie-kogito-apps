@@ -183,22 +183,6 @@ pipeline {
                 }
             }
         }
-
-        stage('Trigger JIT Executor Native - Release Candidate - GH workflow') {
-            steps {
-                script {
-                    dir(getRepoName()) {
-                        withCredentials([usernamePassword(credentialsId: "${getGitAuthorPushCredsId()}", usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
-                            sh """
-                            git config user.email ${GITHUB_USER}@jenkins.kie.apache.org
-                            git config user.name ${GITHUB_USER}
-                            gh workflow run "publish-jitexecutor-native-rc.yml" --ref "${getBuildBranch()}" -f release_candidate_version="${getProjectVersion()}" --repo="https://github.com/${getGitAuthor()}/${getRepoName()}"
-                            """
-                        }
-                    }
-                }
-            }
-        }
     }
     post {
         always {
