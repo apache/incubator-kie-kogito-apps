@@ -28,10 +28,9 @@ jobs:
             echo "REF=${{github.event.pull_request.head.ref}}" >> "$GITHUB_OUTPUT"
             echo "PROJECT_VERSION=999-SNAPSHOT" >> "$GITHUB_OUTPUT"
           else
-            VERSION="${{ github.event.inputs.release_candidate_version }}"
             echo "REPOSITORY=apache/incubator-kie-kogito-apps" >> "$GITHUB_OUTPUT"
-            echo "REF=${VERSION//-SNAPSHOT/}" >> "$GITHUB_OUTPUT"
-            echo "PROJECT_VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+            echo "REF=${{ github.ref_name }}" >> "$GITHUB_OUTPUT"
+            echo "PROJECT_VERSION=${{ github.event.inputs.release_candidate_version }}" >> "$GITHUB_OUTPUT"
           fi
         shell: bash
 
@@ -63,8 +62,6 @@ jobs:
           server-id: apache.releases.https
           server-username: ${{ secrets.NEXUS_STAGE_DEPLOYER_USER }}
           server-password: ${{ secrets.NEXUS_STAGE_DEPLOYER_PW }}
-          gpg-private-key: ${{ secrets.GPG_KEY }}
-          gpg-passphrase: ""
 
       - name: "Setup Linux"
         if: runner.os == 'Linux'
@@ -136,7 +133,7 @@ jobs:
         if: runner.os == 'macOS' && github.event_name != 'pull_request'
         shell: bash
         run: |
-          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-darwin -am -Pjitexecutor-native -Prelease
+          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-darwin -am -Pjitexecutor-native -Papache-release
 
       - name: "Build Linux"
         if: runner.os == 'Linux' && github.event_name == 'pull_request'
@@ -148,7 +145,7 @@ jobs:
         if: runner.os == 'Linux' && github.event_name != 'pull_request'
         shell: bash
         run: |
-          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-linux -am -Pjitexecutor-native -Prelease
+          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-linux -am -Pjitexecutor-native -Papache-release
 
       - name: "Build Windows"
         if: runner.os == 'Windows' && github.event_name == 'pull_request'
@@ -160,7 +157,7 @@ jobs:
         if: runner.os == 'Windows' && github.event_name != 'pull_request'
         shell: pwsh
         run: |
-          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-win32 -am -Pjitexecutor-native -Prelease
+          mvn clean deploy -B -ntp -DdeployAtEnd -DskipTests -pl jitexecutor-native/jitexecutor-native-win32 -am -Pjitexecutor-native -Papache-release
 
       - name: "Upload JIT Executor binary"
         uses: actions/upload-artifact@v4
