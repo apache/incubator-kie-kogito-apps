@@ -275,6 +275,10 @@ String getGitAuthorCredsId() {
     return env.GIT_AUTHOR_CREDS_ID
 }
 
+String getGitAuthorPushCredsId() {
+    return env.GIT_AUTHOR_PUSH_CREDS_ID
+}
+
 String getBuildBranch() {
     return params.BUILD_BRANCH_NAME
 }
