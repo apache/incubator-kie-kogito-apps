@@ -112,7 +112,10 @@ pipeline {
                         def mavenCommand = getMavenCommand().withProperty('maven.test.failure.ignore', true)
                            .withOptions(env.BUILD_MVN_OPTS_CURRENT ? [ env.BUILD_MVN_OPTS_CURRENT ] : [])
                            .withOptions(env.KOGITO_APPS_BUILD_MVN_OPTS ? [ env.KOGITO_APPS_BUILD_MVN_OPTS ] : [])
-                           .skipTests(skipTests)
+
+                        if (params.SKIP_TESTS) {
+                            mavenCommand.skipTests()
+                        }
 
                         if (isRelease()) {
                             releaseUtils.gpgImportKeyFromStringWithoutPassword(getReleaseGpgSignKeyCredsId())
@@ -254,6 +257,10 @@ String getGitAuthor() {
 
 String getGitAuthorCredsId() {
     return env.GIT_AUTHOR_CREDS_ID
+}
+
+String getGitAuthorPushCredsId() {
+    return env.GIT_AUTHOR_PUSH_CREDS_ID
 }
 
 String getBuildBranch() {
