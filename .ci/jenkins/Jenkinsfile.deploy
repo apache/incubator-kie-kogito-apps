@@ -112,7 +112,10 @@ pipeline {
                         def mavenCommand = getMavenCommand().withProperty('maven.test.failure.ignore', true)
                            .withOptions(env.BUILD_MVN_OPTS_CURRENT ? [ env.BUILD_MVN_OPTS_CURRENT ] : [])
                            .withOptions(env.KOGITO_APPS_BUILD_MVN_OPTS ? [ env.KOGITO_APPS_BUILD_MVN_OPTS ] : [])
-                           .skipTests(skipTests)
+
+                        if (params.SKIP_TESTS) {
+                            mavenCommand.skipTests()
+                        }
 
                         if (isRelease()) {
                             releaseUtils.gpgImportKeyFromStringWithoutPassword(getReleaseGpgSignKeyCredsId())
@@ -176,22 +179,6 @@ pipeline {
                         }
                         githubscm.tagRepository(getGitTagName())
                         githubscm.pushRemoteTag('origin', getGitTagName(), getGitAuthorPushCredsId())
-                    }
-                }
-            }
-        }
-
-        stage('Trigger JIT Executor Native - Release Candidate - GH workflow') {
-            steps {
-                script {
-                    dir(getRepoName()) {
-                        withCredentials([usernamePassword(credentialsId: "${getGitAuthorPushCredsId()}", usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
-                            sh """
-                            git config user.email ${GITHUB_USER}@jenkins.kie.apache.org
-                            git config user.name ${GITHUB_USER}
-                            gh workflow run "publish-jitexecutor-native-rc.yml" --ref "${getBuildBranch()}" -f release_candidate_version="${getProjectVersion()}" --repo="https://github.com/${getGitAuthor()}/${getRepoName()}"
-                            """
-                        }
                     }
                 }
             }
@@ -270,6 +257,10 @@ String getGitAuthor() {
 
 String getGitAuthorCredsId() {
     return env.GIT_AUTHOR_CREDS_ID
+}
+
+String getGitAuthorPushCredsId() {
+    return env.GIT_AUTHOR_PUSH_CREDS_ID
 }
 
 String getBuildBranch() {
