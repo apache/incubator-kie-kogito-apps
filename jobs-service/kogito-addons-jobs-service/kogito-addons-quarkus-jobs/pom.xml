@@ -25,7 +25,7 @@
     <parent>
         <artifactId>kogito-addons-jobs-service</artifactId>
         <groupId>org.kie</groupId>
-        <version>10.0.999-SNAPSHOT</version>
+        <version>10.0.0</version>
     </parent>
 
     <artifactId>kogito-addons-quarkus-jobs</artifactId>
