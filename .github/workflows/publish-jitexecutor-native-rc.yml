@@ -56,7 +56,7 @@ jobs:
           maven-version: 3.9.6
 
       - name: Import GPG key
-        if: ${{ github.event_name }} != "pull_request"
+        if: github.event_name != 'pull_request'
         uses: crazy-max/ghaction-import-gpg@111c56156bcc6918c056dbef52164cfa583dc549
         with:
           gpg_private_key: ${{ secrets.GPG_KEY }}
