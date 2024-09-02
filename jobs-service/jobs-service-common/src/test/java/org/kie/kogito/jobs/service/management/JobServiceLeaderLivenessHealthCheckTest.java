@@ -64,4 +64,14 @@ class JobServiceLeaderLivenessHealthCheckTest {
                 .isNotNull()
                 .isEqualTo(HealthCheckResponse.Status.DOWN);
     }
+    
+    @Test
+    void statusChanged() {
+        healthCheck.onMessagingStatusChange(new MessagingChangeEvent(true));
+        doReturn(START_TIME + 1000 * 10).when(healthCheck).getCurrentTimeMillis();
+        HealthCheckResponse response = healthCheck.call();
+        assertThat(response.getStatus())
+                .isNotNull()
+                .isEqualTo(HealthCheckResponse.Status.UP);
+    }
 }
