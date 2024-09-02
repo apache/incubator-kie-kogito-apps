@@ -43,6 +43,7 @@ public class CallbackResourceTest {
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "postCallbackTest")
     public CompletionStage<String> post(@QueryParam("limit") String limit) {
+        LOGGER.debug("IGNORE THIS CHANGE");
         LOGGER.debug("post received with 'limit' param = {}", limit);
         return CompletableFuture.completedFuture("Post Success");
     }
