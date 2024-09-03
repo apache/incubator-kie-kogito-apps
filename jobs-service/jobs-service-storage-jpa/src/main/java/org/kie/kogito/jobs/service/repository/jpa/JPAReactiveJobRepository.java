@@ -22,12 +22,10 @@ package org.kie.kogito.jobs.service.repository.jpa;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.time.temporal.TemporalUnit;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
