@@ -64,7 +64,7 @@ class JobServiceLeaderLivenessHealthCheckTest {
                 .isNotNull()
                 .isEqualTo(HealthCheckResponse.Status.DOWN);
     }
-    
+
     @Test
     void statusChanged() {
         healthCheck.onMessagingStatusChange(new MessagingChangeEvent(true));
