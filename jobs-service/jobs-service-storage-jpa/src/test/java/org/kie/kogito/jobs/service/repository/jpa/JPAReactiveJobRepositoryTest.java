@@ -16,22 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.jobs.service.repository;
+package org.kie.kogito.jobs.service.repository.jpa;
 
-import java.util.function.Function;
+import org.junit.jupiter.api.BeforeEach;
+import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.impl.BaseJobRepositoryTest;
 
-import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
-import io.smallrye.mutiny.Uni;
+import jakarta.inject.Inject;
 
-public interface JobServiceManagementRepository {
+@QuarkusTest
+@QuarkusTestResource(H2DatabaseTestResource.class)
+public class JPAReactiveJobRepositoryTest extends BaseJobRepositoryTest {
 
-    Uni<JobServiceManagementInfo> getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate);
+    @Inject
+    JPAReactiveJobRepository tested;
 
-    Uni<JobServiceManagementInfo> set(JobServiceManagementInfo info);
+    @BeforeEach
+    public void setUp() throws Exception {
 
-    Uni<Boolean> release(JobServiceManagementInfo info);
+        super.setUp();
+    }
 
-    Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info);
-
+    @Override
+    public ReactiveJobRepository tested() {
+        return tested;
+    }
 }

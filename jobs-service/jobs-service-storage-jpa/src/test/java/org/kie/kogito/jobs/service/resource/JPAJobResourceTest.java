@@ -16,22 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.jobs.service.repository;
+package org.kie.kogito.jobs.service.resource;
 
-import java.util.function.Function;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
+import io.quarkus.test.junit.QuarkusTest;
 
-import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
-
-import io.smallrye.mutiny.Uni;
-
-public interface JobServiceManagementRepository {
-
-    Uni<JobServiceManagementInfo> getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate);
-
-    Uni<JobServiceManagementInfo> set(JobServiceManagementInfo info);
-
-    Uni<Boolean> release(JobServiceManagementInfo info);
-
-    Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info);
+@QuarkusTest
+@QuarkusTestResource(H2DatabaseTestResource.class)
+public class JPAJobResourceTest extends BaseJobResourceTest {
 
 }

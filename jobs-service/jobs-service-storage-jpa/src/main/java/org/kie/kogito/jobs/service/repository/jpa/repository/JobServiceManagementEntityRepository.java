@@ -16,22 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.jobs.service.repository;
 
-import java.util.function.Function;
+package org.kie.kogito.jobs.service.repository.jpa.repository;
 
-import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
+import org.kie.kogito.jobs.service.repository.jpa.model.JobServiceManagementEntity;
 
-import io.smallrye.mutiny.Uni;
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
-public interface JobServiceManagementRepository {
+import jakarta.enterprise.context.ApplicationScoped;
 
-    Uni<JobServiceManagementInfo> getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate);
-
-    Uni<JobServiceManagementInfo> set(JobServiceManagementInfo info);
-
-    Uni<Boolean> release(JobServiceManagementInfo info);
-
-    Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info);
-
+@ApplicationScoped
+public class JobServiceManagementEntityRepository implements PanacheRepositoryBase<JobServiceManagementEntity, String> {
 }
