@@ -46,8 +46,8 @@
       <artifactId>data-index-storage-postgresql</artifactId>
     </dependency>
     <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-flyway</artifactId>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-addons-quarkus-flyway</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
