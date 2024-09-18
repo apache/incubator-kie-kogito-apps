@@ -45,7 +45,7 @@ import jakarta.enterprise.event.Event;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class GroupingReactiveMessagingEventConsumerTest {
+class BlockingMessagingEventConsumerTest {
 
     @Mock
     DataIndexStorageService dataIndexStorageService;
@@ -57,7 +57,7 @@ class GroupingReactiveMessagingEventConsumerTest {
     Event<DataEvent<?>> eventPublisher;
 
     @InjectMocks
-    GroupingReactiveMessagingEventConsumer consumer;
+    BlockingMessagingEventConsumer consumer;
 
     @BeforeEach
     void setUp() {
