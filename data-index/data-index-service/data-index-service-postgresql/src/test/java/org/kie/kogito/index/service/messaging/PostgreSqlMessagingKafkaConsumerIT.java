@@ -27,4 +27,8 @@ import io.quarkus.test.junit.TestProfile;
 @TestProfile(KafkaMessageTestProfile.class)
 class PostgreSqlMessagingKafkaConsumerIT extends AbstractMessagingKafkaConsumerIT {
 
+    @Override
+    protected boolean shouldRunCollectionTests() {
+        return false;
+    }
 }

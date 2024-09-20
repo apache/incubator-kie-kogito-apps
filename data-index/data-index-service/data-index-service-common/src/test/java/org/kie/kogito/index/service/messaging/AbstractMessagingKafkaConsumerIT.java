@@ -67,6 +67,18 @@ public abstract class AbstractMessagingKafkaConsumerIT extends AbstractMessaging
         send("job_event.json", KOGITO_JOBS_EVENTS);
     }
 
+    @Override
+    protected void sendProcessInstanceEventCollection() throws Exception {
+    }
+
+    @Override
+    protected void sendUserTaskInstanceEventCollection() throws Exception {
+    }
+
+    @Override
+    protected void sendProcessDefinitionEventCollection() throws Exception {
+    }
+
     private void send(String file, String topic) throws Exception {
         String json = readFileContent(file);
         kafkaClient.produce(json, topic);
