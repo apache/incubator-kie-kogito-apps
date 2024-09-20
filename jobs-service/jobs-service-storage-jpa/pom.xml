@@ -142,6 +142,9 @@
                             <resources>
                                 <resource>
                                     <directory>${path.to.migration.scripts.from}</directory>
+                                    <includes>
+                                        <include>*.sql</include>
+                                    </includes>
                                 </resource>
                             </resources>
                         </configuration>
