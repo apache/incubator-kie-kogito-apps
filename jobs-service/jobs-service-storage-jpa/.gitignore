@@ -1,1 +1,1 @@
-/src/main/resources/db/jobs-service/postgresql/*
+/src/main/resources/kie-flyway/db/jobs-service/postgresql/*

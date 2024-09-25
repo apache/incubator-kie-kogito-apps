@@ -38,7 +38,7 @@
     <fileSets>
         <!-- Persistence Commons -->
         <fileSet>
-            <directory>${project.root.dir}/persistence-commons/persistence-commons-postgresql/src/main/resources/db/persistence-commons/postgresql</directory>
+            <directory>${project.root.dir}/persistence-commons/persistence-commons-postgresql/src/main/resources/kie-flyway/db/persistence-commons/postgresql</directory>
             <outputDirectory>postgresql/persistence-commons</outputDirectory>
             <includes>
                 <include>*.sql</include>
@@ -47,7 +47,7 @@
 
         <!-- Data Index -->
         <fileSet>
-            <directory>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources/db/data-index/postgresql</directory>
+            <directory>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources/kie-flyway/db/data-index/postgresql</directory>
             <outputDirectory>postgresql/data-index</outputDirectory>
             <includes>
                 <include>*.sql</include>
@@ -56,7 +56,7 @@
 
         <!-- Data Audit -->
         <fileSet>
-            <directory>${project.root.dir}/data-audit/kogito-addons-data-audit-jpa/kogito-addons-data-audit-jpa-common/src/main/resources/db/data-audit/postgresql</directory>
+            <directory>${project.root.dir}/data-audit/kogito-addons-data-audit-jpa/kogito-addons-data-audit-jpa-common/src/main/resources/kie-flyway/db/data-audit/postgresql</directory>
             <outputDirectory>postgresql/data-audit</outputDirectory>
             <includes>
                 <include>*.sql</include>
@@ -65,7 +65,7 @@
 
         <!-- Job Service -->
         <fileSet>
-            <directory>${project.root.dir}/jobs-service/jobs-service-postgresql-common/src/main/resources/db/jobs-service/postgresql</directory>
+            <directory>${project.root.dir}/jobs-service/jobs-service-postgresql-common/src/main/resources/kie-flyway/db/jobs-service/postgresql</directory>
             <outputDirectory>postgresql/jobs-service</outputDirectory>
             <includes>
                 <include>*.sql</include>
