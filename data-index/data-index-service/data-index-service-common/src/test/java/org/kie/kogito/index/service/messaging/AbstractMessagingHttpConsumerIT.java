@@ -18,11 +18,14 @@
  */
 package org.kie.kogito.index.service.messaging;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 
+import org.kie.kogito.event.process.MultipleProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
+import org.kie.kogito.event.usertask.MultipleUserTaskInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.json.JsonUtils;
@@ -76,7 +79,7 @@ public abstract class AbstractMessagingHttpConsumerIT extends AbstractMessagingC
         Collection<ProcessInstanceDataEvent<?>> events = List.of(
                 getProcessCloudEvent("travels", "processId-UUID1", ProcessInstanceState.ACTIVE, null, null, null, "user1"),
                 getProcessCloudEvent("travels", "processId-UUID2", ProcessInstanceState.ACTIVE, null, null, null, "user2"));
-        connector.source(KOGITO_PROCESSINSTANCES_EVENTS).send(events);
+        connector.source(KOGITO_PROCESSINSTANCES_EVENTS).send(new MultipleProcessInstanceDataEvent(URI.create("test"), events));
     }
 
     @Override
@@ -84,15 +87,13 @@ public abstract class AbstractMessagingHttpConsumerIT extends AbstractMessagingC
         Collection<UserTaskInstanceDataEvent<?>> events = List.of(
                 getUserTaskCloudEvent("taskId-UUID1", "travels", "processId-UUID1", null, null, "IN_PROGRESS"),
                 getUserTaskCloudEvent("taskId-UUID2", "travels", "processId-UUID1", null, null, "COMPLETED"));
-        connector.source(KOGITO_USERTASKINSTANCES_EVENTS).send(events);
+        connector.source(KOGITO_USERTASKINSTANCES_EVENTS).send(new MultipleUserTaskInstanceDataEvent(URI.create("test"), events));
     }
 
     @Override
     protected void sendProcessDefinitionEventCollection() throws Exception {
-        Collection<ProcessDefinitionDataEvent> events = List.of(
-                JsonUtils.getObjectMapper().readValue(readFileContent("process_definition_event.json"), ProcessDefinitionDataEvent.class),
-                JsonUtils.getObjectMapper().readValue(readFileContent("process_definition_11_event.json"), ProcessDefinitionDataEvent.class));
-        connector.source(KOGITO_PROCESS_DEFINITIONS_EVENTS).send(events);
+        connector.source(KOGITO_PROCESS_DEFINITIONS_EVENTS).send(JsonUtils.getObjectMapper().readValue(readFileContent("process_definition_event.json"), ProcessDefinitionDataEvent.class));
+        connector.source(KOGITO_PROCESS_DEFINITIONS_EVENTS).send(JsonUtils.getObjectMapper().readValue(readFileContent("process_definition_11_event.json"), ProcessDefinitionDataEvent.class));
     }
 
 }
