@@ -35,7 +35,9 @@ public class DataIndexPostgreSqlContainer extends AbstractDataIndexContainer {
     }
 
     public void migrateDB() {
-        addEnv("KIE_FLYWAY_ENABLED", "true");
+        addEnv("QUARKUS_FLYWAY_MIGRATE_AT_START", "true");
+        addEnv("QUARKUS_FLYWAY_BASELINE_ON_MIGRATE", "true");
+        addEnv("QUARKUS_FLYWAY_TABLE", "data-index-flyway");
     }
 
     @Override
