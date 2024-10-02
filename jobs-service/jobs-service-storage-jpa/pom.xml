@@ -35,9 +35,10 @@
 
     <properties>
         <path.to.postgresql.storage>../jobs-service-postgresql-common</path.to.postgresql.storage>
-        <path.to.script.folder>src/main/resources/db/</path.to.script.folder>
-        <path.to.migration.scripts.from>${path.to.postgresql.storage}/${path.to.script.folder}/jobs-service/postgresql</path.to.migration.scripts.from>
-        <path.to.migration.scripts.to>${path.to.script.folder}/jobs-service/postgresql</path.to.migration.scripts.to>
+        <path.to.flyway.location>kie-flyway/db/jobs-service/postgresql</path.to.flyway.location>
+        <path.to.script.folder>src/main/resources/${path.to.flyway.location}</path.to.script.folder>
+        <path.to.migration.scripts.from>${path.to.postgresql.storage}/${path.to.script.folder}</path.to.migration.scripts.from>
+        <path.to.migration.scripts.to>target/classes/${path.to.flyway.location}</path.to.migration.scripts.to>
         <java.module.name>org.kie.kogito.job.service.repository.jpa</java.module.name>
     </properties>
 
