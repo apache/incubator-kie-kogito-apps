@@ -33,7 +33,6 @@ import jakarta.inject.Inject;
 import static io.restassured.RestAssured.given;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 @Timeout(10000)
 public abstract class AbstractMessagingConsumerIT {
@@ -124,7 +123,6 @@ public abstract class AbstractMessagingConsumerIT {
 
     @Test
     void testProcessInstanceEventCollection() throws Exception {
-        assumeTrue(shouldRunCollectionTests());
         sendProcessInstanceEventCollection();
 
         String processInstanceId1 = "processId-UUID1";
@@ -146,7 +144,6 @@ public abstract class AbstractMessagingConsumerIT {
 
     @Test
     void testUserTaskInstanceEventCollection() throws Exception {
-        assumeTrue(shouldRunCollectionTests());
         sendUserTaskInstanceEventCollection();
 
         String taskId1 = "taskId-UUID1";
@@ -167,7 +164,6 @@ public abstract class AbstractMessagingConsumerIT {
 
     @Test
     void testProcessDefinitionEventCollection() throws Exception {
-        assumeTrue(shouldRunCollectionTests());
         sendProcessDefinitionEventCollection();
 
         String definitionId = "jsongreet";
@@ -185,10 +181,13 @@ public abstract class AbstractMessagingConsumerIT {
                         .body("data.ProcessDefinitions[1].version", is("1.1")));
     }
 
-    protected boolean shouldRunCollectionTests() {
-        return true; // Default is to run the collection tests
-    }
+<<<<<<< Upstream, based on e6cc0b002938513d7f447f46b31b3feeee032d53
+<<<<<<< Upstream, based on e6cc0b002938513d7f447f46b31b3feeee032d53
+=======
 
+>>>>>>> 462bcee Update data-index/data-index-service/data-index-service-common/src/test/java/org/kie/kogito/index/service/messaging/AbstractMessagingConsumerIT.java
+=======
+>>>>>>> e621c56 Update data-index/data-index-service/data-index-service-postgresql/src/test/java/org/kie/kogito/index/service/messaging/PostgreSqlMessagingKafkaConsumerIT.java
     protected abstract void sendUserTaskInstanceEvent() throws Exception;
 
     protected abstract void sendProcessInstanceEvent() throws Exception;
