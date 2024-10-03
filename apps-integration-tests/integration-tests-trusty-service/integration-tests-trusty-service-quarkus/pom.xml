@@ -83,7 +83,7 @@
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
+              <outputDirectory>${project.basedir}/target/classes</outputDirectory>
               <resources>
                 <resource>
                   <directory>${project.parent.basedir}/integration-tests-trusty-service-common/src/main/resources</directory>
