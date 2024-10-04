@@ -181,13 +181,6 @@ public abstract class AbstractMessagingConsumerIT {
                         .body("data.ProcessDefinitions[1].version", is("1.1")));
     }
 
-<<<<<<< Upstream, based on e6cc0b002938513d7f447f46b31b3feeee032d53
-<<<<<<< Upstream, based on e6cc0b002938513d7f447f46b31b3feeee032d53
-=======
-
->>>>>>> 462bcee Update data-index/data-index-service/data-index-service-common/src/test/java/org/kie/kogito/index/service/messaging/AbstractMessagingConsumerIT.java
-=======
->>>>>>> e621c56 Update data-index/data-index-service/data-index-service-postgresql/src/test/java/org/kie/kogito/index/service/messaging/PostgreSqlMessagingKafkaConsumerIT.java
     protected abstract void sendUserTaskInstanceEvent() throws Exception;
 
     protected abstract void sendProcessInstanceEvent() throws Exception;

@@ -58,7 +58,7 @@ public class JsonProcessInstanceDataEventDeserializer extends StdDeserializer<Pr
         String type = node.get("type").asText();
 
         switch (type) {
-            case "MultipleProcessInstanceDataEvent":
+            case MultipleProcessInstanceDataEvent.TYPE:
                 return jp.getCodec().treeToValue(node, MultipleProcessInstanceDataEvent.class);
             case "ProcessInstanceErrorDataEvent":
                 return (ProcessInstanceDataEvent<?>) jp.getCodec().treeToValue(node, ProcessInstanceErrorDataEvent.class);

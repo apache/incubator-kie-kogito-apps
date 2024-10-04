@@ -59,7 +59,7 @@ public class JsonUserTaskInstanceDataEventDeserializer extends StdDeserializer<U
         String type = node.get("type").asText();
 
         switch (type) {
-            case "MultipleUserTaskInstanceDataEvent":
+            case MultipleUserTaskInstanceDataEvent.TYPE:
                 return jp.getCodec().treeToValue(node, MultipleUserTaskInstanceDataEvent.class);
             case "UserTaskInstanceAssignmentDataEvent":
                 return (UserTaskInstanceDataEvent<?>) jp.getCodec().treeToValue(node, UserTaskInstanceAssignmentDataEvent.class);

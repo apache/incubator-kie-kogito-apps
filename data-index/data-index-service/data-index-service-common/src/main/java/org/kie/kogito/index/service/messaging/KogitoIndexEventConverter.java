@@ -20,37 +20,11 @@ package org.kie.kogito.index.service.messaging;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.function.Supplier;
 
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.event.AbstractDataEvent;
-import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionEventBody;
-import org.kie.kogito.event.process.ProcessInstanceDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceErrorEventBody;
-import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceNodeEventBody;
-import org.kie.kogito.event.process.ProcessInstanceSLADataEvent;
-import org.kie.kogito.event.process.ProcessInstanceSLAEventBody;
-import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceStateEventBody;
-import org.kie.kogito.event.process.ProcessInstanceVariableDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceVariableEventBody;
-import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentEventBody;
-import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentEventBody;
-import org.kie.kogito.event.usertask.UserTaskInstanceCommentDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceCommentEventBody;
-import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceDeadlineDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceDeadlineEventBody;
-import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceStateEventBody;
-import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceVariableEventBody;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.service.DataIndexServiceException;
@@ -88,9 +62,7 @@ public class KogitoIndexEventConverter implements MessageConverter {
     }
 
     private boolean isIndexable(Type type) {
-        return type == ProcessInstanceDataEvent.class
-                || type == ProcessDefinitionDataEvent.class
-                || type == UserTaskInstanceDataEvent.class
+        return type == ProcessDefinitionDataEvent.class
                 || type == KogitoJobCloudEvent.class;
     }
 
@@ -106,12 +78,8 @@ public class KogitoIndexEventConverter implements MessageConverter {
             MessageReader messageReader = VertxMessageFactory.createReader(httpHeaders, buffer);
             cloudEvent = messageReader.toEvent();
 
-            if (type.getTypeName().equals(ProcessInstanceDataEvent.class.getTypeName())) {
-                return message.withPayload(buildProcessInstanceDataEventVariant(cloudEvent));
-            } else if (type.getTypeName().equals(KogitoJobCloudEvent.class.getTypeName())) {
+            if (type.getTypeName().equals(KogitoJobCloudEvent.class.getTypeName())) {
                 return message.withPayload(buildKogitoJobCloudEvent(cloudEvent));
-            } else if (type.getTypeName().equals(UserTaskInstanceDataEvent.class.getTypeName())) {
-                return message.withPayload(buildUserTaskInstanceDataEvent(cloudEvent));
             } else if (type.getTypeName().equals(ProcessDefinitionDataEvent.class.getTypeName())) {
                 return message.withPayload(buildProcessDefinitionEvent(cloudEvent));
             }
@@ -137,42 +105,6 @@ public class KogitoIndexEventConverter implements MessageConverter {
         this.objectMapper = objectMapper;
     }
 
-    private DataEvent<?> buildProcessInstanceDataEventVariant(CloudEvent cloudEvent) throws IOException {
-        switch (cloudEvent.getType()) {
-            case "ProcessInstanceErrorDataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, ProcessInstanceErrorDataEvent::new, ProcessInstanceErrorEventBody.class);
-            case "ProcessInstanceNodeDataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, ProcessInstanceNodeDataEvent::new, ProcessInstanceNodeEventBody.class);
-            case "ProcessInstanceSLADataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, ProcessInstanceSLADataEvent::new, ProcessInstanceSLAEventBody.class);
-            case "ProcessInstanceStateDataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, ProcessInstanceStateDataEvent::new, ProcessInstanceStateEventBody.class);
-            case "ProcessInstanceVariableDataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, ProcessInstanceVariableDataEvent::new, ProcessInstanceVariableEventBody.class);
-            default:
-                throw new IllegalArgumentException("Unknown ProcessInstanceDataEvent variant: " + cloudEvent.getType());
-        }
-    }
-
-    private DataEvent<?> buildUserTaskInstanceDataEvent(CloudEvent cloudEvent) throws IOException {
-        switch (cloudEvent.getType()) {
-            case "UserTaskInstanceAssignmentDataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, UserTaskInstanceAssignmentDataEvent::new, UserTaskInstanceAssignmentEventBody.class);
-            case "UserTaskInstanceAttachmentDataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, UserTaskInstanceAttachmentDataEvent::new, UserTaskInstanceAttachmentEventBody.class);
-            case "UserTaskInstanceCommentDataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, UserTaskInstanceCommentDataEvent::new, UserTaskInstanceCommentEventBody.class);
-            case "UserTaskInstanceDeadlineDataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, UserTaskInstanceDeadlineDataEvent::new, UserTaskInstanceDeadlineEventBody.class);
-            case "UserTaskInstanceStateDataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, UserTaskInstanceStateDataEvent::new, UserTaskInstanceStateEventBody.class);
-            case "UserTaskInstanceVariableDataEvent":
-                return buildDataEvent(cloudEvent, objectMapper, UserTaskInstanceVariableDataEvent::new, UserTaskInstanceVariableEventBody.class);
-            default:
-                throw new IllegalArgumentException("Unknown UserTaskInstanceDataEvent variant: " + cloudEvent.getType());
-        }
-    }
-
     private KogitoJobCloudEvent buildKogitoJobCloudEvent(CloudEvent cloudEvent) throws IOException {
         KogitoJobCloudEvent jobCloudEvent = new KogitoJobCloudEvent();
         jobCloudEvent.setId(cloudEvent.getId());
@@ -188,16 +120,6 @@ public class KogitoIndexEventConverter implements MessageConverter {
         return jobCloudEvent;
     }
 
-    private static <E extends AbstractDataEvent<T>, T> E buildDataEvent(CloudEvent cloudEvent, ObjectMapper objectMapper, Supplier<E> supplier, Class<T> clazz) throws IOException {
-        E dataEvent = supplier.get();
-        applyCloudEventAttributes(cloudEvent, dataEvent);
-        applyExtensions(cloudEvent, dataEvent);
-        if (cloudEvent.getData() != null) {
-            dataEvent.setData(objectMapper.readValue(cloudEvent.getData().toBytes(), clazz));
-        }
-        return dataEvent;
-    }
-
     private static void applyCloudEventAttributes(CloudEvent cloudEvent, AbstractDataEvent<?> dataEvent) {
         dataEvent.setSpecVersion(cloudEvent.getSpecVersion());
         dataEvent.setId(cloudEvent.getId());
@@ -207,9 +129,5 @@ public class KogitoIndexEventConverter implements MessageConverter {
         dataEvent.setDataSchema(cloudEvent.getDataSchema());
         dataEvent.setSubject(cloudEvent.getSubject());
         dataEvent.setTime(cloudEvent.getTime());
-    }
-
-    private static void applyExtensions(CloudEvent cloudEvent, AbstractDataEvent<?> dataEvent) {
-        cloudEvent.getExtensionNames().forEach(extensionName -> dataEvent.addExtensionAttribute(extensionName, cloudEvent.getExtension(extensionName)));
     }
 }
