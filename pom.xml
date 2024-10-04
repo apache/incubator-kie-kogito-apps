@@ -130,10 +130,20 @@
     <module>explainability</module>
     <module>trusty</module>
     <module>jitexecutor</module>
-    <module>apps-integration-tests</module>
   </modules>
 
   <profiles>
+    <profile>
+      <id>allSubmodules</id>
+      <activation>
+        <property>
+          <name>!only.reproducible</name>
+        </property>
+      </activation>
+      <modules>
+        <module>apps-integration-tests</module>
+      </modules>
+    </profile>
     <profile>
       <id>optaplanner-downstream</id>
       <activation>
