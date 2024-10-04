@@ -100,6 +100,7 @@
           <artifactId>maven-artifact-plugin</artifactId>
           <configuration>
             <outputTimestamp>${project.build.outputTimestamp}</outputTimestamp>
+            <ignore>image-build.zip</ignore>
           </configuration>
         </plugin>
       </plugins>
