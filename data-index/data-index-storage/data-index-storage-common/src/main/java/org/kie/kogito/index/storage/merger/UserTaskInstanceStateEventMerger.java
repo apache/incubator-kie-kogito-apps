@@ -61,6 +61,7 @@ public class UserTaskInstanceStateEventMerger implements UserTaskInstanceEventMe
                 event.getSource() == null ? null : getEndpoint(event.getSource(), event.getData().getProcessInstanceId(), event.getData().getUserTaskName(), event.getData().getUserTaskInstanceId()));
         task.setLastUpdate(toZonedDateTime(event.getData().getEventDate()));
         task.setReferenceName(event.getData().getUserTaskReferenceName());
+        task.setExternalReferenceId(event.getData().getExternalReferenceId());
         LOGGER.debug("value after merging: {}", task);
         return task;
     }
