@@ -30,7 +30,6 @@ import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonNode;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
@@ -92,7 +91,6 @@ public abstract class AbstractProcessDataIndexIT {
     }
 
     @Test
-    @Disabled
     public void testProcessInstanceEvents() throws IOException {
         String pId = given()
                 .contentType(ContentType.JSON)
