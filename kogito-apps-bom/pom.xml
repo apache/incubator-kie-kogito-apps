@@ -80,6 +80,17 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
+                <artifactId>jobs-service-storage-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jobs-service-storage-jpa</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
                 <artifactId>jobs-service-postgresql</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -446,6 +457,28 @@
             </dependency>
             <dependency>
                 <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-persistence-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-persistence-jpa</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-persistence-jpa-deployment</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-persistence-jpa-deployment</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
                 <artifactId>kogito-addons-quarkus-data-index-common-runtime</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -466,7 +499,28 @@
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
-
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-jpa</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-jpa-deployment</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-quarkus-data-index-jpa-deployment</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
 
             <!-- Kogito Apps Persistence -->
             <dependency>
@@ -573,6 +627,17 @@
             <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>persistence-commons-postgresql</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>persistence-commons-jpa-base</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>persistence-commons-jpa-base</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>

@@ -33,44 +33,18 @@
   <name>Kogito Apps :: Persistence Commons JPA</name>
 
   <properties>
+    <path.to.postgresql.storage>../persistence-commons-postgresql</path.to.postgresql.storage>
+    <path.to.flyway.location>kie-flyway/db/persistence-commons/postgresql</path.to.flyway.location>
+    <path.to.script.folder>src/main/resources/${path.to.flyway.location}</path.to.script.folder>
+    <path.to.migration.scripts.source>${path.to.postgresql.storage}/${path.to.script.folder}</path.to.migration.scripts.source>
+    <path.to.migration.scripts.target>target/classes/${path.to.flyway.location}</path.to.migration.scripts.target>
     <java.module.name>org.kie.kogito.persistence.jpa</java.module.name>
   </properties>
 
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>persistence-commons-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-orm-panache</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.hibernate.orm</groupId>
-      <artifactId>hibernate-ant</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-jackson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-jackson-utils</artifactId>
-	</dependency>
-    <dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>kogito-quarkus-test-utils</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5-mockito</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <scope>test</scope>
+      <artifactId>persistence-commons-jpa-base</artifactId>
     </dependency>
   </dependencies>
   <build>
@@ -89,6 +63,31 @@
               <goal>integration-test</goal>
               <goal>verify</goal>
             </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!--  The cleanest way would be to use the maven-dependency-plugin to unpack and copy scripts from the built artifact `kie-addons-persistence-jdbc` but there's a limitation to using this only in the `package` phase whereas we need that into the `generate-sources` phase. See also https://issues.apache.org/jira/browse/MDEP-98 -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-resource-one</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${path.to.migration.scripts.target}</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${path.to.migration.scripts.source}</directory>
+                  <includes>
+                    <include>*.sql</include>
+                  </includes>
+                </resource>
+              </resources>
+            </configuration>
           </execution>
         </executions>
       </plugin>
