@@ -79,14 +79,8 @@ public class IndexingService {
     public void indexProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
         ProcessInstanceStorage storage = manager.getProcessInstanceStorage();
         if (event instanceof MultipleProcessInstanceDataEvent) {
-            for (ProcessInstanceDataEvent<?> item : ((MultipleProcessInstanceDataEvent) event).getData())
-                indexProccessInstanceEvent(storage, item);
-        } else {
-            indexProccessInstanceEvent(storage, event);
+            storage.indexGroup(((MultipleProcessInstanceDataEvent) event));
         }
-    }
-
-    private void indexProccessInstanceEvent(ProcessInstanceStorage storage, ProcessInstanceDataEvent<?> event) {
         if (event instanceof ProcessInstanceErrorDataEvent) {
             storage.indexError((ProcessInstanceErrorDataEvent) event);
         } else if (event instanceof ProcessInstanceNodeDataEvent) {
