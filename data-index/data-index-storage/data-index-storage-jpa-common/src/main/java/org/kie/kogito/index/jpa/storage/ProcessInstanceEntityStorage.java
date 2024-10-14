@@ -20,7 +20,8 @@ package org.kie.kogito.index.jpa.storage;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.kie.kogito.event.process.MultipleProcessInstanceDataEvent;
@@ -68,13 +69,10 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
 
     @Override
     @Transactional
-    public void indexGroup(MultipleProcessInstanceDataEvent event) {
-        Iterator<ProcessInstanceDataEvent<?>> iter = event.getData().iterator();
-        ProcessInstanceDataEvent<?> firstEvent = iter.next();
-        ProcessInstanceEntity pi = findOrInit(firstEvent);
-        indexEvent(pi, firstEvent);
-        while (iter.hasNext()) {
-            indexEvent(pi, iter.next());
+    public void indexGroup(MultipleProcessInstanceDataEvent events) {
+        Map<String, ProcessInstanceEntity> piMap = new HashMap<>();
+        for (ProcessInstanceDataEvent<?> event : events.getData()) {
+            indexEvent(piMap.computeIfAbsent(event.getKogitoProcessInstanceId(), id -> findOrInit(event)), event);
         }
         repository.flush();
     }
@@ -157,7 +155,6 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
         if ("MilestoneNode".equals(data.getNodeType())) {
             pi.getMilestones().stream().filter(n -> n.getId().equals(data.getNodeInstanceId())).findAny().ifPresentOrElse(n -> updateMilestone(n, data), () -> createMilestone(pi, data));
         }
-
     }
 
     private MilestoneEntity createMilestone(ProcessInstanceEntity pi, ProcessInstanceNodeEventBody data) {
