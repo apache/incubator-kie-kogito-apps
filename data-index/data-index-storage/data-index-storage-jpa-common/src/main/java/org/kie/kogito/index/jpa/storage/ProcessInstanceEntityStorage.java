@@ -74,42 +74,36 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
         for (ProcessInstanceDataEvent<?> event : events.getData()) {
             indexEvent(piMap.computeIfAbsent(event.getKogitoProcessInstanceId(), id -> findOrInit(event)), event);
         }
-        repository.flush();
     }
 
     @Override
     @Transactional
     public void indexError(ProcessInstanceErrorDataEvent event) {
         indexError(findOrInit(event), event.getData());
-        repository.flush();
     }
 
     @Override
     @Transactional
     public void indexNode(ProcessInstanceNodeDataEvent event) {
         indexNode(findOrInit(event), event.getData());
-        repository.flush();
     }
 
     @Override
     @Transactional
     public void indexSLA(ProcessInstanceSLADataEvent event) {
         indexSla(findOrInit(event), event.getData());
-        repository.flush();
     }
 
     @Override
     @Transactional
     public void indexState(ProcessInstanceStateDataEvent event) {
         indexState(findOrInit(event), event);
-        repository.flush();
     }
 
     @Override
     @Transactional
     public void indexVariable(ProcessInstanceVariableDataEvent event) {
         indexVariable(findOrInit(event), event.getData());
-        repository.flush();
     }
 
     private ProcessInstanceEntity findOrInit(ProcessInstanceDataEvent<?> event) {
@@ -186,7 +180,6 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
         nodeInstance.setType(body.getNodeType());
         ZonedDateTime eventDate = toZonedDateTime(body.getEventDate());
         switch (body.getEventType()) {
-
             case EVENT_TYPE_ENTER:
                 nodeInstance.setEnter(eventDate);
                 break;
