@@ -195,7 +195,8 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
     }
 
     private void indexState(ProcessInstanceEntity pi, ProcessInstanceStateDataEvent event) {
-        indexState(pi, event.getData(), event.getKogitoAddons() == null ? Set.of() : Set.of(event.getKogitoAddons().split(",")), event.getSource() == null ? null : event.getSource().toString());
+        indexState(pi, event.getData(), (event.getKogitoAddons() == null || event.getKogitoAddons().isEmpty()) ? Set.of() : Set.of(event.getKogitoAddons().split(",")),
+                event.getSource() == null ? null : event.getSource().toString());
     }
 
     private void indexState(ProcessInstanceEntity pi, ProcessInstanceStateEventBody data, Set<String> addons, String endpoint) {
