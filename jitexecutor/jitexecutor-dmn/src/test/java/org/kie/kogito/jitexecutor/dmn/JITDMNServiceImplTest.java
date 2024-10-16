@@ -19,9 +19,11 @@
 package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -79,6 +81,38 @@ public class JITDMNServiceImplTest {
         Assertions.assertEquals("https://github.com/kiegroup/kogito-examples/dmn-quarkus-listener-example", dmnResult.getNamespace());
         Assertions.assertTrue(dmnResult.getMessages().isEmpty());
         Assertions.assertEquals("Yes", dmnResult.getDecisionResultByName("Eligibility").getResult());
+    }
+
+    @Test
+    public void testConditionalExecutionIdsFromRiskScoreEvaluation() throws IOException {
+        final String thenElementId = "_6481FF12-61B5-451C-B775-4143D9B6CD6B";
+        final String elseElementId = "_2CD02CB2-6B56-45C4-B461-405E89D45633";
+        String decisionTableModel = getModelFromIoUtils("valid_models/DMNv1_5/RiskScore_Simple.dmn");
+
+        Map<String, Object> context = new HashMap<>();
+        context.put("Credit Score", "Poor");
+        context.put("DTI", 33);
+        JITDMNResult dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals(BigDecimal.valueOf(50), dmnResult.getDecisionResultByName("Risk Score").getResult());
+        Set<String> evaluationHitIds = dmnResult.getEvaluationHitIds();
+        Assertions.assertNotNull(evaluationHitIds);
+        Assertions.assertEquals(1, evaluationHitIds.size());
+        Assertions.assertEquals(elseElementId, evaluationHitIds.iterator().next());
+
+
+        context = new HashMap<>();
+        context.put("Credit Score", "Excellent");
+        context.put("DTI", 10);
+        dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals(BigDecimal.valueOf(20), dmnResult.getDecisionResultByName("Risk Score").getResult());
+        evaluationHitIds = dmnResult.getEvaluationHitIds();
+        Assertions.assertNotNull(evaluationHitIds);
+        Assertions.assertEquals(1, evaluationHitIds.size());
+        Assertions.assertEquals(thenElementId, evaluationHitIds.iterator().next());
     }
 
     @Test

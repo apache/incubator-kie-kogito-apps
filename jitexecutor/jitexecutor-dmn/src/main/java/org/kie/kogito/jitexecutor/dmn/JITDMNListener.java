@@ -18,6 +18,10 @@
  */
 package org.kie.kogito.jitexecutor.dmn;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import org.kie.dmn.api.core.event.AfterConditionalEvaluationEvent;
 import org.kie.dmn.api.core.event.AfterEvaluateAllEvent;
 import org.kie.dmn.api.core.event.AfterEvaluateBKMEvent;
 import org.kie.dmn.api.core.event.AfterEvaluateContextEntryEvent;
@@ -31,6 +35,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class JITDMNListener implements DMNRuntimeEventListener {
+
+    private final Set<String> conditionalEvaluationIds = new HashSet<>();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JITDMNListener.class);
 
@@ -63,7 +69,20 @@ public class JITDMNListener implements DMNRuntimeEventListener {
         logEvent(event);
     }
 
+    public void afterConditionalEvaluation(AfterConditionalEvaluationEvent event) {
+        logEvent(event);
+        conditionalEvaluationIds.add(event.getExecutedId());
+    }
+
+    public Set<String> getConditionalEvaluationIds() {
+        return conditionalEvaluationIds;
+    }
+
     private void logEvent(DMNEvent toLog) {
+        LOGGER.info("{} event {}", toLog.getClass().getSimpleName(), toLog);
+    }
+
+    private void logEvent(AfterConditionalEvaluationEvent toLog) {
         LOGGER.info("{} event {}", toLog.getClass().getSimpleName(), toLog);
     }
 

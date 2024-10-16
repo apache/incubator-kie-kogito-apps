@@ -22,7 +22,9 @@ import java.io.StringReader;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import org.kie.api.io.Resource;
@@ -38,6 +40,7 @@ import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
 import org.kie.kogito.jitexecutor.common.requests.ResourceWithURI;
+import org.kie.kogito.jitexecutor.dmn.responses.JITDMNResult;
 import org.kie.kogito.jitexecutor.dmn.utils.ResolveByKey;
 
 public class DMNEvaluator {
@@ -76,16 +79,17 @@ public class DMNEvaluator {
         return dmnRuntime.getModels();
     }
 
-    public DMNResult evaluate(Map<String, Object> context) {
-        DMNContext dmnContext = new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
-        DMNResult toReturn = dmnRuntime.evaluateAll(dmnModel, dmnContext);
-        dmnRuntime.getListeners().forEach(new Consumer<DMNRuntimeEventListener>() {
-            @Override
-            public void accept(DMNRuntimeEventListener dmnRuntimeEventListener) {
-
-            }
-        });
-        return toReturn;
+    public JITDMNResult evaluate(Map<String, Object> context) {
+        DMNContext dmnContext =
+                new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
+        DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
+        JITDMNListener listener = dmnRuntime.getListeners().stream().filter(JITDMNListener.class::isInstance)
+                .findFirst()
+                .map(JITDMNListener.class::cast)
+                .orElseThrow(() -> new IllegalStateException("No JITDMNListener found"));
+        Set<String> evaluationHitIds = new HashSet<>();
+        evaluationHitIds.addAll(listener.getConditionalEvaluationIds());
+        return new JITDMNResult(getNamespace(), getName(), dmnResult, evaluationHitIds);
     }
 
     public static DMNEvaluator fromMultiple(MultipleResourcesPayload payload) {
@@ -109,7 +113,8 @@ public class DMNEvaluator {
             }
         }
         if (mainModel == null) {
-            throw new IllegalStateException("Was not able to identify main model from MultipleResourcesPayload contents.");
+            throw new IllegalStateException("Was not able to identify main model from MultipleResourcesPayload " +
+                                                    "contents.");
         }
         return new DMNEvaluator(mainModel, dmnRuntime);
     }
