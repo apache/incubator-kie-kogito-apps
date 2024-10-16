@@ -36,46 +36,54 @@ import org.slf4j.LoggerFactory;
 
 public class JITDMNListener implements DMNRuntimeEventListener {
 
-    private final Set<String> conditionalEvaluationIds = new HashSet<>();
+    private final Set<String> evaluationHitIds = new HashSet<>();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JITDMNListener.class);
 
+    @Override
     public void afterEvaluateDecisionTable(AfterEvaluateDecisionTableEvent event) {
         logEvent(event);
+        evaluationHitIds.addAll(event.getSelectedIds());
     }
 
+    @Override
     public void afterEvaluateDecision(AfterEvaluateDecisionEvent event) {
         logEvent(event);
     }
 
-
+    @Override
     public void afterEvaluateBKM(AfterEvaluateBKMEvent event) {
         logEvent(event);
     }
 
+    @Override
     public void afterEvaluateContextEntry(AfterEvaluateContextEntryEvent event) {
         logEvent(event);
     }
 
+    @Override
     public void afterEvaluateDecisionService(AfterEvaluateDecisionServiceEvent event) {
         logEvent(event);
     }
 
+    @Override
     public void afterInvokeBKM(AfterInvokeBKMEvent event) {
         logEvent(event);
     }
 
+    @Override
     public void afterEvaluateAll(AfterEvaluateAllEvent event) {
         logEvent(event);
     }
 
+    @Override
     public void afterConditionalEvaluation(AfterConditionalEvaluationEvent event) {
         logEvent(event);
-        conditionalEvaluationIds.add(event.getExecutedId());
+        evaluationHitIds.add(event.getExecutedId());
     }
 
-    public Set<String> getConditionalEvaluationIds() {
-        return conditionalEvaluationIds;
+    public Set<String> getEvaluationHitIds() {
+        return evaluationHitIds;
     }
 
     private void logEvent(DMNEvent toLog) {
