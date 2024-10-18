@@ -26,6 +26,7 @@ import java.util.function.Supplier;
 import org.eclipse.microprofile.reactive.messaging.Message;
 import org.kie.kogito.event.AbstractDataEvent;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.process.KogitoMarshallEventSupport;
 import org.kie.kogito.event.process.MultipleProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionEventBody;
@@ -40,6 +41,7 @@ import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceStateEventBody;
 import org.kie.kogito.event.process.ProcessInstanceVariableDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceVariableEventBody;
+import org.kie.kogito.event.serializer.MultipleProcessInstanceDataEventDeserializer;
 import org.kie.kogito.event.usertask.MultipleUserTaskInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentEventBody;
@@ -148,9 +150,16 @@ public class KogitoIndexEventConverter implements MessageConverter {
 
     private DataEvent<?> buildProcessInstanceDataEventVariant(CloudEvent cloudEvent) throws IOException {
         switch (cloudEvent.getType()) {
-            case MultipleProcessInstanceDataEvent.TYPE:
-                return buildDataEvent(cloudEvent, objectMapper, MultipleProcessInstanceDataEvent::new, new TypeReference<Collection<ProcessInstanceDataEvent<?>>>() {
-                });
+            case MultipleProcessInstanceDataEvent.MULTIPLE_TYPE:
+                MultipleProcessInstanceDataEvent dataEvent = buildEvent(cloudEvent, objectMapper, MultipleProcessInstanceDataEvent::new);
+                if (cloudEvent.getData() != null) {
+                    String contentType = cloudEvent.getDataContentType();
+                    dataEvent.setData(
+                            MultipleProcessInstanceDataEvent.BINARY_CONTENT_TYPE.equals(contentType) ? MultipleProcessInstanceDataEventDeserializer.readFromBytes(cloudEvent.getData().toBytes())
+                                    : objectMapper.readValue(cloudEvent.getData().toBytes(), new TypeReference<Collection<ProcessInstanceDataEvent<? extends KogitoMarshallEventSupport>>>() {
+                                    }));
+                }
+
             case "ProcessInstanceErrorDataEvent":
                 return buildDataEvent(cloudEvent, objectMapper, ProcessInstanceErrorDataEvent::new, ProcessInstanceErrorEventBody.class);
             case "ProcessInstanceNodeDataEvent":
@@ -205,6 +214,7 @@ public class KogitoIndexEventConverter implements MessageConverter {
 
     private static <E extends AbstractDataEvent<T>, T> E buildDataEvent(CloudEvent cloudEvent, ObjectMapper objectMapper, Supplier<E> supplier, TypeReference<T> typeReference) throws IOException {
         E dataEvent = buildEvent(cloudEvent, objectMapper, supplier);
+
         if (cloudEvent.getData() != null) {
             dataEvent.setData(objectMapper.readValue(cloudEvent.getData().toBytes(), typeReference));
         }
