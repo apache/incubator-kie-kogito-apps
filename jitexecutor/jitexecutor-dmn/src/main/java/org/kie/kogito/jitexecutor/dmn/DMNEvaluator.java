@@ -23,6 +23,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNContext;
@@ -79,11 +81,12 @@ public class DMNEvaluator {
         DMNContext dmnContext =
                 new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
         DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
-        JITDMNListener listener = dmnRuntime.getListeners().stream().filter(JITDMNListener.class::isInstance)
+        Optional<Set<String>> evaluationHitIds = dmnRuntime.getListeners().stream()
+                .filter(JITDMNListener.class::isInstance)
                 .findFirst()
                 .map(JITDMNListener.class::cast)
-                .orElseThrow(() -> new IllegalStateException("No JITDMNListener found"));
-        return new JITDMNResult(getNamespace(), getName(), dmnResult, listener.getEvaluationHitIds());
+                .map(JITDMNListener::getEvaluationHitIds);
+        return new JITDMNResult(getNamespace(), getName(), dmnResult, evaluationHitIds.orElse(Collections.emptySet()));
     }
 
     public static DMNEvaluator fromMultiple(MultipleResourcesPayload payload) {
@@ -108,7 +111,7 @@ public class DMNEvaluator {
         }
         if (mainModel == null) {
             throw new IllegalStateException("Was not able to identify main model from MultipleResourcesPayload " +
-                                                    "contents.");
+                    "contents.");
         }
         return new DMNEvaluator(mainModel, dmnRuntime);
     }

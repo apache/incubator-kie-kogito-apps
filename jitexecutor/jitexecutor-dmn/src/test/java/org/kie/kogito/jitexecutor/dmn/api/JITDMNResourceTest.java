@@ -22,17 +22,19 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
@@ -46,6 +48,8 @@ public class JITDMNResourceTest {
     private static String modelWithEvaluationHitIds;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    private static final String EVALUATION_HIT_IDS_FIELD_NAME = "evaluationHitIds";
 
     static {
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -94,15 +98,15 @@ public class JITDMNResourceTest {
                 .then()
                 .statusCode(200)
                 .body(containsString("Risk Score"),
-                      containsString("Loan Pre-Qualification"),
-                      containsString("evaluationHitIds"),
-                      containsString(elseElementId),
-                      containsString(ruleId0),
-                      containsString(ruleId3))
+                        containsString("Loan Pre-Qualification"),
+                        containsString(EVALUATION_HIT_IDS_FIELD_NAME),
+                        containsString(elseElementId),
+                        containsString(ruleId0),
+                        containsString(ruleId3))
                 .extract()
                 .asString();
         JsonNode retrieved = MAPPER.readTree(response);
-        ArrayNode evaluationHitIdsNode = (ArrayNode) retrieved.get("evaluationHitIds");
+        ArrayNode evaluationHitIdsNode = (ArrayNode) retrieved.get(EVALUATION_HIT_IDS_FIELD_NAME);
         Assertions.assertThat(evaluationHitIdsNode).hasSize(3)
                 .anyMatch(node -> node.asText().equals(elseElementId))
                 .anyMatch(node -> node.asText().equals(ruleId0))
@@ -119,7 +123,7 @@ public class JITDMNResourceTest {
                 .then()
                 .statusCode(200)
                 .body(containsString("dmnResult"), containsString("saliencies"), containsString("xls2dmn"),
-                      containsString("featureName"));
+                        containsString("featureName"));
     }
 
     @Test
