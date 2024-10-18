@@ -21,10 +21,12 @@ package org.kie.kogito.jitexecutor.dmn.responses;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.kie.dmn.api.core.DMNContext;
@@ -49,16 +51,23 @@ public class JITDMNResult implements Serializable,
 
     private Map<String, JITDMNDecisionResult> decisionResults = new HashMap<>();
 
+    private Set<String> evaluationHitIds;
+
     public JITDMNResult() {
         // Intentionally blank.
     }
 
     public JITDMNResult(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult) {
+        this(namespace, modelName, dmnResult, Collections.emptySet());
+    }
+
+    public JITDMNResult(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult, Set<String> evaluationHitIds) {
         this.namespace = namespace;
         this.modelName = modelName;
         this.setDmnContext(dmnResult.getContext().getAll());
         this.setMessages(dmnResult.getMessages());
         this.setDecisionResults(dmnResult.getDecisionResults());
+        this.evaluationHitIds = evaluationHitIds;
     }
 
     public String getNamespace() {
@@ -100,6 +109,14 @@ public class JITDMNResult implements Serializable,
         for (DMNDecisionResult dr : decisionResults) {
             this.decisionResults.put(dr.getDecisionId(), JITDMNDecisionResult.of(dr));
         }
+    }
+
+    public Set<String> getEvaluationHitIds() {
+        return evaluationHitIds;
+    }
+
+    public void setEvaluationHitIds(Set<String> evaluationHitIds) {
+        this.evaluationHitIds = evaluationHitIds;
     }
 
     @JsonIgnore
@@ -151,6 +168,7 @@ public class JITDMNResult implements Serializable,
                 .append(", dmnContext=").append(dmnContext)
                 .append(", messages=").append(messages)
                 .append(", decisionResults=").append(decisionResults)
+                .append(", evaluationHitIds=").append(evaluationHitIds)
                 .append("]").toString();
     }
 }

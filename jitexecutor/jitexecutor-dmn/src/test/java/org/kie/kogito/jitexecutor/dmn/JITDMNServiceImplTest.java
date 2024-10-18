@@ -19,9 +19,11 @@
 package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -43,7 +45,7 @@ public class JITDMNServiceImplTest {
     }
 
     @Test
-    public void testModelEvaluation() {
+    void testModelEvaluation() {
         Map<String, Object> context = new HashMap<>();
         context.put("FICO Score", 800);
         context.put("DTI Ratio", .1);
@@ -57,7 +59,110 @@ public class JITDMNServiceImplTest {
     }
 
     @Test
-    public void testExplainability() throws IOException {
+    void testDecisionTableModelEvaluation() throws IOException {
+        String decisionTableModel = getModelFromIoUtils("valid_models/DMNv1_x/LoanEligibility.dmn");
+        Map<String, Object> client = new HashMap<>();
+        client.put("age", 43);
+        client.put("salary", 1950);
+        client.put("existing payments", 100);
+
+        Map<String, Object> loan = new HashMap<>();
+        loan.put("duration", 15);
+        loan.put("installment", 180);
+        Map<String, Object> context = new HashMap<>();
+
+        context.put("Client", client);
+        context.put("Loan", loan);
+        context.put("SupremeDirector", "No");
+        context.put("Bribe", 10);
+        JITDMNResult dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertEquals("LoanEligibility", dmnResult.getModelName());
+        Assertions.assertEquals("https://github.com/kiegroup/kogito-examples/dmn-quarkus-listener-example", dmnResult.getNamespace());
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals("Yes", dmnResult.getDecisionResultByName("Eligibility").getResult());
+    }
+
+    @Test
+    void testConditionalExecutionIdsFromRiskScoreEvaluation() throws IOException {
+        final String thenElementId = "_6481FF12-61B5-451C-B775-4143D9B6CD6B";
+        final String elseElementId = "_2CD02CB2-6B56-45C4-B461-405E89D45633";
+        final String ruleId0 = "_1578BD9E-2BF9-4BFC-8956-1A736959C937";
+        final String ruleId1 = "_31CD7AA3-A806-4E7E-B512-821F82043620";
+        final String ruleId3 = "_2545E1A8-93D3-4C8A-A0ED-8AD8B10A58F9";
+        final String ruleId4 = "_510A50DA-D5A4-4F06-B0BE-7F8F2AA83740";
+        String decisionTableModel = getModelFromIoUtils("valid_models/DMNv1_5/RiskScore_Simple.dmn");
+
+        Map<String, Object> context = new HashMap<>();
+        context.put("Credit Score", "Poor");
+        context.put("DTI", 33);
+        JITDMNResult dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals(BigDecimal.valueOf(50), dmnResult.getDecisionResultByName("Risk Score").getResult());
+        Set<String> evaluationHitIds = dmnResult.getEvaluationHitIds();
+        Assertions.assertNotNull(evaluationHitIds);
+        Assertions.assertEquals(3, evaluationHitIds.size());
+        Assertions.assertTrue(evaluationHitIds.contains(elseElementId));
+        Assertions.assertTrue(evaluationHitIds.contains(ruleId0));
+        Assertions.assertTrue(evaluationHitIds.contains(ruleId3));
+
+        context = new HashMap<>();
+        context.put("Credit Score", "Excellent");
+        context.put("DTI", 10);
+        dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals(BigDecimal.valueOf(20), dmnResult.getDecisionResultByName("Risk Score").getResult());
+        evaluationHitIds = dmnResult.getEvaluationHitIds();
+        Assertions.assertNotNull(evaluationHitIds);
+        Assertions.assertEquals(3, evaluationHitIds.size());
+        Assertions.assertTrue(evaluationHitIds.contains(thenElementId));
+        Assertions.assertTrue(evaluationHitIds.contains(ruleId1));
+        Assertions.assertTrue(evaluationHitIds.contains(ruleId4));
+    }
+
+    @Test
+    void testEvaluationHitIds() throws IOException {
+        final String thenElementId = "_6481FF12-61B5-451C-B775-4143D9B6CD6B";
+        final String elseElementId = "_2CD02CB2-6B56-45C4-B461-405E89D45633";
+        final String ruleId0 = "_1578BD9E-2BF9-4BFC-8956-1A736959C937";
+        final String ruleId1 = "_31CD7AA3-A806-4E7E-B512-821F82043620";
+        final String ruleId3 = "_2545E1A8-93D3-4C8A-A0ED-8AD8B10A58F9";
+        final String ruleId4 = "_510A50DA-D5A4-4F06-B0BE-7F8F2AA83740";
+        String decisionTableModel = getModelFromIoUtils("valid_models/DMNv1_5/RiskScore_Simple.dmn");
+        Map<String, Object> context = new HashMap<>();
+        context.put("Credit Score", "Poor");
+        context.put("DTI", 33);
+        JITDMNResult dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertEquals("DMN_A77074C1-21FE-4F7E-9753-F84661569AFC", dmnResult.getModelName());
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals(BigDecimal.valueOf(50), dmnResult.getDecisionResultByName("Risk Score").getResult());
+        Set<String> evaluationHitIds = dmnResult.getEvaluationHitIds();
+        Assertions.assertNotNull(evaluationHitIds);
+        Assertions.assertEquals(3, evaluationHitIds.size());
+        Assertions.assertTrue(evaluationHitIds.contains(elseElementId));
+        Assertions.assertTrue(evaluationHitIds.contains(ruleId0));
+        Assertions.assertTrue(evaluationHitIds.contains(ruleId3));
+
+        context = new HashMap<>();
+        context.put("Credit Score", "Excellent");
+        context.put("DTI", 10);
+        dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals(BigDecimal.valueOf(20), dmnResult.getDecisionResultByName("Risk Score").getResult());
+        evaluationHitIds = dmnResult.getEvaluationHitIds();
+        Assertions.assertNotNull(evaluationHitIds);
+        Assertions.assertEquals(3, evaluationHitIds.size());
+        Assertions.assertTrue(evaluationHitIds.contains(thenElementId));
+        Assertions.assertTrue(evaluationHitIds.contains(ruleId1));
+        Assertions.assertTrue(evaluationHitIds.contains(ruleId4));
+    }
+
+    @Test
+    void testExplainability() throws IOException {
         String allTypesModel = getModelFromIoUtils("valid_models/DMNv1_x/allTypes.dmn");
 
         Map<String, Object> context = new HashMap<>();
