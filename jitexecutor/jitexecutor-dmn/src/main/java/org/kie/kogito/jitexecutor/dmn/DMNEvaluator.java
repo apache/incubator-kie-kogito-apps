@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNContext;
@@ -87,7 +86,7 @@ public class DMNEvaluator {
                 .findFirst()
                 .map(JITDMNListener.class::cast)
                 .map(JITDMNListener::getEvaluationHitIds);
-        return new JITDMNResult(getNamespace(), getName(), dmnResult, evaluationHitIds.orElse(Collections.emptySet()));
+        return new JITDMNResult(getNamespace(), getName(), dmnResult, evaluationHitIds.orElse(Collections.emptyList()));
     }
 
     public static DMNEvaluator fromMultiple(MultipleResourcesPayload payload) {
