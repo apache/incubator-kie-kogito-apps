@@ -110,8 +110,7 @@ public class DMNEvaluator {
             }
         }
         if (mainModel == null) {
-            throw new IllegalStateException("Was not able to identify main model from MultipleResourcesPayload " +
-                    "contents.");
+            throw new IllegalStateException("Was not able to identify main model from MultipleResourcesPayload contents.");
         }
         return new DMNEvaluator(mainModel, dmnRuntime);
     }
