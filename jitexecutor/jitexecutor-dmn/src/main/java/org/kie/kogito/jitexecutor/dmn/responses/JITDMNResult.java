@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.kie.dmn.api.core.DMNContext;
@@ -51,17 +50,17 @@ public class JITDMNResult implements Serializable,
 
     private Map<String, JITDMNDecisionResult> decisionResults = new HashMap<>();
 
-    private Set<String> evaluationHitIds;
+    private List<String> evaluationHitIds;
 
     public JITDMNResult() {
         // Intentionally blank.
     }
 
     public JITDMNResult(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult) {
-        this(namespace, modelName, dmnResult, Collections.emptySet());
+        this(namespace, modelName, dmnResult, Collections.emptyList());
     }
 
-    public JITDMNResult(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult, Set<String> evaluationHitIds) {
+    public JITDMNResult(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult, List<String> evaluationHitIds) {
         this.namespace = namespace;
         this.modelName = modelName;
         this.setDmnContext(dmnResult.getContext().getAll());
@@ -111,11 +110,11 @@ public class JITDMNResult implements Serializable,
         }
     }
 
-    public Set<String> getEvaluationHitIds() {
+    public List<String> getEvaluationHitIds() {
         return evaluationHitIds;
     }
 
-    public void setEvaluationHitIds(Set<String> evaluationHitIds) {
+    public void setEvaluationHitIds(List<String> evaluationHitIds) {
         this.evaluationHitIds = evaluationHitIds;
     }
 

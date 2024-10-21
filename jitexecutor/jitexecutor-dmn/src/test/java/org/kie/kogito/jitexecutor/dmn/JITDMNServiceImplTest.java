@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -100,7 +101,7 @@ public class JITDMNServiceImplTest {
 
         Assertions.assertTrue(dmnResult.getMessages().isEmpty());
         Assertions.assertEquals(BigDecimal.valueOf(50), dmnResult.getDecisionResultByName("Risk Score").getResult());
-        Set<String> evaluationHitIds = dmnResult.getEvaluationHitIds();
+        List<String> evaluationHitIds = dmnResult.getEvaluationHitIds();
         Assertions.assertNotNull(evaluationHitIds);
         Assertions.assertEquals(3, evaluationHitIds.size());
         Assertions.assertTrue(evaluationHitIds.contains(elseElementId));
@@ -139,7 +140,7 @@ public class JITDMNServiceImplTest {
         Assertions.assertEquals("DMN_A77074C1-21FE-4F7E-9753-F84661569AFC", dmnResult.getModelName());
         Assertions.assertTrue(dmnResult.getMessages().isEmpty());
         Assertions.assertEquals(BigDecimal.valueOf(50), dmnResult.getDecisionResultByName("Risk Score").getResult());
-        Set<String> evaluationHitIds = dmnResult.getEvaluationHitIds();
+        List<String> evaluationHitIds = dmnResult.getEvaluationHitIds();
         Assertions.assertNotNull(evaluationHitIds);
         Assertions.assertEquals(3, evaluationHitIds.size());
         Assertions.assertTrue(evaluationHitIds.contains(elseElementId));
