@@ -204,11 +204,11 @@ public class JITDMNServiceImplTest {
     }
 
     @Test
-    void testCollectionsEvaluation() throws IOException {
+    void testMultipleHitRulesEvaluation() throws IOException {
         final String rule0 = "_E5C380DA-AF7B-4401-9804-C58296EC09DD";
         final String rule1 = "_DFD65E8B-5648-4BFD-840F-8C76B8DDBD1A";
         final String rule2 = "_E80EE7F7-1C0C-4050-B560-F33611F16B05";
-        String decisionTableModel = getModelFromIoUtils("valid_models/DMNv1_5/Collections.dmn");
+        String decisionTableModel = getModelFromIoUtils("valid_models/DMNv1_5/MultipleHitRules.dmn");
 
         final List<BigDecimal> numbers = new ArrayList<>();
         numbers.add(BigDecimal.valueOf(10));
