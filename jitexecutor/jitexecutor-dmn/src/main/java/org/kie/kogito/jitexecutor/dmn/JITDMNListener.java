@@ -19,9 +19,7 @@
 package org.kie.kogito.jitexecutor.dmn;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.kie.dmn.api.core.event.AfterConditionalEvaluationEvent;
 import org.kie.dmn.api.core.event.AfterEvaluateAllEvent;
