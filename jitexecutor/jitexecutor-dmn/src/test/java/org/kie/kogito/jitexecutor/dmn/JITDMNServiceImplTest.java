@@ -20,11 +20,11 @@ package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -160,6 +160,76 @@ public class JITDMNServiceImplTest {
         Assertions.assertTrue(evaluationHitIds.contains(thenElementId));
         Assertions.assertTrue(evaluationHitIds.contains(ruleId1));
         Assertions.assertTrue(evaluationHitIds.contains(ruleId4));
+    }
+
+    @Test
+    void testConditionalWithNestedDecisionTableFromRiskScoreEvaluation() throws IOException {
+        final String thenElementId = "_6481FF12-61B5-451C-B775-4143D9B6CD6B";
+        final String thenRuleId0 = "_D1753442-03F0-414B-94F8-6A86182DF6EB";
+        final String thenRuleId4 = "_E787BA51-E31D-449B-A432-50BE7466A15E";
+        final String elseElementId = "_2CD02CB2-6B56-45C4-B461-405E89D45633";
+        final String elseRuleId2 = "_945A5471-9F91-4751-9D96-74978F6FB12B";
+        final String elseRuleId5 = "_654BBFBC-9B84-4BD8-9D0B-13E8DD1B9F5D";
+        String decisionTableModel = getModelFromIoUtils("valid_models/DMNv1_5/RiskScore_Conditional.dmn");
+
+        Map<String, Object> context = new HashMap<>();
+        context.put("Credit Score", "Poor");
+        context.put("DTI", 33);
+        context.put("World Region", "Asia");
+        JITDMNResult dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals(BigDecimal.valueOf(50), dmnResult.getDecisionResultByName("Risk Score").getResult());
+        List<String> evaluationHitIds = dmnResult.getEvaluationHitIds();
+        Assertions.assertNotNull(evaluationHitIds);
+        Assertions.assertEquals(3, evaluationHitIds.size());
+        Assertions.assertTrue(evaluationHitIds.contains(thenElementId));
+        Assertions.assertTrue(evaluationHitIds.contains(thenRuleId0));
+        Assertions.assertTrue(evaluationHitIds.contains(thenRuleId4));
+
+        context = new HashMap<>();
+        context.put("Credit Score", "Excellent");
+        context.put("DTI", 10);
+        context.put("World Region", "Europe");
+        dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals(BigDecimal.valueOf(30), dmnResult.getDecisionResultByName("Risk Score").getResult());
+        evaluationHitIds = dmnResult.getEvaluationHitIds();
+        Assertions.assertNotNull(evaluationHitIds);
+        Assertions.assertEquals(3, evaluationHitIds.size());
+        Assertions.assertTrue(evaluationHitIds.contains(elseElementId));
+        Assertions.assertTrue(evaluationHitIds.contains(elseRuleId2));
+        Assertions.assertTrue(evaluationHitIds.contains(elseRuleId5));
+    }
+
+    @Test
+    void testMultipleHitRulesEvaluation() throws IOException {
+        final String rule0 = "_E5C380DA-AF7B-4401-9804-C58296EC09DD";
+        final String rule1 = "_DFD65E8B-5648-4BFD-840F-8C76B8DDBD1A";
+        final String rule2 = "_E80EE7F7-1C0C-4050-B560-F33611F16B05";
+        String decisionTableModel = getModelFromIoUtils("valid_models/DMNv1_5/MultipleHitRules.dmn");
+
+        final List<BigDecimal> numbers = new ArrayList<>();
+        numbers.add(BigDecimal.valueOf(10));
+        numbers.add(BigDecimal.valueOf(2));
+        numbers.add(BigDecimal.valueOf(1));
+        final Map<String, Object> context = new HashMap<>();
+        context.put("Numbers", numbers);
+        final JITDMNResult dmnResult = jitdmnService.evaluateModel(decisionTableModel, context);
+
+        final List<BigDecimal> expectedStatistcs = new ArrayList<>();
+        expectedStatistcs.add(BigDecimal.valueOf(6));
+        expectedStatistcs.add(BigDecimal.valueOf(3));
+        expectedStatistcs.add(BigDecimal.valueOf(1));
+        Assertions.assertTrue(dmnResult.getMessages().isEmpty());
+        Assertions.assertEquals(expectedStatistcs, dmnResult.getDecisionResultByName("Statistics").getResult());
+        final List<String> evaluationHitIds = dmnResult.getEvaluationHitIds();
+        Assertions.assertNotNull(evaluationHitIds);
+        Assertions.assertEquals(6, evaluationHitIds.size());
+        Assertions.assertEquals(3, evaluationHitIds.stream().filter(hitId -> rule0.equals(hitId)).count());
+        Assertions.assertEquals(2, evaluationHitIds.stream().filter(hitId -> rule1.equals(hitId)).count());
+        Assertions.assertEquals(1, evaluationHitIds.stream().filter(hitId -> rule2.equals(hitId)).count());
     }
 
     @Test
