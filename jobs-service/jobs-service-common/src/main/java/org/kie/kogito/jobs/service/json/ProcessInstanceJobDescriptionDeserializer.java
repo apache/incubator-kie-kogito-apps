@@ -21,8 +21,8 @@ package org.kie.kogito.jobs.service.json;
 import java.io.IOException;
 
 import org.kie.kogito.jobs.ExpirationTime;
-import org.kie.kogito.jobs.ProcessInstanceJobDescription;
-import org.kie.kogito.jobs.ProcessInstanceJobDescriptionBuilder;
+import org.kie.kogito.jobs.descriptiors.ProcessInstanceJobDescription;
+import org.kie.kogito.jobs.descriptiors.ProcessInstanceJobDescriptionBuilder;
 
 import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParser;
@@ -42,7 +42,7 @@ public class ProcessInstanceJobDescriptionDeserializer extends StdDeserializer<P
 
     @Override
     public ProcessInstanceJobDescription deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JacksonException {
-        ProcessInstanceJobDescriptionBuilder builder = ProcessInstanceJobDescription.builder();
+        ProcessInstanceJobDescriptionBuilder builder = ProcessInstanceJobDescription.newProcessInstanceJobDescriptionBuilder();
 
         JsonNode node = jp.getCodec().readTree(jp);
         ofNullable(node.get("id")).ifPresent(e -> builder.id(e.textValue()));

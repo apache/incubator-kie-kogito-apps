@@ -20,9 +20,8 @@ package org.kie.kogito.jobs.embedded;
 
 import java.util.concurrent.ExecutionException;
 
+import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.JobsService;
-import org.kie.kogito.jobs.ProcessInstanceJobDescription;
-import org.kie.kogito.jobs.ProcessJobDescription;
 import org.kie.kogito.jobs.api.JobCallbackResourceDef;
 import org.kie.kogito.jobs.service.adapter.JobDetailsAdapter;
 import org.kie.kogito.jobs.service.api.Job;
@@ -35,11 +34,11 @@ import org.slf4j.LoggerFactory;
 import io.smallrye.mutiny.Uni;
 import io.smallrye.mutiny.infrastructure.Infrastructure;
 
+import static mutiny.zero.flow.adapters.AdaptersToFlow.publisher;
+
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Alternative;
 import jakarta.inject.Inject;
-
-import static mutiny.zero.flow.adapters.AdaptersToFlow.publisher;
 
 @ApplicationScoped
 @Alternative
@@ -54,13 +53,13 @@ public class EmbeddedJobsService implements JobsService {
     }
 
     @Override
-    public String scheduleProcessJob(ProcessJobDescription description) {
+    public String scheduleProcessJob(JobDescription description) {
         LOGGER.debug("ScheduleProcessJob: {} not supported", description);
         return null;
     }
 
     @Override
-    public String scheduleProcessInstanceJob(ProcessInstanceJobDescription description) {
+    public String scheduleProcessInstanceJob(JobDescription description) {
         try {
             Job job = Job.builder()
                     .id(description.id())

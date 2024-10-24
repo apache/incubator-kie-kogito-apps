@@ -18,7 +18,7 @@
  */
 package org.kie.kogito.jobs.embedded;
 
-import org.kie.kogito.jobs.ProcessInstanceJobDescription;
+import org.kie.kogito.jobs.descriptiors.ProcessInstanceJobDescription;
 import org.kie.kogito.jobs.service.api.PayloadData;
 
 public class InVMPayloadData extends PayloadData<ProcessInstanceJobDescription> {
