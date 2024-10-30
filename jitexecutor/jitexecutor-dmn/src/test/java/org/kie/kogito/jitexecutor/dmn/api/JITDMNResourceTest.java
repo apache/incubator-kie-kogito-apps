@@ -19,7 +19,10 @@
 package org.kie.kogito.jitexecutor.dmn.api;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.assertj.core.api.Assertions;
@@ -45,7 +48,7 @@ public class JITDMNResourceTest {
 
     private static String invalidModel;
     private static String modelWithExtensionElements;
-    private static String modelWithEvaluationHitIds;
+    private static String modelWithMultipleEvaluationHitIds;
 
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -59,7 +62,7 @@ public class JITDMNResourceTest {
     public static void setup() throws IOException {
         invalidModel = getModelFromIoUtils("invalid_models/DMNv1_x/test.dmn");
         modelWithExtensionElements = getModelFromIoUtils("valid_models/DMNv1_x/testWithExtensionElements.dmn");
-        modelWithEvaluationHitIds = getModelFromIoUtils("valid_models/DMNv1_5/RiskScore_Simple.dmn");
+        modelWithMultipleEvaluationHitIds = getModelFromIoUtils("valid_models/DMNv1_5/MultipleHitRules.dmn");
     }
 
     @Test
@@ -76,44 +79,39 @@ public class JITDMNResourceTest {
 
     @Test
     void testjitdmnResultEndpoint() {
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(modelWithEvaluationHitIds, buildContext());
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(modelWithMultipleEvaluationHitIds, buildMultipleHitContext());
         given()
                 .contentType(ContentType.JSON)
                 .body(jitdmnpayload)
                 .when().post("/jitdmn/dmnresult")
                 .then()
                 .statusCode(200)
-                .body(containsString("Risk Score"),
-                        containsString("Loan Pre-Qualification"));
+                .body(containsString("Statistics"));
     }
 
     @Test
     void testjitdmnResultEndpointWithEvaluationHitIds() throws JsonProcessingException {
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(modelWithEvaluationHitIds, buildRiskScoreContext());
-        final String elseElementId = "_2CD02CB2-6B56-45C4-B461-405E89D45633";
-        final String ruleId0 = "_1578BD9E-2BF9-4BFC-8956-1A736959C937";
-        final String ruleId3 = "_2545E1A8-93D3-4C8A-A0ED-8AD8B10A58F9";
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(modelWithMultipleEvaluationHitIds, buildMultipleHitContext());
+        final String rule0 = "_E5C380DA-AF7B-4401-9804-C58296EC09DD";
+        final String rule1 = "_DFD65E8B-5648-4BFD-840F-8C76B8DDBD1A";
+        final String rule2 = "_E80EE7F7-1C0C-4050-B560-F33611F16B05";
         String response = given().contentType(ContentType.JSON)
                 .body(jitdmnpayload)
                 .when().post("/jitdmn/dmnresult")
                 .then()
                 .statusCode(200)
-                .body(containsString("Risk Score"),
-                        containsString("Loan Pre-Qualification"),
+                .body(containsString("Statistics"),
                         containsString(EVALUATION_HIT_IDS_FIELD_NAME),
-                        containsString(elseElementId),
-                        containsString(ruleId0),
-                        containsString(ruleId3))
+                        containsString(rule0),
+                        containsString(rule1),
+                        containsString(rule2))
                 .extract()
                 .asString();
         JsonNode retrieved = MAPPER.readTree(response);
         ObjectNode evaluationHitIdsNode = (ObjectNode) retrieved.get(EVALUATION_HIT_IDS_FIELD_NAME);
         Assertions.assertThat(evaluationHitIdsNode).hasSize(3);
-        final Map<String, Integer> expectedEvaluationHitIds = Map.of(elseElementId, 1, ruleId0, 1, ruleId3, 1);
-        evaluationHitIdsNode.fields().forEachRemaining(entry -> {
-            Assertions.assertThat(expectedEvaluationHitIds).containsKey(entry.getKey());
-            Assertions.assertThat(expectedEvaluationHitIds.get(entry.getKey())).isEqualTo(entry.getValue().asInt());
-        });
+        final Map<String, Integer> expectedEvaluationHitIds = Map.of(rule0, 3, rule1, 2, rule2, 1);
+        evaluationHitIdsNode.fields().forEachRemaining(entry -> Assertions.assertThat(expectedEvaluationHitIds).containsEntry(entry.getKey(), entry.getValue().asInt()));
     }
 
     @Test
@@ -145,18 +143,21 @@ public class JITDMNResourceTest {
                 .body(containsString("m"), containsString("n"), containsString("sum"));
     }
 
-    private Map<String, Object> buildRiskScoreContext() {
-        Map<String, Object> context = new HashMap<>();
-        context.put("Credit Score", "Poor");
-        context.put("DTI", 33);
-        return context;
-    }
-
     private Map<String, Object> buildContext() {
         Map<String, Object> context = new HashMap<>();
         context.put("FICO Score", 800);
         context.put("DTI Ratio", .1);
         context.put("PITI Ratio", .1);
+        return context;
+    }
+
+    private Map<String, Object> buildMultipleHitContext() {
+        final List<BigDecimal> numbers = new ArrayList<>();
+        numbers.add(BigDecimal.valueOf(10));
+        numbers.add(BigDecimal.valueOf(2));
+        numbers.add(BigDecimal.valueOf(1));
+        final Map<String, Object> context = new HashMap<>();
+        context.put("Numbers", numbers);
         return context;
     }
 }
