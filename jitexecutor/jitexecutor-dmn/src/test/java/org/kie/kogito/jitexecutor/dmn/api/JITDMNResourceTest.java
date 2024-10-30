@@ -31,7 +31,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
@@ -43,7 +43,7 @@ import static org.kie.kogito.jitexecutor.dmn.TestingUtils.getModelFromIoUtils;
 @QuarkusTest
 public class JITDMNResourceTest {
 
-    private static String model;
+    private static String invalidModel;
     private static String modelWithExtensionElements;
     private static String modelWithEvaluationHitIds;
 
@@ -57,14 +57,14 @@ public class JITDMNResourceTest {
 
     @BeforeAll
     public static void setup() throws IOException {
-        model = getModelFromIoUtils("invalid_models/DMNv1_x/test.dmn");
+        invalidModel = getModelFromIoUtils("invalid_models/DMNv1_x/test.dmn");
         modelWithExtensionElements = getModelFromIoUtils("valid_models/DMNv1_x/testWithExtensionElements.dmn");
         modelWithEvaluationHitIds = getModelFromIoUtils("valid_models/DMNv1_5/RiskScore_Simple.dmn");
     }
 
     @Test
     void testjitEndpoint() {
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(model, buildContext());
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(invalidModel, buildContext());
         given()
                 .contentType(ContentType.JSON)
                 .body(jitdmnpayload)
@@ -76,14 +76,15 @@ public class JITDMNResourceTest {
 
     @Test
     void testjitdmnResultEndpoint() {
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(model, buildContext());
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(modelWithEvaluationHitIds, buildContext());
         given()
                 .contentType(ContentType.JSON)
                 .body(jitdmnpayload)
                 .when().post("/jitdmn/dmnresult")
                 .then()
                 .statusCode(200)
-                .body(containsString("Loan Approval"), containsString("Approved"), containsString("xls2dmn"));
+                .body(containsString("Risk Score"),
+                        containsString("Loan Pre-Qualification"));
     }
 
     @Test
@@ -106,16 +107,18 @@ public class JITDMNResourceTest {
                 .extract()
                 .asString();
         JsonNode retrieved = MAPPER.readTree(response);
-        ArrayNode evaluationHitIdsNode = (ArrayNode) retrieved.get(EVALUATION_HIT_IDS_FIELD_NAME);
-        Assertions.assertThat(evaluationHitIdsNode).hasSize(3)
-                .anyMatch(node -> node.asText().equals(elseElementId))
-                .anyMatch(node -> node.asText().equals(ruleId0))
-                .anyMatch(node -> node.asText().equals(ruleId3));
+        ObjectNode evaluationHitIdsNode = (ObjectNode) retrieved.get(EVALUATION_HIT_IDS_FIELD_NAME);
+        Assertions.assertThat(evaluationHitIdsNode).hasSize(3);
+        final Map<String, Integer> expectedEvaluationHitIds = Map.of(elseElementId, 1, ruleId0, 1, ruleId3, 1);
+        evaluationHitIdsNode.fields().forEachRemaining(entry -> {
+            Assertions.assertThat(expectedEvaluationHitIds).containsKey(entry.getKey());
+            Assertions.assertThat(expectedEvaluationHitIds.get(entry.getKey())).isEqualTo(entry.getValue().asInt());
+        });
     }
 
     @Test
     void testjitExplainabilityEndpoint() {
-        JITDMNPayload jitdmnpayload = new JITDMNPayload(model, buildContext());
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(invalidModel, buildContext());
         given()
                 .contentType(ContentType.JSON)
                 .body(jitdmnpayload)
