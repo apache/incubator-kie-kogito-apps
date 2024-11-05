@@ -44,7 +44,7 @@ public class CacheEntity {
     private String name;
 
     @Id
-    @Column(nullable = false)
+    @Column(name = "cache_key", nullable = false)
     private String key;
 
     @Convert(converter = JsonBinaryConverter.class)
