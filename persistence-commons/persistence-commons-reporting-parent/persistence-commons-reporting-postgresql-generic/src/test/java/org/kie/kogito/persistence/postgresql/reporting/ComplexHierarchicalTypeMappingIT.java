@@ -50,9 +50,9 @@ class ComplexHierarchicalTypeMappingIT {
     private static final String CACHE_NAME = "ComplexHierarchicalType";
 
     private static final String SQL = "SELECT " +
-            "ROW_NUMBER() OVER (ORDER BY name, key) as id, " +
+            "ROW_NUMBER() OVER (ORDER BY name, cache_key) as id, " +
             "name, " +
-            "key, " +
+            "cache_key, " +
             "root, " +
             "nestedBasicMappedField, " +
             "nestedComplexCollectionMappedField1, " +
@@ -210,7 +210,7 @@ class ComplexHierarchicalTypeMappingIT {
                     @EntityResult(
                             entityClass = ComplexHierarchicalTypeExtractRow.class,
                             fields = { @FieldResult(name = "id", column = "id"),
-                                    @FieldResult(name = "key", column = "key"),
+                                    @FieldResult(name = "key", column = "cache_key"),
                                     @FieldResult(name = "name", column = "name"),
                                     @FieldResult(name = "root", column = "root"),
                                     @FieldResult(name = "nestedBasicMappedField", column = "nestedBasicMappedField"),
