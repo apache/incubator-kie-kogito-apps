@@ -36,7 +36,7 @@ import jakarta.persistence.UniqueConstraint;
 @Entity
 @IdClass(CacheId.class)
 @Table(name = "kogito_data_cache", uniqueConstraints = @UniqueConstraint(columnNames = { "name",
-        "key" }), indexes = @Index(columnList = "name,key", unique = true))
+        "cache_key" }), indexes = @Index(columnList = "name,cache_key", unique = true))
 public class CacheEntity {
 
     @Id
