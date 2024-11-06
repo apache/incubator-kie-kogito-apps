@@ -18,11 +18,17 @@
  */
 package org.kie.kogito.jitexecutor.dmn.api;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Supplier;
 
+import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.core.internal.utils.MarshallingStubUtils;
+import org.kie.dmn.openapi.DMNOASGeneratorFactory;
+import org.kie.dmn.openapi.model.DMNOASResult;
+import org.kie.kogito.jitexecutor.dmn.DMNEvaluator;
 import org.kie.kogito.jitexecutor.dmn.JITDMNService;
 import org.kie.kogito.jitexecutor.dmn.requests.JITDMNPayload;
 import org.kie.kogito.jitexecutor.dmn.responses.DMNResultWithExplanation;
@@ -73,8 +79,14 @@ public class JITDMNResource {
         LOGGER.debug("jitdmn/dmnresult");
         LOGGER.debug(payload.toString());
         LOGGER.debug(LINEBREAK);
-        JITDMNResult dmnResult = payload.getModel() != null ? jitdmnService.evaluateModel(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModel(payload, payload.getContext());
-        return Response.ok(dmnResult).build();
+        Supplier<Response> supplier = new Supplier<Response>() {
+            @Override
+            public Response get() {
+                JITDMNResult dmnResult = payload.getModel() != null ? jitdmnService.evaluateModel(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModel(payload, payload.getContext());
+                return Response.ok(dmnResult).build();
+            }
+        };
+        return DMNResourceHelper.manageResponse(supplier);
     }
 
     @POST
@@ -86,9 +98,15 @@ public class JITDMNResource {
         LOGGER.debug("jitdmn/evaluateAndExplain");
         LOGGER.debug(payload.toString());
         LOGGER.debug(LINEBREAK);
-        DMNResultWithExplanation response =
-                payload.getModel() != null ? jitdmnService.evaluateModelAndExplain(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModelAndExplain(payload, payload.getContext());
-        return Response.ok(response).build();
+        Supplier<Response> supplier = new Supplier<Response>() {
+            @Override
+            public Response get() {
+                DMNResultWithExplanation response =
+                        payload.getModel() != null ? jitdmnService.evaluateModelAndExplain(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModelAndExplain(payload, payload.getContext());
+                return Response.ok(response).build();
+            }
+        };
+        return DMNResourceHelper.manageResponse(supplier);
     }
 
 }
