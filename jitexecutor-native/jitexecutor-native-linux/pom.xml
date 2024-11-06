@@ -26,7 +26,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>jitexecutor-native</artifactId>
-    <version>10.0.999-SNAPSHOT</version>
+    <version>10.0.0</version>
   </parent>
 
   <artifactId>jitexecutor-native-linux</artifactId>
