@@ -32,6 +32,7 @@ import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
 import org.kie.kogito.jitexecutor.common.requests.ResourceWithURI;
+import org.kie.kogito.jitexecutor.dmn.responses.JITDMNResult;
 import org.kie.kogito.jitexecutor.dmn.utils.ResolveByKey;
 
 public class DMNEvaluator {
@@ -43,6 +44,7 @@ public class DMNEvaluator {
         Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
         DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
                 .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
+        dmnRuntime.addListener(new JITDMNListener());
         DMNModel dmnModel = dmnRuntime.getModels().get(0);
         if (dmnModel.hasErrors()) {
             List<DMNMessage> messages = dmnModel.getMessages(DMNMessage.Severity.ERROR);
@@ -75,9 +77,16 @@ public class DMNEvaluator {
         return dmnRuntime.getModels();
     }
 
-    public DMNResult evaluate(Map<String, Object> context) {
-        DMNContext dmnContext = new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
-        return dmnRuntime.evaluateAll(dmnModel, dmnContext);
+    public JITDMNResult evaluate(Map<String, Object> context) {
+        DMNContext dmnContext =
+                new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
+        DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
+        Optional<Map<String, Integer>> evaluationHitIds = dmnRuntime.getListeners().stream()
+                .filter(JITDMNListener.class::isInstance)
+                .findFirst()
+                .map(JITDMNListener.class::cast)
+                .map(JITDMNListener::getEvaluationHitIds);
+        return new JITDMNResult(getNamespace(), getName(), dmnResult, evaluationHitIds.orElse(Collections.emptyMap()));
     }
 
     public static DMNEvaluator fromMultiple(MultipleResourcesPayload payload) {
