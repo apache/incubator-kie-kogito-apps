@@ -76,13 +76,10 @@ public class SchemaResource {
         LOGGER.debug("jitdmn/validate");
         LOGGER.debug(payload);
         LOGGER.debug(LINEBREAK);
-        Supplier<Response> supplier = new Supplier<Response>() {
-            @Override
-            public Response get() {
-                DMNModel dmnModel = DMNEvaluator.fromXML(payload).getDmnModel();
-                DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Collections.singletonList(dmnModel)).build();
-                return fullSchema(dmnModel, oasResult, true);
-            }
+        Supplier<Response> supplier = () -> {
+            DMNModel dmnModel = DMNEvaluator.fromXML(payload).getDmnModel();
+            DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Collections.singletonList(dmnModel)).build();
+            return fullSchema(dmnModel, oasResult, true);
         };
         return DMNResourceHelper.manageResponse(supplier);
     }
@@ -129,13 +126,10 @@ public class SchemaResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("form")
     public Response form(String payload) {
-        Supplier<Response> supplier = new Supplier<Response>() {
-            @Override
-            public Response get() {
-                DMNModel dmnModel = DMNEvaluator.fromXML(payload).getDmnModel();
-                DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Collections.singletonList(dmnModel)).build();
-                return formSchema(dmnModel, oasResult);
-            }
+        Supplier<Response> supplier = () -> {
+            DMNModel dmnModel = DMNEvaluator.fromXML(payload).getDmnModel();
+            DMNOASResult oasResult = DMNOASGeneratorFactory.generator(Collections.singletonList(dmnModel)).build();
+            return formSchema(dmnModel, oasResult);
         };
         return DMNResourceHelper.manageResponse(supplier);
     }
