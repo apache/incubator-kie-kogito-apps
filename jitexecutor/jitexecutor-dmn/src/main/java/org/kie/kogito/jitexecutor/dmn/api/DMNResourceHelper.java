@@ -32,7 +32,7 @@ public class DMNResourceHelper {
             return responseSupplier.get();
         } catch (Exception e) {
             String errorMessage = e.getMessage() != null ? e.getMessage() : "Failed to get result due to " + e.getClass().getName();
-            return Response.status(Response.Status.BAD_REQUEST.getStatusCode(), errorMessage).build();
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessage).build();
         }
     }
 }

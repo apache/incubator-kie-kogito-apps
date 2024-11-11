@@ -155,7 +155,6 @@ public class JITDMNResourceTest {
                 .then()
                 .statusCode(400)
                 .body(containsString("Error compiling FEEL expression 'Person Age >= 18' for name 'Can Drive?' on node 'Can Drive?': syntax error near 'Age'"));
-
     }
 
     @Test
