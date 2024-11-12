@@ -23,9 +23,6 @@ import org.junit.jupiter.api.Test;
 import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNRuntime;
 
-import java.io.IOException;
-import java.util.Collections;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kie.kogito.jitexecutor.dmn.TestingUtils.getModelFromIoUtils;
@@ -62,7 +59,7 @@ public class DMNEvaluatorTest {
         String modelXML = invalidModel;
         when(dmnRuntime.getModels()).thenReturn(Collections.singletonList(dmnModel));
 
-       assertThrows(IllegalStateException.class, () -> {
+        assertThrows(IllegalStateException.class, () -> {
             DMNEvaluator.fromXML(modelXML);
         });
     }

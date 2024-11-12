@@ -18,15 +18,16 @@
  */
 package org.kie.kogito.jitexecutor.dmn;
 
-import jakarta.ws.rs.core.Response;
+import java.util.function.Supplier;
+
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jitexecutor.dmn.api.DMNResourceHelper;
 
-import java.util.function.Supplier;
+import jakarta.ws.rs.core.Response;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class DMNResourceHelperTest {
 

@@ -18,9 +18,9 @@
  */
 package org.kie.kogito.jitexecutor.dmn.api;
 
-import jakarta.ws.rs.core.Response;
-
 import java.util.function.Supplier;
+
+import jakarta.ws.rs.core.Response;
 
 public class DMNResourceHelper {
 
