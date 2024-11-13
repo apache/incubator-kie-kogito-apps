@@ -115,10 +115,13 @@ public class SchemaResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response schema(MultipleResourcesPayload payload) {
-        DMNEvaluator dmnEvaluator = DMNEvaluator.fromMultiple(payload);
-        DMNModel dmnModel = dmnEvaluator.getDmnModel();
-        DMNOASResult oasResult = DMNOASGeneratorFactory.generator(dmnEvaluator.getAllDMNModels()).build();
-        return fullSchema(dmnModel, oasResult, false);
+        Supplier<Response> supplier = () -> {
+            DMNEvaluator dmnEvaluator = DMNEvaluator.fromMultiple(payload);
+            DMNModel dmnModel = dmnEvaluator.getDmnModel();
+            DMNOASResult oasResult = DMNOASGeneratorFactory.generator(dmnEvaluator.getAllDMNModels()).build();
+            return fullSchema(dmnModel, oasResult, false);
+        };
+        return DMNResourceHelper.manageResponse(supplier);
     }
 
     @POST
@@ -139,10 +142,13 @@ public class SchemaResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("form")
     public Response form(MultipleResourcesPayload payload) {
-        DMNEvaluator dmnEvaluator = DMNEvaluator.fromMultiple(payload);
-        DMNModel dmnModel = dmnEvaluator.getDmnModel();
-        DMNOASResult oasResult = DMNOASGeneratorFactory.generator(dmnEvaluator.getAllDMNModels()).build();
-        return formSchema(dmnModel, oasResult);
+        Supplier<Response> supplier = () -> {
+            DMNEvaluator dmnEvaluator = DMNEvaluator.fromMultiple(payload);
+            DMNModel dmnModel = dmnEvaluator.getDmnModel();
+            DMNOASResult oasResult = DMNOASGeneratorFactory.generator(dmnEvaluator.getAllDMNModels()).build();
+            return formSchema(dmnModel, oasResult);
+        };
+        return DMNResourceHelper.manageResponse(supplier);
     }
 
     private Response formSchema(DMNModel dmnModel, DMNOASResult oasResult) {
