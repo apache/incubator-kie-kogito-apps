@@ -18,39 +18,29 @@
  */
 package org.kie.kogito.jitexecutor.dmn;
 
+import java.io.IOException;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.kie.dmn.api.core.DMNModel;
-import org.kie.dmn.api.core.DMNRuntime;
-
-import java.io.IOException;
-import java.util.Collections;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kie.kogito.jitexecutor.dmn.TestingUtils.getModelFromIoUtils;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class DMNEvaluatorTest {
 
     private static String model;
     private static String invalidModel;
-    private static DMNRuntime dmnRuntime;
-    private static DMNModel dmnModel;
 
     @BeforeAll
     public static void setup() throws IOException {
         model = getModelFromIoUtils("invalid_models/DMNv1_x/test.dmn");
         invalidModel = getModelFromIoUtils("invalid_models/DMNv1_5/DMN-Invalid.dmn");
-        dmnRuntime = mock(DMNRuntime.class);
-        dmnModel = mock(DMNModel.class);
     }
 
     @Test
     void testFromXMLSuccessModel() {
         String modelXML = model;
-        when(dmnRuntime.getModels()).thenReturn(Collections.singletonList(dmnModel));
 
         DMNEvaluator evaluator = DMNEvaluator.fromXML(modelXML);
         assertNotNull(evaluator);
@@ -60,7 +50,6 @@ public class DMNEvaluatorTest {
     @Test
     public void testFromXMLModelWithError() {
         String modelXML = invalidModel;
-        when(dmnRuntime.getModels()).thenReturn(Collections.singletonList(dmnModel));
 
         assertThrows(IllegalStateException.class, () -> {
             DMNEvaluator.fromXML(modelXML);

@@ -57,12 +57,15 @@ public class JITDMNResource {
         LOGGER.debug("jitdmn/");
         LOGGER.debug(payload.toString());
         LOGGER.debug(LINEBREAK);
-        JITDMNResult evaluateAll = payload.getModel() != null ? jitdmnService.evaluateModel(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModel(payload, payload.getContext());
-        Map<String, Object> restResulk = new HashMap<>();
-        for (Entry<String, Object> kv : evaluateAll.getContext().getAll().entrySet()) {
-            restResulk.put(kv.getKey(), MarshallingStubUtils.stubDMNResult(kv.getValue(), String::valueOf));
-        }
-        return Response.ok(restResulk).build();
+        Supplier<Response> supplier = () -> {
+            JITDMNResult evaluateAll = payload.getModel() != null ? jitdmnService.evaluateModel(payload.getModel(), payload.getContext()) : jitdmnService.evaluateModel(payload, payload.getContext());
+            Map<String, Object> restResulk = new HashMap<>();
+            for (Entry<String, Object> kv : evaluateAll.getContext().getAll().entrySet()) {
+                restResulk.put(kv.getKey(), MarshallingStubUtils.stubDMNResult(kv.getValue(), String::valueOf));
+            }
+            return Response.ok(restResulk).build();
+        };
+        return DMNResourceHelper.manageResponse(supplier);
     }
 
     @POST

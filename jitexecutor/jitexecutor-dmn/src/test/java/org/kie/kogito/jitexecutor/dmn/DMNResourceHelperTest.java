@@ -34,18 +34,22 @@ public class DMNResourceHelperTest {
     @Test
     public void testManageResponseWithSuccess() {
         Supplier<Response> responseSupplier = () -> Response.ok("Success").build();
-        Response response = DMNResourceHelper.manageResponse(responseSupplier);
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-        assertEquals("Success", response.getEntity());
+        try (Response response = DMNResourceHelper.manageResponse(responseSupplier)) {
+            assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+            assertEquals("Success", response.getEntity());
+        }
+
     }
 
     @Test
     public void testManageResponseWithFailure() {
         Supplier<Response> responseSupplier = mock(Supplier.class);
         when(responseSupplier.get()).thenThrow(new IllegalStateException("Error : Failed to validate"));
-        Response response = DMNResourceHelper.manageResponse(responseSupplier);
-        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertEquals("Error : Failed to validate", response.getEntity());
+        try (Response response = DMNResourceHelper.manageResponse(responseSupplier)) {
+            assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+            assertEquals("Error : Failed to validate", response.getEntity());
+        }
+
     }
 
 }

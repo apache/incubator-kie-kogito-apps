@@ -146,6 +146,18 @@ public class JITDMNResourceTest {
     }
 
     @Test
+    void testjitEndpointFailure() {
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(invalidModel, buildContext());
+        given()
+                .contentType(ContentType.JSON)
+                .body(jitdmnpayload)
+                .when().post("/jitdmn")
+                .then()
+                .statusCode(400)
+                .body(containsString("Error compiling FEEL expression 'Person Age >= 18' for name 'Can Drive?' on node 'Can Drive?': syntax error near 'Age'"));
+    }
+
+    @Test
     void testjitdmnEvaluateInvalidModel() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(invalidModel, buildInvalidModelContext());
         given()
