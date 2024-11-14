@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.microprofile.faulttolerance.Retry;
+import org.kie.kogito.event.process.MultipleProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
@@ -33,6 +34,7 @@ import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceSLADataEvent;
 import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceVariableDataEvent;
+import org.kie.kogito.event.usertask.MultipleUserTaskInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceCommentDataEvent;
@@ -76,7 +78,9 @@ public class IndexingService {
     @Retry(maxRetries = 3, delay = 300, jitter = 100, retryOn = ConcurrentModificationException.class)
     public void indexProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
         ProcessInstanceStorage storage = manager.getProcessInstanceStorage();
-        if (event instanceof ProcessInstanceErrorDataEvent) {
+        if (event instanceof MultipleProcessInstanceDataEvent) {
+            storage.indexGroup(((MultipleProcessInstanceDataEvent) event));
+        } else if (event instanceof ProcessInstanceErrorDataEvent) {
             storage.indexError((ProcessInstanceErrorDataEvent) event);
         } else if (event instanceof ProcessInstanceNodeDataEvent) {
             storage.indexNode((ProcessInstanceNodeDataEvent) event);
@@ -100,7 +104,9 @@ public class IndexingService {
     @Retry(maxRetries = 3, delay = 300, jitter = 100, retryOn = ConcurrentModificationException.class)
     public <T> void indexUserTaskInstanceEvent(UserTaskInstanceDataEvent<T> event) {
         UserTaskInstanceStorage storage = manager.getUserTaskInstanceStorage();
-        if (event instanceof UserTaskInstanceAssignmentDataEvent) {
+        if (event instanceof MultipleUserTaskInstanceDataEvent) {
+            storage.indexGroup((MultipleUserTaskInstanceDataEvent) event);
+        } else if (event instanceof UserTaskInstanceAssignmentDataEvent) {
             storage.indexAssignment((UserTaskInstanceAssignmentDataEvent) event);
         } else if (event instanceof UserTaskInstanceAttachmentDataEvent) {
             storage.indexAttachment((UserTaskInstanceAttachmentDataEvent) event);
