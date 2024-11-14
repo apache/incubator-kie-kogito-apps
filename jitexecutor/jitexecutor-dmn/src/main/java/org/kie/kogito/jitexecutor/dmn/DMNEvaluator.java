@@ -55,13 +55,7 @@ public class DMNEvaluator {
                 .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
         dmnRuntime.addListener(new JITDMNListener());
         DMNModel dmnModel = dmnRuntime.getModels().get(0);
-        if (dmnModel.hasErrors()) {
-            List<DMNMessage> messages = dmnModel.getMessages(DMNMessage.Severity.ERROR);
-            String errorMessage = messages.stream().map(Message::getText).collect(Collectors.joining(", "));
-            throw new IllegalStateException(errorMessage);
-        } else {
-            return new DMNEvaluator(dmnModel, dmnRuntime);
-        }
+        return validateForErrors(dmnModel, dmnRuntime);
     }
 
     private DMNEvaluator(DMNModel dmnModel, DMNRuntime dmnRuntime) {
@@ -121,6 +115,16 @@ public class DMNEvaluator {
         if (mainModel == null) {
             throw new IllegalStateException("Was not able to identify main model from MultipleResourcesPayload contents.");
         }
-        return new DMNEvaluator(mainModel, dmnRuntime);
+        return validateForErrors(mainModel, dmnRuntime);
+    }
+
+    static DMNEvaluator validateForErrors(DMNModel dmnModel, DMNRuntime dmnRuntime) {
+        if (dmnModel.hasErrors()) {
+            List<DMNMessage> messages = dmnModel.getMessages(DMNMessage.Severity.ERROR);
+            String errorMessage = messages.stream().map(Message::getText).collect(Collectors.joining(", "));
+            throw new IllegalStateException(errorMessage);
+        } else {
+            return new DMNEvaluator(dmnModel, dmnRuntime);
+        }
     }
 }

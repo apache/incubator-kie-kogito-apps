@@ -19,13 +19,21 @@
 package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.IOException;
+import java.util.Collections;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.kie.dmn.api.core.DMNMessage;
+import org.kie.dmn.api.core.DMNModel;
+import org.kie.dmn.api.core.DMNRuntime;
+import org.kie.dmn.core.impl.DMNRuntimeImpl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kie.kogito.jitexecutor.dmn.TestingUtils.getModelFromIoUtils;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DMNEvaluatorTest {
 
@@ -44,7 +52,6 @@ public class DMNEvaluatorTest {
 
         DMNEvaluator evaluator = DMNEvaluator.fromXML(modelXML);
         assertNotNull(evaluator);
-
     }
 
     @Test
@@ -54,6 +61,33 @@ public class DMNEvaluatorTest {
         assertThrows(IllegalStateException.class, () -> {
             DMNEvaluator.fromXML(modelXML);
         });
+    }
+
+    @Test
+    void testValidateForErrorsThrowsException() {
+        DMNModel dmnModel = mock(DMNModel.class);
+        DMNRuntime dmnRuntime = mock(DMNRuntime.class);
+        DMNMessage message = mock(DMNMessage.class);
+
+        when(message.getText()).thenReturn("Error : Failed to validate model");
+        when(dmnModel.hasErrors()).thenReturn(true);
+        when(dmnModel.getMessages(DMNMessage.Severity.ERROR)).thenReturn(Collections.singletonList(message));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> DMNEvaluator.validateForErrors(dmnModel, dmnRuntime));
+
+        assertEquals("Error : Failed to validate model", exception.getMessage());
+    }
+
+    @Test
+    void testValidateForErrors() {
+        DMNModel dmnModel = mock(DMNModel.class);
+        DMNRuntime dmnRuntime = mock(DMNRuntimeImpl.class);
+
+        when(dmnModel.hasErrors()).thenReturn(false);
+        DMNEvaluator evaluator = DMNEvaluator.validateForErrors(dmnModel, dmnRuntime);
+
+        assertNotNull(evaluator);
     }
 
 }
