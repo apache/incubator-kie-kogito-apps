@@ -1,3 +1,4 @@
+#
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
@@ -14,44 +15,26 @@
 # KIND, either express or implied.  See the License for the
 # specific language governing permissions and limitations
 # under the License.
+#
 
-node_modules/
-dist/
-dist-it/
-node/
-coverage/
-target/
-out/
-.idea
-**/.DS_Store
-*.log*
-**/stats.json
-**/junit.xml
-package-lock.json
+name: Run Apache RAT check
 
-# Eclipse, Netbeans and IntelliJ files
-/.*
-!.github
-!.gitignore
-!.ci
-!.mvn
-/nbproject
-/*.ipr
-/*.iws
-**/*.iml
-.classpath
-.project
-.settings
-.vscode
-!.husky
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
 
-# Cypress - runtime artifacts and undesired dirs
-**/cypress/screenshots
-**/cypress/videos
-/packages/cypress*
-/cypress*
+jobs:
+  apache-rat-check:
+    runs-on: ubuntu-latest
 
-.factorypath
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-# Apache RAT check excludes file
-!.rat-excludes
+      - name: Download Apache RAT
+        run: |
+          curl -LO https://repository.apache.org/content/repositories/snapshots/org/apache/rat/apache-rat/0.17-SNAPSHOT/apache-rat-0.17-20241115.065104-374.jar
+
+      - name: Run Apache RAT
+        run: |
+          java -jar apache-rat-0.17-20241115.065104-374.jar --input-exclude-file .rat-excludes -- . | grep "Files with unapproved licenses:" && echo "There are files with missing or unapproved license headers." && exit 1 || echo "All files have correct license headers."

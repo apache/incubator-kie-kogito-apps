@@ -1,0 +1,16 @@
+### general excludes
+**/target/**
+**/.*
+*README*
+*readme*
+DISCLAIMER-WIP
+**/src/test/resources/**
+**/src/test/filtered-resources/**
+**/*integration-test*/src/main/resources/**
+**/**example**/**/resources/**
+**/META-INF/services/**
+**/META-INF/beans.xml
+**/licenses/**
+
+### kogito-apps specific excludes
+**/*.graphqls
