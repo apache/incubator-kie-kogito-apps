@@ -28,7 +28,6 @@ import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNRuntime;
 import org.kie.dmn.core.impl.DMNRuntimeImpl;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kie.kogito.jitexecutor.dmn.TestingUtils.getModelFromIoUtils;
@@ -69,14 +68,13 @@ public class DMNEvaluatorTest {
         DMNRuntime dmnRuntime = mock(DMNRuntime.class);
         DMNMessage message = mock(DMNMessage.class);
 
-        when(message.getText()).thenReturn("Error : Failed to validate model");
+        String errorMessage = "Error compiling FEEL expression 'Person Age >= 18' for name 'Can Drive?' on node 'Can Drive?': syntax error near 'Age'";
+        when(message.getText()).thenReturn(errorMessage);
         when(dmnModel.hasErrors()).thenReturn(true);
         when(dmnModel.getMessages(DMNMessage.Severity.ERROR)).thenReturn(Collections.singletonList(message));
 
-        IllegalStateException exception = assertThrows(IllegalStateException.class,
-                () -> DMNEvaluator.validateForErrors(dmnModel, dmnRuntime));
-
-        assertEquals("Error : Failed to validate model", exception.getMessage());
+        assertThrows(IllegalStateException.class,
+                () -> DMNEvaluator.validateForErrors(dmnModel, dmnRuntime), errorMessage);
     }
 
     @Test
