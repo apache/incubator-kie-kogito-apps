@@ -22,10 +22,15 @@ import java.io.StringReader;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.kie.api.builder.Message;
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNContext;
+import org.kie.dmn.api.core.DMNMessage;
 import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
@@ -36,6 +41,7 @@ import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
 import org.kie.kogito.jitexecutor.common.requests.ResourceWithURI;
+import org.kie.kogito.jitexecutor.dmn.responses.JITDMNResult;
 import org.kie.kogito.jitexecutor.dmn.utils.ResolveByKey;
 
 public class DMNEvaluator {
@@ -47,35 +53,9 @@ public class DMNEvaluator {
         Resource modelResource = ResourceFactory.newReaderResource(new StringReader(modelXML), "UTF-8");
         DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
                 .fromResources(Collections.singletonList(modelResource)).getOrElseThrow(RuntimeException::new);
+        dmnRuntime.addListener(new JITDMNListener());
         DMNModel dmnModel = dmnRuntime.getModels().get(0);
-        return new DMNEvaluator(dmnModel, dmnRuntime);
-    }
-
-    private DMNEvaluator(DMNModel dmnModel, DMNRuntime dmnRuntime) {
-        this.dmnModel = dmnModel;
-        this.dmnRuntime = dmnRuntime;
-        ((DMNRuntimeImpl) this.dmnRuntime).setOption(new RuntimeTypeCheckOption(true));
-    }
-
-    public DMNModel getDmnModel() {
-        return dmnModel;
-    }
-
-    public String getNamespace() {
-        return dmnModel.getNamespace();
-    }
-
-    public String getName() {
-        return dmnModel.getName();
-    }
-
-    public Collection<DMNModel> getAllDMNModels() {
-        return dmnRuntime.getModels();
-    }
-
-    public DMNResult evaluate(Map<String, Object> context) {
-        DMNContext dmnContext = new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
-        return dmnRuntime.evaluateAll(dmnModel, dmnContext);
+        return validateForErrors(dmnModel, dmnRuntime);
     }
 
     public static DMNEvaluator fromMultiple(MultipleResourcesPayload payload) {
@@ -101,6 +81,51 @@ public class DMNEvaluator {
         if (mainModel == null) {
             throw new IllegalStateException("Was not able to identify main model from MultipleResourcesPayload contents.");
         }
-        return new DMNEvaluator(mainModel, dmnRuntime);
+        return validateForErrors(mainModel, dmnRuntime);
     }
+
+    static DMNEvaluator validateForErrors(DMNModel dmnModel, DMNRuntime dmnRuntime) {
+        if (dmnModel.hasErrors()) {
+            List<DMNMessage> messages = dmnModel.getMessages(DMNMessage.Severity.ERROR);
+            String errorMessage = messages.stream().map(Message::getText).collect(Collectors.joining(", "));
+            throw new IllegalStateException(errorMessage);
+        } else {
+            return new DMNEvaluator(dmnModel, dmnRuntime);
+        }
+    }
+
+    private DMNEvaluator(DMNModel dmnModel, DMNRuntime dmnRuntime) {
+        this.dmnModel = dmnModel;
+        this.dmnRuntime = dmnRuntime;
+        ((DMNRuntimeImpl) this.dmnRuntime).setOption(new RuntimeTypeCheckOption(true));
+    }
+
+    public DMNModel getDmnModel() {
+        return dmnModel;
+    }
+
+    public String getNamespace() {
+        return dmnModel.getNamespace();
+    }
+
+    public String getName() {
+        return dmnModel.getName();
+    }
+
+    public Collection<DMNModel> getAllDMNModels() {
+        return dmnRuntime.getModels();
+    }
+
+    public JITDMNResult evaluate(Map<String, Object> context) {
+        DMNContext dmnContext =
+                new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
+        DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
+        Optional<Map<String, Integer>> evaluationHitIds = dmnRuntime.getListeners().stream()
+                .filter(JITDMNListener.class::isInstance)
+                .findFirst()
+                .map(JITDMNListener.class::cast)
+                .map(JITDMNListener::getEvaluationHitIds);
+        return new JITDMNResult(getNamespace(), getName(), dmnResult, evaluationHitIds.orElse(Collections.emptyMap()));
+    }
+
 }
