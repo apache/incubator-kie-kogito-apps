@@ -13,3 +13,4 @@ DISCLAIMER-WIP
 
 ### kogito-apps specific excludes
 **/*.graphqls
+**/kogito-addons-data-audit-jpa-common/src/main/resources/META-INF/data-audit-orm.xml
