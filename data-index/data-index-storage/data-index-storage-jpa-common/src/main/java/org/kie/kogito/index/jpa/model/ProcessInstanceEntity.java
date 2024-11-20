@@ -297,6 +297,7 @@ public class ProcessInstanceEntity extends AbstractEntity {
                 ", lastUpdate=" + lastUpdate +
                 ", createdBy=" + createdBy +
                 ", updatedBy=" + updatedBy +
+                ", slaDueDate=" + slaDueDate +
                 ", variables=" + variables +
                 ", nodes=" + nodes +
                 ", milestones=" + milestones +
