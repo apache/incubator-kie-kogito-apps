@@ -68,6 +68,9 @@ public class ProcessInstanceEntity extends AbstractEntity {
     private String createdBy;
 
     private String updatedBy;
+
+    private ZonedDateTime slaDueDate;
+
     @Convert(converter = JsonBinaryConverter.class)
     @Column(columnDefinition = "jsonb")
     private ObjectNode variables;
@@ -201,6 +204,14 @@ public class ProcessInstanceEntity extends AbstractEntity {
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
+    }
+
+    public ZonedDateTime getSlaDueDate() {
+        return slaDueDate;
+    }
+
+    public void setSlaDueDate(ZonedDateTime slaDueDate) {
+        this.slaDueDate = slaDueDate;
     }
 
     public ObjectNode getVariables() {
