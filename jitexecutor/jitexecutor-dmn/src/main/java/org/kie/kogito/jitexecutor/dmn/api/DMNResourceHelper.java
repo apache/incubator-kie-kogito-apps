@@ -16,38 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.jobs.embedded;
+package org.kie.kogito.jitexecutor.dmn.api;
 
-import org.kie.kogito.jobs.JobDescription;
-import org.kie.kogito.jobs.service.api.PayloadData;
+import java.util.function.Supplier;
 
-public class InVMPayloadData extends PayloadData<JobDescription> {
+import jakarta.ws.rs.core.Response;
 
-    private JobDescription jobDescription;
+public class DMNResourceHelper {
 
-    public InVMPayloadData() {
-        // do nothing
+    private DMNResourceHelper() {
     }
 
-    public void setJobDescription(JobDescription jobDescription) {
-        this.jobDescription = jobDescription;
-    }
-
-    public JobDescription getJobDescription() {
-        return jobDescription;
-    }
-
-    @Override
-    public JobDescription getData() {
-        return jobDescription;
-    }
-
-    public InVMPayloadData(JobDescription data) {
-        this.jobDescription = data;
-    }
-
-    @Override
-    public String toString() {
-        return "InVMPayloadData [data=" + jobDescription + "]";
+    public static Response manageResponse(Supplier<Response> responseSupplier) {
+        try {
+            return responseSupplier.get();
+        } catch (Exception e) {
+            String errorMessage = e.getMessage() != null ? e.getMessage() : "Failed to get result due to " + e.getClass().getName();
+            return Response.status(Response.Status.BAD_REQUEST).entity(errorMessage).build();
+        }
     }
 }
