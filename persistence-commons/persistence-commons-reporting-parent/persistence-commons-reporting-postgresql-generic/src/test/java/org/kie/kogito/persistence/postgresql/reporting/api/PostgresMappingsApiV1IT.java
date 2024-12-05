@@ -72,7 +72,7 @@ class PostgresMappingsApiV1IT {
         final PostgresMappingDefinition definition = new PostgresMappingDefinition("ExampleMappingId",
                 "kogito_data_cache",
                 "json_value",
-                List.of(new PostgresField("key")),
+                List.of(new PostgresField("cache_key")),
                 List.of(new PostgresPartitionField("name", "Example")),
                 "Example",
                 List.of(new PostgresMapping("field1",

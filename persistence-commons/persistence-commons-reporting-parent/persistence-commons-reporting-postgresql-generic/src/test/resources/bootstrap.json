@@ -6,7 +6,7 @@
       "sourceTableJsonFieldName": "json_value",
       "sourceTableIdentityFields": [
         {
-          "fieldName": "key"
+          "fieldName": "cache_key"
         }
       ],
       "sourceTablePartitionFields": [
@@ -39,7 +39,7 @@
       "sourceTableJsonFieldName": "json_value",
       "sourceTableIdentityFields": [
         {
-          "fieldName": "key"
+          "fieldName": "cache_key"
         }
       ],
       "sourceTablePartitionFields": [
@@ -79,7 +79,7 @@
       "sourceTableJsonFieldName": "json_value",
       "sourceTableIdentityFields": [
         {
-          "fieldName": "key"
+          "fieldName": "cache_key"
         }
       ],
       "sourceTablePartitionFields": [
