@@ -370,6 +370,7 @@ type UserTaskInstance {
     comments: [Comment!]
     attachments: [Attachment!]
     externalReferenceId : String
+    slaDueDate: DateTime
 }
 
 input UserTaskInstanceArgument {
