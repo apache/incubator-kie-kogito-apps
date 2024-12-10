@@ -110,13 +110,44 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
                             case "KogitoMetadataArgument":
                                 parser.mapAttribute(field.getName(), mapSubEntityArgument(field.getName(), GraphQLQueryParserRegistry.get().getParser("KogitoMetadataArgument")));
                                 break;
+                            case "JSON":
+                                parser.mapAttribute(field.getName(), mapJsonArgument(field.getName()));
+                                break;
                             default:
-                                parser.mapAttribute(field.getName(), mapSubEntityArgument(field.getName(), new GraphQLQueryMapper().apply((GraphQLInputObjectType) field.getType())));
+                                if (field.getType() instanceof GraphQLInputObjectType) {
+                                    parser.mapAttribute(field.getName(), mapSubEntityArgument(field.getName(), new GraphQLQueryMapper().apply((GraphQLInputObjectType) field.getType())));
+                                }
                         }
                     }
                 });
-
         return parser;
+    }
+
+    private Function<Object, Stream<AttributeFilter<?>>> mapJsonArgument(String attribute) {
+        return argument -> ((Map<String, Object>) argument).entrySet().stream().map(e -> mapJsonArgument(attribute, e.getKey(), e.getValue()));
+    }
+
+    private AttributeFilter<?> mapJsonArgument(String attribute, String key, Object value) {
+        StringBuilder sb = new StringBuilder(attribute);
+        FilterCondition condition = FilterCondition.fromLabel(key);
+        while (condition == null && value instanceof Map) {
+            sb.append('.').append(key);
+            Map.Entry<String, Object> entry = ((Map<String, Object>) value).entrySet().iterator().next();
+            key = entry.getKey();
+            value = entry.getValue();
+            condition = FilterCondition.fromLabel(key);
+        }
+        if (condition != null) {
+            AttributeFilter<?> filter;
+            switch (condition) {
+                case EQUAL:
+                default:
+                    filter = equalTo(sb.toString(), value);
+            }
+            filter.setJson(true);
+            return filter;
+        }
+        return null;
     }
 
     private boolean isListOfType(GraphQLInputType source, String type) {
