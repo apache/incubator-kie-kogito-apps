@@ -37,6 +37,6 @@ public class PostgresqlJsonJPAQuery<K, E extends AbstractEntity, T> extends JPAQ
     }
 
     protected Function<AttributeFilter<?>, Predicate> filterPredicateFunction(Root<E> root, CriteriaBuilder builder) {
-        return filter -> filter.isJson() ? PostgresqlJsonNavigator.buildPredicate(filter, root, builder) : buildPredicateFunction(filter, root, builder);
+        return filter -> filter.isJson() ? PostgresqlJsonHelper.buildPredicate(filter, root, builder) : buildPredicateFunction(filter, root, builder);
     }
 }

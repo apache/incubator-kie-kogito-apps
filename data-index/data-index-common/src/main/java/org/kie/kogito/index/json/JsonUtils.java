@@ -59,10 +59,11 @@ public final class JsonUtils {
         }
         return result;
     }
-    
+
     public static <T> AttributeFilter<T> jsonFilter(AttributeFilter<T> filter) {
-        filter.setJson(true);
+        if (filter != null) {
+            filter.setJson(true);
+        }
         return filter;
     }
-
 }

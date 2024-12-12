@@ -18,6 +18,8 @@
  */
 package org.kie.kogito.index.graphql.query;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -70,5 +72,35 @@ public class GraphQLQueryMapperTest {
     void testJsonMapperBetween() {
         assertThat(mapper.mapJsonArgument("variables").apply(Map.of("workflowdata", Map.of("number", Map.of("between", Map.of("from", 1, "to", 3)))))).containsExactly(
                 jsonFilter(between("variables.workflowdata.number", 1, 3)));
+    }
+
+    @Test
+    void testJsonMapperIn() {
+        assertThat(mapper.mapJsonArgument("variables").apply(Map.of("workflowdata", Map.of("number", Map.of("in", List.of(1, 3)))))).containsExactly(
+                jsonFilter(in("variables.workflowdata.number", Arrays.asList(1, 3))));
+    }
+
+    @Test
+    void testJsonMapperContains() {
+        assertThat(mapper.mapJsonArgument("variables").apply(Map.of("workflowdata", Map.of("number", Map.of("contains", 1))))).containsExactly(
+                jsonFilter(contains("variables.workflowdata.number", 1)));
+    }
+
+    @Test
+    void testJsonMapperLike() {
+        assertThat(mapper.mapJsonArgument("variables").apply(Map.of("workflowdata", Map.of("number", Map.of("like", "kk"))))).containsExactly(
+                jsonFilter(like("variables.workflowdata.number", "kk")));
+    }
+
+    @Test
+    void testJsonMapperNull() {
+        assertThat(mapper.mapJsonArgument("variables").apply(Map.of("workflowdata", Map.of("number", Map.of("isNull", true))))).containsExactly(
+                jsonFilter(isNull("variables.workflowdata.number")));
+    }
+
+    @Test
+    void testJsonMapperNotNull() {
+        assertThat(mapper.mapJsonArgument("variables").apply(Map.of("workflowdata", Map.of("number", Map.of("isNull", false))))).containsExactly(
+                jsonFilter(notNull("variables.workflowdata.number")));
     }
 }

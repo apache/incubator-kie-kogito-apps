@@ -150,6 +150,18 @@ public class GraphQLQueryMapper implements Function<GraphQLInputObjectType, Grap
                     return jsonFilter(lessThanEqual(sb.toString(), value));
                 case BETWEEN:
                     return jsonFilter(filterValueMap(value, val -> between(sb.toString(), val.get("from"), val.get("to"))));
+                case IN:
+                    return jsonFilter(filterValueList(value, val -> in(sb.toString(), val)));
+                case IS_NULL:
+                    return jsonFilter(Boolean.TRUE.equals(value) ? isNull(sb.toString()) : notNull(sb.toString()));
+                case CONTAINS:
+                    return jsonFilter(contains(sb.toString(), value));
+                case LIKE:
+                    return jsonFilter(like(sb.toString(), value.toString()));
+                case CONTAINS_ALL:
+                    return filterValueList(value, val -> containsAll(sb.toString(), val));
+                case CONTAINS_ANY:
+                    return filterValueList(value, val -> containsAny(sb.toString(), val));
                 case EQUAL:
                 default:
                     return jsonFilter(equalTo(sb.toString(), value));
