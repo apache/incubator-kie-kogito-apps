@@ -72,6 +72,9 @@ public class PostgresqlJsonHelper {
                 values = (List<Object>) filter.getValue();
                 isString = values.get(0) instanceof String;
                 return buildPathExpression(builder, root, filter.getAttribute(), isString).in(values.stream().map(o -> buildObjectExpression(builder, o, isString)).collect(Collectors.toList()));
+            case CONTAINS:
+                return builder.isTrue(
+                        builder.function("contains", Boolean.class, buildPathExpression(builder, root, filter.getAttribute(), false), builder.literal(filter.getValue())));
         }
         throw new UnsupportedOperationException("Filter " + filter + " is not supported");
     }
