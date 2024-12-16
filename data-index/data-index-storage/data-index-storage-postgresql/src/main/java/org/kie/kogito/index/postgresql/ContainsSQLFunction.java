@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.index.postgresql;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.dialect.function.StandardSQLFunction;
@@ -30,12 +31,21 @@ import org.hibernate.type.SqlTypes;
 
 public class ContainsSQLFunction extends StandardSQLFunction {
 
-    static final String NAME = "contains";
+    static final String CONTAINS_NAME = "contains";
+    static final String CONTAINS_ALL_NAME = "containsAll";
+    static final String CONTAINS_ANY_NAME = "containsAny";
+
+    static final String CONTAINS_SEQ = "??";
+    static final String CONTAINS_ALL_SEQ = "??&";
+    static final String CONTAINS_ANY_SEQ = "??|";
+
+    private final String operator;
 
     private static final BasicTypeReference<Boolean> RETURN_TYPE = new BasicTypeReference<>("boolean", Boolean.class, SqlTypes.BOOLEAN);
 
-    public ContainsSQLFunction() {
-        super(NAME, RETURN_TYPE);
+    ContainsSQLFunction(String name, String operator) {
+        super(name, RETURN_TYPE);
+        this.operator = operator;
     }
 
     @Override
@@ -44,9 +54,23 @@ public class ContainsSQLFunction extends StandardSQLFunction {
             List<? extends SqlAstNode> args,
             ReturnableType<?> returnType,
             SqlAstTranslator<?> translator) {
-        args.get(0).accept(translator);
-        sqlAppender.append(" ?? ");
-        args.get(1).accept(translator);
+        int size = args.size();
+        if (size < 2) {
+            throw new IllegalArgumentException("Function " + getName() + " requires at least two arguments");
+        }
+        Iterator<? extends SqlAstNode> iter = args.iterator();
+        iter.next().accept(translator);
+        sqlAppender.append(' ');
+        sqlAppender.append(operator);
+        sqlAppender.append(' ');
+        if (size == 2) {
+            iter.next().accept(translator);
+        } else {
+            sqlAppender.append("array[");
+            do {
+                iter.next().accept(translator);
+                sqlAppender.append(iter.hasNext() ? ',' : ']');
+            } while (iter.hasNext());
+        }
     }
-
 }

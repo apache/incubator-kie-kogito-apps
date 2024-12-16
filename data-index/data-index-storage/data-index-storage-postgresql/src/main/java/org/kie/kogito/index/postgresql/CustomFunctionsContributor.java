@@ -20,12 +20,17 @@ package org.kie.kogito.index.postgresql;
 
 import org.hibernate.boot.model.FunctionContributions;
 import org.hibernate.boot.model.FunctionContributor;
+import org.hibernate.query.sqm.function.SqmFunctionRegistry;
+
+import static org.kie.kogito.index.postgresql.ContainsSQLFunction.*;
 
 public class CustomFunctionsContributor implements FunctionContributor {
 
     @Override
     public void contributeFunctions(FunctionContributions functionContributions) {
-        functionContributions.getFunctionRegistry()
-                .register(ContainsSQLFunction.NAME, new ContainsSQLFunction());
+        SqmFunctionRegistry registry = functionContributions.getFunctionRegistry();
+        registry.register(CONTAINS_NAME, new ContainsSQLFunction(CONTAINS_NAME, CONTAINS_SEQ));
+        registry.register(CONTAINS_ANY_NAME, new ContainsSQLFunction(CONTAINS_ANY_NAME, CONTAINS_ANY_SEQ));
+        registry.register(CONTAINS_ALL_NAME, new ContainsSQLFunction(CONTAINS_ALL_NAME, CONTAINS_ALL_SEQ));
     }
 }
