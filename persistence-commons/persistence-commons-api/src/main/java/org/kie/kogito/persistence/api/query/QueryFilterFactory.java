@@ -34,7 +34,7 @@ public final class QueryFilterFactory {
         return new AttributeFilter<>(attribute, FilterCondition.LIKE, value);
     }
 
-    public static AttributeFilter<String> contains(String attribute, String value) {
+    public static <T> AttributeFilter<T> contains(String attribute, T value) {
         return new AttributeFilter<>(attribute, FilterCondition.CONTAINS, value);
     }
 
@@ -42,11 +42,11 @@ public final class QueryFilterFactory {
         return new AttributeFilter<>(attribute, FilterCondition.IN, values);
     }
 
-    public static AttributeFilter<List<String>> containsAny(String attribute, List<String> values) {
+    public static <T> AttributeFilter<List<T>> containsAny(String attribute, List<T> values) {
         return new AttributeFilter<>(attribute, FilterCondition.CONTAINS_ANY, values);
     }
 
-    public static AttributeFilter<List<String>> containsAll(String attribute, List<String> values) {
+    public static <T> AttributeFilter<List<T>> containsAll(String attribute, List<T> values) {
         return new AttributeFilter<>(attribute, FilterCondition.CONTAINS_ALL, values);
     }
 
