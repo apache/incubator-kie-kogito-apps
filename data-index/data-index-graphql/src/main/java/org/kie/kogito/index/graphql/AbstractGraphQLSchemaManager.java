@@ -28,6 +28,7 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
+import org.kie.kogito.index.CommonUtils;
 import org.kie.kogito.index.api.KogitoRuntimeClient;
 import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
@@ -142,25 +143,7 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
     }
 
     protected String getServiceUrl(String endpoint, String processId) {
-        LOGGER.debug("Process endpoint {}", endpoint);
-        if (endpoint == null) {
-            return null;
-        }
-        if (endpoint.startsWith("/")) {
-            LOGGER.warn("Process '{}' endpoint '{}', does not contain full URL, please review the kogito.service.url system property to point the public URL for this runtime.",
-                    processId, endpoint);
-        }
-        String context = getContext(processId);
-        LOGGER.debug("Process context {}", context);
-        if (context.equals(endpoint) || endpoint.equals("/" + context)) {
-            return null;
-        } else {
-            return endpoint.contains("/" + context) ? endpoint.substring(0, endpoint.lastIndexOf("/" + context)) : null;
-        }
-    }
-
-    private String getContext(String processId) {
-        return processId != null && processId.contains(".") ? processId.substring(processId.lastIndexOf('.') + 1) : processId;
+        return CommonUtils.getServiceUrl(endpoint, processId);
     }
 
     protected Collection<ProcessInstance> getChildProcessInstancesValues(DataFetchingEnvironment env) {
