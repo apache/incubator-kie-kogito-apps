@@ -52,3 +52,6 @@ package-lock.json
 /cypress*
 
 .factorypath
+
+# Apache RAT check excludes file
+!.rat-excludes
