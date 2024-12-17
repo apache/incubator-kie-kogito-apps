@@ -17,8 +17,8 @@
  * under the License.
  */
 
-alter table definitions_nodes_metadata rename column key to metadata_key;
-alter table definitions_nodes_metadata rename column value to metadata_value;
-alter table definitions_metadata rename column key to metadata_key;
-alter table definitions_metadata rename column value to metadata_value;
-alter table definitions_annotations rename column value to annotation;
+alter table definitions_nodes_metadata alter column key rename to name;
+alter table definitions_nodes_metadata alter column value rename to meta_value;
+alter table definitions_metadata alter column key rename to name;
+alter table definitions_metadata alter column value rename to meta_value;
+alter table definitions_annotations alter column value rename to annotation;

@@ -17,4 +17,5 @@
  * under the License.
  */
 
-alter table kogito_data_cache rename column key to cache_key;
+alter table kogito_data_cache rename column name to cache_name;
+alter table kogito_data_cache rename column key to var_name;

@@ -78,8 +78,8 @@ public class ProcessDefinitionEntity extends AbstractEntity {
     @CollectionTable(name = "definitions_metadata", joinColumns = {
             @JoinColumn(name = "process_id", referencedColumnName = "id"), @JoinColumn(name = "process_version", referencedColumnName = "version") },
             foreignKey = @ForeignKey(name = "fk_definitions_metadata"))
-    @MapKeyColumn(name = "metadata_key")
-    @Column(name = "metadata_value")
+    @MapKeyColumn(name = "name")
+    @Column(name = "meta_value")
     private Map<String, String> metadata;
 
     @Override
