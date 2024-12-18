@@ -24,3 +24,4 @@ create table if not exists kogito_data_cache (
                                    json_value jsonb,
                                    primary key (var_name, cache_name)
 );
+
