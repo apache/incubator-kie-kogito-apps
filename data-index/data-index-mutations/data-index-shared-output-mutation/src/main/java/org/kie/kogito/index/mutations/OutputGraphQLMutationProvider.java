@@ -16,17 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.service.mutations;
+package org.kie.kogito.index.mutations;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import org.kie.kogito.index.api.ExecuteArgs;
 import org.kie.kogito.index.graphql.AbstractGraphQLSchemaManager;
+import org.kie.kogito.index.graphql.GraphQLMutationsProvider;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
 import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.service.graphql.GraphQLMutationsProvider;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.jackson.utils.MergeUtils;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class OutputGraphQLMutationProvider implements GraphQLMutationsProvider {
 
     @Override
     public Map<String, DataFetcher<CompletableFuture<?>>> mutations(AbstractGraphQLSchemaManager schemaManager) {
-        return Map.of("sharedOutput", env -> sharedOutput(schemaManager, env));
+        return Map.of("ExecuteAfter", env -> sharedOutput(schemaManager, env));
     }
 
     private CompletableFuture<String> sharedOutput(AbstractGraphQLSchemaManager schemaManager, DataFetchingEnvironment env) {

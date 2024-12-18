@@ -22,17 +22,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>data-index-service</artifactId>
+    <artifactId>data-index</artifactId>
     <version>999-SNAPSHOT</version>
   </parent>
-  <artifactId>data-index-service-shared-output</artifactId>
-  <dependencies>
-   <dependency>
-    <groupId>org.kie.kogito</groupId>
-    <artifactId>data-index-service-common</artifactId>
-   </dependency>
-  </dependencies>
-  <properties>
-    <java.module.name>org.kie.kogito.index.service.mutations</java.module.name>
-  </properties>
+  <artifactId>data-index-mutations</artifactId>
+  <packaging>pom</packaging>
+  <modules>
+   <module>data-index-shared-output-mutation</module>
+  </modules>
 </project>

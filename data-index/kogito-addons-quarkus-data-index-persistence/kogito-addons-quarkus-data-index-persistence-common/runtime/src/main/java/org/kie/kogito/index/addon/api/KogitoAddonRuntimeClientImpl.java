@@ -289,6 +289,6 @@ public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient impl
         org.kie.kogito.process.ProcessInstance<? extends Model> pi = process.createInstance(m);
         pi.start();
         return CompletableFuture.completedFuture(
-                String.format(SUCCESSFULLY_OPERATION_MESSAGE, "Started ProcessInstance with id: " + pi.id()));
+                String.format(SUCCESSFULLY_OPERATION_MESSAGE, "Started Process Instance with id: " + pi.id()));
     }
 }

@@ -21,12 +21,8 @@ package org.kie.kogito.index.service.graphql;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.ServiceLoader;
-import java.util.ServiceLoader.Provider;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.kie.kogito.index.graphql.AbstractGraphQLSchemaManager;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
@@ -105,8 +101,7 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
                     builder.dataFetcher("UserTaskInstanceCommentDelete", this::deleteUserTaskComment);
                     builder.dataFetcher("UserTaskInstanceAttachmentUpdate", this::updateUserTaskAttachment);
                     builder.dataFetcher("UserTaskInstanceAttachmentDelete", this::deleteUserTaskAttachment);
-                    ServiceLoader.load(GraphQLMutationsProvider.class).stream().map(Provider::get).map(m -> m.mutations(this)).flatMap(map -> map.entrySet().stream())
-                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2)).forEach(builder::dataFetcher);
+                    loadAdditionalMutations(builder);
                     return builder;
                 })
                 .type("ProcessDefinition", builder -> {

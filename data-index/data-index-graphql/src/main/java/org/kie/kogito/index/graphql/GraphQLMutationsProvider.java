@@ -16,12 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.service.graphql;
+package org.kie.kogito.index.graphql;
 
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-
-import org.kie.kogito.index.graphql.AbstractGraphQLSchemaManager;
 
 import graphql.schema.DataFetcher;
 

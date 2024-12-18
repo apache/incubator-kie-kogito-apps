@@ -23,10 +23,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 public record ExecuteArgs(JsonNode input, String businessKey, String referenceId) {
 
     public static ExecuteArgs of(JsonNode input) {
-        return new Builder().withInput(input).build();
+        return builder().withInput(input).build();
     }
 
-    public static Builder builder(JsonNode modelInput) {
+    public static Builder builder() {
         return new Builder();
     }
 

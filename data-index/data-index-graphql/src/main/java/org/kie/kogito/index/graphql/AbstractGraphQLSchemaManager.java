@@ -25,8 +25,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.ServiceLoader;
+import java.util.ServiceLoader.Provider;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import org.kie.kogito.index.CommonUtils;
 import org.kie.kogito.index.api.KogitoRuntimeClient;
@@ -42,8 +45,6 @@ import org.kie.kogito.index.service.DataIndexServiceException;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.persistence.api.StorageFetcher;
 import org.kie.kogito.persistence.api.query.Query;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLInputObjectType;
@@ -52,6 +53,7 @@ import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchema;
 import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
+import graphql.schema.idl.TypeRuntimeWiring.Builder;
 import jakarta.annotation.PostConstruct;
 import jakarta.inject.Inject;
 
@@ -69,8 +71,6 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
     private static final String ATTACHMENT_ID = "attachmentId";
 
     private static final String UNABLE_TO_FIND_ERROR_MSG = "Unable to find the instance with %s %s";
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGraphQLSchemaManager.class);
 
     @Inject
     DataIndexStorageService cacheService;
@@ -91,6 +91,11 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
                 (GraphQLInputObjectType) schema.getType("ProcessInstanceArgument"),
                 (GraphQLInputObjectType) schema.getType("UserTaskInstanceArgument"),
                 (GraphQLInputObjectType) schema.getType("JobArgument"));
+    }
+
+    protected final void loadAdditionalMutations(Builder builder) {
+        ServiceLoader.load(GraphQLMutationsProvider.class).stream().map(Provider::get).map(m -> m.mutations(this)).flatMap(map -> map.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2)).forEach(builder::dataFetcher);
     }
 
     protected TypeDefinitionRegistry loadSchemaDefinitionFile(String fileName) {

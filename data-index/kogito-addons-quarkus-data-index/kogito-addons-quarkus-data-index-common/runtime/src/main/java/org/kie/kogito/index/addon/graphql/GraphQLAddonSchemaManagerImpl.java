@@ -53,6 +53,7 @@ public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager 
                     builder.dataFetcher("NodeInstanceCancel", this::cancelNodeInstance);
                     builder.dataFetcher("JobCancel", this::cancelJob);
                     builder.dataFetcher("JobReschedule", this::rescheduleJob);
+                    loadAdditionalMutations(builder);
                     return builder;
                 })
                 .type("ProcessDefinition", builder -> {

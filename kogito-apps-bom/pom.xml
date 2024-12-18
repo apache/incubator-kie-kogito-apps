@@ -252,7 +252,7 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-service-shared-output</artifactId>
+                <artifactId>data-index-shared-output-mutation</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
