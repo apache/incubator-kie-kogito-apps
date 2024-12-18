@@ -22,10 +22,10 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>data-index-service</artifactId>
+    <artifactId>data-index-mutations</artifactId>
     <version>999-SNAPSHOT</version>
   </parent>
-  <artifactId>data-index-service-shared-output</artifactId>
+  <artifactId>data-index-shared-output-mutation</artifactId>
   <dependencies>
    <dependency>
     <groupId>org.kie.kogito</groupId>

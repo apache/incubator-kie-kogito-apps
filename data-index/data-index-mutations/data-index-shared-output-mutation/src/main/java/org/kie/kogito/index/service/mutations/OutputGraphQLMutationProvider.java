@@ -44,7 +44,7 @@ public class OutputGraphQLMutationProvider implements GraphQLMutationsProvider {
 
     @Override
     public Map<String, DataFetcher<CompletableFuture<?>>> mutations(AbstractGraphQLSchemaManager schemaManager) {
-        return Map.of("sharedOutput", env -> sharedOutput(schemaManager, env));
+        return Map.of("executeAfter", env -> sharedOutput(schemaManager, env));
     }
 
     private CompletableFuture<String> sharedOutput(AbstractGraphQLSchemaManager schemaManager, DataFetchingEnvironment env) {
