@@ -20,13 +20,38 @@ package org.kie.kogito.index;
 
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class CommonUtils {
 
     public static final int ERROR_STATE = 5;
     private static final Set<String> finalStates = Set.of("Completed", "Aborted");
+    private static final Logger logger = LoggerFactory.getLogger(CommonUtils.class);
 
     public static boolean isTaskCompleted(String status) {
         return finalStates.contains(status);
     }
 
+    public static String getServiceUrl(String endpoint, String processId) {
+        logger.debug("Process endpoint {}", endpoint);
+        if (endpoint == null) {
+            return null;
+        }
+        if (endpoint.startsWith("/")) {
+            logger.warn("Process '{}' endpoint '{}', does not contain full URL, please review the kogito.service.url system property to point the public URL for this runtime.",
+                    processId, endpoint);
+        }
+        String context = getContext(processId);
+        logger.debug("Process context {}", context);
+        if (context.equals(endpoint) || endpoint.equals("/" + context)) {
+            return null;
+        } else {
+            return endpoint.contains("/" + context) ? endpoint.substring(0, endpoint.lastIndexOf("/" + context)) : null;
+        }
+    }
+
+    private static String getContext(String processId) {
+        return processId != null && processId.contains(".") ? processId.substring(processId.lastIndexOf('.') + 1) : processId;
+    }
 }
