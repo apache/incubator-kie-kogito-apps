@@ -18,9 +18,6 @@
  */
 package org.kie.kogito.index.graphql;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -51,7 +48,6 @@ import graphql.schema.GraphQLInputObjectType;
 import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchema;
-import graphql.schema.idl.SchemaParser;
 import graphql.schema.idl.TypeDefinitionRegistry;
 import graphql.schema.idl.TypeRuntimeWiring.Builder;
 import jakarta.annotation.PostConstruct;
@@ -83,8 +79,11 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
 
     private GraphQLSchema schema;
 
+    private Collection<GraphQLMutationsProvider> mutations;
+
     @PostConstruct
     public void setup() {
+        mutations = ServiceLoader.load(GraphQLMutationsProvider.class).stream().map(Provider::get).collect(Collectors.toList());
         schema = createSchema();
         GraphQLQueryParserRegistry.get().registerParsers(
                 (GraphQLInputObjectType) schema.getType("ProcessDefinitionArgument"),
@@ -94,18 +93,16 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
     }
 
     protected final void loadAdditionalMutations(Builder builder) {
-        ServiceLoader.load(GraphQLMutationsProvider.class).stream().map(Provider::get).map(m -> m.mutations(this)).flatMap(map -> map.entrySet().stream())
+        mutations.stream().map(m -> m.mutations(this)).flatMap(map -> map.entrySet().stream())
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (v1, v2) -> v2)).forEach(builder::dataFetcher);
     }
 
+    protected final void loadAdditionalMutations(TypeDefinitionRegistry typeRegistry) {
+        mutations.stream().map(GraphQLMutationsProvider::registry).forEach(typeRegistry::merge);
+    }
+
     protected TypeDefinitionRegistry loadSchemaDefinitionFile(String fileName) {
-        SchemaParser schemaParser = new SchemaParser();
-        try (InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
-                InputStreamReader reader = new InputStreamReader(stream)) {
-            return schemaParser.parse(reader);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return CommonUtils.loadSchemaDefinitionFile(fileName);
     }
 
     public abstract GraphQLSchema createSchema();

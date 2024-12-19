@@ -22,7 +22,10 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import graphql.schema.DataFetcher;
+import graphql.schema.idl.TypeDefinitionRegistry;
 
 public interface GraphQLMutationsProvider {
     Map<String, DataFetcher<CompletableFuture<?>>> mutations(AbstractGraphQLSchemaManager schemaManager);
+
+    TypeDefinitionRegistry registry();
 }

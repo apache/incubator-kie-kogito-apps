@@ -18,10 +18,16 @@
  */
 package org.kie.kogito.index;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import graphql.schema.idl.SchemaParser;
+import graphql.schema.idl.TypeDefinitionRegistry;
 
 public class CommonUtils {
 
@@ -48,6 +54,16 @@ public class CommonUtils {
             return null;
         } else {
             return endpoint.contains("/" + context) ? endpoint.substring(0, endpoint.lastIndexOf("/" + context)) : null;
+        }
+    }
+
+    public static TypeDefinitionRegistry loadSchemaDefinitionFile(String fileName) {
+        SchemaParser schemaParser = new SchemaParser();
+        try (InputStream stream = Thread.currentThread().getContextClassLoader().getResourceAsStream(fileName);
+                InputStreamReader reader = new InputStreamReader(stream)) {
+            return schemaParser.parse(reader);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

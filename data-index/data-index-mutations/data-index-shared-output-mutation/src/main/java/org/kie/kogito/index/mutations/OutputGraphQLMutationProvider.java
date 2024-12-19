@@ -21,6 +21,7 @@ package org.kie.kogito.index.mutations;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import org.kie.kogito.index.CommonUtils;
 import org.kie.kogito.index.api.ExecuteArgs;
 import org.kie.kogito.index.graphql.AbstractGraphQLSchemaManager;
 import org.kie.kogito.index.graphql.GraphQLMutationsProvider;
@@ -28,6 +29,7 @@ import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.storage.DataIndexStorageService;
+import org.kie.kogito.jackson.utils.JsonObjectUtils;
 import org.kie.kogito.jackson.utils.MergeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.idl.TypeDefinitionRegistry;
 
 public class OutputGraphQLMutationProvider implements GraphQLMutationsProvider {
 
@@ -54,7 +57,7 @@ public class OutputGraphQLMutationProvider implements GraphQLMutationsProvider {
         if (processDefinition == null) {
             throw new IllegalArgumentException(key + "does not correspond to any existing process definition");
         }
-        JsonNode input = env.getArgument("input");
+        JsonNode input = JsonObjectUtils.fromValue(env.getArgument("input"));
         String completedInstanceId = env.getArgument(COMPLETED_INSTANCE_ID);
         if (completedInstanceId != null) {
             ProcessInstance processInstance = cacheService.getProcessInstanceStorage().get(completedInstanceId);
@@ -75,5 +78,10 @@ public class OutputGraphQLMutationProvider implements GraphQLMutationsProvider {
             throw new IllegalArgumentException("Missing " + name + " mandatory parameter");
         }
         return result;
+    }
+
+    @Override
+    public TypeDefinitionRegistry registry() {
+        return CommonUtils.loadSchemaDefinitionFile("mutation.schema.graphqls");
     }
 }

@@ -121,10 +121,10 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
         final String infraProcessId = "infra";
         ProcessDefinitionDataEvent definitionEvent = TestUtils.getProcessDefinitionDataEvent(infraProcessId);
         indexProcessCloudEvent(definitionEvent);
-        checkOkResponse("{ \"query\" : \"mutation{ ExecuteAfter ( " + fragment("completedProcessId", assesmentInstanceId) + "," + fragment("processId", infraProcessId) +
-                "," + fragment("processVersion", TestUtils.PROCESS_VERSION) + "," + "input: {" + fragment(assesmentVarName, assesmentVarValue) + "})}\"}");
+        checkOkResponse("{ \"query\" : \"mutation{ ExecuteAfter ( " + fragment("completedInstanceId", assesmentInstanceId) + "," + fragment("processId", infraProcessId) +
+                "," + fragment("processVersion", TestUtils.PROCESS_VERSION) + "," + "input: {" + fragment(infraVarName, infraVarValue) + "})}\"}");
         verify(dataIndexApiClient).executeProcessIntance(getProcessDefinition(infraProcessId), ExecuteArgs.of(ObjectMapperFactory.get().createObjectNode().put(assesmentVarName, assesmentVarValue)
-        		.put(infraVarName,infraVarValue)));
+                .put(infraVarName, infraVarValue)));
     }
 
     private String fragment(String name, String value) {
