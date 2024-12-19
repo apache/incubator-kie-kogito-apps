@@ -101,6 +101,7 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
                     builder.dataFetcher("UserTaskInstanceCommentDelete", this::deleteUserTaskComment);
                     builder.dataFetcher("UserTaskInstanceAttachmentUpdate", this::updateUserTaskAttachment);
                     builder.dataFetcher("UserTaskInstanceAttachmentDelete", this::deleteUserTaskAttachment);
+                    loadAdditionalMutations(builder);
                     return builder;
                 })
                 .type("ProcessDefinition", builder -> {
