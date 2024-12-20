@@ -39,7 +39,6 @@ import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
 import org.kie.kogito.index.api.ExecuteArgs;
 import org.kie.kogito.index.api.KogitoRuntimeClient;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
-import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.index.service.AbstractIndexingIT;
 import org.kie.kogito.index.service.graphql.GraphQLSchemaManagerImpl;
@@ -123,19 +122,13 @@ public abstract class AbstractGraphQLRuntimesQueriesIT extends AbstractIndexingI
         indexProcessCloudEvent(definitionEvent);
         checkOkResponse("{ \"query\" : \"mutation{ ExecuteAfter ( " + fragment("completedInstanceId", assesmentInstanceId) + "," + fragment("processId", infraProcessId) +
                 "," + fragment("processVersion", TestUtils.PROCESS_VERSION) + "," + "input: {" + fragment(infraVarName, infraVarValue) + "})}\"}");
-        verify(dataIndexApiClient).executeProcessIntance(getProcessDefinition(infraProcessId), ExecuteArgs.of(ObjectMapperFactory.get().createObjectNode().put(assesmentVarName, assesmentVarValue)
-                .put(infraVarName, infraVarValue)));
+        verify(dataIndexApiClient).executeProcessIntance(TestUtils.getProcessDefinition(infraProcessId),
+                ExecuteArgs.of(ObjectMapperFactory.get().createObjectNode().put(assesmentVarName, assesmentVarValue)
+                        .put(infraVarName, infraVarValue)));
     }
 
     private String fragment(String name, String value) {
         return name + ": \\\"" + value + "\\\"";
-    }
-
-    private ProcessDefinition getProcessDefinition(String processId) {
-        ProcessDefinition def = new ProcessDefinition();
-        def.setId(processId);
-        def.setVersion(TestUtils.PROCESS_VERSION);
-        return def;
     }
 
     @Test
