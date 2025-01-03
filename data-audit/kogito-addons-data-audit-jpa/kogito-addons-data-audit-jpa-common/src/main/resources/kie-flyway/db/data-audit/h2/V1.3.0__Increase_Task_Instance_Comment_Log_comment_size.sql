@@ -17,4 +17,4 @@
  * under the License.
  */
 
-ALTER TABLE jbpm_user_tasks_comments ALTER COLUMN comment SET DATA TYPE VARCHAR(1000);
+ALTER TABLE Task_Instance_Comment_Log ALTER COLUMN comment_content SET DATA TYPE VARCHAR(1000);
