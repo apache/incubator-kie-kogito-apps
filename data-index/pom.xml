@@ -42,6 +42,7 @@
     <module>data-index-service</module>
     <module>kogito-addons-quarkus-data-index-persistence</module>
     <module>kogito-addons-quarkus-data-index</module>
+    <module>data-index-mutations</module>
   </modules>
 
 </project>
