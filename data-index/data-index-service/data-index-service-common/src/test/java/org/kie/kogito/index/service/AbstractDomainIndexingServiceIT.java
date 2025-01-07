@@ -88,7 +88,7 @@ public abstract class AbstractDomainIndexingServiceIT extends AbstractIndexingSe
             fail("Registering broken proto file should fail");
         } catch (Exception ex) {
             assertThat(ex.getMessage())
-                    .isEqualTo("Failed to resolve type of field \"org.demo.travels.traveller\". Type not found : stringa");
+                    .isEqualTo("Failed to resolve type of field \"org.demo.travels.traveller\" in \"domainModel\". Type not found : stringa");
         }
     }
 
