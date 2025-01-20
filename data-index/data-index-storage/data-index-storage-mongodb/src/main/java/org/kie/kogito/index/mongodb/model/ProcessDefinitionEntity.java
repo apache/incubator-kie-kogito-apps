@@ -40,7 +40,7 @@ public class ProcessDefinitionEntity {
 
     private Set<String> annotations;
 
-    private Map<String, String> metadata;
+    private Map<String, ?> metadata;
 
     private Set<String> roles;
 
@@ -148,11 +148,11 @@ public class ProcessDefinitionEntity {
         this.annotations = annotations;
     }
 
-    public Map<String, String> getMetadata() {
+    public Map<String, ?> getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(Map<String, String> metadata) {
+    public void setMetadata(Map<String, ?> metadata) {
         this.metadata = metadata;
     }
 
@@ -193,7 +193,7 @@ public class ProcessDefinitionEntity {
         private String uniqueId;
         private String type;
 
-        private Map<String, String> metadata;
+        private Map<String, ?> metadata;
 
         public String getId() {
             return id;
@@ -227,11 +227,11 @@ public class ProcessDefinitionEntity {
             this.type = type;
         }
 
-        public Map<String, String> getMetadata() {
+        public Map<String, ?> getMetadata() {
             return metadata;
         }
 
-        public void setMetadata(Map<String, String> metadata) {
+        public void setMetadata(Map<String, ?> metadata) {
             this.metadata = metadata;
         }
 

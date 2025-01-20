@@ -67,16 +67,16 @@ public class NodeMarshaller extends AbstractMarshaller implements MessageMarshal
         };
     }
 
-    Function<Map<String, String>, NodeMetadata> toNodeMetadata() {
+    Function<Map<String, ?>, NodeMetadata> toNodeMetadata() {
         return m -> {
             if (m == null) {
                 return null;
             }
             NodeMetadata meta = new NodeMetadata();
-            meta.setAction(m.get(NodeMetadataMarshaller.ACTION));
-            meta.setState(m.get(NodeMetadataMarshaller.STATE));
-            meta.setUniqueId(m.get(NodeMetadataMarshaller.UNIQUE_ID));
-            meta.setBranch(m.get(NodeMetadataMarshaller.BRANCH));
+            meta.setAction((String) m.get(NodeMetadataMarshaller.ACTION));
+            meta.setState((String) m.get(NodeMetadataMarshaller.STATE));
+            meta.setUniqueId((String) m.get(NodeMetadataMarshaller.UNIQUE_ID));
+            meta.setBranch((String) m.get(NodeMetadataMarshaller.BRANCH));
             return meta;
         };
     }

@@ -55,7 +55,7 @@ public class NodeEntity extends AbstractEntity {
             foreignKey = @ForeignKey(name = "fk_definitions_nodes_metadata_definitions_nodes"))
     @MapKeyColumn(name = "name")
     @Column(name = "meta_value")
-    private Map<String, String> metadata;
+    private Map<String, ?> metadata;
 
     @Id
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
@@ -96,11 +96,11 @@ public class NodeEntity extends AbstractEntity {
         this.type = type;
     }
 
-    public Map<String, String> getMetadata() {
+    public Map<String, ?> getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(Map<String, String> metadata) {
+    public void setMetadata(Map<String, ?> metadata) {
         this.metadata = metadata;
     }
 

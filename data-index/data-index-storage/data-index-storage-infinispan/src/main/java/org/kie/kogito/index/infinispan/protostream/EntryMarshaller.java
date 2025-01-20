@@ -43,7 +43,11 @@ public class EntryMarshaller extends AbstractMarshaller implements MessageMarsha
     @Override
     public void writeTo(ProtoStreamWriter writer, Entry entry) throws IOException {
         writer.writeString(KEY, entry.getKey());
-        writer.writeString(VALUE, entry.getValue());
+        writer.writeString(VALUE, toString(entry.getValue()));
+    }
+
+    private String toString(Object str) {
+        return str != null ? str.toString() : null;
     }
 
     @Override

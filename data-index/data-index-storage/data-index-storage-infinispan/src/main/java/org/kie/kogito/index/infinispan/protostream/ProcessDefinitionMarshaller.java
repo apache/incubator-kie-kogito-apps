@@ -72,7 +72,7 @@ public class ProcessDefinitionMarshaller extends AbstractMarshaller implements M
         return pd;
     }
 
-    private static Map<String, String> buildMetadata(ProtoStreamReader reader) throws IOException {
+    private static Map<String, ?> buildMetadata(ProtoStreamReader reader) throws IOException {
         return Optional.ofNullable(reader.readCollection(METADATA, new HashSet<>(), Entry.class))
                 .map(entries -> entries.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue)))
                 .orElse(null);

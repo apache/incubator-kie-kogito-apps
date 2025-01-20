@@ -21,6 +21,8 @@ package org.kie.kogito.index;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -64,6 +66,25 @@ public class CommonUtils {
             return schemaParser.parse(reader);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static Map mergeMap(Map source, Map target) {
+        if (source == null) {
+            return target;
+        } else if (target == null) {
+            return source;
+        } else {
+            Map result = new HashMap(target);
+            source.forEach((key, value) -> result.merge(key, value, (targetValue, srcValue) -> {
+                if (srcValue instanceof Map && targetValue instanceof Map) {
+                    return mergeMap((Map) srcValue, (Map) targetValue);
+                } else {
+                    return srcValue;
+                }
+            }));
+            return result;
         }
     }
 

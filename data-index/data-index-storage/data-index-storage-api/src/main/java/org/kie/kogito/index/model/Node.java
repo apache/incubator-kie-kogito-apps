@@ -30,7 +30,7 @@ public class Node {
     @JsonProperty("nodeType")
     private String type;
     private String uniqueId;
-    private Map<String, String> metadata;
+    private Map<String, ?> metadata;
 
     public String getId() {
         return id;
@@ -64,11 +64,11 @@ public class Node {
         this.uniqueId = uniqueId;
     }
 
-    public Map<String, String> getMetadata() {
+    public Map<String, ?> getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(Map<String, String> metadata) {
+    public void setMetadata(Map<String, ?> metadata) {
         this.metadata = metadata;
     }
 

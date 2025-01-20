@@ -25,12 +25,12 @@ public class Entry {
 
     private String key;
 
-    private String value;
+    private Object value;
 
     public Entry() {
     }
 
-    public Entry(String key, String value) {
+    public Entry(String key, Object value) {
         this.key = key;
         this.value = value;
     }
@@ -43,7 +43,7 @@ public class Entry {
         this.key = key;
     }
 
-    public String getValue() {
+    public Object getValue() {
         return value;
     }
 
