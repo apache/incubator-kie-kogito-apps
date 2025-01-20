@@ -18,17 +18,23 @@
  */
 package org.kie.kogito.index.service;
 
+import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.kie.kogito.event.process.NodeDefinition;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionEventBody;
 import org.kie.kogito.index.CommonUtils;
+import org.kie.kogito.index.json.JsonUtils;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessDefinition;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -57,9 +63,8 @@ public class ProcessDefinitionHelper {
         instance.setEndpoint(doMerge(data.getEndpoint(), instance.getEndpoint()));
         instance.setDescription(doMerge(data.getDescription(), instance.getDescription()));
         instance.setAnnotations(doMerge(data.getAnnotations(), instance.getAnnotations()));
-        instance.setMetadata(CommonUtils.mergeMap(data.getMetadata(), instance.getMetadata()));
+        instance.setMetadata(CommonUtils.mergeMap(toStringMap(data.getMetadata()), instance.getMetadata()));
         instance.setNodes(doMerge(nodeDefinitions(data), instance.getNodes()));
-
         instance.setSource(doMerge(data.getSource(), instance.getSource()));
         return instance;
     }
@@ -77,7 +82,7 @@ public class ProcessDefinitionHelper {
         node.setName(definition.getName());
         node.setUniqueId(definition.getUniqueId());
         node.setType(definition.getType());
-        node.setMetadata(definition.getMetadata());
+        node.setMetadata(toStringMap(definition.getMetadata()));
         return node;
     }
 
@@ -90,4 +95,22 @@ public class ProcessDefinitionHelper {
         return current;
     }
 
+    private static Map<String, String> toStringMap(Map<String, ?> input) {
+        if (input == null) {
+            return null;
+        }
+        return input.entrySet().stream()
+                .map(entry -> {
+                    if (String.class.isInstance(entry.getValue())) {
+                        return entry;
+                    }
+                    String value = null;
+                    try {
+                        value = JsonUtils.getObjectMapper().writeValueAsString(entry.getValue());
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return new AbstractMap.SimpleEntry<>(entry.getKey(), value);
+                }).collect(Collectors.toMap(Map.Entry::getKey, e -> (String) e.getValue()));
+    }
 }

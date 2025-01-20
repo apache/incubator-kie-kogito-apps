@@ -69,21 +69,25 @@ public class CommonUtils {
         }
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
-    public static Map mergeMap(Map source, Map target) {
+    @SuppressWarnings("unchecked")
+    public static <K, V> Map<K, V> mergeMap(Map<K, V> source, Map<K, V> target) {
         if (source == null) {
             return target;
         } else if (target == null) {
             return source;
         } else {
-            Map result = new HashMap(target);
-            source.forEach((key, value) -> result.merge(key, value, (targetValue, srcValue) -> {
-                if (srcValue instanceof Map && targetValue instanceof Map) {
-                    return mergeMap((Map) srcValue, (Map) targetValue);
-                } else {
-                    return srcValue;
+            Map<K, V> result = new HashMap<>(target);
+            source.forEach((key, value) -> {
+                if (value != null) {
+                    result.merge(key, value, (targetValue, srcValue) -> {
+                        if (srcValue instanceof Map && targetValue instanceof Map) {
+                            return (V) mergeMap((Map<K, V>) srcValue, (Map<K, V>) targetValue);
+                        } else {
+                            return srcValue;
+                        }
+                    });
                 }
-            }));
+            });
             return result;
         }
     }

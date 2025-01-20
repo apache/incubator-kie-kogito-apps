@@ -80,7 +80,7 @@ public class ProcessDefinitionEntity extends AbstractEntity {
             foreignKey = @ForeignKey(name = "fk_definitions_metadata"))
     @MapKeyColumn(name = "name")
     @Column(name = "meta_value")
-    private Map<String, ?> metadata;
+    private Map<String, String> metadata;
 
     @Override
     public String getId() {
@@ -171,11 +171,11 @@ public class ProcessDefinitionEntity extends AbstractEntity {
         this.annotations = annotations;
     }
 
-    public Map<String, ?> getMetadata() {
+    public Map<String, String> getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(Map<String, ?> metadata) {
+    public void setMetadata(Map<String, String> metadata) {
         this.metadata = metadata;
     }
 
