@@ -18,15 +18,15 @@
  */
 package org.kie.kogito.index.service;
 
-import io.restassured.http.ContentType;
+import java.util.Collection;
+
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.service.test.InMemoryMessageTestProfile;
 import org.kie.kogito.index.test.TestUtils;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
-
-import java.util.Collection;
+import io.restassured.http.ContentType;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.isA;
@@ -44,6 +44,7 @@ class MongoDomainIndexingServiceIT extends AbstractDomainIndexingServiceIT {
     protected String getUserTaskProtobufFileContent() throws Exception {
         return TestUtils.readFileContent("deals-mongo.proto");
     }
+
     @Test
     void testAddProtoFileTwice() throws Exception {
         protobufService.registerProtoBufferType(getProtoBufferFileV1());
@@ -66,6 +67,7 @@ class MongoDomainIndexingServiceIT extends AbstractDomainIndexingServiceIT {
                 .when().post("/graphql")
                 .then().log().ifValidationFails().statusCode(200).body("data.ProcessInstances", isA(Collection.class));
     }
+
     private String getProtoBufferFileV1() {
         return "package org.demo;\n" +
                 "import \"kogito-index.proto\";\n" +
