@@ -63,7 +63,7 @@ public class JITDMNResult implements Serializable,
         this.modelName = modelName;
         this.setDmnContext(dmnResult.getContext().getAll());
         this.setMessages(dmnResult.getMessages());
-        this.setDecisionResults(dmnResult.getDecisionResults(), decisionEvaluationHitIdsMap);
+        this.internalSetDecisionResults(dmnResult.getDecisionResults(), decisionEvaluationHitIdsMap);
     }
 
     public String getNamespace() {
@@ -100,10 +100,10 @@ public class JITDMNResult implements Serializable,
         }
     }
 
-    private void setDecisionResults(List<? extends DMNDecisionResult> decisionResults, Map<String, Map<String, Integer>> decisionEvaluationHitIdsMap) {
+    public void setDecisionResults(List<? extends DMNDecisionResult> decisionResults) {
         this.decisionResults = new HashMap<>();
         for (DMNDecisionResult dr : decisionResults) {
-            this.decisionResults.put(dr.getDecisionId(), JITDMNDecisionResult.of(dr, decisionEvaluationHitIdsMap.getOrDefault(dr.getDecisionName(), Collections.emptyMap())));
+            this.decisionResults.put(dr.getDecisionId(), JITDMNDecisionResult.of(dr));
         }
     }
 
@@ -157,5 +157,12 @@ public class JITDMNResult implements Serializable,
                 .append(", messages=").append(messages)
                 .append(", decisionResults=").append(decisionResults)
                 .append("]").toString();
+    }
+
+    private void internalSetDecisionResults(List<? extends DMNDecisionResult> decisionResults, Map<String, Map<String, Integer>> decisionEvaluationHitIdsMap) {
+        this.decisionResults = new HashMap<>();
+        for (DMNDecisionResult dr : decisionResults) {
+            this.decisionResults.put(dr.getDecisionId(), JITDMNDecisionResult.of(dr, decisionEvaluationHitIdsMap.getOrDefault(dr.getDecisionName(), Collections.emptyMap())));
+        }
     }
 }

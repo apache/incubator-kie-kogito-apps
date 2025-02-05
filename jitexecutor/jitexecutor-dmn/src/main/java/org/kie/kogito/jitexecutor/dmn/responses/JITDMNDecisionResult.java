@@ -20,6 +20,7 @@ package org.kie.kogito.jitexecutor.dmn.responses;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -44,6 +45,10 @@ public class JITDMNDecisionResult implements Serializable,
 
     public JITDMNDecisionResult() {
         // Intentionally blank.
+    }
+
+    public static JITDMNDecisionResult of(DMNDecisionResult value) {
+        return of(value, Collections.emptyMap());
     }
 
     public static JITDMNDecisionResult of(DMNDecisionResult value, Map<String, Integer> decisionEvaluationHitIdsMap) {
