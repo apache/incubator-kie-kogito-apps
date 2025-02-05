@@ -129,14 +129,14 @@ public class JITDMNResourceTest {
         ObjectNode decisionNode = (ObjectNode) targetStream.filter(node -> node.get("decisionName").asText().equals("Credit Score Rating")).findFirst().get();
         ObjectNode evaluationHitIdsNode = (ObjectNode) decisionNode.get(EVALUATION_HIT_IDS_FIELD_NAME);
         Assertions.assertThat(evaluationHitIdsNode).hasSize(1);
-        Map<String, Integer> expectedEvaluationHitIds0 = Map.of(ruleId0, 2);
+        Map<String, Integer> expectedEvaluationHitIds0 = Map.of(ruleId0, 1);
         evaluationHitIdsNode.fields().forEachRemaining(entry -> Assertions.assertThat(expectedEvaluationHitIds0).containsEntry(entry.getKey(), entry.getValue().asInt()));
 
         targetStream = StreamSupport.stream(iterable.spliterator(), false);
         decisionNode = (ObjectNode) targetStream.filter(node -> node.get("decisionName").asText().equals("Loan Pre-Qualification")).findFirst().get();
         evaluationHitIdsNode = (ObjectNode) decisionNode.get(EVALUATION_HIT_IDS_FIELD_NAME);
         Assertions.assertThat(evaluationHitIdsNode).hasSize(1);
-        Map<String, Integer> expectedEvaluationHitIds1 = Map.of(ruleId1, 2);
+        Map<String, Integer> expectedEvaluationHitIds1 = Map.of(ruleId1, 1);
         evaluationHitIdsNode.fields().forEachRemaining(entry -> Assertions.assertThat(expectedEvaluationHitIds1).containsEntry(entry.getKey(), entry.getValue().asInt()));
     }
 
@@ -176,7 +176,7 @@ public class JITDMNResourceTest {
         ObjectNode evaluationHitIdsNode = (ObjectNode) decisionNode.get(EVALUATION_HIT_IDS_FIELD_NAME);
         Assertions.assertThat(evaluationHitIdsNode).hasSize(3);
 
-        final Map<String, Integer> expectedEvaluationHitIds = Map.of(rule0, 6, rule1, 4, rule2, 2);
+        final Map<String, Integer> expectedEvaluationHitIds = Map.of(rule0, 3, rule1, 2, rule2, 1);
         evaluationHitIdsNode.fields().forEachRemaining(entry -> Assertions.assertThat(expectedEvaluationHitIds).containsEntry(entry.getKey(), entry.getValue().asInt()));
     }
 

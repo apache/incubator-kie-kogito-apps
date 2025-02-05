@@ -245,7 +245,7 @@ public class JITDMNServiceImplTest {
         assertThat(retrievedDecisionResult.getResult()).isEqualTo(expectedStatistcs);
         Map<String, Integer> evaluationHitIds = retrievedDecisionResult.getEvaluationHitIds();
         assertThat(evaluationHitIds).isNotNull()
-                .containsExactlyInAnyOrderEntriesOf(Map.of(rule0, 6, rule1, 4, rule2, 2));
+                .containsExactlyInAnyOrderEntriesOf(Map.of(rule0, 3, rule1, 2, rule2, 1));
     }
 
     @Test

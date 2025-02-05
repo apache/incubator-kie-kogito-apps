@@ -96,12 +96,7 @@ public class JITDMNListener implements DMNRuntimeEventListener {
             evaluationHitIds = new HashMap<>();
             decisionEvaluationHitIdsMap.put(decisionName, evaluationHitIds);
         }
-        for (String id : idsToStore) {
-            int count = evaluationHitIds.containsKey(id) ? evaluationHitIds.get(id) + 1 : 1;
-            evaluationHitIds.put(id, count);
-        }
         idsToStore.forEach(s -> evaluationHitIds.compute(s, (k, v) -> v == null ? 1 : v + 1));
-
     }
 
     private void logEvent(DMNEvent toLog) {
