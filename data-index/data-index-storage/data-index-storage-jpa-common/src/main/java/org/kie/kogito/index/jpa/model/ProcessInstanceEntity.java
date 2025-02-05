@@ -34,9 +34,12 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinColumns;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -84,6 +87,11 @@ public class ProcessInstanceEntity extends AbstractEntity {
     private Set<String> addons;
     @Embedded
     private ProcessInstanceErrorEntity error;
+
+    @ManyToOne(targetEntity = ProcessDefinitionEntity.class, fetch = FetchType.LAZY)
+    @JoinColumns({ @JoinColumn(name = "processId", referencedColumnName = "id", insertable = false, updatable = false),
+            @JoinColumn(name = "version", referencedColumnName = "version", insertable = false, updatable = false) })
+    private ProcessDefinitionEntity definition;
 
     @Override
     public String getId() {
@@ -277,6 +285,10 @@ public class ProcessInstanceEntity extends AbstractEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public ProcessDefinitionEntity getDefinition() {
+        return definition;
     }
 
     @Override

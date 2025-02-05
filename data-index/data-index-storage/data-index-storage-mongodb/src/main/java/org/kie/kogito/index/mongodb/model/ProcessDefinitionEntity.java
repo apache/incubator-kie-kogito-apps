@@ -25,6 +25,8 @@ import java.util.Set;
 
 import org.bson.codecs.pojo.annotations.BsonId;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 public class ProcessDefinitionEntity {
 
     @BsonId
@@ -40,7 +42,7 @@ public class ProcessDefinitionEntity {
 
     private Set<String> annotations;
 
-    private Map<String, String> metadata;
+    private ObjectNode metadata;
 
     private Set<String> roles;
 
@@ -148,11 +150,11 @@ public class ProcessDefinitionEntity {
         this.annotations = annotations;
     }
 
-    public Map<String, String> getMetadata() {
+    public ObjectNode getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(Map<String, String> metadata) {
+    public void setMetadata(ObjectNode metadata) {
         this.metadata = metadata;
     }
 

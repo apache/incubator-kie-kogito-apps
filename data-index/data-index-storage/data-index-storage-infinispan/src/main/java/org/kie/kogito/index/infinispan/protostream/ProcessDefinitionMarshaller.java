@@ -21,18 +21,18 @@ package org.kie.kogito.index.infinispan.protostream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
+import java.util.LinkedHashSet;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.infinispan.protostream.MessageMarshaller;
 import org.kie.kogito.index.model.Entry;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessDefinition;
+import org.kie.kogito.jackson.utils.ObjectMapperFactory;
 import org.kie.kogito.persistence.infinispan.protostream.AbstractMarshaller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ProcessDefinitionMarshaller extends AbstractMarshaller implements MessageMarshaller<ProcessDefinition> {
 
@@ -72,10 +72,14 @@ public class ProcessDefinitionMarshaller extends AbstractMarshaller implements M
         return pd;
     }
 
-    private static Map<String, String> buildMetadata(ProtoStreamReader reader) throws IOException {
-        return Optional.ofNullable(reader.readCollection(METADATA, new HashSet<>(), Entry.class))
-                .map(entries -> entries.stream().collect(Collectors.toMap(Entry::getKey, Entry::getValue)))
-                .orElse(null);
+    private static ObjectNode buildMetadata(ProtoStreamReader reader) throws IOException {
+        Set<Entry> set = reader.readCollection(METADATA, new HashSet<>(), Entry.class);
+        if (set == null) {
+            return null;
+        }
+        ObjectNode node = ObjectMapperFactory.get().createObjectNode();
+        set.forEach(e -> node.put(e.getKey(), e.getValue()));
+        return node;
     }
 
     @Override
@@ -95,10 +99,13 @@ public class ProcessDefinitionMarshaller extends AbstractMarshaller implements M
     }
 
     private static Set<Entry> buildMetadata(ProcessDefinition pd) {
-        return Optional.ofNullable(pd.getMetadata())
-                .map(Map::entrySet)
-                .map(entries -> entries.stream().map(e -> new Entry(e.getKey(), e.getValue())).collect(Collectors.toSet()))
-                .orElse(null);
+        return pd.getMetadata() == null ? null : buildMetadata(pd.getMetadata());
+    }
+
+    private static Set<Entry> buildMetadata(ObjectNode node) {
+        Set<Entry> result = new LinkedHashSet<Entry>();
+        node.fields().forEachRemaining(e -> result.add(new Entry(e.getKey(), e.getValue().asText())));
+        return result;
     }
 
     @Override

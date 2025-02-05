@@ -64,6 +64,7 @@ input ProcessDefinitionArgument {
     id: StringArgument
     name: StringArgument
     version: StringArgument
+    metadata: JSON
 }
 
 type ProcessInstance {
@@ -194,6 +195,7 @@ input ProcessInstanceArgument {
     businessKey: StringArgument
     createdBy: StringArgument
     updatedBy: StringArgument
+    definition: ProcessDefinitionArgument
 }
 
 input ProcessInstanceErrorArgument {
