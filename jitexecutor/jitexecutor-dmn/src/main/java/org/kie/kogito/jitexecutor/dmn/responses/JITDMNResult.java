@@ -61,16 +61,6 @@ public class JITDMNResult implements Serializable,
         return toReturn;
     }
 
-    //    public static JITDMNResult of(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult) {
-    //        JITDMNResult toReturn = new JITDMNResult();
-    //        toReturn.namespace = namespace;
-    //        toReturn.modelName = modelName;
-    //        toReturn.dmnContext = internalGetContext(dmnResult.getContext().getAll());
-    //        toReturn.messages = internalGetMessages(dmnResult.getMessages());
-    //        toReturn.decisionResultsMap = ((JITDMNResult) dmnResult).decisionResultsMap;
-    //        return toReturn;
-    //    }
-
     public JITDMNResult() {
         // Intentionally blank.
     }

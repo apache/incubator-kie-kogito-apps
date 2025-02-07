@@ -120,7 +120,6 @@ public class JITDMNServiceImpl implements JITDMNService {
             }
             return new DMNResultWithExplanation(
                     JITDMNResult.of(dmnEvaluator.getNamespace(), dmnEvaluator.getName(), dmnResult, Collections.emptyMap()),
-                    //JITDMNResult.of(dmnEvaluator.getNamespace(), dmnEvaluator.getName(), dmnResult),
                     new SalienciesResponse(EXPLAINABILITY_FAILED, EXPLAINABILITY_FAILED_MESSAGE, null));
         }
 
@@ -128,7 +127,6 @@ public class JITDMNServiceImpl implements JITDMNService {
 
         return new DMNResultWithExplanation(
                 JITDMNResult.of(dmnEvaluator.getNamespace(), dmnEvaluator.getName(), dmnResult, Collections.emptyMap()),
-                //JITDMNResult.of(dmnEvaluator.getNamespace(), dmnEvaluator.getName(), dmnResult),
                 new SalienciesResponse(EXPLAINABILITY_SUCCEEDED, null, saliencyModelResponse));
     }
 
