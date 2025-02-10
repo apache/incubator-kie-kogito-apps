@@ -250,15 +250,7 @@ public class JITDMNResourceTest {
                 .body(containsString("Error compiling FEEL expression 'Person Age >= 18' for name 'Can Drive?' on node 'Can Drive?': syntax error near 'Age'"));
     }
 
-    private Map<String, Object> buildContext() {
-        Map<String, Object> context = new HashMap<>();
-        context.put("FICO Score", 800);
-        context.put("DTI Ratio", .1);
-        context.put("PITI Ratio", .1);
-        return context;
-    }
-
-    private Map<String, Object> buildMultipleHitContext() {
+    static Map<String, Object> buildMultipleHitContext() {
         final List<BigDecimal> numbers = new ArrayList<>();
         numbers.add(BigDecimal.valueOf(10));
         numbers.add(BigDecimal.valueOf(2));
@@ -267,6 +259,15 @@ public class JITDMNResourceTest {
         context.put("Numbers", numbers);
         return context;
     }
+
+    private Map<String, Object> buildContext() {
+        Map<String, Object> context = new HashMap<>();
+        context.put("FICO Score", 800);
+        context.put("DTI Ratio", .1);
+        context.put("PITI Ratio", .1);
+        return context;
+    }
+
 
     private Map<String, Object> buildInvalidModelContext() {
         Map<String, Object> context = new HashMap<>();
