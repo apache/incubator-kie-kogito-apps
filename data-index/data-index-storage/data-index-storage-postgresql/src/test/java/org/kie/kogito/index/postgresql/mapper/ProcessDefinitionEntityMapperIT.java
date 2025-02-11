@@ -19,9 +19,16 @@
 package org.kie.kogito.index.postgresql.mapper;
 
 import org.kie.kogito.index.jpa.mapper.AbstractProcessDefinitionEntityMapperIT;
+import org.kie.kogito.index.postgresql.PostgresqlProcessDefinitionEntity;
+import org.kie.kogito.index.postgresql.PostgresqlProcessDefinitionEntityMapper;
 
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
-class ProcessDefinitionEntityMapperIT extends AbstractProcessDefinitionEntityMapperIT {
+class ProcessDefinitionEntityMapperIT extends AbstractProcessDefinitionEntityMapperIT<PostgresqlProcessDefinitionEntity, PostgresqlProcessDefinitionEntityMapper> {
+
+    @Override
+    protected PostgresqlProcessDefinitionEntity getEntity() {
+        return new PostgresqlProcessDefinitionEntity();
+    }
 }

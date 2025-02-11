@@ -16,21 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jdbc.query;
+package org.kie.kogito.index.jdbc;
 
-import org.kie.kogito.index.jdbc.PostgreSQLQuarkusTestProfile;
-import org.kie.kogito.index.jpa.query.AbstractUserTaskInstanceEntityQueryIT;
-import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
+import org.kie.kogito.index.jpa.mapper.ProcessDefinitionEntityMapperHolder;
 
-import io.quarkus.test.TestTransaction;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
+import io.quarkus.runtime.Startup;
 
-@QuarkusTest
-@TestTransaction
-@QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
-@TestProfile(PostgreSQLQuarkusTestProfile.class)
-class PostgreSQLUserTaskInstanceEntityQueryIT extends AbstractUserTaskInstanceEntityQueryIT {
+import jakarta.annotation.PostConstruct;
+import jakarta.enterprise.inject.Produces;
 
+@Startup
+public class JPAProcessDefinitionEntityMapperProducer {
+
+    private JPAProcessDefinitionEntityMapper mapper;
+
+    @PostConstruct
+    void setup() {
+        mapper = new JPAProcessDefinitionEntityMapper();
+        ProcessDefinitionEntityMapperHolder.get().mapper(mapper);
+    }
+
+    @Produces
+    public JPAProcessDefinitionEntityMapper createMapper() {
+        return mapper;
+    }
 }

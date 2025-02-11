@@ -31,7 +31,7 @@ public abstract class AbstractStorageIT<K, E extends AbstractEntity, T> {
         this.type = type;
     }
 
-    abstract Storage<K, T> getStorage();
+    protected abstract Storage<K, T> getStorage();
 
     void testStorage(K key, T value1, T value2) {
         Storage<K, T> cache = getStorage();

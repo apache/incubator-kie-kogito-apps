@@ -18,11 +18,17 @@
  */
 package org.kie.kogito.index.jdbc.mapper;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.kie.kogito.index.jdbc.JPAProcessDefinitionEntityMapper;
 import org.kie.kogito.index.jpa.mapper.AbstractProcessInstanceEntityMapperIT;
+import org.kie.kogito.index.jpa.mapper.ProcessDefinitionEntityMapperHolder;
 
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 class ProcessInstanceEntityMapperIT extends AbstractProcessInstanceEntityMapperIT {
-
+    @BeforeAll
+    static void setupHolder() {
+        ProcessDefinitionEntityMapperHolder.get().mapper(new JPAProcessDefinitionEntityMapper());
+    }
 }

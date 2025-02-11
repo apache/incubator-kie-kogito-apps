@@ -28,7 +28,6 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "cdi", suppressTimestampInGenerated = true)
 public interface ProcessInstanceEntityMapper {
@@ -44,7 +43,7 @@ public interface ProcessInstanceEntityMapper {
     ProcessInstance mapToModel(ProcessInstanceEntity pi);
 
     default ProcessDefinition mapToDefinition(ProcessDefinitionEntity entity) {
-        return Mappers.getMapper(ProcessDefinitionEntityMapper.class).mapToModel(entity);
+        return ProcessDefinitionEntityMapperHolder.get().mapper().mapToModel(entity);
     }
 
     @AfterMapping

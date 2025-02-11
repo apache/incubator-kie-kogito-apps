@@ -22,29 +22,25 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.hibernate.annotations.NotFound;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
-import org.kie.kogito.persistence.postgresql.hibernate.JsonBinaryConverter;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ForeignKey;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
 
-@Entity(name = "definitions")
-@Table(name = "definitions")
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @IdClass(ProcessDefinitionKey.class)
-public class ProcessDefinitionEntity extends AbstractEntity {
+public abstract class ProcessDefinitionEntity extends AbstractEntity {
 
     @Id
     private String id;
@@ -77,10 +73,6 @@ public class ProcessDefinitionEntity extends AbstractEntity {
             @JoinColumn(name = "process_version", referencedColumnName = "version") }, foreignKey = @ForeignKey(name = "fk_definitions_annotations"))
     @Column(name = "annotation")
     private Set<String> annotations;
-    @Convert(converter = JsonBinaryConverter.class)
-    @Column(columnDefinition = "jsonb")
-    @NotFound
-    private ObjectNode metadata;
 
     @Override
     public String getId() {
@@ -169,14 +161,6 @@ public class ProcessDefinitionEntity extends AbstractEntity {
 
     public void setAnnotations(Set<String> annotations) {
         this.annotations = annotations;
-    }
-
-    public ObjectNode getMetadata() {
-        return metadata;
-    }
-
-    public void setMetadata(ObjectNode metadata) {
-        this.metadata = metadata;
     }
 
     @Override

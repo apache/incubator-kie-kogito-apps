@@ -18,21 +18,28 @@
  */
 package org.kie.kogito.index.postgresql;
 
-import org.kie.kogito.index.jpa.mapper.ProcessDefinitionEntityMapper;
-import org.kie.kogito.index.jpa.model.ProcessDefinitionEntityRepository;
-import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
+import org.kie.kogito.index.jpa.storage.AbstractStorage;
 import org.kie.kogito.index.model.ProcessDefinition;
+import org.kie.kogito.index.model.ProcessDefinitionKey;
 import org.kie.kogito.persistence.api.query.Query;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
-public class PostgresqlProcessDefinitionEntityStorage extends ProcessDefinitionEntityStorage {
+public class PostgresqlProcessDefinitionEntityStorage extends AbstractStorage<ProcessDefinitionKey, PostgresqlProcessDefinitionEntity, ProcessDefinition> {
 
     @Inject
-    public PostgresqlProcessDefinitionEntityStorage(ProcessDefinitionEntityRepository repository, ProcessDefinitionEntityMapper mapper) {
-        super(repository, mapper);
+    public PostgresqlProcessDefinitionEntityStorage(PostgresqlProcessDefinitionEntityRepository repository, PostgresqlProcessDefinitionEntityMapper mapper) {
+        super(repository, ProcessDefinition.class, PostgresqlProcessDefinitionEntity.class, mapper::mapToModel, mapper::mapToEntity, e -> new ProcessDefinitionKey(e.getId(),
+                e.getVersion()));
+    }
+
+    @Transactional
+    @Override
+    public boolean containsKey(ProcessDefinitionKey key) {
+        return getRepository().count("id = ?1 and version = ?2", key.getId(), key.getVersion()) == 1;
     }
 
     @Override
