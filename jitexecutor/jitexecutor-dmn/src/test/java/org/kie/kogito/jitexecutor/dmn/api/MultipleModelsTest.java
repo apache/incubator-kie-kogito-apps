@@ -25,7 +25,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -41,6 +40,7 @@ import org.kie.kogito.jitexecutor.dmn.responses.JITDMNResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -223,10 +223,10 @@ public class MultipleModelsTest {
                 .then()
                 .statusCode(200)
                 .body(containsString("Statistics"),
-                      containsString(EVALUATION_HIT_IDS_FIELD_NAME),
-                      containsString(rule0),
-                      containsString(rule1),
-                      containsString(rule2))
+                        containsString(EVALUATION_HIT_IDS_FIELD_NAME),
+                        containsString(rule0),
+                        containsString(rule1),
+                        containsString(rule2))
                 .extract()
                 .asString();
         JsonNode retrieved = MAPPER.readTree(response);

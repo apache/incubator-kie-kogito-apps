@@ -268,7 +268,6 @@ public class JITDMNResourceTest {
         return context;
     }
 
-
     private Map<String, Object> buildInvalidModelContext() {
         Map<String, Object> context = new HashMap<>();
         context.put("Can Drive?", false);
