@@ -16,27 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.postgresql;
+package org.kie.kogito.index.jpa.model;
 
-import org.kie.kogito.index.jpa.mapper.ProcessDefinitionEntityMapper;
-import org.kie.kogito.index.jpa.model.ProcessDefinitionEntityRepository;
-import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
-import org.kie.kogito.index.model.ProcessDefinition;
-import org.kie.kogito.persistence.api.query.Query;
+import org.kie.kogito.index.model.ProcessDefinitionKey;
+
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 @ApplicationScoped
-public class PostgresqlProcessDefinitionEntityStorage extends ProcessDefinitionEntityStorage {
+public class ProcessDefinitionEntityRepository implements PanacheRepositoryBase<ProcessDefinitionEntity, ProcessDefinitionKey> {
 
-    @Inject
-    public PostgresqlProcessDefinitionEntityStorage(ProcessDefinitionEntityRepository repository, ProcessDefinitionEntityMapper mapper) {
-        super(repository, mapper);
-    }
-
-    @Override
-    public Query<ProcessDefinition> query() {
-        return new PostgresqlJsonJPAQuery<>(repository, mapToModel, entityClass);
-    }
 }

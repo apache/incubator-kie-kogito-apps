@@ -16,24 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jdbc;
+package org.kie.kogito.index.jpa.storage;
 
-import org.kie.kogito.index.jpa.storage.AbstractStorage;
-import org.kie.kogito.index.jpa.storage.JPAQuery;
+import org.kie.kogito.index.jpa.mapper.ProcessDefinitionEntityMapper;
+import org.kie.kogito.index.jpa.model.ProcessDefinitionEntity;
+import org.kie.kogito.index.jpa.model.ProcessDefinitionEntityRepository;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
-import org.kie.kogito.persistence.api.query.Query;
+
+import io.quarkus.arc.DefaultBean;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
 @ApplicationScoped
-public class JPAProcessDefinitionEntityStorage extends AbstractStorage<ProcessDefinitionKey, JPAProcessDefinitionEntity, ProcessDefinition> {
+@DefaultBean
+public class ProcessDefinitionEntityStorage extends AbstractStorage<ProcessDefinitionKey, ProcessDefinitionEntity, ProcessDefinition> {
+
+    protected ProcessDefinitionEntityStorage() {
+    }
 
     @Inject
-    public JPAProcessDefinitionEntityStorage(JPAProcessDefinitionEntityRepository repository, JPAProcessDefinitionEntityMapper mapper) {
-        super(repository, ProcessDefinition.class, JPAProcessDefinitionEntity.class, mapper::mapToModel, mapper::mapToEntity, e -> new ProcessDefinitionKey(e.getId(),
+    public ProcessDefinitionEntityStorage(ProcessDefinitionEntityRepository repository, ProcessDefinitionEntityMapper mapper) {
+        super(repository, ProcessDefinition.class, ProcessDefinitionEntity.class, mapper::mapToModel, mapper::mapToEntity, e -> new ProcessDefinitionKey(e.getId(),
                 e.getVersion()));
     }
 
@@ -43,8 +49,4 @@ public class JPAProcessDefinitionEntityStorage extends AbstractStorage<ProcessDe
         return getRepository().count("id = ?1 and version = ?2", key.getId(), key.getVersion()) == 1;
     }
 
-    @Override
-    public Query<ProcessDefinition> query() {
-        return new JPAQuery<>(repository, mapToModel, entityClass);
-    }
 }

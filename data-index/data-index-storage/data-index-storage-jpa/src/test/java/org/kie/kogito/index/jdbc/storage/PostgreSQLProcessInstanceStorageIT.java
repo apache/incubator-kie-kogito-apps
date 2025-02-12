@@ -16,15 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.postgresql;
+package org.kie.kogito.index.jdbc.storage;
 
-import org.kie.kogito.index.model.ProcessDefinitionKey;
+import org.kie.kogito.index.jdbc.PostgreSQLQuarkusTestProfile;
+import org.kie.kogito.index.jpa.storage.AbstractProcessInstanceStorageIT;
+import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
 
-import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+import io.quarkus.test.TestTransaction;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 
-import jakarta.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
-public class PostgresqlProcessDefinitionEntityRepository implements PanacheRepositoryBase<PostgresqlProcessDefinitionEntity, ProcessDefinitionKey> {
-
+@QuarkusTest
+@TestTransaction
+@QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
+@TestProfile(PostgreSQLQuarkusTestProfile.class)
+public class PostgreSQLProcessInstanceStorageIT extends AbstractProcessInstanceStorageIT {
 }

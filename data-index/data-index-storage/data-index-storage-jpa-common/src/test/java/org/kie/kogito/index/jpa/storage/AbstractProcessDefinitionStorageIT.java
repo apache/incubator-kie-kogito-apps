@@ -26,11 +26,22 @@ import org.kie.kogito.index.jpa.model.ProcessDefinitionEntity;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
 import org.kie.kogito.index.test.TestUtils;
+import org.kie.kogito.persistence.api.Storage;
+
+import jakarta.inject.Inject;
 
 public abstract class AbstractProcessDefinitionStorageIT extends AbstractStorageIT<ProcessDefinitionKey, ProcessDefinitionEntity, ProcessDefinition> {
 
+    @Inject
+    ProcessDefinitionEntityStorage storage;
+
     public AbstractProcessDefinitionStorageIT() {
         super(ProcessDefinition.class);
+    }
+
+    @Override
+    public Storage<ProcessDefinitionKey, ProcessDefinition> getStorage() {
+        return storage;
     }
 
     @Test

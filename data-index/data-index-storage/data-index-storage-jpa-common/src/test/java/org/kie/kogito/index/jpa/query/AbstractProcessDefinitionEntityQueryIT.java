@@ -16,28 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.postgresql;
+package org.kie.kogito.index.jpa.query;
 
-import org.kie.kogito.index.jpa.mapper.ProcessDefinitionEntityMapperHolder;
+import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
+import org.kie.kogito.index.model.ProcessDefinition;
+import org.kie.kogito.index.model.ProcessDefinitionKey;
+import org.kie.kogito.index.test.query.AbstractProcessDefinitionQueryIT;
+import org.kie.kogito.persistence.api.Storage;
 
-import io.quarkus.runtime.Startup;
+import jakarta.inject.Inject;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.enterprise.inject.Produces;
+public abstract class AbstractProcessDefinitionEntityQueryIT extends AbstractProcessDefinitionQueryIT {
 
-@Startup
-public class PostgresqlProcessDefinitionEntityMapperProducer {
+    @Inject
+    ProcessDefinitionEntityStorage storage;
 
-    private PostgresqlProcessDefinitionEntityMapper mapper = new PostgresqlProcessDefinitionEntityMapper();
-
-    @PostConstruct
-    void setup() {
-        mapper = new PostgresqlProcessDefinitionEntityMapper();
-        ProcessDefinitionEntityMapperHolder.get().mapper(mapper);
+    @Override
+    public Storage<ProcessDefinitionKey, ProcessDefinition> getStorage() {
+        return storage;
     }
 
-    @Produces
-    public PostgresqlProcessDefinitionEntityMapper createMapper() {
-        return mapper;
-    }
 }

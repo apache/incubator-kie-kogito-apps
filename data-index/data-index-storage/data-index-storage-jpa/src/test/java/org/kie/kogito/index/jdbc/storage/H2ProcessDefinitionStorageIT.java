@@ -19,29 +19,15 @@
 package org.kie.kogito.index.jdbc.storage;
 
 import org.kie.kogito.index.jdbc.H2QuarkusTestProfile;
-import org.kie.kogito.index.jdbc.JPAProcessDefinitionEntityStorage;
 import org.kie.kogito.index.jpa.storage.AbstractProcessDefinitionStorageIT;
-import org.kie.kogito.index.model.ProcessDefinition;
-import org.kie.kogito.index.model.ProcessDefinitionKey;
-import org.kie.kogito.persistence.api.Storage;
 
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 
-import jakarta.inject.Inject;
-
 @QuarkusTest
 @TestTransaction
 @TestProfile(H2QuarkusTestProfile.class)
 class H2ProcessDefinitionStorageIT extends AbstractProcessDefinitionStorageIT {
-
-    @Inject
-    JPAProcessDefinitionEntityStorage storage;
-
-    @Override
-    public Storage<ProcessDefinitionKey, ProcessDefinition> getStorage() {
-        return storage;
-    }
 
 }

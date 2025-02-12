@@ -16,25 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jdbc;
+package org.kie.kogito.index.jdbc.query;
 
-import org.kie.kogito.index.jpa.storage.JPACommonDataIndexStorageService;
-import org.kie.kogito.index.model.ProcessDefinition;
-import org.kie.kogito.index.model.ProcessDefinitionKey;
-import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.index.jdbc.PostgreSQLQuarkusTestProfile;
+import org.kie.kogito.index.jpa.query.AbstractJobEntityQueryIT;
+import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
 
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
+import io.quarkus.test.TestTransaction;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 
-@ApplicationScoped
-public class JPADataIndexStorageService extends JPACommonDataIndexStorageService {
-
-    @Inject
-    JPAProcessDefinitionEntityStorage definitionStorage;
-
-    @Override
-    public Storage<ProcessDefinitionKey, ProcessDefinition> getProcessDefinitionStorage() {
-        return definitionStorage;
-    }
+@QuarkusTest
+@TestTransaction
+@QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
+@TestProfile(PostgreSQLQuarkusTestProfile.class)
+class PostgreSQLJobEntityQueryIT extends AbstractJobEntityQueryIT {
 
 }

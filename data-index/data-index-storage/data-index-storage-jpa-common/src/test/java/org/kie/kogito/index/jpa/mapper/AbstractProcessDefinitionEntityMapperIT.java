@@ -34,14 +34,13 @@ import static java.util.Collections.singletonList;
 import static java.util.Collections.singletonMap;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class AbstractProcessDefinitionEntityMapperIT<V extends ProcessDefinitionEntity, T extends ProcessDefinitionEntityMapper<V>> {
+public abstract class AbstractProcessDefinitionEntityMapperIT {
 
     ProcessDefinition pd = new ProcessDefinition();
-
-    private V entity;
+    ProcessDefinitionEntity entity = new ProcessDefinitionEntity();
 
     @Inject
-    T mapper;
+    ProcessDefinitionEntityMapper mapper;
 
     @BeforeEach
     void setup() {
@@ -77,9 +76,6 @@ public abstract class AbstractProcessDefinitionEntityMapperIT<V extends ProcessD
         nodeEntity.setType(nodeType);
         nodeEntity.setUniqueId(nodeUniqueId);
         nodeEntity.setMetadata(singletonMap("UniqueId", nodeMetadataUniqueId));
-
-        entity = getEntity();
-
         nodeEntity.setProcessDefinition(entity);
 
         entity.setId(processId);
@@ -89,8 +85,6 @@ public abstract class AbstractProcessDefinitionEntityMapperIT<V extends ProcessD
         entity.setType(type);
         entity.setNodes(singletonList(nodeEntity));
     }
-
-    protected abstract V getEntity();
 
     @Test
     void testMapToEntity() {

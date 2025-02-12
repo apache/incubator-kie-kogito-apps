@@ -16,15 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.postgresql.query;
 
-import org.kie.kogito.index.jpa.query.AbstractProcessDefinitionEntityQueryIT;
-import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
+package org.kie.kogito.index.jdbc;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.QuarkusTestProfile;
 
-@QuarkusTest
-@QuarkusTestResource(PostgreSqlQuarkusTestResource.class)
-class ProcessDefinitionEntityQueryIT extends AbstractProcessDefinitionEntityQueryIT {
+public class PostgreSQLQuarkusTestProfile implements QuarkusTestProfile {
+
+    @Override
+    public String getConfigProfile() {
+        return "test-postgresql";
+    }
 }

@@ -18,17 +18,10 @@
  */
 package org.kie.kogito.index.jdbc.mapper;
 
-import org.kie.kogito.index.jdbc.JPAProcessDefinitionEntity;
 import org.kie.kogito.index.jpa.mapper.AbstractProcessDefinitionEntityMapperIT;
-import org.kie.kogito.index.jpa.model.ProcessDefinitionEntity;
 
 import io.quarkus.test.junit.QuarkusTest;
 
 @QuarkusTest
 class ProcessDefinitionEntityMapperIT extends AbstractProcessDefinitionEntityMapperIT {
-
-    @Override
-    protected ProcessDefinitionEntity getEntity() {
-        return new JPAProcessDefinitionEntity();
-    }
 }

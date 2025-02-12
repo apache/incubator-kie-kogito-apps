@@ -20,10 +20,32 @@ package org.kie.kogito.index.jpa.mapper;
 
 import org.kie.kogito.index.jpa.model.ProcessDefinitionEntity;
 import org.kie.kogito.index.model.ProcessDefinition;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
-public interface ProcessDefinitionEntityMapper<T extends ProcessDefinitionEntity> {
+@Mapper(componentModel = "cdi", suppressTimestampInGenerated = true)
+public interface ProcessDefinitionEntityMapper {
 
-    T mapToEntity(ProcessDefinition pd);
+    ProcessDefinitionEntity mapToEntity(ProcessDefinition pd);
 
-    ProcessDefinition mapToModel(T pd);
+    @InheritInverseConfiguration
+    ProcessDefinition mapToModel(ProcessDefinitionEntity pd);
+
+    default byte[] map(String value) {
+        return value == null ? null : value.getBytes();
+    }
+
+    default String map(byte[] value) {
+        return value == null ? null : new String(value);
+    }
+
+    @AfterMapping
+    default void afterMapping(@MappingTarget ProcessDefinitionEntity entity) {
+        if (entity.getNodes() != null) {
+            entity.getNodes().forEach(n -> n.setProcessDefinition(entity));
+        }
+    }
+
 }

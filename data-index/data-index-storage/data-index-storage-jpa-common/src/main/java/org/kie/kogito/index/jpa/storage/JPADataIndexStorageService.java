@@ -32,7 +32,10 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
-public abstract class JPACommonDataIndexStorageService implements DataIndexStorageService {
+public class JPADataIndexStorageService implements DataIndexStorageService {
+
+    @Inject
+    ProcessDefinitionEntityStorage definitionStorage;
 
     @Inject
     JobEntityStorage jobsStorage;
@@ -44,7 +47,9 @@ public abstract class JPACommonDataIndexStorageService implements DataIndexStora
     UserTaskInstanceStorage userTaskInstanceStorage;
 
     @Override
-    public abstract Storage<ProcessDefinitionKey, ProcessDefinition> getProcessDefinitionStorage();
+    public Storage<ProcessDefinitionKey, ProcessDefinition> getProcessDefinitionStorage() {
+        return definitionStorage;
+    }
 
     @Override
     public ProcessInstanceStorage getProcessInstanceStorage() {
