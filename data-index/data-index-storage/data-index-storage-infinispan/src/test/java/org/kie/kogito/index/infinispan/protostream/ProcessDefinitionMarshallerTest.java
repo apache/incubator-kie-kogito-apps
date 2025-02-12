@@ -20,13 +20,13 @@ package org.kie.kogito.index.infinispan.protostream;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.infinispan.protostream.MessageMarshaller;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.Entry;
 import org.kie.kogito.index.model.ProcessDefinition;
-import org.kie.kogito.jackson.utils.ObjectMapperFactory;
 import org.mockito.InOrder;
 
 import static java.util.Collections.singleton;
@@ -74,7 +74,7 @@ class ProcessDefinitionMarshallerTest {
                 .hasFieldOrPropertyWithValue(NAME, "processName")
                 .hasFieldOrPropertyWithValue(DESCRIPTION, "descr")
                 .hasFieldOrPropertyWithValue(ANNOTATIONS, singleton("tag1"))
-                .hasFieldOrPropertyWithValue(METADATA, ObjectMapperFactory.get().createObjectNode().put(metaKey, metaValue))
+                .hasFieldOrPropertyWithValue(METADATA, Map.of(metaKey, metaValue))
                 .hasFieldOrPropertyWithValue(ROLES, singleton("admin"))
                 .hasFieldOrPropertyWithValue(ADDONS, singleton("process-management"))
                 .hasFieldOrPropertyWithValue(TYPE, "processType");
@@ -100,7 +100,7 @@ class ProcessDefinitionMarshallerTest {
         pd.setName("processName");
         pd.setDescription("descr");
         pd.setAnnotations(singleton("tag1"));
-        pd.setMetadata(ObjectMapperFactory.get().createObjectNode().put(metaKey, metaValue));
+        pd.setMetadata(Map.of(metaKey, metaValue));
         pd.setRoles(singleton("admin"));
         pd.setAddons(singleton("process-management"));
         pd.setType("processType");

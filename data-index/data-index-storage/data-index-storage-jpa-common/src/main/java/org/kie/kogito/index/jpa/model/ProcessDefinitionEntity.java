@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
-import org.hibernate.annotations.NotFound;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
 import org.kie.kogito.persistence.postgresql.hibernate.JsonBinaryConverter;
 
@@ -79,7 +78,6 @@ public class ProcessDefinitionEntity extends AbstractEntity {
     private Set<String> annotations;
     @Convert(converter = JsonBinaryConverter.class)
     @Column(columnDefinition = "jsonb")
-    @NotFound
     private ObjectNode metadata;
 
     @Override

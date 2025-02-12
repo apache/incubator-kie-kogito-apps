@@ -19,10 +19,9 @@
 package org.kie.kogito.index.model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class ProcessDefinition {
 
@@ -36,7 +35,7 @@ public class ProcessDefinition {
     private String source;
     private String description;
     private Set<String> annotations;
-    private ObjectNode metadata;
+    private Map<String, Object> metadata;
     private List<Node> nodes;
 
     public String getId() {
@@ -127,11 +126,11 @@ public class ProcessDefinition {
         this.annotations = annotations;
     }
 
-    public ObjectNode getMetadata() {
+    public Map<String, Object> getMetadata() {
         return metadata;
     }
 
-    public void setMetadata(ObjectNode metadata) {
+    public void setMetadata(Map<String, Object> metadata) {
         this.metadata = metadata;
     }
 

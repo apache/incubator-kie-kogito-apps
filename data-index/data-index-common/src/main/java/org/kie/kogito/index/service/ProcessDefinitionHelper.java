@@ -29,14 +29,12 @@ import java.util.stream.Collectors;
 import org.kie.kogito.event.process.NodeDefinition;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionEventBody;
+import org.kie.kogito.index.CommonUtils;
 import org.kie.kogito.index.json.JsonUtils;
 import org.kie.kogito.index.model.Node;
 import org.kie.kogito.index.model.ProcessDefinition;
-import org.kie.kogito.jackson.utils.JsonObjectUtils;
-import org.kie.kogito.jackson.utils.MergeUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -65,7 +63,7 @@ public class ProcessDefinitionHelper {
         instance.setEndpoint(doMerge(data.getEndpoint(), instance.getEndpoint()));
         instance.setDescription(doMerge(data.getDescription(), instance.getDescription()));
         instance.setAnnotations(doMerge(data.getAnnotations(), instance.getAnnotations()));
-        instance.setMetadata((ObjectNode) MergeUtils.merge(JsonObjectUtils.fromValue(data.getMetadata()), instance.getMetadata()));
+        instance.setMetadata(CommonUtils.mergeMap(Collections.unmodifiableMap(data.getMetadata()), instance.getMetadata()));
         instance.setNodes(doMerge(nodeDefinitions(data), instance.getNodes()));
         instance.setSource(doMerge(data.getSource(), instance.getSource()));
         return instance;
