@@ -61,6 +61,7 @@ class ProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT 
         final String version = "1.0";
         ProcessDefinitionKey key = new ProcessDefinitionKey(processId, version);
         ProcessDefinition definitionEvent = TestUtils.createProcessDefinition(processId, version, Set.of());
+        definitionEvent.setAnnotations(Set.of("Javierito", "Another"));
         definitionEvent.setMetadata(Map.of("name", "Javierito", "hobbies", List.of("community", "first")));
         variableEvent.setKogitoProcessInstanceVersion(version);
         definitionStorage.put(key, definitionEvent);
@@ -143,5 +144,7 @@ class ProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT 
         queryAndAssert(assertNotId(), storage, singletonList(jsonFilter(equalTo("definition.metadata.name", "Fulanito"))), null, null, null, processInstanceId);
         queryAndAssert(assertWithId(), storage, singletonList(jsonFilter(contains("definition.metadata.hobbies", "community"))), null, null, null, processInstanceId);
         queryAndAssert(assertNotId(), storage, singletonList(jsonFilter(contains("definition.metadata.hobbies", "commercial"))), null, null, null, processInstanceId);
+        queryAndAssert(assertWithId(), storage, singletonList(contains("definition.annotations", "Javierito")), null, null, null, processInstanceId);
+        queryAndAssert(assertNotId(), storage, singletonList(contains("definition.annotations", "Fulanito")), null, null, null, processInstanceId);
     }
 }

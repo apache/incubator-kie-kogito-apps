@@ -64,6 +64,11 @@ input ProcessDefinitionArgument {
     id: StringArgument
     name: StringArgument
     version: StringArgument
+    annotations: StringArrayArgument
+    roles: StringArrayArgument
+    serviceUrl: StringArgument
+    description: StringArgument
+    type: StringArgument
     metadata: JSON
 }
 
