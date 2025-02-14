@@ -19,4 +19,21 @@
 
 ALTER TABLE definitions ADD COLUMN metadata varchar(max);
 
-DROP TABLE definitions_metadata;
+/* Migration for postgresql and sql server */
+/*
+UPDATE definitions SET metadata = v
+FROM  (SELECT process_id, process_version, string_agg(name || ':' || meta_value, ',') as v FROM definitions_metadata group by process_id, process_version) as grouped_metadata
+WHERE id = grouped_metadata.process_id and version = grouped_metadata.process_version;
+*/
+
+
+/* Migration for h2 and oracle*/
+/*
+UPDATE definitions SET metadata = v
+FROM  (SELECT process_id, process_version, listagg(name || ':' || meta_value, ',') as v FROM definitions_metadata group by process_id, process_version) as grouped_metadata
+WHERE id = grouped_metadata.process_id and version = grouped_metadata.process_version;
+*/
+
+
+/* Since migration is disable, do not delete not longer used table*/
+/* DROP TABLE definitions_metadata;*/

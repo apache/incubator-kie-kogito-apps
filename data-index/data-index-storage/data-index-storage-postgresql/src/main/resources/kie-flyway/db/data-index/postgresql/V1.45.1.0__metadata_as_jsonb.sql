@@ -19,9 +19,9 @@
 
 ALTER TABLE definitions ADD COLUMN metadata jsonb;
 
-UPDATE definitions SET metadata = 
-(SELECT json_object_agg(name, meta_value) FROM definitions_metadata where process_id = a.process_id and process_version = a.process_version) 
-FROM (SELECT * FROM definitions_metadata) as a
-WHERE process_id = a.process_id and process_version = a.process_version;
+WITH grouped_metadata as (SELECT process_id, process_version, json_object_agg(name, meta_value) as v FROM definitions_metadata group by process_id, process_version)
+UPDATE definitions SET metadata = v
+FROM  grouped_metadata
+WHERE id = grouped_metadata.process_id and version = grouped_metadata.process_version;
 
 DROP TABLE definitions_metadata;
