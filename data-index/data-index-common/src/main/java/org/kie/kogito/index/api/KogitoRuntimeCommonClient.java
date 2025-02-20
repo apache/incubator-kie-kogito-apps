@@ -130,7 +130,7 @@ public class KogitoRuntimeCommonClient {
         if (res.succeeded() && (res.result().statusCode() == 200 || res.result().statusCode() == 201)) {
             future.complete(function.apply(res.result()));
         } else {
-            LOGGER.info("Error {}", logMessage);
+            LOGGER.error("Error {}", logMessage);
             future.completeExceptionally(new DataIndexServiceException(getErrorMessage(logMessage, res.result())));
         }
     }
