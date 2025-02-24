@@ -18,10 +18,19 @@
  */
 package org.kie.kogito.index.jpa.query;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.junit.jupiter.api.Test;
+import org.kie.kogito.event.process.ProcessInstanceVariableDataEvent;
 import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
+import org.kie.kogito.index.storage.ProcessInstanceStorage;
+import org.kie.kogito.index.test.TestUtils;
 import org.kie.kogito.index.test.query.AbstractProcessInstanceQueryIT;
 
 import jakarta.inject.Inject;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProcessInstanceQueryIT {
 
@@ -31,5 +40,16 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
     @Override
     public ProcessInstanceEntityStorage getStorage() {
         return storage;
+    }
+
+    @Test
+    void testCount() {
+        String processId = "persons";
+        String processInstanceId = UUID.randomUUID().toString();
+        ProcessInstanceStorage storage = getStorage();
+        ProcessInstanceVariableDataEvent variableEvent = TestUtils.createProcessInstanceVariableEvent(processInstanceId, processId, "John", 28, false,
+                List.of("Super", "Astonishing", "TheRealThing"));
+        storage.indexVariable(variableEvent);
+        assertThat(storage.query().count()).isOne();
     }
 }

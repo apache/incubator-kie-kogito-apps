@@ -18,6 +18,9 @@
  */
 package org.kie.kogito.index.storage;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
@@ -26,7 +29,6 @@ import org.kie.kogito.persistence.api.Storage;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public interface DataIndexStorageService {
-
     Storage<ProcessDefinitionKey, ProcessDefinition> getProcessDefinitionStorage();
 
     ProcessInstanceStorage getProcessInstanceStorage();
@@ -40,4 +42,8 @@ public interface DataIndexStorageService {
     String getDomainModelCacheName(String processId);
 
     Storage<String, String> getProcessIdModelCache();
+
+    default Set<StorageServiceCapability> capabilities() {
+        return EnumSet.noneOf(StorageServiceCapability.class);
+    }
 }

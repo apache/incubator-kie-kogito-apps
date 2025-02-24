@@ -18,11 +18,15 @@
  */
 package org.kie.kogito.index.jpa.storage;
 
+import java.util.EnumSet;
+import java.util.Set;
+
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.index.storage.ProcessInstanceStorage;
+import org.kie.kogito.index.storage.StorageServiceCapability;
 import org.kie.kogito.index.storage.UserTaskInstanceStorage;
 import org.kie.kogito.persistence.api.Storage;
 
@@ -79,5 +83,10 @@ public class JPADataIndexStorageService implements DataIndexStorageService {
     @Override
     public Storage<String, String> getProcessIdModelCache() {
         throw new UnsupportedOperationException("Generic String cache not available in JPA");
+    }
+
+    @Override
+    public Set<StorageServiceCapability> capabilities() {
+        return EnumSet.of(StorageServiceCapability.COUNT);
     }
 }

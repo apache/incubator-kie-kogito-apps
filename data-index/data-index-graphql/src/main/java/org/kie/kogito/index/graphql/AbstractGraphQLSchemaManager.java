@@ -40,6 +40,7 @@ import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.index.service.DataIndexServiceException;
 import org.kie.kogito.index.storage.DataIndexStorageService;
+import org.kie.kogito.index.storage.StorageServiceCapability;
 import org.kie.kogito.persistence.api.StorageFetcher;
 import org.kie.kogito.persistence.api.query.Query;
 import org.slf4j.Logger;
@@ -107,6 +108,23 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
 
     protected final void loadAdditionalMutations(TypeDefinitionRegistry typeRegistry) {
         mutations.stream().map(GraphQLMutationsProvider::registry).forEach(typeRegistry::merge);
+    }
+
+    protected final void addCountQueries(TypeDefinitionRegistry typeRegistry) {
+        if (supportsCount()) {
+            typeRegistry.merge(loadSchemaDefinitionFile("count.schema.graphqls"));
+        }
+    }
+
+    protected final void addCountQueries(Builder builder) {
+        if (supportsCount()) {
+            builder.dataFetcher("CountProcessInstances", this::countProcessInstances);
+            builder.dataFetcher("CountUserTaskInstances", this::countUserTaskInstances);
+        }
+    }
+
+    private boolean supportsCount() {
+        return cacheService.capabilities().contains(StorageServiceCapability.COUNT);
     }
 
     protected TypeDefinitionRegistry loadSchemaDefinitionFile(String fileName) {
@@ -182,18 +200,17 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
         return executeAdvancedQueryForCache(cacheService.getProcessInstanceStorage(), env);
     }
 
+    protected long countProcessInstances(DataFetchingEnvironment env) {
+        return executeCount(cacheService.getProcessInstanceStorage(), env);
+    }
+
+    protected long countUserTaskInstances(DataFetchingEnvironment env) {
+        return executeCount(cacheService.getUserTaskInstanceStorage(), env);
+    }
+
     protected <K, T> List<T> executeAdvancedQueryForCache(StorageFetcher<K, T> cache, DataFetchingEnvironment env) {
-        Objects.requireNonNull(cache, "Cache not found");
-
-        String inputTypeName = ((GraphQLNamedType) env.getFieldDefinition().getArgument("where").getType()).getName();
-
-        Query<T> query = cache.query();
-
-        Map<String, Object> where = env.getArgument("where");
-        query.filter(GraphQLQueryParserRegistry.get().getParser(inputTypeName).apply(where));
-
+        Query<T> query = setupQuery(cache, env);
         query.sort(new GraphQLQueryOrderByParser().apply(env));
-
         Map<String, Integer> pagination = env.getArgument("pagination");
         if (pagination != null) {
             Integer limit = pagination.get("limit");
@@ -205,8 +222,20 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
                 query.offset(offset);
             }
         }
-
         return query.execute();
+    }
+
+    protected <K, T> long executeCount(StorageFetcher<K, T> cache, DataFetchingEnvironment env) {
+        return setupQuery(cache, env).count();
+    }
+
+    private <K, T> Query<T> setupQuery(StorageFetcher<K, T> cache, DataFetchingEnvironment env) {
+        Objects.requireNonNull(cache, "Cache not found");
+        String inputTypeName = ((GraphQLNamedType) env.getFieldDefinition().getArgument("where").getType()).getName();
+        Query<T> query = cache.query();
+        Map<String, Object> where = env.getArgument("where");
+        query.filter(GraphQLQueryParserRegistry.get().getParser(inputTypeName).apply(where));
+        return query;
     }
 
     protected Collection<UserTaskInstance> getUserTaskInstancesValues(DataFetchingEnvironment env) {

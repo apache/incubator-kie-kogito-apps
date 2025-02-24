@@ -86,10 +86,7 @@ public class JPAQuery<K, E extends AbstractEntity, T> implements Query<T> {
         CriteriaBuilder builder = repository.getEntityManager().getCriteriaBuilder();
         CriteriaQuery<E> criteriaQuery = builder.createQuery(entityClass);
         Root<E> root = criteriaQuery.from(entityClass);
-        if (filters != null && !filters.isEmpty()) {
-            List<Predicate> predicates = getPredicates(builder, root);
-            criteriaQuery.where(predicates.toArray(new Predicate[] {}));
-        }
+        addWhere(builder, criteriaQuery, root);
         if (sortBy != null && !sortBy.isEmpty()) {
             List<Order> orderBy = sortBy.stream().map(f -> {
                 Path attributePath = getAttributePath(root, f.getAttribute());
@@ -99,7 +96,6 @@ public class JPAQuery<K, E extends AbstractEntity, T> implements Query<T> {
         }
 
         jakarta.persistence.Query query = repository.getEntityManager().createQuery(criteriaQuery);
-
         if (limit != null) {
             query.setMaxResults(limit);
         }
@@ -193,6 +189,23 @@ public class JPAQuery<K, E extends AbstractEntity, T> implements Query<T> {
                 .stream()
                 .map(filterPredicateFunction(root, builder))
                 .collect(toList());
+    }
+
+    @Override
+    public long count() {
+        CriteriaBuilder builder = repository.getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<Long> criteriaQuery = builder.createQuery(Long.class);
+        Root<E> root = criteriaQuery.from(entityClass);
+        criteriaQuery.select(builder.count(root));
+        addWhere(builder, criteriaQuery, root);
+        return repository.getEntityManager().createQuery(criteriaQuery).getSingleResult();
+    }
+
+    private <V> void addWhere(CriteriaBuilder builder, CriteriaQuery<V> criteriaQuery, Root<E> root) {
+        if (filters != null && !filters.isEmpty()) {
+            List<Predicate> predicates = getPredicates(builder, root);
+            criteriaQuery.where(predicates.toArray(new Predicate[] {}));
+        }
     }
 
 }
