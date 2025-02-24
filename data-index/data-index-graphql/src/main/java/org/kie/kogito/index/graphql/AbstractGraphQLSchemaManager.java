@@ -40,8 +40,8 @@ import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.index.service.DataIndexServiceException;
 import org.kie.kogito.index.storage.DataIndexStorageService;
-import org.kie.kogito.index.storage.StorageServiceCapability;
 import org.kie.kogito.persistence.api.StorageFetcher;
+import org.kie.kogito.persistence.api.StorageServiceCapability;
 import org.kie.kogito.persistence.api.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -113,6 +113,12 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
     protected final void addCountQueries(TypeDefinitionRegistry typeRegistry) {
         if (supportsCount()) {
             typeRegistry.merge(loadSchemaDefinitionFile("count.schema.graphqls"));
+        }
+    }
+
+    protected final void addJsonQueries(TypeDefinitionRegistry typeRegistry) {
+        if (cacheService.capabilities().contains(StorageServiceCapability.JSON_QUERY)) {
+            typeRegistry.merge(loadSchemaDefinitionFile("json.schema.graphqls"));
         }
     }
 

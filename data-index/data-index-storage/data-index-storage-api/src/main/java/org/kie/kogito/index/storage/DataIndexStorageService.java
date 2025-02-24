@@ -25,6 +25,7 @@ import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
 import org.kie.kogito.persistence.api.Storage;
+import org.kie.kogito.persistence.api.StorageServiceCapability;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 

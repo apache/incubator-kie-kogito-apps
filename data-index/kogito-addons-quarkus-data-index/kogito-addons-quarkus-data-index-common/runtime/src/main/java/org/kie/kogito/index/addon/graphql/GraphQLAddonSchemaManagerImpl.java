@@ -35,6 +35,7 @@ public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager 
         TypeDefinitionRegistry typeDefinitionRegistry = new TypeDefinitionRegistry();
         typeDefinitionRegistry.merge(loadSchemaDefinitionFile("basic.schema.graphqls"));
         addCountQueries(typeDefinitionRegistry);
+        addJsonQueries(typeDefinitionRegistry);
         loadAdditionalMutations(typeDefinitionRegistry);
 
         RuntimeWiring runtimeWiring = RuntimeWiring.newRuntimeWiring()
