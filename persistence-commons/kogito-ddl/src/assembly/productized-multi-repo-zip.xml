@@ -36,6 +36,14 @@
         </dependencySet>
     </dependencySets>
     <fileSets>
+        <!-- Persistence Commons -->
+        <fileSet>
+            <directory>${project.root.dir}/persistence-commons/persistence-commons-postgresql/src/main/resources/kie-flyway/db/persistence-commons/postgresql</directory>
+            <outputDirectory>postgresql/persistence-commons</outputDirectory>
+            <includes>
+                <include>*.sql</include>
+            </includes>
+        </fileSet>
         <!-- Data Index -->
         <fileSet>
             <directory>${project.root.dir}/data-index/data-index-storage/data-index-storage-postgresql/src/main/resources/kie-flyway/db/data-index/postgresql</directory>
