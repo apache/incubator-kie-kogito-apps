@@ -33,6 +33,6 @@ public interface Query<T> {
     List<T> execute();
 
     default long count() {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Count is an optional operation not supported by the underlying datastore");
     }
 }

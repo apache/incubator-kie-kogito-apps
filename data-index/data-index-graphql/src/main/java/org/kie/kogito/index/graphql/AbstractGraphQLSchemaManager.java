@@ -21,7 +21,6 @@ package org.kie.kogito.index.graphql;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.ServiceLoader;
 import java.util.ServiceLoader.Provider;
 import java.util.concurrent.CompletableFuture;
@@ -31,6 +30,7 @@ import java.util.stream.Collectors;
 import org.kie.kogito.index.CommonUtils;
 import org.kie.kogito.index.api.KogitoRuntimeClient;
 import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
+import org.kie.kogito.index.graphql.query.GraphQLQueryParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.Node;
@@ -48,7 +48,9 @@ import org.slf4j.LoggerFactory;
 
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
+import graphql.schema.GraphQLArgument;
 import graphql.schema.GraphQLInputObjectType;
+import graphql.schema.GraphQLInputType;
 import graphql.schema.GraphQLNamedType;
 import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchema;
@@ -215,7 +217,7 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
     }
 
     protected <K, T> List<T> executeAdvancedQueryForCache(StorageFetcher<K, T> cache, DataFetchingEnvironment env) {
-        Query<T> query = setupQuery(cache, env);
+        Query<T> query = buildQuery(cache, env);
         query.sort(new GraphQLQueryOrderByParser().apply(env));
         Map<String, Integer> pagination = env.getArgument("pagination");
         if (pagination != null) {
@@ -232,15 +234,22 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
     }
 
     protected <K, T> long executeCount(StorageFetcher<K, T> cache, DataFetchingEnvironment env) {
-        return setupQuery(cache, env).count();
+        return buildQuery(cache, env).count();
     }
 
-    private <K, T> Query<T> setupQuery(StorageFetcher<K, T> cache, DataFetchingEnvironment env) {
-        Objects.requireNonNull(cache, "Cache not found");
-        String inputTypeName = ((GraphQLNamedType) env.getFieldDefinition().getArgument("where").getType()).getName();
+    private <K, T> Query<T> buildQuery(StorageFetcher<K, T> cache, DataFetchingEnvironment env) {
+        assert cache != null;
         Query<T> query = cache.query();
-        Map<String, Object> where = env.getArgument("where");
-        query.filter(GraphQLQueryParserRegistry.get().getParser(inputTypeName).apply(where));
+        GraphQLArgument arg = env.getFieldDefinition().getArgument("where");
+        if (arg != null) {
+            GraphQLInputType inputType = arg.getType();
+            if (inputType instanceof GraphQLNamedType) {
+                GraphQLQueryParser parser = GraphQLQueryParserRegistry.get().getParser(((GraphQLNamedType) inputType).getName());
+                if (parser != null) {
+                    query.filter(parser.apply(env.getArgument("where")));
+                }
+            }
+        }
         return query;
     }
 
