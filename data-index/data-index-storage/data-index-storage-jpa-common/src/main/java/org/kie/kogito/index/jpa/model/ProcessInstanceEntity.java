@@ -90,7 +90,7 @@ public class ProcessInstanceEntity extends AbstractEntity {
     @Embedded
     private ProcessInstanceErrorEntity error;
 
-    @ManyToOne(targetEntity = ProcessDefinitionEntity.class, fetch = FetchType.LAZY)
+    @ManyToOne(targetEntity = ProcessDefinitionEntity.class)
     @JoinColumns({ @JoinColumn(name = "processId", referencedColumnName = "id", insertable = false, updatable = false),
             @JoinColumn(name = "version", referencedColumnName = "version", insertable = false, updatable = false) })
     @NotFound(action = NotFoundAction.IGNORE)
