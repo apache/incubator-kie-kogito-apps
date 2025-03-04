@@ -16,23 +16,6 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.persistence.api.query;
 
-import java.util.List;
-
-public interface Query<T> {
-
-    Query<T> limit(Integer limit);
-
-    Query<T> offset(Integer offset);
-
-    Query<T> filter(List<AttributeFilter<?>> filters);
-
-    Query<T> sort(List<AttributeSort> sortBy);
-
-    List<T> execute();
-
-    default long count() {
-        throw new UnsupportedOperationException("Count is an optional operation not supported by the underlying datastore");
-    }
-}
+ALTER TABLE Process_Instance_Variable_Log ALTER COLUMN variable_value SET DATA TYPE VARCHAR(MAX);
+ALTER TABLE Task_Instance_Variable_Log ALTER COLUMN variable_value SET DATA TYPE VARCHAR(MAX);
