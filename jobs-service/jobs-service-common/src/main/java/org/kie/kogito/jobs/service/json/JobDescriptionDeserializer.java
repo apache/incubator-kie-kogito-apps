@@ -73,6 +73,9 @@ public class JobDescriptionDeserializer extends StdDeserializer<JobDescription> 
                     builder.expirationTime((ExpirationTime) ctxt.readTreeAsValue(node.get("expirationTime"), Class.forName(expirationTimeType)));
 
                     ofNullable(node.get("userTaskInstanceId")).ifPresent(e -> builder.userTaskInstanceId(e.textValue()));
+                    ofNullable(node.get("processId")).ifPresent(e -> builder.processId(e.textValue()));
+                    ofNullable(node.get("processInstanceId")).ifPresent(e -> builder.processInstanceId(e.textValue()));
+                    ofNullable(node.get("nodeInstanceId")).ifPresent(e -> builder.nodeInstanceId(e.textValue()));
                     return builder.build();
                 }
             }
