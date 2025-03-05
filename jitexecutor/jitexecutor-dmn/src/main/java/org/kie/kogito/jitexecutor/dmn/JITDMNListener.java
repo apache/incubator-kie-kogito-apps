@@ -39,8 +39,6 @@ import org.slf4j.LoggerFactory;
 public class JITDMNListener implements DMNRuntimeEventListener {
 
     private final Map<String, Map<String, Integer>> decisionEvaluationHitIdsMap = new HashMap<>();
-    private final Map<String, String> conditionalEvaluationHitIdsMap = new HashMap<>();
-
     private static final Logger LOGGER = LoggerFactory.getLogger(JITDMNListener.class);
 
     @Override
