@@ -45,10 +45,29 @@ public class NodeInstanceEntity extends AbstractEntity {
     private ZonedDateTime exit;
     private ZonedDateTime slaDueDate;
     private String definitionId;
+    private int triggerCount;
+    private String errorMessage;
+
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "processInstanceId", foreignKey = @ForeignKey(name = "fk_nodes_process"))
     private ProcessInstanceEntity processInstance;
+
+    public int getTriggerCount() {
+        return triggerCount;
+    }
+
+    public void setTriggerCount(int triggerCount) {
+        this.triggerCount = triggerCount;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
 
     @Override
     public String getId() {

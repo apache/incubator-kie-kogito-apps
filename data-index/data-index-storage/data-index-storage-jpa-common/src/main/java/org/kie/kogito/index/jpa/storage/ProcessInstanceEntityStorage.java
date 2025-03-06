@@ -147,7 +147,9 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
         }
         errorEntity.setMessage(error.getErrorMessage());
         errorEntity.setNodeDefinitionId(error.getNodeDefinitionId());
+        errorEntity.setNodeInstanceId(error.getNodeInstanceId());
         pi.setState(CommonUtils.ERROR_STATE);
+        pi.getNodes().stream().filter(n -> n.getId().equals(error.getNodeInstanceId())).findAny().ifPresent(n -> n.setErrorMessage(error.getErrorMessage()));
     }
 
     private void indexNode(ProcessInstanceEntity pi, ProcessInstanceNodeEventBody data) {
@@ -186,6 +188,7 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
         nodeInstance.setName(body.getNodeName());
         nodeInstance.setType(body.getNodeType());
         nodeInstance.setSlaDueDate(toZonedDateTime(body.getSlaDueDate()));
+        nodeInstance.setTriggerCount(body.triggerCount());
         ZonedDateTime eventDate = toZonedDateTime(body.getEventDate());
         switch (body.getEventType()) {
             case EVENT_TYPE_ENTER:
