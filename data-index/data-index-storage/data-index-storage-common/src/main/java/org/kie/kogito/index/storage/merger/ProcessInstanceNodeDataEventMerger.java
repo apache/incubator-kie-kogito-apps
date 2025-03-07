@@ -64,6 +64,7 @@ public class ProcessInstanceNodeDataEventMerger extends ProcessInstanceEventMerg
         nodeInstance.setName(body.getNodeName());
         nodeInstance.setType(body.getNodeType());
         nodeInstance.setSlaDueDate(toZonedDateTime(body.getSlaDueDate()));
+        nodeInstance.setTriggerCount(body.triggerCount());
         ZonedDateTime eventDate = toZonedDateTime(body.getEventDate());
         switch (body.getEventType()) {
             case EVENT_TYPE_ENTER:

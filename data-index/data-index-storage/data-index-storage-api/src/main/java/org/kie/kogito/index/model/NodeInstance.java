@@ -40,6 +40,26 @@ public class NodeInstance {
 
     private ZonedDateTime slaDueDate;
 
+    private int triggerCount;
+
+    private String errorMessage;
+
+    public int getTriggerCount() {
+        return triggerCount;
+    }
+
+    public void setTriggerCount(int triggerCount) {
+        this.triggerCount = triggerCount;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
     @JsonProperty("nodeDefinitionId")
     private String definitionId;
 
