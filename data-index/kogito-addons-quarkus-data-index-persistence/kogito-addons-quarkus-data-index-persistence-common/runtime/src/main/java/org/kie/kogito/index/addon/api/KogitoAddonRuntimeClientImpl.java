@@ -47,6 +47,8 @@ import org.kie.kogito.process.impl.AbstractProcess;
 import org.kie.kogito.services.uow.UnitOfWorkExecutor;
 import org.kie.kogito.source.files.SourceFilesProvider;
 import org.kie.kogito.svg.ProcessSvgService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -55,9 +57,12 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 
 import static java.util.stream.Collectors.toMap;
+import static org.kie.kogito.jackson.utils.JsonObjectUtils.*;
 
 @ApplicationScoped
 public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient implements KogitoRuntimeClient {
+
+    private static final Logger logger = LoggerFactory.getLogger(KogitoAddonRuntimeClientImpl.class);
 
     private static String SUCCESSFULLY_OPERATION_MESSAGE = "Successfully performed: %s";
 
@@ -128,7 +133,21 @@ public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient impl
 
     @Override
     public CompletableFuture<String> updateProcessInstanceVariables(String serviceURL, ProcessInstance processInstance, String variables) {
-        return throwUnsupportedException();
+        return CompletableFuture.completedFuture(executeOnProcessInstance(processInstance.getProcessId(), processInstance.getId(), pInstance -> {
+            try {
+                Model model = (Model) convertValue(fromString(variables), pInstance.variables().getClass());
+
+                Model toReturn = (Model) pInstance.updateVariables(convertInstanceOfObject(model));
+
+                return JsonObjectUtils.toString(fromValue(toReturn.toMap()));
+            } catch (Exception ex) {
+                throw new DataIndexServiceException("Failure to update the variables for the process instance " + pInstance.id(), ex);
+            }
+        }));
+    }
+
+    private <T> T convertInstanceOfObject(Object value) {
+        return value == null ? null : (T) value;
     }
 
     @Override
@@ -287,9 +306,9 @@ public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient impl
             throw new DataIndexServiceException(String.format("Unable to find Process  with id %s to perform the operation requested", definition.getId()));
         }
         Model m = (Model) process.createModel();
-        m.update(JsonObjectUtils.convertValue(args.input(), Map.class));
+        m.update(convertValue(args.input(), Map.class));
         org.kie.kogito.process.ProcessInstance<? extends Model> pi = process.createInstance(m);
         pi.start();
-        return CompletableFuture.completedFuture(JsonObjectUtils.fromValue(pi.variables().toMap()));
+        return CompletableFuture.completedFuture(fromValue(pi.variables().toMap()));
     }
 }
