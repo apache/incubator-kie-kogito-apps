@@ -47,8 +47,6 @@ import org.kie.kogito.process.impl.AbstractProcess;
 import org.kie.kogito.services.uow.UnitOfWorkExecutor;
 import org.kie.kogito.source.files.SourceFilesProvider;
 import org.kie.kogito.svg.ProcessSvgService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
@@ -61,8 +59,6 @@ import static org.kie.kogito.jackson.utils.JsonObjectUtils.*;
 
 @ApplicationScoped
 public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient implements KogitoRuntimeClient {
-
-    private static final Logger logger = LoggerFactory.getLogger(KogitoAddonRuntimeClientImpl.class);
 
     private static String SUCCESSFULLY_OPERATION_MESSAGE = "Successfully performed: %s";
 
