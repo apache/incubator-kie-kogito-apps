@@ -56,6 +56,8 @@ public class JobDescriptionSerializer extends StdSerializer<JobDescription> {
             jgen.writeStringField("processId", userTaskInstanceJobDescription.processId());
             jgen.writeStringField("processInstanceId", userTaskInstanceJobDescription.processInstanceId());
             jgen.writeStringField("nodeInstanceId", userTaskInstanceJobDescription.nodeInstanceId());
+            jgen.writeStringField("rootProcessInstanceId", userTaskInstanceJobDescription.rootProcessInstanceId());
+            jgen.writeStringField("rootProcessId", userTaskInstanceJobDescription.rootProcessId());
         }
         jgen.writeEndObject();
     }
