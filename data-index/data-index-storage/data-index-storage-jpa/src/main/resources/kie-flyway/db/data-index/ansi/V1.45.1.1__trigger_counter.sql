@@ -17,6 +17,6 @@
  * under the License.
  */
 
-ALTER TABLE nodes ADD COLUMN trigger_count integer;
+ALTER TABLE nodes ADD COLUMN is_retrigger boolean;
 ALTER TABLE nodes ADD COLUMN error_message varchar(4000);
 ALTER TABLE processes ADD COLUMN node_instance_id varchar(255);

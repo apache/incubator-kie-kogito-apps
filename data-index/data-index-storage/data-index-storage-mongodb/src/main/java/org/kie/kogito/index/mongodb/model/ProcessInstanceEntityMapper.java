@@ -149,7 +149,7 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         instance.setExit(instantToZonedDateTime(entity.getExit()));
         instance.setDefinitionId(entity.getDefinitionId());
         instance.setSlaDueDate(instantToZonedDateTime(entity.getSlaDueDate()));
-        instance.setTriggerCount(instance.getTriggerCount());
+        instance.setRetrigger(entity.isRetrigger());
         instance.setErrorMessage(entity.getErrorMessage());
         return instance;
     }
@@ -168,7 +168,7 @@ public class ProcessInstanceEntityMapper implements MongoEntityMapper<ProcessIns
         entity.setExit(zonedDateTimeToInstant(instance.getExit()));
         entity.setDefinitionId(instance.getDefinitionId());
         entity.setSlaDueDate(zonedDateTimeToInstant(instance.getSlaDueDate()));
-        entity.setTriggerCount(instance.getTriggerCount());
+        entity.setRetrigger(instance.isRetrigger());
         entity.setErrorMessage(instance.getErrorMessage());
         return entity;
     }

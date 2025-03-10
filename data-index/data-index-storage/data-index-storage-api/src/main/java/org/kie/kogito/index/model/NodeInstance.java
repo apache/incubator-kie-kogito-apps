@@ -40,16 +40,16 @@ public class NodeInstance {
 
     private ZonedDateTime slaDueDate;
 
-    private int triggerCount;
+    private Boolean isRetrigger;
 
     private String errorMessage;
 
-    public int getTriggerCount() {
-        return triggerCount;
+    public Boolean isRetrigger() {
+        return isRetrigger;
     }
 
-    public void setTriggerCount(int triggerCount) {
-        this.triggerCount = triggerCount;
+    public void setRetrigger(Boolean isRetrigger) {
+        this.isRetrigger = isRetrigger;
     }
 
     public String getErrorMessage() {

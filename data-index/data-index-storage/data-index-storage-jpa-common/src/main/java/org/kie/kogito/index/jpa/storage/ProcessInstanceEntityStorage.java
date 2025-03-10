@@ -188,7 +188,9 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
         nodeInstance.setName(body.getNodeName());
         nodeInstance.setType(body.getNodeType());
         nodeInstance.setSlaDueDate(toZonedDateTime(body.getSlaDueDate()));
-        nodeInstance.setTriggerCount(body.triggerCount());
+        if (body.isRetrigger() != null) {
+            nodeInstance.setRetrigger(body.isRetrigger());
+        }
         ZonedDateTime eventDate = toZonedDateTime(body.getEventDate());
         switch (body.getEventType()) {
             case EVENT_TYPE_ENTER:

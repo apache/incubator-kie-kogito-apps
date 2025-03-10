@@ -283,7 +283,7 @@ public class ProcessInstanceEntity {
 
         Long slaDueDate;
 
-        private int triggerCount;
+        private Boolean isRetrigger;
 
         private String errorMessage;
 
@@ -368,20 +368,20 @@ public class ProcessInstanceEntity {
             return Objects.hash(id);
         }
 
-        public int getTriggerCount() {
-            return triggerCount;
-        }
-
-        public void setTriggerCount(int triggerCount) {
-            this.triggerCount = triggerCount;
-        }
-
         public String getErrorMessage() {
             return errorMessage;
         }
 
         public void setErrorMessage(String errorMessage) {
             this.errorMessage = errorMessage;
+        }
+
+        public void setRetrigger(Boolean retrigger) {
+            this.isRetrigger = retrigger;
+        }
+
+        public Boolean isRetrigger() {
+            return isRetrigger;
         }
     }
 

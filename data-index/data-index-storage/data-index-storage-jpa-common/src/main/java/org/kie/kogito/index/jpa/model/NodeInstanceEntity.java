@@ -45,7 +45,7 @@ public class NodeInstanceEntity extends AbstractEntity {
     private ZonedDateTime exit;
     private ZonedDateTime slaDueDate;
     private String definitionId;
-    private int triggerCount;
+    private Boolean isRetrigger;
     private String errorMessage;
 
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
@@ -53,12 +53,12 @@ public class NodeInstanceEntity extends AbstractEntity {
     @JoinColumn(name = "processInstanceId", foreignKey = @ForeignKey(name = "fk_nodes_process"))
     private ProcessInstanceEntity processInstance;
 
-    public int getTriggerCount() {
-        return triggerCount;
+    public Boolean isRetrigger() {
+        return isRetrigger;
     }
 
-    public void setTriggerCount(int triggerCount) {
-        this.triggerCount = triggerCount;
+    public void setRetrigger(Boolean isRetrigger) {
+        this.isRetrigger = isRetrigger;
     }
 
     public String getErrorMessage() {
