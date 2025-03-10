@@ -75,11 +75,11 @@ public class JobDescriptionDeserializer extends StdDeserializer<JobDescription> 
 
                     ofNullable(node.get("userTaskInstanceId")).ifPresent(e -> builder.userTaskInstanceId(e.textValue()));
                     var metadata = new HashMap<String, Object>();
-                    metadata.put("processId", node.get("processId").textValue());
-                    metadata.put("processInstanceId", node.get("processInstanceId").textValue());
-                    metadata.put("nodeInstanceId", node.get("nodeInstanceId").textValue());
-                    metadata.put("rootProcessInstanceId", node.get("rootProcessInstanceId").textValue());
-                    metadata.put("rootProcessId", node.get("rootProcessId").textValue());
+                    ofNullable(node.get("processId")).ifPresent(e -> metadata.put("processId", e.textValue()));
+                    ofNullable(node.get("processInstanceId")).ifPresent(e -> metadata.put("processInstanceId", e.textValue()));
+                    ofNullable(node.get("nodeInstanceId")).ifPresent(e -> metadata.put("nodeInstanceId", e.textValue()));
+                    ofNullable(node.get("rootProcessInstanceId")).ifPresent(e -> metadata.put("rootProcessInstanceId", e.textValue()));
+                    ofNullable(node.get("rootProcessId")).ifPresent(e -> metadata.put("rootProcessId", e.textValue()));
                     builder.metadata(metadata);
                     return builder.build();
                 }
