@@ -75,11 +75,11 @@ public class JobDescriptionDeserializer extends StdDeserializer<JobDescription> 
 
                     ofNullable(node.get("userTaskInstanceId")).ifPresent(e -> builder.userTaskInstanceId(e.textValue()));
                     var metadata = new HashMap<String, Object>();
-                    ofNullable(node.get("processId")).ifPresent(e -> metadata.put("processId", e.textValue()));
-                    ofNullable(node.get("processInstanceId")).ifPresent(e -> metadata.put("processInstanceId", e.textValue()));
-                    ofNullable(node.get("nodeInstanceId")).ifPresent(e -> metadata.put("nodeInstanceId", e.textValue()));
-                    ofNullable(node.get("rootProcessInstanceId")).ifPresent(e -> metadata.put("rootProcessInstanceId", e.textValue()));
-                    ofNullable(node.get("rootProcessId")).ifPresent(e -> metadata.put("rootProcessId", e.textValue()));
+                    ofNullable(node.get("processId")).ifPresent(e -> metadata.put("ProcessId", e.textValue()));
+                    ofNullable(node.get("processInstanceId")).ifPresent(e -> metadata.put("ProcessInstanceId", e.textValue()));
+                    ofNullable(node.get("nodeInstanceId")).ifPresent(e -> metadata.put("NodeInstanceId", e.textValue()));
+                    ofNullable(node.get("rootProcessInstanceId")).ifPresent(e -> metadata.put("RootProcessInstanceId", e.textValue()));
+                    ofNullable(node.get("rootProcessId")).ifPresent(e -> metadata.put("RootProcessId", e.textValue()));
                     builder.metadata(metadata);
                     return builder.build();
                 }

@@ -107,6 +107,8 @@ public class JobInVMEventPublisher implements JobEventPublisher {
                 scheduledJob.setProcessInstanceId(userTaskInstanceJobDescription.processInstanceId());
                 scheduledJob.setProcessId(userTaskInstanceJobDescription.processId());
                 scheduledJob.setNodeInstanceId(userTaskInstanceJobDescription.nodeInstanceId());
+                scheduledJob.setRootProcessInstanceId(userTaskInstanceJobDescription.rootProcessInstanceId());
+                scheduledJob.setRootProcessId(userTaskInstanceJobDescription.rootProcessId());
             }
 
             byte[] jsonContent = objectMapper.writeValueAsBytes(scheduledJob);
