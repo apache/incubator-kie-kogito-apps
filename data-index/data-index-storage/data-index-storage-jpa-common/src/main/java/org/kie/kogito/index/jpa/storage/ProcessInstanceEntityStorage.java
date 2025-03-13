@@ -225,6 +225,8 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
             pi.setCreatedBy(data.getEventUser());
         } else if (data.getEventType() == ProcessInstanceStateEventBody.EVENT_TYPE_ENDED) {
             pi.setEnd(toZonedDateTime(data.getEventDate()));
+        } else if (data.getEventType() == ProcessInstanceStateEventBody.EVENT_TYPE_RETRIGGERED) {
+            pi.setError(null);
         }
         pi.setBusinessKey(data.getBusinessKey());
         pi.setUpdatedBy(data.getEventUser());
