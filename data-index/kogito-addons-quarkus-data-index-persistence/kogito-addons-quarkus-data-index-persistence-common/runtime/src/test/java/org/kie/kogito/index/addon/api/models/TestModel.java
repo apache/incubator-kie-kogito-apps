@@ -17,14 +17,42 @@
  * under the License.
  */
 
-package org.kie.kogito.index.jdbc;
+package org.kie.kogito.index.addon.api.models;
 
-import io.quarkus.test.junit.QuarkusTestProfile;
+import org.kie.kogito.Model;
 
-public class H2QuarkusTestProfile implements QuarkusTestProfile {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-    @Override
-    public String getConfigProfile() {
-        return "test-h2";
+public class TestModel implements Model {
+
+    @JsonProperty(value = "name")
+    String name;
+    @JsonProperty(value = "age")
+    Integer age;
+    @JsonProperty(value = "adult")
+    Boolean adult;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public Boolean getAdult() {
+        return adult;
+    }
+
+    public void setAdult(Boolean adult) {
+        this.adult = adult;
     }
 }
