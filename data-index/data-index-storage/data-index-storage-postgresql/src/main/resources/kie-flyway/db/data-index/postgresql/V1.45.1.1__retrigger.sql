@@ -17,5 +17,5 @@
  * under the License.
  */
 
-ALTER TABLE nodes ADD COLUMN is_retrigger boolean, ADD COLUMN error_message VARCHAR(65535);
+ALTER TABLE nodes ADD COLUMN retrigger boolean default false, ADD COLUMN error_message VARCHAR(65535);
 ALTER TABLE processes ADD COLUMN node_instance_id VARCHAR(255);

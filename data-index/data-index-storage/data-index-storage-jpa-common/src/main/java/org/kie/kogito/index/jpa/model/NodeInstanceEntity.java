@@ -45,7 +45,7 @@ public class NodeInstanceEntity extends AbstractEntity {
     private ZonedDateTime exit;
     private ZonedDateTime slaDueDate;
     private String definitionId;
-    private Boolean isRetrigger;
+    private Boolean retrigger;
     private String errorMessage;
 
     @ManyToOne(cascade = CascadeType.ALL, optional = false)
@@ -54,11 +54,11 @@ public class NodeInstanceEntity extends AbstractEntity {
     private ProcessInstanceEntity processInstance;
 
     public Boolean isRetrigger() {
-        return isRetrigger;
+        return retrigger;
     }
 
     public void setRetrigger(Boolean isRetrigger) {
-        this.isRetrigger = isRetrigger;
+        this.retrigger = isRetrigger;
     }
 
     public String getErrorMessage() {
