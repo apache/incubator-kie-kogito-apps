@@ -49,4 +49,15 @@ public abstract class AbstractProcessInstanceQueryIT extends QueryTestBase<Strin
                 processInstanceId);
     }
 
+    @Test
+    void testProcessRetriggerQuery() {
+        String processId = "no_retrigger";
+        String processInstanceId = UUID.randomUUID().toString();
+        String subProcessId = processId + "_sub";
+        String subProcessInstanceId = UUID.randomUUID().toString();
+        ProcessInstanceStorage storage = getStorage();
+        storage.indexState(TestUtils.createProcessInstanceEvent(processInstanceId, processId, subProcessId, subProcessInstanceId, COMPLETED.ordinal()));
+        storage.indexNode(TestUtils.createProcessInstanceNodeDataEvent(processInstanceId, processId, "1", "1", "Javierito", "type", 1));
+        queryAndAssert(assertWithId(), storage, singletonList(equalTo("nodes.isRetrigger", false)), null, null, null, processInstanceId);
+    }
 }
