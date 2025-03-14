@@ -40,6 +40,26 @@ public class NodeInstance {
 
     private ZonedDateTime slaDueDate;
 
+    private Boolean isRetrigger;
+
+    private String errorMessage;
+
+    public Boolean isRetrigger() {
+        return isRetrigger;
+    }
+
+    public void setRetrigger(Boolean isRetrigger) {
+        this.isRetrigger = isRetrigger;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+
     @JsonProperty("nodeDefinitionId")
     private String definitionId;
 

@@ -43,6 +43,11 @@ public class NodeInstanceMarshaller extends AbstractMarshaller implements Messag
         node.setDefinitionId(reader.readString("definitionId"));
         node.setNodeId(reader.readString("nodeId"));
         node.setSlaDueDate(dateToZonedDateTime(reader.readDate("slaDueDate")));
+        try {
+            node.setRetrigger(reader.readBoolean("retrigger"));
+        } catch (IOException ex) {
+            // ignoring, this means that the stored node does not have retrigger 
+        }
         return node;
     }
 
@@ -56,6 +61,7 @@ public class NodeInstanceMarshaller extends AbstractMarshaller implements Messag
         writer.writeString("definitionId", node.getDefinitionId());
         writer.writeString("nodeId", node.getNodeId());
         writer.writeDate("slaDueDate", zonedDateTimeToDate(node.getSlaDueDate()));
+        writer.writeBoolean("retrigger", node.isRetrigger());
     }
 
     @Override
