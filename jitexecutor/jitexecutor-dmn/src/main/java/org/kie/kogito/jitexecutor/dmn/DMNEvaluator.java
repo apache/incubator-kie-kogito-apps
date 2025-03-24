@@ -103,43 +103,6 @@ public class DMNEvaluator {
         }
     }
 
-    static List<String> getPathToRoot(DMNModel dmnModel, String invalidId) {
-        List<String> path = new ArrayList<>();
-        DMNModelInstrumentedBase node = getNodeById(dmnModel.getDefinitions(), invalidId);
-
-        while (node != null) {
-            path.add(node.getIdentifierString());
-            if (node instanceof Definitions) {
-                break;
-            }
-            node = node.getParent();
-        }
-        Collections.reverse(path);
-        return path.isEmpty() ? Collections.singletonList(invalidId) : path;
-    }
-
-    static DMNModelInstrumentedBase getNodeById(DMNModel dmnModel, String id) {
-        return dmnModel.getDefinitions().getChildren().stream().map(child -> getNodeById(child, id))
-                .filter(Objects::nonNull).findFirst().orElse(null);
-    }
-
-    static DMNModelInstrumentedBase getNodeById(DMNModelInstrumentedBase dmnModelInstrumentedBase, String id) {
-        if (dmnModelInstrumentedBase.getIdentifierString().equals(id)) {
-            return dmnModelInstrumentedBase;
-        }
-        for (DMNModelInstrumentedBase child : dmnModelInstrumentedBase.getChildren()) {
-            DMNModelInstrumentedBase result = getNodeById(child, id);
-            if (result != null) {
-                return result;
-            }
-        }
-        return null;
-
-//        return dmnModelInstrumentedBase.getChildren().stream().map(child -> getNodeById(child, id))
-//                .filter(Objects::nonNull).findFirst().orElse(null);
-    }
-
-
     private DMNEvaluator(DMNModel dmnModel, DMNRuntime dmnRuntime) {
         this.dmnModel = dmnModel;
         this.dmnRuntime = dmnRuntime;
