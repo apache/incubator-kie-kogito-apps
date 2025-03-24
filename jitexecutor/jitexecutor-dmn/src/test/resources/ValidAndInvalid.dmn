@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<definitions xmlns="https://www.omg.org/spec/DMN/20230324/MODEL/" expressionLanguage="https://www.omg.org/spec/DMN/20230324/FEEL/" namespace="https://kie.org/dmn/_248C7E6D-97F6-4789-A99E-24D5BA409DF4" id="_26DF568A-F525-460A-A587-9A00DE0AF02E" name="DMN_1A7DF226-0019-4D2D-B32F-7B69EA59EDC5" xmlns:dmndi="https://www.omg.org/spec/DMN/20230324/DMNDI/" xmlns:dc="http://www.omg.org/spec/DMN/20180521/DC/" xmlns:di="http://www.omg.org/spec/DMN/20180521/DI/" xmlns:kie="https://kie.org/dmn/extensions/1.0">
+  <decision name="S" id="_682DC07F-2C28-4C55-A242-543043B67330">
+    <variable name="S" id="_FBD02D92-181C-46D1-831D-2E9F5D94909C" typeRef="number" />
+    <informationRequirement id="_D7BAC838-5CF5-473C-894D-78EF716DD090">
+      <requiredInput href="#_BBFF543C-0F41-4F59-8D41-592AACB6CF3B" />
+    </informationRequirement>
+    <literalExpression id="_78D57955-D324-45E3-8A26-8421326DAA1A" typeRef="number" label="S">
+      <text>round down(100,B )</text>
+    </literalExpression>
+  </decision>
+  <decision name="New Decision" id="_DBD85850-E927-4A88-9591-EFE5BF696874">
+    <variable name="New Decision" id="_68D6D511-F5CA-47A7-A998-F5D2F02A0191" typeRef="number" />
+    <informationRequirement id="_ECD209A2-B5BA-44C7-89A8-A37F430C231C">
+      <requiredInput href="#_BBFF543C-0F41-4F59-8D41-592AACB6CF3B" />
+    </informationRequirement>
+    <literalExpression id="_EF7ADBEB-E761-4EC7-BFF7-334164C4014E" typeRef="number" label="New Decision">
+      <text>B</text>
+    </literalExpression>
+  </decision>
+  <inputData name="B" id="_BBFF543C-0F41-4F59-8D41-592AACB6CF3B">
+    <variable name="B" id="_586A60F5-1841-41DA-9139-142BD339A786" typeRef="number" />
+  </inputData>
+  <dmndi:DMNDI>
+    <dmndi:DMNDiagram id="_7F693A8C-14FD-4F73-AA1D-A18DEB3B2CA2" name="Default DRD" useAlternativeInputDataShape="false">
+      <di:extension>
+        <kie:ComponentsWidthsExtension>
+          <kie:ComponentWidths dmnElementRef="_78D57955-D324-45E3-8A26-8421326DAA1A">
+            <kie:width>190</kie:width>
+          </kie:ComponentWidths>
+          <kie:ComponentWidths dmnElementRef="_EF7ADBEB-E761-4EC7-BFF7-334164C4014E">
+            <kie:width>190</kie:width>
+          </kie:ComponentWidths>
+        </kie:ComponentsWidthsExtension>
+      </di:extension>
+      <dmndi:DMNShape id="_24A239CA-F749-4D5F-A98F-80E87A243E89" dmnElementRef="_682DC07F-2C28-4C55-A242-543043B67330" isCollapsed="false" isListedInputData="false">
+        <dc:Bounds x="140" y="80" width="160" height="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="_B229B57F-AC1F-437D-A63A-72CD7645D47A" dmnElementRef="_DBD85850-E927-4A88-9591-EFE5BF696874" isCollapsed="false" isListedInputData="false">
+        <dc:Bounds x="300" y="320" width="160" height="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNShape id="_8AC11FE5-3F28-4B21-91DF-2B71C235EC76" dmnElementRef="_BBFF543C-0F41-4F59-8D41-592AACB6CF3B" isCollapsed="false" isListedInputData="false">
+        <dc:Bounds x="460" y="80" width="160" height="80" />
+      </dmndi:DMNShape>
+      <dmndi:DMNEdge id="_B8109507-6312-4B6B-B5AB-91DAD66646F0" dmnElementRef="_D7BAC838-5CF5-473C-894D-78EF716DD090" sourceElement="_8AC11FE5-3F28-4B21-91DF-2B71C235EC76" targetElement="_24A239CA-F749-4D5F-A98F-80E87A243E89">
+        <di:waypoint x="540" y="120" />
+        <di:waypoint x="300" y="120" />
+      </dmndi:DMNEdge>
+      <dmndi:DMNEdge id="_B863A167-FA7A-4B06-A7BA-09F203693203" dmnElementRef="_ECD209A2-B5BA-44C7-89A8-A37F430C231C" sourceElement="_8AC11FE5-3F28-4B21-91DF-2B71C235EC76" targetElement="_B229B57F-AC1F-437D-A63A-72CD7645D47A">
+        <di:waypoint x="540" y="120" />
+        <di:waypoint x="380" y="320" />
+      </dmndi:DMNEdge>
+    </dmndi:DMNDiagram>
+  </dmndi:DMNDI>
+</definitions>
