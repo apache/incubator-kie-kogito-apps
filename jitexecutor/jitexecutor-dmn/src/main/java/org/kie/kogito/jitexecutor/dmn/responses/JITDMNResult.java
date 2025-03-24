@@ -51,13 +51,16 @@ public class JITDMNResult implements Serializable,
 
     private List<DMNDecisionResult> decisionResults;
 
-    public static JITDMNResult of(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult, Map<String, Map<String, Integer>> decisionEvaluationHitIdsMap) {
+    private List<List<String>> invalidPaths;
+
+    public static JITDMNResult of(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult, Map<String, Map<String, Integer>> decisionEvaluationHitIdsMap, List<List<String>> invalidPaths) {
         JITDMNResult toReturn = new JITDMNResult();
         toReturn.namespace = namespace;
         toReturn.modelName = modelName;
         toReturn.dmnContext = internalGetContext(dmnResult.getContext().getAll());
         toReturn.messages = internalGetMessages(dmnResult.getMessages());
         toReturn.decisionResults = internalGetDecisionResults(dmnResult.getDecisionResults(), decisionEvaluationHitIdsMap);
+        toReturn.invalidPaths = invalidPaths;
         return toReturn;
     }
 
@@ -163,6 +166,7 @@ public class JITDMNResult implements Serializable,
                 .append(", dmnContext=").append(dmnContext)
                 .append(", messages=").append(messages)
                 .append(", decisionResults=").append(decisionResults)
+                .append(", invalidPaths=").append(invalidPaths)
                 .append("]").toString();
     }
 
@@ -180,5 +184,13 @@ public class JITDMNResult implements Serializable,
 
     private static List<DMNDecisionResult> internalGetDecisionResults(List<? extends DMNDecisionResult> decisionResults, Map<String, Map<String, Integer>> decisionEvaluationHitIdsMap) {
         return decisionResults.stream().map(dr -> JITDMNDecisionResult.of(dr, decisionEvaluationHitIdsMap.getOrDefault(dr.getDecisionName(), Collections.emptyMap()))).collect(Collectors.toList());
+    }
+
+    public List<List<String>> getInvalidPaths() {
+        return invalidPaths;
+    }
+
+    public void setInvalidPaths(List<List<String>> invalidPaths) {
+        this.invalidPaths = invalidPaths;
     }
 }
