@@ -51,7 +51,7 @@ public class JITDMNResult implements Serializable,
 
     private List<DMNDecisionResult> decisionResults;
 
-    private List<List<String>> invalidPaths;
+    private List<List<String>> invalidElementPaths;
 
     public static JITDMNResult of(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult, Map<String, Map<String, Integer>> decisionEvaluationHitIdsMap, List<List<String>> invalidPaths) {
         JITDMNResult toReturn = new JITDMNResult();
@@ -60,7 +60,7 @@ public class JITDMNResult implements Serializable,
         toReturn.dmnContext = internalGetContext(dmnResult.getContext().getAll());
         toReturn.messages = internalGetMessages(dmnResult.getMessages());
         toReturn.decisionResults = internalGetDecisionResults(dmnResult.getDecisionResults(), decisionEvaluationHitIdsMap);
-        toReturn.invalidPaths = invalidPaths;
+        toReturn.invalidElementPaths = invalidPaths;
         return toReturn;
     }
 
@@ -166,7 +166,7 @@ public class JITDMNResult implements Serializable,
                 .append(", dmnContext=").append(dmnContext)
                 .append(", messages=").append(messages)
                 .append(", decisionResults=").append(decisionResults)
-                .append(", invalidPaths=").append(invalidPaths)
+                .append(", invalidPaths=").append(invalidElementPaths)
                 .append("]").toString();
     }
 
@@ -186,11 +186,11 @@ public class JITDMNResult implements Serializable,
         return decisionResults.stream().map(dr -> JITDMNDecisionResult.of(dr, decisionEvaluationHitIdsMap.getOrDefault(dr.getDecisionName(), Collections.emptyMap()))).collect(Collectors.toList());
     }
 
-    public List<List<String>> getInvalidPaths() {
-        return invalidPaths;
+    public List<List<String>> getInvalidElementPaths() {
+        return invalidElementPaths;
     }
 
-    public void setInvalidPaths(List<List<String>> invalidPaths) {
-        this.invalidPaths = invalidPaths;
+    public void setInvalidElementPaths(List<List<String>> invalidElementPaths) {
+        this.invalidElementPaths = invalidElementPaths;
     }
 }

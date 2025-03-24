@@ -27,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.kie.api.builder.Message;
@@ -37,15 +36,16 @@ import org.kie.dmn.api.core.DMNMessage;
 import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
-import org.kie.dmn.api.core.ast.DecisionNode;
-import org.kie.dmn.api.core.ast.DecisionServiceNode;
 import org.kie.dmn.api.core.ast.InputDataNode;
 import org.kie.dmn.core.compiler.RuntimeTypeCheckOption;
 import org.kie.dmn.core.impl.DMNRuntimeImpl;
 import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
 import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
+import org.kie.dmn.model.api.BusinessKnowledgeModel;
 import org.kie.dmn.model.api.DMNModelInstrumentedBase;
+import org.kie.dmn.model.api.Decision;
 import org.kie.dmn.model.api.Definitions;
+import org.kie.dmn.model.api.LiteralExpression;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
 import org.kie.kogito.jitexecutor.common.requests.ResourceWithURI;
@@ -103,6 +103,53 @@ public class DMNEvaluator {
         }
     }
 
+    static List<String> getPathToRoot(DMNModel dmnModel, String invalidId) {
+        List<String> path = new ArrayList<>();
+        DMNModelInstrumentedBase node = getNodeById(dmnModel, invalidId);
+
+        while (node != null && !(node instanceof Definitions)) {
+            if (node instanceof Decision) {
+                path.add(((Decision) node).getId());
+            } else if (node instanceof BusinessKnowledgeModel) {
+                path.add(((BusinessKnowledgeModel) node).getId());
+            } else if (node instanceof InputDataNode) {
+                path.add(((InputDataNode) node).getId());
+            } else {
+                path.add(node.getIdentifierString());
+            }
+            node = node.getParent();
+        }
+        Collections.reverse(path);
+        return path.isEmpty() ? Collections.singletonList(invalidId) : path;
+    }
+
+    static DMNModelInstrumentedBase getNodeById(DMNModel dmnModel, String id) {
+        return dmnModel.getDefinitions().getChildren().stream().map(child -> getNodeById(child, id))
+                .filter(Objects::nonNull).findFirst().orElse(null);
+    }
+
+    static DMNModelInstrumentedBase getNodeById(DMNModelInstrumentedBase dmnModelInstrumentedBase, String id) {
+        if (dmnModelInstrumentedBase.getIdentifierString().equals(id)) {
+            return dmnModelInstrumentedBase;
+        }
+        for (DMNModelInstrumentedBase child : dmnModelInstrumentedBase.getChildren()) {
+            DMNModelInstrumentedBase result = getNodeById(child, id);
+            if (result != null) {
+                return result;
+            }
+        }
+        return null;
+    }
+
+    static List<List<String>> retrieveInvalidElementPaths(List<DMNMessage> messages, DMNModel dmnModel) {
+        return messages.stream().filter(message -> message.getLevel().equals(Message.Level.WARNING) ||
+                        message.getLevel().equals(Message.Level.ERROR)).map(message -> {
+                    List<String> pathToRoot = getPathToRoot(dmnModel, message.getSourceId());
+                    Collections.reverse(pathToRoot);
+                    return pathToRoot;
+                }).collect(Collectors.toList());
+    }
+
     private DMNEvaluator(DMNModel dmnModel, DMNRuntime dmnRuntime) {
         this.dmnModel = dmnModel;
         this.dmnRuntime = dmnRuntime;
@@ -129,57 +176,14 @@ public class DMNEvaluator {
         DMNContext dmnContext =
                 new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
         DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
-
-        List<List<String>> invalidPaths = new ArrayList<>();
-        for (DMNMessage message : dmnResult.getMessages()) {
-            if (message.getSeverity() == DMNMessage.Severity.WARN || message.getSeverity() == DMNMessage.Severity.ERROR) {
-                String sourceId = message.getSourceId();
-                List<String> path = new ArrayList<>();
-                getPathToRoot(dmnModel, sourceId, path);
-                Collections.reverse(path);
-                invalidPaths.add(path);
-            }
-        }
+        List<List<String>> invalidElementPaths = retrieveInvalidElementPaths(dmnResult.getMessages(), dmnModel);
         Optional<Map<String, Map<String, Integer>>> decisionEvaluationHitIdsMap = dmnRuntime.getListeners().stream()
                 .filter(JITDMNListener.class::isInstance)
                 .findFirst()
                 .map(JITDMNListener.class::cast)
                 .map(JITDMNListener::getDecisionEvaluationHitIdsMap);
         return JITDMNResult.of(getNamespace(), getName(), dmnResult,
-                decisionEvaluationHitIdsMap.orElse(Collections.emptyMap()), invalidPaths);
-    }
-
-    static void getPathToRoot(DMNModel dmnModel, String elementId, List<String> path) {
-        path.add(elementId);
-        String parentId = findParentId(dmnModel, elementId);
-
-        if (parentId != null) {
-            getPathToRoot(dmnModel, parentId, path);
-        }
-    }
-
-    static String findParentId(DMNModel dmnModel, String elementId) {
-        for (DecisionServiceNode decisionServiceNode : dmnModel.getDecisionServices()) {
-            if (decisionServiceNode.getDecisionService().getOutputDecision().stream()
-                    .anyMatch(decision -> decision.getIdentifierString().equals(elementId))) {
-                return decisionServiceNode.getId();
-            }
-        }
-
-        for (DecisionNode parentDecisionNode : dmnModel.getDecisions()) {
-            Set<InputDataNode> requiredInputs = dmnModel.getRequiredInputsForDecisionId(parentDecisionNode.getId());
-            if (requiredInputs.stream().anyMatch(input -> input.getId().equals(elementId))) {
-                return parentDecisionNode.getId();
-            }
-        }
-
-        for (DecisionNode decisionNode : dmnModel.getDecisions()) {
-            if (decisionNode.getDecision().getExpression() != null && elementId.equals(decisionNode.getDecision().getExpression().getId())) {
-                return decisionNode.getId();
-            }
-        }
-
-        return null;
+                decisionEvaluationHitIdsMap.orElse(Collections.emptyMap()), invalidElementPaths);
     }
 
 }

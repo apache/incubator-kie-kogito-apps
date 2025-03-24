@@ -20,14 +20,23 @@ package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.kie.api.io.Resource;
+import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNMessage;
 import org.kie.dmn.api.core.DMNModel;
+import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
+import org.kie.dmn.core.api.DMNFactory;
 import org.kie.dmn.core.impl.DMNRuntimeImpl;
+import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
+import org.kie.dmn.model.api.DMNModelInstrumentedBase;
+import org.kie.internal.io.ResourceFactory;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kie.kogito.jitexecutor.dmn.TestingUtils.getModelFromIoUtils;
@@ -86,6 +95,87 @@ public class DMNEvaluatorTest {
         DMNEvaluator evaluator = DMNEvaluator.validateForErrors(dmnModel, dmnRuntime);
 
         assertNotNull(evaluator);
+    }
+
+    @Test
+    void testRetrieveInvalidElementPaths() throws IOException {
+        Resource resource = ResourceFactory.newClassPathResource("InvalidPath.dmn");
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
+                .fromResources(Collections.singletonList(resource)).getOrElseThrow(RuntimeException::new);
+        assertThat(dmnRuntime).isNotNull();
+        String nameSpace = "https://kie.org/dmn/_79591DB5-1EE1-4CBD-AA5D-2E3EDF31150E";
+
+        final DMNModel dmnModel = dmnRuntime.getModel(nameSpace, "DMN_8F7C4323-412A-4E0B-9AEF-0F24C8F55282");
+        assertThat(dmnModel).isNotNull();
+        DMNContext dmnContext = DMNFactory.newContext();
+        dmnContext.set("New Input Data", 65);
+        DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
+        List<List<String>> invalidElementPaths = List.of(List.of("_A40F3AA4-2832-4D98-83F0-7D604F9A090F","_4AC1BD7D-5A8D-4A88-94F9-0B80BDF0D9B1"), List.of("_3DC41DB9-BE1D-4289-A639-24AB57ED082D"));
+
+        List<List<String>> invalidPaths = DMNEvaluator.retrieveInvalidElementPaths(dmnResult.getMessages(), dmnModel);
+
+        assertNotNull(invalidPaths);
+        assertThat(invalidElementPaths.size()).isEqualTo(invalidPaths.size());
+        assertThat(invalidElementPaths.containsAll(invalidPaths));
+    }
+
+    @Test
+    void testGetPathToRoot()  {
+        Resource resource = ResourceFactory.newClassPathResource("InvalidPath.dmn");
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
+                .fromResources(Collections.singletonList(resource)).getOrElseThrow(RuntimeException::new);
+        assertThat(dmnRuntime).isNotNull();
+        String nameSpace = "https://kie.org/dmn/_79591DB5-1EE1-4CBD-AA5D-2E3EDF31150E";
+
+        final DMNModel dmnModel = dmnRuntime.getModel(nameSpace, "DMN_8F7C4323-412A-4E0B-9AEF-0F24C8F55282");
+        assertThat(dmnModel).isNotNull();
+        String id = "_4AC1BD7D-5A8D-4A88-94F9-0B80BDF0D9B1";
+        List<String> invalidPath = List.of("_A40F3AA4-2832-4D98-83F0-7D604F9A090F","_4AC1BD7D-5A8D-4A88-94F9-0B80BDF0D9B1");
+
+        List<String> path = DMNEvaluator.getPathToRoot(dmnModel, id);
+
+        assertNotNull(path);
+        assertThat(invalidPath).isEqualTo(path);
+    }
+
+    @Test
+    void testGetNodeById()  {
+        DMNModelInstrumentedBase dmnModelInstrumentedBaseNode = mock(DMNModelInstrumentedBase.class);
+        Resource resource = ResourceFactory.newClassPathResource("InvalidPath.dmn");
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
+                .fromResources(Collections.singletonList(resource)).getOrElseThrow(RuntimeException::new);
+        assertThat(dmnRuntime).isNotNull();
+        String nameSpace = "https://kie.org/dmn/_79591DB5-1EE1-4CBD-AA5D-2E3EDF31150E";
+
+        final DMNModel dmnModel = dmnRuntime.getModel(nameSpace, "DMN_8F7C4323-412A-4E0B-9AEF-0F24C8F55282");
+        assertThat(dmnModel).isNotNull();
+        String id = "_4AC1BD7D-5A8D-4A88-94F9-0B80BDF0D9B1";
+        when(dmnModelInstrumentedBaseNode.getIdentifierString()).thenReturn("_4AC1BD7D-5A8D-4A88-94F9-0B80BDF0D9B1");
+
+        DMNModelInstrumentedBase node = DMNEvaluator.getNodeById(dmnModel, id);
+
+        assertNotNull(node);
+        assertThat(dmnModelInstrumentedBaseNode.getIdentifierString()).isEqualTo(node.getIdentifierString());
+    }
+
+    @Test
+    void getNodeById()  {
+        DMNModelInstrumentedBase dmnModelInstrumentedBaseNode = mock(DMNModelInstrumentedBase.class);
+        Resource resource = ResourceFactory.newClassPathResource("InvalidPath.dmn");
+        DMNRuntime dmnRuntime = DMNRuntimeBuilder.fromDefaults().buildConfiguration()
+                .fromResources(Collections.singletonList(resource)).getOrElseThrow(RuntimeException::new);
+        assertThat(dmnRuntime).isNotNull();
+        String nameSpace = "https://kie.org/dmn/_79591DB5-1EE1-4CBD-AA5D-2E3EDF31150E";
+
+        final DMNModel dmnModel = dmnRuntime.getModel(nameSpace, "DMN_8F7C4323-412A-4E0B-9AEF-0F24C8F55282");
+        assertThat(dmnModel).isNotNull();
+        String id = "_4AC1BD7D-5A8D-4A88-94F9-0B80BDF0D9B1";
+        when(dmnModelInstrumentedBaseNode.getIdentifierString()).thenReturn("_4AC1BD7D-5A8D-4A88-94F9-0B80BDF0D9B1");
+
+        DMNModelInstrumentedBase node = DMNEvaluator.getNodeById(dmnModelInstrumentedBaseNode, id);
+
+        assertNotNull(node);
+        assertThat(dmnModelInstrumentedBaseNode.getIdentifierString()).isEqualTo(node.getIdentifierString());
     }
 
 }
