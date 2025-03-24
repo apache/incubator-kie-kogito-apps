@@ -78,7 +78,7 @@ class JITDMNResultTest {
         dmnResult.setContext(createContext());
         dmnResult.addDecisionResult(decisionResult);
 
-        JITDMNResult jitdmnResult = JITDMNResult.of("http://www.trisotech.com/definitions/_9d01a0c4-f529-4ad8-ad8e-ec5fb5d96ad4", "Chapter 11 Example", dmnResult, Collections.emptyMap());
+        JITDMNResult jitdmnResult = JITDMNResult.of("http://www.trisotech.com/definitions/_9d01a0c4-f529-4ad8-ad8e-ec5fb5d96ad4", "Chapter 11 Example", dmnResult, Collections.emptyMap(), Collections.emptyList());
         String retrieved = MAPPER.writeValueAsString(jitdmnResult);
         assertThat(retrieved).isNotNull().isNotBlank();
         JITDMNResult result = MAPPER.readValue(retrieved, JITDMNResult.class);

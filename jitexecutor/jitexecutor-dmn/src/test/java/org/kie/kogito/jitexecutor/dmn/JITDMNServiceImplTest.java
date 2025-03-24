@@ -39,6 +39,7 @@ public class JITDMNServiceImplTest {
 
     private static String model;
     private static JITDMNService jitdmnService;
+    private DMNEvaluator dmnEvaluator;
 
     @BeforeAll
     public static void setup() throws IOException {
@@ -311,4 +312,40 @@ public class JITDMNServiceImplTest {
         assertThat(response.salienciesResponse.getSaliencies()).hasSize(1);
         assertThat(response.salienciesResponse.getSaliencies().get(0).getFeatureImportance()).hasSize(17);
     }
+
+    /*@Test
+    void testValidateDMNModel() throws IOException {
+        String model = getModelFromIoUtils("invalid_models/DMNv1_5/FailValidation.dmn");
+        Resource modelResource = ResourceFactory.newReaderResource(new StringReader(model), "UTF-8");
+
+        DMNValidator validator = new DMNValidator();
+        <DMNMessage > messages = validator.validate(modelResource, VALIDATE_SCHEMA, VALIDATE_MODEL, VALIDATE_COMPILATION);
+
+        assertThat(messages).isEmpty();
+    }*/
+
+    @Test
+    void testValidateDMNModel() throws IOException {
+        String model = getModelFromIoUtils("ValidAndInvalid.dmn");
+        Map<String, Object> context = new HashMap<>();
+        context.put("id", "_008E6370-4418-453A-B576-8CAC321569CF");
+        context.put("B", 8888);
+
+        JITDMNResult response = jitdmnService.evaluateModel(model, context);
+        System.out.println(response.getMessages());
+    }
+
+    @Test
+    void testValidateDMNModelPath() throws IOException {
+        String model = getModelFromIoUtils("InvalidPath.dmn");
+        Map<String, Object> context = new HashMap<>();
+        context.put("New Input Data", 65);
+        context.put("id", "_EF17BEFC-A658-47ED-868E-E904CF295294");
+
+        JITDMNResult response = jitdmnService.evaluateModel(model, context);
+        System.out.println(response.getMessages());
+        System.out.println(response);
+
+    }
+
 }
