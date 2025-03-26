@@ -36,16 +36,15 @@ import org.kie.dmn.api.core.DMNMessage;
 import org.kie.dmn.api.core.DMNModel;
 import org.kie.dmn.api.core.DMNResult;
 import org.kie.dmn.api.core.DMNRuntime;
-import org.kie.dmn.api.core.ast.InputDataNode;
 import org.kie.dmn.core.compiler.RuntimeTypeCheckOption;
 import org.kie.dmn.core.impl.DMNRuntimeImpl;
 import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
 import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
 import org.kie.dmn.model.api.BusinessKnowledgeModel;
+import org.kie.dmn.model.api.ChildExpression;
 import org.kie.dmn.model.api.DMNModelInstrumentedBase;
 import org.kie.dmn.model.api.Decision;
 import org.kie.dmn.model.api.Definitions;
-import org.kie.dmn.model.api.LiteralExpression;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
 import org.kie.kogito.jitexecutor.common.requests.ResourceWithURI;
@@ -112,8 +111,8 @@ public class DMNEvaluator {
                 path.add(((Decision) node).getId());
             } else if (node instanceof BusinessKnowledgeModel) {
                 path.add(((BusinessKnowledgeModel) node).getId());
-            } else if (node instanceof InputDataNode) {
-                path.add(((InputDataNode) node).getId());
+            } else if (node instanceof ChildExpression) {
+                path.add(((ChildExpression) node).getId());
             } else {
                 path.add(node.getIdentifierString());
             }
@@ -143,9 +142,8 @@ public class DMNEvaluator {
 
     static List<List<String>> retrieveInvalidElementPaths(List<DMNMessage> messages, DMNModel dmnModel) {
         return messages.stream().filter(message -> message.getLevel().equals(Message.Level.WARNING) ||
-                        message.getLevel().equals(Message.Level.ERROR)).map(message -> {
+                message.getLevel().equals(Message.Level.ERROR)).map(message -> {
                     List<String> pathToRoot = getPathToRoot(dmnModel, message.getSourceId());
-                    Collections.reverse(pathToRoot);
                     return pathToRoot;
                 }).collect(Collectors.toList());
     }
