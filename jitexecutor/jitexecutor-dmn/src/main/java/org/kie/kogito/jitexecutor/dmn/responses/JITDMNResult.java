@@ -96,6 +96,14 @@ public class JITDMNResult implements Serializable,
         this.messages = messages;
     }
 
+    public List<List<String>> getInvalidElementPaths() {
+        return invalidElementPaths;
+    }
+
+    public void setInvalidElementPaths(List<List<String>> invalidElementPaths) {
+        this.invalidElementPaths = invalidElementPaths;
+    }
+
     @JsonIgnore
     @Override
     public DMNContext getContext() {
@@ -184,13 +192,5 @@ public class JITDMNResult implements Serializable,
 
     private static List<DMNDecisionResult> internalGetDecisionResults(List<? extends DMNDecisionResult> decisionResults, Map<String, Map<String, Integer>> decisionEvaluationHitIdsMap) {
         return decisionResults.stream().map(dr -> JITDMNDecisionResult.of(dr, decisionEvaluationHitIdsMap.getOrDefault(dr.getDecisionName(), Collections.emptyMap()))).collect(Collectors.toList());
-    }
-
-    public List<List<String>> getInvalidElementPaths() {
-        return invalidElementPaths;
-    }
-
-    public void setInvalidElementPaths(List<List<String>> invalidElementPaths) {
-        this.invalidElementPaths = invalidElementPaths;
     }
 }

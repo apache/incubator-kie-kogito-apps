@@ -47,21 +47,20 @@ import io.restassured.response.ResponseBody;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.hasItems;
 import static org.kie.kogito.jitexecutor.dmn.TestingUtils.getModelFromIoUtils;
 
 @QuarkusTest
 public class JITDMNResourceTest {
 
+    static final String EVALUATION_HIT_IDS_FIELD_NAME = "evaluationHitIds";
+    private static final ObjectMapper MAPPER = new ObjectMapper();
     private static String invalidModel1x;
     private static String invalidModel15;
     private static String validModel15;
     private static String modelWithExtensionElements;
     private static String modelWithMultipleEvaluationHitIds;
     private static String modelWithNestedConditionalEvaluationHitIds;
-
-    private static final ObjectMapper MAPPER = new ObjectMapper();
-
-    static final String EVALUATION_HIT_IDS_FIELD_NAME = "evaluationHitIds";
 
     static {
         MAPPER.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -75,6 +74,16 @@ public class JITDMNResourceTest {
         modelWithExtensionElements = getModelFromIoUtils("valid_models/DMNv1_x/testWithExtensionElements.dmn");
         modelWithMultipleEvaluationHitIds = getModelFromIoUtils("valid_models/DMNv1_5/MultipleHitRules.dmn");
         modelWithNestedConditionalEvaluationHitIds = getModelFromIoUtils("valid_models/DMNv1_5/NestedConditional.dmn");
+    }
+
+    static Map<String, Object> buildMultipleHitContext() {
+        final List<BigDecimal> numbers = new ArrayList<>();
+        numbers.add(BigDecimal.valueOf(10));
+        numbers.add(BigDecimal.valueOf(2));
+        numbers.add(BigDecimal.valueOf(1));
+        final Map<String, Object> context = new HashMap<>();
+        context.put("Numbers", numbers);
+        return context;
     }
 
     @Test
@@ -288,14 +297,20 @@ public class JITDMNResourceTest {
                 .body(containsString("Error compiling FEEL expression 'Person Age >= 18' for name 'Can Drive?' on node 'Can Drive?': syntax error near 'Age'"));
     }
 
-    static Map<String, Object> buildMultipleHitContext() {
-        final List<BigDecimal> numbers = new ArrayList<>();
-        numbers.add(BigDecimal.valueOf(10));
-        numbers.add(BigDecimal.valueOf(2));
-        numbers.add(BigDecimal.valueOf(1));
-        final Map<String, Object> context = new HashMap<>();
-        context.put("Numbers", numbers);
-        return context;
+    @Test
+    void testjitdmnRetrieveInvalidElementPath() throws IOException {
+        Map<String, Object> context = new HashMap<>();
+        context.put("id", "_641F6FB1-6720-425E-9045-7EB9B90E2FFF");
+        context.put("New Input Data", 8888);
+        JITDMNPayload jitdmnpayload = new JITDMNPayload(getModelFromIoUtils("invalid_models/DMNv1_5/InvalidElementPath.dmn"), context);
+        given()
+                .contentType(ContentType.JSON)
+                .body(jitdmnpayload)
+                .when().post("/jitdmn/dmnresult")
+                .then()
+                .statusCode(200)
+                .body("invalidElementPaths", hasItems(List.of("_172F9901-0884-47C1-A5B4-3C09CC83D5B6", "_8577FE15-1512-4BBE-885F-C30FD73ADC6B"),
+                List.of("_4FF85EFF-B9E6-41C3-9115-DC9690E3B6F7")));
     }
 
     private Map<String, Object> buildContext() {

@@ -142,10 +142,7 @@ public class DMNEvaluator {
 
     static List<List<String>> retrieveInvalidElementPaths(List<DMNMessage> messages, DMNModel dmnModel) {
         return messages.stream().filter(message -> message.getLevel().equals(Message.Level.WARNING) ||
-                message.getLevel().equals(Message.Level.ERROR)).map(message -> {
-                    List<String> pathToRoot = getPathToRoot(dmnModel, message.getSourceId());
-                    return pathToRoot;
-                }).collect(Collectors.toList());
+                message.getLevel().equals(Message.Level.ERROR)).map(message -> getPathToRoot(dmnModel, message.getSourceId())).collect(Collectors.toList());
     }
 
     private DMNEvaluator(DMNModel dmnModel, DMNRuntime dmnRuntime) {
