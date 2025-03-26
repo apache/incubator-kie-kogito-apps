@@ -40,10 +40,9 @@ import org.kie.dmn.core.compiler.RuntimeTypeCheckOption;
 import org.kie.dmn.core.impl.DMNRuntimeImpl;
 import org.kie.dmn.core.internal.utils.DMNRuntimeBuilder;
 import org.kie.dmn.core.internal.utils.DynamicDMNContextBuilder;
-import org.kie.dmn.model.api.BusinessKnowledgeModel;
 import org.kie.dmn.model.api.ChildExpression;
+import org.kie.dmn.model.api.DMNElement;
 import org.kie.dmn.model.api.DMNModelInstrumentedBase;
-import org.kie.dmn.model.api.Decision;
 import org.kie.dmn.model.api.Definitions;
 import org.kie.internal.io.ResourceFactory;
 import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
@@ -106,13 +105,11 @@ public class DMNEvaluator {
         List<String> path = new ArrayList<>();
         DMNModelInstrumentedBase node = getNodeById(dmnModel, invalidId);
 
-        while (node != null && !(node instanceof Definitions)) {
-            if (node instanceof Decision) {
-                path.add(((Decision) node).getId());
-            } else if (node instanceof BusinessKnowledgeModel) {
-                path.add(((BusinessKnowledgeModel) node).getId());
-            } else if (node instanceof ChildExpression) {
-                path.add(((ChildExpression) node).getId());
+        while (node != null && !(node instanceof Definitions) ) {
+            if (node instanceof DMNElement dmnElement) {
+                path.add(dmnElement.getId());
+            } else if (node instanceof ChildExpression childExpression) {
+                path.add(childExpression.getId());
             } else {
                 path.add(node.getIdentifierString());
             }
