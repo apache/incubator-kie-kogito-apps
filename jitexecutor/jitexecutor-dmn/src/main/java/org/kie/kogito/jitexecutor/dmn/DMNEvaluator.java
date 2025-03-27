@@ -18,17 +18,6 @@
  */
 package org.kie.kogito.jitexecutor.dmn;
 
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
 import org.kie.api.builder.Message;
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNContext;
@@ -49,6 +38,17 @@ import org.kie.kogito.jitexecutor.common.requests.MultipleResourcesPayload;
 import org.kie.kogito.jitexecutor.common.requests.ResourceWithURI;
 import org.kie.kogito.jitexecutor.dmn.responses.JITDMNResult;
 import org.kie.kogito.jitexecutor.dmn.utils.ResolveByKey;
+
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class DMNEvaluator {
 
@@ -105,7 +105,7 @@ public class DMNEvaluator {
         List<String> path = new ArrayList<>();
         DMNModelInstrumentedBase node = getNodeById(dmnModel, invalidId);
 
-        while (node != null && !(node instanceof Definitions) ) {
+        while (node != null && !(node instanceof Definitions)) {
             if (node instanceof DMNElement dmnElement) {
                 path.add(dmnElement.getId());
             } else if (node instanceof ChildExpression childExpression) {
