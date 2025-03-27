@@ -113,8 +113,9 @@ public class DMNEvaluatorTest {
         dmnContext.set("New Input Data", 8888);
         dmnContext.set("Score", 8);
         DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
-        List<List<String>> invalidElementPaths = List.of(List.of("_3DC41DB9-BE1D-4289-A639-24AB57ED082D", "_2B147ECC-2457-4623-B841-3360D75F9F76", "_6F318F57-DA06-4F71-80AD-288E0BBB3A52", "_43236F2B-9857-454F-8EA0-39B37C7519CF"),
-                        List.of("_09186183-0646-4CD0-AD67-A159E9F87F5E", "_D386D137-582B-49F9-B6F9-F341C3AC4B3E", "_2E43C09D-011A-436C-B40B-9154405EAF3A"), List.of("_E9468D45-51EB-48DA-8B30-7D65696FDFB8"));
+        List<List<String>> invalidElementPaths = List.of(
+                List.of("_3DC41DB9-BE1D-4289-A639-24AB57ED082D", "_2B147ECC-2457-4623-B841-3360D75F9F76", "_6F318F57-DA06-4F71-80AD-288E0BBB3A52", "_43236F2B-9857-454F-8EA0-39B37C7519CF"),
+                List.of("_09186183-0646-4CD0-AD67-A159E9F87F5E", "_D386D137-582B-49F9-B6F9-F341C3AC4B3E", "_2E43C09D-011A-436C-B40B-9154405EAF3A"), List.of("_E9468D45-51EB-48DA-8B30-7D65696FDFB8"));
 
         List<List<String>> retrieved = DMNEvaluator.retrieveInvalidElementPaths(dmnResult.getMessages(), dmnModel);
         assertNotNull(retrieved);

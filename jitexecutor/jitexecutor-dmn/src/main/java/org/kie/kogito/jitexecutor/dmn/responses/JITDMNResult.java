@@ -52,7 +52,8 @@ public class JITDMNResult implements Serializable,
 
     private List<List<String>> invalidElementPaths;
 
-    public static JITDMNResult of(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult, Map<String, Map<String, Integer>> decisionEvaluationHitIdsMap, List<List<String>> invalidElementPaths) {
+    public static JITDMNResult of(String namespace, String modelName, org.kie.dmn.api.core.DMNResult dmnResult, Map<String, Map<String, Integer>> decisionEvaluationHitIdsMap,
+            List<List<String>> invalidElementPaths) {
         JITDMNResult toReturn = new JITDMNResult();
         toReturn.namespace = namespace;
         toReturn.modelName = modelName;

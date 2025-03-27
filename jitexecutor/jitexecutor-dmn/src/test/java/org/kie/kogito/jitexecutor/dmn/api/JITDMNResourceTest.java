@@ -310,7 +310,7 @@ public class JITDMNResourceTest {
                 .then()
                 .statusCode(200)
                 .body("invalidElementPaths", hasItems(List.of("_172F9901-0884-47C1-A5B4-3C09CC83D5B6", "_8577FE15-1512-4BBE-885F-C30FD73ADC6B"),
-                List.of("_4FF85EFF-B9E6-41C3-9115-DC9690E3B6F7")));
+                        List.of("_4FF85EFF-B9E6-41C3-9115-DC9690E3B6F7")));
     }
 
     private Map<String, Object> buildContext() {

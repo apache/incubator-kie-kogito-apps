@@ -87,7 +87,8 @@ class JITDMNResultTest {
         List<String> invalidPath = List.of("_4bd33d4a-741b-444a-968b-64e1841211e7");
         invalidElementPaths.add(invalidPath);
 
-        JITDMNResult jitdmnResult = JITDMNResult.of("http://www.trisotech.com/definitions/_9d01a0c4-f529-4ad8-ad8e-ec5fb5d96ad4", "Chapter 11 Example", dmnResult, decisionEvaluationHitIdsMap, invalidElementPaths);
+        JITDMNResult jitdmnResult =
+                JITDMNResult.of("http://www.trisotech.com/definitions/_9d01a0c4-f529-4ad8-ad8e-ec5fb5d96ad4", "Chapter 11 Example", dmnResult, decisionEvaluationHitIdsMap, invalidElementPaths);
         String retrieved = MAPPER.writeValueAsString(jitdmnResult);
         assertThat(retrieved).isNotNull().isNotBlank();
         JITDMNResult result = MAPPER.readValue(retrieved, JITDMNResult.class);
