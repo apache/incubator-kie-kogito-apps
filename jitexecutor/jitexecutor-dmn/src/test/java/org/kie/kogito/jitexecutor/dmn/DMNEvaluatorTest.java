@@ -116,11 +116,10 @@ public class DMNEvaluatorTest {
         List<List<String>> invalidElementPaths = List.of(List.of("_3DC41DB9-BE1D-4289-A639-24AB57ED082D", "_2B147ECC-2457-4623-B841-3360D75F9F76", "_6F318F57-DA06-4F71-80AD-288E0BBB3A52", "_43236F2B-9857-454F-8EA0-39B37C7519CF"),
                         List.of("_09186183-0646-4CD0-AD67-A159E9F87F5E", "_D386D137-582B-49F9-B6F9-F341C3AC4B3E", "_2E43C09D-011A-436C-B40B-9154405EAF3A"), List.of("_E9468D45-51EB-48DA-8B30-7D65696FDFB8"));
 
-        List<List<String>> invalidPaths = DMNEvaluator.retrieveInvalidElementPaths(dmnResult.getMessages(), dmnModel);
-        System.out.println(invalidPaths);
-        assertNotNull(invalidPaths);
-        assertThat(invalidElementPaths.size()).isEqualTo(invalidPaths.size());
-        assertThat(invalidElementPaths).isEqualTo(invalidPaths);
+        List<List<String>> retrieved = DMNEvaluator.retrieveInvalidElementPaths(dmnResult.getMessages(), dmnModel);
+        assertNotNull(retrieved);
+        assertThat(invalidElementPaths.size()).isEqualTo(retrieved.size());
+        assertThat(invalidElementPaths).isEqualTo(retrieved);
     }
 
     @Test
@@ -136,10 +135,10 @@ public class DMNEvaluatorTest {
         String id = "_8577FE15-1512-4BBE-885F-C30FD73ADC6B";
         List<String> invalidPath = List.of("_172F9901-0884-47C1-A5B4-3C09CC83D5B6", "_8577FE15-1512-4BBE-885F-C30FD73ADC6B");
 
-        List<String> path = DMNEvaluator.getPathToRoot(dmnModel, id);
+        List<String> retrieved = DMNEvaluator.getPathToRoot(dmnModel, id);
 
-        assertNotNull(path);
-        assertThat(invalidPath).isEqualTo(path);
+        assertNotNull(retrieved);
+        assertThat(invalidPath).isEqualTo(retrieved);
     }
 
     @Test
