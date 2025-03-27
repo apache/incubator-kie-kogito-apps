@@ -29,13 +29,14 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNDecisionResult;
 import org.kie.dmn.api.core.DMNMessage;
 import org.kie.dmn.api.core.DMNMessage.Severity;
 import org.kie.dmn.core.internal.utils.MapBackedDMNContext;
 import org.kie.dmn.core.internal.utils.MarshallingStubUtils;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class JITDMNResult implements Serializable,
         org.kie.dmn.api.core.DMNResult {
