@@ -19,6 +19,7 @@
 package org.kie.kogito.jitexecutor.dmn;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -115,7 +116,8 @@ public class DMNEvaluatorTest {
         DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
         List<List<String>> invalidElementPaths = List.of(
                 List.of("_3DC41DB9-BE1D-4289-A639-24AB57ED082D", "_2B147ECC-2457-4623-B841-3360D75F9F76", "_6F318F57-DA06-4F71-80AD-288E0BBB3A52", "_43236F2B-9857-454F-8EA0-39B37C7519CF"),
-                List.of("_09186183-0646-4CD0-AD67-A159E9F87F5E", "_D386D137-582B-49F9-B6F9-F341C3AC4B3E", "_2E43C09D-011A-436C-B40B-9154405EAF3A"), List.of("_E9468D45-51EB-48DA-8B30-7D65696FDFB8"));
+                List.of("_09186183-0646-4CD0-AD67-A159E9F87F5E", "_D386D137-582B-49F9-B6F9-F341C3AC4B3E", "_2E43C09D-011A-436C-B40B-9154405EAF3A"),
+                List.of("_A40F3AA4-2832-4D98-83F0-7D604F9A090F", "_4AC1BD7D-5A8D-4A88-94F9-0B80BDF0D9B1"), List.of("_E9468D45-51EB-48DA-8B30-7D65696FDFB8"));
 
         List<List<String>> retrieved = DMNEvaluator.retrieveInvalidElementPaths(dmnResult.getMessages(), dmnModel);
         assertNotNull(retrieved);
@@ -181,4 +183,15 @@ public class DMNEvaluatorTest {
         assertNotNull(node);
         assertThat(dmnModelInstrumentedBaseNode.getIdentifierString()).isEqualTo(node.getIdentifierString());
     }
+
+    @Test
+    void testRemoveDuplicates() {
+        List<List<String>> lists = Arrays.asList(List.of("A", "B", "C", "D"), List.of("A", "B", "C"), List.of("A", "B", "D", "E"),
+                List.of("F", "G", "H", "I"), List.of("F", "G", "C", "D"), List.of("H", "D"), List.of("G", "H"));
+        List<List<String>> expected = List.of(List.of("A", "B", "C", "D"), List.of("A", "B", "D", "E"), List.of("F", "G", "H", "I"), List.of("F", "G", "C", "D"), List.of("H", "D"));
+        List<List<String>> retrieved = DMNEvaluator.removeDuplicates(lists);
+        assertThat(expected.size()).isEqualTo(retrieved.size());
+        assertThat(expected).isEqualTo(retrieved);
+    }
+
 }

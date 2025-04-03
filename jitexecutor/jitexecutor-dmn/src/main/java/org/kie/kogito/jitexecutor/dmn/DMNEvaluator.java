@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -138,8 +139,28 @@ public class DMNEvaluator {
     }
 
     static List<List<String>> retrieveInvalidElementPaths(List<DMNMessage> messages, DMNModel dmnModel) {
-        return messages.stream().filter(message -> message.getLevel().equals(Message.Level.WARNING) ||
+        List<List<String>> invalidElementPaths = messages.stream().filter(message -> message.getLevel().equals(Message.Level.WARNING) ||
                 message.getLevel().equals(Message.Level.ERROR)).map(message -> getPathToRoot(dmnModel, message.getSourceId())).collect(Collectors.toList());
+        return removeDuplicates(invalidElementPaths);
+    }
+
+    static List<List<String>> removeDuplicates(List<List<String>> invalidElementPaths) {
+        invalidElementPaths.sort((a, b) -> Integer.compare(b.size(), a.size()));
+        List<List<String>> result = new ArrayList<>();
+
+        for (List<String> invalidPath : invalidElementPaths) {
+            boolean isSubset = false;
+            for (List<String> path : result) {
+                if (new HashSet<>(path).containsAll(invalidPath)) {
+                    isSubset = true;
+                    break;
+                }
+            }
+            if (!isSubset) {
+                result.add(invalidPath);
+            }
+        }
+        return result;
     }
 
     private DMNEvaluator(DMNModel dmnModel, DMNRuntime dmnRuntime) {
