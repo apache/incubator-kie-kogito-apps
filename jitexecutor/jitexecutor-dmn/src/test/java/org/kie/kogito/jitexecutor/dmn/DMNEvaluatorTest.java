@@ -200,7 +200,19 @@ public class DMNEvaluatorTest {
         return Stream.of(Arguments.of(Arrays.asList(List.of("A", "B", "D"), List.of("A", "B", "B", "D"), List.of("A", "B", "C", "D"), List.of("C", "B", "A"),
                 List.of("A", "B", "C"), List.of("F", "G", "H", "I"), List.of("F", "H"), List.of("I", "H"), List.of("FG", "H", "I"), List.of("F", "GH")),
                 Arrays.asList(List.of("A", "B", "B", "D"), List.of("A", "B", "C", "D"), List.of("F", "G", "H", "I"), List.of("A", "B", "D"), List.of("C", "B", "A"),
-                        List.of("FG", "H", "I"), List.of("F", "H"), List.of("I", "H"), List.of("F", "GH"))));
+                        List.of("FG", "H", "I"), List.of("F", "H"), List.of("I", "H"), List.of("F", "GH"))),
+                // subset
+                Arguments.of(Arrays.asList(List.of("A", "B", "C", "D"), List.of("A", "B"), List.of("B", "C"), List.of("C", "D")),
+                        List.of(List.of("A", "B", "C", "D"))),
+                // all duplicates
+                Arguments.of(Arrays.asList(List.of("A", "B", "C"), List.of("A", "B", "C"), List.of("A", "B", "C")),
+                        List.of(List.of("A", "B", "C"))),
+                // no duplicates
+                Arguments.of(Arrays.asList(List.of("A", "B", "C"), List.of("X", "Y", "Z")),
+                        Arrays.asList(List.of("A", "B", "C"), List.of("X", "Y", "Z"))),
+                // one complete duplicate
+                Arguments.of(Arrays.asList(List.of("A", "B", "C"), List.of("A", "B", "C"), List.of("X", "Y", "Z")),
+                        Arrays.asList(List.of("A", "B", "C"), List.of("X", "Y", "Z"))));
     }
 
 }
