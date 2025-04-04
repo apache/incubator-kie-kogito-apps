@@ -22,9 +22,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.kie.api.io.Resource;
 import org.kie.dmn.api.core.DMNContext;
 import org.kie.dmn.api.core.DMNMessage;
@@ -53,6 +57,13 @@ public class DMNEvaluatorTest {
     public static void setup() throws IOException {
         model = getModelFromIoUtils("invalid_models/DMNv1_x/test.dmn");
         invalidModel = getModelFromIoUtils("invalid_models/DMNv1_5/DMN-Invalid.dmn");
+    }
+
+    private static Stream<Arguments> provideParametersForRemoveDuplicates() {
+        return Stream.of(Arguments.of(Arrays.asList(List.of("A", "B", "D"), List.of("A", "B", "B", "D"), List.of("A", "B", "C", "D"), List.of("C", "B", "A"),
+                                List.of("A", "B", "C"), List.of("F", "G", "H", "I"), List.of("F", "H"), List.of("I", "H"), List.of("FG",  "H", "I"), List.of("F", "GH")),
+                        Arrays.asList(List.of("A", "B", "B", "D"), List.of("A", "B", "C", "D"), List.of("F", "G", "H", "I"), List.of("A", "B", "D"), List.of("C", "B", "A"),
+                                List.of("FG",  "H", "I"), List.of("F", "H"), List.of("I", "H"), List.of("F", "GH"))));
     }
 
     @Test
@@ -184,12 +195,10 @@ public class DMNEvaluatorTest {
         assertThat(dmnModelInstrumentedBaseNode.getIdentifierString()).isEqualTo(node.getIdentifierString());
     }
 
-    @Test
-    void testRemoveDuplicates() {
-        List<List<String>> lists = Arrays.asList(List.of("A", "B", "C", "D"), List.of("A", "B", "C"), List.of("A", "B", "D", "E"),
-                List.of("F", "G", "H", "I"), List.of("F", "G", "C", "D"), List.of("H", "D"), List.of("G", "H"));
-        List<List<String>> expected = List.of(List.of("A", "B", "C", "D"), List.of("A", "B", "D", "E"), List.of("F", "G", "H", "I"), List.of("F", "G", "C", "D"), List.of("H", "D"));
-        List<List<String>> retrieved = DMNEvaluator.removeDuplicates(lists);
+    @ParameterizedTest
+    @MethodSource("provideParametersForRemoveDuplicates")
+    void testRemoveDuplicates(List<List<String>> input, List<List<String>> expected) {
+        List<List<String>> retrieved = DMNEvaluator.removeDuplicates(input);
         assertThat(expected.size()).isEqualTo(retrieved.size());
         assertThat(expected).isEqualTo(retrieved);
     }
