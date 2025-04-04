@@ -59,13 +59,6 @@ public class DMNEvaluatorTest {
         invalidModel = getModelFromIoUtils("invalid_models/DMNv1_5/DMN-Invalid.dmn");
     }
 
-    private static Stream<Arguments> provideParametersForRemoveDuplicates() {
-        return Stream.of(Arguments.of(Arrays.asList(List.of("A", "B", "D"), List.of("A", "B", "B", "D"), List.of("A", "B", "C", "D"), List.of("C", "B", "A"),
-                                List.of("A", "B", "C"), List.of("F", "G", "H", "I"), List.of("F", "H"), List.of("I", "H"), List.of("FG",  "H", "I"), List.of("F", "GH")),
-                        Arrays.asList(List.of("A", "B", "B", "D"), List.of("A", "B", "C", "D"), List.of("F", "G", "H", "I"), List.of("A", "B", "D"), List.of("C", "B", "A"),
-                                List.of("FG",  "H", "I"), List.of("F", "H"), List.of("I", "H"), List.of("F", "GH"))));
-    }
-
     @Test
     void testFromXMLSuccessModel() {
         String modelXML = model;
@@ -201,6 +194,13 @@ public class DMNEvaluatorTest {
         List<List<String>> retrieved = DMNEvaluator.removeDuplicates(input);
         assertThat(expected.size()).isEqualTo(retrieved.size());
         assertThat(expected).isEqualTo(retrieved);
+    }
+
+    private static Stream<Arguments> provideParametersForRemoveDuplicates() {
+        return Stream.of(Arguments.of(Arrays.asList(List.of("A", "B", "D"), List.of("A", "B", "B", "D"), List.of("A", "B", "C", "D"), List.of("C", "B", "A"),
+                        List.of("A", "B", "C"), List.of("F", "G", "H", "I"), List.of("F", "H"), List.of("I", "H"), List.of("FG",  "H", "I"), List.of("F", "GH")),
+                Arrays.asList(List.of("A", "B", "B", "D"), List.of("A", "B", "C", "D"), List.of("F", "G", "H", "I"), List.of("A", "B", "D"), List.of("C", "B", "A"),
+                        List.of("FG",  "H", "I"), List.of("F", "H"), List.of("I", "H"), List.of("F", "GH"))));
     }
 
 }

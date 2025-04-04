@@ -76,16 +76,6 @@ public class JITDMNResourceTest {
         modelWithNestedConditionalEvaluationHitIds = getModelFromIoUtils("valid_models/DMNv1_5/NestedConditional.dmn");
     }
 
-    static Map<String, Object> buildMultipleHitContext() {
-        final List<BigDecimal> numbers = new ArrayList<>();
-        numbers.add(BigDecimal.valueOf(10));
-        numbers.add(BigDecimal.valueOf(2));
-        numbers.add(BigDecimal.valueOf(1));
-        final Map<String, Object> context = new HashMap<>();
-        context.put("Numbers", numbers);
-        return context;
-    }
-
     @Test
     void testjitEndpoint() {
         JITDMNPayload jitdmnpayload = new JITDMNPayload(invalidModel1x, buildContext());
@@ -311,6 +301,16 @@ public class JITDMNResourceTest {
                 .statusCode(200)
                 .body("invalidElementPaths", hasItems(List.of("_172F9901-0884-47C1-A5B4-3C09CC83D5B6", "_8577FE15-1512-4BBE-885F-C30FD73ADC6B"),
                         List.of("_4FF85EFF-B9E6-41C3-9115-DC9690E3B6F7")));
+    }
+
+    static Map<String, Object> buildMultipleHitContext() {
+        final List<BigDecimal> numbers = new ArrayList<>();
+        numbers.add(BigDecimal.valueOf(10));
+        numbers.add(BigDecimal.valueOf(2));
+        numbers.add(BigDecimal.valueOf(1));
+        final Map<String, Object> context = new HashMap<>();
+        context.put("Numbers", numbers);
+        return context;
     }
 
     private Map<String, Object> buildContext() {
