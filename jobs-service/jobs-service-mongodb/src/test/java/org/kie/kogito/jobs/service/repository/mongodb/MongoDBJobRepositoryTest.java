@@ -23,7 +23,7 @@ import java.time.Duration;
 import org.bson.Document;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.junit.jupiter.api.BeforeEach;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseJobRepositoryTest;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
 
@@ -59,7 +59,7 @@ public class MongoDBJobRepositoryTest extends BaseJobRepositoryTest {
     }
 
     @Override
-    public ReactiveJobRepository tested() {
+    public JobRepository tested() {
         return tested;
     }
 }

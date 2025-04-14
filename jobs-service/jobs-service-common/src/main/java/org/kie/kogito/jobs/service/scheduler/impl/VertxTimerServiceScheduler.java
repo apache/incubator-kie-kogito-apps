@@ -32,8 +32,12 @@ import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.DefaultTimerJobFactoryManager;
 import org.kie.kogito.timer.impl.TimerJobFactoryManager;
 import org.kie.kogito.timer.impl.TimerJobInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import io.vertx.mutiny.core.Vertx;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.WorkerExecutor;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -41,14 +45,19 @@ import jakarta.enterprise.context.ApplicationScoped;
 public class VertxTimerServiceScheduler implements TimerService<ManageableJobHandle>,
         InternalSchedulerService {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(VertxTimerServiceScheduler.class);
+
     private static final long MIN_TIMER_DELAY = 1000;
 
     protected TimerJobFactoryManager jobFactoryManager = DefaultTimerJobFactoryManager.instance;
 
-    protected final Vertx vertx;
+    protected Vertx vertx;
+
+    protected WorkerExecutor workerExecutor;
 
     public VertxTimerServiceScheduler(Vertx vertx) {
         this.vertx = vertx;
+        this.workerExecutor = vertx.createSharedWorkerExecutor("VertxTimerServiceScheduler");
     }
 
     @Override
@@ -88,7 +97,8 @@ public class VertxTimerServiceScheduler implements TimerService<ManageableJobHan
 
     @Override
     public ManageableJobHandle scheduleJob(Job job, JobContext ctx, Trigger trigger) {
-        return Optional.ofNullable(trigger.hasNextFireTime())
+        return Optional.ofNullable(trigger)
+                .map(Trigger::hasNextFireTime)
                 .map(id -> new ManageableJobHandle(false))
                 .map(jobHandle -> jobFactoryManager.createTimerJobInstance(job, ctx, trigger, jobHandle, this))
                 .map(jobInstance -> {
@@ -105,17 +115,28 @@ public class VertxTimerServiceScheduler implements TimerService<ManageableJobHan
 
     @Override
     public void internalSchedule(TimerJobInstance timerJobInstance) {
-        final Trigger trigger = timerJobInstance.getTrigger();
+        Trigger trigger = timerJobInstance.getTrigger();
         if (trigger.hasNextFireTime() == null) {
             return;
         }
-        final long then = trigger.hasNextFireTime().getTime();
-        final ZonedDateTime now = DateUtil.now();
-        final long delay = calculateDelay(then, now);
-        final ManageableJobHandle handle = (ManageableJobHandle) timerJobInstance.getJobHandle();
-        long scheduledId = vertx.setTimer(delay, i -> timerJobInstance.getJob().execute(timerJobInstance.getJobContext()));
+        long then = trigger.hasNextFireTime().getTime();
+        ZonedDateTime now = DateUtil.now();
+        long delay = calculateDelay(then, now);
+        ManageableJobHandle handle = (ManageableJobHandle) timerJobInstance.getJobHandle();
+
+        long scheduledId = vertx.setTimer(delay, execute(timerJobInstance));
         handle.setId(scheduledId);
         handle.setScheduledTime(now);
+    }
+
+    private Handler<Long> execute(TimerJobInstance timerJobInstance) {
+        return timerId -> {
+            LOGGER.info("executing timeout {} for {}", timerId, timerJobInstance);
+            workerExecutor.executeBlocking(() -> {
+                timerJobInstance.getJob().execute(timerJobInstance.getJobContext());
+                return null;
+            });
+        };
     }
 
     private long calculateDelay(long then, ZonedDateTime now) {

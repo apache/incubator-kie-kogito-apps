@@ -20,7 +20,6 @@ package org.kie.kogito.jobs.service.scheduler.impl;
 
 import java.util.UUID;
 
-import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +28,7 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobDetailsContext;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.ManageableJobHandle;
-import org.kie.kogito.jobs.service.scheduler.BaseTimerJobScheduler;
+import org.kie.kogito.jobs.service.scheduler.AbstractTimerJobScheduler;
 import org.kie.kogito.jobs.service.scheduler.BaseTimerJobSchedulerTest;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Job;
@@ -39,11 +38,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.reactivestreams.Publisher;
 
-import io.smallrye.mutiny.Multi;
-
-import static mutiny.zero.flow.adapters.AdaptersToFlow.publisher;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
@@ -69,29 +64,25 @@ class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
     }
 
     @Override
-    public BaseTimerJobScheduler tested() {
+    public AbstractTimerJobScheduler tested() {
         return tested;
     }
 
     @Test
     void testDoSchedule() {
-        PublisherBuilder<ManageableJobHandle> schedule = tested.doSchedule(scheduledJob, scheduledJob.getTrigger());
-        Multi.createFrom().publisher(publisher(schedule.buildRs())).subscribe().with(dummyCallback(), dummyCallback());
+        ManageableJobHandle schedule = tested.doSchedule(scheduledJob, scheduledJob.getTrigger());
         verify(timer).scheduleJob(any(DelegateJob.class), any(JobDetailsContext.class), eq(scheduledJob.getTrigger()));
     }
 
     @Test
     void testDoCancel() {
-        Publisher<ManageableJobHandle> cancel = tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(SCHEDULED_ID).build());
-        Multi.createFrom().publisher(publisher(cancel)).subscribe().with(dummyCallback(), dummyCallback());
+        ManageableJobHandle cancel = tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(SCHEDULED_ID).build());
         verify(timer).removeJob(any(ManageableJobHandle.class));
     }
 
     @Test
     void testDoCancelNullId() {
-        Publisher<ManageableJobHandle> cancel =
-                tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(null).build());
-        Multi.createFrom().publisher(publisher(cancel)).subscribe().with(dummyCallback(), dummyCallback());
+        ManageableJobHandle cancel = tested.doCancel(JobDetails.builder().of(scheduledJob).scheduledId(null).build());
         verify(timer, never()).removeJob(any(ManageableJobHandle.class));
     }
 

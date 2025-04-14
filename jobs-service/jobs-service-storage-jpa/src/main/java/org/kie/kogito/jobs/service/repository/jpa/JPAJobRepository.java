@@ -23,21 +23,18 @@ import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CompletionStage;
 import java.util.function.Function;
 
-import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
-import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jackson.utils.ObjectMapperFactory;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
-import org.kie.kogito.jobs.service.repository.impl.BaseReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
+import org.kie.kogito.jobs.service.repository.impl.AbstractJobRepository;
 import org.kie.kogito.jobs.service.repository.jpa.model.JobDetailsEntity;
 import org.kie.kogito.jobs.service.repository.jpa.repository.JobDetailsEntityRepository;
-import org.kie.kogito.jobs.service.repository.jpa.utils.ReactiveRepositoryHelper;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
 import org.kie.kogito.jobs.service.stream.JobEventPublisher;
@@ -47,49 +44,45 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.panache.common.Sort;
-import io.smallrye.mutiny.Multi;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import static java.time.OffsetDateTime.now;
-import static mutiny.zero.flow.adapters.AdaptersToReactiveStreams.publisher;
 import static org.kie.kogito.jobs.service.utils.DateUtil.DEFAULT_ZONE;
 
 @ApplicationScoped
-public class JPAReactiveJobRepository extends BaseReactiveJobRepository implements ReactiveJobRepository {
+@Transactional
+public class JPAJobRepository extends AbstractJobRepository implements JobRepository {
 
     private static final String JOBS_BETWEEN_FIRE_TIMES_QUERY = "select job " +
             "from JobDetailsEntity job " +
             "where job.fireTime between :from and :to and job.status in :status";
 
     private final JobDetailsEntityRepository repository;
-    private final ReactiveRepositoryHelper reactiveRepositoryHelper;
 
     private final TriggerMarshaller triggerMarshaller;
     private final RecipientMarshaller recipientMarshaller;
 
-    JPAReactiveJobRepository() {
-        this(null, null, null, null, null, null);
+    JPAJobRepository() {
+        this(null, null, null, null, null);
     }
 
     @Inject
-    public JPAReactiveJobRepository(Vertx vertx, JobEventPublisher jobEventPublisher, JobDetailsEntityRepository repository,
-            ReactiveRepositoryHelper reactiveRepositoryHelper,
+    public JPAJobRepository(Vertx vertx, JobEventPublisher jobEventPublisher, JobDetailsEntityRepository repository,
             TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller) {
-        super(vertx, jobEventPublisher);
+        super(jobEventPublisher);
         this.repository = repository;
-        this.reactiveRepositoryHelper = reactiveRepositoryHelper;
         this.triggerMarshaller = triggerMarshaller;
         this.recipientMarshaller = recipientMarshaller;
     }
 
     @Override
-    public CompletionStage<JobDetails> doSave(JobDetails job) {
-        return this.reactiveRepositoryHelper.runAsync(() -> persist(job))
-                .thenApply(this::from);
+    public JobDetails doSave(JobDetails job) {
+        return this.from(persist(job));
     }
 
     private JobDetailsEntity persist(JobDetails job) {
@@ -103,21 +96,18 @@ public class JPAReactiveJobRepository extends BaseReactiveJobRepository implemen
     }
 
     @Override
-    public CompletionStage<JobDetails> get(String id) {
-        return this.reactiveRepositoryHelper.runAsync(() -> repository.findById(id))
-                .thenApply(this::from);
+    public JobDetails get(String id) {
+        return this.from(repository.findById(id));
     }
 
     @Override
-    public CompletionStage<Boolean> exists(String id) {
-        return this.reactiveRepositoryHelper.runAsync(() -> repository.findByIdOptional(id))
-                .thenApply(Optional::isPresent);
+    public Boolean exists(String id) {
+        return repository.findByIdOptional(id).isPresent();
     }
 
     @Override
-    public CompletionStage<JobDetails> delete(String id) {
-        return this.reactiveRepositoryHelper.runAsync(() -> this.deleteJob(id))
-                .thenApply(this::from);
+    public JobDetails delete(String id) {
+        return this.from(this.deleteJob(id));
 
     }
 
@@ -143,7 +133,7 @@ public class JPAReactiveJobRepository extends BaseReactiveJobRepository implemen
     }
 
     @Override
-    public PublisherBuilder<JobDetails> findByStatusBetweenDates(ZonedDateTime fromFireTime,
+    public List<JobDetails> findByStatusBetweenDates(ZonedDateTime fromFireTime,
             ZonedDateTime toFireTime,
             JobStatus[] status,
             SortTerm[] orderBy) {
@@ -159,10 +149,7 @@ public class JPAReactiveJobRepository extends BaseReactiveJobRepository implemen
             sort.and(columnName, sortTerm.isAsc() ? Sort.Direction.Ascending : Sort.Direction.Descending);
         });
 
-        return ReactiveStreams.fromPublisher(publisher(Multi.createFrom()
-                .completionStage(this.reactiveRepositoryHelper.runAsync(() -> repository.list(JOBS_BETWEEN_FIRE_TIMES_QUERY, sort, params.map())))
-                .flatMap(jobDetailsEntities -> Multi.createFrom().iterable(jobDetailsEntities))
-                .map(this::from)));
+        return repository.list(JOBS_BETWEEN_FIRE_TIMES_QUERY, sort, params.map()).stream().map(this::from).toList();
 
     }
 

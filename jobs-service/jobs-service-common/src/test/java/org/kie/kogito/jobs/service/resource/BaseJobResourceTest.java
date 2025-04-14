@@ -155,22 +155,18 @@ public abstract class BaseJobResourceTest extends CommonBaseJobResourceTest {
 
         assertGetScheduledJob(id);
 
-        //guarantee the job is scheduled on vertx
-        await().atMost(2, TimeUnit.SECONDS).untilAsserted(() -> {
+        //canceled the running job
+        ScheduledJob scheduledJob = assertCancelScheduledJob(id);
 
-            //canceled the running job
-            ScheduledJob scheduledJob = assertCancelScheduledJob(id);
+        //assert the job was deleted from the api perspective
+        assertJobNotFound(id);
 
-            //assert the job was deleted from the api perspective
-            assertJobNotFound(id);
+        //ensure the job was indeed canceled on vertx
+        assertJobNotScheduledOnVertx(scheduledJob);
 
-            //ensure the job was indeed canceled on vertx
-            assertJobNotScheduledOnVertx(scheduledJob);
-        });
     }
 
     @Test
-    //@Disabled("see https://issues.redhat.com/browse/KOGITO-1941")
     void cancelRunningPeriodicJobTest() throws Exception {
         final String id = UUID.randomUUID().toString();
         int timeMillis = 1000;
@@ -180,22 +176,23 @@ public abstract class BaseJobResourceTest extends CommonBaseJobResourceTest {
         //check the job was created
         assertGetScheduledJob(id);
 
-        //guarantee the job is running
-        await().atMost(5, TimeUnit.SECONDS)
-                .untilAsserted(() -> {
-                    //assert executed at least once
-                    ScheduledJob scheduledJob = assertGetScheduledJob(id);
-                    assertThat(scheduledJob.getExecutionCounter()).isPositive();
+        //guarantee the job is scheduled on vertx
+        await().atMost(2, TimeUnit.SECONDS).untilAsserted(() -> {
+            //assert executed at least once
+            ScheduledJob scheduledJob = assertGetScheduledJob(id);
 
-                    //canceled the running job
-                    assertCancelScheduledJob(id);
+            assertThat(scheduledJob.getExecutionCounter()).isPositive();
 
-                    //assert the job was deleted from the api perspective
-                    assertJobNotFound(id);
+            //canceled the running job
+            assertCancelScheduledJob(id);
 
-                    //ensure the job was indeed canceled on vertx
-                    assertJobNotScheduledOnVertx(scheduledJob);
-                });
+            //assert the job was deleted from the api perspective
+            assertJobNotFound(id);
+
+            //ensure the job was indeed canceled on vertx
+            assertJobNotScheduledOnVertx(scheduledJob);
+        });
+
     }
 
     private void assertJobNotScheduledOnVertx(ScheduledJob scheduledJob) {

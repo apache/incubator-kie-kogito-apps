@@ -37,8 +37,8 @@ import io.cloudevents.core.builder.CloudEventBuilder;
 import io.cloudevents.core.provider.EventFormatProvider;
 import io.cloudevents.jackson.JsonCloudEventData;
 import io.cloudevents.jackson.JsonFormat;
+import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpHeaders;
-import io.vertx.mutiny.core.Vertx;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;

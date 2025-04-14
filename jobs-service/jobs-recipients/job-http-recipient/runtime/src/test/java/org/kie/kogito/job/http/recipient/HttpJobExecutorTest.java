@@ -31,7 +31,7 @@ import org.kie.kogito.timer.impl.SimpleTimerTrigger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.vertx.mutiny.core.Vertx;
+import io.vertx.core.Vertx;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

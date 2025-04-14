@@ -32,7 +32,6 @@ import org.kie.kogito.jobs.service.model.RecipientInstance;
 
 import io.quarkus.test.QuarkusUnitTest;
 import io.quarkus.test.common.QuarkusTestResource;
-import io.smallrye.mutiny.helpers.test.UniAssertSubscriber;
 
 import jakarta.inject.Inject;
 
@@ -68,11 +67,10 @@ class JobHttpRecipientTest {
                 .url(mockServiceUrl + "/" + HttpRecipientResourceMock.RESOURCE_URL)
                 .build();
         JobDetails job = JobDetails.builder().id("12345").recipient(new RecipientInstance(httpRecipient)).build();
-        UniAssertSubscriber<JobExecutionResponse> tester = httpJobExecutor.execute(job)
-                .invoke(response -> assertThat(response.getJobId()).isEqualTo(job.getId()))
-                .invoke(response -> assertThat(response.getCode()).isEqualTo("200"))
-                .invoke(response -> assertThat(response.getMessage()).isEqualTo(method.name()))
-                .subscribe().withSubscriber(UniAssertSubscriber.create());
-        tester.awaitItem();
+        JobExecutionResponse response = httpJobExecutor.execute(job);
+        assertThat(response.getJobId()).isEqualTo(job.getId());
+        assertThat(response.getCode()).isEqualTo("200");
+        assertThat(response.getMessage()).isEqualTo(method.name());
+
     }
 }

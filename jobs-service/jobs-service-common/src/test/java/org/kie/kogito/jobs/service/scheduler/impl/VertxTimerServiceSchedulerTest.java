@@ -21,8 +21,6 @@ package org.kie.kogito.jobs.service.scheduler.impl;
 import java.time.ZonedDateTime;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
-import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +31,7 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobDetailsContext;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.ManageableJobHandle;
-import org.kie.kogito.jobs.service.scheduler.ReactiveJobScheduler;
+import org.kie.kogito.jobs.service.scheduler.JobScheduler;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Job;
 import org.kie.kogito.timer.JobContext;
@@ -45,8 +43,7 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.core.Vertx;
+import io.vertx.core.Vertx;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.given;
@@ -59,7 +56,7 @@ import static org.mockito.Mockito.verify;
 class VertxTimerServiceSchedulerTest {
 
     private VertxTimerServiceScheduler tested;
-    private Job job;
+    private Job<JobDetailsContext> job;
     private JobContext context;
     private Trigger trigger;
 
@@ -70,7 +67,7 @@ class VertxTimerServiceSchedulerTest {
     private JobExecutor jobExecutor;
 
     @Mock
-    private ReactiveJobScheduler reactiveJobScheduler;
+    private JobScheduler<JobDetails> reactiveJobScheduler;
 
     @Captor
     private ArgumentCaptor<JobDetails> jobCaptor;
@@ -91,10 +88,8 @@ class VertxTimerServiceSchedulerTest {
         JobDetails jobDetails = JobDetails.builder().build();
         doReturn(jobExecutor).when(jobExecutorResolver).get(any());
         JobExecutionResponse response = new JobExecutionResponse();
-        Uni<JobExecutionResponse> result = Uni.createFrom().item(response);
-        PublisherBuilder<JobDetails> executionSuccessPublisherBuilder = ReactiveStreams.of(jobDetails);
-        doReturn(executionSuccessPublisherBuilder).when(reactiveJobScheduler).handleJobExecutionSuccess(response);
-        doReturn(result).when(jobExecutor).execute(jobDetails);
+        doReturn(jobDetails).when(reactiveJobScheduler).handleJobExecutionSuccess(response);
+        doReturn(response).when(jobExecutor).execute(jobDetails);
         ZonedDateTime time = DateUtil.now().plusSeconds(1);
         final ManageableJobHandle handle = schedule(jobDetails, time);
         verify(vertx).setTimer(timeCaptor.capture(), any());

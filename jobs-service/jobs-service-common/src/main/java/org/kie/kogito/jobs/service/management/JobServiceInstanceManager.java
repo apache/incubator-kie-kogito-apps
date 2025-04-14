@@ -21,6 +21,7 @@ package org.kie.kogito.jobs.service.management;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -33,19 +34,21 @@ import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
-import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.core.TimeoutStream;
-import io.vertx.mutiny.core.Vertx;
+import io.vertx.core.Vertx;
+import io.vertx.core.WorkerExecutor;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.event.Observes;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
+import jakarta.inject.Singleton;
+import jakarta.transaction.Transactional;
 
-@ApplicationScoped
+@Singleton
+@Transactional
 public class JobServiceInstanceManager {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceInstanceManager.class);
@@ -74,35 +77,116 @@ public class JobServiceInstanceManager {
     @Inject
     JobServiceManagementRepository repository;
 
-    private TimeoutStream checkLeader;
+    private Long checkLeader;
 
-    private TimeoutStream heartbeat;
+    private Long heartbeat;
 
     private final AtomicReference<JobServiceManagementInfo> currentInfo = new AtomicReference<>();
 
     private final AtomicBoolean leader = new AtomicBoolean(false);
 
+    protected WorkerExecutor workerExecutor;
+
+    @PostConstruct
+    public void init() {
+        LOGGER.info("Initialized with worker executor");
+        this.workerExecutor = vertx.createSharedWorkerExecutor("JobServiceInstanceManager");
+    }
+
+    @PreDestroy
+    public void destroy() {
+        this.shutdown();
+    }
+
+    public void disable() {
+        this.disableCommunication();
+        this.shutdown();
+    }
+
+    public void shutdown() {
+        try {
+            LOGGER.info("Shutting down leader instance check");
+            cancelCheckLeader();
+            cancelHeartbeat();
+            LOGGER.info("releasing leader");
+            release(currentInfo.get());
+        } catch (Exception ex) {
+            LOGGER.error("Shutdown error", ex);
+        }
+    }
+
+    protected void release(JobServiceManagementInfo info) {
+        leader.set(false);
+        try {
+            repository.release(info);
+            LOGGER.info("Leader instance released");
+        } catch (Throwable e) {
+            LOGGER.error("Error releasing leader", e);
+        }
+    }
+
     void startup(@Observes StartupEvent startupEvent) {
-        buildAndSetInstanceInfo();
-
-        //background task for leader check, it will be started after the first tryBecomeLeader() execution
-        checkLeader = vertx.periodicStream(TimeUnit.SECONDS.toMillis(leaderCheckIntervalInSeconds))
-                .handler(id -> tryBecomeLeader(currentInfo.get(), checkLeader, heartbeat)
-                        .subscribe().with(i -> LOGGER.trace("Leader check completed"),
-                                ex -> LOGGER.error("Error checking Leader", ex)))
-                .pause();
-
-        //background task for heartbeat will be started when become leader
-        heartbeat = vertx.periodicStream(TimeUnit.SECONDS.toMillis(heardBeatIntervalInSeconds))
-                .handler(t -> heartbeat(currentInfo.get())
-                        .subscribe().with(i -> LOGGER.trace("Heartbeat completed {}", currentInfo.get()),
-                                ex -> LOGGER.error("Error on heartbeat {}", currentInfo.get(), ex)))
-                .pause();
-
+        currentInfo.set(buildAndSetInstanceInfo());
+        LOGGER.info("Starting JobServiceInstanceManager {}", currentInfo.get());
         //initial leader check
-        tryBecomeLeader(currentInfo.get(), checkLeader, heartbeat)
-                .subscribe().with(i -> LOGGER.info("Initial leader check completed"),
-                        ex -> LOGGER.error("Error on initial check leader", ex));
+        tryBecomeLeader(currentInfo.get());
+    }
+
+    private void registerCheckLeader() {
+        if (checkLeader != null) {
+            return;
+        }
+        LOGGER.info("Registering job service check leader every {} seconds", leaderCheckIntervalInSeconds);
+        //background task for leader check, it will be started after the first tryBecomeLeader() execution
+        checkLeader = vertx.setPeriodic(TimeUnit.SECONDS.toMillis(leaderCheckIntervalInSeconds), this::internalRegisterCheckLeader);
+    }
+
+    private void internalRegisterCheckLeader(Long id) {
+        Callable<JobServiceManagementInfo> transacted = () -> {
+            LOGGER.debug("trying to become leader now for {}", currentInfo.get());
+            return tryBecomeLeader(currentInfo.get());
+        };
+        if (workerExecutor == null) {
+            return;
+        }
+        workerExecutor.executeBlocking(transacted).toCompletionStage();
+    }
+
+    private void cancelCheckLeader() {
+        if (checkLeader == null) {
+            return;
+        }
+        LOGGER.info("Cancelling job service check leader");
+        vertx.cancelTimer(checkLeader);
+        checkLeader = null;
+    }
+
+    private void registerHeartbeat() {
+        if (heartbeat != null) {
+            return;
+        }
+        LOGGER.info("Registering job service heartbeat every {} seconds", heardBeatIntervalInSeconds);
+        heartbeat = vertx.setPeriodic(TimeUnit.SECONDS.toMillis(heardBeatIntervalInSeconds), this::internalregisterHeartbeat);
+    }
+
+    private void internalregisterHeartbeat(Long id) {
+        Callable<JobServiceManagementInfo> transacted = () -> {
+            LOGGER.debug("executing heartbeat {}", currentInfo.get());
+            return heartbeat(currentInfo.get());
+        };
+        if (workerExecutor == null) {
+            return;
+        }
+        workerExecutor.executeBlocking(transacted).toCompletionStage();
+    }
+
+    private void cancelHeartbeat() {
+        if (heartbeat == null) {
+            return;
+        }
+        LOGGER.info("Cancelling job service heartbeat");
+        vertx.cancelTimer(heartbeat);
+        heartbeat = null;
     }
 
     private void disableCommunication() {
@@ -123,39 +207,26 @@ public class JobServiceInstanceManager {
         LOGGER.info("Enabled communication for leader instance");
     }
 
-    void onShutdown(@Observes ShutdownEvent event) {
-        shutdown();
-    }
-
-    void onReleaseLeader(@Observes ReleaseLeaderEvent event) {
-        shutdown();
-    }
-
-    private void shutdown() {
-        release(currentInfo.get())
-                .onItem().invoke(i -> checkLeader.cancel())
-                .onItem().invoke(i -> heartbeat.cancel())
-                .subscribe().with(i -> LOGGER.info("Shutting down leader instance check"),
-                        ex -> LOGGER.error("Shutdown error", ex));
-    }
-
     protected boolean isLeader() {
         return leader.get();
     }
 
-    protected Uni<JobServiceManagementInfo> tryBecomeLeader(JobServiceManagementInfo info, TimeoutStream checkLeader, TimeoutStream heartbeat) {
+    protected JobServiceManagementInfo tryBecomeLeader(JobServiceManagementInfo info) {
         LOGGER.debug("Try to become Leader");
-        return repository.getAndUpdate(info.getId(), c -> {
-            final OffsetDateTime currentTime = DateUtil.now().toOffsetDateTime();
-            if (Objects.isNull(c) || Objects.isNull(c.getToken()) || Objects.equals(c.getToken(), info.getToken()) || Objects.isNull(c.getLastHeartbeat())
-                    || c.getLastHeartbeat().isBefore(currentTime.minusSeconds(heartbeatExpirationInSeconds))) {
+        return repository.getAndUpdate(info.getId(), updatedJobServiceManagementInfo -> {
+            OffsetDateTime currentTime = DateUtil.now().toOffsetDateTime();
+            if (Objects.isNull(updatedJobServiceManagementInfo) ||
+                    Objects.isNull(updatedJobServiceManagementInfo.getToken()) ||
+                    Objects.equals(updatedJobServiceManagementInfo.getToken(), info.getToken()) ||
+                    Objects.isNull(updatedJobServiceManagementInfo.getLastHeartbeat()) ||
+                    updatedJobServiceManagementInfo.getLastHeartbeat().isBefore(currentTime.minusSeconds(heartbeatExpirationInSeconds))) {
                 //old instance is not active
                 info.setLastHeartbeat(currentTime);
                 LOGGER.info("SET Leader {}", info);
                 leader.set(true);
                 enableCommunication();
-                heartbeat.resume();
-                checkLeader.pause();
+                registerHeartbeat();
+                cancelCheckLeader();
                 return info;
             } else {
                 if (isLeader()) {
@@ -164,33 +235,22 @@ public class JobServiceInstanceManager {
                     disableCommunication();
                 }
                 //stop heartbeats if running
-                heartbeat.pause();
-                //guarantee the stream is running if not leader
-                checkLeader.resume();
+                cancelHeartbeat();
+                registerCheckLeader();
             }
             return null;
         });
     }
 
-    protected Uni<Void> release(JobServiceManagementInfo info) {
-        leader.set(false);
-        return repository.release(info)
-                .onItem().invoke(this::disableCommunication)
-                .onItem().invoke(i -> LOGGER.info("Leader instance released"))
-                .onFailure().invoke(ex -> LOGGER.error("Error releasing leader"))
-                .replaceWithVoid();
-    }
-
-    protected Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
+    protected JobServiceManagementInfo heartbeat(JobServiceManagementInfo info) {
         if (isLeader()) {
             return repository.heartbeat(info);
         }
-        return Uni.createFrom().nullItem();
+        return null;
     }
 
-    private void buildAndSetInstanceInfo() {
-        currentInfo.set(new JobServiceManagementInfo(leaderManagementId, generateToken(), DateUtil.now().toOffsetDateTime()));
-        LOGGER.info("Current Job Service Instance {}", currentInfo.get());
+    private JobServiceManagementInfo buildAndSetInstanceInfo() {
+        return new JobServiceManagementInfo(leaderManagementId, generateToken(), DateUtil.now().toOffsetDateTime());
     }
 
     private String generateToken() {
@@ -201,11 +261,11 @@ public class JobServiceInstanceManager {
         return currentInfo.get();
     }
 
-    protected TimeoutStream getCheckLeader() {
+    protected Long getCheckLeader() {
         return checkLeader;
     }
 
-    protected TimeoutStream getHeartbeat() {
+    protected Long getHeartbeat() {
         return heartbeat;
     }
 }

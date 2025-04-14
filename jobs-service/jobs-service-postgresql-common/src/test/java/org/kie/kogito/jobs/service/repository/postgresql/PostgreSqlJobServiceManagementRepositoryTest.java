@@ -52,15 +52,14 @@ class PostgreSqlJobServiceManagementRepositoryTest {
         String token = "token1";
         create(id, token);
 
-        AtomicReference<OffsetDateTime> date = new AtomicReference<>();
+        OffsetDateTime date = DateUtil.now().toOffsetDateTime();
         JobServiceManagementInfo updated = tested.getAndUpdate(id, info -> {
-            date.set(DateUtil.now().toOffsetDateTime());
-            info.setLastHeartbeat(date.get());
+            info.setLastHeartbeat(date);
             return info;
-        }).await().indefinitely();
+        });
+
         assertThat(updated.getId()).isEqualTo(id);
-        assertThat(date.get()).isNotNull();
-        assertThat(updated.getLastHeartbeat()).isEqualTo(date.get());
+        assertThat(updated.getLastHeartbeat()).isEqualTo(date);
         assertThat(updated.getToken()).isEqualTo(token);
     }
 
@@ -71,13 +70,13 @@ class PostgreSqlJobServiceManagementRepositoryTest {
         JobServiceManagementInfo updated = tested.getAndUpdate(id, info -> {
             found.set(info);
             return info;
-        }).await().indefinitely();
+        });
         assertThat(updated).isNull();
         assertThat(found.get()).isNull();
     }
 
     private JobServiceManagementInfo create(String id, String token) {
-        JobServiceManagementInfo created = tested.set(new JobServiceManagementInfo(id, token, null)).await().indefinitely();
+        JobServiceManagementInfo created = tested.set(new JobServiceManagementInfo(id, token, null));
         assertThat(created.getId()).isEqualTo(id);
         assertThat(created.getToken()).isEqualTo(token);
         assertThat(created.getLastHeartbeat()).isNull();
@@ -90,7 +89,7 @@ class PostgreSqlJobServiceManagementRepositoryTest {
         String token = "token3";
         JobServiceManagementInfo created = create(id, token);
 
-        JobServiceManagementInfo updated = tested.heartbeat(created).await().indefinitely();
+        JobServiceManagementInfo updated = tested.heartbeat(created);
         assertThat(updated.getLastHeartbeat()).isNotNull();
         assertThat(updated.getLastHeartbeat()).isBefore(DateUtil.now().plusSeconds(1).toOffsetDateTime());
     }
@@ -101,7 +100,7 @@ class PostgreSqlJobServiceManagementRepositoryTest {
         String token = "token4";
         create(id, token);
 
-        JobServiceManagementInfo updated = tested.heartbeat(new JobServiceManagementInfo(id, "differentToken", null)).await().indefinitely();
+        JobServiceManagementInfo updated = tested.heartbeat(new JobServiceManagementInfo(id, "differentToken", null));
         assertThat(updated).isNull();
     }
 }

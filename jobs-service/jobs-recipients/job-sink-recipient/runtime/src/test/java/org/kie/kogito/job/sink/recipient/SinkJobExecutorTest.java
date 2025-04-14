@@ -35,11 +35,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import io.cloudevents.SpecVersion;
-import io.vertx.mutiny.core.Vertx;
+import io.vertx.core.Vertx;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class SinkJobExecutorTest extends HTTPRequestExecutorTest<SinkRecipient<?>, SinkJobExecutor> {
+public class SinkJobExecutorTest extends HTTPRequestExecutorTest<SinkRecipient<?>, SinkJobExecutor> {
 
     public static final String JOB_CE_TYPE = "JOB_CE_TYPE";
     public static final SpecVersion JOB_CE_SPECVERSION = SpecVersion.V1;

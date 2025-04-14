@@ -60,10 +60,10 @@ public abstract class BaseKeycloakJobServiceTest {
     public static final int FORBIDDEN_CODE = 401;
 
     @ConfigProperty(name = KeycloakQuarkusTestResource.KOGITO_KEYCLOAK_PROPERTY)
-    private String keycloakURL;
+    protected String keycloakURL;
 
     @Inject
-    private ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
 
     @BeforeAll
     public static void setup() throws Exception {

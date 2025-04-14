@@ -18,16 +18,34 @@
  */
 package org.kie.kogito.jobs.service.repository.jpa;
 
-import org.kie.kogito.jobs.service.profiles.PostgreSQLQuarkusTestProfile;
-import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
+import org.junit.jupiter.api.BeforeEach;
+import org.kie.kogito.jobs.service.profiles.H2QuarkusTestProfile;
+import org.kie.kogito.jobs.service.repository.JobRepository;
+import org.kie.kogito.jobs.service.repository.impl.BaseJobRepositoryTest;
 
 import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 
-@QuarkusTest
-@QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
-@TestProfile(PostgreSQLQuarkusTestProfile.class)
-class PostgresSqlJPAReactiveJobServiceManagementRepositoryTest extends BaseJPAReactiveJobServiceManagementRepositoryTest {
+import jakarta.inject.Inject;
 
+@QuarkusTest
+@QuarkusTestResource(value = H2DatabaseTestResource.class, restrictToAnnotatedClass = true)
+@TestProfile(H2QuarkusTestProfile.class)
+public class H2JPAJobRepositoryTest extends BaseJobRepositoryTest {
+
+    @Inject
+    JPAJobRepository tested;
+
+    @BeforeEach
+    public void setUp() throws Exception {
+
+        super.setUp();
+    }
+
+    @Override
+    public JobRepository tested() {
+        return tested;
+    }
 }

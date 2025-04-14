@@ -19,19 +19,19 @@
 package org.kie.kogito.jobs.service.scheduler;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Consumer;
 
-import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.jobs.service.management.MessagingChangeEvent;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
@@ -65,7 +65,7 @@ class JobSchedulerManagerTest {
     TimerDelegateJobScheduler scheduler;
 
     @Mock
-    ReactiveJobRepository repository;
+    JobRepository repository;
 
     @Mock
     Vertx vertx;
@@ -96,12 +96,12 @@ class JobSchedulerManagerTest {
         lenient().when(repository.findByStatusBetweenDates(any(ZonedDateTime.class),
                 any(ZonedDateTime.class),
                 any(JobStatus[].class),
-                any(ReactiveJobRepository.SortTerm[].class)))
-                .thenReturn(ReactiveStreams.of(scheduledJob));
+                any(JobRepository.SortTerm[].class)))
+                .thenReturn(List.of(scheduledJob));
         lenient().when(scheduler.scheduled(JOB_ID))
                 .thenReturn(Optional.empty());
         lenient().when(scheduler.internalSchedule(eq(scheduledJob), anyBoolean()))
-                .thenReturn(ReactiveStreams.of(scheduledJob).buildRs());
+                .thenReturn(scheduledJob);
         ArgumentCaptor<Runnable> action = ArgumentCaptor.forClass(Runnable.class);
         lenient().doAnswer(a -> {
             ((Runnable) a.getArgument(0)).run();

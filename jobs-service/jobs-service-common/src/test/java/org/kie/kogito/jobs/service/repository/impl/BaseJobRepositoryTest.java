@@ -24,6 +24,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.IntStream;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
@@ -32,19 +33,17 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.Recipient;
 import org.kie.kogito.jobs.service.model.RecipientInstance;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 import org.kie.kogito.jobs.service.utils.DateUtil;
-import org.kie.kogito.jobs.service.utils.FunctionsUtil;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.kie.kogito.jobs.service.repository.ReactiveJobRepository.SortTerm.byFireTime;
+import static org.kie.kogito.jobs.service.repository.JobRepository.SortTerm.byFireTime;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 
-@SuppressWarnings("java:S5786")
 public abstract class BaseJobRepositoryTest {
 
     public static final String ID = UUID.randomUUID().toString();
@@ -56,19 +55,24 @@ public abstract class BaseJobRepositoryTest {
         createAndSaveJob(ID);
     }
 
+    @AfterEach
+    public void tearDown() throws Exception {
+        tested().delete(ID);
+    }
+
     public JobEventPublisher mockJobEventPublisher() {
         final JobEventPublisher mock = mock(JobEventPublisher.class);
         lenient().when(mock.publishJobStatusChange(any(JobDetails.class))).thenAnswer(a -> a.getArgument(0));
         return mock;
     }
 
-    public abstract ReactiveJobRepository tested();
+    public abstract JobRepository tested();
 
     @Test
     void testSaveAndGet() throws ExecutionException, InterruptedException {
-        JobDetails scheduledJob = tested().get(ID).toCompletableFuture().get();
+        JobDetails scheduledJob = tested().get(ID);
         assertEqualsToReturnedJob(job, scheduledJob);
-        JobDetails notFound = tested().get(UUID.randomUUID().toString()).toCompletableFuture().get();
+        JobDetails notFound = tested().get(UUID.randomUUID().toString());
         assertThat(notFound).isNull();
     }
 
@@ -82,22 +86,22 @@ public abstract class BaseJobRepositoryTest {
                         .payload(HttpRecipientStringPayloadData.from("payload test"))
                         .build()))
                 .build();
-        tested().save(job).toCompletableFuture().get();
+        tested().save(job);
     }
 
     @Test
     void testExists() throws ExecutionException, InterruptedException {
-        Boolean exists = tested().exists(ID).toCompletableFuture().get();
+        Boolean exists = tested().exists(ID);
         assertThat(exists).isTrue();
-        Boolean notFound = tested().exists(UUID.randomUUID().toString()).toCompletableFuture().get();
+        Boolean notFound = tested().exists(UUID.randomUUID().toString());
         assertThat(notFound).isFalse();
     }
 
     @Test
     void testDelete() throws ExecutionException, InterruptedException {
-        JobDetails deletedJob = tested().delete(ID).toCompletableFuture().get();
+        JobDetails deletedJob = tested().delete(ID);
         assertEqualsToReturnedJob(job, deletedJob);
-        JobDetails notFound = tested().get(ID).toCompletableFuture().get();
+        JobDetails notFound = tested().get(ID);
         assertThat(notFound).isNull();
     }
 
@@ -112,17 +116,13 @@ public abstract class BaseJobRepositoryTest {
                         .trigger(new PointInTimeTrigger(now.plusMinutes(id).toInstant().toEpochMilli(), null, null))
                         .priority(id)
                         .build())
-                .map(j -> FunctionsUtil.unchecked((t) -> tested().save(j).toCompletableFuture().get()).apply(null))
+                .map(j -> tested().save(j))
                 .toList();
 
-        final List<JobDetails> fetched = tested().findByStatusBetweenDates(now,
+        List<JobDetails> fetched = tested().findByStatusBetweenDates(now,
                 now.plusMinutes(5),
                 new JobStatus[] { JobStatus.SCHEDULED },
-                new ReactiveJobRepository.SortTerm[] { byFireTime(true) })
-                .toList()
-                .run()
-                .toCompletableFuture()
-                .get();
+                new JobRepository.SortTerm[] { byFireTime(true) });
 
         assertThat(fetched.size()).isEqualTo(5);
 
@@ -130,14 +130,10 @@ public abstract class BaseJobRepositoryTest {
             assertThat(fetched.get(i)).isEqualTo(jobs.get(i));
         }
 
-        final List<JobDetails> fetchedDesc = tested().findByStatusBetweenDates(now,
+        List<JobDetails> fetchedDesc = tested().findByStatusBetweenDates(now,
                 now.plusMinutes(5),
                 new JobStatus[] { JobStatus.SCHEDULED },
-                new ReactiveJobRepository.SortTerm[] { byFireTime(false) })
-                .toList()
-                .run()
-                .toCompletableFuture()
-                .get();
+                new JobRepository.SortTerm[] { byFireTime(false) });
 
         assertThat(fetchedDesc.size()).isEqualTo(5);
         for (int i = 0; i < fetchedDesc.size(); i++) {
@@ -148,22 +144,14 @@ public abstract class BaseJobRepositoryTest {
         List<JobDetails> fetchedNotFound = tested().findByStatusBetweenDates(now,
                 now.plusMinutes(5),
                 new JobStatus[] { JobStatus.CANCELED },
-                new ReactiveJobRepository.SortTerm[] { byFireTime(true) })
-                .toList()
-                .run()
-                .toCompletableFuture()
-                .get();
+                new JobRepository.SortTerm[] { byFireTime(true) });
 
         assertThat(fetchedNotFound.size()).isZero();
 
         fetchedNotFound = tested().findByStatusBetweenDates(now.plusMinutes(10).plusSeconds(1),
                 now.plusMinutes(20),
                 new JobStatus[] { JobStatus.SCHEDULED },
-                new ReactiveJobRepository.SortTerm[] { byFireTime(true) })
-                .toList()
-                .run()
-                .toCompletableFuture()
-                .get();
+                new JobRepository.SortTerm[] { byFireTime(true) });
 
         assertThat(fetchedNotFound.size()).isZero();
     }
@@ -179,10 +167,11 @@ public abstract class BaseJobRepositoryTest {
                 .recipient(recipient)
                 .build();
 
-        JobDetails merged = tested().merge(id, toMerge).toCompletableFuture().get();
+        JobDetails merged = tested().merge(id, toMerge);
         assertThat(merged.getRecipient()).isEqualTo(recipient);
         assertThat(merged.getId()).isEqualTo(job.getId());
         assertThat(merged.getTrigger().hasNextFireTime()).isEqualTo(job.getTrigger().hasNextFireTime());
+        tested().delete(id);
     }
 
     private static void assertEqualsToReturnedJob(JobDetails job, JobDetails returnedJob) {

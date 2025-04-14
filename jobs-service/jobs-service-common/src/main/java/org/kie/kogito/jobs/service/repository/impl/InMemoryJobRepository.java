@@ -22,21 +22,19 @@ import java.time.ZonedDateTime;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CompletionStage;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Stream;
 
-import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
-import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 import org.kie.kogito.jobs.service.utils.DateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.quarkus.arc.DefaultBean;
-import io.vertx.core.Vertx;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -45,46 +43,47 @@ import static org.kie.kogito.jobs.service.utils.ModelUtil.jobWithCreatedAndLastU
 
 @DefaultBean
 @ApplicationScoped
-public class InMemoryJobRepository extends BaseReactiveJobRepository implements ReactiveJobRepository {
+public class InMemoryJobRepository extends AbstractJobRepository implements JobRepository {
 
-    private final Map<String, JobDetails> jobMap = new ConcurrentHashMap<>();
+    private Logger LOGGER = LoggerFactory.getLogger(InMemoryJobRepository.class);
+
+    private static ConcurrentMap<String, JobDetails> jobMap = new ConcurrentHashMap<>();
 
     public InMemoryJobRepository() {
-        super(null, null);
+        super(null);
     }
 
     @Inject
-    public InMemoryJobRepository(Vertx vertx, JobEventPublisher jobEventPublisher) {
-        super(vertx, jobEventPublisher);
+    public InMemoryJobRepository(JobEventPublisher jobEventPublisher) {
+        super(jobEventPublisher);
     }
 
     @Override
-    public CompletionStage<JobDetails> doSave(JobDetails job) {
-        return runAsync(() -> {
-            boolean isNew = !jobMap.containsKey(job.getId());
-            JobDetails timeStampedJob = jobWithCreatedAndLastUpdate(isNew, job);
-            jobMap.put(timeStampedJob.getId(), timeStampedJob);
-            return timeStampedJob;
+    public JobDetails doSave(JobDetails job) {
+        LOGGER.trace("do save in memmory job service {}", job);
+        JobDetails savedJobDetails = jobMap.compute(job.getId(), (jobId, currentJobDetails) -> {
+            return jobWithCreatedAndLastUpdate(currentJobDetails == null, job);
         });
+        return savedJobDetails;
     }
 
     @Override
-    public CompletionStage<JobDetails> get(String key) {
-        return runAsync(() -> jobMap.get(key));
+    public JobDetails get(String key) {
+        return jobMap.get(key);
     }
 
     @Override
-    public CompletionStage<Boolean> exists(String key) {
-        return runAsync(() -> jobMap.containsKey(key));
+    public Boolean exists(String key) {
+        return jobMap.containsKey(key);
     }
 
     @Override
-    public CompletionStage<JobDetails> delete(String key) {
-        return runAsync(() -> jobMap.remove(key));
+    public JobDetails delete(String key) {
+        return jobMap.remove(key);
     }
 
     @Override
-    public PublisherBuilder<JobDetails> findByStatusBetweenDates(ZonedDateTime fromFireTime,
+    public List<JobDetails> findByStatusBetweenDates(ZonedDateTime fromFireTime,
             ZonedDateTime toFireTime,
             JobStatus[] status,
             SortTerm[] orderBy) {
@@ -93,7 +92,7 @@ public class InMemoryJobRepository extends BaseReactiveJobRepository implements 
                 .filter(j -> matchStatusFilter(j, status))
                 .filter(j -> matchFireTimeFilter(j, fromFireTime, toFireTime));
         List<JobDetails> result = orderBy == null || orderBy.length == 0 ? unsortedResult.toList() : unsortedResult.sorted(orderByComparator(orderBy)).toList();
-        return ReactiveStreams.fromIterable(result);
+        return result;
     }
 
     private static boolean matchStatusFilter(JobDetails job, JobStatus[] status) {

@@ -41,12 +41,14 @@ class JobServiceManagementResourceIT {
                 .accept(ContentType.JSON)
                 .get(HEALTH_ENDPOINT)
                 .then()
+                .log().body()
                 .statusCode(200);
 
         given()
                 .when()
                 .post(MANAGEMENT_SHUTDOWN_ENDPOINT)
                 .then()
+                .log().body()
                 .statusCode(200);
 
         Awaitility.await().atMost(Duration.ofSeconds(5)).untilAsserted(() -> given()
@@ -54,6 +56,7 @@ class JobServiceManagementResourceIT {
                 .accept(ContentType.JSON)
                 .get(HEALTH_ENDPOINT)
                 .then()
+                .log().body()
                 .statusCode(503));
     }
 }

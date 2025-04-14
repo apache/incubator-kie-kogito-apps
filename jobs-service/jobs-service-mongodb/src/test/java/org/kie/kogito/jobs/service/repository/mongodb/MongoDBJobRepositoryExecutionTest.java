@@ -21,12 +21,12 @@ package org.kie.kogito.jobs.service.repository.mongodb;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletionStage;
+import java.util.function.Consumer;
 
 import org.bson.Document;
 import org.bson.conversions.Bson;
-import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
@@ -36,7 +36,7 @@ import org.kie.kogito.jobs.service.model.JobDetailsBuilder;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.Recipient;
 import org.kie.kogito.jobs.service.model.RecipientInstance;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.repository.marshaller.JobDetailsMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
@@ -45,18 +45,18 @@ import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
+import org.mockito.invocation.InvocationOnMock;
+import org.mockito.stubbing.Answer;
 
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReturnDocument;
-import com.mongodb.reactivestreams.client.FindPublisher;
 
-import io.quarkus.mongodb.FindOptions;
-import io.quarkus.mongodb.reactive.ReactiveMongoClient;
-import io.quarkus.mongodb.reactive.ReactiveMongoCollection;
-import io.quarkus.mongodb.reactive.ReactiveMongoDatabase;
-import io.smallrye.mutiny.Multi;
-import io.smallrye.mutiny.Uni;
-import io.smallrye.mutiny.groups.UniAwait;
 import io.vertx.core.json.JsonObject;
 
 import static com.mongodb.client.model.Filters.and;
@@ -75,6 +75,7 @@ import static org.kie.kogito.jobs.service.repository.mongodb.MongoDBJobRepositor
 import static org.kie.kogito.jobs.service.repository.mongodb.MongoDBJobRepository.STATUS_COLUMN;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -89,15 +90,15 @@ class MongoDBJobRepositoryExecutionTest {
 
     private MongoDBJobRepository mongoDBJobRepository;
 
-    private ReactiveMongoCollection<Document> collection;
+    private MongoCollection<Document> collection;
 
     private JobDetailsMarshaller jobDetailsMarshaller;
 
     @BeforeEach
     void setUp() {
-        ReactiveMongoClient mongoClient = mock(ReactiveMongoClient.class);
-        collection = mock(ReactiveMongoCollection.class);
-        ReactiveMongoDatabase mongoDatabase = mock(ReactiveMongoDatabase.class);
+        MongoClient mongoClient = mock(MongoClient.class);
+        collection = mock(MongoCollection.class);
+        MongoDatabase mongoDatabase = mock(MongoDatabase.class);
         when(mongoClient.getDatabase(anyString())).thenReturn(mongoDatabase);
         when(mongoDatabase.getCollection(anyString())).thenReturn(collection);
         jobDetailsMarshaller = spy(new MongoDBJobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller()));
@@ -121,21 +122,19 @@ class MongoDBJobRepositoryExecutionTest {
 
     private void doSave(JobDetails job, boolean exists) throws Exception {
         ZonedDateTime now = ZonedDateTime.now();
-        Multi<Document> multi;
-        if (exists) {
-            Document document = Document.parse(new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller()).marshall(job).toString());
-            multi = Multi.createFrom().item(document);
-        } else {
-            multi = Multi.createFrom().empty();
-        }
+        FindIterable<Document> multi = mock(FindIterable.class);
+        MongoCursor<Document> cursor = mock(MongoCursor.class);
+        when(multi.iterator()).thenReturn(cursor);
+        when(cursor.available()).thenReturn(exists ? 1 : 0);
+
+        Document.parse(new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller()).marshall(job).toString());
+
         when(collection.find(any(Bson.class))).thenReturn(multi);
 
         Document replaced = new Document().append("id", "replaced");
-        Uni<Document> replacedDocument = Uni.createFrom().item(replaced);
-        when(collection.findOneAndReplace(any(Bson.class), any(), any(FindOneAndReplaceOptions.class))).thenReturn(replacedDocument);
+        when(collection.findOneAndReplace(any(Bson.class), any(), any(FindOneAndReplaceOptions.class))).thenReturn(replaced);
 
-        CompletionStage<JobDetails> result = mongoDBJobRepository.doSave(job);
-        JobDetails saved = result.toCompletableFuture().get();
+        JobDetails saved = mongoDBJobRepository.doSave(job);
 
         ArgumentCaptor<Bson> filterCaptor = ArgumentCaptor.forClass(Bson.class);
         ArgumentCaptor<Document> documentCaptor = ArgumentCaptor.forClass(Document.class);
@@ -169,10 +168,11 @@ class MongoDBJobRepositoryExecutionTest {
     void get() throws Exception {
         JobDetails job = createExistingJob();
         Document document = Document.parse(new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller()).marshall(job).toString());
-        Multi<Document> multi = Multi.createFrom().item(document);
+        FindIterable<Document> multi = mock(FindIterable.class);
+        when(multi.first()).thenReturn(document);
         when(collection.find(any(Bson.class))).thenReturn(multi);
 
-        JobDetails result = mongoDBJobRepository.get(job.getId()).toCompletableFuture().get();
+        JobDetails result = mongoDBJobRepository.get(job.getId());
         assertThat(result).isEqualTo(job);
 
         ArgumentCaptor<Bson> filterCaptor = ArgumentCaptor.forClass(Bson.class);
@@ -189,10 +189,11 @@ class MongoDBJobRepositoryExecutionTest {
     void exists() throws Exception {
         JobDetails job = createExistingJob();
         Document document = Document.parse(new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller()).marshall(job).toString());
-        Multi<Document> multi = Multi.createFrom().item(document);
+        FindIterable<Document> multi = mock(FindIterable.class);
+        when(multi.first()).thenReturn(document);
         when(collection.find(any(Bson.class))).thenReturn(multi);
 
-        Boolean result = mongoDBJobRepository.exists(job.getId()).toCompletableFuture().get();
+        Boolean result = mongoDBJobRepository.exists(job.getId());
         assertThat(result).isTrue();
 
         ArgumentCaptor<Bson> filterCaptor = ArgumentCaptor.forClass(Bson.class);
@@ -204,10 +205,11 @@ class MongoDBJobRepositoryExecutionTest {
     void delete() throws Exception {
         JobDetails job = createExistingJob();
         Document document = Document.parse(new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller()).marshall(job).toString());
-        Uni<Document> uni = Uni.createFrom().item(document);
-        when(collection.findOneAndDelete(any(Bson.class))).thenReturn(uni);
+        FindIterable<Document> multi = mock(FindIterable.class);
+        when(multi.first()).thenReturn(document);
+        when(collection.findOneAndDelete(any(Bson.class))).thenReturn(document);
 
-        JobDetails result = mongoDBJobRepository.delete(job.getId()).toCompletableFuture().get();
+        JobDetails result = mongoDBJobRepository.delete(job.getId());
         assertThat(result).isEqualTo(job);
 
         ArgumentCaptor<Bson> filterCaptor = ArgumentCaptor.forClass(Bson.class);
@@ -223,27 +225,40 @@ class MongoDBJobRepositoryExecutionTest {
     @Test
     void findByStatusBetweenDates() {
         JobDetails job = createExistingJob();
-        Document document = Document.parse(new JobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller()).marshall(job).toString());
-        Multi<Document> multi = Multi.createFrom().item(document);
-        doReturn(multi).when(collection).find(any(FindOptions.class));
+
+        FindIterable<Document> multi = mock(FindIterable.class);
+        when(multi.sort(any())).thenReturn(multi);
+
+        FindIterable<JsonObject> multiJson = mock(FindIterable.class);
+        when(multi.map(ArgumentMatchers.<com.mongodb.Function<Document, JsonObject>> any())).thenReturn(multiJson);
+
+        FindIterable<JobDetails> multiJob = mock(FindIterable.class);
+        when(multiJson.map(ArgumentMatchers.<com.mongodb.Function<JsonObject, JobDetails>> any())).thenReturn(multiJob);
+
+        doAnswer(new Answer() {
+
+            @Override
+            public Object answer(InvocationOnMock invocation) throws Throwable {
+                Consumer<JobDetails> consumer = (Consumer<JobDetails>) invocation.getArgument(0);
+                consumer.accept(job);
+                return null;
+            }
+
+        }).when(multiJob).forEach(any());
+
+        doReturn(multi).when(collection).find(any(Bson.class));
 
         ZonedDateTime from = ZonedDateTime.now();
         ZonedDateTime to = ZonedDateTime.now();
 
-        PublisherBuilder<JobDetails> result = mongoDBJobRepository.findByStatusBetweenDates(from, to,
+        List<JobDetails> result = mongoDBJobRepository.findByStatusBetweenDates(from, to,
                 new JobStatus[] { JobStatus.SCHEDULED, JobStatus.RETRY },
-                new ReactiveJobRepository.SortTerm[] { ReactiveJobRepository.SortTerm.byFireTime(true) });
+                new JobRepository.SortTerm[] { JobRepository.SortTerm.byFireTime(true) });
         assertNotNull(result);
 
         ArgumentCaptor<Bson> filterCaptor = ArgumentCaptor.forClass(Bson.class);
-        ArgumentCaptor<FindOptions> optionCaptor = ArgumentCaptor.forClass(FindOptions.class);
-        verify(collection, times(1)).find(optionCaptor.capture());
 
-        FindPublisher findPublisher = mock(FindPublisher.class);
-        doReturn(findPublisher).when(findPublisher).filter(any());
-
-        optionCaptor.getValue().apply(findPublisher);
-        verify(findPublisher).filter(filterCaptor.capture());
+        verify(collection, times(1)).find(filterCaptor.capture());
 
         assertEquals(and(
                 in("status", Arrays.stream(new JobStatus[] { JobStatus.SCHEDULED, JobStatus.RETRY }).map(Enum::name).collect(toList())),
@@ -254,10 +269,6 @@ class MongoDBJobRepositoryExecutionTest {
 
     @Test
     void onStart() {
-        Uni uni = mock(Uni.class);
-        when(collection.createIndex(any())).thenReturn(uni);
-        when(uni.await()).thenReturn(mock(UniAwait.class));
-
         mongoDBJobRepository.onStart(null);
 
         ArgumentCaptor<Bson> indexCaptor = ArgumentCaptor.forClass(Bson.class);

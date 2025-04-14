@@ -25,6 +25,7 @@ import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.jobs.DurationExpirationTime;
@@ -53,10 +54,11 @@ public class EmbeddedJobsServiceTest {
     TestEventPublisher publisher;
 
     @Test
+    @Timeout(10000)
     public void testJobService() throws Exception {
 
         // testing only when we have the full lifecycle
-        CountDownLatch latch = new CountDownLatch(8);
+        CountDownLatch latch = new CountDownLatch(6);
         publisher.setLatch(latch);
 
         ProcessInstanceJobDescription description = ProcessInstanceJobDescription.newProcessInstanceJobDescriptionBuilder()
@@ -87,7 +89,7 @@ public class EmbeddedJobsServiceTest {
 
         List<DataEvent<?>> events = new ArrayList<>(publisher.getEvents());
 
-        Assertions.assertEquals(8, events.size());
+        Assertions.assertEquals(6, events.size());
 
         Consumer<DataEvent<?>> noRootProcess = e -> assertThat(e)
                 .hasFieldOrPropertyWithValue("kogitoRootProcessInstanceId", null)

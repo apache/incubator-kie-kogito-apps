@@ -19,6 +19,8 @@
 package org.kie.kogito.jobs.service.executor;
 
 import org.kie.kogito.jobs.service.model.JobDetails;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -27,11 +29,17 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class DefaultJobExecutorResolver implements JobExecutorResolver {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(DefaultJobExecutorResolver.class);
+
     private Instance<JobExecutor> executors;
 
     @Inject
     public DefaultJobExecutorResolver(Instance<JobExecutor> executors) {
         this.executors = executors;
+        for (JobExecutor registeredJobExecutor : executors) {
+            LOGGER.info("Registering job executor: {}", registeredJobExecutor.getClass().getName());
+        }
+        LOGGER.info("Number of job executors registered: {}", executors.stream().count());
     }
 
     @Override

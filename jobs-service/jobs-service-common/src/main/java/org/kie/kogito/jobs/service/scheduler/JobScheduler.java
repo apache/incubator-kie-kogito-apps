@@ -21,13 +21,22 @@ package org.kie.kogito.jobs.service.scheduler;
 import java.time.ZonedDateTime;
 import java.util.Optional;
 
-import org.kie.kogito.jobs.service.model.JobDetails;
+import org.kie.kogito.jobs.service.model.JobExecutionResponse;
+import org.kie.kogito.timer.Trigger;
 
-public interface JobScheduler<T, C> {
+public interface JobScheduler<T> {
 
-    T schedule(JobDetails job);
+    T schedule(T job);
 
-    C cancel(String jobId);
+    T cancel(String jobId);
 
     Optional<ZonedDateTime> scheduled(String jobId);
+
+    T internalSchedule(T job, boolean onServiceStart);
+
+    T reschedule(String id, Trigger trigger);
+
+    T handleJobExecutionError(JobExecutionResponse errorResponse);
+
+    T handleJobExecutionSuccess(JobExecutionResponse errorResponse);
 }

@@ -40,8 +40,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
-import io.vertx.mutiny.core.TimeoutStream;
-import io.vertx.mutiny.core.Vertx;
+import io.vertx.core.Vertx;
 
 import jakarta.enterprise.event.Event;
 import jakarta.enterprise.inject.Instance;
@@ -99,19 +98,21 @@ class JobServiceInstanceManagerTest {
 
     @Test
     void startup() {
+        tested.init();
         tested.startup(startupEvent);
 
         assertThat(tested.getCurrentInfo()).isNotNull();
-        verify(tested, times(1)).tryBecomeLeader(infoCaptor.capture(), any(TimeoutStream.class), any(TimeoutStream.class));
+        verify(tested, times(1)).tryBecomeLeader(infoCaptor.capture());
         assertThat(infoCaptor.getValue()).isEqualTo(tested.getCurrentInfo());
         assertThat(tested.getHeartbeat()).isNotNull();
-        assertThat(tested.getCheckLeader()).isNotNull();
+        assertThat(tested.getCheckLeader()).isNull();
     }
 
     @Test
     void onShutdown() {
+        tested.init();
         tested.startup(startupEvent);
-        tested.onShutdown(shutdownEvent);
+        tested.shutdown();
 
         verify(tested, times(1)).release(infoCaptor.capture());
         assertThat(infoCaptor.getValue()).isEqualTo(tested.getCurrentInfo());
@@ -123,9 +124,7 @@ class JobServiceInstanceManagerTest {
         JobServiceManagementInfo info = new JobServiceManagementInfo("id", "token", OffsetDateTime.now());
         ArgumentCaptor<Function<JobServiceManagementInfo, JobServiceManagementInfo>> updateFunction = ArgumentCaptor.forClass(Function.class);
 
-        TimeoutStream checkLeader = vertx.timerStream(1);
-        TimeoutStream heartbeat = vertx.timerStream(1);
-        tested.tryBecomeLeader(info, checkLeader, heartbeat).await().indefinitely();
+        tested.tryBecomeLeader(info);
         verify(repository).getAndUpdate(anyString(), updateFunction.capture());
         assertThat(tested.isLeader()).isTrue();
         verify(messagingHandler).resume();
@@ -136,12 +135,10 @@ class JobServiceInstanceManagerTest {
     void tryBecomeLeaderFail() {
         JobServiceManagementInfo info = new JobServiceManagementInfo("id", "token", OffsetDateTime.now());
         JobServiceManagementInfo info2 = new JobServiceManagementInfo("id2", "token2", OffsetDateTime.now());
-        repository.set(info).await().indefinitely();
+        repository.set(info);
         ArgumentCaptor<Function<JobServiceManagementInfo, JobServiceManagementInfo>> updateFunction = ArgumentCaptor.forClass(Function.class);
 
-        TimeoutStream checkLeader = vertx.timerStream(1);
-        TimeoutStream heartbeat = vertx.timerStream(1);
-        tested.tryBecomeLeader(info2, checkLeader, heartbeat).await().indefinitely();
+        tested.tryBecomeLeader(info2);
         verify(repository).getAndUpdate(anyString(), updateFunction.capture());
         assertThat(tested.isLeader()).isFalse();
     }
@@ -149,12 +146,13 @@ class JobServiceInstanceManagerTest {
     @Test
     void heartbeatNotLeader() {
         JobServiceManagementInfo info = new JobServiceManagementInfo("id", "token", OffsetDateTime.now());
-        tested.heartbeat(info).await().indefinitely();
+        tested.heartbeat(info);
         verify(repository, never()).heartbeat(info);
     }
 
     @Test
     void heartbeatLeader() {
+        tested.init();
         tested.startup(startupEvent);
         await().atMost(30, TimeUnit.SECONDS)
                 .untilAsserted(() -> {

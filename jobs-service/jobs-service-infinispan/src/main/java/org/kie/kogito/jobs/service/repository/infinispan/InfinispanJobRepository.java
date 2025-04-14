@@ -20,12 +20,10 @@ package org.kie.kogito.jobs.service.repository.infinispan;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.concurrent.CompletionStage;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
-import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.infinispan.client.hotrod.Flag;
 import org.infinispan.client.hotrod.RemoteCache;
 import org.infinispan.client.hotrod.RemoteCacheManager;
@@ -34,8 +32,8 @@ import org.infinispan.query.dsl.Query;
 import org.infinispan.query.dsl.QueryFactory;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
-import org.kie.kogito.jobs.service.repository.impl.BaseReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
+import org.kie.kogito.jobs.service.repository.impl.AbstractJobRepository;
 import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 
 import io.vertx.core.Vertx;
@@ -48,21 +46,21 @@ import static org.kie.kogito.jobs.service.repository.infinispan.InfinispanConfig
 import static org.kie.kogito.jobs.service.utils.ModelUtil.jobWithCreatedAndLastUpdate;
 
 @ApplicationScoped
-public class InfinispanJobRepository extends BaseReactiveJobRepository implements ReactiveJobRepository {
+public class InfinispanJobRepository extends AbstractJobRepository implements JobRepository {
 
     private RemoteCache<String, JobDetails> cache;
     private QueryFactory queryFactory;
     private RemoteCacheManager remoteCacheManager;
 
     InfinispanJobRepository() {
-        super(null, null);
+        super(null);
     }
 
     @Inject
     public InfinispanJobRepository(Vertx vertx,
             JobEventPublisher jobEventPublisher,
             RemoteCacheManager remoteCacheManager) {
-        super(vertx, jobEventPublisher);
+        super(jobEventPublisher);
         this.remoteCacheManager = remoteCacheManager;
     }
 
@@ -72,34 +70,34 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
     }
 
     @Override
-    public CompletionStage<JobDetails> doSave(JobDetails job) {
-        return runAsync(() -> {
-            boolean isNew = !cache.containsKey(job.getId());
-            JobDetails timeStampedJob = jobWithCreatedAndLastUpdate(isNew, job);
-            cache.put(timeStampedJob.getId(), timeStampedJob);
-            return timeStampedJob;
-        });
+    public JobDetails doSave(JobDetails job) {
+
+        boolean isNew = !cache.containsKey(job.getId());
+        JobDetails timeStampedJob = jobWithCreatedAndLastUpdate(isNew, job);
+        cache.put(timeStampedJob.getId(), timeStampedJob);
+        return timeStampedJob;
+
     }
 
     @Override
-    public CompletionStage<JobDetails> get(String id) {
-        return runAsync(() -> cache.get(id));
+    public JobDetails get(String id) {
+        return cache.get(id);
     }
 
     @Override
-    public CompletionStage<Boolean> exists(String id) {
-        return runAsync(() -> cache.containsKey(id));
+    public Boolean exists(String id) {
+        return cache.containsKey(id);
     }
 
     @Override
-    public CompletionStage<JobDetails> delete(String id) {
-        return runAsync(() -> cache
+    public JobDetails delete(String id) {
+        return cache
                 .withFlags(Flag.FORCE_RETURN_VALUE)
-                .remove(id));
+                .remove(id);
     }
 
     @Override
-    public PublisherBuilder<JobDetails> findByStatusBetweenDates(ZonedDateTime fromFireTime,
+    public List<JobDetails> findByStatusBetweenDates(ZonedDateTime fromFireTime,
             ZonedDateTime toFireTime,
             JobStatus[] status,
             SortTerm[] orderBy) {
@@ -122,7 +120,7 @@ public class InfinispanJobRepository extends BaseReactiveJobRepository implement
         Query<JobDetails> query = queryFactory.create(findQuery);
         query.setParameter("from", fromFireTime.toInstant().toEpochMilli());
         query.setParameter("to", toFireTime.toInstant().toEpochMilli());
-        return ReactiveStreams.fromIterable(query.execute().list());
+        return query.execute().list();
     }
 
     private static String createFireTimeFilter(String fromParam, String toParam) {

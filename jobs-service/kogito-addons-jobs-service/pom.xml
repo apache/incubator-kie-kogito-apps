@@ -37,7 +37,6 @@
 
     <modules>
         <module>kogito-addons-quarkus-jobs</module>
-        <module>kogito-addons-quarkus-jobs-service-embedded</module>
     </modules>
 
 </project>
