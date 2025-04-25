@@ -57,10 +57,11 @@ public class SinkJobExecutor extends HTTPRequestExecutor<SinkRecipient<?>> imple
     static final String CE_DATASCHEMA_HEADER_V03 = "ce-schemaurl";
 
     @Inject
-    public SinkJobExecutor(@ConfigProperty(name = "kogito.job.recipient.sink.timeout-in-millis") long timeout,
+    public SinkJobExecutor(@ConfigProperty(name = "kogito.job.recipient.sink.ssl-enabled") boolean sslEnabled,
+            @ConfigProperty(name = "kogito.job.recipient.sink.timeout-in-millis") long timeout,
             Vertx vertx,
             ObjectMapper objectMapper) {
-        super(timeout, vertx, objectMapper);
+        super(sslEnabled, timeout, vertx, objectMapper);
     }
 
     @PostConstruct

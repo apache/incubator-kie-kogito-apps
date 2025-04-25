@@ -55,6 +55,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 public abstract class HTTPRequestExecutorTest<R extends Recipient<?>, E extends HTTPRequestExecutor<R>> {
 
+    public static final boolean DEFAULT_SSL_ENABLED = false;
     public static final long DEFAULT_TIMEOUT = 5000;
     public static final int PORT = 8080;
     public static final String HOST = "localhost";
@@ -94,12 +95,12 @@ public abstract class HTTPRequestExecutorTest<R extends Recipient<?>, E extends 
     @BeforeEach
     void setUp() {
         objectMapper = SerializationUtils.DEFAULT_OBJECT_MAPPER;
-        tested = spy(createExecutor(DEFAULT_TIMEOUT, vertx, objectMapper));
+        tested = spy(createExecutor(DEFAULT_SSL_ENABLED, DEFAULT_TIMEOUT, vertx, objectMapper));
         doReturn(webClient).when(tested).createClient();
         tested.initialize();
     }
 
-    protected abstract E createExecutor(long timeout, Vertx vertx, ObjectMapper objectMapper);
+    protected abstract E createExecutor(boolean sslEnabled, long timeout, Vertx vertx, ObjectMapper objectMapper);
 
     @Test
     void testExecute() {

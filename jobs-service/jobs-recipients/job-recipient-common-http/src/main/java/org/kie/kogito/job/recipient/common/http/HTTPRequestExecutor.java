@@ -39,6 +39,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.smallrye.mutiny.Uni;
+import io.vertx.ext.web.client.WebClientOptions;
 import io.vertx.mutiny.core.Vertx;
 import io.vertx.mutiny.core.buffer.Buffer;
 import io.vertx.mutiny.ext.web.client.HttpRequest;
@@ -49,6 +50,8 @@ import jakarta.ws.rs.core.Response;
 
 public abstract class HTTPRequestExecutor<R extends Recipient<?>> {
     private static final Logger LOGGER = LoggerFactory.getLogger(HTTPRequestExecutor.class);
+
+    protected boolean sslEnabled;
 
     protected long timeout;
 
@@ -61,7 +64,8 @@ public abstract class HTTPRequestExecutor<R extends Recipient<?>> {
     protected HTTPRequestExecutor() {
     }
 
-    protected HTTPRequestExecutor(long timeout, Vertx vertx, ObjectMapper objectMapper) {
+    protected HTTPRequestExecutor(boolean sslEnabled, long timeout, Vertx vertx, ObjectMapper objectMapper) {
+        this.sslEnabled = sslEnabled;
         this.timeout = timeout;
         this.vertx = vertx;
         this.objectMapper = objectMapper;
@@ -75,7 +79,7 @@ public abstract class HTTPRequestExecutor<R extends Recipient<?>> {
      * facilitates tests.
      */
     public WebClient createClient() {
-        return WebClient.create(vertx);
+        return WebClient.create(vertx, new WebClientOptions().setSsl(sslEnabled));
     }
 
     public Uni<JobExecutionResponse> execute(JobDetails jobDetails) {
