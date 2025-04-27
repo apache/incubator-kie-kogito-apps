@@ -30,6 +30,7 @@ import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.ManageableJobHandle;
 import org.kie.kogito.jobs.service.scheduler.AbstractTimerJobScheduler;
 import org.kie.kogito.jobs.service.scheduler.BaseTimerJobSchedulerTest;
+import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Job;
 import org.kie.kogito.timer.JobContext;
@@ -48,12 +49,15 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
 
+    @Mock
+    protected JobEventPublisher jobEventPublisher;
+
     @Spy
     @InjectMocks
-    private TimerDelegateJobScheduler tested;
+    protected TimerDelegateJobScheduler tested;
 
     @Mock
-    private VertxTimerServiceScheduler timer;
+    protected VertxTimerServiceScheduler timer;
 
     @BeforeEach
     public void setUp() {

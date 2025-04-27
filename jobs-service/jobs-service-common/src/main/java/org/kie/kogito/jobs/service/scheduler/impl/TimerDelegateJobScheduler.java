@@ -18,6 +18,8 @@
  */
 package org.kie.kogito.jobs.service.scheduler.impl;
 
+import java.util.Optional;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.jobs.service.executor.JobExecutorResolver;
 import org.kie.kogito.jobs.service.job.DelegateJob;
@@ -32,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 
 /**
@@ -49,7 +52,7 @@ public class TimerDelegateJobScheduler extends AbstractTimerJobScheduler {
     protected VertxTimerServiceScheduler delegate;
 
     @Inject
-    JobEventPublisher jobEventPublisher;
+    Instance<JobEventPublisher> jobEventPublisher;
 
     protected TimerDelegateJobScheduler() {
     }
@@ -68,8 +71,8 @@ public class TimerDelegateJobScheduler extends AbstractTimerJobScheduler {
     }
 
     @Override
-    protected JobEventPublisher getJobEventPublisher() {
-        return jobEventPublisher;
+    protected Optional<JobEventPublisher> getJobEventPublisher() {
+        return jobEventPublisher.isResolvable() ? Optional.of(jobEventPublisher.get()) : Optional.empty();
     }
 
     @Override

@@ -108,7 +108,7 @@ public abstract class AbstractTimerJobScheduler implements JobScheduler<JobDetai
         this(null, 0, 0, 0, true, true);
     }
 
-    abstract protected JobEventPublisher getJobEventPublisher();
+    abstract protected Optional<JobEventPublisher> getJobEventPublisher();
 
     protected AbstractTimerJobScheduler(JobRepository jobRepository,
             long backoffRetryMillis,
@@ -140,8 +140,8 @@ public abstract class AbstractTimerJobScheduler implements JobScheduler<JobDetai
             job = doJobScheduling(job);
         } else {
             LOGGER.trace("Job will not be scheduled {} but will be saved", job);
-            getJobEventPublisher().publishJobStatusChange(job);
-            job = jobRepository.save(jobWithStatus(job, JobStatus.SCHEDULED));
+            JobDetails savedJob = jobRepository.save(jobWithStatus(job, JobStatus.SCHEDULED));
+            getJobEventPublisher().ifPresent(p -> p.publishJobStatusChange(savedJob));
         }
         return job;
     }
@@ -173,14 +173,14 @@ public abstract class AbstractTimerJobScheduler implements JobScheduler<JobDetai
         }
 
         LOGGER.trace("about to reschedule the current merge {}", currentJobDetails);
-        getJobEventPublisher().publishJobStatusChange(jobWithStatus(currentJobDetails, JobStatus.CANCELED));
+        getJobEventPublisher().ifPresent(p -> p.publishJobStatusChange(jobWithStatus(currentJobDetails, JobStatus.CANCELED)));
         this.doCancel(mergedJobDetails);
 
         if (this.isOnCurrentSchedulerChunk(mergedJobDetails)) {
             return schedule(mergedJobDetails);
         } else {
             JobDetails newJobDetails = this.jobRepository.save(jobWithStatus(mergedJobDetails, JobStatus.SCHEDULED));
-            getJobEventPublisher().publishJobStatusChange(newJobDetails);
+            getJobEventPublisher().ifPresent(p -> p.publishJobStatusChange(newJobDetails));
             return newJobDetails;
         }
 
@@ -204,7 +204,7 @@ public abstract class AbstractTimerJobScheduler implements JobScheduler<JobDetai
         LOGGER.trace("Saved job details before scheduling {} in {}", savedJobDetails, jobRepository.getClass().getName());
         ManageableJobHandle manageableJobHandle = scheduleRegistering(savedJobDetails, job.getTrigger());
         JobDetails scheduledJob = jobWithStatusAndHandle(savedJobDetails, JobStatus.SCHEDULED, manageableJobHandle);
-        getJobEventPublisher().publishJobStatusChange(scheduledJob);
+        getJobEventPublisher().ifPresent(p -> p.publishJobStatusChange(scheduledJob));
         return jobRepository.save(scheduledJob);
     }
 
@@ -285,12 +285,12 @@ public abstract class AbstractTimerJobScheduler implements JobScheduler<JobDetai
             JobDetails newScheduledJobDetails = doJobScheduling(nextJobDetails);
             jobRepository.save(newScheduledJobDetails);
             JobDetails excecutedJobDetails = jobWithStatus(futureJob, JobStatus.EXECUTED);
-            getJobEventPublisher().publishJobStatusChange(excecutedJobDetails);
+            getJobEventPublisher().ifPresent(p -> p.publishJobStatusChange(excecutedJobDetails));
             return excecutedJobDetails;
         } else {
             JobDetails deletedExecutedJobDetails = jobRepository.delete(futureJob);
             JobDetails excecutedJobDetails = JobDetails.builder().of(deletedExecutedJobDetails).incrementExecutionCounter().status(JobStatus.EXECUTED).build();
-            getJobEventPublisher().publishJobStatusChange(excecutedJobDetails);
+            getJobEventPublisher().ifPresent(p -> p.publishJobStatusChange(excecutedJobDetails));
             return excecutedJobDetails;
         }
 
@@ -354,7 +354,7 @@ public abstract class AbstractTimerJobScheduler implements JobScheduler<JobDetai
                     .incrementRetries()
                     .build();
 
-            getJobEventPublisher().publishJobStatusChange(scheduledJobDetails);
+            getJobEventPublisher().ifPresent(p -> p.publishJobStatusChange(scheduledJobDetails));
             jobRepository.save(scheduledJobDetails);
             LOGGER.debug("Retry executed {}", futureJob);
             return futureJob;
@@ -375,7 +375,7 @@ public abstract class AbstractTimerJobScheduler implements JobScheduler<JobDetai
         jobRepository.delete(errorJobDetails);
         unregisterScheduledJob(errorJobDetails);
         LOGGER.warn("Retry limit exceeded for job{}", errorJobDetails);
-        getJobEventPublisher().publishJobStatusChange(errorJobDetails);
+        getJobEventPublisher().ifPresent(p -> p.publishJobStatusChange(errorJobDetails));
         return errorJobDetails;
 
     }
@@ -408,7 +408,7 @@ public abstract class AbstractTimerJobScheduler implements JobScheduler<JobDetai
         JobDetails deletedJobDetails = jobRepository.delete(job);
         this.unregisterScheduledJob(job);
         JobDetails canceledJobDetails = jobWithStatus(deletedJobDetails == null ? job : deletedJobDetails, JobStatus.CANCELED);
-        getJobEventPublisher().publishJobStatusChange(canceledJobDetails);
+        getJobEventPublisher().ifPresent(p -> p.publishJobStatusChange(canceledJobDetails));
         return canceledJobDetails;
 
     }
