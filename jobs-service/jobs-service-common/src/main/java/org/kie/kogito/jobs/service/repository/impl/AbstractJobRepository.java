@@ -21,20 +21,12 @@ package org.kie.kogito.jobs.service.repository.impl;
 import org.apache.commons.lang3.StringUtils;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.repository.JobRepository;
-import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 
 public abstract class AbstractJobRepository implements JobRepository {
-
-    private JobEventPublisher jobEventPublisher;
-
-    protected AbstractJobRepository(JobEventPublisher jobEventPublisher) {
-        this.jobEventPublisher = jobEventPublisher;
-    }
 
     @Override
     public JobDetails save(JobDetails job) {
         JobDetails jobDetails = doSave(job);
-        jobEventPublisher.publishJobStatusChange(jobDetails);
         return jobDetails;
     }
 
@@ -43,7 +35,6 @@ public abstract class AbstractJobRepository implements JobRepository {
     @Override
     public JobDetails delete(JobDetails job) {
         JobDetails jobDetails = delete(job.getId());
-        jobEventPublisher.publishJobStatusChange(job);
         return jobDetails;
     }
 

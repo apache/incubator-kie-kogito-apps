@@ -32,7 +32,6 @@ import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.repository.impl.AbstractJobRepository;
 import org.kie.kogito.jobs.service.repository.marshaller.JobDetailsMarshaller;
-import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoClient;
@@ -87,14 +86,14 @@ public class MongoDBJobRepository extends AbstractJobRepository implements JobRe
     private JobDetailsMarshaller jobDetailsMarshaller;
 
     MongoDBJobRepository() {
-        super(null);
+        super();
     }
 
     @Inject
-    public MongoDBJobRepository(Vertx vertx, JobEventPublisher jobEventPublisher, MongoClient mongoClient,
+    public MongoDBJobRepository(Vertx vertx, MongoClient mongoClient,
             @ConfigProperty(name = DATABASE_PROPERTY) String database,
             JobDetailsMarshaller jobDetailsMarshaller) {
-        super(jobEventPublisher);
+        super();
         this.jobDetailsMarshaller = jobDetailsMarshaller;
         this.collection = mongoClient.getDatabase(database).getCollection(JOB_DETAILS_COLLECTION);
     }

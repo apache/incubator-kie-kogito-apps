@@ -37,7 +37,6 @@ import org.kie.kogito.jobs.service.repository.jpa.model.JobDetailsEntity;
 import org.kie.kogito.jobs.service.repository.jpa.repository.JobDetailsEntityRepository;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
-import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -68,13 +67,13 @@ public class JPAJobRepository extends AbstractJobRepository implements JobReposi
     private final RecipientMarshaller recipientMarshaller;
 
     JPAJobRepository() {
-        this(null, null, null, null, null);
+        this(null, null, null, null);
     }
 
     @Inject
-    public JPAJobRepository(Vertx vertx, JobEventPublisher jobEventPublisher, JobDetailsEntityRepository repository,
+    public JPAJobRepository(Vertx vertx, JobDetailsEntityRepository repository,
             TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller) {
-        super(jobEventPublisher);
+        super();
         this.repository = repository;
         this.triggerMarshaller = triggerMarshaller;
         this.recipientMarshaller = recipientMarshaller;

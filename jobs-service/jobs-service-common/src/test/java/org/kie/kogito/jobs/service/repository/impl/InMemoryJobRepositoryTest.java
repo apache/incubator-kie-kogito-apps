@@ -27,7 +27,7 @@ class InMemoryJobRepositoryTest extends BaseJobRepositoryTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        tested = new InMemoryJobRepository(mockJobEventPublisher());
+        tested = new InMemoryJobRepository();
         super.setUp();
     }
 

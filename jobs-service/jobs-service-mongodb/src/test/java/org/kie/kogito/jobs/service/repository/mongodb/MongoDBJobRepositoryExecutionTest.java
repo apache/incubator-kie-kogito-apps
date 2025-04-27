@@ -102,7 +102,7 @@ class MongoDBJobRepositoryExecutionTest {
         when(mongoClient.getDatabase(anyString())).thenReturn(mongoDatabase);
         when(mongoDatabase.getCollection(anyString())).thenReturn(collection);
         jobDetailsMarshaller = spy(new MongoDBJobDetailsMarshaller(new TriggerMarshaller(), new RecipientMarshaller()));
-        mongoDBJobRepository = new MongoDBJobRepository(null, null, mongoClient, "test", jobDetailsMarshaller);
+        mongoDBJobRepository = new MongoDBJobRepository(null, mongoClient, "test", jobDetailsMarshaller);
     }
 
     @Test

@@ -26,6 +26,7 @@ import org.kie.kogito.jobs.service.model.JobDetailsContext;
 import org.kie.kogito.jobs.service.model.ManageableJobHandle;
 import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.scheduler.AbstractTimerJobScheduler;
+import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 import org.kie.kogito.timer.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +48,9 @@ public class TimerDelegateJobScheduler extends AbstractTimerJobScheduler {
     @Inject
     protected VertxTimerServiceScheduler delegate;
 
+    @Inject
+    JobEventPublisher jobEventPublisher;
+
     protected TimerDelegateJobScheduler() {
     }
 
@@ -61,6 +65,11 @@ public class TimerDelegateJobScheduler extends AbstractTimerJobScheduler {
         LOGGER.info(
                 "Creating JobScheduler with backoffRetryMillis={}, maxIntervalLimitToRetryMillis={}, schedulerChunkInMinutes={}, forceExecuteExpiredJobs={}, forceExecuteExpiredJobsOnServiceStart={}",
                 backoffRetryMillis, maxIntervalLimitToRetryMillis, schedulerChunkInMinutes, forceExecuteExpiredJobs, forceExecuteExpiredJobsOnServiceStart);
+    }
+
+    @Override
+    protected JobEventPublisher getJobEventPublisher() {
+        return jobEventPublisher;
     }
 
     @Override

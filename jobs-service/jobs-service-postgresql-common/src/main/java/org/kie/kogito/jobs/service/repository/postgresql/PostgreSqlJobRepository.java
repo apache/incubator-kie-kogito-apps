@@ -43,7 +43,6 @@ import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.repository.impl.AbstractJobRepository;
 import org.kie.kogito.jobs.service.repository.marshaller.RecipientMarshaller;
 import org.kie.kogito.jobs.service.repository.marshaller.TriggerMarshaller;
-import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
 import org.slf4j.Logger;
@@ -72,13 +71,13 @@ public class PostgreSqlJobRepository extends AbstractJobRepository implements Jo
     private final RecipientMarshaller recipientMarshaller;
 
     PostgreSqlJobRepository() {
-        this(null, null, null, null);
+        this(null, null, null);
     }
 
     @Inject
-    public PostgreSqlJobRepository(JobEventPublisher jobEventPublisher, DataSource client,
+    public PostgreSqlJobRepository(DataSource client,
             TriggerMarshaller triggerMarshaller, RecipientMarshaller recipientMarshaller) {
-        super(jobEventPublisher);
+        super();
         this.client = client;
         this.triggerMarshaller = triggerMarshaller;
         this.recipientMarshaller = recipientMarshaller;

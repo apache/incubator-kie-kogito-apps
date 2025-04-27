@@ -29,7 +29,6 @@ import java.util.stream.Stream;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.repository.JobRepository;
-import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,7 +36,6 @@ import org.slf4j.LoggerFactory;
 import io.quarkus.arc.DefaultBean;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
 
 import static org.kie.kogito.jobs.service.utils.ModelUtil.jobWithCreatedAndLastUpdate;
 
@@ -48,15 +46,6 @@ public class InMemoryJobRepository extends AbstractJobRepository implements JobR
     private Logger LOGGER = LoggerFactory.getLogger(InMemoryJobRepository.class);
 
     private static ConcurrentMap<String, JobDetails> jobMap = new ConcurrentHashMap<>();
-
-    public InMemoryJobRepository() {
-        super(null);
-    }
-
-    @Inject
-    public InMemoryJobRepository(JobEventPublisher jobEventPublisher) {
-        super(jobEventPublisher);
-    }
 
     @Override
     public JobDetails doSave(JobDetails job) {

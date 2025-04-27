@@ -34,7 +34,6 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.repository.impl.AbstractJobRepository;
-import org.kie.kogito.jobs.service.stream.JobEventPublisher;
 
 import io.vertx.core.Vertx;
 
@@ -53,14 +52,13 @@ public class InfinispanJobRepository extends AbstractJobRepository implements Jo
     private RemoteCacheManager remoteCacheManager;
 
     InfinispanJobRepository() {
-        super(null);
+        super();
     }
 
     @Inject
     public InfinispanJobRepository(Vertx vertx,
-            JobEventPublisher jobEventPublisher,
             RemoteCacheManager remoteCacheManager) {
-        super(jobEventPublisher);
+        super();
         this.remoteCacheManager = remoteCacheManager;
     }
 
@@ -71,7 +69,6 @@ public class InfinispanJobRepository extends AbstractJobRepository implements Jo
 
     @Override
     public JobDetails doSave(JobDetails job) {
-
         boolean isNew = !cache.containsKey(job.getId());
         JobDetails timeStampedJob = jobWithCreatedAndLastUpdate(isNew, job);
         cache.put(timeStampedJob.getId(), timeStampedJob);
