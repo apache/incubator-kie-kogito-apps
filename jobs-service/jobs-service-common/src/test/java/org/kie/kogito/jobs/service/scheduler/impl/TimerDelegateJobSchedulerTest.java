@@ -40,6 +40,8 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import jakarta.enterprise.inject.Instance;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
@@ -50,7 +52,7 @@ import static org.mockito.Mockito.verify;
 class TimerDelegateJobSchedulerTest extends BaseTimerJobSchedulerTest {
 
     @Mock
-    protected JobEventPublisher jobEventPublisher;
+    protected Instance<JobEventPublisher> jobEventPublisher;
 
     @Spy
     @InjectMocks
