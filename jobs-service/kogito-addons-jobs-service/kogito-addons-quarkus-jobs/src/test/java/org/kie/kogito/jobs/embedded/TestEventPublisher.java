@@ -26,11 +26,18 @@ import java.util.concurrent.CountDownLatch;
 
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.EventPublisher;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
+import org.kie.kogito.jobs.service.events.JobDataEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Singleton;
 
-@ApplicationScoped
+@Singleton
 public class TestEventPublisher implements EventPublisher {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestEventPublisher.class);
+
     private List<DataEvent<?>> events;
 
     private CountDownLatch latch;
@@ -45,14 +52,15 @@ public class TestEventPublisher implements EventPublisher {
 
     @Override
     public void publish(DataEvent<?> event) {
+        JobInstanceDataEvent jobEvent = (JobInstanceDataEvent) event;
+        LOGGER.info("In VM event publisher test {}", new String(jobEvent.getData()));
         events.add(event);
         latch.countDown();
     }
 
     @Override
     public void publish(Collection<DataEvent<?>> events) {
-        events.addAll(events);
-        events.forEach(e -> latch.countDown());
+        events.forEach(this::publish);
     }
 
     public void setLatch(CountDownLatch latch) {
