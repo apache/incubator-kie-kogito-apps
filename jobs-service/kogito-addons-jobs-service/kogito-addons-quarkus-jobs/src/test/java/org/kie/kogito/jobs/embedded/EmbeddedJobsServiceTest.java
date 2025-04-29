@@ -59,7 +59,6 @@ public class EmbeddedJobsServiceTest {
     @Timeout(10000)
     public void testJobService() throws Exception {
 
-
         // testing only when we have the full lifecycle
         CountDownLatch latch = new CountDownLatch(NUMBER_OF_EVENTS);
         publisher.setLatch(latch);

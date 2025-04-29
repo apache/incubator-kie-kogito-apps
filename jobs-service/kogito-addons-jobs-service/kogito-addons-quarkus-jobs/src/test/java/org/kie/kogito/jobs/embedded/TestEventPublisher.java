@@ -27,7 +27,6 @@ import java.util.concurrent.CountDownLatch;
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.event.job.JobInstanceDataEvent;
-import org.kie.kogito.jobs.service.events.JobDataEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

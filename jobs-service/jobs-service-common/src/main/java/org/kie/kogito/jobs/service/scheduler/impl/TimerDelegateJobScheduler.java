@@ -34,7 +34,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 
 /**
@@ -52,7 +51,7 @@ public class TimerDelegateJobScheduler extends AbstractTimerJobScheduler {
     protected VertxTimerServiceScheduler delegate;
 
     @Inject
-    Instance<JobEventPublisher> jobEventPublisher;
+    protected JobEventPublisher jobEventPublisher;
 
     protected TimerDelegateJobScheduler() {
     }
@@ -72,7 +71,7 @@ public class TimerDelegateJobScheduler extends AbstractTimerJobScheduler {
 
     @Override
     protected Optional<JobEventPublisher> getJobEventPublisher() {
-        return jobEventPublisher.isResolvable() ? Optional.of(jobEventPublisher.get()) : Optional.empty();
+        return Optional.ofNullable(jobEventPublisher);
     }
 
     @Override
