@@ -38,8 +38,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class HttpJobExecutorTest extends HTTPRequestExecutorTest<HttpRecipient<?>, HttpJobExecutor> {
 
     @Override
-    protected HttpJobExecutor createExecutor(long timeout, Vertx vertx, ObjectMapper objectMapper) {
-        return new HttpJobExecutor(timeout, vertx, objectMapper);
+    protected HttpJobExecutor createExecutor(boolean sslEnabled, long timeout, Vertx vertx, ObjectMapper objectMapper) {
+        return new HttpJobExecutor(sslEnabled, timeout, vertx, objectMapper);
     }
 
     @Override

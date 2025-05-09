@@ -37,10 +37,11 @@ import jakarta.inject.Inject;
 public class HttpJobExecutor extends HTTPRequestExecutor<HttpRecipient<?>> implements JobExecutor {
 
     @Inject
-    public HttpJobExecutor(@ConfigProperty(name = "kogito.job.recipient.http.timeout-in-millis") long timeout,
+    public HttpJobExecutor(@ConfigProperty(name = "kogito.job.recipient.http.ssl-enabled") boolean sslEnabled,
+            @ConfigProperty(name = "kogito.job.recipient.http.timeout-in-millis") long timeout,
             Vertx vertx,
             ObjectMapper objectMapper) {
-        super(timeout, vertx, objectMapper);
+        super(sslEnabled, timeout, vertx, objectMapper);
     }
 
     @PostConstruct

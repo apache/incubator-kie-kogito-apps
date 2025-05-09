@@ -51,8 +51,8 @@ class SinkJobExecutorTest extends HTTPRequestExecutorTest<SinkRecipient<?>, Sink
     public static final String PROPERTY_VALUE = "PROPERTY_VALUE";
 
     @Override
-    protected SinkJobExecutor createExecutor(long timeout, Vertx vertx, ObjectMapper objectMapper) {
-        return new SinkJobExecutor(timeout, vertx, objectMapper);
+    protected SinkJobExecutor createExecutor(boolean sslEnabled, long timeout, Vertx vertx, ObjectMapper objectMapper) {
+        return new SinkJobExecutor(sslEnabled, timeout, vertx, objectMapper);
     }
 
     @Override
