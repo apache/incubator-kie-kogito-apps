@@ -27,7 +27,7 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.vertx.mutiny.core.Vertx;
+import io.vertx.core.Vertx;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;

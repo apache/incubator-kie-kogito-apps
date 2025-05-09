@@ -16,20 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.jobs.embedded;
+package org.kie.kogito.jobs.service.repository.jpa;
 
-import org.kie.kogito.jobs.service.model.JobDetails;
+import org.kie.kogito.jobs.service.profiles.H2QuarkusTestProfile;
 
-public class EmbeddedJobServiceEvent {
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.h2.H2DatabaseTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
 
-    private JobDetails jobDetails;
-
-    public EmbeddedJobServiceEvent(JobDetails jobDetails) {
-        this.jobDetails = jobDetails;
-    }
-
-    public JobDetails getJobDetails() {
-        return jobDetails;
-    }
+@QuarkusTest
+@QuarkusTestResource(value = H2DatabaseTestResource.class, restrictToAnnotatedClass = true)
+@TestProfile(H2QuarkusTestProfile.class)
+class H2JPAJobServiceManagementRepositoryTest extends BaseJPAJobServiceManagementRepositoryTest {
 
 }

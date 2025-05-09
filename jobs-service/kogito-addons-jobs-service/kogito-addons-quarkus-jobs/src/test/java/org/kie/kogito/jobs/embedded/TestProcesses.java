@@ -19,7 +19,7 @@
 package org.kie.kogito.jobs.embedded;
 
 import java.util.Collection;
-import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import org.kie.kogito.Model;
@@ -31,6 +31,8 @@ import org.mockito.Mockito;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
+import static org.mockito.ArgumentMatchers.any;
+
 @ApplicationScoped
 public class TestProcesses implements Processes {
 
@@ -40,13 +42,13 @@ public class TestProcesses implements Processes {
         ProcessInstances instances = Mockito.mock(ProcessInstances.class);
         Mockito.when(process.instances()).thenReturn(instances);
 
-        Mockito.when(instances.findById(Mockito.any())).thenReturn(Optional.of(Mockito.mock(ProcessInstance.class)));
+        Mockito.when(instances.findById(any(), any())).thenReturn(Optional.of(Mockito.mock(ProcessInstance.class)));
         return process;
     }
 
     @Override
     public Collection<String> processIds() {
-        return Collections.emptyList();
+        return List.of(EmbeddedJobsServiceTest.PROCESS_ID);
     }
 
 }

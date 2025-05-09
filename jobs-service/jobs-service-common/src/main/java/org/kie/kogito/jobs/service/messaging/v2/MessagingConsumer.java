@@ -24,23 +24,23 @@ import org.kie.kogito.jobs.service.adapter.JobDetailsAdapter;
 import org.kie.kogito.jobs.service.api.event.CreateJobEvent;
 import org.kie.kogito.jobs.service.api.event.DeleteJobEvent;
 import org.kie.kogito.jobs.service.api.event.serialization.JobCloudEventDeserializer;
-import org.kie.kogito.jobs.service.messaging.ReactiveMessagingEventConsumer;
+import org.kie.kogito.jobs.service.messaging.MessagingEventConsumer;
 import org.kie.kogito.jobs.service.model.JobDetails;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.cloudevents.CloudEvent;
 
-public class MessagingConsumer extends ReactiveMessagingEventConsumer {
+public class MessagingConsumer extends MessagingEventConsumer {
 
     protected JobCloudEventDeserializer deserializer;
 
     public MessagingConsumer() {
     }
 
-    public MessagingConsumer(TimerDelegateJobScheduler scheduler, ReactiveJobRepository jobRepository, ObjectMapper objectMapper) {
+    public MessagingConsumer(TimerDelegateJobScheduler scheduler, JobRepository jobRepository, ObjectMapper objectMapper) {
         super(scheduler, jobRepository, CreateJobEvent.TYPE, DeleteJobEvent.TYPE);
         this.deserializer = new JobCloudEventDeserializer(objectMapper);
     }

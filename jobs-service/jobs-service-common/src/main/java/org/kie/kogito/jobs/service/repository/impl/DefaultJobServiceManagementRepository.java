@@ -26,7 +26,6 @@ import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 
 import io.quarkus.arc.DefaultBean;
-import io.smallrye.mutiny.Uni;
 
 import jakarta.enterprise.context.ApplicationScoped;
 
@@ -37,25 +36,25 @@ public class DefaultJobServiceManagementRepository implements JobServiceManageme
     private AtomicReference<JobServiceManagementInfo> instance = new AtomicReference<>(new JobServiceManagementInfo(null, null, null));
 
     @Override
-    public Uni<JobServiceManagementInfo> getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate) {
+    public JobServiceManagementInfo getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate) {
         return set(computeUpdate.apply(instance.get()));
     }
 
     @Override
-    public Uni<JobServiceManagementInfo> set(JobServiceManagementInfo info) {
+    public JobServiceManagementInfo set(JobServiceManagementInfo info) {
         instance.set(info);
-        return Uni.createFrom().item(instance.get());
+        return instance.get();
     }
 
     @Override
-    public Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
+    public JobServiceManagementInfo heartbeat(JobServiceManagementInfo info) {
         info.setLastHeartbeat(DateUtil.now().toOffsetDateTime());
         return set(info);
     }
 
     @Override
-    public Uni<Boolean> release(JobServiceManagementInfo info) {
+    public Boolean release(JobServiceManagementInfo info) {
         instance.set(new JobServiceManagementInfo(info.getId(), null, null));
-        return Uni.createFrom().item(true);
+        return true;
     }
 }

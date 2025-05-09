@@ -27,14 +27,14 @@ import org.kie.kogito.jobs.service.api.event.CreateJobEvent;
 import org.kie.kogito.jobs.service.api.event.DeleteJobEvent;
 import org.kie.kogito.jobs.service.api.recipient.http.HttpRecipient;
 import org.kie.kogito.jobs.service.api.schedule.timer.TimerSchedule;
-import org.kie.kogito.jobs.service.messaging.ReactiveMessagingEventConsumer;
+import org.kie.kogito.jobs.service.messaging.MessagingEventConsumer;
 import org.kie.kogito.jobs.service.messaging.ReactiveMessagingEventConsumerTest;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.cloudevents.CloudEvent;
 
 @ExtendWith(MockitoExtension.class)
-public abstract class MessagingEventConsumerTest<T extends ReactiveMessagingEventConsumer> extends ReactiveMessagingEventConsumerTest<T> {
+public abstract class MessagingEventConsumerTest<T extends MessagingEventConsumer> extends ReactiveMessagingEventConsumerTest<T> {
 
     @Override
     public CloudEvent newCreateProcessInstanceJobRequestCloudEvent() {

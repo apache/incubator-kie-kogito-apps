@@ -20,6 +20,8 @@ package org.kie.kogito.job.recipient.common.http;
 
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CompletionStage;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,22 +37,24 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.smallrye.mutiny.Uni;
+import io.vertx.core.Future;
+import io.vertx.core.MultiMap;
+import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.mutiny.core.MultiMap;
-import io.vertx.mutiny.core.Vertx;
-import io.vertx.mutiny.core.buffer.Buffer;
-import io.vertx.mutiny.ext.web.client.HttpRequest;
-import io.vertx.mutiny.ext.web.client.HttpResponse;
-import io.vertx.mutiny.ext.web.client.WebClient;
+import io.vertx.ext.web.client.HttpRequest;
+import io.vertx.ext.web.client.HttpResponse;
+import io.vertx.ext.web.client.WebClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public abstract class HTTPRequestExecutorTest<R extends Recipient<?>, E extends HTTPRequestExecutor<R>> {
@@ -146,32 +150,46 @@ public abstract class HTTPRequestExecutorTest<R extends Recipient<?>, E extends 
     @SuppressWarnings("unchecked")
     private Map<String, String>[] executeAndCollectRequestInfo(HttpRequest<Buffer> request, MultiMap params, MultiMap headers,
             JobDetails scheduledJob, boolean mockError) {
-        doReturn(request).when(webClient).request(HttpMethod.POST, PORT, HOST, PATH);
-        doReturn(request).when(request).timeout(anyLong());
-        doReturn(params).when(request).queryParams();
-        doReturn(headers).when(request).headers();
+        try {
+            doReturn(request).when(webClient).request(HttpMethod.POST, PORT, HOST, PATH);
+            doReturn(request).when(request).timeout(anyLong());
+            doReturn(params).when(request).queryParams();
+            doReturn(headers).when(request).headers();
 
-        HttpResponse<Buffer> httpResponse = mock(HttpResponse.class);
-        int statusCode = mockError ? 500 : 200;
-        doReturn(statusCode).when(httpResponse).statusCode();
-        doReturn(Uni.createFrom().item(httpResponse)).when(request).sendBuffer(any());
+            Future<HttpResponse<Buffer>> futureHttpResponse = mock(Future.class);
+            when(request.sendBuffer(any())).thenReturn(futureHttpResponse);
 
-        JobExecutionResponse response = tested.execute(scheduledJob).onFailure().recoverWithNull().await().indefinitely();
-        verify(webClient).request(HttpMethod.POST, PORT, HOST, PATH);
-        verify(request).sendBuffer(bufferCaptor.capture());
-        verify(request).queryParams();
-        verify(request).headers();
-        verify(params).addAll(queryParamsCaptor.capture());
-        verify(headers).addAll(headersCaptor.capture());
+            CompletionStage<HttpResponse<Buffer>> completionStageHttpResponse = mock(CompletionStage.class);
+            when(futureHttpResponse.toCompletionStage()).thenReturn(completionStageHttpResponse);
 
-        verify(request).sendBuffer(any());
-        if (!mockError) {
-            assertThat(response.getJobId()).isEqualTo(JOB_ID);
-            assertThat(response.getCode()).isEqualTo("200");
-        } else {
-            assertThat(response).isNull();//since recover with null
+            CompletableFuture<HttpResponse<Buffer>> completableFuture = mock(CompletableFuture.class);
+            when(completionStageHttpResponse.toCompletableFuture()).thenReturn(completableFuture);
+
+            HttpResponse<Buffer> httpResponse = mock(HttpResponse.class);
+            int statusCode = mockError ? 500 : 200;
+            doReturn(statusCode).when(httpResponse).statusCode();
+            when(completableFuture.get(anyLong(), any())).thenReturn(httpResponse);
+
+            JobExecutionResponse response = tested.execute(scheduledJob);
+            verify(webClient).request(HttpMethod.POST, PORT, HOST, PATH);
+            verify(request).sendBuffer(bufferCaptor.capture());
+            verify(request).queryParams();
+            verify(request).headers();
+            verify(params).addAll(queryParamsCaptor.capture());
+            verify(headers).addAll(headersCaptor.capture());
+
+            verify(request).sendBuffer(any());
+            if (!mockError) {
+                assertThat(response.getJobId()).isEqualTo(JOB_ID);
+                assertThat(response.getCode()).isEqualTo("200");
+            } else {
+                assertThat(response).isNull();//since recover with null
+            }
+            return new Map[] { headersCaptor.getValue(), queryParamsCaptor.getValue() };
+        } catch (Exception e) {
+            fail(e);
+            return null;
         }
-        return new Map[] { headersCaptor.getValue(), queryParamsCaptor.getValue() };
     }
 
     private void assertTimeout(long expectedTimeout) {
