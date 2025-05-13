@@ -103,6 +103,8 @@ type ProcessInstance {
     updatedBy: String
     executionSummary: [String]
     slaDueDate: DateTime
+    cloudEventId: String
+    cloudEventSource: String
 }
 
 type ProcessInstanceError {
@@ -204,6 +206,8 @@ input ProcessInstanceArgument {
     updatedBy: StringArgument
     definition: ProcessDefinitionArgument
     slaDueDate: DateArgument
+    cloudEventId: StringArgument
+    cloudEventSource: StringArgument
 }
 
 input ProcessInstanceErrorArgument {
