@@ -57,7 +57,8 @@ class JobServiceModelFilterTest {
 
         Schema jsonNodeSchema = openAPI.getComponents().getSchemas().get(JSON_NODE_SCHEMA);
         assertThat(jsonNodeSchema).isNotNull();
-        assertThat(jsonNodeSchema.getType()).isEqualTo(Schema.SchemaType.OBJECT);
+        assertThat(jsonNodeSchema.getType()).hasSize(1);
+        assertThat(jsonNodeSchema.getType().get(0)).isEqualTo(Schema.SchemaType.OBJECT);
 
         Schema specVersionSchema = openAPI.getComponents().getSchemas().get(SPEC_VERSION_SCHEMA);
         assertThat(specVersionSchema).isNotNull();
