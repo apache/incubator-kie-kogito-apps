@@ -57,7 +57,6 @@ class KogitoRuntimeClientImpl extends KogitoRuntimeCommonClient implements Kogit
     public static final String GET_PROCESS_INSTANCE_SOURCE_PATH = "/management/processes/%s/source";
     public static final String GET_PROCESS_INSTANCE_NODE_DEFINITIONS_PATH = "/management/processes/%s/nodes";
     public static final String GET_PROCESS_INSTANCE_TIMERS_PATH = "/management/processes/%s/instances/%s/timers";
-    public static final String GET_NODE_INSTANCE_TIMERS_PATH = "/management/processes/%s/instances/%s/nodes/%s/timers"; //node def
 
     public static final String UPDATE_VARIABLES_PROCESS_INSTANCE_PATH = "/%s/%s";
     public static final String TRIGGER_NODE_INSTANCE_PATH = "/management/processes/%s/instances/%s/nodes/%s"; //node def
