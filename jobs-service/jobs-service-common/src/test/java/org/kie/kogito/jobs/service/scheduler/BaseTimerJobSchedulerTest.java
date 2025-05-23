@@ -23,22 +23,18 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
-import org.eclipse.microprofile.reactive.streams.operators.PublisherBuilder;
-import org.eclipse.microprofile.reactive.streams.operators.ReactiveStreams;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.jobs.service.exception.InvalidScheduleTimeException;
 import org.kie.kogito.jobs.service.exception.JobServiceException;
 import org.kie.kogito.jobs.service.executor.JobExecutor;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.ManageableJobHandle;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.PointInTimeTrigger;
@@ -46,14 +42,11 @@ import org.kie.kogito.timer.impl.SimpleTimerTrigger;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
-import org.reactivestreams.Publisher;
 
-import io.smallrye.mutiny.Multi;
-import io.smallrye.mutiny.Uni;
-
-import static mutiny.zero.flow.adapters.AdaptersToFlow.publisher;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kie.kogito.jobs.service.model.JobStatus.CANCELED;
 import static org.kie.kogito.jobs.service.model.JobStatus.SCHEDULED;
 import static org.mockito.ArgumentMatchers.any;
@@ -66,7 +59,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-@SuppressWarnings("java:S5786")
 public abstract class BaseTimerJobSchedulerTest {
 
     public static final String JOB_ID = UUID.randomUUID().toString();
@@ -76,9 +68,9 @@ public abstract class BaseTimerJobSchedulerTest {
     public JobExecutor jobExecutor;
 
     @Mock
-    public ReactiveJobRepository jobRepository;
+    public JobRepository jobRepository;
 
-    public CompletionStage<JobDetails> scheduled;
+    public JobDetails scheduled;
 
     @Captor
     private ArgumentCaptor<Trigger> delayCaptor;
@@ -87,9 +79,11 @@ public abstract class BaseTimerJobSchedulerTest {
     private ArgumentCaptor<JobDetails> scheduleCaptor;
 
     @Captor
-    private ArgumentCaptor<CompletionStage<JobDetails>> scheduleCaptorFuture;
+    private ArgumentCaptor<JobDetails> scheduleCaptorFuture;
 
     public JobDetails scheduledJob;
+
+    public JobDetails notScheduledJob;
 
     public JobExecutionResponse errorResponse;
 
@@ -99,12 +93,17 @@ public abstract class BaseTimerJobSchedulerTest {
 
     public Trigger trigger;
 
+    public ZonedDateTime notExpirationTime;
+
+    public Trigger notTrigger;
+
     @BeforeEach
     public void setUp() {
         tested().schedulerChunkInMinutes = 5;
         tested().forceExecuteExpiredJobs = false;
         //expiration on the current scheduler chunk
         expirationTime = DateUtil.now().plusMinutes(tested().schedulerChunkInMinutes - 1);
+        notExpirationTime = DateUtil.now().plusMinutes(tested().schedulerChunkInMinutes + 1);
         errorResponse = JobExecutionResponse.builder()
                 .jobId(JOB_ID)
                 .message("error")
@@ -118,21 +117,25 @@ public abstract class BaseTimerJobSchedulerTest {
 
         trigger = new PointInTimeTrigger(expirationTime.toInstant().toEpochMilli(), null, null);
         scheduledJob = JobDetails.builder().id(JOB_ID).trigger(trigger).status(SCHEDULED).build();
-        scheduled = CompletableFuture.completedFuture(scheduledJob);
+
+        notTrigger = new PointInTimeTrigger(notExpirationTime.toInstant().toEpochMilli(), null, null);
+        notScheduledJob = JobDetails.builder().id(JOB_ID).trigger(notTrigger).status(SCHEDULED).build();
+
+        scheduled = scheduledJob;
+
         lenient().when(jobRepository.get(JOB_ID)).thenReturn(scheduled);
-        lenient().when(jobRepository.save(any(JobDetails.class))).thenAnswer(a -> CompletableFuture.completedFuture(a.getArgument(0)));
-        lenient().when(jobExecutor.execute(any())).thenReturn(Uni.createFrom().item(successResponse));
+        lenient().when(jobRepository.save(any(JobDetails.class))).thenAnswer(a -> a.getArgument(0));
+        lenient().when(jobExecutor.execute(any())).thenReturn(successResponse);
     }
 
-    public abstract BaseTimerJobScheduler tested();
+    public abstract AbstractTimerJobScheduler tested();
 
     @Test
     void testScheduleNotExistingJob() {
-        when(jobRepository.exists(JOB_ID)).thenReturn(CompletableFuture.completedFuture(false));
-        Publisher<JobDetails> schedule = tested().schedule(scheduledJob);
-        verify(tested(), never()).doSchedule(eq(scheduledJob), delayCaptor.capture());
-        subscribeOn(schedule);
-        verify(tested()).doSchedule(eq(scheduledJob), delayCaptor.capture());
+        JobDetails scheduleNotExistingJobDetails = JobDetails.builder().of(scheduledJob).build();
+        when(jobRepository.exists(scheduleNotExistingJobDetails.getId())).thenReturn(false);
+        tested().schedule(scheduleNotExistingJobDetails);
+        verify(tested()).doSchedule(eq(scheduleNotExistingJobDetails), delayCaptor.capture());
         verify(jobRepository, times(2)).save(scheduleCaptor.capture());
         JobDetails scheduledJob = scheduleCaptor.getValue();
         assertThat(scheduledJob.getScheduledId()).isEqualTo(SCHEDULED_ID);
@@ -151,33 +154,21 @@ public abstract class BaseTimerJobSchedulerTest {
     }
 
     private void testExistingJob(boolean expired, JobStatus jobStatus) {
-        scheduledJob = Optional
-                .of(expired)
-                .filter(Boolean.TRUE::equals)
-                .map(e -> JobDetails.builder()
-                        .status(jobStatus)
-                        .id(JOB_ID)
-                        .trigger(new PointInTimeTrigger(System.currentTimeMillis() - 1, null, null))
-                        .build())
-                .orElse(JobDetails.builder().of(scheduledJob).status(jobStatus).build());
 
-        when(jobRepository.exists(JOB_ID)).thenReturn(CompletableFuture.completedFuture(true));
+        JobDetails reschedule = expired ? scheduledJob : notScheduledJob;
+        JobDetails toSchedule = JobDetails.builder().of(reschedule).status(jobStatus).build();
+        String jobId = toSchedule.getId();
 
-        CompletableFuture<JobDetails> scheduledJobCompletableFuture = CompletableFuture.completedFuture(scheduledJob);
+        when(jobRepository.exists(JOB_ID)).thenReturn(true);
+        lenient().when(jobRepository.get(JOB_ID)).thenReturn(scheduledJob);
+        lenient().when(jobRepository.delete(JOB_ID)).thenReturn(scheduledJob);
+        lenient().when(jobRepository.delete(any(JobDetails.class))).thenReturn(scheduledJob);
 
-        lenient().when(jobRepository.delete(JOB_ID)).thenReturn(scheduledJobCompletableFuture);
-        lenient().when(jobRepository.delete(any(JobDetails.class))).thenReturn(scheduledJobCompletableFuture);
-        lenient().when(jobRepository.get(JOB_ID)).thenReturn(scheduledJobCompletableFuture);
-
-        Publisher<JobDetails> schedule = tested().schedule(scheduledJob);
-
-        verify(tested(), never()).doSchedule(eq(scheduledJob), delayCaptor.capture());
-
-        subscribeOn(schedule);
+        tested().schedule(toSchedule);
 
         verify(jobRepository, expired || SCHEDULED.equals(jobStatus) ? atLeastOnce() : never()).delete(any(JobDetails.class));
-        verify(tested(), expired ? never() : times(1)).doSchedule(eq(scheduledJob), delayCaptor.capture());
-        verify(jobRepository, expired ? never() : times(2)).save(scheduleCaptor.capture());
+        verify(tested(), expired ? times(1) : never()).doSchedule(eq(reschedule), delayCaptor.capture());
+        verify(jobRepository, expired ? times(2) : times(1)).save(scheduleCaptor.capture());
 
         //assert always a scheduled job is canceled (periodic or not)
         Optional.ofNullable(jobStatus)
@@ -185,15 +176,15 @@ public abstract class BaseTimerJobSchedulerTest {
                 .ifPresent(s -> {
                     verify(tested()).cancel(scheduleCaptorFuture.capture());
                     try {
-                        JobDetails value = scheduleCaptorFuture.getValue().toCompletableFuture().get(1, TimeUnit.MILLISECONDS);
-                        assertThat(value.getId()).isEqualTo(scheduledJob.getId());
+                        JobDetails value = scheduleCaptorFuture.getValue();
+                        assertThat(value.getId()).isEqualTo(jobId);
                         assertThat(value.getStatus()).isEqualTo(CANCELED);
                     } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 });
 
-        if (!expired) {
+        if (expired) {
             JobDetails returnedJobDetails = scheduleCaptor.getValue();
             assertThat(returnedJobDetails.getScheduledId()).isEqualTo(SCHEDULED_ID);
             assertThat(returnedJobDetails.getId()).isEqualTo(JOB_ID);
@@ -213,27 +204,27 @@ public abstract class BaseTimerJobSchedulerTest {
 
     @Test
     void testScheduleExistingJobPeriodic() {
-        scheduledJob = createPeriodicJob();
+        createPeriodicJob();
         testExistingJob(false, SCHEDULED);
     }
 
     @Test
     void testHandleJobExecutionSuccess() {
-        PublisherBuilder<JobDetails> executionSuccess = tested().handleJobExecutionSuccess(scheduledJob);
-        verify(tested(), never()).cancel(scheduleCaptorFuture.capture());
+        JobDetails handleJobExecutionSuccessJobDetails = JobDetails.builder().of(notScheduledJob).build();
+        when(jobRepository.delete(handleJobExecutionSuccessJobDetails)).thenReturn(handleJobExecutionSuccessJobDetails);
+        JobDetails executionSuccess = tested().handleJobExecutionSuccess(handleJobExecutionSuccessJobDetails);
 
-        subscribeOn(executionSuccess.buildRs());
-        verify(tested()).cancel(scheduleCaptorFuture.capture());
+        verify(jobRepository).delete(scheduleCaptorFuture.capture());
+        assertEquals(handleJobExecutionSuccessJobDetails, scheduleCaptorFuture.getValue());
+        assertThat(executionSuccess).extracting(JobDetails::getStatus).isEqualTo(JobStatus.EXECUTED);
     }
 
     @Test
     void testHandleJobExecutionSuccessPeriodicFirstExecution() {
-        scheduledJob = createPeriodicJob();
+        JobDetails handleJobExecutionSuccessPeriodicFirstExecution = createPeriodicJob();
 
-        PublisherBuilder<JobDetails> executionSuccess = tested().handleJobExecutionSuccess(scheduledJob);
+        tested().handleJobExecutionSuccess(handleJobExecutionSuccessPeriodicFirstExecution);
         verify(tested(), never()).cancel(scheduleCaptorFuture.capture());
-
-        subscribeOn(executionSuccess.buildRs());
         verify(tested()).doSchedule(scheduleCaptor.capture(), delayCaptor.capture());
     }
 
@@ -247,12 +238,11 @@ public abstract class BaseTimerJobSchedulerTest {
 
     @Test
     void testHandleJobExecutionSuccessPeriodic() {
-        scheduledJob = createPeriodicJob();
+        JobDetails handleJobExecutionSuccessPeriodic = createPeriodicJob();
 
-        PublisherBuilder<JobDetails> executionSuccess = tested().handleJobExecutionSuccess(scheduledJob);
+        tested().handleJobExecutionSuccess(handleJobExecutionSuccessPeriodic);
         verify(tested(), never()).cancel(scheduleCaptorFuture.capture());
 
-        subscribeOn(executionSuccess.buildRs());
         verify(jobRepository, times(3)).save(scheduleCaptor.capture());
         JobDetails scheduleCaptorValue = scheduleCaptor.getValue();
         assertThat(scheduleCaptorValue.getStatus()).isEqualTo(SCHEDULED);
@@ -261,10 +251,8 @@ public abstract class BaseTimerJobSchedulerTest {
 
     @Test
     void testHandleJobExecutionErrorWithRetry() {
-        PublisherBuilder<JobDetails> scheduledJobPublisher = tested().handleJobExecutionError(errorResponse);
+        tested().handleJobExecutionError(errorResponse);
 
-        verify(tested(), never()).doSchedule(eq(scheduledJob), delayCaptor.capture());
-        subscribeOn(scheduledJobPublisher.buildRs());
         verify(tested()).doSchedule(eq(scheduledJob), delayCaptor.capture());
 
         verify(jobRepository).save(scheduleCaptor.capture());
@@ -275,12 +263,11 @@ public abstract class BaseTimerJobSchedulerTest {
     @Test
     void testHandleJobExecutionErrorFinal() {
         scheduledJob = JobDetails.builder().of(scheduledJob).status(JobStatus.ERROR).build();
-        when(jobRepository.get(JOB_ID)).thenReturn(CompletableFuture.completedFuture(scheduledJob));
+        when(jobRepository.get(JOB_ID)).thenReturn(scheduledJob);
 
-        PublisherBuilder<JobDetails> scheduledJobPublisher = tested().handleJobExecutionError(errorResponse);
+        tested().handleJobExecutionError(errorResponse);
 
         verify(tested(), never()).doSchedule(eq(scheduledJob), delayCaptor.capture());
-        subscribeOn(scheduledJobPublisher.buildRs());
         verify(tested(), never()).doSchedule(eq(scheduledJob), delayCaptor.capture());
     }
 
@@ -291,19 +278,20 @@ public abstract class BaseTimerJobSchedulerTest {
 
     @Test
     void testCancel() {
-        tested().cancel(JOB_ID);
+        JobDetails canceled = tested().cancel(JOB_ID);
+
         verify(jobRepository).get(JOB_ID);
         verify(tested()).cancel(scheduleCaptorFuture.capture());
-        scheduleCaptorFuture.getValue()
-                .thenAccept(j -> assertThat(j.getStatus()).isEqualTo(JobStatus.CANCELED));
+        assertThat(canceled).extracting(JobDetails::getStatus).isEqualTo(JobStatus.CANCELED);
+        assertThat(scheduleCaptorFuture.getValue().getId()).isEqualTo(JOB_ID);
     }
 
     @Test
     void testCancelJobDetails() {
         scheduledJob = JobDetails.builder().of(scheduledJob).status(SCHEDULED).scheduledId("1").build();
-        when(tested().doCancel(scheduledJob)).thenReturn(ReactiveStreams.of(new ManageableJobHandle(true)).buildRs());
+        when(tested().doCancel(scheduledJob)).thenReturn(new ManageableJobHandle(true));
 
-        tested().cancel(CompletableFuture.completedFuture(scheduledJob));
+        tested().cancel(scheduledJob);
         verify(tested()).doCancel(scheduledJob);
         verify(jobRepository).delete(scheduledJob);
     }
@@ -317,18 +305,15 @@ public abstract class BaseTimerJobSchedulerTest {
 
     @Test
     void testScheduleOutOfCurrentChunk() {
-        expirationTime = DateUtil.now().plusMinutes(tested().schedulerChunkInMinutes + 10);
-
-        scheduledJob = JobDetails.builder()
-                .of(scheduledJob)
-                .trigger(new PointInTimeTrigger(expirationTime.toInstant().toEpochMilli(), null, null))
+        JobDetails testScheduleOutOfCurrentChunkJob = JobDetails.builder()
+                .of(notScheduledJob)
                 .build();
 
-        when(jobRepository.exists(any())).thenReturn(CompletableFuture.completedFuture(Boolean.FALSE));
+        when(jobRepository.exists(any())).thenReturn(Boolean.FALSE);
 
-        subscribeOn(tested().schedule(scheduledJob));
+        tested().schedule(testScheduleOutOfCurrentChunkJob);
 
-        verify(tested(), never()).doSchedule(eq(scheduledJob), delayCaptor.capture());
+        verify(tested(), never()).doSchedule(eq(testScheduleOutOfCurrentChunkJob), delayCaptor.capture());
         verify(jobRepository).save(scheduleCaptor.capture());
         JobDetails current = scheduleCaptor.getValue();
         assertThat(current.getId()).isEqualTo(JOB_ID);
@@ -338,9 +323,7 @@ public abstract class BaseTimerJobSchedulerTest {
 
     @Test
     void testScheduleInCurrentChunk() {
-        when(jobRepository.exists(any())).thenReturn(CompletableFuture.completedFuture(Boolean.FALSE));
-
-        subscribeOn(tested().schedule(scheduledJob));
+        tested().schedule(scheduledJob);
 
         verify(tested()).doSchedule(eq(scheduledJob), delayCaptor.capture());
         verify(jobRepository, times(2)).save(scheduleCaptor.capture());
@@ -352,34 +335,28 @@ public abstract class BaseTimerJobSchedulerTest {
 
     @Test
     void testScheduled() {
-        testExistingJob(false, SCHEDULED);
+        testExistingJob(true, SCHEDULED);
         Optional<ZonedDateTime> scheduled = tested().scheduled(JOB_ID);
         assertThat(scheduled).isNotNull().isPresent();
     }
 
-    private void subscribeOn(Publisher<JobDetails> schedule) {
-        Multi.createFrom()
-                .publisher(publisher(schedule))
-                .subscribe()
-                .with(dummyCallback(), dummyCallback());
-    }
-
     @Test
     void testForceExpiredJobToBeExecuted() {
-        when(jobRepository.exists(any())).thenReturn(CompletableFuture.completedFuture(Boolean.FALSE));
+        when(jobRepository.exists(any())).thenReturn(Boolean.FALSE);
 
-        scheduledJob = JobDetails.builder()
+        JobDetails forceExpiredJobDetails = scheduledJob = JobDetails.builder()
                 .of(scheduledJob)
                 .trigger(new SimpleTimerTrigger(DateUtil.toDate(OffsetDateTime.now().minusHours(1)), 1, ChronoUnit.MILLIS, 0, null))
                 .build();
 
         //testing with forcing disabled
-        subscribeOn(tested().schedule(scheduledJob));
-        verify(tested(), never()).doSchedule(eq(scheduledJob), delayCaptor.capture());
+        tested().forceExecuteExpiredJobs = false;
+        assertThrows(InvalidScheduleTimeException.class, () -> tested().schedule(forceExpiredJobDetails));
+        verify(tested(), never()).doSchedule(eq(forceExpiredJobDetails), delayCaptor.capture());
 
         //testing with forcing enabled
         tested().forceExecuteExpiredJobs = true;
-        subscribeOn(tested().schedule(scheduledJob));
+        tested().schedule(forceExpiredJobDetails);
         verify(tested(), times(1)).doSchedule(eq(scheduledJob), delayCaptor.capture());
     }
 
@@ -389,11 +366,16 @@ public abstract class BaseTimerJobSchedulerTest {
         PointInTimeTrigger newTrigger = new PointInTimeTrigger(newTime.toInstant().toEpochMilli(), null, null);
         JobDetails jobToMerge =
                 JobDetails.builder()
+                        .id(JOB_ID)
                         .trigger(newTrigger)
                         .build();
+
+        when(jobRepository.get(JOB_ID)).thenReturn(scheduledJob);
         JobDetails merged = JobDetails.builder().of(scheduledJob).merge(jobToMerge).build();
-        when(jobRepository.merge(JOB_ID, jobToMerge)).thenReturn(CompletableFuture.completedFuture(merged));
-        subscribeOn(tested().reschedule(JOB_ID, newTrigger).buildRs());
+        when(jobRepository.merge(JOB_ID, jobToMerge)).thenReturn(merged);
+
+        tested().reschedule(JOB_ID, jobToMerge.getTrigger());
+
         verify(tested()).doCancel(merged);
         verify(tested()).schedule(merged);
     }
@@ -401,37 +383,29 @@ public abstract class BaseTimerJobSchedulerTest {
     @Test
     void handleJobExecutionSuccess() throws Exception {
         scheduledJob = JobDetails.builder().id(JOB_ID).trigger(trigger).status(SCHEDULED).build();
-        doReturn(CompletableFuture.completedFuture(scheduledJob)).when(jobRepository).get(JOB_ID);
-        doReturn(CompletableFuture.completedFuture(scheduledJob)).when(jobRepository).delete(any(JobDetails.class));
+        doReturn(scheduledJob).when(jobRepository).get(JOB_ID);
+        doReturn(scheduledJob).when(jobRepository).delete(any(JobDetails.class));
         JobExecutionResponse response = new JobExecutionResponse("execution successful", "200", ZonedDateTime.now(), JOB_ID);
 
-        Optional<JobDetails> result = tested().handleJobExecutionSuccess(response)
-                .findFirst()
-                .run()
-                .toCompletableFuture()
-                .get();
+        JobDetails result = tested().handleJobExecutionSuccess(response);
 
         verify(jobRepository).delete(scheduleCaptor.capture());
         JobDetails deletedJob = scheduleCaptor.getValue();
         assertThat(deletedJob).isNotNull();
         assertThat(deletedJob.getId()).isEqualTo(JOB_ID);
-        assertThat(result).isNotEmpty();
-        assertThat(result.get().getId()).isEqualTo(JOB_ID);
+        assertThat(result).isNotNull();
+        assertThat(result.getId()).isEqualTo(JOB_ID);
     }
 
     @Test
     void handleJobExecutionSuccessJobNotFound() {
         scheduledJob = JobDetails.builder().id(JOB_ID).trigger(trigger).status(SCHEDULED).build();
-        doReturn(CompletableFuture.completedFuture(null)).when(jobRepository).get(JOB_ID);
+        when(jobRepository.get(JOB_ID)).thenReturn(null);
         JobExecutionResponse response = new JobExecutionResponse("execution successful", "200", ZonedDateTime.now(), JOB_ID);
 
-        assertThatThrownBy(() -> tested().handleJobExecutionSuccess(response)
-                .findFirst()
-                .run()
-                .toCompletableFuture()
-                .get())
-                        .hasCauseInstanceOf(JobServiceException.class)
-                        .hasMessageContaining("Job: %s was not found in database.", JOB_ID);
+        assertThatThrownBy(() -> tested().handleJobExecutionSuccess(response))
+                .isInstanceOf(JobServiceException.class)
+                .hasMessageContaining("Job: %s was not found in database.", JOB_ID);
         verify(jobRepository, never()).delete(JOB_ID);
         verify(jobRepository, never()).delete(any(JobDetails.class));
         verify(jobRepository, never()).save(any());

@@ -25,13 +25,11 @@ import org.kie.kogito.jobs.service.adapter.ScheduledJobAdapter;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.jobs.service.model.ScheduledJob.ScheduledJobBuilder;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
 import org.kie.kogito.jobs.service.validation.JobDetailsValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.smallrye.mutiny.Uni;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -46,8 +44,6 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 
-import static mutiny.zero.flow.adapters.AdaptersToFlow.publisher;
-
 @ApplicationScoped
 @Path(RestApiConstants.JOBS_PATH)
 public class JobResource {
@@ -58,7 +54,7 @@ public class JobResource {
     TimerDelegateJobScheduler scheduler;
 
     @Inject
-    ReactiveJobRepository jobRepository;
+    JobRepository jobRepository;
 
     @Inject
     JobDetailsValidator jobDetailsValidator;
@@ -67,12 +63,14 @@ public class JobResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "createJob")
-    public Uni<ScheduledJob> create(Job job) {
+    public ScheduledJob create(Job job) {
         LOGGER.debug("REST create {}", job);
         JobDetails jobDetails = jobDetailsValidator.validateToCreate(ScheduledJobAdapter.to(ScheduledJob.builder().job(job).build()));
-        return Uni.createFrom().publisher(publisher(scheduler.schedule(jobDetails)))
-                .onItem().ifNull().failWith(new RuntimeException("Failed to schedule job " + job))
-                .onItem().transform(ScheduledJobAdapter::of);
+        JobDetails scheduledJobDetails = scheduler.schedule(jobDetails);
+        if (scheduledJobDetails == null) {
+            throw new RuntimeException("Failed to schedule job " + job);
+        }
+        return ScheduledJobAdapter.of(scheduledJobDetails);
     }
 
     @PATCH
@@ -80,32 +78,40 @@ public class JobResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @Operation(operationId = "patchJob")
-    public Uni<ScheduledJob> patch(@PathParam("id") String id, @RequestBody Job job) {
+    public ScheduledJob patch(@PathParam("id") String id, @RequestBody Job job) {
         LOGGER.debug("REST patch update {}", job);
         //validating allowed patch attributes
         JobDetails jobToBeMerged = jobDetailsValidator.validateToMerge(ScheduledJobAdapter.to(ScheduledJobBuilder.from(job)));
-        return Uni.createFrom().publisher(publisher(scheduler.reschedule(id, jobToBeMerged.getTrigger()).buildRs()))
-                .onItem().ifNull().failWith(new NotFoundException("Failed to reschedule job " + job))
-                .onItem().transform(ScheduledJobAdapter::of);
+        JobDetails rescheduleJobDetails = scheduler.reschedule(id, jobToBeMerged.getTrigger());
+        if (rescheduleJobDetails == null) {
+            throw new NotFoundException("Failed to reschedule job " + job);
+        }
+        return ScheduledJobAdapter.of(rescheduleJobDetails);
     }
 
     @DELETE
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     @Operation(operationId = "deleteJob")
-    public Uni<ScheduledJob> delete(@PathParam("id") String id) {
-        return Uni.createFrom().completionStage(scheduler.cancel(id))
-                .onItem().ifNull().failWith(new NotFoundException("Failed to cancel job scheduling for jobId " + id))
-                .onItem().transform(ScheduledJobAdapter::of);
+    public ScheduledJob delete(@PathParam("id") String id) {
+        LOGGER.debug("REST delete {}", id);
+        JobDetails cancelJobDetails = scheduler.cancel(id);
+        if (cancelJobDetails == null) {
+            throw new NotFoundException("Failed to cancel job scheduling for jobId " + id);
+        }
+        return ScheduledJobAdapter.of(cancelJobDetails);
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{id}")
     @Operation(operationId = "getJob")
-    public Uni<ScheduledJob> get(@PathParam("id") String id) {
-        return Uni.createFrom().completionStage(jobRepository.get(id))
-                .onItem().ifNull().failWith(new NotFoundException("Job not found id " + id))
-                .onItem().transform(ScheduledJobAdapter::of);
+    public ScheduledJob get(@PathParam("id") String id) {
+        LOGGER.debug("REST get {}", id);
+        JobDetails jobDetails = jobRepository.get(id);
+        if (jobDetails == null) {
+            throw new NotFoundException("Job not found id " + id);
+        }
+        return ScheduledJobAdapter.of(jobDetails);
     }
 }

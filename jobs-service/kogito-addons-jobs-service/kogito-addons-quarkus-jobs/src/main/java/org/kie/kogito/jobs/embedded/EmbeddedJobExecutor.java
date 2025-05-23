@@ -19,7 +19,6 @@
 package org.kie.kogito.jobs.embedded;
 
 import java.util.Optional;
-import java.util.function.Supplier;
 
 import org.kie.kogito.Application;
 import org.kie.kogito.Model;
@@ -37,8 +36,6 @@ import org.kie.kogito.process.Processes;
 import org.kie.kogito.services.jobs.impl.TriggerJobCommand;
 import org.kie.kogito.usertask.UserTaskInstance;
 import org.kie.kogito.usertask.UserTasks;
-
-import io.smallrye.mutiny.Uni;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Alternative;
@@ -61,7 +58,7 @@ public class EmbeddedJobExecutor implements JobExecutor {
     Application application;
 
     @Override
-    public Uni<JobExecutionResponse> execute(JobDetails jobDetails) {
+    public JobExecutionResponse execute(JobDetails jobDetails) {
         RecipientInstance recipientModel = (RecipientInstance) jobDetails.getRecipient();
         InVMRecipient recipient = (InVMRecipient) recipientModel.getRecipient();
         JobDescription jobDescription = recipient.getPayload().getData();
@@ -71,75 +68,72 @@ public class EmbeddedJobExecutor implements JobExecutor {
             return processJobDescription(jobDetails, userTaskInstanceJobDescription);
         }
 
-        return Uni.createFrom().item(
-                JobExecutionResponse.builder()
+        return JobExecutionResponse.builder()
+                .code("401")
+                .jobId(jobDetails.getId())
+                .now()
+                .message("job cannot be processed")
+                .build();
+    }
+
+    private JobExecutionResponse processJobDescription(JobDetails jobDetails, UserTaskInstanceJobDescription userTaskInstanceJobDescription) {
+        try {
+            executeInUnitOfWork(application.unitOfWorkManager(), () -> {
+                Optional<UserTaskInstance> userTaskInstance = userTasks.get().instances().findById(userTaskInstanceJobDescription.userTaskInstanceId());
+                if (userTaskInstance.isEmpty()) {
+                    return null;
+                }
+                UserTaskInstance instance = userTaskInstance.get();
+                instance.trigger(userTaskInstanceJobDescription);
+                return null;
+            });
+            return JobExecutionResponse.builder()
+                    .message("Embedded job executed")
+                    .code(String.valueOf(200))
+                    .now()
+                    .jobId(jobDetails.getId())
+                    .build();
+        } catch (Exception unexpected) {
+            throw new JobExecutionException(jobDetails.getId(),
+                    "Unexpected error when executing Embedded request for job: " + jobDetails.getId() + ". " + unexpected.getMessage(),
+                    unexpected);
+        }
+
+    }
+
+    private JobExecutionResponse processJobDescription(JobDetails jobDetails, ProcessInstanceJobDescription processInstanceJobDescription) {
+        try {
+            String timerId = processInstanceJobDescription.timerId();
+            String processInstanceId = processInstanceJobDescription.processInstanceId();
+            Optional<Process<? extends Model>> process = processes.get().processByProcessInstanceId(processInstanceId);
+            if (process.isEmpty()) {
+                return JobExecutionResponse.builder()
                         .code("401")
                         .jobId(jobDetails.getId())
                         .now()
-                        .message("job cannot be processed")
-                        .build());
-    }
-
-    private Uni<JobExecutionResponse> processJobDescription(JobDetails jobDetails, UserTaskInstanceJobDescription userTaskInstanceJobDescription) {
-        Supplier<Void> execute = () -> executeInUnitOfWork(application.unitOfWorkManager(), () -> {
-            Optional<UserTaskInstance> userTaskInstance = userTasks.get().instances().findById(userTaskInstanceJobDescription.userTaskInstanceId());
-            if (userTaskInstance.isEmpty()) {
-                return null;
+                        .message("job does not belong to this container")
+                        .build();
             }
-            UserTaskInstance instance = userTaskInstance.get();
-            instance.trigger(userTaskInstanceJobDescription);
-            return null;
-        });
 
-        return Uni.createFrom().item(execute)
-                .onFailure()
-                .transform(
-                        unexpected -> new JobExecutionException(jobDetails.getId(), "Unexpected error when executing Embedded request for job: " + jobDetails.getId() + ". " + unexpected.getMessage(),
-                                unexpected))
-                .onItem()
-                .transform(res -> JobExecutionResponse.builder()
-                        .message("Embedded job executed")
-                        .code(String.valueOf(200))
-                        .now()
-                        .jobId(jobDetails.getId())
-                        .build());
+            Integer limit = jobDetails.getRetries();
 
-    }
+            executeInUnitOfWork(application.unitOfWorkManager(), () -> {
+                TriggerJobCommand command = new TriggerJobCommand(processInstanceId, jobDetails.getCorrelationId(), timerId, limit, process.get(), application.unitOfWorkManager());
+                return command.execute();
+            });
 
-    private Uni<JobExecutionResponse> processJobDescription(JobDetails jobDetails, ProcessInstanceJobDescription processInstanceJobDescription) {
-        String timerId = processInstanceJobDescription.timerId();
-        String processInstanceId = processInstanceJobDescription.processInstanceId();
-        Optional<Process<? extends Model>> process = processes.get().processByProcessInstanceId(processInstanceId);
-        if (process.isEmpty()) {
-            return Uni.createFrom().item(
-                    JobExecutionResponse.builder()
-                            .code("401")
-                            .jobId(jobDetails.getId())
-                            .now()
-                            .message("job does not belong to this container")
-                            .build());
+            return JobExecutionResponse.builder()
+                    .message("Embedded job executed")
+                    .code(String.valueOf(200))
+                    .now()
+                    .jobId(jobDetails.getId())
+                    .build();
+        } catch (Exception unexpected) {
+            throw new JobExecutionException(jobDetails.getId(),
+                    "Unexpected error when executing Embedded request for job: " + jobDetails.getId() + ". " + unexpected.getMessage(),
+                    unexpected);
         }
 
-        Integer limit = jobDetails.getRetries();
-
-        Supplier<Boolean> execute = () -> executeInUnitOfWork(application.unitOfWorkManager(), () -> {
-            TriggerJobCommand command = new TriggerJobCommand(processInstanceId, jobDetails.getCorrelationId(), timerId, limit, process.get(), application.unitOfWorkManager());
-            return command.execute();
-        });
-
-        return Uni.createFrom()
-                .item(execute)
-                .onFailure()
-                .transform(
-                        unexpected -> new JobExecutionException(jobDetails.getId(), "Unexpected error when executing Embedded request for job: " + jobDetails.getId() + ". " + unexpected.getMessage(),
-                                unexpected))
-                .onItem()
-                .transform(res -> JobExecutionResponse.builder()
-                        .message("Embedded job executed")
-                        .code(String.valueOf(200))
-                        .now()
-                        .jobId(jobDetails.getId())
-                        .build());
     }
 
     @SuppressWarnings("rawtypes")

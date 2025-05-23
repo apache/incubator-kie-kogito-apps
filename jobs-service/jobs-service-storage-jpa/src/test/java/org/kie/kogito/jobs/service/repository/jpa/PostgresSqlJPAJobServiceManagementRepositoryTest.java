@@ -16,8 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.jobs.service.management;
+package org.kie.kogito.jobs.service.repository.jpa;
 
-public class ReleaseLeaderEvent {
+import org.kie.kogito.jobs.service.profiles.PostgreSQLQuarkusTestProfile;
+import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.TestProfile;
+
+@QuarkusTest
+@QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
+@TestProfile(PostgreSQLQuarkusTestProfile.class)
+class PostgresSqlJPAJobServiceManagementRepositoryTest extends BaseJPAJobServiceManagementRepositoryTest {
 
 }

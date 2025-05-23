@@ -22,6 +22,8 @@ import java.net.URI;
 import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.Map;
+import java.util.concurrent.CompletionStage;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.kie.kogito.job.recipient.common.http.converters.HttpConverters;
@@ -38,12 +40,11 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.core.Vertx;
-import io.vertx.mutiny.core.buffer.Buffer;
-import io.vertx.mutiny.ext.web.client.HttpRequest;
-import io.vertx.mutiny.ext.web.client.HttpResponse;
-import io.vertx.mutiny.ext.web.client.WebClient;
+import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.ext.web.client.HttpRequest;
+import io.vertx.ext.web.client.HttpResponse;
+import io.vertx.ext.web.client.WebClient;
 
 import jakarta.ws.rs.core.Response;
 
@@ -78,44 +79,63 @@ public abstract class HTTPRequestExecutor<R extends Recipient<?>> {
         return WebClient.create(vertx);
     }
 
-    public Uni<JobExecutionResponse> execute(JobDetails jobDetails) {
-        return Uni.createFrom().item(jobDetails)
-                .chain(job -> {
-                    final R recipient = getRecipient(job);
-                    final String limit = getLimit(job);
-                    final HTTPRequest request = buildRequest(recipient, limit);
-                    final long requestTimeout = getTimeoutInMillis(job);
-                    return executeRequest(request, requestTimeout)
-                            .onFailure().transform(unexpected -> new JobExecutionException(job.getId(),
-                                    "Unexpected error when executing HTTP request for job: " + jobDetails.getId() + ". " + unexpected.getMessage()))
-                            .onItem().transform(response -> JobExecutionResponse.builder()
-                                    .message(response.bodyAsString())
-                                    .code(String.valueOf(response.statusCode()))
-                                    .now()
-                                    .jobId(job.getId())
-                                    .build())
-                            .chain(this::handleResponse);
-                });
+    public JobExecutionResponse execute(JobDetails jobDetails) {
+        try {
+            R recipient = getRecipient(jobDetails);
+            String limit = getLimit(jobDetails);
+            HTTPRequest request = buildRequest(recipient, limit);
+            long requestTimeout = getTimeoutInMillis(jobDetails);
+            HttpResponse<?> response = executeRequest(request, requestTimeout);
+            JobExecutionResponse jobExecutionResponse = JobExecutionResponse.builder()
+                    .message(response.bodyAsString())
+                    .code(String.valueOf(response.statusCode()))
+                    .now()
+                    .jobId(jobDetails.getId())
+                    .build();
+
+            return this.handleResponse(jobExecutionResponse);
+        } catch (Throwable unexpected) {
+            LOGGER.error("Executing error for {}", jobDetails.getId(), unexpected);
+            return null;
+        }
+    }
+
+    protected <T extends JobExecutionResponse> T handleResponse(T response) {
+        LOGGER.debug("Handle response {}", response);
+
+        Integer code = Integer.valueOf(response.getCode());
+        if (Response.Status.Family.SUCCESSFUL.equals(Response.Status.Family.familyOf(code))) {
+            LOGGER.debug("Success executing job {}.", response);
+            return response;
+        } else {
+            throw new JobExecutionException(response.getJobId(), "Response error when executing HTTP request for " + response);
+        }
+
     }
 
     protected abstract R getRecipient(JobDetails job);
 
     protected abstract HTTPRequest buildRequest(R recipient, String limit);
 
-    protected Uni<HttpResponse<Buffer>> executeRequest(HTTPRequest request, long timeout) {
-        LOGGER.debug("Executing request {}", request);
-        final URI uri = URIBuilder.toURI(request.getUrl());
-        final HttpRequest<Buffer> clientRequest = client.request(HttpConverters.convertHttpMethod(request.getMethod()),
+    protected HttpResponse<Buffer> executeRequest(HTTPRequest request, long timeout) throws Exception {
+        LOGGER.trace("Executing request {}", request);
+        URI uri = URIBuilder.toURI(request.getUrl());
+        HttpRequest<Buffer> clientRequest = client.request(HttpConverters.convertHttpMethod(request.getMethod()),
                 uri.getPort(),
                 uri.getHost(),
                 uri.getPath()).timeout(timeout);
         clientRequest.queryParams().addAll(filterEntries(request.getQueryParams()));
         clientRequest.headers().addAll(filterEntries(request.getHeaders()));
+
+        CompletionStage<HttpResponse<Buffer>> completionStage = null;
         if (request.getBody() != null) {
-            return clientRequest.sendBuffer(buildBuffer(request.getBody()));
+            completionStage = clientRequest.sendBuffer(buildBuffer(request.getBody())).toCompletionStage();
         } else {
-            return clientRequest.send();
+            completionStage = clientRequest.send().toCompletionStage();
         }
+
+        return completionStage.toCompletableFuture().get(timeout, TimeUnit.SECONDS);
+
     }
 
     protected Buffer buildBuffer(Object body) {
@@ -131,27 +151,6 @@ public abstract class HTTPRequestExecutor<R extends Recipient<?>> {
             }
         }
         throw new IllegalArgumentException("Unexpected body type: " + body.getClass());
-    }
-
-    protected <T extends JobExecutionResponse> Uni<T> handleResponse(T response) {
-        LOGGER.debug("Handle response {}", response);
-        return Uni.createFrom().item(response)
-                .onItem().transform(JobExecutionResponse::getCode)
-                .onItem().transform(Integer::valueOf)
-                .chain(code -> Response.Status.Family.SUCCESSFUL.equals(Response.Status.Family.familyOf(code))
-                        ? handleSuccess(response)
-                        : handleError(response));
-    }
-
-    protected <T extends JobExecutionResponse> Uni<T> handleError(T response) {
-        return Uni.createFrom().item(response)
-                .onItem().invoke(r -> LOGGER.debug("Error executing job {}.", r))
-                .onItem().failWith(() -> new JobExecutionException(response.getJobId(), "Response error when executing HTTP request for " + response));
-    }
-
-    protected <T extends JobExecutionResponse> Uni<T> handleSuccess(T response) {
-        return Uni.createFrom().item(response)
-                .onItem().invoke(r -> LOGGER.debug("Success executing job {}.", r));
     }
 
     protected String getLimit(JobDetails job) {

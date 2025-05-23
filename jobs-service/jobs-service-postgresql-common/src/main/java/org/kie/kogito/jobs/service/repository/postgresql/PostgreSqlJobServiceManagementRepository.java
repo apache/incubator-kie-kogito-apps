@@ -18,23 +18,24 @@
  */
 package org.kie.kogito.jobs.service.repository.postgresql;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.time.OffsetDateTime;
+import java.util.Date;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
+import javax.sql.DataSource;
 
 import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
+import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.smallrye.mutiny.Uni;
-import io.vertx.mutiny.pgclient.PgPool;
-import io.vertx.mutiny.sqlclient.Row;
-import io.vertx.mutiny.sqlclient.RowIterator;
-import io.vertx.mutiny.sqlclient.RowSet;
-import io.vertx.mutiny.sqlclient.SqlClient;
-import io.vertx.mutiny.sqlclient.Tuple;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -44,69 +45,135 @@ public class PostgreSqlJobServiceManagementRepository implements JobServiceManag
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostgreSqlJobServiceManagementRepository.class);
 
-    private PgPool client;
+    private DataSource client;
 
     @Inject
-    public PostgreSqlJobServiceManagementRepository(PgPool client) {
+    public PostgreSqlJobServiceManagementRepository(DataSource client) {
         this.client = client;
     }
 
-    public Uni<JobServiceManagementInfo> getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate) {
-        LOGGER.info("get {}", id);
-        return client.withTransaction(conn -> conn
-                .preparedQuery("SELECT id, token, last_heartbeat FROM job_service_management WHERE id = $1 FOR UPDATE ")
-                .execute(Tuple.of(id))
-                .onItem().transform(RowSet::iterator)
-                .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)
-                .onItem().invoke(r -> LOGGER.trace("got {}", r))
-                .onItem().transformToUni(r -> update(conn, computeUpdate.apply(r))));
-    }
+    private static final String GET_AND_UPDATE = "SELECT id, token, last_heartbeat FROM job_service_management WHERE id = ? FOR UPDATE ";
+    private static final String RELEASE = "UPDATE job_service_management SET token = null, last_heartbeat = null WHERE id = ? AND token = ? RETURNING id, token, last_heartbeat";
+    private static final String HEARTBEAT = "UPDATE job_service_management SET last_heartbeat = now() WHERE id = ? AND token = ? RETURNING id, token, last_heartbeat";
+    private static final String UPDATE = "INSERT INTO job_service_management (id, token, last_heartbeat) " +
+            "VALUES (?, ?, ?) " +
+            "ON CONFLICT (id) DO " +
+            "UPDATE SET token = ?, last_heartbeat = ? " +
+            "RETURNING id, token, last_heartbeat";
 
-    JobServiceManagementInfo from(Row row) {
-        return new JobServiceManagementInfo(row.getString("id"),
-                row.getString("token"),
-                row.getOffsetDateTime("last_heartbeat"));
-    }
+    public JobServiceManagementInfo getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate) {
+        LOGGER.trace("get {}", id);
+        JobServiceManagementInfo jobServiceManagementInfo = null;
+        try (Connection connection = client.getConnection(); PreparedStatement stmt = connection.prepareStatement(GET_AND_UPDATE)) {
+            stmt.setString(1, id);
 
-    @Override
-    public Uni<JobServiceManagementInfo> set(JobServiceManagementInfo info) {
-        LOGGER.info("set {}", info);
-        return update(client, info);
-    }
-
-    private Uni<JobServiceManagementInfo> update(SqlClient conn, JobServiceManagementInfo info) {
-        if (Objects.isNull(info)) {
-            return Uni.createFrom().nullItem();
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                jobServiceManagementInfo = from(resultSet);
+                LOGGER.trace("got {}", jobServiceManagementInfo);
+            }
+            resultSet.close();
+            return update(connection, computeUpdate.apply(jobServiceManagementInfo));
+        } catch (SQLException ex) {
+            LOGGER.error("Error during getAndUpdate job service management info", ex);
+            return null;
         }
-        return conn.preparedQuery("INSERT INTO job_service_management (id, token, last_heartbeat) " +
-                "VALUES ($1, $2, $3) " +
-                "ON CONFLICT (id) DO " +
-                "UPDATE SET token = $2, last_heartbeat = $3 " +
-                "RETURNING id, token, last_heartbeat")
-                .execute(Tuple.tuple(Stream.of(
-                        info.getId(),
-                        info.getToken(),
-                        info.getLastHeartbeat()).collect(Collectors.toList())))
-                .onItem().transform(RowSet::iterator)
-                .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null);
+
+    }
+
+    JobServiceManagementInfo from(ResultSet row) throws SQLException {
+        OffsetDateTime lastHeartbeat = Optional.ofNullable(row.getTimestamp("last_heartbeat"))
+                .map(Timestamp::getTime)
+                .map(Date::new)
+                .map(DateUtil::dateToOffsetDateTime)
+                .orElse(null);
+
+        return new JobServiceManagementInfo(
+                row.getString("id"),
+                row.getString("token"),
+                lastHeartbeat);
     }
 
     @Override
-    public Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
-        return client.withTransaction(conn -> conn
-                .preparedQuery("UPDATE job_service_management SET last_heartbeat = now() WHERE id = $1 AND token = $2 RETURNING id, token, last_heartbeat")
-                .execute(Tuple.of(info.getId(), info.getToken()))
-                .onItem().transform(RowSet::iterator)
-                .onItem().transform(iterator -> iterator.hasNext() ? from(iterator.next()) : null)
-                .onItem().invoke(r -> LOGGER.trace("Heartbeat {}", r)));
+    public JobServiceManagementInfo set(JobServiceManagementInfo info) {
+        LOGGER.trace("set {}", info);
+        try (Connection connection = client.getConnection();) {
+            return update(connection, info);
+        } catch (SQLException ex) {
+            LOGGER.error("Error during set job service management info", ex);
+            return null;
+        }
+    }
+
+    private JobServiceManagementInfo update(Connection connection, JobServiceManagementInfo info) {
+        if (Objects.isNull(info)) {
+            return null;
+        }
+        java.sql.Timestamp heartbeat = Optional.ofNullable(info.getLastHeartbeat())
+                .map(DateUtil::toDate)
+                .map(Date::getTime)
+                .map(java.sql.Timestamp::new)
+                .orElse(null);
+
+        JobServiceManagementInfo jobServiceManagementInfo = null;
+        try (PreparedStatement stmt = connection.prepareStatement(UPDATE)) {
+            stmt.setString(1, info.getId());
+            stmt.setString(2, info.getToken());
+            stmt.setTimestamp(3, heartbeat);
+
+            stmt.setString(4, info.getToken());
+            stmt.setTimestamp(5, heartbeat);
+
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                jobServiceManagementInfo = from(resultSet);
+                LOGGER.trace("update {}", jobServiceManagementInfo);
+            }
+            resultSet.close();
+            return jobServiceManagementInfo;
+        } catch (SQLException ex) {
+            LOGGER.error("Error during update job service management info", ex);
+            return null;
+        }
+
     }
 
     @Override
-    public Uni<Boolean> release(JobServiceManagementInfo info) {
-        return client.withTransaction(conn -> conn
-                .preparedQuery("UPDATE job_service_management SET token = null, last_heartbeat = null WHERE id = $1 AND token = $2 RETURNING id, token, last_heartbeat")
-                .execute(Tuple.of(info.getId(), info.getToken()))
-                .onItem().transform(RowSet::iterator)
-                .onItem().transform(RowIterator::hasNext));
+    public JobServiceManagementInfo heartbeat(JobServiceManagementInfo info) {
+        JobServiceManagementInfo jobServiceManagementInfo = null;
+        try (Connection connection = client.getConnection(); PreparedStatement stmt = connection.prepareStatement(HEARTBEAT)) {
+            stmt.setString(1, info.getId());
+            stmt.setString(2, info.getToken());
+
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                jobServiceManagementInfo = from(resultSet);
+                LOGGER.trace("heartbeat {}", jobServiceManagementInfo);
+            }
+            resultSet.close();
+            return jobServiceManagementInfo;
+        } catch (SQLException ex) {
+            LOGGER.error("Error during heartbeat job service management info", ex);
+            return null;
+        }
+    }
+
+    @Override
+    public Boolean release(JobServiceManagementInfo info) {
+        JobServiceManagementInfo updatedInfo = null;
+        try (Connection connection = client.getConnection(); PreparedStatement stmt = connection.prepareStatement(RELEASE)) {
+            stmt.setString(1, info.getId());
+            stmt.setString(2, info.getToken());
+            ResultSet resultSet = stmt.executeQuery();
+            if (resultSet.next()) {
+                updatedInfo = from(resultSet);
+            }
+            resultSet.close();
+            return updatedInfo != null;
+        } catch (SQLException ex) {
+            LOGGER.error("Error during release job service management info", ex);
+            return null;
+        }
+
     }
 }
