@@ -26,6 +26,12 @@ import io.quarkus.runtime.annotations.ConfigRoot;
 public class JobHttpRecipientRuntimeConfiguration {
 
     /**
+     * Default to execute HTTP requests for the HttpRecipient with no SSL support.
+     */
+    @ConfigItem(name = "ssl-enabled", defaultValue = "false")
+    boolean sslEnabled;
+
+    /**
      * Default timeout to execute HTTP requests for the HttpRecipient when the Job's timeout is not configured.
      */
     @ConfigItem(name = "timeout-in-millis", defaultValue = "180000")
