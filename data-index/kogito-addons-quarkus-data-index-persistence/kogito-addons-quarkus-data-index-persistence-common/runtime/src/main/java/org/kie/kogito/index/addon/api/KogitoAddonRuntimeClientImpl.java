@@ -23,7 +23,6 @@ import java.io.UncheckedIOException;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import org.eclipse.microprofile.context.ManagedExecutor;
@@ -197,7 +196,7 @@ public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient impl
             } catch (Exception ex) {
                 throw new DataIndexServiceException("Failure getting timers for process instance " + pInstance.id(), ex);
             }
-        }, List::of));
+        }));
     }
 
     private static Map<String, String> mapMetadata(org.kie.api.definition.process.Node n) {
@@ -288,10 +287,6 @@ public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient impl
     }
 
     private <T> T executeOnProcessInstance(String processId, String processInstanceId, Function<org.kie.kogito.process.ProcessInstance<?>, T> supplier) {
-        return executeOnProcessInstance(processId, processInstanceId, supplier, null);
-    }
-
-    private <T> T executeOnProcessInstance(String processId, String processInstanceId, Function<org.kie.kogito.process.ProcessInstance<?>, T> supplier, Supplier<T> supplierIfNotFound) {
         Process<?> process = processes != null ? processes.processById(processId) : null;
 
         if (process == null) {
@@ -302,8 +297,6 @@ public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient impl
             if (processInstanceFound.isPresent()) {
                 org.kie.kogito.process.ProcessInstance<?> processInstance = processInstanceFound.get();
                 return supplier.apply(processInstance);
-            } else if (supplierIfNotFound != null) {
-                return supplierIfNotFound.get();
             } else {
                 throw new DataIndexServiceException(String.format("Process instance with id %s doesn't allow the operation requested", processInstanceId));
             }

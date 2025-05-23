@@ -18,12 +18,7 @@
  */
 package org.kie.kogito.index.graphql;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.ServiceLoader.Provider;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -35,6 +30,7 @@ import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
 import org.kie.kogito.index.model.*;
+import org.kie.kogito.index.model.Timer;
 import org.kie.kogito.index.service.DataIndexServiceException;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.internal.process.runtime.KogitoProcessInstance;
@@ -329,8 +325,12 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
     public CompletableFuture<List<Timer>> getProcessInstanceTimers(DataFetchingEnvironment env) {
         ProcessInstance processInstance = env.getSource();
 
-        String serviceUrl = getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId());
+        // Skipping Getting the timers from the runtime if process instance isn't in Active state
+        if (processInstance.getState() != org.kie.kogito.process.ProcessInstance.STATE_ACTIVE) {
+            return CompletableFuture.completedFuture(Collections.emptyList());
+        }
 
+        String serviceUrl = getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId());
         return dataIndexApiExecutor.getProcessInstanceTimers(serviceUrl, processInstance);
     }
 
