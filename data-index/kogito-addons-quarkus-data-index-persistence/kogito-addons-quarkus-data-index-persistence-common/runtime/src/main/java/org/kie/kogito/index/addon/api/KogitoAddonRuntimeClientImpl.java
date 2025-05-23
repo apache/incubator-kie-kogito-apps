@@ -20,6 +20,7 @@ package org.kie.kogito.index.addon.api;
 
 import java.io.IOException;
 import java.io.UncheckedIOException;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -306,5 +307,21 @@ public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient impl
         org.kie.kogito.process.ProcessInstance<? extends Model> pi = process.createInstance(m);
         pi.start();
         return CompletableFuture.completedFuture(fromValue(pi.variables().toMap()));
+    }
+
+    @Override
+    public CompletableFuture<String> rescheduleNodeInstanceSla(String serviceURL, ProcessInstance processInstance, String nodeInstanceId, ZonedDateTime expirationTime) {
+        return CompletableFuture.completedFuture(executeOnProcessInstance(processInstance.getProcessId(), processInstance.getId(), pInstance -> {
+            pInstance.updateNodeInstanceSla(nodeInstanceId, expirationTime);
+            return "Updated SLA of node instance " + nodeInstanceId;
+        }));
+    }
+
+    @Override
+    public CompletableFuture<String> rescheduleProcessInstanceSla(String serviceURL, ProcessInstance processInstance, ZonedDateTime expirationTime) {
+        return CompletableFuture.completedFuture(executeOnProcessInstance(processInstance.getProcessId(), processInstance.getId(), pInstance -> {
+            pInstance.updateProcessInstanceSla(expirationTime);
+            return "Updated SLA of process instance " + processInstance.getId();
+        }));
     }
 }
