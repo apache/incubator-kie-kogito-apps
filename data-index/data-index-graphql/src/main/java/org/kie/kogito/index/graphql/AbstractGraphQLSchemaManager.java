@@ -34,13 +34,7 @@ import org.kie.kogito.index.api.KogitoRuntimeClient;
 import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
-import org.kie.kogito.index.model.Job;
-import org.kie.kogito.index.model.Node;
-import org.kie.kogito.index.model.NodeInstance;
-import org.kie.kogito.index.model.ProcessDefinition;
-import org.kie.kogito.index.model.ProcessDefinitionKey;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.model.UserTaskInstance;
+import org.kie.kogito.index.model.*;
 import org.kie.kogito.index.service.DataIndexServiceException;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.internal.process.runtime.KogitoProcessInstance;
@@ -50,6 +44,7 @@ import org.kie.kogito.persistence.api.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import graphql.execution.DataFetcherResult;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
@@ -246,8 +241,12 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
         return executeAdvancedQueryForCache(cacheService.getProcessDefinitionStorage(), env);
     }
 
-    protected Collection<ProcessInstance> getProcessInstancesValues(DataFetchingEnvironment env) {
-        return executeAdvancedQueryForCache(cacheService.getProcessInstanceStorage(), env);
+    protected DataFetcherResult<?> getProcessInstancesValues(DataFetchingEnvironment env) {
+        Collection<ProcessInstance> processInstances = executeAdvancedQueryForCache(cacheService.getProcessInstanceStorage(), env);
+        return DataFetcherResult.newResult()
+                .data(processInstances)
+                .localContext(processInstances)
+                .build();
     }
 
     protected long countProcessInstances(DataFetchingEnvironment env) {
@@ -325,6 +324,14 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
         } else {
             return getProcessDefinitionSource(pd);
         }
+    }
+
+    public CompletableFuture<List<Timer>> getProcessInstanceTimers(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = env.getSource();
+
+        String serviceUrl = getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId());
+
+        return dataIndexApiExecutor.getProcessInstanceTimers(serviceUrl, processInstance);
     }
 
     public CompletableFuture<List<Node>> getProcessInstanceNodes(DataFetchingEnvironment env) {
