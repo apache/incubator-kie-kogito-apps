@@ -35,10 +35,6 @@ public class ProcessInstance extends ProcessInstanceMeta {
     private ProcessInstanceError error;
     private ProcessDefinition definition;
 
-    public ProcessInstance() {
-        System.out.println("ProcessInstance created");
-    }
-
     public ObjectNode getVariables() {
         return variables;
     }
