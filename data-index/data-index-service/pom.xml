@@ -35,7 +35,6 @@
     <module>data-index-service-common</module>
     <module>data-index-service-inmemory</module>
     <module>data-index-service-postgresql</module>
-    <module>data-index-service-infinispan</module>
     <module>data-index-service-mongodb</module>
   </modules>
 
