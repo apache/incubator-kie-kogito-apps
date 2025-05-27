@@ -21,10 +21,12 @@ package org.kie.kogito.jobs.embedded;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Timeout;
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.jobs.DurationExpirationTime;
@@ -40,11 +42,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 @QuarkusTest
 public class EmbeddedJobsServiceTest {
 
-    private static final String PROCESS_ID = "processId";
-    private static final String PROCESS_INSTANCE_ID = "1";
-    private static final String NODE_INSTANCE_ID = "node_1";
-    private static final String ROOT_PROCESS_ID = "rootProcess";
-    private static final String ROOT_PROCESS_INSTANCE_ID = "0";
+    public static final Integer NUMBER_OF_EVENTS = 4;
+    public static final String PROCESS_ID = "processId";
+    public static final String PROCESS_INSTANCE_ID = "1";
+    public static final String NODE_INSTANCE_ID = "node_1";
+    public static final String ROOT_PROCESS_ID = "rootProcess";
+    public static final String ROOT_PROCESS_INSTANCE_ID = "0";
 
     @Inject
     JobsService jobService;
@@ -53,10 +56,11 @@ public class EmbeddedJobsServiceTest {
     TestEventPublisher publisher;
 
     @Test
+    @Timeout(10000)
     public void testJobService() throws Exception {
 
         // testing only when we have the full lifecycle
-        CountDownLatch latch = new CountDownLatch(8);
+        CountDownLatch latch = new CountDownLatch(NUMBER_OF_EVENTS);
         publisher.setLatch(latch);
 
         ProcessInstanceJobDescription description = ProcessInstanceJobDescription.newProcessInstanceJobDescriptionBuilder()
@@ -83,11 +87,11 @@ public class EmbeddedJobsServiceTest {
                 .build();
         jobService.scheduleJob(descriptionWRootProcess);
 
-        latch.await();
+        latch.await(10000L, TimeUnit.MILLISECONDS);
 
         List<DataEvent<?>> events = new ArrayList<>(publisher.getEvents());
 
-        Assertions.assertEquals(8, events.size());
+        Assertions.assertEquals(NUMBER_OF_EVENTS, events.size());
 
         Consumer<DataEvent<?>> noRootProcess = e -> assertThat(e)
                 .hasFieldOrPropertyWithValue("kogitoRootProcessInstanceId", null)

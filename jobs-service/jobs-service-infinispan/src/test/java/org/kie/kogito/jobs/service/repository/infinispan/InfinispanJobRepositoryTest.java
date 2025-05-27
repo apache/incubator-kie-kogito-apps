@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.infinispan.client.hotrod.RemoteCacheManager;
 import org.junit.jupiter.api.BeforeEach;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseJobRepositoryTest;
 
 import io.quarkus.test.junit.QuarkusTest;
@@ -51,7 +51,7 @@ class InfinispanJobRepositoryTest extends BaseJobRepositoryTest {
     }
 
     @Override
-    public ReactiveJobRepository tested() {
+    public JobRepository tested() {
         return tested;
     }
 }

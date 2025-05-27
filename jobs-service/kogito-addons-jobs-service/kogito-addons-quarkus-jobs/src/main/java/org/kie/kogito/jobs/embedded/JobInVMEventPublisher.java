@@ -20,7 +20,6 @@
 package org.kie.kogito.jobs.embedded;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.event.EventPublisher;
@@ -40,11 +39,8 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.enterprise.event.Event;
-import jakarta.enterprise.event.ObservesAsync;
 import jakarta.enterprise.inject.Alternative;
 import jakarta.enterprise.inject.Instance;
-import jakarta.inject.Inject;
 
 import static java.util.stream.Collectors.toList;
 import static org.kie.kogito.jobs.service.events.JobDataEvent.JOB_EVENT_TYPE;
@@ -61,9 +57,6 @@ public class JobInVMEventPublisher implements JobEventPublisher {
 
     private final ObjectMapper objectMapper;
 
-    @Inject
-    Event<EmbeddedJobServiceEvent> bus;
-
     public JobInVMEventPublisher(
             @ConfigProperty(name = "kogito.service.url", defaultValue = "http://localhost:8080") String url,
             Instance<EventPublisher> eventPublishers,
@@ -76,21 +69,16 @@ public class JobInVMEventPublisher implements JobEventPublisher {
 
     @Override
     public JobDetails publishJobStatusChange(JobDetails jobDetails) {
-        try {
-            LOGGER.debug("publishJobStatusChange {}", jobDetails);
-            if (eventPublishers.isEmpty()) {
-                return jobDetails;
-            }
-
-            bus.fireAsync(new EmbeddedJobServiceEvent(jobDetails)).toCompletableFuture().get();
+        LOGGER.debug("publishJobStatusChange {}", jobDetails);
+        if (eventPublishers.isEmpty()) {
             return jobDetails;
-        } catch (InterruptedException | ExecutionException e) {
-            throw new RuntimeException(e);
         }
+
+        observe(jobDetails);
+        return jobDetails;
     }
 
-    public void observe(@ObservesAsync EmbeddedJobServiceEvent serviceEvent) {
-        JobDetails jobDetails = serviceEvent.getJobDetails();
+    public void observe(JobDetails jobDetails) {
         LOGGER.debug("Emmit in-vm publishJobStatusChange {}", jobDetails);
         try {
             ScheduledJob scheduledJob = ScheduledJobAdapter.of(jobDetails);

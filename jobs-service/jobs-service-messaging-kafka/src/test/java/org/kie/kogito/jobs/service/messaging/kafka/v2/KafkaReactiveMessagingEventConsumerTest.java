@@ -19,7 +19,7 @@
 package org.kie.kogito.jobs.service.messaging.kafka.v2;
 
 import org.kie.kogito.jobs.service.messaging.v2.MessagingEventConsumerTest;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.scheduler.impl.TimerDelegateJobScheduler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,7 +28,7 @@ class KafkaReactiveMessagingEventConsumerTest extends MessagingEventConsumerTest
 
     @Override
     protected KafkaReactiveMessagingEventConsumer createEventConsumer(TimerDelegateJobScheduler scheduler,
-            ReactiveJobRepository jobRepository,
+            JobRepository jobRepository,
             ObjectMapper objectMapper) {
         return new KafkaReactiveMessagingEventConsumer(scheduler, jobRepository, objectMapper);
     }

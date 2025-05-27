@@ -30,7 +30,7 @@ import jakarta.inject.Inject;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public abstract class BaseJPAReactiveJobServiceManagementRepositoryTest {
+public abstract class BaseJPAJobServiceManagementRepositoryTest {
     @Inject
     JobServiceManagementRepository tested;
 
@@ -45,7 +45,7 @@ public abstract class BaseJPAReactiveJobServiceManagementRepositoryTest {
             date.set(DateUtil.now().toOffsetDateTime());
             info.setLastHeartbeat(date.get());
             return info;
-        }).await().indefinitely();
+        });
         assertThat(updated.getId()).isEqualTo(id);
         assertThat(date.get()).isNotNull();
         assertThat(updated.getLastHeartbeat()).isEqualTo(date.get());
@@ -59,13 +59,13 @@ public abstract class BaseJPAReactiveJobServiceManagementRepositoryTest {
         JobServiceManagementInfo updated = tested.getAndUpdate(id, info -> {
             found.set(info);
             return info;
-        }).await().indefinitely();
+        });
         assertThat(updated).isNull();
         assertThat(found.get()).isNull();
     }
 
     private JobServiceManagementInfo create(String id, String token) {
-        JobServiceManagementInfo created = tested.set(new JobServiceManagementInfo(id, token, null)).await().indefinitely();
+        JobServiceManagementInfo created = tested.set(new JobServiceManagementInfo(id, token, null));
         assertThat(created.getId()).isEqualTo(id);
         assertThat(created.getToken()).isEqualTo(token);
         assertThat(created.getLastHeartbeat()).isNull();
@@ -78,7 +78,7 @@ public abstract class BaseJPAReactiveJobServiceManagementRepositoryTest {
         String token = "token3";
         JobServiceManagementInfo created = create(id, token);
 
-        JobServiceManagementInfo updated = tested.heartbeat(created).await().indefinitely();
+        JobServiceManagementInfo updated = tested.heartbeat(created);
         assertThat(updated.getLastHeartbeat()).isNotNull();
         assertThat(updated.getLastHeartbeat()).isBefore(DateUtil.now().plusSeconds(1).toOffsetDateTime());
     }
@@ -89,7 +89,7 @@ public abstract class BaseJPAReactiveJobServiceManagementRepositoryTest {
         String token = "token4";
         create(id, token);
 
-        JobServiceManagementInfo updated = tested.heartbeat(new JobServiceManagementInfo(id, "differentToken", null)).await().indefinitely();
+        JobServiceManagementInfo updated = tested.heartbeat(new JobServiceManagementInfo(id, "differentToken", null));
         assertThat(updated).isNull();
     }
 
@@ -99,7 +99,7 @@ public abstract class BaseJPAReactiveJobServiceManagementRepositoryTest {
         String token = "token5";
         JobServiceManagementInfo created = create(id, token);
 
-        Boolean released = tested.release(created).await().indefinitely();
+        Boolean released = tested.release(created);
         assertThat(released).isTrue();
     }
 
@@ -109,7 +109,7 @@ public abstract class BaseJPAReactiveJobServiceManagementRepositoryTest {
         String token = "token6";
         JobServiceManagementInfo notExisting = new JobServiceManagementInfo(id, token, OffsetDateTime.now());
 
-        Boolean released = tested.release(notExisting).await().indefinitely();
+        Boolean released = tested.release(notExisting);
         assertThat(released).isFalse();
     }
 }

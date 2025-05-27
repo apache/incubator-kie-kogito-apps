@@ -18,17 +18,18 @@
  */
 package org.kie.kogito.jobs.service.repository.inmemory.postgresql;
 
-import java.time.Duration;
+import java.sql.Connection;
+import java.sql.Statement;
+
+import javax.sql.DataSource;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
-import org.kie.kogito.jobs.service.repository.ReactiveJobRepository;
+import org.kie.kogito.jobs.service.repository.JobRepository;
 import org.kie.kogito.jobs.service.repository.impl.BaseJobRepositoryTest;
 import org.kie.kogito.jobs.service.repository.postgresql.PostgreSqlJobRepository;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.smallrye.mutiny.infrastructure.Infrastructure;
-import io.vertx.mutiny.pgclient.PgPool;
 
 import jakarta.inject.Inject;
 
@@ -40,19 +41,18 @@ public class InmemoryPostgreSqlJobRepositoryTest extends BaseJobRepositoryTest {
     PostgreSqlJobRepository tested;
 
     @Inject
-    PgPool client;
+    DataSource client;
 
     @BeforeEach
     public void setUp() throws Exception {
-        client.query("DELETE FROM job_details")
-                .execute()
-                .emitOn(Infrastructure.getDefaultExecutor())
-                .await().atMost(Duration.ofSeconds(10L));
+        try (Connection connection = client.getConnection(); Statement statement = connection.createStatement()) {
+            statement.executeUpdate("DELETE FROM job_details");
+        }
         super.setUp();
     }
 
     @Override
-    public ReactiveJobRepository tested() {
+    public JobRepository tested() {
         return tested;
     }
 }

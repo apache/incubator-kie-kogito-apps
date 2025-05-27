@@ -18,13 +18,10 @@
  */
 package org.kie.kogito.jobs.service.resource;
 
-import org.kie.kogito.jobs.service.management.ReleaseLeaderEvent;
+import org.kie.kogito.jobs.service.management.JobServiceInstanceManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.smallrye.mutiny.Uni;
-
-import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -36,14 +33,13 @@ public class JobServiceManagementResource {
     private static final Logger LOGGER = LoggerFactory.getLogger(JobServiceManagementResource.class);
 
     @Inject
-    Event<ReleaseLeaderEvent> releaseLeaderEventEvent;
+    JobServiceInstanceManager jobServiceInstanceManager;
 
     @POST
     @Path("/shutdown")
-    public Uni<Response> shutdownHook() {
-        return Uni.createFrom().voidItem()
-                .onItem().invoke(i -> LOGGER.info("Job Service is shutting down"))
-                .onItem().invoke(() -> releaseLeaderEventEvent.fire(new ReleaseLeaderEvent()))
-                .onItem().transform(i -> Response.ok().build());
+    public Response shutdownHook() {
+        LOGGER.info("Invoked manually jobservice shutdown");
+        jobServiceInstanceManager.disable();
+        return Response.ok().build();
     }
 }

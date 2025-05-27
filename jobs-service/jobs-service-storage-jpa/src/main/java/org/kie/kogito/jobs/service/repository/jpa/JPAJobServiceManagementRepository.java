@@ -26,39 +26,36 @@ import org.kie.kogito.jobs.service.model.JobServiceManagementInfo;
 import org.kie.kogito.jobs.service.repository.JobServiceManagementRepository;
 import org.kie.kogito.jobs.service.repository.jpa.model.JobServiceManagementEntity;
 import org.kie.kogito.jobs.service.repository.jpa.repository.JobServiceManagementEntityRepository;
-import org.kie.kogito.jobs.service.repository.jpa.utils.ReactiveRepositoryHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import io.quarkus.panache.common.Parameters;
-import io.smallrye.mutiny.Uni;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 
 import static java.time.OffsetDateTime.now;
 
 @ApplicationScoped
-public class JPAReactiveJobServiceManagementRepository implements JobServiceManagementRepository {
+@Transactional
+public class JPAJobServiceManagementRepository implements JobServiceManagementRepository {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(JPAReactiveJobServiceManagementRepository.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(JPAJobServiceManagementRepository.class);
 
     private final JobServiceManagementEntityRepository repository;
-    private final ReactiveRepositoryHelper reactiveRepositoryHelper;
 
     @Inject
-    public JPAReactiveJobServiceManagementRepository(JobServiceManagementEntityRepository repository,
-            ReactiveRepositoryHelper reactiveRepositoryHelper) {
+    public JPAJobServiceManagementRepository(JobServiceManagementEntityRepository repository) {
         this.repository = repository;
-        this.reactiveRepositoryHelper = reactiveRepositoryHelper;
     }
 
     @Override
-    public Uni<JobServiceManagementInfo> getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate) {
-        LOGGER.info("get {}", id);
-        return Uni.createFrom()
-                .completionStage(this.reactiveRepositoryHelper.runAsync(() -> doGetAndUpdate(id, computeUpdate)))
-                .onItem().ifNotNull().invoke(info -> LOGGER.trace("got {}", info));
+    public JobServiceManagementInfo getAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate) {
+        LOGGER.trace("get {}", id);
+        JobServiceManagementInfo info = doGetAndUpdate(id, computeUpdate);
+        LOGGER.trace("got {}", info);
+        return info;
     }
 
     private JobServiceManagementInfo doGetAndUpdate(String id, Function<JobServiceManagementInfo, JobServiceManagementInfo> computeUpdate) {
@@ -71,9 +68,9 @@ public class JPAReactiveJobServiceManagementRepository implements JobServiceMana
     }
 
     @Override
-    public Uni<JobServiceManagementInfo> set(JobServiceManagementInfo info) {
-        LOGGER.info("set {}", info);
-        return Uni.createFrom().completionStage(this.reactiveRepositoryHelper.runAsync(() -> this.doSet(info)));
+    public JobServiceManagementInfo set(JobServiceManagementInfo info) {
+        LOGGER.trace("set {}", info);
+        return this.doSet(info);
     }
 
     public JobServiceManagementInfo doSet(JobServiceManagementInfo info) {
@@ -98,17 +95,13 @@ public class JPAReactiveJobServiceManagementRepository implements JobServiceMana
     }
 
     @Override
-    public Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
-        return Uni.createFrom().completionStage(this.reactiveRepositoryHelper.runAsync(() -> this.doHeartbeat(info)));
+    public JobServiceManagementInfo heartbeat(JobServiceManagementInfo info) {
+        return this.doHeartbeat(info);
     }
 
     @Override
-    public Uni<Boolean> release(JobServiceManagementInfo info) {
-        return Uni.createFrom().completionStage(this.reactiveRepositoryHelper.runAsync(() -> this.doRelease(info)));
-    }
-
-    private JobServiceManagementEntity findById(String id) {
-        return repository.findById(id);
+    public Boolean release(JobServiceManagementInfo info) {
+        return this.doRelease(info);
     }
 
     private JobServiceManagementEntity findByIdAndToken(JobServiceManagementInfo info) {
