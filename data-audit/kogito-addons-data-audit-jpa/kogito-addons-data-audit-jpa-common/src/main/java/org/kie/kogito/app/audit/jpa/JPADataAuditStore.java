@@ -153,7 +153,7 @@ public class JPADataAuditStore implements DataAuditStore {
             case ProcessInstanceNodeEventBody.EVENT_TYPE_SKIPPED -> NodeLogType.SKIPPED;
             case ProcessInstanceNodeEventBody.EVENT_TYPE_OBSOLETE -> NodeLogType.OBSOLETE;
             case ProcessInstanceNodeEventBody.EVENT_TYPE_ERROR -> NodeLogType.ERROR;
-            case ProcessInstanceNodeEventBody.EVENT_TYPE_UPDATE -> NodeLogType.STATE_UPDATED;
+            case ProcessInstanceNodeEventBody.EVENT_TYPE_UPDATED -> NodeLogType.STATE_UPDATED;
             default -> throw new IllegalArgumentException("Unknown ProcessInstanceNodeDataEvent type " + event.getData().getEventType());
         };
     }
