@@ -464,7 +464,7 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
     }
 
     public CompletableFuture<String> rescheduleNodeInstanceSla(DataFetchingEnvironment env) {
-        String id = env.getArgument("id");
+        String id = env.getArgument("processInstanceId");
         ProcessInstance processInstance = getCacheService().getProcessInstanceStorage().get(id);
         if (processInstance != null) {
             return getDataIndexApiExecutor().rescheduleNodeInstanceSla(
