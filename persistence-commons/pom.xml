@@ -40,7 +40,6 @@
     <module>persistence-commons-jpa-base</module>
     <module>persistence-commons-jpa</module>
     <module>persistence-commons-postgresql</module>
-    <module>persistence-commons-infinispan</module>
     <module>persistence-commons-mongodb</module>
     <module>persistence-commons-redis</module>
     <module>persistence-commons-reporting-parent</module>

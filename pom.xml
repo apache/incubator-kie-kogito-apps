@@ -156,7 +156,6 @@
         <module>kogito-apps-bom</module>
         <module>kogito-apps-build-parent</module>
         <module>explainability</module>
-        <module>trusty</module>
       </modules>
     </profile>
     <profile>

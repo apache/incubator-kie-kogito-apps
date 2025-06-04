@@ -33,7 +33,7 @@ import static org.hamcrest.CoreMatchers.isA;
 
 @QuarkusTest
 @TestProfile(InMemoryMessageTestProfile.class)
-class MongoDomainIndexingServiceIT extends AbstractDomainIndexingServiceIT {
+class MongoDomainIndexingServiceIT extends QuarkusAbstractDomainIT {
 
     @Override
     protected String getProcessProtobufFileContent() throws Exception {

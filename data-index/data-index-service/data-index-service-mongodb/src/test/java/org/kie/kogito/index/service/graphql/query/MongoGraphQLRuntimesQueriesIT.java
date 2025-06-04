@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.index.service.graphql.query;
 
+import org.kie.kogito.index.service.QuarkusAbstractGraphQlIT;
 import org.kie.kogito.index.service.test.InMemoryMessageTestProfile;
 import org.kie.kogito.index.test.TestUtils;
 
@@ -26,7 +27,7 @@ import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
 @TestProfile(InMemoryMessageTestProfile.class)
-class MongoGraphQLRuntimesQueriesIT extends AbstractGraphQLRuntimesQueriesIT {
+class MongoGraphQLRuntimesQueriesIT extends QuarkusAbstractGraphQlIT {
 
     @Override
     protected String getTestProtobufFileContent() throws Exception {
