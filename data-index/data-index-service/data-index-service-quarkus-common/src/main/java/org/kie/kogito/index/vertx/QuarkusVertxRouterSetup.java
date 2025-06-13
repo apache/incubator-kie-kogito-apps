@@ -36,19 +36,20 @@ import jakarta.inject.Inject;
 @ApplicationScoped
 public class QuarkusVertxRouterSetup {
 
-    @Inject
     @ConfigProperty(name = "quarkus.oidc.enabled", defaultValue = "false")
     Boolean authEnabled;
 
-    @Inject
-    @ConfigProperty(name = "kogito.data-index.vertx-graphql.ui.path", defaultValue = "/graphiql")
+    @ConfigProperty(name = VertxRouterSetupHelper.GRAPH_UI_PATH_PROPERTY, defaultValue = "/graphiql")
     String graphUIPath;
+
+    @ConfigProperty(name = VertxRouterSetupHelper.UI_PATH_PROPERTY, defaultValue = "")
+    String indexUIPath;
 
     @Inject
     Vertx vertx;
 
     void setupRouter(@Observes Router router) {
-        VertxRouterSetupHelper.setupRouter(vertx, router, graphUIPath, authEnabled, this::getCurrentAccessToken);
+        VertxRouterSetupHelper.setupRouter(vertx, router, graphUIPath, indexUIPath, authEnabled, this::getCurrentAccessToken);
     }
 
     private String getCurrentAccessToken(RoutingContext routingContext) {

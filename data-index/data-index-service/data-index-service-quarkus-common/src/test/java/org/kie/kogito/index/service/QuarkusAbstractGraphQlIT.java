@@ -22,7 +22,6 @@ import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
-import org.kie.kogito.index.service.graphql.AbstractWebSocketSubscriptionIT;
 import org.kie.kogito.index.service.graphql.query.AbstractGraphQLRuntimesQueriesIT;
 
 import io.smallrye.reactive.messaging.memory.InMemoryConnector;
