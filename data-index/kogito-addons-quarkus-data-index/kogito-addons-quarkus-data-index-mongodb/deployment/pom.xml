@@ -46,10 +46,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-vertx-graphql-deployment</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-reactive-routes-deployment</artifactId>
-    </dependency>
   </dependencies>
   <build>
     <plugins>

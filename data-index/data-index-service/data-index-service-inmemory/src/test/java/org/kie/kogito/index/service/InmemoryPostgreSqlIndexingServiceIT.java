@@ -25,6 +25,6 @@ import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
 @TestProfile(InMemoryMessageTestProfile.class)
-class InmemoryPostgreSqlIndexingServiceIT extends AbstractIndexingServiceIT {
+class InmemoryPostgreSqlIndexingServiceIT extends QuarkusAbstractIndexingIT {
 
 }

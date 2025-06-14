@@ -21,7 +21,9 @@ package org.kie.kogito.index.addon.api;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -31,9 +33,12 @@ import org.kie.kogito.Application;
 import org.kie.kogito.Model;
 import org.kie.kogito.index.api.ExecuteArgs;
 import org.kie.kogito.index.api.KogitoRuntimeClient;
-import org.kie.kogito.index.api.KogitoRuntimeCommonClient;
-import org.kie.kogito.index.model.*;
+import org.kie.kogito.index.model.Node;
+import org.kie.kogito.index.model.ProcessDefinition;
+import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.model.Timer;
+import org.kie.kogito.index.model.UserTaskInstance;
+import org.kie.kogito.index.quarkus.service.api.KogitoRuntimeCommonClient;
 import org.kie.kogito.index.service.DataIndexServiceException;
 import org.kie.kogito.internal.process.runtime.KogitoWorkflowProcess;
 import org.kie.kogito.jackson.utils.JsonObjectUtils;
@@ -52,7 +57,9 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 
 import static java.util.stream.Collectors.toMap;
-import static org.kie.kogito.jackson.utils.JsonObjectUtils.*;
+import static org.kie.kogito.jackson.utils.JsonObjectUtils.convertValue;
+import static org.kie.kogito.jackson.utils.JsonObjectUtils.fromString;
+import static org.kie.kogito.jackson.utils.JsonObjectUtils.fromValue;
 
 @ApplicationScoped
 public class KogitoAddonRuntimeClientImpl extends KogitoRuntimeCommonClient implements KogitoRuntimeClient {

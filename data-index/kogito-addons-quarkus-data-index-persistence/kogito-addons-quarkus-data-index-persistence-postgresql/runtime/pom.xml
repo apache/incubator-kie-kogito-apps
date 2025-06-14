@@ -43,6 +43,10 @@
       <artifactId>data-index-storage-postgresql</artifactId>
     </dependency>
     <dependency>
+       <groupId>io.quarkus</groupId>
+       <artifactId>quarkus-hibernate-orm</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kie-addons-quarkus-flyway</artifactId>
     </dependency>

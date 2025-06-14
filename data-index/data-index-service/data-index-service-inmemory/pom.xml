@@ -39,7 +39,7 @@
   <dependencies>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>data-index-service-common</artifactId>
+      <artifactId>data-index-service-quarkus-common</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
@@ -57,7 +57,10 @@
       <groupId>io.quarkiverse.embedded.postgresql</groupId>
       <artifactId>quarkus-embedded-postgresql</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-orm</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-test-utils</artifactId>
@@ -66,6 +69,12 @@
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-service-common</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+     <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>data-index-service-quarkus-common</artifactId>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>

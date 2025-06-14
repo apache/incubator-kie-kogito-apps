@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.index.service.graphql;
 
+import org.kie.kogito.index.service.QuarkusAbstractWebSocketIT;
 import org.kie.kogito.index.service.test.InMemoryMessageTestProfile;
 import org.kie.kogito.index.test.TestUtils;
 
@@ -26,7 +27,7 @@ import io.quarkus.test.junit.TestProfile;
 
 @QuarkusTest
 @TestProfile(InMemoryMessageTestProfile.class)
-class MongoWebSocketSubscriptionIT extends AbstractWebSocketSubscriptionIT {
+class MongoWebSocketSubscriptionIT extends QuarkusAbstractWebSocketIT {
 
     @Override
     protected String getProcessProtobufFileContent() throws Exception {
