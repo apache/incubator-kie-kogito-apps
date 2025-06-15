@@ -26,7 +26,7 @@
   <parent>
     <artifactId>jitexecutor</artifactId>
     <groupId>org.kie.kogito</groupId>
-    <version>10.1.999-SNAPSHOT</version>
+    <version>10.1.999-20250615-SNAPSHOT</version>
   </parent>
 
   <artifactId>jitexecutor-bpmn</artifactId>
