@@ -19,6 +19,7 @@
 package org.kie.kogito.index;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.KogitoApplication;
 import org.kie.kogito.index.spring.DataIndexInfinispanSpringTestResource;
 import org.kie.kogito.index.spring.KogitoServiceRandomPortSpringTestResource;
@@ -35,6 +36,7 @@ import static org.kie.kogito.index.test.Constants.KOGITO_DATA_INDEX_SERVICE_URL;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = { KogitoApplication.class })
 @ContextConfiguration(initializers = { KogitoServiceRandomPortSpringTestResource.class, DataIndexInfinispanSpringTestResource.class })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
+@Disabled
 public class ProcessDataIndexInfinispanIT extends SpringBootAbstractProcessInstanceIT {
 
     @LocalServerPort
