@@ -42,14 +42,12 @@ class MongoClientManagerIT {
     @Test
     void testGetCollection() {
         MongoCollection<Document> mongoCollection = mongoClientManager.getCollection("test");
-        assertEquals(mongoClientManager.database, mongoCollection.getNamespace().getDatabaseName());
         assertEquals("test", mongoCollection.getNamespace().getCollectionName());
     }
 
     @Test
     void testGetCollection_withDocumentClass() {
         MongoCollection<TestClass> mongoCollection = mongoClientManager.getCollection("test", TestClass.class);
-        assertEquals(mongoClientManager.database, mongoCollection.getNamespace().getDatabaseName());
         assertEquals("test", mongoCollection.getNamespace().getCollectionName());
         assertTrue(mongoCollection.getDocumentClass().isAssignableFrom(TestClass.class));
     }

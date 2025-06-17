@@ -45,7 +45,6 @@ import org.kie.kogito.persistence.api.schema.SchemaRegistrationException;
 import org.kie.kogito.persistence.api.schema.SchemaType;
 import org.kie.kogito.persistence.mongodb.mock.MockProcessIndexEventListener;
 import org.kie.kogito.testcontainers.quarkus.MongoDBQuarkusTestResource;
-import org.mockito.ArgumentMatchers;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.IndexModel;
@@ -57,7 +56,6 @@ import io.quarkus.test.junit.QuarkusTest;
 
 import jakarta.inject.Inject;
 
-import static io.quarkus.test.junit.QuarkusMock.installMockForType;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -66,14 +64,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.kie.kogito.persistence.mongodb.index.IndexManager.DEFAULT_INDEX;
 import static org.kie.kogito.persistence.mongodb.index.IndexManager.INDEX_NAME_FIELD;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 @QuarkusTest
 @QuarkusTestResource(MongoDBQuarkusTestResource.class)
 class IndexManagerIT {
-
-    private IndexSchemaAcceptor indexSchemaAcceptor;
 
     @Inject
     MockProcessIndexEventListener mockProcessIndexEventListener;
@@ -119,10 +113,6 @@ class IndexManagerIT {
         indexManager.getIndexes().put(flightEntityIndexDescriptor.getName(), flightEntityIndexDescriptor);
         indexManager.getIndexes().put(hotelEntityIndexDescriptor.getName(), hotelEntityIndexDescriptor);
         indexManager.getIndexes().put(travelEntityIndexDescriptor.getName(), travelEntityIndexDescriptor);
-
-        indexSchemaAcceptor = mock(IndexSchemaAcceptor.class);
-        when(indexSchemaAcceptor.accept(ArgumentMatchers.any())).thenReturn(true);
-        installMockForType(indexSchemaAcceptor, IndexSchemaAcceptor.class);
 
         mockProcessIndexEventListener.reset();
     }

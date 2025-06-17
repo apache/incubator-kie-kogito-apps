@@ -26,7 +26,7 @@ import jakarta.enterprise.inject.Produces;
 
 @ApplicationScoped
 public class DateTimeCoercingProducer {
-    
+
     @Produces
     DateTimeCoercing defaultTimeCoercing() {
         return new DefaultDateTimeCoercing();

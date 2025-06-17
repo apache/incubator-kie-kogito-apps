@@ -16,27 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 package org.kie.kogito.persistence.mongodb.index;
 
-import java.util.Optional;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.kie.kogito.persistence.api.schema.SchemaAcceptor;
-import org.kie.kogito.persistence.api.schema.SchemaType;
 
 import jakarta.enterprise.context.ApplicationScoped;
-
-import static org.kie.kogito.persistence.api.factory.Constants.PERSISTENCE_TYPE_PROPERTY;
-import static org.kie.kogito.persistence.mongodb.Constants.MONGODB_STORAGE;
+import jakarta.enterprise.inject.Produces;
 
 @ApplicationScoped
-public class IndexSchemaAcceptor implements SchemaAcceptor {
+public class MongoConfigProducer {
 
-    @ConfigProperty(name = PERSISTENCE_TYPE_PROPERTY)
-    Optional<String> storageType;
+    @ConfigProperty(name = "kogito.apps.persistence.indexing", defaultValue = "true")
+    boolean indexEnabled;
 
-    @Override
-    public boolean accept(SchemaType type) {
-        return storageType.isPresent() && MONGODB_STORAGE.equals(storageType.get());
+    @ConfigProperty(name = "quarkus.mongodb.database")
+    String dbName;
+
+    @Produces
+    MongoConfig mongoConfig() {
+        return new MongoConfig(dbName, indexEnabled);
     }
+
 }

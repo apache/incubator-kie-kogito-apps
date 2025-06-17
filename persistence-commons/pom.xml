@@ -44,6 +44,7 @@
     <module>persistence-commons-redis</module>
     <module>persistence-commons-reporting-parent</module>
     <module>kogito-ddl</module>
+    <module>persistence-commons-mongodb-quarkus</module>
   </modules>
 
 </project>
