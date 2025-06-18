@@ -36,6 +36,10 @@
      <artifactId>data-index-common</artifactId>
   </dependency>
   <dependency>
+     <groupId>org.kie.kogito</groupId>
+     <artifactId>data-index-graphql</artifactId>
+  </dependency>
+  <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web-client</artifactId>
     </dependency>
@@ -47,5 +51,13 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-jackson</artifactId>
     </dependency>
+     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx-graphql</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-reactive-routes</artifactId>
+     </dependency>
   </dependencies>
 </project>

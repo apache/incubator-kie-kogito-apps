@@ -62,7 +62,10 @@
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-storage-protobuf</artifactId>
     </dependency>
-    
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-graphql-client</artifactId>
+    </dependency>
      <dependency>
       <groupId>io.quarkiverse.reactivemessaging.http</groupId>
       <artifactId>quarkus-reactive-messaging-http</artifactId>

@@ -42,10 +42,6 @@
       <groupId>org.kie</groupId>
       <artifactId>kogito-addons-quarkus-data-index-mongodb</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx-graphql-deployment</artifactId>
-    </dependency>
   </dependencies>
   <build>
     <plugins>

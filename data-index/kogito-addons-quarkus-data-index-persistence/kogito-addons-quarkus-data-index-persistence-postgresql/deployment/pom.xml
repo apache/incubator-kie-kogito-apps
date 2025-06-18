@@ -50,6 +50,10 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-hibernate-orm-deployment</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-postgresql-deployment</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>

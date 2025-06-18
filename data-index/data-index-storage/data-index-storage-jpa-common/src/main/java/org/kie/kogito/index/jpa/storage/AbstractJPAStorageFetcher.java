@@ -27,6 +27,7 @@ import org.kie.kogito.persistence.api.query.Query;
 
 import io.smallrye.mutiny.Multi;
 
+import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
@@ -38,6 +39,8 @@ public class AbstractJPAStorageFetcher<K, E extends AbstractEntity, V> implement
     protected Class<E> entityClass;
     protected Function<E, V> mapToModel;
     protected Optional<JsonPredicateBuilder> jsonPredicateBuilder = Optional.empty();
+
+    private String entityName;
 
     protected AbstractJPAStorageFetcher() {
     }
@@ -51,6 +54,8 @@ public class AbstractJPAStorageFetcher<K, E extends AbstractEntity, V> implement
         this.entityClass = entityClass;
         this.mapToModel = mapToModel;
         this.jsonPredicateBuilder = jsonPredicateBuilder;
+        Entity entity = entityClass.getAnnotation(Entity.class);
+        this.entityName = entity != null ? entity.name() : entityClass.getSimpleName();
     }
 
     @Override
@@ -83,6 +88,6 @@ public class AbstractJPAStorageFetcher<K, E extends AbstractEntity, V> implement
     @Override
     @Transactional
     public void clear() {
-        em.clear();
+        em.createQuery("DELETE from " + entityName).executeUpdate();
     }
 }

@@ -50,5 +50,6 @@
       <groupId>org.kie</groupId>
       <artifactId>kogito-addons-quarkus-data-index-common-runtime</artifactId>
     </dependency>
+    
   </dependencies>
 </project>

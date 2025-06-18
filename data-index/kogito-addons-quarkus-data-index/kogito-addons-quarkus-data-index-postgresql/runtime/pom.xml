@@ -38,10 +38,6 @@
       <groupId>org.kie</groupId>
       <artifactId>kogito-addons-quarkus-data-index-persistence-postgresql</artifactId>
     </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-vertx-graphql</artifactId>
-    </dependency>
   </dependencies>
   <build>
     <plugins>

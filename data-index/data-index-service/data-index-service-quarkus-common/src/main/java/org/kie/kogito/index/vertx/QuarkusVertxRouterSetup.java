@@ -42,14 +42,14 @@ public class QuarkusVertxRouterSetup {
     @ConfigProperty(name = VertxRouterSetupHelper.GRAPH_UI_PATH_PROPERTY, defaultValue = "/graphiql")
     String graphUIPath;
 
-    @ConfigProperty(name = VertxRouterSetupHelper.UI_PATH_PROPERTY, defaultValue = "")
-    String indexUIPath;
+    @ConfigProperty(name = VertxRouterSetupHelper.UI_PATH_PROPERTY)
+    Optional<String> indexUIPath;
 
     @Inject
     Vertx vertx;
 
     void setupRouter(@Observes Router router) {
-        VertxRouterSetupHelper.setupRouter(vertx, router, graphUIPath, indexUIPath, authEnabled, this::getCurrentAccessToken);
+        VertxRouterSetupHelper.setupRouter(vertx, router, graphUIPath, indexUIPath.orElse(""), authEnabled, this::getCurrentAccessToken);
     }
 
     private String getCurrentAccessToken(RoutingContext routingContext) {

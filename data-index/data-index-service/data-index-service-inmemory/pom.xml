@@ -54,6 +54,10 @@
       <artifactId>quarkus-container-image-jib</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-postgresql</artifactId>
+    </dependency>
+    <dependency>
       <groupId>io.quarkiverse.embedded.postgresql</groupId>
       <artifactId>quarkus-embedded-postgresql</artifactId>
     </dependency>
