@@ -129,7 +129,6 @@
     <module>data-audit</module>
     <module>security-commons</module>
     <module>explainability</module>
-    <module>trusty</module>
     <module>jitexecutor</module>
   </modules>
 

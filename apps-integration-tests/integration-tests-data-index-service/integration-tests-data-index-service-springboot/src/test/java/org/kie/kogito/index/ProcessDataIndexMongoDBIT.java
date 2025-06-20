@@ -19,6 +19,7 @@
 package org.kie.kogito.index;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.kie.kogito.KogitoApplication;
 import org.kie.kogito.index.spring.DataIndexMongoDBSpringTestResource;
 import org.kie.kogito.index.spring.KogitoServiceRandomPortSpringTestResource;
