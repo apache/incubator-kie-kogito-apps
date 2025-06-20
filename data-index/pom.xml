@@ -44,6 +44,7 @@
     <module>kogito-addons-quarkus-data-index</module>
     <module>data-index-mutations</module>
     <module>data-index-common-quarkus</module>
+    <module>data-index-graphql-quarkus</module>
   </modules>
 
 </project>

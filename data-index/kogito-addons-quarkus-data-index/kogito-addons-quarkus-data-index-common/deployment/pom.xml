@@ -50,6 +50,13 @@
       <groupId>org.kie</groupId>
       <artifactId>kogito-addons-quarkus-data-index-common-runtime</artifactId>
     </dependency>
-    
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx-deployment</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-vertx-graphql-deployment</artifactId>
+    </dependency>
   </dependencies>
 </project>
