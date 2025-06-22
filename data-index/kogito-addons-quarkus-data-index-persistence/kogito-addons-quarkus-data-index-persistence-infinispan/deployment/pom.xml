@@ -25,7 +25,7 @@
   <parent>
     <groupId>org.kie</groupId>
     <artifactId>kogito-addons-quarkus-data-index-persistence-infinispan-parent</artifactId>
-    <version>999-SNAPSHOT</version>
+    <version>999-20250622-SNAPSHOT</version>
   </parent>
   <artifactId>kogito-addons-quarkus-data-index-persistence-infinispan-deployment</artifactId>
   <name>Kogito Apps :: Kogito Addons Quarkus Data Index Persistence Infinispan :: Deployment</name>
