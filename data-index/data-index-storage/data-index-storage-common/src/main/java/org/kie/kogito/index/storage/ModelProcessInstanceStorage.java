@@ -77,11 +77,7 @@ public class ModelProcessInstanceStorage extends ModelStorageFetcher<String, Pro
     public void indexGroup(MultipleProcessInstanceDataEvent events) {
         Map<String, ProcessInstance> processInstances = new HashMap<>();
         for (ProcessInstanceDataEvent<?> event : events.getData()) {
-            ProcessInstance processInstance = processInstances.get(event.getKogitoProcessInstanceId());
-            if (processInstance == null) {
-                processInstance = findProcessInstance(event);
-                processInstances.put(event.getKogitoProcessInstanceId(), processInstance);
-            }
+            ProcessInstance processInstance = processInstances.computeIfAbsent(event.getKogitoProcessInstanceId(), k -> findProcessInstance(event));
             if (event instanceof ProcessInstanceErrorDataEvent) {
                 errorMerger.merge(processInstance, event);
             } else if (event instanceof ProcessInstanceNodeDataEvent) {
@@ -94,13 +90,7 @@ public class ModelProcessInstanceStorage extends ModelStorageFetcher<String, Pro
                 variableMerger.merge(processInstance, event);
             }
         }
-        if (!processInstances.isEmpty()) {
-            while(processInstances.values().iterator().hasNext()) {
-                ProcessInstance processInstance = processInstances.values().iterator().next();
-                storage.put(processInstance.getId(), processInstance);
-                processInstances.remove(processInstance.getId());
-            }
-        }
+        processInstances.values().forEach(processInstance -> storage.put(processInstance.getId(),processInstance));
     }
 
     private <T extends ProcessInstanceDataEvent<?>> void index(T event, ProcessInstanceEventMerger merger) {
