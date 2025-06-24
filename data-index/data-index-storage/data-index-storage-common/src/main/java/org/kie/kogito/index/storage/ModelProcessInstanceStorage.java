@@ -34,6 +34,9 @@ import org.kie.kogito.index.storage.merger.ProcessInstanceStateDataEventMerger;
 import org.kie.kogito.index.storage.merger.ProcessInstanceVariableDataEventMerger;
 import org.kie.kogito.persistence.api.Storage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ModelProcessInstanceStorage extends ModelStorageFetcher<String, ProcessInstance> implements ProcessInstanceStorage {
     private final ProcessInstanceErrorDataEventMerger errorMerger = new ProcessInstanceErrorDataEventMerger();
     private final ProcessInstanceNodeDataEventMerger nodeMerger = new ProcessInstanceNodeDataEventMerger();
@@ -72,10 +75,12 @@ public class ModelProcessInstanceStorage extends ModelStorageFetcher<String, Pro
 
     @Override
     public void indexGroup(MultipleProcessInstanceDataEvent events) {
-        ProcessInstance processInstance = null;
+        Map<String, ProcessInstance> processInstances = new HashMap<>();
         for (ProcessInstanceDataEvent<?> event : events.getData()) {
+            ProcessInstance processInstance = processInstances.get(event.getKogitoProcessInstanceId());
             if (processInstance == null) {
                 processInstance = findProcessInstance(event);
+                processInstances.put(event.getKogitoProcessInstanceId(), processInstance);
             }
             if (event instanceof ProcessInstanceErrorDataEvent) {
                 errorMerger.merge(processInstance, event);
@@ -89,8 +94,12 @@ public class ModelProcessInstanceStorage extends ModelStorageFetcher<String, Pro
                 variableMerger.merge(processInstance, event);
             }
         }
-        if (processInstance != null) {
-            storage.put(processInstance.getId(), processInstance);
+        if (!processInstances.isEmpty()) {
+            while(processInstances.values().iterator().hasNext()) {
+                ProcessInstance processInstance = processInstances.values().iterator().next();
+                storage.put(processInstance.getId(), processInstance);
+                processInstances.remove(processInstance.getId());
+            }
         }
     }
 
