@@ -18,6 +18,9 @@
  */
 package org.kie.kogito.index.storage;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.kie.kogito.event.process.MultipleProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
@@ -33,9 +36,6 @@ import org.kie.kogito.index.storage.merger.ProcessInstanceSLADataEventMerger;
 import org.kie.kogito.index.storage.merger.ProcessInstanceStateDataEventMerger;
 import org.kie.kogito.index.storage.merger.ProcessInstanceVariableDataEventMerger;
 import org.kie.kogito.persistence.api.Storage;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class ModelProcessInstanceStorage extends ModelStorageFetcher<String, ProcessInstance> implements ProcessInstanceStorage {
     private final ProcessInstanceErrorDataEventMerger errorMerger = new ProcessInstanceErrorDataEventMerger();
@@ -90,7 +90,7 @@ public class ModelProcessInstanceStorage extends ModelStorageFetcher<String, Pro
                 variableMerger.merge(processInstance, event);
             }
         }
-        processInstances.values().forEach(processInstance -> storage.put(processInstance.getId(),processInstance));
+        processInstances.values().forEach(processInstance -> storage.put(processInstance.getId(), processInstance));
     }
 
     private <T extends ProcessInstanceDataEvent<?>> void index(T event, ProcessInstanceEventMerger merger) {
