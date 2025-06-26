@@ -50,6 +50,10 @@
       <artifactId>data-index-graphql</artifactId>
     </dependency>
     <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-health</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>persistence-commons-protobuf</artifactId>
       <scope>test</scope>
