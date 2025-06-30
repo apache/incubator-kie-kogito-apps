@@ -40,7 +40,7 @@ public abstract class AbstractProcessInstanceStorageIT {
 
     @Test
     @Transactional
-    void testProcessInstanceStateEvent() {
+    public void testProcessInstanceStateEvent() {
         String processInstanceId = createNewProcessInstance();
 
         ProcessInstance processInstance = storage.get(processInstanceId);
@@ -68,7 +68,7 @@ public abstract class AbstractProcessInstanceStorageIT {
 
     @Test
     @Transactional
-    void testProcessInstanceErrorEvent() {
+    public void testProcessInstanceErrorEvent() {
         String processInstanceId = createNewProcessInstance();
 
         ProcessInstance processInstance = storage.get(processInstanceId);
@@ -89,7 +89,7 @@ public abstract class AbstractProcessInstanceStorageIT {
 
     @Test
     @Transactional
-    void testProcessInstanceNodeEvent() {
+    public void testProcessInstanceNodeEvent() {
         String processInstanceId = createNewProcessInstance();
 
         ProcessInstance processInstance = storage.get(processInstanceId);
@@ -135,7 +135,7 @@ public abstract class AbstractProcessInstanceStorageIT {
 
     @Test
     @Transactional
-    void testProcessInstanceVariableEvent() {
+    public void testProcessInstanceVariableEvent() {
         String processInstanceId = createNewProcessInstance();
 
         ProcessInstance processInstance = storage.get(processInstanceId);
