@@ -159,6 +159,14 @@ type NodeInstance {
     slaDueDate: DateTime
     retrigger: Boolean
     errorMessage: String
+    cancelledType: CancelledType
+}
+
+enum CancelledType {
+    ABORTED,
+    SKIPPED,
+    OBSOLETE,
+    ERROR
 }
 
 enum MilestoneStatus {

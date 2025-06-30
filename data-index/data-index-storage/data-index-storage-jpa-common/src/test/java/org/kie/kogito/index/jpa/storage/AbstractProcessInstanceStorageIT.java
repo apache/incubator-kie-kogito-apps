@@ -40,7 +40,7 @@ public abstract class AbstractProcessInstanceStorageIT {
 
     @Test
     @Transactional
-    public void testProcessInstanceStateEvent() {
+    void testProcessInstanceStateEvent() {
         String processInstanceId = createNewProcessInstance();
 
         ProcessInstance processInstance = storage.get(processInstanceId);
@@ -68,7 +68,7 @@ public abstract class AbstractProcessInstanceStorageIT {
 
     @Test
     @Transactional
-    public void testProcessInstanceErrorEvent() {
+    void testProcessInstanceErrorEvent() {
         String processInstanceId = createNewProcessInstance();
 
         ProcessInstance processInstance = storage.get(processInstanceId);
@@ -89,7 +89,7 @@ public abstract class AbstractProcessInstanceStorageIT {
 
     @Test
     @Transactional
-    public void testProcessInstanceNodeEvent() {
+    void testProcessInstanceNodeEvent() {
         String processInstanceId = createNewProcessInstance();
 
         ProcessInstance processInstance = storage.get(processInstanceId);
@@ -109,7 +109,7 @@ public abstract class AbstractProcessInstanceStorageIT {
                 .hasSize(1);
 
         Assertions.assertThat(processInstance.getNodes().get(0))
-                .hasNoNullFieldsOrPropertiesExcept("exit", "slaDueDate", "errorMessage", "retrigger")
+                .hasNoNullFieldsOrPropertiesExcept("exit", "slaDueDate", "errorMessage", "retrigger", "cancelledType")
                 .hasFieldOrPropertyWithValue("name", "nodeName")
                 .hasFieldOrPropertyWithValue("type", "BoundaryEventNode")
                 .hasFieldOrPropertyWithValue("definitionId", nodeDefinitionId)
@@ -125,7 +125,7 @@ public abstract class AbstractProcessInstanceStorageIT {
                 .hasSize(1);
 
         Assertions.assertThat(processInstance.getNodes().get(0))
-                .hasNoNullFieldsOrPropertiesExcept("slaDueDate", "errorMessage", "retrigger")
+                .hasNoNullFieldsOrPropertiesExcept("slaDueDate", "errorMessage", "retrigger", "cancelledType")
                 .hasFieldOrPropertyWithValue("name", "nodeName")
                 .hasFieldOrPropertyWithValue("type", "BoundaryEventNode")
                 .hasFieldOrPropertyWithValue("definitionId", nodeDefinitionId)
@@ -135,7 +135,7 @@ public abstract class AbstractProcessInstanceStorageIT {
 
     @Test
     @Transactional
-    public void testProcessInstanceVariableEvent() {
+    void testProcessInstanceVariableEvent() {
         String processInstanceId = createNewProcessInstance();
 
         ProcessInstance processInstance = storage.get(processInstanceId);
