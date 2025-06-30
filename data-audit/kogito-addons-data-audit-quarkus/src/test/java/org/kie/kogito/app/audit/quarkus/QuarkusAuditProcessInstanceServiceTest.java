@@ -111,7 +111,7 @@ public class QuarkusAuditProcessInstanceServiceTest {
     public void testGetAllProcessInstancesState() {
 
         String query =
-                "{ GetAllProcessInstancesState { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
+                "{ GetAllProcessInstancesState { eventId, eventDate, eventUser, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
 
         query = wrapQuery(query);
 
@@ -128,18 +128,18 @@ public class QuarkusAuditProcessInstanceServiceTest {
 
         assertThat(data)
                 .hasSize(3)
-                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"))
+                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"), e -> e.get("eventUser"))
                 .containsExactlyInAnyOrder(
-                        tuple("1", String.valueOf(ProcessInstance.STATE_ACTIVE)),
-                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED)),
-                        tuple("3", String.valueOf(ProcessInstance.STATE_ERROR)));
+                        tuple("1", String.valueOf(ProcessInstance.STATE_ACTIVE), "identity"),
+                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED), "identity2"),
+                        tuple("3", String.valueOf(ProcessInstance.STATE_ERROR), "identity3"));
 
     }
 
     @Test
     public void testGetProcessInstancesStateHistory() {
         String query =
-                "{ GetProcessInstancesStateHistory ( processInstanceId : \\\"2\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
+                "{ GetProcessInstancesStateHistory ( processInstanceId : \\\"2\\\") { eventId, eventDate, eventUser, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -154,17 +154,17 @@ public class QuarkusAuditProcessInstanceServiceTest {
 
         assertThat(data)
                 .hasSize(2)
-                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"))
+                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"), e -> e.get("eventUser"))
                 .containsExactlyInAnyOrder(
-                        tuple("2", String.valueOf(ProcessInstance.STATE_ACTIVE)),
-                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED)));
+                        tuple("2", String.valueOf(ProcessInstance.STATE_ACTIVE), "identity"),
+                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED), "identity2"));
 
     }
 
     @Test
     public void testGetProcessInstancesStateHistoryByBusinessKey() {
         String query =
-                "{ GetProcessInstancesStateHistoryByBusinessKey ( businessKey : \\\"BusinessKey2\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
+                "{ GetProcessInstancesStateHistoryByBusinessKey ( businessKey : \\\"BusinessKey2\\\") { eventId, eventDate, eventUser, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -179,10 +179,10 @@ public class QuarkusAuditProcessInstanceServiceTest {
 
         assertThat(data)
                 .hasSize(2)
-                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"))
+                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"), e -> e.get("eventUser"))
                 .containsExactlyInAnyOrder(
-                        tuple("2", String.valueOf(ProcessInstance.STATE_ACTIVE)),
-                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED)));
+                        tuple("2", String.valueOf(ProcessInstance.STATE_ACTIVE), "identity"),
+                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED), "identity2"));
 
     }
 
@@ -190,7 +190,7 @@ public class QuarkusAuditProcessInstanceServiceTest {
     public void testGetAllProcessInstancesStateByStatus() {
 
         String query =
-                "{ GetAllProcessInstancesStateByStatus (status : \\\"1\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
+                "{ GetAllProcessInstancesStateByStatus (status : \\\"1\\\") { eventId, eventDate, eventUser, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
 
         query = wrapQuery(query);
 
@@ -207,9 +207,9 @@ public class QuarkusAuditProcessInstanceServiceTest {
 
         assertThat(data)
                 .hasSize(1)
-                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"))
+                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"), e -> e.get("eventUser"))
                 .containsExactlyInAnyOrder(
-                        tuple("1", String.valueOf(ProcessInstance.STATE_ACTIVE)));
+                        tuple("1", String.valueOf(ProcessInstance.STATE_ACTIVE), "identity"));
 
     }
 
@@ -217,7 +217,7 @@ public class QuarkusAuditProcessInstanceServiceTest {
     public void testGetAllProcessInstancesStateByProcessId() {
 
         String query =
-                "{ GetAllProcessInstancesStateByProcessId (processId : \\\"processId1\\\") { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
+                "{ GetAllProcessInstancesStateByProcessId (processId : \\\"processId1\\\") { eventId, eventDate, eventUser, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, eventType, outcome, state, slaDueDate, roles} }";
 
         query = wrapQuery(query);
 
@@ -234,10 +234,10 @@ public class QuarkusAuditProcessInstanceServiceTest {
 
         assertThat(data)
                 .hasSize(2)
-                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"))
+                .extracting(e -> e.get("processInstanceId"), e -> e.get("state"), e -> e.get("eventUser"))
                 .containsExactlyInAnyOrder(
-                        tuple("1", String.valueOf(ProcessInstance.STATE_ACTIVE)),
-                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED)));
+                        tuple("1", String.valueOf(ProcessInstance.STATE_ACTIVE), "identity"),
+                        tuple("2", String.valueOf(ProcessInstance.STATE_COMPLETED), "identity2"));
 
     }
 
@@ -293,7 +293,7 @@ public class QuarkusAuditProcessInstanceServiceTest {
     }
 
     @Test
-    public void testGetAllProcessInstancesVariablebyProcessInstanceId() {
+    public void testGetAllProcessInstancesVariableByProcessInstanceId() {
 
         String query =
                 "{ GetAllProcessInstancesVariableByProcessInstanceId ( processInstanceId : \\\"1\\\")  { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, variableId, variableName, variableValue } }";
@@ -321,7 +321,7 @@ public class QuarkusAuditProcessInstanceServiceTest {
     public void testGetAllProcessInstancesVariableHistoryByProcessInstanceId() {
 
         String query =
-                "{ GetAllProcessInstancesVariableHistoryByProcessInstanceId ( processInstanceId : \\\"1\\\")  { variableId, variableName, logs { eventId, eventDate, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, variableId, variableName, variableValue} } }";
+                "{ GetAllProcessInstancesVariableHistoryByProcessInstanceId ( processInstanceId : \\\"1\\\")  { variableId, variableName, logs { eventId, eventDate, eventUser, processType, processId, processVersion, parentProcessInstanceId, rootProcessId, rootProcessInstanceId, processInstanceId, businessKey, variableId, variableName, variableValue} } }";
         query = wrapQuery(query);
         List<Map<String, Object>> data = given()
                 .contentType(ContentType.JSON)
@@ -339,6 +339,13 @@ public class QuarkusAuditProcessInstanceServiceTest {
                 .extracting(e -> e.get("variableId"), e -> e.get("variableName"))
                 .containsExactlyInAnyOrder(
                         tuple("var_id1", "varName"));
+
+        List<Map<String, Object>> variableLogs = (List<Map<String, Object>>) data.get(0).get("logs");
+        assertThat(variableLogs)
+                .hasSize(2)
+                .extracting(e -> e.get("processInstanceId"), e -> e.get("variableId"), e -> e.get("variableName"), e -> e.get("variableValue"), e -> e.get("eventUser"))
+                .containsExactlyInAnyOrder(tuple("1", "var_id1", "varName", "variableValue", "identity"),
+                        tuple("1", "var_id1", "varName", "errorMessage", "identity"));
 
     }
 }

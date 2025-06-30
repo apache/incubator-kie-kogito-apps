@@ -19,6 +19,8 @@ type Mutation {
     ProcessInstanceRetry(id: String): String
     ProcessInstanceSkip(id: String): String
     ProcessInstanceUpdateVariables(id: String, variables: String): String
+    ProcessInstanceRescheduleSlaTimer(id: String!, expirationTime: DateTime!): String
+    NodeInstanceRescheduleSlaTimer(processInstanceId: String!, nodeInstanceId: String!, expirationTime: DateTime!): String
     NodeInstanceTrigger(id: String, nodeId: String): String
     NodeInstanceRetrigger(id: String, nodeInstanceId: String): String
     NodeInstanceCancel(id: String, nodeInstanceId: String): String
@@ -71,6 +73,14 @@ input ProcessDefinitionArgument {
     type: StringArgument
 }
 
+type TimerInstance {
+    timerId: String!
+    processId: String!
+    processInstanceId: String!
+    nodeInstanceId: String
+    description: String
+}
+
 type ProcessInstance {
     id: String!
     processId: String!
@@ -103,6 +113,9 @@ type ProcessInstance {
     updatedBy: String
     executionSummary: [String]
     slaDueDate: DateTime
+    timers: [TimerInstance]
+    cloudEventId: String
+    cloudEventSource: String
 }
 
 type ProcessInstanceError {
@@ -203,6 +216,9 @@ input ProcessInstanceArgument {
     createdBy: StringArgument
     updatedBy: StringArgument
     definition: ProcessDefinitionArgument
+    slaDueDate: DateArgument
+    cloudEventId: StringArgument
+    cloudEventSource: StringArgument
 }
 
 input ProcessInstanceErrorArgument {
@@ -223,6 +239,7 @@ input NodeInstanceArgument {
     exit: DateArgument
     errorMessage: StringArgument
     retrigger: BooleanArgument
+    slaDueDate: DateArgument
 }
 
 input MilestoneStatusArgument {
@@ -411,6 +428,7 @@ input UserTaskInstanceArgument {
     lastUpdate: DateArgument
     comments: CommentArgument
     attachments: AttachmentArgument
+    slaDueDate: DateArgument
 }
 
 input CommentArgument {

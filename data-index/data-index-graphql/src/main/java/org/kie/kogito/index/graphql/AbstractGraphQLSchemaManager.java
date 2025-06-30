@@ -18,12 +18,7 @@
  */
 package org.kie.kogito.index.graphql;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.ServiceLoader;
+import java.util.*;
 import java.util.ServiceLoader.Provider;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
@@ -34,13 +29,8 @@ import org.kie.kogito.index.api.KogitoRuntimeClient;
 import org.kie.kogito.index.graphql.query.GraphQLQueryOrderByParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParser;
 import org.kie.kogito.index.graphql.query.GraphQLQueryParserRegistry;
-import org.kie.kogito.index.model.Job;
-import org.kie.kogito.index.model.Node;
-import org.kie.kogito.index.model.NodeInstance;
-import org.kie.kogito.index.model.ProcessDefinition;
-import org.kie.kogito.index.model.ProcessDefinitionKey;
-import org.kie.kogito.index.model.ProcessInstance;
-import org.kie.kogito.index.model.UserTaskInstance;
+import org.kie.kogito.index.model.*;
+import org.kie.kogito.index.model.Timer;
 import org.kie.kogito.index.service.DataIndexServiceException;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.internal.process.runtime.KogitoProcessInstance;
@@ -50,6 +40,7 @@ import org.kie.kogito.persistence.api.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import graphql.execution.DataFetcherResult;
 import graphql.schema.DataFetcher;
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLArgument;
@@ -132,6 +123,8 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
         if (supportsCount()) {
             builder.dataFetcher("CountProcessInstances", this::countProcessInstances);
             builder.dataFetcher("CountUserTaskInstances", this::countUserTaskInstances);
+            builder.dataFetcher("CountJobs", this::countJobs);
+            builder.dataFetcher("CountProcessDefinitions", this::countProcessDefinitions);
         }
     }
 
@@ -244,8 +237,12 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
         return executeAdvancedQueryForCache(cacheService.getProcessDefinitionStorage(), env);
     }
 
-    protected Collection<ProcessInstance> getProcessInstancesValues(DataFetchingEnvironment env) {
-        return executeAdvancedQueryForCache(cacheService.getProcessInstanceStorage(), env);
+    protected DataFetcherResult<?> getProcessInstancesValues(DataFetchingEnvironment env) {
+        Collection<ProcessInstance> processInstances = executeAdvancedQueryForCache(cacheService.getProcessInstanceStorage(), env);
+        return DataFetcherResult.newResult()
+                .data(processInstances)
+                .localContext(processInstances)
+                .build();
     }
 
     protected long countProcessInstances(DataFetchingEnvironment env) {
@@ -254,6 +251,14 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
 
     protected long countUserTaskInstances(DataFetchingEnvironment env) {
         return executeCount(cacheService.getUserTaskInstanceStorage(), env);
+    }
+
+    protected long countJobs(DataFetchingEnvironment env) {
+        return executeCount(cacheService.getJobsStorage(), env);
+    }
+
+    protected long countProcessDefinitions(DataFetchingEnvironment env) {
+        return executeCount(cacheService.getProcessDefinitionStorage(), env);
     }
 
     protected <K, T> List<T> executeAdvancedQueryForCache(StorageFetcher<K, T> cache, DataFetchingEnvironment env) {
@@ -315,6 +320,18 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
         } else {
             return getProcessDefinitionSource(pd);
         }
+    }
+
+    public CompletableFuture<List<Timer>> getProcessInstanceTimers(DataFetchingEnvironment env) {
+        ProcessInstance processInstance = env.getSource();
+
+        // Skipping Getting the timers from the runtime if process instance isn't in Active state
+        if (processInstance.getState() != org.kie.kogito.process.ProcessInstance.STATE_ACTIVE) {
+            return CompletableFuture.completedFuture(Collections.emptyList());
+        }
+
+        String serviceUrl = getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId());
+        return dataIndexApiExecutor.getProcessInstanceTimers(serviceUrl, processInstance);
     }
 
     public CompletableFuture<List<Node>> getProcessInstanceNodes(DataFetchingEnvironment env) {
@@ -442,6 +459,31 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
         Job job = getCacheService().getJobsStorage().get(id);
         if (job != null) {
             return getDataIndexApiExecutor().rescheduleJob(job.getEndpoint(), job, env.getArgument("data"));
+        }
+        return CompletableFuture.failedFuture(new DataIndexServiceException(format(UNABLE_TO_FIND_ERROR_MSG, ID, id)));
+    }
+
+    public CompletableFuture<String> rescheduleNodeInstanceSla(DataFetchingEnvironment env) {
+        String id = env.getArgument("processInstanceId");
+        ProcessInstance processInstance = getCacheService().getProcessInstanceStorage().get(id);
+        if (processInstance != null) {
+            return getDataIndexApiExecutor().rescheduleNodeInstanceSla(
+                    getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                    processInstance,
+                    env.getArgument("nodeInstanceId"),
+                    env.getArgument("expirationTime"));
+        }
+        return CompletableFuture.failedFuture(new DataIndexServiceException(format(UNABLE_TO_FIND_ERROR_MSG, ID, id)));
+    }
+
+    public CompletableFuture<String> rescheduleProcessInstanceSla(DataFetchingEnvironment env) {
+        String id = env.getArgument("id");
+        ProcessInstance processInstance = getCacheService().getProcessInstanceStorage().get(id);
+        if (processInstance != null) {
+            return getDataIndexApiExecutor().rescheduleProcessInstanceSla(
+                    getServiceUrl(processInstance.getEndpoint(), processInstance.getProcessId()),
+                    processInstance,
+                    env.getArgument("expirationTime"));
         }
         return CompletableFuture.failedFuture(new DataIndexServiceException(format(UNABLE_TO_FIND_ERROR_MSG, ID, id)));
     }

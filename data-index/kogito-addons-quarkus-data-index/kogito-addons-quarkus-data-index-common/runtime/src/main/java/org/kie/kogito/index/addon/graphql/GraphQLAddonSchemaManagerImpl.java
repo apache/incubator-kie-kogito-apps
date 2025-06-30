@@ -57,6 +57,8 @@ public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager 
                     builder.dataFetcher("NodeInstanceCancel", this::cancelNodeInstance);
                     builder.dataFetcher("JobCancel", this::cancelJob);
                     builder.dataFetcher("JobReschedule", this::rescheduleJob);
+                    builder.dataFetcher("NodeInstanceRescheduleSlaTimer", this::rescheduleNodeInstanceSla);
+                    builder.dataFetcher("ProcessInstanceRescheduleSlaTimer", this::rescheduleProcessInstanceSla);
                     loadAdditionalMutations(builder);
                     return builder;
                 })
@@ -70,6 +72,7 @@ public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager 
                     builder.dataFetcher("parentProcessInstance", this::getParentProcessInstanceValue);
                     builder.dataFetcher("childProcessInstances", this::getChildProcessInstancesValues);
                     builder.dataFetcher("serviceUrl", this::getProcessInstanceServiceUrl);
+                    builder.dataFetcher("timers", this::getProcessInstanceTimers);
                     builder.dataFetcher("diagram", this::getProcessInstanceDiagram);
                     builder.dataFetcher("source", this::getProcessInstanceSource);
                     builder.dataFetcher("nodeDefinitions", this::getProcessInstanceNodes);
