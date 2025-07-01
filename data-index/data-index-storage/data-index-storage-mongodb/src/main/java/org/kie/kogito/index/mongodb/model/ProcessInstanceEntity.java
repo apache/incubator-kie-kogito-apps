@@ -24,6 +24,7 @@ import java.util.Set;
 
 import org.bson.Document;
 import org.bson.codecs.pojo.annotations.BsonId;
+import org.kie.kogito.index.model.CancelledType;
 
 public class ProcessInstanceEntity {
 
@@ -303,6 +304,8 @@ public class ProcessInstanceEntity {
 
         Long slaDueDate;
 
+        CancelledType cancelledType;
+
         private Boolean isRetrigger;
 
         private String errorMessage;
@@ -369,6 +372,14 @@ public class ProcessInstanceEntity {
 
         public void setSlaDueDate(Long slaDueDate) {
             this.slaDueDate = slaDueDate;
+        }
+
+        public CancelledType getCancelledType() {
+            return cancelledType;
+        }
+
+        public void setCancelledType(CancelledType cancelledType) {
+            this.cancelledType = cancelledType;
         }
 
         @Override
