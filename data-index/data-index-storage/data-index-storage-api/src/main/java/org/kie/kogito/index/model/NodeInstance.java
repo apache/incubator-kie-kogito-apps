@@ -44,7 +44,7 @@ public class NodeInstance {
 
     private String errorMessage;
 
-    private CancelledType cancelledType;
+    private CancelType cancelType;
 
     public Boolean isRetrigger() {
         return retrigger;
@@ -129,12 +129,12 @@ public class NodeInstance {
         this.slaDueDate = slaDueDate;
     }
 
-    public CancelledType getCancelledType() {
-        return cancelledType;
+    public CancelType getCancelType() {
+        return cancelType;
     }
 
-    public void setCancelledType(CancelledType cancelledType) {
-        this.cancelledType = cancelledType;
+    public void setCancelType(CancelType cancelType) {
+        this.cancelType = cancelType;
     }
 
     @Override

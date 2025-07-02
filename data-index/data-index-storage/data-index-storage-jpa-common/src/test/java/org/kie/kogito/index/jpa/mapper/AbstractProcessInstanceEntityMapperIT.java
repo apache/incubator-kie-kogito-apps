@@ -28,7 +28,7 @@ import org.kie.kogito.index.jpa.model.MilestoneEntityId;
 import org.kie.kogito.index.jpa.model.NodeInstanceEntity;
 import org.kie.kogito.index.jpa.model.ProcessInstanceEntity;
 import org.kie.kogito.index.jpa.model.ProcessInstanceErrorEntity;
-import org.kie.kogito.index.model.CancelledType;
+import org.kie.kogito.index.model.CancelType;
 import org.kie.kogito.index.model.Milestone;
 import org.kie.kogito.index.model.NodeInstance;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -56,7 +56,7 @@ public abstract class AbstractProcessInstanceEntityMapperIT {
     void setup() {
         String nodeInstanceId = "testNodeInstanceId";
         String nodeInstanceName = "testNodeInstanceName";
-        CancelledType cancelledType = CancelledType.ERROR;
+        CancelType cancelType = CancelType.ERROR;
         String nodeInstanceNodeId = "testNodeInstanceNodeId";
         String nodeInstanceType = "testNodeInstanceType";
         String nodeInstanceDefinitionId = "testNodeInstanceDefinitionId";
@@ -93,7 +93,7 @@ public abstract class AbstractProcessInstanceEntityMapperIT {
         nodeInstance.setType(nodeInstanceType);
         nodeInstance.setNodeId(nodeInstanceNodeId);
         nodeInstance.setName(nodeInstanceName);
-        nodeInstance.setCancelledType(cancelledType);
+        nodeInstance.setCancelType(cancelType);
 
         ProcessInstanceError processInstanceError = new ProcessInstanceError();
         processInstanceError.setMessage(processInstanceErrorMessage);
@@ -134,7 +134,7 @@ public abstract class AbstractProcessInstanceEntityMapperIT {
         nodeInstanceEntity.setNodeId(nodeInstanceNodeId);
         nodeInstanceEntity.setType(nodeInstanceType);
         nodeInstanceEntity.setProcessInstance(processInstanceEntity);
-        nodeInstanceEntity.setCancelledType(cancelledType);
+        nodeInstanceEntity.setCancelType(cancelType);
 
         ProcessInstanceErrorEntity processInstanceErrorEntity = new ProcessInstanceErrorEntity();
         processInstanceErrorEntity.setMessage(processInstanceErrorMessage);

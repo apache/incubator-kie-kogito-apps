@@ -18,9 +18,24 @@
  */
 package org.kie.kogito.index.model;
 
-public enum CancelledType {
+import static org.kie.kogito.event.process.ProcessInstanceNodeEventBody.EVENT_TYPE_ABORTED;
+import static org.kie.kogito.event.process.ProcessInstanceNodeEventBody.EVENT_TYPE_ERROR;
+import static org.kie.kogito.event.process.ProcessInstanceNodeEventBody.EVENT_TYPE_OBSOLETE;
+import static org.kie.kogito.event.process.ProcessInstanceNodeEventBody.EVENT_TYPE_SKIPPED;
+
+public enum CancelType {
     ABORTED,
     SKIPPED,
     OBSOLETE,
-    ERROR
+    ERROR;
+
+    public static CancelType fromEventType(Integer eventType) {
+        return switch (eventType) {
+            case EVENT_TYPE_ABORTED -> ABORTED;
+            case EVENT_TYPE_SKIPPED -> SKIPPED;
+            case EVENT_TYPE_OBSOLETE -> OBSOLETE;
+            case EVENT_TYPE_ERROR -> ERROR;
+            default -> throw new IllegalStateException("Unexpected eventType: " + eventType);
+        };
+    }
 }

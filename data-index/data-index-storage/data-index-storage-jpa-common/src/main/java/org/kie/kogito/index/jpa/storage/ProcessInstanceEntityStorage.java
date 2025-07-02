@@ -45,7 +45,7 @@ import org.kie.kogito.index.jpa.model.NodeInstanceEntity;
 import org.kie.kogito.index.jpa.model.ProcessInstanceEntity;
 import org.kie.kogito.index.jpa.model.ProcessInstanceErrorEntity;
 import org.kie.kogito.index.json.JsonUtils;
-import org.kie.kogito.index.model.CancelledType;
+import org.kie.kogito.index.model.CancelType;
 import org.kie.kogito.index.model.MilestoneStatus;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.storage.ProcessInstanceStorage;
@@ -206,19 +206,10 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
         ZonedDateTime eventDate = toZonedDateTime(body.getEventDate());
         switch (body.getEventType()) {
             case EVENT_TYPE_ABORTED:
-                nodeInstance.setCancelledType(CancelledType.ABORTED);
-                nodeInstance.setExit(eventDate);
-                break;
             case EVENT_TYPE_SKIPPED:
-                nodeInstance.setCancelledType(CancelledType.SKIPPED);
-                nodeInstance.setExit(eventDate);
-                break;
             case EVENT_TYPE_OBSOLETE:
-                nodeInstance.setCancelledType(CancelledType.OBSOLETE);
-                nodeInstance.setExit(eventDate);
-                break;
             case EVENT_TYPE_ERROR:
-                nodeInstance.setCancelledType(CancelledType.ERROR);
+                nodeInstance.setCancelType(CancelType.fromEventType(body.getEventType()));
                 nodeInstance.setExit(eventDate);
                 break;
             case EVENT_TYPE_ENTER:

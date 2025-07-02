@@ -24,7 +24,7 @@ import java.util.Set;
 
 import org.bson.Document;
 import org.bson.codecs.pojo.annotations.BsonId;
-import org.kie.kogito.index.model.CancelledType;
+import org.kie.kogito.index.model.CancelType;
 
 public class ProcessInstanceEntity {
 
@@ -304,7 +304,7 @@ public class ProcessInstanceEntity {
 
         Long slaDueDate;
 
-        CancelledType cancelledType;
+        CancelType cancelType;
 
         private Boolean isRetrigger;
 
@@ -374,12 +374,12 @@ public class ProcessInstanceEntity {
             this.slaDueDate = slaDueDate;
         }
 
-        public CancelledType getCancelledType() {
-            return cancelledType;
+        public CancelType getCancelType() {
+            return cancelType;
         }
 
-        public void setCancelledType(CancelledType cancelledType) {
-            this.cancelledType = cancelledType;
+        public void setCancelType(CancelType cancelType) {
+            this.cancelType = cancelType;
         }
 
         @Override

@@ -159,10 +159,10 @@ type NodeInstance {
     slaDueDate: DateTime
     retrigger: Boolean
     errorMessage: String
-    cancelledType: CancelledType
+    cancelType: CancelType
 }
 
-enum CancelledType {
+enum CancelType {
     ABORTED,
     SKIPPED,
     OBSOLETE,
