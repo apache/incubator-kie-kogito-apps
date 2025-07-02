@@ -17,4 +17,4 @@
  * under the License.
  */
 
-ALTER TABLE IF EXISTS nodes ADD COLUMN IF NOT EXISTS cancelled_type varchar (255);
+ALTER TABLE IF EXISTS nodes ADD COLUMN IF NOT EXISTS cancel_type varchar (255);
