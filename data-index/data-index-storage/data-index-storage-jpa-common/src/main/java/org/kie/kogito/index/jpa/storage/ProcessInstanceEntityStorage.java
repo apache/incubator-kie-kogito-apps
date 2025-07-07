@@ -210,7 +210,6 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
             case EVENT_TYPE_OBSOLETE:
             case EVENT_TYPE_ERROR:
                 nodeInstance.setCancelType(CancelType.fromEventType(body.getEventType()));
-                nodeInstance.setExit(eventDate);
                 break;
             case EVENT_TYPE_ENTER:
                 nodeInstance.setEnter(eventDate);
