@@ -155,7 +155,13 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
         errorEntity.setNodeDefinitionId(error.getNodeDefinitionId());
         errorEntity.setNodeInstanceId(error.getNodeInstanceId());
         pi.setState(CommonUtils.ERROR_STATE);
-        pi.getNodes().stream().filter(n -> n.getId().equals(error.getNodeInstanceId())).findAny().ifPresent(n -> n.setErrorMessage(error.getErrorMessage()));
+        pi.getNodes().stream()
+                .filter(n -> n.getId().equals(error.getNodeInstanceId()))
+                .findAny()
+                .ifPresent(n -> {
+                    n.setErrorMessage(error.getErrorMessage());
+                    n.setCancelType(CancelType.ERROR);
+                });
     }
 
     private void indexNode(ProcessInstanceEntity pi, ProcessInstanceNodeEventBody data) {
