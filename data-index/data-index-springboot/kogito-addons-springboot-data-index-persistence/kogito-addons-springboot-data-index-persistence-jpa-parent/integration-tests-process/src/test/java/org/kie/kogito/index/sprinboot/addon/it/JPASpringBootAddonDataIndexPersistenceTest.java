@@ -18,6 +18,8 @@
  */
 package org.kie.kogito.index.sprinboot.addon.it;
 
+import java.util.Map;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -34,12 +36,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-
-import java.util.Map;
 
 import static io.restassured.RestAssured.enableLoggingOfRequestAndResponseIfValidationFails;
 import static io.restassured.RestAssured.given;
