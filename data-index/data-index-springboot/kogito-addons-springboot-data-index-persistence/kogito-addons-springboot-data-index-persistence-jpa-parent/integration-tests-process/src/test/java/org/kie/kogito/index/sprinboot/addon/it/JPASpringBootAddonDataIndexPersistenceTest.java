@@ -19,7 +19,9 @@
 package org.kie.kogito.index.sprinboot.addon.it;
 
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.KogitoSpringBootApplication;
 import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
 import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
@@ -29,20 +31,29 @@ import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.testcontainers.springboot.PostgreSqlSpringBootTestResource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Map;
+
+import static io.restassured.RestAssured.enableLoggingOfRequestAndResponseIfValidationFails;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 
+@ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = KogitoSpringBootApplication.class)
 @ContextConfiguration(initializers = PostgreSqlSpringBootTestResource.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class JPASpringBootAddonDataIndexPersistenceTest {
+
+    @LocalServerPort
+    int randomServerPort;
 
     @Autowired
     ProcessDefinitionEntityStorage processDefinitionEntityStorage;
@@ -51,7 +62,12 @@ class JPASpringBootAddonDataIndexPersistenceTest {
     ProcessInstanceEntityStorage processInstanceEntityStorage;
 
     static {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails();
+        enableLoggingOfRequestAndResponseIfValidationFails();
+    }
+
+    @BeforeEach
+    void setPort() {
+        RestAssured.port = randomServerPort;
     }
 
     @Test
@@ -88,6 +104,7 @@ class JPASpringBootAddonDataIndexPersistenceTest {
         String processInstanceId = given()
                 .contentType(ContentType.JSON)
                 .accept(ContentType.JSON)
+                .body(Map.of())
                 .post("/hello")
                 .then()
                 .statusCode(201)
