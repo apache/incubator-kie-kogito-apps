@@ -66,6 +66,9 @@
         <version.org.apache.opennlp>2.3.2</version.org.apache.opennlp>
         <version.org.apache.commons.csv>1.10.0</version.org.apache.commons.csv>
         <version.org.jredisearch>2.2.0</version.org.jredisearch>
+        <!-- Setting version 3.7.0 since Spring Boot BOM updated it-->
+        <version.redis.clients.jedis>3.7.0</version.redis.clients.jedis>
+
         <version.org.json>20231013</version.org.json>
         <version.org.mapstruct>1.5.5.Final</version.org.mapstruct>
         <version.org.skyscreamer>1.5.1</version.org.skyscreamer>
@@ -173,6 +176,11 @@
                         <artifactId>json</artifactId>
                     </exclusion>
                 </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${version.redis.clients.jedis}</version>
             </dependency>
             <dependency>
                 <groupId>org.json</groupId>
