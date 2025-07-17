@@ -42,7 +42,7 @@ public class QuarkusDataIndexAuthTokenReader implements DataIndexAuthTokenReader
 
     @Override
     public String readToken() {
-        if (identity == null) {
+        if (identity == null || identity.getCredential(TokenCredential.class) == null) {
             return null;
         }
         return identity.getCredential(TokenCredential.class).getToken();
