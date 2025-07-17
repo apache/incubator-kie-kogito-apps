@@ -63,8 +63,6 @@ import io.vertx.ext.web.client.HttpResponse;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
 
-import jakarta.enterprise.inject.Instance;
-
 import static java.lang.String.format;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -120,9 +118,6 @@ public class KogitoAddonRuntimeClientImplTest {
     @Mock
     private ProcessError error;
 
-    @Mock
-    Instance<Application> applicationInstance;
-
     TestModel model;
 
     @Mock
@@ -144,10 +139,8 @@ public class KogitoAddonRuntimeClientImplTest {
         lenient().when(error.failedNodeId()).thenReturn(NODE_ID_ERROR);
         lenient().when(error.errorMessage()).thenReturn("Test error message");
         lenient().when(application.unitOfWorkManager()).thenReturn(new DefaultUnitOfWorkManager(new CollectingUnitOfWorkFactory()));
-        lenient().when(applicationInstance.isResolvable()).thenReturn(true);
-        lenient().when(applicationInstance.get()).thenReturn(application);
 
-        client = spy(new KogitoAddonRuntimeClient(Optional.empty(), authTokenReader, Vertx.vertx(), List.of(processSvgService), List.of(sourceFilesProvider), List.of(processes), applicationInstance,
+        client = spy(new KogitoAddonRuntimeClient(Optional.empty(), authTokenReader, Vertx.vertx(), List.of(processSvgService), List.of(sourceFilesProvider), List.of(processes), List.of(application),
                 ManagedExecutor.builder().build()));
         client.addServiceWebClient(SERVICE_URL, webClientMock);
     }
