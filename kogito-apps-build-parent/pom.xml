@@ -66,11 +66,6 @@
         <version.org.apache.opennlp>2.3.2</version.org.apache.opennlp>
         <version.org.apache.commons.csv>1.10.0</version.org.apache.commons.csv>
         <version.org.jredisearch>2.2.0</version.org.jredisearch>
-        <!--
-            Setting Jedis version to 3.7.0 since Spring Boot BOM upgraded it to 5.2.0. It removed classes needed
-            by Trusty Redis Storage
-        -->
-        <version.redis.clients.jedis>3.7.0</version.redis.clients.jedis>
 
         <version.org.json>20231013</version.org.json>
         <version.org.mapstruct>1.5.5.Final</version.org.mapstruct>
@@ -152,13 +147,6 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>kogito-spring-boot-bom</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
                 <artifactId>kogito-apps-bom</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
@@ -179,11 +167,6 @@
                         <artifactId>json</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>redis.clients</groupId>
-                <artifactId>jedis</artifactId>
-                <version>${version.redis.clients.jedis}</version>
             </dependency>
             <dependency>
                 <groupId>org.json</groupId>

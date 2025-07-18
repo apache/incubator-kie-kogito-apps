@@ -37,6 +37,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+            <version>${version.org.springframework.boot}</version>
         </dependency>
 
         <dependency>
@@ -71,6 +72,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
+            <version>${version.org.springframework.boot}</version>
         </dependency>
 
         <!-- Test -->
@@ -93,6 +95,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <version>${version.org.springframework.boot}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
