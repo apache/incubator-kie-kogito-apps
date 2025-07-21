@@ -3,4 +3,4 @@ apps-integration-tests/integration-tests-jobs-service/integration-tests-jobs-ser
 apps-integration-tests/integration-tests-data-index-service/pom.xml;integration-tests-data-index-service-common,integration-tests-data-index-service-quarkus,integration-tests-data-index-service-springboot
 data-index/data-index-storage/pom.xml;data-index-storage-common,data-index-storage-mongodb,data-index-storage-postgresql-reporting
 jobs-service/pom.xml;jobs-service-infinispan,jobs-service-mongodb
-persistence-commons/pom.xml;persistence-commons-mongodb,persistence-commons-redis,persistence-commons-reporting-parent
+persistence-commons/pom.xml;persistence-commons-mongodb,persistence-commons-redis,persistence-commons-reporting-parent,persistence-commons-mongodb-quarkus
