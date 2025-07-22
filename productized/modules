@@ -1,7 +1,7 @@
+pom.xml;explainability,data-audit,trusty,security-commons,jitexecutor
 apps-integration-tests/integration-tests-data-index-service/pom.xml;integration-tests-data-index-service-common,integration-tests-data-index-service-quarkus,integration-tests-data-index-service-springboot
 apps-integration-tests/integration-tests-jobs-service/integration-tests-jobs-service-quarkus/pom.xml;integration-tests-jobs-service-quarkus-knative-eventing,integration-tests-jobs-service-quarkus-management,integration-tests-jobs-service-quarkus-messaging;
 apps-integration-tests/integration-tests-jobs-service/pom.xml;integration-tests-jobs-service-springboot
-data-audit/pom.xml;kogito-addons-data-audit-springboot
 data-index/data-index-quarkus/kogito-addons-quarkus-data-index-persistence/kogito-addons-quarkus-data-index-persistence-jpa/pom.xml;integration-tests-process
 data-index/data-index-quarkus/kogito-addons-quarkus-data-index-persistence/kogito-addons-quarkus-data-index-persistence-postgresql/pom.xml;integration-tests-process
 data-index/data-index-quarkus/kogito-addons-quarkus-data-index-persistence/pom.xml;kogito-addons-quarkus-data-index-persistence-mongodb
