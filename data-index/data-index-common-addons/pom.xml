@@ -27,7 +27,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>data-index-addons-common</artifactId>
+    <artifactId>data-index-common-addons</artifactId>
     <name>Kogito Apps :: Data Index Add-Ons Common</name>
 
     <properties>

@@ -71,14 +71,18 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractGraphQLSchemaManager.class);
 
-    @Inject
     DataIndexStorageService cacheService;
 
-    @Inject
     GraphQLScalarType dateTimeScalarType;
 
-    @Inject
     KogitoRuntimeClient dataIndexApiExecutor;
+
+    @Inject
+    public AbstractGraphQLSchemaManager(DataIndexStorageService cacheService, GraphQLScalarType dateTimeScalarType, KogitoRuntimeClient dataIndexApiExecutor) {
+        this.cacheService = cacheService;
+        this.dateTimeScalarType = dateTimeScalarType;
+        this.dataIndexApiExecutor = dataIndexApiExecutor;
+    }
 
     private GraphQLSchema schema;
 
