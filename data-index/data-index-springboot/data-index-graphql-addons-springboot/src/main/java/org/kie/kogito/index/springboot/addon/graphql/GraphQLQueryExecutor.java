@@ -20,6 +20,7 @@
 package org.kie.kogito.index.springboot.addon.graphql;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.graphql.execution.GraphQlSource;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -37,9 +38,9 @@ public class GraphQLQueryExecutor {
     private GraphQL graphQL;
 
     @Autowired
-    GraphQLQueryExecutor(ObjectMapper objectMapper, GraphQL graphQL) {
+    GraphQLQueryExecutor(ObjectMapper objectMapper, GraphQlSource graphQlSource) {
         this.objectMapper = objectMapper;
-        this.graphQL = graphQL;
+        this.graphQL = graphQlSource.graphQl();
     }
 
     public Mono<JsonNode> execute(GraphQLQuery graphQLQuery) {

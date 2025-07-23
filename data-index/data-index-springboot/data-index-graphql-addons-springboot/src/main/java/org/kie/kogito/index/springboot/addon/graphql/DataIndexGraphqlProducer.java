@@ -19,7 +19,9 @@
 
 package org.kie.kogito.index.springboot.addon.graphql;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.kie.kogito.index.addon.graphql.GraphQLAddonSchemaManagerImpl;
 import org.kie.kogito.index.api.DateTimeCoercing;
@@ -31,12 +33,20 @@ import org.kie.kogito.index.graphql.GraphQLSchemaManager;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.graphql.execution.GraphQlSource;
 
-import graphql.GraphQL;
+import graphql.execution.instrumentation.Instrumentation;
 import graphql.schema.GraphQLScalarType;
 
 @Configuration
 public class DataIndexGraphqlProducer {
+
+    @Bean
+    public GraphQlSource graphQLSource(GraphQLSchemaManager graphQLSchemaManager, List<GraphQLInstrumentation> instrumentations) {
+        return GraphQlSource.builder(graphQLSchemaManager.getGraphQLSchema())
+                .instrumentation(instrumentations.stream().map(ins -> (Instrumentation) ins).collect(Collectors.toList()))
+                .build();
+    }
 
     @Bean
     public GraphQLScalarType createGraphQLScalarType(Optional<DateTimeCoercing> dateTimeCoercing) {
@@ -54,10 +64,4 @@ public class DataIndexGraphqlProducer {
         return new GraphQLInstrumentation(schemaManager);
     }
 
-    @Bean
-    public GraphQL createGraphQL(GraphQLSchemaManager schemaManager, GraphQLInstrumentation instrumentation) {
-        return GraphQL.newGraphQL(schemaManager.getGraphQLSchema())
-                .instrumentation(instrumentation)
-                .build();
-    }
 }

@@ -28,7 +28,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>data-index-graphql-addons-springboot</artifactId>
-    <name>Kogito Apps :: Data Index SpringBoot Add-ons GraphQL</name>
+    <name>Kogito Apps :: Kogito Data Index SpringBoot Add-ons GraphQL</name>
 
     <properties>
         <java.module.name>org.kie.kogito.index.springboot.addons.graphql</java.module.name>
