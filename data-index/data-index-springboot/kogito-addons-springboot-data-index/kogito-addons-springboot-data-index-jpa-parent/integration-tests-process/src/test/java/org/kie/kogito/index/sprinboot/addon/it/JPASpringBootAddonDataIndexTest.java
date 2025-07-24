@@ -96,4 +96,12 @@ class JPASpringBootAddonDataIndexTest {
                 .body("data.ProcessInstances[0].nodeDefinitions.size()", is(2));
     }
 
+    @Test
+    void testGraphQLUI() {
+        given().contentType(ContentType.HTML)
+                .when().get("/graphiql")
+                .then().statusCode(200)
+                .body("html.head.title", containsString("GraphiQL"));
+    }
+
 }
