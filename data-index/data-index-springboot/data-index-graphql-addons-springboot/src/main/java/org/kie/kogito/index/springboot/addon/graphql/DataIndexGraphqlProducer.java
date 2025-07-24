@@ -21,7 +21,6 @@ package org.kie.kogito.index.springboot.addon.graphql;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.kie.kogito.index.addon.graphql.GraphQLAddonSchemaManagerImpl;
 import org.kie.kogito.index.api.DateTimeCoercing;
@@ -42,9 +41,9 @@ import graphql.schema.GraphQLScalarType;
 public class DataIndexGraphqlProducer {
 
     @Bean
-    public GraphQlSource graphQLSource(GraphQLSchemaManager graphQLSchemaManager, List<GraphQLInstrumentation> instrumentations) {
+    public GraphQlSource graphQLSource(GraphQLSchemaManager graphQLSchemaManager, List<Instrumentation> instrumentations) {
         return GraphQlSource.builder(graphQLSchemaManager.getGraphQLSchema())
-                .instrumentation(instrumentations.stream().map(ins -> (Instrumentation) ins).collect(Collectors.toList()))
+                .instrumentation(instrumentations)
                 .build();
     }
 
