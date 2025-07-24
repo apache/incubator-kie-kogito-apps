@@ -16,14 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.kie.kogito;
 
-package org.kie.kogito.index.springboot.addon.graphql;
-
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.util.ResourceUtils;
 
-@SpringBootApplication
-@PropertySource(ResourceUtils.CLASSPATH_URL_PREFIX + "/data-index-graphql.properties")
-public class DataIndexGraphQLSpringBootSharedConfiguration {
+@SpringBootApplication(scanBasePackages = { "org.kie.kogito.**", "com.example.**" })
+public class KogitoSpringBootApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(KogitoSpringBootApplication.class, args);
+    }
 }

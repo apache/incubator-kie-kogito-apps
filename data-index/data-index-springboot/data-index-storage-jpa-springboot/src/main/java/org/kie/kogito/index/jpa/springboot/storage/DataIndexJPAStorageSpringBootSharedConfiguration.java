@@ -19,11 +19,11 @@
 
 package org.kie.kogito.index.jpa.springboot.storage;
 
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.util.ResourceUtils;
 
-@SpringBootApplication
+@Configuration
 @PropertySource(ResourceUtils.CLASSPATH_URL_PREFIX + "/data-index-jpa.properties")
 public class DataIndexJPAStorageSpringBootSharedConfiguration {
 }

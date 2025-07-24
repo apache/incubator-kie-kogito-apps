@@ -48,7 +48,7 @@ public class GraphQLAddonSchemaManagerImpl extends AbstractGraphQLSchemaManager 
 
     public GraphQLSchema createSchema() {
         TypeDefinitionRegistry typeDefinitionRegistry = new TypeDefinitionRegistry();
-        typeDefinitionRegistry.merge(loadSchemaDefinitionFile("basic.schema.graphqls"));
+        typeDefinitionRegistry.merge(loadSchemaDefinitionFile("graphql/basic.schema.graphqls"));
         addCountQueries(typeDefinitionRegistry);
         addJsonQueries(typeDefinitionRegistry);
         loadAdditionalMutations(typeDefinitionRegistry);

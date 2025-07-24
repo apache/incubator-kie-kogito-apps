@@ -83,7 +83,7 @@ public class GraphQLSchemaManagerImpl extends AbstractGraphQLSchemaManager {
     @Override
     public GraphQLSchema createSchema() {
         TypeDefinitionRegistry typeDefinitionRegistry = new TypeDefinitionRegistry();
-        typeDefinitionRegistry.merge(loadSchemaDefinitionFile("basic.schema.graphqls"));
+        typeDefinitionRegistry.merge(loadSchemaDefinitionFile("graphql/basic.schema.graphqls"));
         typeDefinitionRegistry.merge(loadSchemaDefinitionFile("domain.schema.graphqls"));
         addCountQueries(typeDefinitionRegistry);
         addJsonQueries(typeDefinitionRegistry);

@@ -33,6 +33,6 @@
 
     <modules>
         <module>kogito-addons-springboot-data-index-jpa</module>
-        <!--<module>integration-tests-process</module>-->
+        <module>integration-tests-process</module>
     </modules>
 </project>

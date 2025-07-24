@@ -113,13 +113,13 @@ public abstract class AbstractGraphQLSchemaManager implements GraphQLSchemaManag
 
     protected final void addCountQueries(TypeDefinitionRegistry typeRegistry) {
         if (supportsCount()) {
-            typeRegistry.merge(loadSchemaDefinitionFile("count.schema.graphqls"));
+            typeRegistry.merge(loadSchemaDefinitionFile("graphql/count.schema.graphqls"));
         }
     }
 
     protected final void addJsonQueries(TypeDefinitionRegistry typeRegistry) {
         if (cacheService.capabilities().contains(StorageServiceCapability.JSON_QUERY)) {
-            typeRegistry.merge(loadSchemaDefinitionFile("json.schema.graphqls"));
+            typeRegistry.merge(loadSchemaDefinitionFile("graphql/json.schema.graphqls"));
         }
     }
 
