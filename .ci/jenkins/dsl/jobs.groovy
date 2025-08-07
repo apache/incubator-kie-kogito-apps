@@ -54,7 +54,7 @@ Map getMultijobPRConfig(JenkinsFolder jobFolder) {
                     // Sonarcloud analysis only on main branch
                     // As we have only Community edition
                     ENABLE_SONARCLOUD: EnvUtils.isDefaultEnvironment(this, jobFolder.getEnvironmentName()) && Utils.isMainBranch(this),
-                    BUILD_MVN_OPTS_CURRENT: "${defaultBuildMvnOptsCurrent} ${getAppsBuildMvnOptions(jobFolder).join(' ')}",
+                    BUILD_MVN_OPTS_CURRENT: "${defaultBuildMvnOptsCurrent} ${getAppsBuildMvnOptions(jobFolder).join(' ')} -Dit.test=!org.kie.kogito.persistence.mongodb.*",
                 ]
             ], [
                 id: 'kogito-quarkus-examples',
