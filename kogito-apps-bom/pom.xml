@@ -330,7 +330,7 @@
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-storage-jpa-common</artifactId>
                 <version>${project.version}</version>
-                <classifier>test-jar</classifier>
+                <type>test-jar</type>
                 <scope>test</scope>
             </dependency>
             <dependency>
@@ -368,6 +368,17 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-common-addons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-common-addons</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-test-utils</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -385,6 +396,17 @@
             <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-graphql</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-graphql-addons</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-graphql-addons</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
@@ -562,6 +584,78 @@
             <dependency>
                 <groupId>org.kie</groupId>
                 <artifactId>kogito-addons-quarkus-data-index-jpa-deployment</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+
+            <!-- Data Index SpringBoot -->
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-common-springboot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-common-springboot</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-jpa-springboot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-jpa-springboot</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-common-addons-springboot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-common-addons-springboot</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-graphql-addons-springboot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-graphql-addons-springboot</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-springboot-data-index-persistence-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-springboot-data-index-persistence-jpa</artifactId>
+                <version>${project.version}</version>
+                <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-springboot-data-index-jpa</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kogito-addons-springboot-data-index-jpa</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
