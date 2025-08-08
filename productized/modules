@@ -11,6 +11,7 @@ data-index/data-index-quarkus/kogito-addons-quarkus-data-index/kogito-addons-qua
 data-index/data-index-quarkus/kogito-addons-quarkus-data-index/pom.xml;kogito-addons-quarkus-data-index-mongodb
 data-index/data-index-quarkus/pom.xml;data-index-service-mongodb
 data-index/data-index-storage/pom.xml;data-index-storage-common,data-index-storage-mongodb,data-index-storage-postgresql-reporting
+data-index/pom.xml;data-index-springboot
 jitexecutor/pom.xml;jitexecutor-bpmn
 jobs-service/pom.xml;jobs-service-infinispan,jobs-service-mongodb
 persistence-commons/pom.xml;persistence-commons-mongodb,persistence-commons-redis,persistence-commons-reporting-parent,persistence-commons-mongodb-quarkus
