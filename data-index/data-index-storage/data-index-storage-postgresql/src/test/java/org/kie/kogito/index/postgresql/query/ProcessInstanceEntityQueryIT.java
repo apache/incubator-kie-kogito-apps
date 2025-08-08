@@ -80,7 +80,7 @@ class ProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT 
         definitionEvent.setMetadata(Map.of("name", "Javierito", "hobbies", List.of("community", "first")));
         variableEvent.setKogitoProcessInstanceVersion(version);
         definitionStorage.put(key, definitionEvent);
-        storage.indexVariable(variableEvent);
+        storage.index(variableEvent);
         queryAndAssert(assertWithId(), storage, singletonList(jsonFilter(equalTo("variables.traveller.name", "John"))), null, null, null,
                 processInstanceId);
         queryAndAssert(assertNotId(), storage, singletonList(jsonFilter(equalTo("variables.traveller.name", "Smith"))), null, null, null,

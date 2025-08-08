@@ -19,8 +19,10 @@
 package org.kie.kogito.index.storage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import org.kie.kogito.event.usertask.MultipleUserTaskInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceCommentDataEvent;
@@ -33,7 +35,6 @@ import org.kie.kogito.index.storage.merger.UserTaskInstanceAssignmentDataEventMe
 import org.kie.kogito.index.storage.merger.UserTaskInstanceAttachmentDataEventMerger;
 import org.kie.kogito.index.storage.merger.UserTaskInstanceCommentDataEventMerger;
 import org.kie.kogito.index.storage.merger.UserTaskInstanceDeadlineDataEventMerger;
-import org.kie.kogito.index.storage.merger.UserTaskInstanceEventMerger;
 import org.kie.kogito.index.storage.merger.UserTaskInstanceStateEventMerger;
 import org.kie.kogito.index.storage.merger.UserTaskInstanceVariableDataEventMerger;
 import org.kie.kogito.persistence.api.Storage;
@@ -52,68 +53,46 @@ public class ModelUserTaskInstanceStorage extends ModelStorageFetcher<String, Us
     }
 
     @Override
-    public void indexAssignment(UserTaskInstanceAssignmentDataEvent event) {
-        index(event, assignmentMerger);
-    }
+    public void index(List<UserTaskInstanceDataEvent> events) {
+        Map<String, UserTaskInstance> userTaskInstances = new HashMap<>();
+        for (UserTaskInstanceDataEvent<?> event : events) {
+            UserTaskInstance taskInstance = userTaskInstances.computeIfAbsent(event.getKogitoUserTaskInstanceId(), key -> {
+                UserTaskInstance ut = storage.get(key);
+                if (ut == null) {
+                    ut = new UserTaskInstance();
+                    ut.setId(event.getKogitoUserTaskInstanceId());
+                    ut.setProcessInstanceId(event.getKogitoProcessInstanceId());
+                    ut.setProcessId(event.getKogitoProcessId());
+                    ut.setRootProcessId(event.getKogitoRootProcessId());
+                    ut.setRootProcessInstanceId(event.getKogitoRootProcessInstanceId());
+                    ut.setAttachments(new ArrayList<>());
+                    ut.setComments(new ArrayList<>());
+                }
+                return ut;
+            });
+            merge(taskInstance, event);
+        }
 
-    @Override
-    public void indexAttachment(UserTaskInstanceAttachmentDataEvent event) {
-        index(event, attachmentMerger);
-
-    }
-
-    @Override
-    public void indexDeadline(UserTaskInstanceDeadlineDataEvent event) {
-        index(event, deadlineMerger);
-    }
-
-    @Override
-    public void indexState(UserTaskInstanceStateDataEvent event) {
-        index(event, stateMerger);
-
-    }
-
-    @Override
-    public void indexVariable(UserTaskInstanceVariableDataEvent event) {
-        index(event, variableMerger);
-    }
-
-    @Override
-    public void indexComment(UserTaskInstanceCommentDataEvent event) {
-        index(event, commentMerger);
-    }
-
-    @Override
-    public void indexGroup(MultipleUserTaskInstanceDataEvent events) {
-        for (UserTaskInstanceDataEvent<?> event : events.getData()) {
-            if (event instanceof UserTaskInstanceAssignmentDataEvent) {
-                index((UserTaskInstanceAssignmentDataEvent) event, assignmentMerger);
-            } else if (event instanceof UserTaskInstanceAttachmentDataEvent) {
-                index((UserTaskInstanceAttachmentDataEvent) event, attachmentMerger);
-            } else if (event instanceof UserTaskInstanceDeadlineDataEvent) {
-                index((UserTaskInstanceDeadlineDataEvent) event, deadlineMerger);
-            } else if (event instanceof UserTaskInstanceStateDataEvent) {
-                index((UserTaskInstanceStateDataEvent) event, stateMerger);
-            } else if (event instanceof UserTaskInstanceCommentDataEvent) {
-                index((UserTaskInstanceCommentDataEvent) event, commentMerger);
-            } else if (event instanceof UserTaskInstanceVariableDataEvent) {
-                index((UserTaskInstanceVariableDataEvent) event, variableMerger);
-            }
+        for (UserTaskInstance userTaskInstance : userTaskInstances.values()) {
+            storage.put(userTaskInstance.getId(), userTaskInstance);
         }
     }
 
-    private <T extends UserTaskInstanceDataEvent<?>> void index(T event, UserTaskInstanceEventMerger merger) {
-        UserTaskInstance taskInstance = storage.get(event.getKogitoUserTaskInstanceId());
-        if (taskInstance == null) {
-            taskInstance = new UserTaskInstance();
-            taskInstance.setId(event.getKogitoUserTaskInstanceId());
-            taskInstance.setProcessInstanceId(event.getKogitoProcessInstanceId());
-            taskInstance.setProcessId(event.getKogitoProcessId());
-            taskInstance.setRootProcessId(event.getKogitoRootProcessId());
-            taskInstance.setRootProcessInstanceId(event.getKogitoRootProcessInstanceId());
-            taskInstance.setAttachments(new ArrayList<>());
-            taskInstance.setComments(new ArrayList<>());
+    private void merge(UserTaskInstance taskInstance, UserTaskInstanceDataEvent<?> event) {
+        if (event instanceof UserTaskInstanceAssignmentDataEvent) {
+            assignmentMerger.merge(taskInstance, event);
+        } else if (event instanceof UserTaskInstanceAttachmentDataEvent) {
+            attachmentMerger.merge(taskInstance, event);
+        } else if (event instanceof UserTaskInstanceCommentDataEvent) {
+            commentMerger.merge(taskInstance, event);
+        } else if (event instanceof UserTaskInstanceDeadlineDataEvent) {
+            deadlineMerger.merge(taskInstance, event);
+        } else if (event instanceof UserTaskInstanceVariableDataEvent) {
+            variableMerger.merge(taskInstance, event);
+        } else if (event instanceof UserTaskInstanceStateDataEvent) {
+            stateMerger.merge(taskInstance, event);
         }
-        storage.put(event.getKogitoUserTaskInstanceId(), merger.merge(taskInstance, event));
+
     }
+
 }

@@ -46,7 +46,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
     @Test
     void testCount() {
         ProcessInstanceStateDataEvent processInstanceEvent = TestUtils.createProcessInstanceEvent(UUID.randomUUID().toString(), "counting", null, null, COMPLETED.ordinal());
-        storage.indexState(processInstanceEvent);
+        storage.index(processInstanceEvent);
         assertThat(storage.query().count()).isNotZero();
         assertThat(storage.query().filter(List.of(in("state", List.of(34)))).count()).isZero();
     }

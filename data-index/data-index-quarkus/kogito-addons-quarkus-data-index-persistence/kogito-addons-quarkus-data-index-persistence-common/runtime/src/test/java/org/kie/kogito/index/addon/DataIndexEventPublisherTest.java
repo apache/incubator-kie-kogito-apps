@@ -78,7 +78,7 @@ public class DataIndexEventPublisherTest {
 
         dataIndexEventPublisher.publish(event);
 
-        verify(indexingService).indexProcessInstanceEvent(eventCaptor.capture());
+        verify(indexingService).indexDataEvent(event);
     }
 
     @Test

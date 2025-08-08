@@ -55,7 +55,7 @@ public abstract class AbstractUserTaskInstanceEntityQueryIT extends AbstractUser
         event.setKogitoProcessInstanceId(processInstanceId);
         event.setKogitoUserTaskInstanceId(taskId);
         event.setData(UserTaskInstanceStateEventBody.create().processInstanceId(processInstanceId).state("InProgress").userTaskInstanceId(taskId).build());
-        storage.indexState(event);
+        storage.index(event);
         assertThat(storage.query().count()).isNotZero();
         assertThat(storage.query().filter(List.of(in("state", List.of("Javierito")))).count()).isZero();
     }

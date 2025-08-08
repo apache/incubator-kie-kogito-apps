@@ -53,7 +53,7 @@ public abstract class AbstractProcessInstanceStorageIT {
                 .hasFieldOrPropertyWithValue("rootProcessId", null)
                 .hasFieldOrPropertyWithValue("variables", null);
 
-        storage.indexState(TestUtils.createProcessInstanceEvent(processInstanceId, PROCESS_ID, null, null, ProcessInstanceState.COMPLETED.ordinal()));
+        storage.index(TestUtils.createProcessInstanceEvent(processInstanceId, PROCESS_ID, null, null, ProcessInstanceState.COMPLETED.ordinal()));
 
         processInstance = storage.get(processInstanceId);
         Assertions.assertThat(processInstance)
@@ -77,7 +77,7 @@ public abstract class AbstractProcessInstanceStorageIT {
                 .isNull();
 
         String nodeDefinitionId = UUID.randomUUID().toString();
-        storage.indexError(TestUtils.createProcessInstanceErrorDataEvent(processInstanceId, PROCESS_ID, TRAVELER_NAME, "This is really wrong", nodeDefinitionId, UUID.randomUUID().toString()));
+        storage.index(TestUtils.createProcessInstanceErrorDataEvent(processInstanceId, PROCESS_ID, TRAVELER_NAME, "This is really wrong", nodeDefinitionId, UUID.randomUUID().toString()));
 
         processInstance = storage.get(processInstanceId);
 
@@ -100,7 +100,7 @@ public abstract class AbstractProcessInstanceStorageIT {
         String nodeDefinitionId = UUID.randomUUID().toString();
         String nodeInstanceId = UUID.randomUUID().toString();
 
-        storage.indexNode(TestUtils.createProcessInstanceNodeDataEvent(processInstanceId, PROCESS_ID, nodeDefinitionId, nodeInstanceId, "nodeName", "BoundaryEventNode",
+        storage.index(TestUtils.createProcessInstanceNodeDataEvent(processInstanceId, PROCESS_ID, nodeDefinitionId, nodeInstanceId, "nodeName", "BoundaryEventNode",
                 ProcessInstanceNodeEventBody.EVENT_TYPE_ENTER));
 
         processInstance = storage.get(processInstanceId);
@@ -116,7 +116,7 @@ public abstract class AbstractProcessInstanceStorageIT {
                 .hasFieldOrPropertyWithValue("nodeId", nodeDefinitionId)
                 .hasFieldOrPropertyWithValue("id", nodeInstanceId);
 
-        storage.indexNode(TestUtils.createProcessInstanceNodeDataEvent(processInstanceId, PROCESS_ID, nodeDefinitionId, nodeInstanceId, "nodeName", "BoundaryEventNode",
+        storage.index(TestUtils.createProcessInstanceNodeDataEvent(processInstanceId, PROCESS_ID, nodeDefinitionId, nodeInstanceId, "nodeName", "BoundaryEventNode",
                 ProcessInstanceNodeEventBody.EVENT_TYPE_EXIT));
 
         processInstance = storage.get(processInstanceId);
@@ -143,7 +143,7 @@ public abstract class AbstractProcessInstanceStorageIT {
         Assertions.assertThat(processInstance.getVariables())
                 .isNull();
 
-        storage.indexVariable(TestUtils.createProcessInstanceVariableEvent(processInstanceId, PROCESS_ID, TRAVELER_NAME, TRAVELER_LAST_NAME));
+        storage.index(TestUtils.createProcessInstanceVariableEvent(processInstanceId, PROCESS_ID, TRAVELER_NAME, TRAVELER_LAST_NAME));
 
         processInstance = storage.get(processInstanceId);
 
@@ -159,7 +159,7 @@ public abstract class AbstractProcessInstanceStorageIT {
         Assertions.assertThat(storage.get(processInstanceId))
                 .isNull();
 
-        storage.indexState(TestUtils.createProcessInstanceEvent(processInstanceId, PROCESS_ID, null, null, ProcessInstanceState.ACTIVE.ordinal()));
+        storage.index(TestUtils.createProcessInstanceEvent(processInstanceId, PROCESS_ID, null, null, ProcessInstanceState.ACTIVE.ordinal()));
 
         ProcessInstance processInstance = storage.get(processInstanceId);
         Assertions.assertThat(processInstance)

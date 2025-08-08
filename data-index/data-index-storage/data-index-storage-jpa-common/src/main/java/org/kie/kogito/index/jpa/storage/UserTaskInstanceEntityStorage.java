@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-import org.kie.kogito.event.usertask.MultipleUserTaskInstanceDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentEventBody;
 import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentDataEvent;
@@ -72,47 +71,25 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Str
 
     @Override
     @Transactional
-    public void indexGroup(MultipleUserTaskInstanceDataEvent events) {
-        Map<String, UserTaskInstanceEntity> taskMap = new HashMap<>();
-        for (UserTaskInstanceDataEvent<?> event : events.getData()) {
-            indexEvent(taskMap.computeIfAbsent(event.getKogitoUserTaskInstanceId(), id -> findOrInit(id)), event);
+    public void index(List<UserTaskInstanceDataEvent> events) {
+        Map<String, UserTaskInstanceEntity> userTaskInstances = new HashMap<>();
+        for (UserTaskInstanceDataEvent<?> event : events) {
+            UserTaskInstanceEntity taskInstance = userTaskInstances.computeIfAbsent(event.getKogitoUserTaskInstanceId(), key -> {
+                UserTaskInstanceEntity ut = em.find(UserTaskInstanceEntity.class, key);
+                if (ut == null) {
+                    ut = new UserTaskInstanceEntity();
+                    ut.setId(key);
+                    em.persist(ut);
+                }
+                em.detach(ut);
+                return ut;
+            });
+            indexEvent(taskInstance, event);
         }
-    }
 
-    @Override
-    @Transactional
-    public void indexAssignment(UserTaskInstanceAssignmentDataEvent event) {
-        indexAssignment(findOrInit(event), event);
-    }
-
-    @Override
-    @Transactional
-    public void indexAttachment(UserTaskInstanceAttachmentDataEvent event) {
-        indexAttachment(findOrInit(event), event);
-    }
-
-    @Override
-    @Transactional
-    public void indexDeadline(UserTaskInstanceDeadlineDataEvent event) {
-        indexDeadline(findOrInit(event), event);
-    }
-
-    @Override
-    @Transactional
-    public void indexState(UserTaskInstanceStateDataEvent event) {
-        indexState(findOrInit(event), event);
-    }
-
-    @Override
-    @Transactional
-    public void indexComment(UserTaskInstanceCommentDataEvent event) {
-        indexComment(findOrInit(event), event);
-    }
-
-    @Override
-    @Transactional
-    public void indexVariable(UserTaskInstanceVariableDataEvent event) {
-        indexVariable(findOrInit(event), event);
+        for (UserTaskInstanceEntity userTaskInstance : userTaskInstances.values()) {
+            em.merge(userTaskInstance);
+        }
     }
 
     private void indexEvent(UserTaskInstanceEntity task, UserTaskInstanceDataEvent<?> event) {
@@ -252,18 +229,4 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Str
         }
     }
 
-    private UserTaskInstanceEntity findOrInit(UserTaskInstanceDataEvent<?> event) {
-        return findOrInit(event.getKogitoUserTaskInstanceId());
-    }
-
-    private UserTaskInstanceEntity findOrInit(String taskId) {
-        UserTaskInstanceEntity ut = em.find(UserTaskInstanceEntity.class, taskId);
-        if (ut == null) {
-            ut = new UserTaskInstanceEntity();
-            ut.setId(taskId);
-            em.persist(ut);
-        }
-        return ut;
-
-    }
 }

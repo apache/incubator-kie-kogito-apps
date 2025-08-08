@@ -18,28 +18,22 @@
  */
 package org.kie.kogito.index.service;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.process.MultipleProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceSLADataEvent;
-import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceVariableDataEvent;
 import org.kie.kogito.event.usertask.MultipleUserTaskInstanceDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceCommentDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceDeadlineDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
 import org.kie.kogito.index.storage.DataIndexStorageService;
@@ -76,45 +70,61 @@ public class IndexingService {
         this.manager = manager;
     }
 
-    public void indexProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
-        ProcessInstanceStorage storage = manager.getProcessInstanceStorage();
-        if (event instanceof MultipleProcessInstanceDataEvent) {
-            storage.indexGroup(((MultipleProcessInstanceDataEvent) event));
-        } else if (event instanceof ProcessInstanceErrorDataEvent) {
-            storage.indexError((ProcessInstanceErrorDataEvent) event);
-        } else if (event instanceof ProcessInstanceNodeDataEvent) {
-            storage.indexNode((ProcessInstanceNodeDataEvent) event);
-        } else if (event instanceof ProcessInstanceSLADataEvent) {
-            storage.indexSLA((ProcessInstanceSLADataEvent) event);
-        } else if (event instanceof ProcessInstanceStateDataEvent) {
-            storage.indexState((ProcessInstanceStateDataEvent) event);
-        } else if (event instanceof ProcessInstanceVariableDataEvent) {
-            storage.indexVariable((ProcessInstanceVariableDataEvent) event);
+    public void indexDataEvent(DataEvent<?> event) {
+        this.internalIndexDataEvent(List.of(event));
+    }
+
+    public void indexDataEvent(Collection<DataEvent<?>> events) {
+        List<DataEvent<?>> primitiveEvents = new ArrayList<>(events);
+        List<MultipleProcessInstanceDataEvent> piBatchEvents = collect(events, MultipleProcessInstanceDataEvent.class);
+        List<MultipleUserTaskInstanceDataEvent> utBatchEvents = collect(events, MultipleUserTaskInstanceDataEvent.class);
+
+        // we deflated events
+        primitiveEvents.removeAll(piBatchEvents);
+        primitiveEvents.removeAll(utBatchEvents);
+
+        piBatchEvents.stream().map(MultipleProcessInstanceDataEvent::getData).forEach(primitiveEvents::addAll);
+        utBatchEvents.stream().map(MultipleUserTaskInstanceDataEvent::getData).forEach(primitiveEvents::addAll);
+
+        internalIndexDataEvent(primitiveEvents);
+    }
+
+    private void internalIndexDataEvent(Collection<DataEvent<?>> events) {
+        collect(events, ProcessDefinitionDataEvent.class).forEach(this::indexProcessDefinition);
+
+        ProcessInstanceStorage processInstanceStorage = manager.getProcessInstanceStorage();
+        processInstanceStorage.index(collectGeneric(events, ProcessInstanceDataEvent.class));
+
+        UserTaskInstanceStorage userTaskInstanceStorage = manager.getUserTaskInstanceStorage();
+        userTaskInstanceStorage.index(collectGeneric(events, UserTaskInstanceDataEvent.class));
+
+        @SuppressWarnings("unchecked")
+        List<Job> jobsEvents = events.stream().filter(e -> "JobEvent".equals(e.getType())).map(e -> (DataEvent<byte[]>) e).map(this::toJob).toList();
+        jobsEvents.forEach(this::indexJob);
+
+    }
+
+    private Job toJob(DataEvent<byte[]> event) {
+        try {
+            Job job = getObjectMapper().readValue(new String((byte[]) event.getData()), Job.class);
+            job.setEndpoint(event.getSource() == null ? null : event.getSource().toString());
+            return job;
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
         }
     }
 
-    public void indexProcessDefinition(ProcessDefinitionDataEvent definitionDataEvent) {
+    private <T> List<T> collectGeneric(Collection<DataEvent<?>> events, Class<T> clazz) {
+        return events.stream().filter(clazz::isInstance).map(clazz::cast).toList();
+    }
+
+    private <T extends DataEvent<R>, R> List<T> collect(Collection<DataEvent<?>> events, Class<T> clazz) {
+        return events.stream().filter(clazz::isInstance).map(clazz::cast).toList();
+    }
+
+    private void indexProcessDefinition(ProcessDefinitionDataEvent definitionDataEvent) {
         ProcessDefinitionKey key = new ProcessDefinitionKey(definitionDataEvent.getKogitoProcessId(), definitionDataEvent.getData().getVersion());
         manager.getProcessDefinitionStorage().put(key, ProcessDefinitionHelper.merge(manager.getProcessDefinitionStorage().get(key), definitionDataEvent));
-    }
-
-    public <T> void indexUserTaskInstanceEvent(UserTaskInstanceDataEvent<T> event) {
-        UserTaskInstanceStorage storage = manager.getUserTaskInstanceStorage();
-        if (event instanceof MultipleUserTaskInstanceDataEvent) {
-            storage.indexGroup((MultipleUserTaskInstanceDataEvent) event);
-        } else if (event instanceof UserTaskInstanceAssignmentDataEvent) {
-            storage.indexAssignment((UserTaskInstanceAssignmentDataEvent) event);
-        } else if (event instanceof UserTaskInstanceAttachmentDataEvent) {
-            storage.indexAttachment((UserTaskInstanceAttachmentDataEvent) event);
-        } else if (event instanceof UserTaskInstanceDeadlineDataEvent) {
-            storage.indexDeadline((UserTaskInstanceDeadlineDataEvent) event);
-        } else if (event instanceof UserTaskInstanceStateDataEvent) {
-            storage.indexState((UserTaskInstanceStateDataEvent) event);
-        } else if (event instanceof UserTaskInstanceCommentDataEvent) {
-            storage.indexComment((UserTaskInstanceCommentDataEvent) event);
-        } else if (event instanceof UserTaskInstanceVariableDataEvent) {
-            storage.indexVariable((UserTaskInstanceVariableDataEvent) event);
-        }
     }
 
     public void indexJob(Job job) {

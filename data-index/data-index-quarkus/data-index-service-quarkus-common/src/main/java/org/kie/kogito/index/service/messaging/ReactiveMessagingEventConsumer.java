@@ -56,7 +56,7 @@ public class ReactiveMessagingEventConsumer {
     public Uni<Void> onProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
         LOGGER.debug("Process instance consumer received ProcessInstanceDataEvent: \n{}", event);
         return Uni.createFrom().item(event)
-                .invoke(indexingService::indexProcessInstanceEvent)
+                .invoke(indexingService::indexDataEvent)
                 .invoke(eventPublisher::fire)
                 .onFailure()
                 .invoke(t -> LOGGER.error("Error processing process instance ProcessInstanceDataEvent: {}", t.getMessage(), t))
@@ -67,7 +67,7 @@ public class ReactiveMessagingEventConsumer {
     public Uni<Void> onUserTaskInstanceEvent(UserTaskInstanceDataEvent<?> event) {
         LOGGER.debug("Task instance received UserTaskInstanceDataEvent \n{}", event);
         return Uni.createFrom().item(event)
-                .invoke(indexingService::indexUserTaskInstanceEvent)
+                .invoke(indexingService::indexDataEvent)
                 .invoke(eventPublisher::fire)
                 .onFailure()
                 .invoke(t -> LOGGER.error("Error processing task instance UserTaskInstanceDataEvent: {}", t.getMessage(), t))
@@ -87,7 +87,7 @@ public class ReactiveMessagingEventConsumer {
     public Uni<Void> onProcessDefinitionDataEvent(ProcessDefinitionDataEvent event) {
         LOGGER.debug("Process Definition received ProcessDefinitionDataEvent \n{}", event);
         return Uni.createFrom().item(event)
-                .onItem().invoke(indexingService::indexProcessDefinition)
+                .onItem().invoke(indexingService::indexDataEvent)
                 .onFailure().invoke(t -> LOGGER.error("Error processing ProcessDefinitionDataEvent: {}", t.getMessage(), t))
                 .onItem().ignore().andContinueWithNull();
     }

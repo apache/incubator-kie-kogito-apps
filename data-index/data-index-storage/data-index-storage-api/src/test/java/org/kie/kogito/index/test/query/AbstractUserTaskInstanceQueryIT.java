@@ -44,7 +44,7 @@ public abstract class AbstractUserTaskInstanceQueryIT extends QueryTestBase<Stri
         event.setKogitoProcessInstanceId(processInstanceId);
         event.setKogitoUserTaskInstanceId(taskId);
         event.setData(UserTaskInstanceStateEventBody.create().processInstanceId(processInstanceId).state("InProgress").userTaskInstanceId(taskId).build());
-        storage.indexState(event);
+        storage.index(event);
         queryAndAssert(assertWithId(), storage, singletonList(equalTo("state", "InProgress")), null, null, null, taskId);
     }
 }

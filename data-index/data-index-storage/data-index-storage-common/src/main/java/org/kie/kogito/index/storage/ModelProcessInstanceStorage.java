@@ -19,9 +19,9 @@
 package org.kie.kogito.index.storage;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.kie.kogito.event.process.MultipleProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
@@ -30,7 +30,6 @@ import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceVariableDataEvent;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.storage.merger.ProcessInstanceErrorDataEventMerger;
-import org.kie.kogito.index.storage.merger.ProcessInstanceEventMerger;
 import org.kie.kogito.index.storage.merger.ProcessInstanceNodeDataEventMerger;
 import org.kie.kogito.index.storage.merger.ProcessInstanceSLADataEventMerger;
 import org.kie.kogito.index.storage.merger.ProcessInstanceStateDataEventMerger;
@@ -49,62 +48,38 @@ public class ModelProcessInstanceStorage extends ModelStorageFetcher<String, Pro
     }
 
     @Override
-    public void indexError(ProcessInstanceErrorDataEvent event) {
-        index(event, errorMerger);
-    }
-
-    @Override
-    public void indexNode(ProcessInstanceNodeDataEvent event) {
-        index(event, nodeMerger);
-    }
-
-    @Override
-    public void indexSLA(ProcessInstanceSLADataEvent event) {
-        index(event, slaMerger);
-    }
-
-    @Override
-    public void indexState(ProcessInstanceStateDataEvent event) {
-        index(event, stateMerger);
-    }
-
-    @Override
-    public void indexVariable(ProcessInstanceVariableDataEvent event) {
-        index(event, variableMerger);
-    }
-
-    @Override
-    public void indexGroup(MultipleProcessInstanceDataEvent events) {
+    public void index(List<ProcessInstanceDataEvent> events) {
         Map<String, ProcessInstance> processInstances = new HashMap<>();
-        for (ProcessInstanceDataEvent<?> event : events.getData()) {
-            ProcessInstance processInstance = processInstances.computeIfAbsent(event.getKogitoProcessInstanceId(), k -> findProcessInstance(event));
-            if (event instanceof ProcessInstanceErrorDataEvent) {
-                errorMerger.merge(processInstance, event);
-            } else if (event instanceof ProcessInstanceNodeDataEvent) {
-                nodeMerger.merge(processInstance, event);
-            } else if (event instanceof ProcessInstanceSLADataEvent) {
-                slaMerger.merge(processInstance, event);
-            } else if (event instanceof ProcessInstanceStateDataEvent) {
-                stateMerger.merge(processInstance, event);
-            } else if (event instanceof ProcessInstanceVariableDataEvent) {
-                variableMerger.merge(processInstance, event);
-            }
+        for (ProcessInstanceDataEvent<?> event : events) {
+            ProcessInstance processInstance = processInstances.computeIfAbsent(event.getKogitoProcessInstanceId(), key -> {
+                ProcessInstance pi = storage.get(key);
+                if (pi == null) {
+                    pi = new ProcessInstance();
+                    pi.setId(event.getKogitoProcessInstanceId());
+                    pi.setProcessId(event.getKogitoProcessId());
+                }
+                return pi;
+            });
+            merge(processInstance, event);
         }
-        processInstances.values().forEach(processInstance -> storage.put(processInstance.getId(), processInstance));
+
+        for (ProcessInstance processInstance : processInstances.values()) {
+            storage.put(processInstance.getId(), processInstance);
+        }
     }
 
-    private <T extends ProcessInstanceDataEvent<?>> void index(T event, ProcessInstanceEventMerger merger) {
-        ProcessInstance processInstance = findProcessInstance(event);
-        storage.put(event.getKogitoProcessInstanceId(), merger.merge(processInstance, event));
+    private void merge(ProcessInstance pi, ProcessInstanceDataEvent<?> event) {
+        if (event instanceof ProcessInstanceErrorDataEvent) {
+            errorMerger.merge(pi, event);
+        } else if (event instanceof ProcessInstanceNodeDataEvent) {
+            nodeMerger.merge(pi, event);
+        } else if (event instanceof ProcessInstanceSLADataEvent) {
+            slaMerger.merge(pi, event);
+        } else if (event instanceof ProcessInstanceStateDataEvent) {
+            stateMerger.merge(pi, event);
+        } else if (event instanceof ProcessInstanceVariableDataEvent) {
+            variableMerger.merge(pi, event);
+        }
     }
 
-    private <T extends ProcessInstanceDataEvent<?>> ProcessInstance findProcessInstance(T event) {
-        ProcessInstance processInstance = storage.get(event.getKogitoProcessInstanceId());
-        if (processInstance == null) {
-            processInstance = new ProcessInstance();
-            processInstance.setId(event.getKogitoProcessInstanceId());
-            processInstance.setProcessId(event.getKogitoProcessId());
-        }
-        return processInstance;
-    }
 }

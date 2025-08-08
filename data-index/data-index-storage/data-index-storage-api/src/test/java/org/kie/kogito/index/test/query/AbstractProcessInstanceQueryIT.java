@@ -44,7 +44,7 @@ public abstract class AbstractProcessInstanceQueryIT extends QueryTestBase<Strin
         String subProcessInstanceId = UUID.randomUUID().toString();
         ProcessInstanceStateDataEvent processInstanceEvent = TestUtils.createProcessInstanceEvent(processInstanceId, processId, subProcessInstanceId, subProcessId, COMPLETED.ordinal());
         ProcessInstanceStorage storage = getStorage();
-        storage.indexState(processInstanceEvent);
+        storage.index(processInstanceEvent);
         queryAndAssert(assertWithId(), storage, singletonList(equalTo("state", COMPLETED.ordinal())), null, null, null,
                 processInstanceId);
     }
@@ -56,9 +56,9 @@ public abstract class AbstractProcessInstanceQueryIT extends QueryTestBase<Strin
         String subProcessId = processId + "_sub";
         String subProcessInstanceId = UUID.randomUUID().toString();
         ProcessInstanceStorage storage = getStorage();
-        storage.indexState(TestUtils.createProcessInstanceEvent(processInstanceId, processId, subProcessId, subProcessInstanceId, COMPLETED.ordinal()));
-        storage.indexNode(TestUtils.createProcessInstanceNodeDataEvent(processInstanceId, processId, "1", "1", "Javierito", "type", 1));
-        storage.indexError(TestUtils.createProcessInstanceErrorDataEvent(processInstanceId, processId, "1", "kkdevaca", "1", "1"));
+        storage.index(TestUtils.createProcessInstanceEvent(processInstanceId, processId, subProcessId, subProcessInstanceId, COMPLETED.ordinal()));
+        storage.index(TestUtils.createProcessInstanceNodeDataEvent(processInstanceId, processId, "1", "1", "Javierito", "type", 1));
+        storage.index(TestUtils.createProcessInstanceErrorDataEvent(processInstanceId, processId, "1", "kkdevaca", "1", "1"));
         queryAndAssert(assertWithId(), storage, singletonList(equalTo("nodes.retrigger", false)), null, null, null, processInstanceId);
     }
 }
