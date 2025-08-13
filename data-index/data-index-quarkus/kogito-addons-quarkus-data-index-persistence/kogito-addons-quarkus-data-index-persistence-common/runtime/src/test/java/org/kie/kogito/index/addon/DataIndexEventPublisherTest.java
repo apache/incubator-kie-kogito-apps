@@ -20,18 +20,25 @@ package org.kie.kogito.index.addon;
 
 import java.io.UncheckedIOException;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kie.kogito.event.AbstractDataEvent;
 import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
 import org.kie.kogito.index.addon.event.DataIndexEventPublisher;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.service.IndexingService;
+import org.kie.kogito.index.storage.DataIndexStorageService;
+import org.kie.kogito.index.storage.ProcessInstanceStorage;
+import org.kie.kogito.index.storage.UserTaskInstanceStorage;
+import org.kie.kogito.persistence.api.Storage;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,6 +46,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
 import static org.kie.kogito.index.test.TestUtils.getProcessCloudEvent;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 
@@ -60,41 +70,60 @@ public class DataIndexEventPublisherTest {
     private static final ZonedDateTime EXPIRATION_TIME = ZonedDateTime.parse("2023-04-13T00:00:00.001Z");
 
     @Mock
+    DataIndexStorageService storage;
+    
+    @Mock
+    ProcessInstanceStorage piStorage;
+    
+    @Mock
+    UserTaskInstanceStorage utStorage;
+    
+    @Mock
+    Storage<String, Job> jobStorage;
+
     IndexingService indexingService;
 
     private static DataIndexEventPublisher dataIndexEventPublisher;
 
     @BeforeEach
     public void setup() {
+        Mockito.lenient().when(storage.getProcessInstanceStorage()).thenReturn(piStorage);
+        Mockito.lenient().when(storage.getUserTaskInstanceStorage()).thenReturn(utStorage);
+        Mockito.lenient().when(storage.getJobsStorage()).thenReturn(jobStorage);
+        indexingService = new IndexingService(storage);
         dataIndexEventPublisher = new DataIndexEventPublisher(indexingService);
     }
 
     @Test
     void onProcessInstanceEvent() {
 
-        ArgumentCaptor<ProcessInstanceStateDataEvent> eventCaptor = ArgumentCaptor.forClass(ProcessInstanceStateDataEvent.class);
+        ArgumentCaptor<List<ProcessInstanceDataEvent>> eventCaptor = ArgumentCaptor.forClass(List.class);
         ProcessInstanceStateDataEvent event = getProcessCloudEvent(PROCESS_ID, PROCESS_INSTANCE_ID, COMPLETED,
                 ROOT_PROCESS_INSTANCE_ID, ROOT_PROCESS_ID, ROOT_PROCESS_INSTANCE_ID, "currentUser");
 
         dataIndexEventPublisher.publish(event);
 
-        verify(indexingService).indexDataEvent(event);
+        verify(piStorage, times(1)).index(any(List.class));  
+        verify(piStorage).index(eventCaptor.capture());
+
+        
+        assertThat(eventCaptor.getValue().get(0)).isEqualTo(event);
     }
 
     @Test
     void onJobEvent() throws Exception {
         ArgumentCaptor<Job> eventCaptor = ArgumentCaptor.forClass(Job.class);
-
-        byte[] jsonContent = getObjectMapper().writeValueAsBytes(buildJob());
+        Job job = buildJob();
+        byte[] jsonContent = getObjectMapper().writeValueAsBytes(job);
 
         DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
                 PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID);
         dataIndexEventPublisher.publish(event);
 
-        verify(indexingService).indexJob(eventCaptor.capture());
+        verify(jobStorage).put(anyString(), eventCaptor.capture());
+        verify(jobStorage, times(1)).put(JOB_ID, job);
         assertThat(eventCaptor.getValue().getId()).isEqualTo(JOB_ID);
         assertThat(eventCaptor.getValue().getProcessId()).isEqualTo(PROCESS_ID);
-
         assertThat(eventCaptor.getValue().getProcessInstanceId()).isEqualTo(PROCESS_INSTANCE_ID);
         assertThat(eventCaptor.getValue().getNodeInstanceId()).isEqualTo(NODE_INSTANCE_ID);
         assertThat(eventCaptor.getValue().getRootProcessId()).isEqualTo(ROOT_PROCESS_ID);
@@ -118,7 +147,7 @@ public class DataIndexEventPublisherTest {
         DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
                 PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID);
         assertThrows(UncheckedIOException.class, () -> dataIndexEventPublisher.publish(event));
-        verifyNoInteractions(indexingService);
+        verifyNoInteractions(jobStorage);
     }
 
     public static class TestingDataEvent extends AbstractDataEvent<byte[]> {

@@ -60,7 +60,7 @@ public class ModelUserTaskInstanceStorage extends ModelStorageFetcher<String, Us
                 UserTaskInstance ut = storage.get(key);
                 if (ut == null) {
                     ut = new UserTaskInstance();
-                    ut.setId(event.getKogitoUserTaskInstanceId());
+                    ut.setId(key);
                     ut.setProcessInstanceId(event.getKogitoProcessInstanceId());
                     ut.setProcessId(event.getKogitoProcessId());
                     ut.setRootProcessId(event.getKogitoRootProcessId());

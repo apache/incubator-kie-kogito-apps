@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.index.storage;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +36,8 @@ import org.kie.kogito.index.storage.merger.ProcessInstanceSLADataEventMerger;
 import org.kie.kogito.index.storage.merger.ProcessInstanceStateDataEventMerger;
 import org.kie.kogito.index.storage.merger.ProcessInstanceVariableDataEventMerger;
 import org.kie.kogito.persistence.api.Storage;
+
+import static org.kie.kogito.index.DateTimeUtils.toZonedDateTime;
 
 public class ModelProcessInstanceStorage extends ModelStorageFetcher<String, ProcessInstance> implements ProcessInstanceStorage {
     private final ProcessInstanceErrorDataEventMerger errorMerger = new ProcessInstanceErrorDataEventMerger();
@@ -55,8 +58,12 @@ public class ModelProcessInstanceStorage extends ModelStorageFetcher<String, Pro
                 ProcessInstance pi = storage.get(key);
                 if (pi == null) {
                     pi = new ProcessInstance();
-                    pi.setId(event.getKogitoProcessInstanceId());
+                    pi.setId(key);
                     pi.setProcessId(event.getKogitoProcessId());
+                    pi.setVersion(event.getKogitoProcessInstanceVersion());
+                    pi.setLastUpdate(toZonedDateTime(event.getTime()));
+                    pi.setNodes(new ArrayList<>());
+                    pi.setMilestones(new ArrayList<>());
                 }
                 return pi;
             });

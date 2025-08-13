@@ -71,7 +71,7 @@ public class IndexingService {
     }
 
     public void indexDataEvent(DataEvent<?> event) {
-        this.internalIndexDataEvent(List.of(event));
+        this.indexDataEvent(List.of(event));
     }
 
     public void indexDataEvent(Collection<DataEvent<?>> events) {
