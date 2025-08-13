@@ -79,16 +79,14 @@ public class UserTaskInstanceEntityStorage extends AbstractJPAStorageFetcher<Str
                 if (ut == null) {
                     ut = new UserTaskInstanceEntity();
                     ut.setId(key);
-                    em.persist(ut);
                 }
-                em.detach(ut);
                 return ut;
             });
             indexEvent(taskInstance, event);
         }
 
         for (UserTaskInstanceEntity userTaskInstance : userTaskInstances.values()) {
-            em.merge(userTaskInstance);
+            em.persist(userTaskInstance);
         }
     }
 

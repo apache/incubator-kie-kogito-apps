@@ -97,16 +97,14 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
                     pi.setLastUpdate(toZonedDateTime(event.getTime()));
                     pi.setNodes(new ArrayList<>());
                     pi.setMilestones(new ArrayList<>());
-                    em.persist(pi);
                 }
-                em.detach(pi);
                 return pi;
             });
             indexEvent(processInstance, event);
         }
 
         for (ProcessInstanceEntity processInstance : processInstances.values()) {
-            em.merge(processInstance);
+            em.persist(processInstance);
         }
     }
 
