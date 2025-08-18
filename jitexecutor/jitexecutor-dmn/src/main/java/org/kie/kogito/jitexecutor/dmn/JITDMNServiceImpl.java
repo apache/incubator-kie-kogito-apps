@@ -80,9 +80,9 @@ public class JITDMNServiceImpl implements JITDMNService {
     }
 
     @Override
-    public JITDMNResult evaluateModel(MultipleResourcesPayload payload, Map<String, Object> context, boolean isStrictMode) {
+    public JITDMNResult evaluateModel(MultipleResourcesPayload payload, Map<String, Object> context) {
         DMNEvaluator dmnEvaluator = DMNEvaluator.fromMultiple(payload);
-        return dmnEvaluator.evaluate(context, isStrictMode);
+        return dmnEvaluator.evaluate(context, payload.isStrictMode());
     }
 
     @Override
@@ -92,9 +92,9 @@ public class JITDMNServiceImpl implements JITDMNService {
     }
 
     @Override
-    public DMNResultWithExplanation evaluateModelAndExplain(MultipleResourcesPayload payload, Map<String, Object> context, boolean isStrictMode) {
+    public DMNResultWithExplanation evaluateModelAndExplain(MultipleResourcesPayload payload, Map<String, Object> context) {
         DMNEvaluator dmnEvaluator = DMNEvaluator.fromMultiple(payload);
-        return evaluateModelAndExplain(dmnEvaluator, context, isStrictMode);
+        return evaluateModelAndExplain(dmnEvaluator, context, payload.isStrictMode());
     }
 
     public DMNResultWithExplanation evaluateModelAndExplain(DMNEvaluator dmnEvaluator, Map<String, Object> context, boolean isStrictMode) {

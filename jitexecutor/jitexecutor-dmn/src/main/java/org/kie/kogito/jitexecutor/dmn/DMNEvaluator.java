@@ -195,7 +195,7 @@ public class DMNEvaluator {
     public JITDMNResult evaluate(Map<String, Object> context, boolean isStrictMode) {
         DMNContext dmnContext =
                 new DynamicDMNContextBuilder(dmnRuntime.newContext(), dmnModel).populateContextWith(context);
-        ((DMNRuntimeImpl) this.dmnRuntime).setOption(new RuntimeModeOption(isStrictMode ? "strict" : "lenient"));
+        ((DMNRuntimeImpl) this.dmnRuntime).setOption(new RuntimeModeOption(isStrictMode ? RuntimeModeOption.MODE.STRICT : RuntimeModeOption.MODE.LENIENT));
         DMNResult dmnResult = dmnRuntime.evaluateAll(dmnModel, dmnContext);
         List<List<String>> invalidElementPaths = retrieveInvalidElementPaths(dmnResult.getMessages(), dmnModel);
         Optional<Map<String, Map<String, Integer>>> decisionEvaluationHitIdsMap = dmnRuntime.getListeners().stream()

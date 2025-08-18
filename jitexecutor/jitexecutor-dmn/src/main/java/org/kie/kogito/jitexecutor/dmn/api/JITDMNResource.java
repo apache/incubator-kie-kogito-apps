@@ -59,7 +59,7 @@ public class JITDMNResource {
         LOGGER.debug(LINEBREAK);
         Supplier<Response> supplier = () -> {
             JITDMNResult evaluateAll = payload.getModel() != null ? jitdmnService.evaluateModel(payload.getModel(), payload.getContext(), payload.isStrictMode())
-                    : jitdmnService.evaluateModel(payload, payload.getContext(), payload.isStrictMode());
+                    : jitdmnService.evaluateModel(payload, payload.getContext());
             Map<String, Object> restResulk = new HashMap<>();
             for (Entry<String, Object> kv : evaluateAll.getContext().getAll().entrySet()) {
                 restResulk.put(kv.getKey(), MarshallingStubUtils.stubDMNResult(kv.getValue(), String::valueOf));
@@ -80,7 +80,7 @@ public class JITDMNResource {
         LOGGER.debug(LINEBREAK);
         Supplier<Response> supplier = () -> {
             JITDMNResult dmnResult = payload.getModel() != null ? jitdmnService.evaluateModel(payload.getModel(), payload.getContext(), payload.isStrictMode())
-                    : jitdmnService.evaluateModel(payload, payload.getContext(), payload.isStrictMode());
+                    : jitdmnService.evaluateModel(payload, payload.getContext());
             return Response.ok(dmnResult).build();
         };
         return DMNResourceHelper.manageResponse(supplier);
@@ -98,7 +98,7 @@ public class JITDMNResource {
         Supplier<Response> supplier = () -> {
             DMNResultWithExplanation response =
                     payload.getModel() != null ? jitdmnService.evaluateModelAndExplain(payload.getModel(), payload.getContext(), payload.isStrictMode())
-                            : jitdmnService.evaluateModelAndExplain(payload, payload.getContext(), payload.isStrictMode());
+                            : jitdmnService.evaluateModelAndExplain(payload, payload.getContext());
             return Response.ok(response).build();
         };
         return DMNResourceHelper.manageResponse(supplier);

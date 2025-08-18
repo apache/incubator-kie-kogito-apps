@@ -30,9 +30,7 @@ public class MultipleResourcesPayload {
     }
 
     public MultipleResourcesPayload(String mainURI, List<ResourceWithURI> resources) {
-        this.mainURI = mainURI;
-        this.resources = resources;
-        this.isStrictMode = false;
+        this(mainURI, resources, false);
     }
 
     public MultipleResourcesPayload(String mainURI, List<ResourceWithURI> resources, boolean isStrictMode) {
