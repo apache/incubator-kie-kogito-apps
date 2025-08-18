@@ -24,6 +24,7 @@ public class MultipleResourcesPayload {
 
     private String mainURI;
     private List<ResourceWithURI> resources;
+    private boolean isStrictMode;
 
     public MultipleResourcesPayload() {
     }
@@ -31,6 +32,12 @@ public class MultipleResourcesPayload {
     public MultipleResourcesPayload(String mainURI, List<ResourceWithURI> resources) {
         this.mainURI = mainURI;
         this.resources = resources;
+    }
+
+    public MultipleResourcesPayload(String mainURI, List<ResourceWithURI> resources, boolean isStrictMode) {
+        this.mainURI = mainURI;
+        this.resources = resources;
+        this.isStrictMode = isStrictMode;
     }
 
     public String getMainURI() {
@@ -49,11 +56,20 @@ public class MultipleResourcesPayload {
         this.resources = resources;
     }
 
+    public boolean isStrictMode() {
+        return isStrictMode;
+    }
+
+    public void setStrictMode(boolean strictMode) {
+        isStrictMode = strictMode;
+    }
+
     @Override
     public String toString() {
         return "MultipleResourcesPayload{" +
                 "mainURI='" + mainURI + '\'' +
-                ", resources=" + resources +
+                ", resources=" + resources + '\'' +
+                ", isStrictMode =" + isStrictMode +
                 '}';
     }
 }
