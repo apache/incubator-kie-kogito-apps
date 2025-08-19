@@ -20,10 +20,15 @@ package org.kie.kogito.jitexecutor.common.requests;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class MultipleResourcesPayload {
 
+    @JsonProperty("mainURI")
     private String mainURI;
+    @JsonProperty("resources")
     private List<ResourceWithURI> resources;
+    @JsonProperty("isStrictMode")
     private boolean isStrictMode;
 
     public MultipleResourcesPayload() {
