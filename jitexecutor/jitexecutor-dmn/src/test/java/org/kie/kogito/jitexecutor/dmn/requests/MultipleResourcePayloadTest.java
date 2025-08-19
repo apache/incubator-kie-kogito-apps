@@ -41,14 +41,14 @@ public class MultipleResourcePayloadTest {
     @Test
     void deserialize() throws JsonProcessingException {
         String json = "{\n" +
-                "  \"mainURI\": \"file://main.dmn\",\n" +
+                "  \"mainURI\": \"main.dmn\",\n" +
                 "  \"resources\": [\n" +
                 "    {\n" +
-                "      \"uri\": \"file://resource1.dmn\",\n" +
+                "      \"uri\": \"resource1.dmn\",\n" +
                 "      \"content\": \"<dmn>...</dmn>\"\n" +
                 "    },\n" +
                 "    {\n" +
-                "      \"uri\": \"file://resource2.dmn\",\n" +
+                "      \"uri\": \"resource2.dmn\",\n" +
                 "      \"content\": \"<dmn>...</dmn>\"\n" +
                 "    }\n" +
                 "  ],\n" +
@@ -57,18 +57,18 @@ public class MultipleResourcePayloadTest {
 
         MultipleResourcesPayload payload = MAPPER.readValue(json, MultipleResourcesPayload.class);
         assertThat(payload).isNotNull();
-        assertThat(payload.getMainURI()).isEqualTo("file://main.dmn");
+        assertThat(payload.getMainURI()).isEqualTo("main.dmn");
         assertThat(payload.getResources()).hasSize(2);
         assertThat(payload.isStrictMode()).isTrue();
     }
 
     @Test
     void roundTripSerialization() throws JsonProcessingException {
-        ResourceWithURI resource1 = new ResourceWithURI("file://resource1.dmn", "<dmn>resource1</dmn>");
-        ResourceWithURI resource2 = new ResourceWithURI("file://resource2.dmn", "<dmn>resource2</dmn>");
+        ResourceWithURI resource1 = new ResourceWithURI("resource1.dmn", "<dmn>resource1</dmn>");
+        ResourceWithURI resource2 = new ResourceWithURI("resource2.dmn", "<dmn>resource2</dmn>");
 
         MultipleResourcesPayload original = new MultipleResourcesPayload(
-                "file:///main.dmn",
+                "main.dmn",
                 List.of(resource1, resource2),
                 true);
 
@@ -79,7 +79,7 @@ public class MultipleResourcePayloadTest {
         assertThat(deserialized).isNotNull();
         assertThat(deserialized.getMainURI()).isEqualTo(original.getMainURI());
         assertThat(deserialized.getResources()).hasSize(2);
-        assertThat(deserialized.getResources().get(0).getURI()).isEqualTo("file://resource1.dmn");
+        assertThat(deserialized.getResources().get(0).getURI()).isEqualTo("resource1.dmn");
         assertThat(deserialized.isStrictMode()).isTrue();
     }
 }
