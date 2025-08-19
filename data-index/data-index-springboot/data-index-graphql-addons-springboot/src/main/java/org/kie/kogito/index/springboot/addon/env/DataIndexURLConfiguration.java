@@ -32,6 +32,7 @@ import jakarta.annotation.PostConstruct;
 
 @Configuration
 public class DataIndexURLConfiguration {
+    private static final String CONTEXT_PATH = "server.servlet.context-path";
     private static final String KOGITO_DATA_INDEX_URL_PROP = "kogito.data-index.url";
     private static final String KOGITO_DATAINDEX_HTTP_URL_PROP = "kogito.dataindex.http.url";
 
@@ -43,6 +44,9 @@ public class DataIndexURLConfiguration {
 
     @Value("${kogito.service.url:null}")
     String kogitoServiceUrl;
+
+    @Value("${server.servlet.context-path:''}")
+    String contextPath;
 
     @Autowired
     ConfigurableEnvironment environment;
@@ -58,13 +62,14 @@ public class DataIndexURLConfiguration {
         Properties properties = new Properties();
         properties.put(KOGITO_DATA_INDEX_URL_PROP, dataIndexUrl);
         properties.put(KOGITO_DATAINDEX_HTTP_URL_PROP, dataIndexUrl);
+        properties.put(CONTEXT_PATH, contextPath);
         propertySources.addLast(new PropertiesPropertySource("data-index-url", properties));
     }
 
     private String resolveDataIndexURL(ConfigurableEnvironment environment) {
 
         if (kogitoServiceUrl == null) {
-            return "http://" + serverAddress + ":" + serverPort;
+            return "http://" + serverAddress + ":" + serverPort + contextPath;
         }
         return kogitoServiceUrl;
     }

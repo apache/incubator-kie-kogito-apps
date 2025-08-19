@@ -41,6 +41,7 @@ import io.quarkus.deployment.pkg.steps.NativeOrNativeSourcesBuild;
 
 public abstract class AbstractKogitoAddonsQuarkusDataIndexProcessor extends OneOfCapabilityKogitoAddOnProcessor {
     private static final String QUARKUS_HTTP_PORT = "quarkus.http.port";
+    private static final String QUARKUS_HTTP_ROOT_PATH = "quarkus.http.root-path";
     private static final String KOGITO_SERVICE_URL_PROP = "kogito.service.url";
     private static final String KOGITO_DATA_INDEX_PROP = "kogito.data-index.url";
     /**
@@ -61,7 +62,8 @@ public abstract class AbstractKogitoAddonsQuarkusDataIndexProcessor extends OneO
             // Setting a default `kogito.data-index.url` accordingly to the runtime url.
             String dataIndexUrl = ConfigProvider.getConfig().getOptionalValue(KOGITO_SERVICE_URL_PROP, String.class).orElseGet(() -> {
                 Integer port = ConfigProvider.getConfig().getOptionalValue(QUARKUS_HTTP_PORT, Integer.class).orElse(8080);
-                return "http://localhost:" + port;
+                String rootPath = ConfigProvider.getConfig().getOptionalValue(QUARKUS_HTTP_ROOT_PATH, String.class).orElse("");
+                return "http://localhost:" + port + rootPath;
             });
             systemProperties.produce(new SystemPropertyBuildItem(KOGITO_DATA_INDEX_PROP, dataIndexUrl));
         }
