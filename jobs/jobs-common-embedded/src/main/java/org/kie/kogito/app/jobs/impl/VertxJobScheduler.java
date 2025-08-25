@@ -343,9 +343,12 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             @Override
             public void run() {
                 jobsScheduled.compute(jobDetails.getId(), (jobId, timerInfo) -> {
-                    if (timerInfo != null) {
-                        removeTimerInfo(timerInfo);
+                    if (timerInfo == null) {
+                        // if the timer info does not exist we should not reschedule as it was executed or cancelled by 
+                        // another thread
+                        return null;
                     }
+                    removeTimerInfo(timerInfo);
                     return addTimerInfo(rescheduledJobDetails);
                 });
             }
