@@ -343,7 +343,9 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             @Override
             public void run() {
                 jobsScheduled.compute(jobDetails.getId(), (jobId, timerInfo) -> {
-                    removeTimerInfo(timerInfo);
+                    if (timerInfo != null) {
+                        removeTimerInfo(timerInfo);
+                    }
                     return addTimerInfo(rescheduledJobDetails);
                 });
             }
