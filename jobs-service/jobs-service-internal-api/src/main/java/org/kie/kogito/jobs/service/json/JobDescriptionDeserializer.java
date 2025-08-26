@@ -25,6 +25,7 @@ import org.kie.kogito.jobs.ExpirationTime;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.descriptors.ProcessInstanceJobDescription;
 import org.kie.kogito.jobs.descriptors.ProcessInstanceJobDescriptionBuilder;
+import org.kie.kogito.jobs.descriptors.ProcessJobDescription;
 import org.kie.kogito.jobs.descriptors.UserTaskInstanceJobDescription;
 import org.kie.kogito.jobs.descriptors.UserTaskInstanceJobDescriptionBuilder;
 
@@ -50,6 +51,13 @@ public class JobDescriptionDeserializer extends StdDeserializer<JobDescription> 
             JsonNode node = jp.getCodec().readTree(jp);
             String jobDescriptionType = node.get("@type").asText();
             switch (jobDescriptionType) {
+                case "ProcessJobDescription": {
+                    String id = ofNullable(node.get("id")).map(JsonNode::textValue).orElse(null);
+                    Integer priority = ofNullable(node.get("priority")).map(JsonNode::asInt).orElse(null);
+                    String expirationTimeType = node.get("expirationTime").get("@type").asText();
+                    ExpirationTime expirationTime = (ExpirationTime) ctxt.readTreeAsValue(node.get("expirationTime"), Class.forName(expirationTimeType));
+                    return ProcessJobDescription.of(expirationTime, priority, id);
+                }
                 case "ProcessInstanceJobDescription": {
                     ProcessInstanceJobDescriptionBuilder builder = ProcessInstanceJobDescription.newProcessInstanceJobDescriptionBuilder();
                     ofNullable(node.get("id")).ifPresent(e -> builder.id(e.textValue()));
