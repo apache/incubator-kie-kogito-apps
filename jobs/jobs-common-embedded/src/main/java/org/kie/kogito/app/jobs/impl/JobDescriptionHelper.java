@@ -23,44 +23,11 @@ import java.time.temporal.ChronoUnit;
 
 import org.kie.kogito.jobs.DurationExpirationTime;
 import org.kie.kogito.jobs.ExpirationTime;
-import org.kie.kogito.jobs.JobDescription;
-import org.kie.kogito.jobs.descriptors.ProcessInstanceJobDescription;
-import org.kie.kogito.jobs.descriptors.UserTaskInstanceJobDescription;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.SimpleTimerTrigger;
 
 public class JobDescriptionHelper {
-
-    public static JobDescription newJobDescription(JobDescription jobDescription, Trigger trigger) {
-        if (jobDescription instanceof ProcessInstanceJobDescription processInstanceJobDescription) {
-            ProcessInstanceJobDescription newProcessInstanceJobDescription = new ProcessInstanceJobDescription(
-                    processInstanceJobDescription.id(),
-                    processInstanceJobDescription.timerId(),
-                    toExpirationTime(trigger),
-                    processInstanceJobDescription.priority(),
-                    processInstanceJobDescription.processInstanceId(),
-                    processInstanceJobDescription.rootProcessInstanceId(),
-                    processInstanceJobDescription.processId(),
-                    processInstanceJobDescription.rootProcessId(),
-                    processInstanceJobDescription.nodeInstanceId());
-            return newProcessInstanceJobDescription;
-        } else if (jobDescription instanceof UserTaskInstanceJobDescription userTaskInstanceJobDescription) {
-            UserTaskInstanceJobDescription newUserTaskInstanceJobDescription = new UserTaskInstanceJobDescription(
-                    userTaskInstanceJobDescription.id(),
-                    toExpirationTime(trigger),
-                    userTaskInstanceJobDescription.priority(),
-                    userTaskInstanceJobDescription.userTaskInstanceId(),
-                    userTaskInstanceJobDescription.processId(),
-                    userTaskInstanceJobDescription.processInstanceId(),
-                    userTaskInstanceJobDescription.nodeInstanceId(),
-                    userTaskInstanceJobDescription.rootProcessInstanceId(),
-                    userTaskInstanceJobDescription.rootProcessId());
-            return newUserTaskInstanceJobDescription;
-        } else {
-            return jobDescription;
-        }
-    }
 
     public static ExpirationTime toExpirationTime(Trigger trigger) {
         if (trigger instanceof SimpleTimerTrigger simpleTimerTrigger) {

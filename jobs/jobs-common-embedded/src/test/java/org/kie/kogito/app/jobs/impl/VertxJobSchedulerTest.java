@@ -32,6 +32,7 @@ import org.kie.kogito.app.jobs.spi.memory.MemoryJobStore;
 import org.kie.kogito.jobs.DurationExpirationTime;
 import org.kie.kogito.jobs.ExpirationTime;
 import org.kie.kogito.jobs.service.model.JobDetails;
+import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.timer.impl.SimpleTimerTrigger;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -52,6 +53,7 @@ public class VertxJobSchedulerTest {
                 .withJobContextFactory(jobContextFactory)
                 .withJobStore(memoryJobStore)
                 .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
                 .build();
         jobScheduler.init();
         jobScheduler.schedule(new TestJobDescription(jobId, ZonedDateTime.now().plus(Duration.ofSeconds(1))));
@@ -76,6 +78,7 @@ public class VertxJobSchedulerTest {
                 .withJobContextFactory(jobContextFactory)
                 .withJobStore(memoryJobStore)
                 .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
                 .build();
         jobScheduler.init();
         ExpirationTime expirationTime = DurationExpirationTime.repeat(0, 1000L, 3);
@@ -103,6 +106,7 @@ public class VertxJobSchedulerTest {
                 .withJobContextFactory(jobContextFactory)
                 .withJobStore(memoryJobStore)
                 .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
                 .build();
         jobScheduler.init();
         ExpirationTime expirationTime = DurationExpirationTime.repeat(0, 1000L, SimpleTimerTrigger.INDEFINITELY);
@@ -128,6 +132,7 @@ public class VertxJobSchedulerTest {
                 .withJobContextFactory(jobContextFactory)
                 .withJobStore(memoryJobStore)
                 .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
                 .build();
         jobScheduler.init();
 
@@ -152,6 +157,7 @@ public class VertxJobSchedulerTest {
                 .withJobContextFactory(jobContextFactory)
                 .withJobStore(memoryJobStore)
                 .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
                 .build();
         jobScheduler.init();
 
@@ -179,6 +185,7 @@ public class VertxJobSchedulerTest {
                 .withJobContextFactory(jobContextFactory)
                 .withJobStore(memoryJobStore)
                 .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
                 .build();
         jobScheduler.init();
 
@@ -206,6 +213,7 @@ public class VertxJobSchedulerTest {
                 .withJobContextFactory(jobContextFactory)
                 .withJobStore(memoryJobStore)
                 .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
                 .build();
         jobScheduler.init();
 
@@ -216,6 +224,38 @@ public class VertxJobSchedulerTest {
         jobScheduler.close();
     }
 
+    
+    @Test
+    public void testNumberOfRetries() throws Exception {
+        final int NUMBER_OF_FAILURES = 4; // first execution + number of retries
+        final int NUMBER_OF_RETRIES = NUMBER_OF_FAILURES - 1;
+ 
+        final String jobId = "1";
+        JobStore memoryJobStore = new MemoryJobStore();
+        JobContextFactory jobContextFactory = new MemoryJobContextFactory();
+        TestFailureJobExecutor latchJobExecutor = new TestFailureJobExecutor(NUMBER_OF_FAILURES);
+        LatchFailureJobSchedulerListener latchExecutionJobSchedulerListener = new LatchFailureJobSchedulerListener(NUMBER_OF_FAILURES);
+        JobScheduler jobScheduler = JobSchedulerBuilder.newJobSchedulerBuilder()
+                .withMaxNumberOfRetries(NUMBER_OF_RETRIES)
+                .withJobExecutors(latchJobExecutor)
+                .withRetryInterval(1000L)
+                .withJobEventAdapters(new TestJobDetailsEventAdapter())
+                .withEventPublishers(new TestEventPublisher())
+                .withJobContextFactory(jobContextFactory)
+                .withJobStore(memoryJobStore)
+                .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
+                .build();
+
+        jobScheduler.init();
+
+        jobScheduler.schedule(new TestJobDescription(jobId, ZonedDateTime.now().plus(Duration.ofSeconds(1))));
+        latchExecutionJobSchedulerListener.waitForExecution();
+        assertThat(memoryJobStore.find(jobContextFactory.newContext(), jobId)).isNotNull().extracting(JobDetails::getStatus).isEqualTo(JobStatus.ERROR);
+
+        jobScheduler.close();
+    }
+    
     @Test
     public void testBasicOverdueTime() throws Exception {
         final String jobId = "1";
@@ -235,6 +275,7 @@ public class VertxJobSchedulerTest {
                 .withJobContextFactory(jobContextFactory)
                 .withJobStore(memoryJobStore)
                 .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
                 .build();
         jobScheduler.init();
         latchExecutionJobSchedulerListener.waitForExecution();

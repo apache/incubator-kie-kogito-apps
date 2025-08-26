@@ -31,6 +31,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.kie.kogito.app.jobs.api.JobDescriptorMerger;
 import org.kie.kogito.app.jobs.api.JobDetailsEventAdapter;
 import org.kie.kogito.app.jobs.api.JobExecutor;
 import org.kie.kogito.app.jobs.api.JobScheduler;
@@ -38,6 +39,8 @@ import org.kie.kogito.app.jobs.api.JobSchedulerBuilder;
 import org.kie.kogito.app.jobs.api.JobSchedulerListener;
 import org.kie.kogito.app.jobs.api.JobSynchronization;
 import org.kie.kogito.app.jobs.api.JobTimeoutInterceptor;
+import org.kie.kogito.app.jobs.integregations.ProcessInstanceJobDescriptorMerger;
+import org.kie.kogito.app.jobs.integregations.UserTaskInstanceJobDescriptorMerger;
 import org.kie.kogito.app.jobs.spi.JobContext;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
 import org.kie.kogito.app.jobs.spi.JobStore;
@@ -48,6 +51,7 @@ import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.impl.SimpleTimerTrigger;
 import org.slf4j.Logger;
@@ -86,6 +90,8 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
     private List<JobSchedulerListener> jobSchedulerListeners;
 
     private List<JobTimeoutInterceptor> interceptors;
+
+    private List<JobDescriptorMerger> jobDescriptionMergers;
 
     private ConcurrentMap<String, TimerInfo> jobsScheduled;
 
@@ -185,6 +191,12 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             return this;
         }
 
+        @Override
+        public JobSchedulerBuilder withJobDescriptorMergers(JobDescriptorMerger... jobDescriptionMergers) {
+            VertxJobScheduler.this.jobDescriptionMergers.addAll(List.of(jobDescriptionMergers));
+            return this;
+        }
+
     }
 
     public VertxJobScheduler() {
@@ -197,6 +209,9 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         this.jobEventAdapters = new ArrayList<>();
         this.jobSchedulerListeners = new ArrayList<>();
         this.interceptors = new ArrayList<>();
+        this.jobDescriptionMergers = new ArrayList<>();
+        this.jobDescriptionMergers.add(new UserTaskInstanceJobDescriptorMerger());
+        this.jobDescriptionMergers.add(new ProcessInstanceJobDescriptorMerger());
 
         this.jobSynchronization = new JobSynchronization() {
             @Override
@@ -342,12 +357,8 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
             @Override
             public void run() {
-                jobsScheduled.compute(jobDetails.getId(), (jobId, timerInfo) -> {
-                    if (timerInfo == null) {
-                        // if the timer info does not exist we should not reschedule as it was executed or cancelled by 
-                        // another thread
-                        return null;
-                    }
+                // if the timer info does not exist we should not reschedule as it was executed or cancelled by 
+                jobsScheduled.computeIfPresent(jobDetails.getId(), (jobId, timerInfo) -> {
                     removeTimerInfo(timerInfo);
                     return addTimerInfo(rescheduledJobDetails);
                 });
@@ -512,7 +523,24 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         LOG.trace("doRetryIfAny {}", jobDetails);
         Integer retryCounter = jobDetails.getRetries();
         if (retryCounter < this.maxNumberOfRetries) {
+            // we compute the next trigger
+            Date now = Date.from(DateUtil.now().plus(Duration.ofMillis(retryInterval)).toInstant());
+
+            SimpleTimerTrigger oldTrigger = (SimpleTimerTrigger) jobDetails.getTrigger();
+
+            SimpleTimerTrigger newTrigger = new SimpleTimerTrigger(now,
+                    oldTrigger.getPeriod(),
+                    oldTrigger.getPeriodUnit(),
+                    oldTrigger.getRepeatCount(),
+                    null,
+                    oldTrigger.getZoneId());
+            JobDescription jobDescription = jobDetails.getRecipient().<InVMPayloadData> getRecipient().getPayload().getJobDescription();
+            JobDescription jobDescriptionMerged =
+                    jobDescriptionMergers.stream().filter(merger -> merger.accept(jobDescription)).map(merger -> merger.mergeTrigger(jobDescription, newTrigger)).findFirst().orElseThrow();
+
             JobDetails retryJobDetails = JobDetails.builder().of(jobDetails)
+                    .trigger(newTrigger)
+                    .recipient(new RecipientInstance(new InVMRecipient(new InVMPayloadData(jobDescriptionMerged))))
                     .status(JobStatus.RETRY)
                     .executionTimeout(jobDetails.getExecutionTimeout() + retryInterval)
                     .incrementRetries()
