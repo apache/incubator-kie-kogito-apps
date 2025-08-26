@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.app.jobs.impl;
+package org.kie.kogito.app.jobs.integregations;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;

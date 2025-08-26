@@ -20,30 +20,25 @@ package org.kie.kogito.app.jobs.integregations;
 
 import org.kie.kogito.app.jobs.api.JobDescriptorMerger;
 import org.kie.kogito.jobs.JobDescription;
-import org.kie.kogito.jobs.descriptors.UserTaskInstanceJobDescription;
+import org.kie.kogito.jobs.descriptors.ProcessInstanceJobDescription;
+import org.kie.kogito.jobs.descriptors.ProcessJobDescription;
 import org.kie.kogito.timer.Trigger;
 
-public class UserTaskInstanceJobDescriptorMerger implements JobDescriptorMerger {
+public class ProcessJobDescriptorMerger implements JobDescriptorMerger {
 
     @Override
     public boolean accept(Object instance) {
-        return instance instanceof UserTaskInstanceJobDescription;
+        return instance instanceof ProcessInstanceJobDescription;
     }
 
     @Override
     public JobDescription mergeTrigger(JobDescription jobDescription, Trigger trigger) {
-        if (jobDescription instanceof UserTaskInstanceJobDescription userTaskInstanceJobDescription) {
-            UserTaskInstanceJobDescription newUserTaskInstanceJobDescription = new UserTaskInstanceJobDescription(
-                    userTaskInstanceJobDescription.id(),
+        if (jobDescription instanceof ProcessJobDescription processJobDescription) {
+            ProcessJobDescription newProcessJobDescription = ProcessJobDescription.of(
                     JobDescriptionHelper.toExpirationTime(trigger),
-                    userTaskInstanceJobDescription.priority(),
-                    userTaskInstanceJobDescription.userTaskInstanceId(),
-                    userTaskInstanceJobDescription.processId(),
-                    userTaskInstanceJobDescription.processInstanceId(),
-                    userTaskInstanceJobDescription.nodeInstanceId(),
-                    userTaskInstanceJobDescription.rootProcessInstanceId(),
-                    userTaskInstanceJobDescription.rootProcessId());
-            return newUserTaskInstanceJobDescription;
+                    processJobDescription.priority(),
+                    processJobDescription.processId());
+            return newProcessJobDescription;
         }
         throw new IllegalArgumentException("jobDescription type not supported by this merger " + jobDescription);
     }

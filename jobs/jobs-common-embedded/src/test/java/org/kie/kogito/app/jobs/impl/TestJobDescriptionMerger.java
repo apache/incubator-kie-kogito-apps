@@ -19,6 +19,7 @@
 package org.kie.kogito.app.jobs.impl;
 
 import org.kie.kogito.app.jobs.api.JobDescriptorMerger;
+import org.kie.kogito.app.jobs.integregations.JobDescriptionHelper;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.timer.Trigger;
 

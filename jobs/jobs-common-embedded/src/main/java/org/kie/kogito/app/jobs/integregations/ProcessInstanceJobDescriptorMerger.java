@@ -19,7 +19,6 @@
 package org.kie.kogito.app.jobs.integregations;
 
 import org.kie.kogito.app.jobs.api.JobDescriptorMerger;
-import org.kie.kogito.app.jobs.impl.JobDescriptionHelper;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.descriptors.ProcessInstanceJobDescription;
 import org.kie.kogito.timer.Trigger;
@@ -46,7 +45,7 @@ public class ProcessInstanceJobDescriptorMerger implements JobDescriptorMerger {
                     processInstanceJobDescription.nodeInstanceId());
             return newProcessInstanceJobDescription;
         }
-        return null;
+        throw new IllegalArgumentException("jobDescription type not supported by this merger " + jobDescription);
     }
 
 }

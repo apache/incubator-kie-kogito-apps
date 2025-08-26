@@ -40,6 +40,7 @@ import org.kie.kogito.app.jobs.api.JobSchedulerListener;
 import org.kie.kogito.app.jobs.api.JobSynchronization;
 import org.kie.kogito.app.jobs.api.JobTimeoutInterceptor;
 import org.kie.kogito.app.jobs.integregations.ProcessInstanceJobDescriptorMerger;
+import org.kie.kogito.app.jobs.integregations.ProcessJobDescriptorMerger;
 import org.kie.kogito.app.jobs.integregations.UserTaskInstanceJobDescriptorMerger;
 import org.kie.kogito.app.jobs.spi.JobContext;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
@@ -212,6 +213,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         this.jobDescriptionMergers = new ArrayList<>();
         this.jobDescriptionMergers.add(new UserTaskInstanceJobDescriptorMerger());
         this.jobDescriptionMergers.add(new ProcessInstanceJobDescriptorMerger());
+        this.jobDescriptionMergers.add(new ProcessJobDescriptorMerger());
 
         this.jobSynchronization = new JobSynchronization() {
             @Override
