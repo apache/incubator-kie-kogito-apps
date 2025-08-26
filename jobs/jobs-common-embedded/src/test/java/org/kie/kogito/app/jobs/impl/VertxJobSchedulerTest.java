@@ -224,12 +224,11 @@ public class VertxJobSchedulerTest {
         jobScheduler.close();
     }
 
-    
     @Test
     public void testNumberOfRetries() throws Exception {
         final int NUMBER_OF_FAILURES = 4; // first execution + number of retries
         final int NUMBER_OF_RETRIES = NUMBER_OF_FAILURES - 1;
- 
+
         final String jobId = "1";
         JobStore memoryJobStore = new MemoryJobStore();
         JobContextFactory jobContextFactory = new MemoryJobContextFactory();
@@ -255,7 +254,7 @@ public class VertxJobSchedulerTest {
 
         jobScheduler.close();
     }
-    
+
     @Test
     public void testBasicOverdueTime() throws Exception {
         final String jobId = "1";

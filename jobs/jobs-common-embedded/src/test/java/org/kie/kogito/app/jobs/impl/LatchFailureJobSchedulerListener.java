@@ -91,7 +91,7 @@ public class LatchFailureJobSchedulerListener implements JobSchedulerListener {
     public List<JobDetails> getJobDetailsList() {
         return jobDetailsList;
     }
-    
+
     public boolean isExecuted() {
         return latch.getCount() == 0;
     }
