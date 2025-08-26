@@ -16,34 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.app.jobs.integregations;
+package org.kie.kogito.app.jobs.integrations;
 
 import org.kie.kogito.app.jobs.api.JobDescriptionMerger;
 import org.kie.kogito.jobs.JobDescription;
-import org.kie.kogito.jobs.descriptors.ProcessInstanceJobDescription;
+import org.kie.kogito.jobs.descriptors.UserTaskInstanceJobDescription;
 import org.kie.kogito.timer.Trigger;
 
-public class ProcessInstanceJobDescriptionMerger implements JobDescriptionMerger {
+public class UserTaskInstanceJobDescriptorMerger implements JobDescriptionMerger {
 
     @Override
     public boolean accept(Object instance) {
-        return instance instanceof ProcessInstanceJobDescription;
+        return instance instanceof UserTaskInstanceJobDescription;
     }
 
     @Override
     public JobDescription mergeTrigger(JobDescription jobDescription, Trigger trigger) {
-        if (jobDescription instanceof ProcessInstanceJobDescription processInstanceJobDescription) {
-            ProcessInstanceJobDescription newProcessInstanceJobDescription = new ProcessInstanceJobDescription(
-                    processInstanceJobDescription.id(),
-                    processInstanceJobDescription.timerId(),
+        if (jobDescription instanceof UserTaskInstanceJobDescription userTaskInstanceJobDescription) {
+            UserTaskInstanceJobDescription newUserTaskInstanceJobDescription = new UserTaskInstanceJobDescription(
+                    userTaskInstanceJobDescription.id(),
                     JobDescriptionHelper.toExpirationTime(trigger),
-                    processInstanceJobDescription.priority(),
-                    processInstanceJobDescription.processInstanceId(),
-                    processInstanceJobDescription.rootProcessInstanceId(),
-                    processInstanceJobDescription.processId(),
-                    processInstanceJobDescription.rootProcessId(),
-                    processInstanceJobDescription.nodeInstanceId());
-            return newProcessInstanceJobDescription;
+                    userTaskInstanceJobDescription.priority(),
+                    userTaskInstanceJobDescription.userTaskInstanceId(),
+                    userTaskInstanceJobDescription.processId(),
+                    userTaskInstanceJobDescription.processInstanceId(),
+                    userTaskInstanceJobDescription.nodeInstanceId(),
+                    userTaskInstanceJobDescription.rootProcessInstanceId(),
+                    userTaskInstanceJobDescription.rootProcessId());
+            return newUserTaskInstanceJobDescription;
         }
         throw new IllegalArgumentException("jobDescription type not supported by this merger " + jobDescription);
     }

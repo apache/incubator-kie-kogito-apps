@@ -16,15 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.app.jobs.integregations;
+package org.kie.kogito.app.jobs.integrations;
 
 import org.kie.kogito.app.jobs.api.JobDescriptionMerger;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.descriptors.ProcessInstanceJobDescription;
-import org.kie.kogito.jobs.descriptors.ProcessJobDescription;
 import org.kie.kogito.timer.Trigger;
 
-public class ProcessJobDescriptionMerger implements JobDescriptionMerger {
+public class ProcessInstanceJobDescriptionMerger implements JobDescriptionMerger {
 
     @Override
     public boolean accept(Object instance) {
@@ -33,12 +32,18 @@ public class ProcessJobDescriptionMerger implements JobDescriptionMerger {
 
     @Override
     public JobDescription mergeTrigger(JobDescription jobDescription, Trigger trigger) {
-        if (jobDescription instanceof ProcessJobDescription processJobDescription) {
-            ProcessJobDescription newProcessJobDescription = ProcessJobDescription.of(
+        if (jobDescription instanceof ProcessInstanceJobDescription processInstanceJobDescription) {
+            ProcessInstanceJobDescription newProcessInstanceJobDescription = new ProcessInstanceJobDescription(
+                    processInstanceJobDescription.id(),
+                    processInstanceJobDescription.timerId(),
                     JobDescriptionHelper.toExpirationTime(trigger),
-                    processJobDescription.priority(),
-                    processJobDescription.processId());
-            return newProcessJobDescription;
+                    processInstanceJobDescription.priority(),
+                    processInstanceJobDescription.processInstanceId(),
+                    processInstanceJobDescription.rootProcessInstanceId(),
+                    processInstanceJobDescription.processId(),
+                    processInstanceJobDescription.rootProcessId(),
+                    processInstanceJobDescription.nodeInstanceId());
+            return newProcessInstanceJobDescription;
         }
         throw new IllegalArgumentException("jobDescription type not supported by this merger " + jobDescription);
     }
