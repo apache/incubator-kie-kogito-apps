@@ -534,7 +534,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                     oldTrigger.getPeriod(),
                     oldTrigger.getPeriodUnit(),
                     oldTrigger.getRepeatCount(),
-                    null,
+                    oldTrigger.getEndTime(),
                     oldTrigger.getZoneId());
             JobDescription jobDescription = jobDetails.getRecipient().<InVMPayloadData> getRecipient().getPayload().getJobDescription();
             JobDescription jobDescriptionMerged =
