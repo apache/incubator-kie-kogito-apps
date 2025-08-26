@@ -20,9 +20,12 @@ package org.kie.kogito.app.jobs.integregations;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
+import org.kie.kogito.app.jobs.api.JobDescriptionMerger;
 import org.kie.kogito.jobs.DurationExpirationTime;
 import org.kie.kogito.jobs.ExpirationTime;
+import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.service.utils.DateUtil;
 import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.SimpleTimerTrigger;
@@ -38,5 +41,10 @@ public class JobDescriptionHelper {
             return time;
         }
         throw new IllegalArgumentException("this type of trigger is not supported " + trigger.getClass().getName());
+    }
+
+    public static JobDescription newJobDescription(JobDescription jobDescription, Trigger trigger) {
+        List<JobDescriptionMerger> mergers = List.of(new ProcessInstanceJobDescriptionMerger(), new ProcessJobDescriptionMerger(), new UserTaskInstanceJobDescriptorMerger());
+        return mergers.stream().filter(merger -> merger.accept(jobDescription)).map(merger -> merger.mergeTrigger(jobDescription, trigger)).findFirst().orElseThrow();
     }
 }

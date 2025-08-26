@@ -21,7 +21,7 @@ package org.kie.kogito.app.jobs.api;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.timer.Trigger;
 
-public interface JobDescriptorMerger {
+public interface JobDescriptionMerger {
 
     boolean accept(Object instance);
 

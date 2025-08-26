@@ -18,13 +18,13 @@
  */
 package org.kie.kogito.app.jobs.integregations;
 
-import org.kie.kogito.app.jobs.api.JobDescriptorMerger;
+import org.kie.kogito.app.jobs.api.JobDescriptionMerger;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.descriptors.ProcessInstanceJobDescription;
 import org.kie.kogito.jobs.descriptors.ProcessJobDescription;
 import org.kie.kogito.timer.Trigger;
 
-public class ProcessJobDescriptorMerger implements JobDescriptorMerger {
+public class ProcessJobDescriptionMerger implements JobDescriptionMerger {
 
     @Override
     public boolean accept(Object instance) {

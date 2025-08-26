@@ -31,7 +31,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.kie.kogito.app.jobs.api.JobDescriptorMerger;
+import org.kie.kogito.app.jobs.api.JobDescriptionMerger;
 import org.kie.kogito.app.jobs.api.JobDetailsEventAdapter;
 import org.kie.kogito.app.jobs.api.JobExecutor;
 import org.kie.kogito.app.jobs.api.JobScheduler;
@@ -39,8 +39,8 @@ import org.kie.kogito.app.jobs.api.JobSchedulerBuilder;
 import org.kie.kogito.app.jobs.api.JobSchedulerListener;
 import org.kie.kogito.app.jobs.api.JobSynchronization;
 import org.kie.kogito.app.jobs.api.JobTimeoutInterceptor;
-import org.kie.kogito.app.jobs.integregations.ProcessInstanceJobDescriptorMerger;
-import org.kie.kogito.app.jobs.integregations.ProcessJobDescriptorMerger;
+import org.kie.kogito.app.jobs.integregations.ProcessInstanceJobDescriptionMerger;
+import org.kie.kogito.app.jobs.integregations.ProcessJobDescriptionMerger;
 import org.kie.kogito.app.jobs.integregations.UserTaskInstanceJobDescriptorMerger;
 import org.kie.kogito.app.jobs.spi.JobContext;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
@@ -92,7 +92,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
     private List<JobTimeoutInterceptor> interceptors;
 
-    private List<JobDescriptorMerger> jobDescriptionMergers;
+    private List<JobDescriptionMerger> jobDescriptionMergers;
 
     private ConcurrentMap<String, TimerInfo> jobsScheduled;
 
@@ -193,7 +193,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         }
 
         @Override
-        public JobSchedulerBuilder withJobDescriptorMergers(JobDescriptorMerger... jobDescriptionMergers) {
+        public JobSchedulerBuilder withJobDescriptorMergers(JobDescriptionMerger... jobDescriptionMergers) {
             VertxJobScheduler.this.jobDescriptionMergers.addAll(List.of(jobDescriptionMergers));
             return this;
         }
@@ -212,8 +212,8 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         this.interceptors = new ArrayList<>();
         this.jobDescriptionMergers = new ArrayList<>();
         this.jobDescriptionMergers.add(new UserTaskInstanceJobDescriptorMerger());
-        this.jobDescriptionMergers.add(new ProcessInstanceJobDescriptorMerger());
-        this.jobDescriptionMergers.add(new ProcessJobDescriptorMerger());
+        this.jobDescriptionMergers.add(new ProcessInstanceJobDescriptionMerger());
+        this.jobDescriptionMergers.add(new ProcessJobDescriptionMerger());
 
         this.jobSynchronization = new JobSynchronization() {
             @Override

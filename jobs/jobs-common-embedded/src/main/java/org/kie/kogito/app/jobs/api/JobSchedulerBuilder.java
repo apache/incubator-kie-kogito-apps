@@ -57,5 +57,5 @@ public interface JobSchedulerBuilder {
 
     JobSchedulerBuilder withJobSynchronization(JobSynchronization jobSynchronization);
 
-    JobSchedulerBuilder withJobDescriptorMergers(JobDescriptorMerger... jobDescriptionMergers);
+    JobSchedulerBuilder withJobDescriptorMergers(JobDescriptionMerger... jobDescriptionMergers);
 }
