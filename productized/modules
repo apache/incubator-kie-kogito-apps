@@ -14,4 +14,5 @@ data-index/data-index-storage/pom.xml;data-index-storage-common,data-index-stora
 data-index/pom.xml;data-index-springboot
 jitexecutor/pom.xml;jitexecutor-bpmn
 jobs-service/pom.xml;jobs-service-infinispan,jobs-service-mongodb
+jobs/pom.xml;kogito-addons-springboot-embedded-jobs
 persistence-commons/pom.xml;persistence-commons-mongodb,persistence-commons-redis,persistence-commons-reporting-parent,persistence-commons-mongodb-quarkus
