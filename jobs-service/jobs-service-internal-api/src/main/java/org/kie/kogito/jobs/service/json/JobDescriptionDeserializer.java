@@ -53,10 +53,11 @@ public class JobDescriptionDeserializer extends StdDeserializer<JobDescription> 
             switch (jobDescriptionType) {
                 case "ProcessJobDescription": {
                     String id = ofNullable(node.get("id")).map(JsonNode::textValue).orElse(null);
+                    String processId = ofNullable(node.get("processId")).map(JsonNode::textValue).orElse(null);
                     Integer priority = ofNullable(node.get("priority")).map(JsonNode::asInt).orElse(null);
                     String expirationTimeType = node.get("expirationTime").get("@type").asText();
                     ExpirationTime expirationTime = (ExpirationTime) ctxt.readTreeAsValue(node.get("expirationTime"), Class.forName(expirationTimeType));
-                    return ProcessJobDescription.of(expirationTime, priority, id);
+                    return ProcessJobDescription.of(expirationTime, priority, processId, id);
                 }
                 case "ProcessInstanceJobDescription": {
                     ProcessInstanceJobDescriptionBuilder builder = ProcessInstanceJobDescription.newProcessInstanceJobDescriptionBuilder();
