@@ -430,13 +430,25 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
     private void removeIfFinal(Long timerId, JobContext jobContext, JobDetails nextJobDetails) {
         String jobId = nextJobDetails.getId();
-        if (!nextJobDetails.getStatus().isFinalStatus()) {
-            LOG.trace("Timeout {} with jobId {} will be updated", timerId, jobId);
-            jobStore.update(jobContext, nextJobDetails);
-            doSchedule(nextJobDetails);
-        } else {
-            LOG.trace("Timeout {} with jobId {} will be removed", timerId, jobId);
-            jobStore.remove(jobContext, jobId);
+        switch(nextJobDetails.getStatus()) { 
+            case EXECUTED:
+            case CANCELED:
+                LOG.trace("Timeout {} with jobId {} will be removed", timerId, jobId);
+                jobStore.remove(jobContext, jobId);
+                break;
+            case SCHEDULED:
+            case RETRY:
+                LOG.trace("Timeout {} with jobId {} will be updated and scheduled", timerId, jobId);
+                jobStore.update(jobContext, nextJobDetails);
+                doSchedule(nextJobDetails);
+                break;
+            case ERROR:
+                LOG.trace("Timeout {} with jobId {} will be set to error", timerId, jobId);
+                jobStore.update(jobContext, nextJobDetails);
+                break;
+            default:
+                LOG.trace("Timeout {} with jobId {} is RUNNING and should not happen", timerId, jobId);
+                break;
         }
     }
 
@@ -492,7 +504,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
             @Override
             public void run() {
-                jobsScheduled.compute(jobDetails.getId(), (jobId, timerInfo) -> {
+                jobsScheduled.computeIfPresent(jobDetails.getId(), (jobId, timerInfo) -> {
                     removeTimerInfo(timerInfo);
                     return null;
                 });
@@ -560,10 +572,8 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         // there is a problem here. If we retried the job the origin, the current time is different.
         // so we set the current time as the time of execution so we do execute things at fixed interval time.
         ((SimpleTimerTrigger) jobDetails.getTrigger()).setNextFireTime(Date.from(Instant.now()));
-
         jobDetails.getTrigger().nextFireTime();
         if (jobDetails.getTrigger().hasNextFireTime() != null) {
-
             JobDetails nextJobDetails = JobDetails.builder().of(jobDetails)
                     .status(JobStatus.SCHEDULED)
                     .retries(0)
