@@ -21,6 +21,7 @@ package org.kie.kogito.app.jobs.impl;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.app.jobs.api.JobScheduler;
@@ -30,6 +31,7 @@ import org.kie.kogito.app.jobs.spi.JobStore;
 import org.kie.kogito.app.jobs.spi.memory.MemoryJobContextFactory;
 import org.kie.kogito.app.jobs.spi.memory.MemoryJobStore;
 import org.kie.kogito.jobs.DurationExpirationTime;
+import org.kie.kogito.jobs.ExactExpirationTime;
 import org.kie.kogito.jobs.ExpirationTime;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
@@ -224,6 +226,34 @@ public class VertxJobSchedulerTest {
         jobScheduler.close();
     }
 
+    @Test
+    public void testExactTime() throws Exception {
+        final String jobId = "1";
+        LatchExecutionJobSchedulerListener latchExecutionJobSchedulerListener = new LatchExecutionJobSchedulerListener();
+        TestJobExecutor latchJobExecutor = new TestJobExecutor();
+        JobStore memoryJobStore = new MemoryJobStore();
+        JobContextFactory jobContextFactory = new MemoryJobContextFactory();
+        JobScheduler jobScheduler = JobSchedulerBuilder.newJobSchedulerBuilder()
+                .withJobExecutors(latchJobExecutor)
+                .withJobEventAdapters(new TestJobDetailsEventAdapter())
+                .withEventPublishers(new TestEventPublisher())
+                .withJobContextFactory(jobContextFactory)
+                .withJobStore(memoryJobStore)
+                .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
+                .build();
+        jobScheduler.init();
+        ExpirationTime expirationTime = ExactExpirationTime.of(ZonedDateTime.now().plus(1, ChronoUnit.MILLIS));
+        jobScheduler.schedule(new TestJobDescription(jobId, expirationTime));
+        latchExecutionJobSchedulerListener.waitForExecution();
+        assertThat(latchJobExecutor.getJobsExecuted()).hasSize(1);
+        assertThat(memoryJobStore.find(jobContextFactory.newContext(), jobId)).isNull();
+        assertThat(latchExecutionJobSchedulerListener.isExecuted()).isTrue();
+        jobScheduler.close();
+        
+        
+    }
+    
     @Test
     public void testNumberOfRetries() throws Exception {
         final int NUMBER_OF_FAILURES = 4; // first execution + number of retries
