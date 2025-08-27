@@ -99,7 +99,7 @@ public class VertxJobSchedulerTest {
         final String jobId = "1";
         JobStore memoryJobStore = new MemoryJobStore();
         JobContextFactory jobContextFactory = new MemoryJobContextFactory();
-        LatchExecutionJobSchedulerListener latchExecutionJobSchedulerListener = new LatchExecutionJobSchedulerListener(3);
+        LatchExecutionJobSchedulerListener latchExecutionJobSchedulerListener = new LatchExecutionJobSchedulerListener(6);
         TestJobExecutor latchJobExecutor = new TestJobExecutor();
         JobScheduler jobScheduler = JobSchedulerBuilder.newJobSchedulerBuilder()
                 .withJobExecutors(latchJobExecutor)
@@ -115,7 +115,7 @@ public class VertxJobSchedulerTest {
         jobScheduler.schedule(new TestJobDescription(jobId, expirationTime));
 
         latchExecutionJobSchedulerListener.waitForExecution();
-        assertThat(latchJobExecutor.getJobsExecuted()).hasSize(3);
+        assertThat(latchJobExecutor.getJobsExecuted()).hasSize(6);
         assertThat(memoryJobStore.find(jobContextFactory.newContext(), jobId)).isNotNull();
         assertThat(latchExecutionJobSchedulerListener.isExecuted()).isTrue();
         jobScheduler.close();
@@ -241,19 +241,19 @@ public class VertxJobSchedulerTest {
                 .withJobStore(memoryJobStore)
                 .withJobSchedulerListeners(latchExecutionJobSchedulerListener)
                 .withJobDescriptorMergers(new TestJobDescriptionMerger())
+                .withRefreshJobsInterval(100000L)
                 .build();
         jobScheduler.init();
         ExpirationTime expirationTime = ExactExpirationTime.of(ZonedDateTime.now().plus(1, ChronoUnit.MILLIS));
         jobScheduler.schedule(new TestJobDescription(jobId, expirationTime));
-        latchExecutionJobSchedulerListener.waitForExecution();
+        latchExecutionJobSchedulerListener.waitForExecution(1000L);
         assertThat(latchJobExecutor.getJobsExecuted()).hasSize(1);
         assertThat(memoryJobStore.find(jobContextFactory.newContext(), jobId)).isNull();
         assertThat(latchExecutionJobSchedulerListener.isExecuted()).isTrue();
         jobScheduler.close();
-        
-        
+
     }
-    
+
     @Test
     public void testNumberOfRetries() throws Exception {
         final int NUMBER_OF_FAILURES = 4; // first execution + number of retries
