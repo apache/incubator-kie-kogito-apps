@@ -23,6 +23,6 @@ public enum JobStatus {
     EXECUTED, //final
     SCHEDULED, //active
     RETRY, //active
-    CANCELED,//final
+    CANCELED, //final
     RUNNING
 }

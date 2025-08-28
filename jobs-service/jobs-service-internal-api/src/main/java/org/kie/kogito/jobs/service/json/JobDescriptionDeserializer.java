@@ -98,5 +98,5 @@ public class JobDescriptionDeserializer extends StdDeserializer<JobDescription> 
         }
         return null;
     }
-    
+
 }
