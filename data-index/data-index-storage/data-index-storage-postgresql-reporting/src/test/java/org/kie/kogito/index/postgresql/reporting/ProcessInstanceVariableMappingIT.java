@@ -76,9 +76,9 @@ class ProcessInstanceVariableMappingIT {
                 "Javier",
                 "Ito");
 
-        storage.indexVariable(event1);
-        storage.indexVariable(event2);
-        storage.indexVariable(event3);
+        storage.index(event1);
+        storage.index(event2);
+        storage.index(event3);
 
         @SuppressWarnings("unchecked")
         List<ProcessInstanceVariableExtract> results = em

@@ -18,16 +18,10 @@
  */
 package org.kie.kogito.index.addon.event;
 
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.Collection;
 
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.EventPublisher;
-import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
-import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.service.IndexingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,9 +29,6 @@ import org.slf4j.LoggerFactory;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-
-import static org.kie.kogito.event.process.ProcessDefinitionDataEvent.PROCESS_DEFINITION_EVENT;
-import static org.kie.kogito.index.json.JsonUtils.getObjectMapper;
 
 @ApplicationScoped
 public class DataIndexEventPublisher implements EventPublisher {
@@ -55,42 +46,13 @@ public class DataIndexEventPublisher implements EventPublisher {
     @Transactional
     public void publish(DataEvent<?> event) {
         LOGGER.debug("Sending event to embedded data index: {}", event);
-        switch (event.getType()) {
-            case PROCESS_DEFINITION_EVENT:
-                indexingService.indexProcessDefinition((ProcessDefinitionDataEvent) event);
-                break;
-            case "ProcessInstanceErrorDataEvent":
-            case "ProcessInstanceNodeDataEvent":
-            case "ProcessInstanceSLADataEvent":
-            case "ProcessInstanceStateDataEvent":
-            case "ProcessInstanceVariableDataEvent":
-                indexingService.indexProcessInstanceEvent((ProcessInstanceDataEvent<?>) event);
-                break;
-            case "UserTaskInstanceAssignmentDataEvent":
-            case "UserTaskInstanceAttachmentDataEvent":
-            case "UserTaskInstanceCommentDataEvent":
-            case "UserTaskInstanceDeadlineDataEvent":
-            case "UserTaskInstanceStateDataEvent":
-            case "UserTaskInstanceVariableDataEvent":
-                indexingService.indexUserTaskInstanceEvent((UserTaskInstanceDataEvent<?>) event);
-                break;
-            case "JobEvent":
-                try {
-                    Job job = getObjectMapper().readValue(new String((byte[]) event.getData()), Job.class);
-                    job.setEndpoint(event.getSource() == null ? null : event.getSource().toString());
-                    indexingService.indexJob(job);
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
-                break;
-            default:
-                LOGGER.debug("Unknown type of event '{}', ignoring for this publisher", event.getType());
-        }
+        indexingService.indexDataEvent(event);
     }
 
     @Override
     @Transactional
     public void publish(Collection<DataEvent<?>> events) {
-        events.forEach(this::publish);
+        LOGGER.debug("Sending batch event to embedded data index: {}", events);
+        indexingService.indexDataEvent(events);
     }
 }

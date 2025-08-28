@@ -80,7 +80,7 @@ class BlockingMessagingEventConsumerTest {
         consumer.onProcessInstanceEvent(event);
 
         // Assert
-        verify(indexingService, times(1)).indexProcessInstanceEvent(event);
+        verify(indexingService, times(1)).indexDataEvent(event);
         verify(eventPublisher, times(1)).fire(event);
     }
 
@@ -96,7 +96,7 @@ class BlockingMessagingEventConsumerTest {
         consumer.onUserTaskInstanceEvent(event);
 
         // Assert
-        verify(indexingService, times(1)).indexUserTaskInstanceEvent(event);
+        verify(indexingService, times(1)).indexDataEvent(event);
         verify(eventPublisher, times(1)).fire(event);
     }
 
@@ -123,7 +123,7 @@ class BlockingMessagingEventConsumerTest {
         consumer.onProcessDefinitionDataEvent(event1);
 
         // Assert
-        verify(indexingService, times(1)).indexProcessDefinition(event1);
+        verify(indexingService, times(1)).indexDataEvent(event1);
         verify(eventPublisher, times(1)).fire(event1);
     }
 
@@ -132,7 +132,7 @@ class BlockingMessagingEventConsumerTest {
         // Arrange
         ProcessInstanceDataEvent<? extends KogitoMarshallEventSupport> event = mock(ProcessInstanceDataEvent.class);
         Collection<ProcessInstanceDataEvent<? extends KogitoMarshallEventSupport>> events = Arrays.asList(event);
-        doThrow(new RuntimeException("On purpose! Indexing failed")).when(indexingService).indexProcessInstanceEvent(event);
+        doThrow(new RuntimeException("On purpose! Indexing failed")).when(indexingService).indexDataEvent(event);
 
         // Act
         consumer.onProcessInstanceEvent(new MultipleProcessInstanceDataEvent(URI.create("dummy"), events));
@@ -146,7 +146,7 @@ class BlockingMessagingEventConsumerTest {
         // Arrange
         UserTaskInstanceDataEvent<?> event = mock(UserTaskInstanceDataEvent.class);
         Collection<UserTaskInstanceDataEvent<?>> events = Arrays.asList(event);
-        doThrow(new RuntimeException("On purpose! Indexing failed")).when(indexingService).indexUserTaskInstanceEvent(event);
+        doThrow(new RuntimeException("On purpose! Indexing failed")).when(indexingService).indexDataEvent(event);
 
         // Act
         consumer.onUserTaskInstanceEvent(new MultipleUserTaskInstanceDataEvent(URI.create("dummy"), events));
@@ -160,13 +160,13 @@ class BlockingMessagingEventConsumerTest {
     void testErrorHandlingInOnProcessDefinitionDataEvent() {
         // Arrange
         ProcessDefinitionDataEvent event = mock(ProcessDefinitionDataEvent.class);
-        doThrow(new RuntimeException("On purpose! Indexing failed")).when(indexingService).indexProcessDefinition(event);
+        doThrow(new RuntimeException("On purpose! Indexing failed")).when(indexingService).indexDataEvent(event);
 
         // Act
         consumer.onProcessDefinitionDataEvent(event);
 
         // Assert
-        verify(indexingService, times(1)).indexProcessDefinition(event);
+        verify(indexingService, times(1)).indexDataEvent(event);
         verify(eventPublisher, never()).fire(event);
     }
 }
