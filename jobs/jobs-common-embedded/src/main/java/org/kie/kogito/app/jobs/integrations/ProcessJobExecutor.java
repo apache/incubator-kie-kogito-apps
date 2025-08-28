@@ -25,9 +25,7 @@ import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.process.Process;
 import org.kie.kogito.process.ProcessInstance;
 import org.kie.kogito.process.Processes;
-import org.kie.kogito.process.SignalFactory;
 import org.kie.kogito.services.uow.UnitOfWorkExecutor;
-import org.kie.kogito.timer.TimerInstance;
 import org.kie.kogito.uow.UnitOfWorkManager;
 
 public class ProcessJobExecutor implements JobExecutor {
