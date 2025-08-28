@@ -50,8 +50,10 @@ public class KeycloakTestProfile implements QuarkusTestProfile {
 
     @Override
     public List<TestResourceEntry> testResources() {
-        Map<String, String> args = singletonMap(KOGITO_OIDC_TENANTS, "web-app-tenant");
-        return Arrays.asList(
+        Map<String, String> args = new HashMap<>();
+        args.put(KOGITO_OIDC_TENANTS, "web-app-tenant");
+        args.put("JAVA_OPTS", "-Xms256m -Xmx1g");
+	return Arrays.asList(
                 new TestResourceEntry(PostgreSqlQuarkusTestResource.class, Collections.emptyMap(), true),
                 new TestResourceEntry(InMemoryMessagingTestResource.class, Collections.emptyMap(), true),
                 new TestResourceEntry(KeycloakQuarkusTestResource.class, args, true));
