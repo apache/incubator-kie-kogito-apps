@@ -76,8 +76,8 @@ public class SpringbootJobsService implements JobsService {
     @Value("${kogito.jobs-service.maxNumberOfRetries:3}")
     protected Integer maxNumberOfRetries;
 
-    @Value("${kogito.jobs-service.maxIntervalLimitToRetryMillis:60000}")
-    protected Long maxIntervalLimitToRetryMillis;
+    @Value("${kogito.jobs-service.retryMillis:100}")
+    protected Long retryMillis;
 
     @Value("${kogito.jobs-service.schedulerChunkInMinutes:10}")
     protected Long maxRefreshJobsIntervalWindow;
@@ -123,7 +123,7 @@ public class SpringbootJobsService implements JobsService {
                         new UserTaskInstanceJobDescriptionJobInstanceEventAdapter(serviceURL + RestApiConstants.JOBS_PATH))
                 .withJobExecutors(ofNullable(jobExecutors).toArray(JobExecutor[]::new))
                 .withMaxRefreshJobsIntervalWindow(maxRefreshJobsIntervalWindow * 60 * 1000L)
-                .withRetryInterval(maxIntervalLimitToRetryMillis)
+                .withRetryInterval(retryMillis)
                 .withMaxNumberOfRetries(maxNumberOfRetries)
                 .withRefreshJobsInterval(maxRefreshJobsIntervalWindow * 60 * 1000L)
                 .withTimeoutInterceptor(txInterceptor)
