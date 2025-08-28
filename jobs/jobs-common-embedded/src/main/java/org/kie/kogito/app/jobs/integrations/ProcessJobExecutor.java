@@ -57,7 +57,7 @@ public class ProcessJobExecutor implements JobExecutor {
                 return null;
             }
             ProcessInstance pi = processDefinition.createInstance(processDefinition.createModel());
-            pi.send(SignalFactory.of(SIGNAL, TimerInstance.with(jobDetails.getId(), jobDetails.getId(), -1)));
+            pi.start("timer", null);
             return null;
         });
     }
