@@ -22,10 +22,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 
+import org.kie.kogito.app.jobs.api.JobTimeoutExecution;
 import org.kie.kogito.app.jobs.api.JobTimeoutInterceptor;
 import org.kie.kogito.handler.ExceptionHandler;
+import org.kie.kogito.jobs.service.model.JobStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ErrorHandlingJobTimeoutInterceptor implements JobTimeoutInterceptor {
+
+    private static Logger LOG = LoggerFactory.getLogger(ErrorHandlingJobTimeoutInterceptor.class);
 
     private List<ExceptionHandler> exceptionHandlers;
 
@@ -39,16 +45,20 @@ public class ErrorHandlingJobTimeoutInterceptor implements JobTimeoutInterceptor
     }
 
     @Override
-    public Callable<Void> chainIntercept(Callable<Void> callable) {
-        return new Callable<Void>() {
+    public Callable<JobTimeoutExecution> chainIntercept(Callable<JobTimeoutExecution> callable) {
+        return new Callable<JobTimeoutExecution>() {
             @Override
-            public Void call() throws Exception {
-                try {
-                    return callable.call();
-                } catch (Exception ex) {
-                    exceptionHandlers.stream().forEach(e -> e.handle(ex));
-                    return null;
+            public JobTimeoutExecution call() throws Exception {
+                JobTimeoutExecution execution = callable.call();
+                if (execution.getJobDetails() != null && JobStatus.ERROR.equals(execution.getJobDetails().getStatus())) {
+                    if (!exceptionHandlers.isEmpty()) {
+                        LOG.warn("there was an error in job {} but not handler were registered", execution.getJobDetails());
+                    } else {
+                        LOG.error("there was error in job {}. Handling error {}", execution.getJobDetails(), execution.getException().getMessage());
+                        exceptionHandlers.stream().forEach(e -> e.handle(execution.getException()));
+                    }
                 }
+                return execution;
             }
         };
     }

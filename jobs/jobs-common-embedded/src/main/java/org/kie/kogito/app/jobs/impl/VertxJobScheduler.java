@@ -38,6 +38,7 @@ import org.kie.kogito.app.jobs.api.JobScheduler;
 import org.kie.kogito.app.jobs.api.JobSchedulerBuilder;
 import org.kie.kogito.app.jobs.api.JobSchedulerListener;
 import org.kie.kogito.app.jobs.api.JobSynchronization;
+import org.kie.kogito.app.jobs.api.JobTimeoutExecution;
 import org.kie.kogito.app.jobs.api.JobTimeoutInterceptor;
 import org.kie.kogito.app.jobs.integrations.ProcessInstanceJobDescriptionMerger;
 import org.kie.kogito.app.jobs.integrations.ProcessJobDescriptionMerger;
@@ -232,9 +233,9 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
     @Override
     public void handle(Long timerId) {
-        Callable<Void> current = new Callable<Void>() {
+        Callable<JobTimeoutExecution> current = new Callable<JobTimeoutExecution>() {
             @Override
-            public Void call() throws Exception {
+            public JobTimeoutExecution call() throws Exception {
                 syncWithJobStores();
                 return null;
             }
@@ -375,10 +376,10 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         workerExecutor.executeBlocking(newTimeoutTask(timerId, jobId));
     }
 
-    private Callable<Void> newTimeoutTask(Long timerId, String jobId) {
-        Callable<Void> current = new Callable<Void>() {
+    private Callable<JobTimeoutExecution> newTimeoutTask(Long timerId, String jobId) {
+        Callable<JobTimeoutExecution> current = new Callable<JobTimeoutExecution>() {
             @Override
-            public Void call() throws Exception {
+            public JobTimeoutExecution call() throws Exception {
 
                 LOG.trace("Timeout task {} with jobId {} newTimeoutTask", timerId, jobId);
                 JobContext jobContext = jobContextFactory.newContext();
@@ -400,14 +401,15 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                     JobDetails nextJobDetails = computeNextJobDetailsIfAny(executeJobDetails);
                     removeIfFinal(timerId, jobContext, nextJobDetails);
                     jobSchedulerListeners.forEach(l -> l.onExecution(jobDetails));
+                    return new JobTimeoutExecution(nextJobDetails);
                 } catch (Exception exception) {
                     LOG.trace("Timeout {} with jobId {} will be retried if possible", timerId, jobId, exception);
                     JobDetails nextJobDetails = computeRetryIfAny(jobDetails);
                     removeIfFinal(timerId, jobContext, nextJobDetails);
                     jobSchedulerListeners.forEach(l -> l.onFailure(jobDetails));
+                    return new JobTimeoutExecution(nextJobDetails, exception);
                 }
 
-                return null;
             }
         };
         for (JobTimeoutInterceptor interceptor : interceptors) {

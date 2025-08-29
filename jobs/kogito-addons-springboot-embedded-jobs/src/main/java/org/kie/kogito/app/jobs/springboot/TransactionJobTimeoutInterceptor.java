@@ -20,6 +20,7 @@ package org.kie.kogito.app.jobs.springboot;
 
 import java.util.concurrent.Callable;
 
+import org.kie.kogito.app.jobs.api.JobTimeoutExecution;
 import org.kie.kogito.app.jobs.api.JobTimeoutInterceptor;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -33,11 +34,11 @@ public class TransactionJobTimeoutInterceptor implements JobTimeoutInterceptor {
     }
 
     @Override
-    public Callable<Void> chainIntercept(Callable<Void> callable) {
-        return new Callable<Void>() {
+    public Callable<JobTimeoutExecution> chainIntercept(Callable<JobTimeoutExecution> callable) {
+        return new Callable<JobTimeoutExecution>() {
 
             @Override
-            public Void call() throws Exception {
+            public JobTimeoutExecution call() throws Exception {
                 return transactionTemplate.execute(status -> {
                     try {
                         return callable.call();

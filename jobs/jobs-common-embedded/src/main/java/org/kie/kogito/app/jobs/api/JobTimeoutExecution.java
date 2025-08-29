@@ -16,26 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.app.jobs.quarkus;
+package org.kie.kogito.app.jobs.api;
 
-import java.util.concurrent.Callable;
+import org.kie.kogito.jobs.service.model.JobDetails;
 
-import org.kie.kogito.app.jobs.api.JobTimeoutExecution;
-import org.kie.kogito.app.jobs.api.JobTimeoutInterceptor;
+public class JobTimeoutExecution {
 
-import io.quarkus.narayana.jta.QuarkusTransaction;
+    private JobDetails jobDetails;
+    private Exception exception;
 
-public class TransactionJobTimeoutInterceptor implements JobTimeoutInterceptor {
+    public JobTimeoutExecution(JobDetails jobDetails) {
+        this(jobDetails, null);
+    }
 
-    @Override
-    public Callable<JobTimeoutExecution> chainIntercept(Callable<JobTimeoutExecution> callable) {
-        return new Callable<JobTimeoutExecution>() {
+    public JobTimeoutExecution(JobDetails jobDetails, Exception exception) {
+        this.jobDetails = jobDetails;
+        this.exception = exception;
+    }
 
-            @Override
-            public JobTimeoutExecution call() throws Exception {
-                return QuarkusTransaction.requiringNew().call(callable);
-            }
+    public Exception getException() {
+        return exception;
+    }
 
-        };
+    public JobDetails getJobDetails() {
+        return jobDetails;
     }
 }
