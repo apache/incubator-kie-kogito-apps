@@ -18,31 +18,39 @@
  */
 package org.kie.kogito.app.jobs.jpa.quarkus;
 
-import org.kie.kogito.handler.ExceptionHandler;
+import org.kie.kogito.app.jobs.api.JobExecutor;
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import jakarta.inject.Singleton;
 
 @Singleton
-public class TestExceptionHandler implements ExceptionHandler {
+public class TestJobExecutor implements JobExecutor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TestExceptionHandler.class);
-
-    private boolean error;
+    private Logger LOG = LoggerFactory.getLogger(TestJobExecutor.class);
+    private int numberOfFailures;
 
     @Override
-    public void handle(Exception th) {
-        LOG.info("error", th);
-        error = true;
+    public boolean accept(JobDetails jobDescription) {
+        return true;
+    }
+
+    @Override
+    public void execute(JobDetails jobDescription) {
+        LOG.info("executing {}", jobDescription);
+        if (numberOfFailures > 0) {
+            --numberOfFailures;
+            throw new RuntimeException();
+        }
+    }
+
+    public void setNumberOfFailures(int numberOfFailures) {
+        this.numberOfFailures = numberOfFailures;
     }
 
     public void reset() {
-        error = false;
-    }
-
-    public boolean isError() {
-        return error;
+        numberOfFailures = 0;
     }
 
 }

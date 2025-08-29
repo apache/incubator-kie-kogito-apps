@@ -21,16 +21,30 @@ package org.kie.kogito.app.jobs.springboot;
 import org.kie.kogito.handler.ExceptionHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
+@Scope(scopeName = ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class TestExceptionHandler implements ExceptionHandler {
 
     private static final Logger LOG = LoggerFactory.getLogger(TestExceptionHandler.class);
 
+    private boolean error;
+
     @Override
     public void handle(Exception th) {
         LOG.info("error", th);
+        error = true;
+    }
+
+    public void reset() {
+        error = false;
+    }
+
+    public boolean isError() {
+        return error;
     }
 
 }
