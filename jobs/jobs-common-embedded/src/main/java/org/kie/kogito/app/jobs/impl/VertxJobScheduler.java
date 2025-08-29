@@ -237,7 +237,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             @Override
             public JobTimeoutExecution call() throws Exception {
                 syncWithJobStores();
-                return null;
+                return new JobTimeoutExecution(null);
             }
         };
         for (JobTimeoutInterceptor interceptor : interceptors) {
