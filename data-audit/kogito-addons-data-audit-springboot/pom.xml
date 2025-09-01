@@ -39,7 +39,11 @@
     </properties>
 
     <dependencies>
-
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-actuator</artifactId>
+			<version>3.4.7</version>
+		</dependency>
         <dependency>
             <groupId>org.kie.kogito</groupId>
             <artifactId>data-audit-common</artifactId>
@@ -67,8 +71,7 @@
             <artifactId>spring-boot-starter-web</artifactId>
             <version>${version.org.springframework.boot}</version>
         </dependency>
-
-        <!--testing -->
+		<!--testing -->
         <dependency>
             <groupId>org.kie.kogito</groupId>
             <artifactId>data-audit-common</artifactId>
