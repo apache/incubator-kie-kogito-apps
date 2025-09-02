@@ -39,11 +39,7 @@
     </properties>
 
     <dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-actuator</artifactId>
-			<version>3.4.7</version>
-		</dependency>
+
         <dependency>
             <groupId>org.kie.kogito</groupId>
             <artifactId>data-audit-common</artifactId>
@@ -64,14 +60,16 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
-            <version>${version.org.springframework.boot}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${version.org.springframework.boot}</version>
         </dependency>
-		<!--testing -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
+        </dependency>
+        <!--testing -->
         <dependency>
             <groupId>org.kie.kogito</groupId>
             <artifactId>data-audit-common</artifactId>
@@ -80,7 +78,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${version.org.springframework.boot}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -90,7 +87,17 @@
         </dependency>
     </dependencies>
 
-
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>kogito-spring-boot-bom</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
     <profiles>
         <profile>
             <id>jpa-h2</id>
