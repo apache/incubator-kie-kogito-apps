@@ -19,6 +19,8 @@
 package org.kie.kogito.index.service.messaging;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.Objects;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,12 +30,13 @@ import org.kie.kogito.index.storage.DataIndexStorageService;
 
 import io.restassured.http.ContentType;
 
-import jakarta.inject.Inject;
-
 import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasItems;
+
+import jakarta.inject.Inject;
 
 @Timeout(10000)
 public abstract class AbstractMessagingConsumerIT {
@@ -156,15 +159,19 @@ public abstract class AbstractMessagingConsumerIT {
 
         await()
                 .atMost(timeout)
-                .untilAsserted(() -> given().contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"{ UserTaskInstances { id, state } }\" }")
-                        .when().post("/graphql")
-                        .then().log().ifValidationFails().statusCode(200)
-                        .body("data.UserTaskInstances.size()", is(2))
-                        .body("data.UserTaskInstances[0].id", is(taskId1))
-                        .body("data.UserTaskInstances[0].state", is("IN_PROGRESS"))
-                        .body("data.UserTaskInstances[1].id", is(taskId2))
-                        .body("data.UserTaskInstances[1].state", is("COMPLETED")));
+                .untilAsserted(() -> {
+                    List<UserTaskInstanceView> views = given().contentType(ContentType.JSON)
+                            .body("{ \"query\" : \"{ UserTaskInstances { id, state } }\" }")
+                            .when().post("/graphql")
+                            .then().log().ifValidationFails().statusCode(200)
+                            .extract().jsonPath().getList("data.UserTaskInstances", UserTaskInstanceView.class);
+
+                    assertThat(views).hasSize(2);
+                    assertThat(views).containsExactlyInAnyOrder(
+                            new UserTaskInstanceView(taskId1, "IN_PROGRESS"),
+                            new UserTaskInstanceView(taskId2, "COMPLETED"));
+                });
+
     }
 
     @Test
@@ -199,4 +206,53 @@ public abstract class AbstractMessagingConsumerIT {
     protected abstract void sendUserTaskInstanceEventCollection() throws Exception;
 
     protected abstract void sendProcessDefinitionEventCollection() throws Exception;
+}
+
+class UserTaskInstanceView {
+    String id;
+    String state;
+
+    public UserTaskInstanceView() {
+
+    }
+
+    public UserTaskInstanceView(String id, String state) {
+        this.id = id;
+        this.state = state;
+
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, state);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        UserTaskInstanceView other = (UserTaskInstanceView) obj;
+        return Objects.equals(id, other.id) && Objects.equals(state, other.state);
+    }
+
 }
