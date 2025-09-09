@@ -27,11 +27,16 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class VertxRouterSetupHelper {
 
-    private final StaticHandler staticHandler = StaticHandler.create("ui").setCachingEnabled(false);
+    private final StaticHandler staticHandler =
+            StaticHandler.create("ui").setIndexPage("index.html");
 
     @Route(path = "/ui/*", type = Route.HandlerType.NORMAL)
     void serveUi(RoutingContext rc) {
         staticHandler.handle(rc);
     }
 
+    @Route(path = "/*", type = Route.HandlerType.NORMAL, order = 10000)
+    void serveRoot(RoutingContext rc) {
+        staticHandler.handle(rc);
+    }
 }
