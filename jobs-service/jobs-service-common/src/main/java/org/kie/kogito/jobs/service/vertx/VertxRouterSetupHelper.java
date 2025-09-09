@@ -18,60 +18,20 @@
  */
 package org.kie.kogito.index.service.vertx;
 
-import java.util.function.Function;
-
-import io.vertx.core.MultiMap;
-import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpHeaders;
-import io.vertx.ext.web.Router;
+import io.quarkus.vertx.web.Route;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.FaviconHandler;
-import io.vertx.ext.web.handler.FileSystemAccess;
-import io.vertx.ext.web.handler.LoggerHandler;
 import io.vertx.ext.web.handler.StaticHandler;
-import io.vertx.ext.web.handler.graphql.GraphiQLHandler;
-import io.vertx.ext.web.handler.graphql.GraphiQLHandlerOptions;
 
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
 public class VertxRouterSetupHelper {
 
-    public static final String UI_PATH_PROPERTY = "kogito.jobs-service.ui.path";
-    public static final String GRAPH_UI_PATH_PROPERTY = "kogito.jobs-service.vertx-graphql.ui.path";
+    private final StaticHandler staticHandler = StaticHandler.create("ui").setCachingEnabled(false);
 
-    private VertxRouterSetupHelper() {
-    }
-
-    public static void setupRouter(Vertx vertx, Router router, String graphUIPath, String indexUIPath, boolean authEnabled, Function<RoutingContext, String> accessToken) {
-        router.route().handler(LoggerHandler.create());
-        GraphiQLHandler graphiQLHandler = GraphiQLHandler.create(vertx, new GraphiQLHandlerOptions().setEnabled(true));
-        if (authEnabled) {
-            graphiQLHandler.graphiQLRequestHeaders(rc -> MultiMap.caseInsensitiveMultiMap().add(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken.apply(rc)));
-        }
-        router.route().handler(BodyHandler.create());
-        router.route(graphUIPath + "/*").handler(graphiQLHandler);
-        if (indexUIPath.isEmpty()) {
-            router.route("/").handler(ctx -> ctx.response().putHeader("location", graphUIPath + "/").setStatusCode(302).end());
-        } else {
-            router.route("/")
-                    .handler(ctx -> ctx.response()
-                            .putHeader("Location", "/ui/index.html")
-                            .setStatusCode(302)
-                            .end());
-
-            final String normalized = indexUIPath.endsWith("/") ? indexUIPath.substring(0, indexUIPath.length() - 1) : indexUIPath;
-            final FileSystemAccess fsa = normalized.startsWith("/") ? FileSystemAccess.ROOT : FileSystemAccess.RELATIVE;
-            final StaticHandler handler = StaticHandler.create(fsa, normalized)
-                    .setDefaultContentEncoding("utf-8")
-                    .setDirectoryListing(false)
-                    .setAlwaysAsyncFS(true)
-                    .setIndexPage("index.html")
-                    .setCacheEntryTimeout(86400) // cache for one day
-                    .setEnableFSTuning(true);
-
-            router.route("/index.html").handler(handler);
-            router.route("/ui/*").handler(handler);
-        }
-        router.route().handler(FaviconHandler.create(vertx));
+    @Route(path = "/ui/*", type = Route.HandlerType.NORMAL)
+    void serveUi(RoutingContext rc) {
+        staticHandler.handle(rc);
     }
 
 }
