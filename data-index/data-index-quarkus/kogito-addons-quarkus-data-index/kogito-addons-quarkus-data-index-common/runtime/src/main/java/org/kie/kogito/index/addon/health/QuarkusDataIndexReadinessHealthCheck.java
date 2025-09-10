@@ -31,7 +31,7 @@ public class QuarkusDataIndexReadinessHealthCheck implements HealthCheck {
 
     @Override
     public HealthCheckResponse call() {
-        HealthCheckResponseBuilder reponse = HealthCheckResponse.builder().name("Embedded Jobs").up();
+        HealthCheckResponseBuilder reponse = HealthCheckResponse.builder().name("Data Index").up();
         return reponse.build();
     }
 
