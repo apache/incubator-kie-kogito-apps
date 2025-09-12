@@ -51,7 +51,7 @@ public abstract class AbstractUserTaskInstanceStorageIT {
     public void testUserTaskStateEvent() {
         String taskId = createUserTaskInstance();
 
-        storage.indexState(TestUtils.createUserTaskStateEvent(taskId, TASK_NAME, PROCESS_INSTANCE_ID, PROCESS_ID, "Completed"));
+        storage.index(TestUtils.createUserTaskStateEvent(taskId, TASK_NAME, PROCESS_INSTANCE_ID, PROCESS_ID, "Completed"));
 
         UserTaskInstance task = storage.get(taskId);
 
@@ -79,11 +79,11 @@ public abstract class AbstractUserTaskInstanceStorageIT {
                 .hasFieldOrPropertyWithValue("adminUsers", null)
                 .hasFieldOrPropertyWithValue("excludedUsers", null);
 
-        storage.indexAssignment(TestUtils.createUserTaskAssignmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "USER_OWNERS", "John"));
-        storage.indexAssignment(TestUtils.createUserTaskAssignmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "USER_GROUPS", "user-group"));
-        storage.indexAssignment(TestUtils.createUserTaskAssignmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "ADMIN_GROUPS", "administrators"));
-        storage.indexAssignment(TestUtils.createUserTaskAssignmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "ADMIN_USERS", "super-user"));
-        storage.indexAssignment(TestUtils.createUserTaskAssignmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "USERS_EXCLUDED", "excluded-user"));
+        storage.index(TestUtils.createUserTaskAssignmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "USER_OWNERS", "John"));
+        storage.index(TestUtils.createUserTaskAssignmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "USER_GROUPS", "user-group"));
+        storage.index(TestUtils.createUserTaskAssignmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "ADMIN_GROUPS", "administrators"));
+        storage.index(TestUtils.createUserTaskAssignmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "ADMIN_USERS", "super-user"));
+        storage.index(TestUtils.createUserTaskAssignmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "USERS_EXCLUDED", "excluded-user"));
 
         task = storage.get(taskId);
 
@@ -115,7 +115,7 @@ public abstract class AbstractUserTaskInstanceStorageIT {
         person.put("firstName", "John");
         person.put("lastName", "Doe");
 
-        storage.indexVariable(TestUtils.createUserTaskVariableEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "person", person, "INPUT"));
+        storage.index(TestUtils.createUserTaskVariableEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "person", person, "INPUT"));
 
         task = storage.get(taskId);
 
@@ -131,7 +131,7 @@ public abstract class AbstractUserTaskInstanceStorageIT {
         person.put("age", 50);
         person.put("married", true);
 
-        storage.indexVariable(TestUtils.createUserTaskVariableEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "person", person, "OUTPUT"));
+        storage.index(TestUtils.createUserTaskVariableEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, "person", person, "OUTPUT"));
 
         task = storage.get(taskId);
 
@@ -152,7 +152,7 @@ public abstract class AbstractUserTaskInstanceStorageIT {
                 .isEmpty();
 
         String commentId = UUID.randomUUID().toString();
-        storage.indexComment(
+        storage.index(
                 TestUtils.createUserTaskCommentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, commentId, "this is a comment", "John", UserTaskInstanceAttachmentEventBody.EVENT_TYPE_ADDED));
 
         task = storage.get(taskId);
@@ -166,7 +166,7 @@ public abstract class AbstractUserTaskInstanceStorageIT {
                 .hasFieldOrPropertyWithValue("content", "this is a comment")
                 .hasFieldOrPropertyWithValue("updatedBy", "John");
 
-        storage.indexComment(
+        storage.index(
                 TestUtils.createUserTaskCommentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, commentId, "this is an updated comment", "John", UserTaskInstanceAttachmentEventBody.EVENT_TYPE_CHANGE));
 
         task = storage.get(taskId);
@@ -180,7 +180,7 @@ public abstract class AbstractUserTaskInstanceStorageIT {
                 .hasFieldOrPropertyWithValue("content", "this is an updated comment")
                 .hasFieldOrPropertyWithValue("updatedBy", "John");
 
-        storage.indexComment(
+        storage.index(
                 TestUtils.createUserTaskCommentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, commentId, "this is an updated comment", "John", UserTaskInstanceAttachmentEventBody.EVENT_TYPE_DELETED));
 
         task = storage.get(taskId);
@@ -200,7 +200,7 @@ public abstract class AbstractUserTaskInstanceStorageIT {
                 .isEmpty();
 
         String attachmentId = UUID.randomUUID().toString();
-        storage.indexAttachment(TestUtils.createUserTaskAttachmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, attachmentId, "Attachment-1", URI.create("http://localhost:8080/my-doc.txt"), "John",
+        storage.index(TestUtils.createUserTaskAttachmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, attachmentId, "Attachment-1", URI.create("http://localhost:8080/my-doc.txt"), "John",
                 UserTaskInstanceAttachmentEventBody.EVENT_TYPE_ADDED));
 
         task = storage.get(taskId);
@@ -215,7 +215,7 @@ public abstract class AbstractUserTaskInstanceStorageIT {
                 .hasFieldOrPropertyWithValue("content", "http://localhost:8080/my-doc.txt")
                 .hasFieldOrPropertyWithValue("updatedBy", "John");
 
-        storage.indexAttachment(TestUtils.createUserTaskAttachmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, attachmentId, "Attachment-1.2", URI.create("http://localhost:8080/my-doc2.txt"),
+        storage.index(TestUtils.createUserTaskAttachmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, attachmentId, "Attachment-1.2", URI.create("http://localhost:8080/my-doc2.txt"),
                 "John", UserTaskInstanceAttachmentEventBody.EVENT_TYPE_CHANGE));
 
         task = storage.get(taskId);
@@ -230,7 +230,7 @@ public abstract class AbstractUserTaskInstanceStorageIT {
                 .hasFieldOrPropertyWithValue("content", "http://localhost:8080/my-doc2.txt")
                 .hasFieldOrPropertyWithValue("updatedBy", "John");
 
-        storage.indexAttachment(TestUtils.createUserTaskAttachmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, attachmentId, "Attachment-1", URI.create("http://localhost:8080/my-doc2.txt"), "John",
+        storage.index(TestUtils.createUserTaskAttachmentEvent(taskId, PROCESS_INSTANCE_ID, PROCESS_ID, attachmentId, "Attachment-1", URI.create("http://localhost:8080/my-doc2.txt"), "John",
                 UserTaskInstanceAttachmentEventBody.EVENT_TYPE_DELETED));
 
         task = storage.get(taskId);
@@ -256,7 +256,7 @@ public abstract class AbstractUserTaskInstanceStorageIT {
     private String createUserTaskInstance() {
         String taskId = UUID.randomUUID().toString();
 
-        storage.indexState(TestUtils.createUserTaskStateEvent(taskId, TASK_NAME, PROCESS_INSTANCE_ID, PROCESS_ID, "InProgress"));
+        storage.index(TestUtils.createUserTaskStateEvent(taskId, TASK_NAME, PROCESS_INSTANCE_ID, PROCESS_ID, "InProgress"));
 
         UserTaskInstance task = storage.get(taskId);
 
