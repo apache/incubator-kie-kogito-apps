@@ -73,10 +73,6 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-vertx</artifactId>
     </dependency>
-      <dependency>
-      <groupId>io.vertx</groupId>
-      <artifactId>vertx-web-graphql</artifactId>
-    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-mutiny</artifactId>
