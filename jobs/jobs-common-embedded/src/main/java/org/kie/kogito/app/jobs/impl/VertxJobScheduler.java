@@ -31,13 +31,18 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.kie.kogito.app.jobs.api.JobDescriptionMerger;
 import org.kie.kogito.app.jobs.api.JobDetailsEventAdapter;
 import org.kie.kogito.app.jobs.api.JobExecutor;
 import org.kie.kogito.app.jobs.api.JobScheduler;
 import org.kie.kogito.app.jobs.api.JobSchedulerBuilder;
 import org.kie.kogito.app.jobs.api.JobSchedulerListener;
 import org.kie.kogito.app.jobs.api.JobSynchronization;
+import org.kie.kogito.app.jobs.api.JobTimeoutExecution;
 import org.kie.kogito.app.jobs.api.JobTimeoutInterceptor;
+import org.kie.kogito.app.jobs.integrations.ProcessInstanceJobDescriptionMerger;
+import org.kie.kogito.app.jobs.integrations.ProcessJobDescriptionMerger;
+import org.kie.kogito.app.jobs.integrations.UserTaskInstanceJobDescriptorMerger;
 import org.kie.kogito.app.jobs.spi.JobContext;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
 import org.kie.kogito.app.jobs.spi.JobStore;
@@ -48,7 +53,9 @@ import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.jobs.service.utils.DateUtil;
+import org.kie.kogito.timer.Trigger;
 import org.kie.kogito.timer.impl.SimpleTimerTrigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,6 +93,8 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
     private List<JobSchedulerListener> jobSchedulerListeners;
 
     private List<JobTimeoutInterceptor> interceptors;
+
+    private List<JobDescriptionMerger> jobDescriptionMergers;
 
     private ConcurrentMap<String, TimerInfo> jobsScheduled;
 
@@ -185,6 +194,12 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             return this;
         }
 
+        @Override
+        public JobSchedulerBuilder withJobDescriptorMergers(JobDescriptionMerger... jobDescriptionMergers) {
+            VertxJobScheduler.this.jobDescriptionMergers.addAll(List.of(jobDescriptionMergers));
+            return this;
+        }
+
     }
 
     public VertxJobScheduler() {
@@ -197,6 +212,10 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         this.jobEventAdapters = new ArrayList<>();
         this.jobSchedulerListeners = new ArrayList<>();
         this.interceptors = new ArrayList<>();
+        this.jobDescriptionMergers = new ArrayList<>();
+        this.jobDescriptionMergers.add(new UserTaskInstanceJobDescriptorMerger());
+        this.jobDescriptionMergers.add(new ProcessInstanceJobDescriptionMerger());
+        this.jobDescriptionMergers.add(new ProcessJobDescriptionMerger());
 
         this.jobSynchronization = new JobSynchronization() {
             @Override
@@ -214,11 +233,11 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
     @Override
     public void handle(Long timerId) {
-        Callable<Void> current = new Callable<Void>() {
+        Callable<JobTimeoutExecution> current = new Callable<JobTimeoutExecution>() {
             @Override
-            public Void call() throws Exception {
+            public JobTimeoutExecution call() throws Exception {
                 syncWithJobStores();
-                return null;
+                return new JobTimeoutExecution(null);
             }
         };
         for (JobTimeoutInterceptor interceptor : interceptors) {
@@ -286,12 +305,12 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         this.refreshJobsIntervalTimerId = this.vertx.setPeriodic(0L, refreshJobsInterval, this);
 
         LOG.info("Initializing Job Service Logic \n" +
-                "MaxRefreshJobsIntervalWindow: {} (millis)\n" +
-                "MaxIntervalLimitToRetryMillis: {} (millis)\n" +
-                "MaxNumberOfRetries: {}\n" +
-                "RefreshJobsInterval: {} (millis)\n" +
-                "Number of worker threads {}\n" +
-                "Store: {}",
+                "\tMaxRefreshJobsIntervalWindow: {} (millis)\n" +
+                "\tMaxIntervalLimitToRetryMillis: {} (millis)\n" +
+                "\tMaxNumberOfRetries: {}\n" +
+                "\tRefreshJobsInterval: {} (millis)\n" +
+                "\tNumber of worker threads {}\n" +
+                "\tStore: {}",
                 maxRefreshJobsIntervalWindow,
                 retryInterval,
                 maxNumberOfRetries,
@@ -338,17 +357,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
         jobSchedulerListeners.forEach(l -> l.onReschedule(rescheduledJobDetails));
         jobStore.update(jobContextFactory.newContext(), rescheduledJobDetails);
-        this.jobSynchronization.synchronize(new Runnable() {
-
-            @Override
-            public void run() {
-                jobsScheduled.compute(jobDetails.getId(), (jobId, timerInfo) -> {
-                    removeTimerInfo(timerInfo);
-                    return addTimerInfo(rescheduledJobDetails);
-                });
-            }
-
-        });
+        updateTxTimer(rescheduledJobDetails);
 
         return rescheduledJobDetails.getId();
     }
@@ -367,41 +376,40 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         workerExecutor.executeBlocking(newTimeoutTask(timerId, jobId));
     }
 
-    private Callable<Void> newTimeoutTask(Long timerId, String jobId) {
-        Callable<Void> current = new Callable<Void>() {
+    private Callable<JobTimeoutExecution> newTimeoutTask(Long timerId, String jobId) {
+        Callable<JobTimeoutExecution> current = new Callable<JobTimeoutExecution>() {
             @Override
-            public Void call() throws Exception {
-                try {
-                    LOG.trace("Timeout task {} with jobId {} newTimeoutTask", timerId, jobId);
-                    JobContext jobContext = jobContextFactory.newContext();
-                    // we check now if we should run
-                    boolean shouldRun = jobStore.shouldRun(jobContext, jobId);
-                    if (!shouldRun) {
-                        LOG.trace("Timeout {} with jobId {} won't run", timerId, jobId);
-                        VertxJobScheduler.this.jobsScheduled.remove(jobId);
-                        return null;
-                    }
+            public JobTimeoutExecution call() throws Exception {
 
-                    LOG.debug("Timeout {} with jobId {} will be executed", timerId, jobId);
-                    JobDetails jobDetails = jobStore.find(jobContext, jobId);
-                    try {
-                        JobDetails runningJobDetails = doRun(jobDetails);
-                        LOG.trace("Timeout {} with jobId {} have been executed", timerId, jobId);
-                        JobDetails executeJobDetails = doExecute(runningJobDetails);
-                        LOG.trace("Timeout {} with jobId {} will be rescheduled if required", timerId, jobId);
-                        JobDetails nextJobDetails = computeNextJobDetailsIfAny(executeJobDetails);
-                        removeIfFinal(timerId, jobContext, nextJobDetails);
-                        jobSchedulerListeners.forEach(l -> l.onExecution(jobDetails));
-                    } catch (Exception exception) {
-                        LOG.trace("Timeout {} with jobId {} will be retried if possible", timerId, jobId, exception);
-                        JobDetails nextJobDetails = computeRetryIfAny(jobDetails);
-                        removeIfFinal(timerId, jobContext, nextJobDetails);
-                        jobSchedulerListeners.forEach(l -> l.onFailure(jobDetails));
-                    }
-                } catch (Exception e) {
-                    LOG.error("unexpected error during timeout execution", e);
+                LOG.trace("Timeout task {} with jobId {} newTimeoutTask", timerId, jobId);
+                JobContext jobContext = jobContextFactory.newContext();
+                // we check now if we should run
+                boolean shouldRun = jobStore.shouldRun(jobContext, jobId);
+                if (!shouldRun) {
+                    LOG.trace("Timeout {} with jobId {} won't run", timerId, jobId);
+                    VertxJobScheduler.this.jobsScheduled.remove(jobId);
+                    return null;
                 }
-                return null;
+
+                LOG.debug("Timeout {} with jobId {} will be executed", timerId, jobId);
+                JobDetails jobDetails = jobStore.find(jobContext, jobId);
+                try {
+                    JobDetails runningJobDetails = doRun(jobDetails);
+                    LOG.trace("Timeout {} with jobId {} have been executed", timerId, jobId);
+                    JobDetails executeJobDetails = doExecute(runningJobDetails);
+                    LOG.trace("Timeout {} with jobId {} will be rescheduled if required", timerId, jobId);
+                    JobDetails nextJobDetails = computeNextJobDetailsIfAny(executeJobDetails);
+                    removeIfFinal(timerId, jobContext, nextJobDetails);
+                    jobSchedulerListeners.forEach(l -> l.onExecution(jobDetails));
+                    return new JobTimeoutExecution(nextJobDetails);
+                } catch (Exception exception) {
+                    LOG.trace("Timeout {} with jobId {} will be retried if possible", timerId, jobId, exception);
+                    JobDetails nextJobDetails = computeRetryIfAny(jobDetails);
+                    removeIfFinal(timerId, jobContext, nextJobDetails);
+                    jobSchedulerListeners.forEach(l -> l.onFailure(jobDetails));
+                    return new JobTimeoutExecution(nextJobDetails, exception);
+                }
+
             }
         };
         for (JobTimeoutInterceptor interceptor : interceptors) {
@@ -412,34 +420,68 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
     private void removeIfFinal(Long timerId, JobContext jobContext, JobDetails nextJobDetails) {
         String jobId = nextJobDetails.getId();
-        if (!nextJobDetails.getStatus().isFinalStatus()) {
-            LOG.trace("Timeout {} with jobId {} will be updated", timerId, jobId);
-            jobStore.update(jobContext, nextJobDetails);
-            doSchedule(nextJobDetails);
-        } else {
-            LOG.trace("Timeout {} with jobId {} will be removed", timerId, jobId);
-            jobStore.remove(jobContext, jobId);
+        switch (nextJobDetails.getStatus()) {
+            case EXECUTED:
+            case CANCELED:
+                LOG.trace("Timeout {} with jobId {} will be removed", timerId, jobId);
+                removeTxTimer(nextJobDetails);
+                jobStore.remove(jobContext, jobId);
+                break;
+            case SCHEDULED:
+            case RETRY:
+                LOG.trace("Timeout {} with jobId {} will be updated and scheduled", timerId, jobId);
+                jobStore.update(jobContext, nextJobDetails);
+                doNextSchedule(nextJobDetails);
+                break;
+            case ERROR:
+                LOG.trace("Timeout {} with jobId {} will be set to error", timerId, jobId);
+                removeTxTimer(nextJobDetails);
+                jobStore.update(jobContext, nextJobDetails);
+                break;
+            default:
+                LOG.trace("Timeout {} with jobId {} is RUNNING and should not happen", timerId, jobId);
+                break;
         }
     }
 
-    // lifecycle calls
-    private JobDetails doSchedule(JobDetails jobDetails) {
+    // add tx timer and remove tx timer
+    private void updateTxTimer(JobDetails jobDetails) {
         this.jobSynchronization.synchronize(new Runnable() {
-
             @Override
             public void run() {
-                jobsScheduled.compute(jobDetails.getId(), (jobId, timerInfo) -> {
+                // if the timer info does not exist we should not reschedule as it was executed or cancelled by 
+                jobsScheduled.computeIfPresent(jobDetails.getId(), (jobId, timerInfo) -> {
+                    removeTimerInfo(timerInfo);
                     return addTimerInfo(jobDetails);
                 });
             }
-
         });
-
-        LOG.trace("doSchedule {}", jobDetails);
-        fireEvents(jobDetails);
-        return jobDetails;
     }
 
+    private void addTxTimer(JobDetails jobDetails) {
+        this.jobSynchronization.synchronize(new Runnable() {
+            @Override
+            public void run() {
+                jobsScheduled.computeIfAbsent(jobDetails.getId(), jobId -> {
+                    return addTimerInfo(jobDetails);
+                });
+            }
+        });
+    }
+
+    private void removeTxTimer(JobDetails jobDetails) {
+        this.jobSynchronization.synchronize(new Runnable() {
+            @Override
+            public void run() {
+                jobsScheduled.computeIfPresent(jobDetails.getId(), (jobId, timerInfo) -> {
+                    removeTimerInfo(timerInfo);
+                    return null;
+                });
+            }
+        });
+    }
+
+    // vertx calls 
     private TimerInfo addTimerInfo(JobDetails jobDetails) {
         LOG.trace("addTimerInfo {}", jobDetails);
         // if it is negative means it should be executed right away
@@ -462,6 +504,21 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         this.vertx.cancelTimer(timerId);
     }
 
+    // lifecycle calls
+    private JobDetails doNextSchedule(JobDetails jobDetails) {
+        updateTxTimer(jobDetails);
+        LOG.trace("doNextSchedule {}", jobDetails);
+        fireEvents(jobDetails);
+        return jobDetails;
+    }
+
+    private JobDetails doSchedule(JobDetails jobDetails) {
+        addTxTimer(jobDetails);
+        LOG.trace("doSchedule {}", jobDetails);
+        fireEvents(jobDetails);
+        return jobDetails;
+    }
+
     private JobDetails doRun(JobDetails jobDetails) {
         JobDetails runJobDetails = JobDetails.builder().of(jobDetails).status(JobStatus.RUNNING).build();
         LOG.trace("doRun {}", runJobDetails);
@@ -470,18 +527,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
     }
 
     private JobDetails doCancel(JobDetails jobDetails) {
-        this.jobSynchronization.synchronize(new Runnable() {
-
-            @Override
-            public void run() {
-                jobsScheduled.compute(jobDetails.getId(), (jobId, timerInfo) -> {
-                    removeTimerInfo(timerInfo);
-                    return null;
-                });
-            }
-
-        });
-
+        removeTxTimer(jobDetails);
         JobDetails canceledJobDetails = JobDetails.builder().of(jobDetails).status(JobStatus.CANCELED).build();
         LOG.trace("doCancel {}", canceledJobDetails);
         fireEvents(canceledJobDetails);
@@ -493,11 +539,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         LOG.trace("valid executors are: {}", validExecutors);
         validExecutors.forEach(executor -> executor.execute(jobDetails));
         JobDetails executedJobDetails = JobDetails.builder().of(jobDetails).status(JobStatus.EXECUTED).incrementExecutionCounter().build();
-        this.jobSynchronization.synchronize(new Runnable() {
-            public void run() {
-                jobsScheduled.remove(jobDetails.getId());
-            };
-        });
         LOG.trace("doExecute {}", executedJobDetails);
         fireEvents(executedJobDetails);
         return executedJobDetails;
@@ -507,7 +548,13 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         LOG.trace("doRetryIfAny {}", jobDetails);
         Integer retryCounter = jobDetails.getRetries();
         if (retryCounter < this.maxNumberOfRetries) {
+
+            Date now = Date.from(DateUtil.now().plus(Duration.ofMillis(retryInterval)).toInstant());
+            Trigger newTrigger = setTriggerDate(jobDetails.getTrigger(), now);
+            JobDescription jobDescriptionMerged = setJobDescription(jobDetails, newTrigger);
             JobDetails retryJobDetails = JobDetails.builder().of(jobDetails)
+                    .trigger(newTrigger)
+                    .recipient(new RecipientInstance(new InVMRecipient(new InVMPayloadData(jobDescriptionMerged))))
                     .status(JobStatus.RETRY)
                     .executionTimeout(jobDetails.getExecutionTimeout() + retryInterval)
                     .incrementRetries()
@@ -521,15 +568,40 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         }
     }
 
+    private Trigger setTriggerDate(Trigger oldTrigger, Date newOriginDate) {
+        SimpleTimerTrigger oldSimpleTimerTrigger = (SimpleTimerTrigger) oldTrigger;
+        SimpleTimerTrigger newTrigger = new SimpleTimerTrigger(
+                newOriginDate,
+                oldSimpleTimerTrigger.getPeriod(),
+                oldSimpleTimerTrigger.getPeriodUnit(),
+                oldSimpleTimerTrigger.getRepeatCount(),
+                oldSimpleTimerTrigger.getEndTime(),
+                oldSimpleTimerTrigger.getZoneId());
+        return newTrigger;
+    }
+
+    private JobDescription setJobDescription(JobDetails jobDetails, Trigger newTrigger) {
+        JobDescription jobDescription = jobDetails.getRecipient().<InVMPayloadData> getRecipient().getPayload().getJobDescription();
+
+        JobDescription newJobDescription = jobDescriptionMergers.stream()
+                .filter(merger -> merger.accept(jobDescription))
+                .map(merger -> merger.mergeTrigger(jobDescription, newTrigger))
+                .findFirst()
+                .orElseThrow();
+        return newJobDescription;
+    }
+
     private JobDetails computeNextJobDetailsIfAny(JobDetails jobDetails) {
         // there is a problem here. If we retried the job the origin, the current time is different.
         // so we set the current time as the time of execution so we do execute things at fixed interval time.
         ((SimpleTimerTrigger) jobDetails.getTrigger()).setNextFireTime(Date.from(Instant.now()));
-
         jobDetails.getTrigger().nextFireTime();
         if (jobDetails.getTrigger().hasNextFireTime() != null) {
-
-            JobDetails nextJobDetails = JobDetails.builder().of(jobDetails)
+            // we set the date for the trigger so we compute new job description
+            JobDescription jobDescriptionMerged = setJobDescription(jobDetails, jobDetails.getTrigger());
+            JobDetails nextJobDetails = JobDetails.builder()
+                    .of(jobDetails)
+                    .recipient(new RecipientInstance(new InVMRecipient(new InVMPayloadData(jobDescriptionMerged))))
                     .status(JobStatus.SCHEDULED)
                     .retries(0)
                     .executionTimeout(jobDetails.getTrigger().hasNextFireTime().getTime())

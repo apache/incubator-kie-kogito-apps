@@ -16,24 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.springboot.service.auth.impl;
+package org.kie.kogito.app.jobs.api;
 
-import org.kie.kogito.index.springboot.service.auth.PrincipalAuthTokenReader;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
-import org.springframework.stereotype.Component;
+import org.kie.kogito.jobs.JobDescription;
+import org.kie.kogito.timer.Trigger;
 
-@Component
-@ConditionalOnClass({ OidcUser.class })
-public class OIDCPrincipalAuthTokenReader implements PrincipalAuthTokenReader {
+public interface JobDescriptionMerger {
 
-    @Override
-    public boolean acceptsPrincipal(Object principal) {
-        return principal instanceof OidcUser;
-    }
+    boolean accept(Object instance);
 
-    @Override
-    public String readAuthToken(Object principal) {
-        return ((OidcUser) principal).getIdToken().getTokenValue();
-    }
+    JobDescription mergeTrigger(JobDescription jobDescription, Trigger trigger);
+
 }

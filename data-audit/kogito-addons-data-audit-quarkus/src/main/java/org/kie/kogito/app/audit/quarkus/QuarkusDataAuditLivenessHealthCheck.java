@@ -16,13 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.jobs.service.model;
+package org.kie.kogito.app.audit.quarkus;
 
-public enum JobStatus {
-    ERROR, //final
-    EXECUTED, //final
-    SCHEDULED, //active
-    RETRY, //active
-    CANCELED, //final
-    RUNNING
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
+import org.eclipse.microprofile.health.Readiness;
+import org.kie.kogito.app.audit.api.SubsystemConstants;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+@Readiness
+@ApplicationScoped
+public class QuarkusDataAuditLivenessHealthCheck implements HealthCheck {
+
+    @Override
+    public HealthCheckResponse call() {
+        HealthCheckResponseBuilder reponse = HealthCheckResponse.builder().name(SubsystemConstants.DATA_AUDIT_NAME).up();
+        return reponse.build();
+    }
+
 }

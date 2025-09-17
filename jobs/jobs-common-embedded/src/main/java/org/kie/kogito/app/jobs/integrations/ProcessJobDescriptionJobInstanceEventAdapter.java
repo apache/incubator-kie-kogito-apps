@@ -16,36 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.app.jobs.springboot;
+package org.kie.kogito.app.jobs.integrations;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
-
-import org.kie.kogito.app.jobs.api.JobSchedulerListener;
+import org.kie.kogito.jobs.JobDescription;
+import org.kie.kogito.jobs.api.JobBuilder;
+import org.kie.kogito.jobs.descriptors.ProcessJobDescription;
 import org.kie.kogito.jobs.service.model.JobDetails;
-import org.springframework.stereotype.Component;
 
-@Component
-public class TestJobSchedulerListener implements JobSchedulerListener {
+public class ProcessJobDescriptionJobInstanceEventAdapter extends AbstractJobDescriptionJobInstanceEventAdapter {
 
-    private CountDownLatch latch;
-
-    void setCount(Integer count) {
-        latch = new CountDownLatch(count);
-    }
-
-    public boolean await(long timeout, TimeUnit unit) throws Exception {
-        return latch.await(timeout, unit);
+    public ProcessJobDescriptionJobInstanceEventAdapter(String serviceURL) {
+        super(serviceURL);
     }
 
     @Override
-    public void onFailure(JobDetails jobDetails) {
-        latch.countDown();
+    public boolean accept(JobDetails jobDetails) {
+        return extractJobDescription(jobDetails) instanceof ProcessJobDescription;
     }
 
     @Override
-    public void onExecution(JobDetails jobDetails) {
-        latch.countDown();
+    protected void doAdaptPayload(JobBuilder jobBuilder, JobDescription jobDescription) {
+        if (jobDescription instanceof ProcessJobDescription processJobDescription) {
+            jobBuilder.processId(processJobDescription.processId());
+        }
     }
 
 }

@@ -24,6 +24,7 @@ public final class SubsystemConstants {
         // do nothing
     }
 
+    public static final String DATA_AUDIT_NAME = "Data Audit";
     public static final String DATA_AUDIT_PATH = "/data-audit";
     public static final String DATA_AUDIT_QUERY_PATH = DATA_AUDIT_PATH + "/q";
     public static final String DATA_AUDIT_REGISTRY_PATH = DATA_AUDIT_PATH + "/r";

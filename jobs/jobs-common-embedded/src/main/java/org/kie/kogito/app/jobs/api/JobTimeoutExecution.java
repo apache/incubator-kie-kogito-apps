@@ -16,29 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.app.jobs.integregations;
+package org.kie.kogito.app.jobs.api;
 
-import org.kie.kogito.jobs.JobDescription;
-import org.kie.kogito.jobs.api.JobBuilder;
-import org.kie.kogito.jobs.descriptors.ProcessJobDescription;
 import org.kie.kogito.jobs.service.model.JobDetails;
 
-public class ProcessJobDescriptionJobInstanceEventAdapter extends AbstractJobDescriptionJobInstanceEventAdapter {
+public class JobTimeoutExecution {
 
-    public ProcessJobDescriptionJobInstanceEventAdapter(String serviceURL) {
-        super(serviceURL);
+    private JobDetails jobDetails;
+    private Exception exception;
+
+    public JobTimeoutExecution(JobDetails jobDetails) {
+        this(jobDetails, null);
     }
 
-    @Override
-    public boolean accept(JobDetails jobDetails) {
-        return extractJobDescription(jobDetails) instanceof ProcessJobDescription;
+    public JobTimeoutExecution(JobDetails jobDetails, Exception exception) {
+        this.jobDetails = jobDetails;
+        this.exception = exception;
     }
 
-    @Override
-    protected void doAdaptPayload(JobBuilder jobBuilder, JobDescription jobDescription) {
-        if (jobDescription instanceof ProcessJobDescription processJobDescription) {
-            jobBuilder.processId(processJobDescription.processId());
-        }
+    public Exception getException() {
+        return exception;
     }
 
+    public JobDetails getJobDetails() {
+        return jobDetails;
+    }
 }

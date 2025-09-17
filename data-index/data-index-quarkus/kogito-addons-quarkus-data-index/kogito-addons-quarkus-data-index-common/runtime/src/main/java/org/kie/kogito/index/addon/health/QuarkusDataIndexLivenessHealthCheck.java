@@ -16,11 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.springboot.service.auth;
+package org.kie.kogito.index.addon.health;
 
-public interface PrincipalAuthTokenReader {
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
+import org.eclipse.microprofile.health.Readiness;
 
-    boolean acceptsPrincipal(Object principal);
+import jakarta.enterprise.context.ApplicationScoped;
 
-    String readAuthToken(Object principal);
+@Readiness
+@ApplicationScoped
+public class QuarkusDataIndexLivenessHealthCheck implements HealthCheck {
+
+    @Override
+    public HealthCheckResponse call() {
+        HealthCheckResponseBuilder reponse = HealthCheckResponse.builder().name("Data Index").up();
+        return reponse.build();
+    }
+
 }

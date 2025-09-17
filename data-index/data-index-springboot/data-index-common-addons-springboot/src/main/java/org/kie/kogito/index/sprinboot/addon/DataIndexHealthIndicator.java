@@ -16,13 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.jobs.service.model;
+package org.kie.kogito.index.sprinboot.addon;
 
-public enum JobStatus {
-    ERROR, //final
-    EXECUTED, //final
-    SCHEDULED, //active
-    RETRY, //active
-    CANCELED, //final
-    RUNNING
+import org.springframework.boot.actuate.health.Health;
+import org.springframework.boot.actuate.health.HealthIndicator;
+import org.springframework.stereotype.Component;
+
+@Component
+public class DataIndexHealthIndicator implements HealthIndicator {
+
+    @Override
+    public Health health() {
+        return Health.up().build();
+    }
+
 }

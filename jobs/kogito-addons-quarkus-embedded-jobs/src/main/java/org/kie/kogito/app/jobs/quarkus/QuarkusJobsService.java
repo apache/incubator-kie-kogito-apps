@@ -18,26 +18,24 @@
  */
 package org.kie.kogito.app.jobs.quarkus;
 
-import java.util.concurrent.Callable;
-
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.kie.kogito.app.jobs.api.JobExecutor;
 import org.kie.kogito.app.jobs.api.JobScheduler;
 import org.kie.kogito.app.jobs.api.JobSchedulerBuilder;
 import org.kie.kogito.app.jobs.api.JobSchedulerListener;
 import org.kie.kogito.app.jobs.api.JobSynchronization;
-import org.kie.kogito.app.jobs.api.JobTimeoutInterceptor;
-import org.kie.kogito.app.jobs.integregations.ProcessInstanceJobDescriptionJobInstanceEventAdapter;
-import org.kie.kogito.app.jobs.integregations.ProcessJobDescriptionJobInstanceEventAdapter;
-import org.kie.kogito.app.jobs.integregations.UserTaskInstanceJobDescriptionJobInstanceEventAdapter;
+import org.kie.kogito.app.jobs.integrations.ErrorHandlingJobTimeoutInterceptor;
+import org.kie.kogito.app.jobs.integrations.ProcessInstanceJobDescriptionJobInstanceEventAdapter;
+import org.kie.kogito.app.jobs.integrations.ProcessJobDescriptionJobInstanceEventAdapter;
+import org.kie.kogito.app.jobs.integrations.UserTaskInstanceJobDescriptionJobInstanceEventAdapter;
 import org.kie.kogito.app.jobs.quarkus.resource.RestApiConstants;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
 import org.kie.kogito.app.jobs.spi.JobStore;
 import org.kie.kogito.event.EventPublisher;
+import org.kie.kogito.handler.ExceptionHandler;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.JobsService;
 
-import io.quarkus.narayana.jta.QuarkusTransaction;
 import io.quarkus.runtime.Startup;
 
 import jakarta.annotation.PostConstruct;
@@ -78,8 +76,8 @@ public class QuarkusJobsService implements JobsService {
     @ConfigProperty(name = "kogito.jobs-service.maxNumberOfRetries", defaultValue = "3")
     protected Integer maxNumberOfRetries;
 
-    @ConfigProperty(name = "kogito.jobs-service.maxIntervalLimitToRetryMillis", defaultValue = "60000")
-    protected Long maxIntervalLimitToRetryMillis;
+    @ConfigProperty(name = "kogito.jobs-service.retryMillis", defaultValue = "100")
+    protected Long retryMillis;
 
     @ConfigProperty(name = "kogito.jobs-service.schedulerChunkInMinutes", defaultValue = "10")
     protected Long maxRefreshJobsIntervalWindow;
@@ -90,22 +88,11 @@ public class QuarkusJobsService implements JobsService {
     @Inject
     protected TransactionSynchronizationRegistry registry;
 
+    @Inject
+    Instance<ExceptionHandler> exceptionHandlers;
+
     @PostConstruct
     public void init() {
-        JobTimeoutInterceptor txInterceptor = new JobTimeoutInterceptor() {
-
-            @Override
-            public Callable<Void> chainIntercept(Callable<Void> callable) {
-                return new Callable<Void>() {
-
-                    @Override
-                    public Void call() throws Exception {
-                        return QuarkusTransaction.requiringNew().call(callable);
-                    }
-
-                };
-            }
-        };
         this.jobScheduler = JobSchedulerBuilder.newJobSchedulerBuilder()
                 .withEventPublishers(eventPublisher.stream().toArray(EventPublisher[]::new))
                 .withJobSchedulerListeners(jobSchedulerListeners.stream().toArray(JobSchedulerListener[]::new))
@@ -117,10 +104,12 @@ public class QuarkusJobsService implements JobsService {
                         new UserTaskInstanceJobDescriptionJobInstanceEventAdapter(serviceURL + RestApiConstants.JOBS_PATH))
                 .withJobExecutors(jobExecutors.stream().toArray(JobExecutor[]::new))
                 .withMaxRefreshJobsIntervalWindow(maxRefreshJobsIntervalWindow * 60 * 1000L)
-                .withRetryInterval(maxIntervalLimitToRetryMillis)
+                .withRetryInterval(retryMillis)
                 .withMaxNumberOfRetries(maxNumberOfRetries)
                 .withRefreshJobsInterval(maxRefreshJobsIntervalWindow * 60 * 1000L)
-                .withTimeoutInterceptor(txInterceptor)
+                .withTimeoutInterceptor(
+                        new TransactionJobTimeoutInterceptor(),
+                        new ErrorHandlingJobTimeoutInterceptor(exceptionHandlers.stream().toList()))
                 .withNumberOfWorkerThreads(numberOfWorkerThreads)
                 .withJobSynchronization(new JobSynchronization() {
 

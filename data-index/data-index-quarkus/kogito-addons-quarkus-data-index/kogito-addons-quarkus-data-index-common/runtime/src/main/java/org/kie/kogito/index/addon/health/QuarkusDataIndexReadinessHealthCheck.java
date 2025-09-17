@@ -16,24 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.springboot.service.auth.impl;
+package org.kie.kogito.index.addon.health;
 
-import org.kie.kogito.index.springboot.service.auth.PrincipalAuthTokenReader;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.security.oauth2.jwt.Jwt;
-import org.springframework.stereotype.Component;
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
+import org.eclipse.microprofile.health.Liveness;
 
-@Component
-@ConditionalOnClass(Jwt.class)
-public class JwtPrincipalAuthTokenReader implements PrincipalAuthTokenReader {
+import jakarta.enterprise.context.ApplicationScoped;
 
-    @Override
-    public boolean acceptsPrincipal(Object principal) {
-        return principal instanceof Jwt;
-    }
+@Liveness
+@ApplicationScoped
+public class QuarkusDataIndexReadinessHealthCheck implements HealthCheck {
 
     @Override
-    public String readAuthToken(Object principal) {
-        return ((Jwt) principal).getTokenValue();
+    public HealthCheckResponse call() {
+        HealthCheckResponseBuilder reponse = HealthCheckResponse.builder().name("Data Index").up();
+        return reponse.build();
     }
+
 }
