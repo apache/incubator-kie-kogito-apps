@@ -18,26 +18,18 @@
  */
 package org.kie.kogito.index.storage;
 
-import org.kie.kogito.event.process.MultipleProcessInstanceDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceErrorDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceSLADataEvent;
-import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
-import org.kie.kogito.event.process.ProcessInstanceVariableDataEvent;
+import java.util.List;
+
+import org.kie.kogito.event.process.ProcessInstanceDataEvent;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.persistence.api.StorageFetcher;
 
 public interface ProcessInstanceStorage extends StorageFetcher<String, ProcessInstance> {
 
-    void indexGroup(MultipleProcessInstanceDataEvent event);
+    void index(List<ProcessInstanceDataEvent> events);
 
-    void indexError(ProcessInstanceErrorDataEvent event);
+    default void index(ProcessInstanceDataEvent event) {
+        this.index(List.of(event));
+    }
 
-    void indexNode(ProcessInstanceNodeDataEvent event);
-
-    void indexSLA(ProcessInstanceSLADataEvent event);
-
-    void indexState(ProcessInstanceStateDataEvent event);
-
-    void indexVariable(ProcessInstanceVariableDataEvent event);
 }

@@ -18,29 +18,17 @@
  */
 package org.kie.kogito.index.storage;
 
-import org.kie.kogito.event.usertask.MultipleUserTaskInstanceDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceAssignmentDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceAttachmentDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceCommentDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceDeadlineDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
-import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
+import java.util.List;
+
+import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.model.UserTaskInstance;
 import org.kie.kogito.persistence.api.StorageFetcher;
 
 public interface UserTaskInstanceStorage extends StorageFetcher<String, UserTaskInstance> {
 
-    void indexAssignment(UserTaskInstanceAssignmentDataEvent event);
+    void index(List<UserTaskInstanceDataEvent> events);
 
-    void indexAttachment(UserTaskInstanceAttachmentDataEvent event);
-
-    void indexDeadline(UserTaskInstanceDeadlineDataEvent event);
-
-    void indexState(UserTaskInstanceStateDataEvent event);
-
-    void indexComment(UserTaskInstanceCommentDataEvent event);
-
-    void indexVariable(UserTaskInstanceVariableDataEvent event);
-
-    void indexGroup(MultipleUserTaskInstanceDataEvent event);
+    default void index(UserTaskInstanceDataEvent event) {
+        this.index(List.of(event));
+    }
 }

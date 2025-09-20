@@ -28,6 +28,7 @@ import org.kie.kogito.event.usertask.UserTaskInstanceDataEvent;
 import org.kie.kogito.index.event.KogitoJobCloudEvent;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.index.service.IndexingService;
+import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -70,7 +71,7 @@ public class ReactiveMessagingEventConsumerTest {
                 .withSubscriber(UniAssertSubscriber.create());
 
         future.awaitItem().assertCompleted();
-        verify(service).indexProcessInstanceEvent(any());
+        verify(service).indexDataEvent(ArgumentMatchers.<DataEvent<?>> any());
         verify(eventPublisher).fire(event);
     }
 
@@ -87,33 +88,33 @@ public class ReactiveMessagingEventConsumerTest {
                 .withSubscriber(UniAssertSubscriber.create());
 
         future.awaitItem().assertCompleted();
-        verify(service).indexUserTaskInstanceEvent(any());
+        verify(service).indexDataEvent(ArgumentMatchers.<DataEvent<?>> any());
         verify(eventPublisher).fire(event);
     }
 
     @Test
     public void testOnProcessInstanceEventException() {
         ProcessInstanceDataEvent event = mock(ProcessInstanceDataEvent.class);
-        doThrow(new RuntimeException("")).when(service).indexProcessInstanceEvent(any());
+        doThrow(new RuntimeException("")).when(service).indexDataEvent(ArgumentMatchers.<DataEvent<?>> any());
 
         UniAssertSubscriber<Void> future = consumer.onProcessInstanceEvent(event).subscribe()
                 .withSubscriber(UniAssertSubscriber.create());
 
         future.awaitFailure().assertFailedWith(RuntimeException.class, "");
-        verify(service).indexProcessInstanceEvent(any());
+        verify(service).indexDataEvent(ArgumentMatchers.<DataEvent<?>> any());
         verify(eventPublisher, never()).fire(event);
     }
 
     @Test
     public void testOnUserTaskInstanceEventException() {
         UserTaskInstanceDataEvent event = mock(UserTaskInstanceDataEvent.class);
-        doThrow(new RuntimeException("")).when(service).indexUserTaskInstanceEvent(any());
+        doThrow(new RuntimeException("")).when(service).indexDataEvent(ArgumentMatchers.<DataEvent<?>> any());
 
         UniAssertSubscriber<Void> future = consumer.onUserTaskInstanceEvent(event).subscribe()
                 .withSubscriber(UniAssertSubscriber.create());
 
         future.awaitFailure().assertFailedWith(RuntimeException.class, "");
-        verify(service).indexUserTaskInstanceEvent(any());
+        verify(service).indexDataEvent(ArgumentMatchers.<DataEvent<?>> any());
         verify(eventPublisher, never()).fire(event);
     }
 

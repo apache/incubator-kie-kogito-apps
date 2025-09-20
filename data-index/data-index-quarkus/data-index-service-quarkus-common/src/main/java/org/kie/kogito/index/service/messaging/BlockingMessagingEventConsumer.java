@@ -18,6 +18,8 @@
  */
 package org.kie.kogito.index.service.messaging;
 
+import java.util.List;
+
 import org.eclipse.microprofile.reactive.messaging.Incoming;
 import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.process.ProcessDefinitionDataEvent;
@@ -36,7 +38,6 @@ import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 
-import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.*;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_JOBS_EVENTS;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_PROCESSINSTANCES_EVENTS;
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_PROCESS_DEFINITIONS_EVENTS;
@@ -59,7 +60,7 @@ public class BlockingMessagingEventConsumer {
     @Transactional
     public void onProcessInstanceEvent(ProcessInstanceDataEvent<?> event) {
         LOGGER.debug("Process instance consumer received ProcessInstanceDataEvent: \n{}", event);
-        indexingService.indexProcessInstanceEvent(event);
+        indexingService.indexDataEvent(List.of(event));
         eventPublisher.fire(event);
     }
 
@@ -68,7 +69,7 @@ public class BlockingMessagingEventConsumer {
     @Transactional
     public void onUserTaskInstanceEvent(UserTaskInstanceDataEvent<?> event) {
         LOGGER.debug("Task instance received UserTaskInstanceDataEvent \n{}", event);
-        indexingService.indexUserTaskInstanceEvent(event);
+        indexingService.indexDataEvent(List.of(event));
         eventPublisher.fire(event);
     }
 
@@ -85,6 +86,6 @@ public class BlockingMessagingEventConsumer {
     @Transactional
     public void onProcessDefinitionDataEvent(ProcessDefinitionDataEvent event) {
         LOGGER.debug("Job received KogitoJobCloudEvent \n{}", event);
-        indexingService.indexProcessDefinition(event);
+        indexingService.indexDataEvent(List.of(event));
     }
 }
