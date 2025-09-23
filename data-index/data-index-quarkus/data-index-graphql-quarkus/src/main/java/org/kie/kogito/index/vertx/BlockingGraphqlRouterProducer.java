@@ -34,7 +34,7 @@ import static io.quarkus.vertx.web.Route.HttpMethod.GET;
 import static io.quarkus.vertx.web.Route.HttpMethod.POST;
 
 @ApplicationScoped
-@IfBuildProperty(name = "kogito.data-index.blocking", stringValue = "true")
+@IfBuildProperty(name = "kogito.data-index.build.blocking", stringValue = "true")
 public class BlockingGraphqlRouterProducer {
 
     @Inject

@@ -18,52 +18,26 @@
  */
 package org.kie.kogito.index.addon.config;
 
-import java.util.Optional;
-
 import io.quarkus.runtime.annotations.ConfigPhase;
 import io.quarkus.runtime.annotations.ConfigRoot;
 import io.smallrye.config.ConfigMapping;
 import io.smallrye.config.WithDefault;
 import io.smallrye.config.WithName;
 
-@ConfigMapping(prefix = "kogito.data-index")
-@ConfigRoot(phase = ConfigPhase.BUILD_TIME)
-public interface DataIndexRuntimeConfig {
+/**
+ * We keep this class for backward compatibility purposes.
+ * Avoid using quarkus.kogito.data-index prefixed properties unless there's a strong reason.
+ * see: DataIndexBuildConfig.
+ */
+@ConfigMapping(prefix = "quarkus.kogito.data-index")
+@ConfigRoot(phase = ConfigPhase.BUILD_AND_RUN_TIME_FIXED)
+public interface QuarkusDataIndexBuildConfig {
 
     /**
-     * Data Index URL.
+     * If GraphQL UI should be enabled. By default, this is only included when the application is running in dev mode.
      */
-    Optional<String> url();
-
-    /**
-     * Path to the Data Index web application if any.
-     */
-    @WithName("ui.path")
-    Optional<String> uiPath();
-
-    /**
-     * Path for publishing the Graphql UI.
-     */
-    @WithName("vertx-graphql.ui.path")
-    @WithDefault("/graphiql")
-    String graphqlUIPath();
-
-    /**
-     * Graphql UI tenant.
-     */
-    @WithName("vertx-graphql.ui.tenant")
-    @WithDefault("web-app-tenant")
-    String graphqlUITenant();
-
-    /**
-     * Domain Objects indexing.
-     */
-    @WithDefault("true")
-    boolean domainIndexing();
-
-    /**
-     * Availability health check enabling.
-     */
-    Optional<Boolean> healthEnabled();
+    @WithName("graphql.ui.always-include")
+    @WithDefault("false")
+    boolean graphqlUiAlwaysInclude();
 
 }
