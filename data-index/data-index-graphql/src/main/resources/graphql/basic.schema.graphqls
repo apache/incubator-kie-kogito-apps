@@ -439,7 +439,7 @@ input UserTaskInstanceArgument {
     slaDueDate: DateArgument
     rootProcessInstanceId: StringArgument
     rootProcessId: StringArgument
-    externalReferenceId : StringArgument
+    externalReferenceId: StringArgument
     endpoint: StringArgument
 }
 
