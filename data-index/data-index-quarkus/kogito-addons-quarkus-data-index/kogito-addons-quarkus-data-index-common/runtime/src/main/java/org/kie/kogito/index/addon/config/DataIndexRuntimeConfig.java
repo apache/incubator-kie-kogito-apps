@@ -27,7 +27,7 @@ import io.smallrye.config.WithDefault;
 import io.smallrye.config.WithName;
 
 @ConfigMapping(prefix = "kogito.data-index")
-@ConfigRoot(phase = ConfigPhase.BUILD_TIME)
+@ConfigRoot(phase = ConfigPhase.RUN_TIME)
 public interface DataIndexRuntimeConfig {
 
     /**

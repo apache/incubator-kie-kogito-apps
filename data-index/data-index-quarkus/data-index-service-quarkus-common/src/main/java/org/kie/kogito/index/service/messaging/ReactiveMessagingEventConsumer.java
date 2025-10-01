@@ -36,7 +36,7 @@ import jakarta.enterprise.event.Event;
 import jakarta.inject.Inject;
 
 @ApplicationScoped
-@UnlessBuildProperty(name = "kogito.data-index.build.blocking", stringValue = "true", enableIfMissing = true)
+@UnlessBuildProperty(name = "kogito.data-index.blocking", stringValue = "true", enableIfMissing = true)
 public class ReactiveMessagingEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ReactiveMessagingEventConsumer.class);

@@ -43,7 +43,7 @@ import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsu
 import static org.kie.kogito.index.service.messaging.ReactiveMessagingEventConsumer.KOGITO_USERTASKINSTANCES_EVENTS;
 
 @ApplicationScoped
-@IfBuildProperty(name = "kogito.data-index.build.blocking", stringValue = "true")
+@IfBuildProperty(name = "kogito.data-index.blocking", stringValue = "true")
 public class BlockingMessagingEventConsumer {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BlockingMessagingEventConsumer.class);
