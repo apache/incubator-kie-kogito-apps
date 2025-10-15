@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.jobs.embedded;
 
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 
@@ -25,6 +26,7 @@ import org.kie.kogito.Application;
 import org.kie.kogito.Model;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.descriptors.ProcessInstanceJobDescription;
+import org.kie.kogito.jobs.descriptors.ProcessJobDescription;
 import org.kie.kogito.jobs.descriptors.UserTaskInstanceJobDescription;
 import org.kie.kogito.jobs.service.api.Recipient;
 import org.kie.kogito.jobs.service.exception.JobExecutionException;
@@ -34,9 +36,12 @@ import org.kie.kogito.jobs.service.model.JobExecutionResponse;
 import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.process.Process;
 import org.kie.kogito.process.Processes;
+import org.kie.kogito.process.SignalFactory;
 import org.kie.kogito.services.jobs.impl.TriggerJobCommand;
 import org.kie.kogito.usertask.UserTaskInstance;
 import org.kie.kogito.usertask.UserTasks;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import io.smallrye.mutiny.Uni;
 
@@ -60,6 +65,8 @@ public class EmbeddedJobExecutor implements JobExecutor {
     @Inject
     Application application;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmbeddedJobExecutor.class);
+
     @Override
     public Uni<JobExecutionResponse> execute(JobDetails jobDetails) {
         RecipientInstance recipientModel = (RecipientInstance) jobDetails.getRecipient();
@@ -67,6 +74,9 @@ public class EmbeddedJobExecutor implements JobExecutor {
         JobDescription jobDescription = recipient.getPayload().getData();
         if (jobDescription instanceof ProcessInstanceJobDescription processInstanceJobDescription && processes.isResolvable()) {
             return processJobDescription(jobDetails, processInstanceJobDescription);
+        } else if (jobDescription instanceof ProcessJobDescription processJobDescription && processes.isResolvable()) {
+            // This is a legacy job description, we can still process it
+            return processJobDescription(jobDetails, processJobDescription);
         } else if (jobDescription instanceof UserTaskInstanceJobDescription userTaskInstanceJobDescription && userTasks.isResolvable()) {
             return processJobDescription(jobDetails, userTaskInstanceJobDescription);
         }
@@ -125,6 +135,45 @@ public class EmbeddedJobExecutor implements JobExecutor {
         Supplier<Boolean> execute = () -> executeInUnitOfWork(application.unitOfWorkManager(), () -> {
             TriggerJobCommand command = new TriggerJobCommand(processInstanceId, jobDetails.getCorrelationId(), timerId, limit, process.get(), application.unitOfWorkManager());
             return command.execute();
+        });
+
+        return Uni.createFrom()
+                .item(execute)
+                .onFailure()
+                .transform(
+                        unexpected -> new JobExecutionException(jobDetails.getId(), "Unexpected error when executing Embedded request for job: " + jobDetails.getId() + ". " + unexpected.getMessage(),
+                                unexpected))
+                .onItem()
+                .transform(res -> JobExecutionResponse.builder()
+                        .message("Embedded job executed")
+                        .code(String.valueOf(200))
+                        .now()
+                        .jobId(jobDetails.getId())
+                        .build());
+    }
+
+    private Uni<JobExecutionResponse> processJobDescription(JobDetails jobDetails, ProcessJobDescription processJobDescription) {
+        String processId = processJobDescription.processId();
+        Process<? extends Model> process = processes.get().processById(processId);
+
+        LOGGER.info("Processing processJobDescription for processId: {}, jobDetails: {}, processDescription: {}, and process: {}",
+                processId, jobDetails, processJobDescription, process);
+
+        if (Objects.isNull(process)) {
+            return Uni.createFrom().item(
+                    JobExecutionResponse.builder()
+                            .code("401")
+                            .jobId(jobDetails.getId())
+                            .now()
+                            .message("job does not belong to this container")
+                            .build());
+        }
+
+        Integer limit = jobDetails.getRetries();
+
+        Supplier<Boolean> execute = () -> executeInUnitOfWork(application.unitOfWorkManager(), () -> {
+            process.send(SignalFactory.of("timerTriggered", processJobDescription.expirationTime()));
+            return true;
         });
 
         return Uni.createFrom()
