@@ -1,0 +1,8 @@
+[
+  {
+    "name":"org.kie.kogito.index.quarkus.json.ObjectMapperProducer"
+  },
+  {
+    "name":"org.kie.kogito.index.quarkus.service.auth.QuarkusDataIndexAuthTokenReader"
+  }
+]
