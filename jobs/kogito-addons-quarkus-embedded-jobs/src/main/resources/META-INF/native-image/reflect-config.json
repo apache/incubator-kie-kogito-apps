@@ -1,0 +1,12 @@
+[
+  {
+    "name": "org.kie.kogito.app.jobs.quarkus.QuarkusJobsService",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true
+  },
+  {
+    "name": "org.kie.kogito.jobs.api.ProcessInstanceJobDescription",
+    "allDeclaredMethods": true,
+    "allDeclaredConstructors": true
+  }
+]

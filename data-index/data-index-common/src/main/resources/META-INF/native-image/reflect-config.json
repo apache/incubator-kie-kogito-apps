@@ -1,0 +1,11 @@
+[
+  {
+    "name":"org.kie.kogito.index.service.IndexingService"
+  },
+  {
+    "name":"org.kie.kogito.index.service.ProcessDefinitionHelper"
+  },
+  {
+    "name":"org.kie.kogito.index.service.auth.DataIndexAuthTokenReader"
+  }
+]
