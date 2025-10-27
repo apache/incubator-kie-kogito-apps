@@ -1,0 +1,8 @@
+[
+  {
+    "name":"org.kie.kogito.persistence.api.Storage"
+  },
+  {
+    "name":"org.kie.kogito.persistence.api.StorageFetcher"
+  }
+]

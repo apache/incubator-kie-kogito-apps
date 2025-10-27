@@ -1,0 +1,22 @@
+[
+  {
+    "name":"org.kie.kogito.app.jobs.api.JobExecutor"
+  },
+  {
+    "name":"org.kie.kogito.app.jobs.api.JobSchedulerListener"
+  },
+  {
+    "name":"org.kie.kogito.app.jobs.impl.InVMPayloadData",
+    "allDeclaredFields":true,
+    "queryAllDeclaredMethods":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getJobDescription","parameterTypes":[] }, {"name":"setJobDescription","parameterTypes":["org.kie.kogito.jobs.JobDescription"] }]
+  },
+  {
+    "name":"org.kie.kogito.app.jobs.impl.InVMRecipient",
+    "allDeclaredFields":true,
+    "queryAllDeclaredMethods":true,
+    "queryAllDeclaredConstructors":true,
+    "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getData","parameterTypes":[] }, {"name":"setData","parameterTypes":["org.kie.kogito.app.jobs.impl.InVMPayloadData"] }]
+  }
+]
