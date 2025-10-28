@@ -1,72 +1,146 @@
 [
   {
-    "name":"org.kie.kogito.index.storage.DataIndexStorageService"
+    "name":"org.kie.kogito.index.storage.DataIndexStorageService",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
-    "name":"org.kie.kogito.index.storage.ProcessInstanceStorage"
+    "name":"org.kie.kogito.index.storage.ProcessInstanceStorage",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
-    "name":"org.kie.kogito.index.storage.UserTaskInstanceStorage"
+    "name":"org.kie.kogito.index.storage.UserTaskInstanceStorage",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
-    "name":"[Lorg.kie.kogito.index.model.ProcessDefinitionKey;"
+    "name":"[Lorg.kie.kogito.index.model.ProcessDefinitionKey;",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
-    "name":"org.kie.kogito.index.model.CancelType"
+    "name":"org.kie.kogito.index.model.CancelType",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
     "name":"org.kie.kogito.index.model.Job",
-    "allDeclaredFields":true,
-    "queryAllDeclaredMethods":true,
-    "queryAllDeclaredConstructors":true,
-    "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"getCallbackEndpoint","parameterTypes":[] }, {"name":"getEndpoint","parameterTypes":[] }, {"name":"getExecutionCounter","parameterTypes":[] }, {"name":"getExpirationTime","parameterTypes":[] }, {"name":"getId","parameterTypes":[] }, {"name":"getLastUpdate","parameterTypes":[] }, {"name":"getNodeInstanceId","parameterTypes":[] }, {"name":"getPriority","parameterTypes":[] }, {"name":"getProcessId","parameterTypes":[] }, {"name":"getProcessInstanceId","parameterTypes":[] }, {"name":"getRepeatInterval","parameterTypes":[] }, {"name":"getRepeatLimit","parameterTypes":[] }, {"name":"getRetries","parameterTypes":[] }, {"name":"getRootProcessId","parameterTypes":[] }, {"name":"getScheduledId","parameterTypes":[] }, {"name":"getStatus","parameterTypes":[] }, {"name":"setCallbackEndpoint","parameterTypes":["java.lang.String"] }, {"name":"setExecutionCounter","parameterTypes":["java.lang.Integer"] }, {"name":"setExpirationTime","parameterTypes":["java.time.ZonedDateTime"] }, {"name":"setId","parameterTypes":["java.lang.String"] }, {"name":"setLastUpdate","parameterTypes":["java.time.ZonedDateTime"] }, {"name":"setNodeInstanceId","parameterTypes":["java.lang.String"] }, {"name":"setPriority","parameterTypes":["java.lang.Integer"] }, {"name":"setProcessId","parameterTypes":["java.lang.String"] }, {"name":"setProcessInstanceId","parameterTypes":["java.lang.String"] }, {"name":"setRepeatInterval","parameterTypes":["java.lang.Long"] }, {"name":"setRepeatLimit","parameterTypes":["java.lang.Integer"] }, {"name":"setRetries","parameterTypes":["java.lang.Integer"] }, {"name":"setRootProcessId","parameterTypes":["java.lang.String"] }, {"name":"setRootProcessInstanceId","parameterTypes":["java.lang.String"] }, {"name":"setScheduledId","parameterTypes":["java.lang.String"] }, {"name":"setStatus","parameterTypes":["java.lang.String"] }]
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
     "name":"org.kie.kogito.index.model.Node",
-    "queryAllDeclaredMethods":true,
-    "methods":[{"name":"getId","parameterTypes":[] }, {"name":"getName","parameterTypes":[] }, {"name":"getType","parameterTypes":[] }]
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
     "name":"org.kie.kogito.index.model.NodeInstance",
-    "queryAllDeclaredMethods":true,
-    "methods":[{"name":"getDefinitionId","parameterTypes":[] }, {"name":"getEnter","parameterTypes":[] }, {"name":"getErrorMessage","parameterTypes":[] }, {"name":"getExit","parameterTypes":[] }, {"name":"getId","parameterTypes":[] }, {"name":"getName","parameterTypes":[] }, {"name":"getNodeId","parameterTypes":[] }, {"name":"getSlaDueDate","parameterTypes":[] }, {"name":"getType","parameterTypes":[] }, {"name":"isRetrigger","parameterTypes":[] }]
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
     "name":"org.kie.kogito.index.model.ProcessDefinition",
-    "queryAllDeclaredMethods":true,
-    "methods":[{"name":"getEndpoint","parameterTypes":[] }, {"name":"getId","parameterTypes":[] }]
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
     "name":"org.kie.kogito.index.model.ProcessDefinitionKey",
-    "allDeclaredFields":true,
-    "queryAllDeclaredMethods":true,
-    "queryAllDeclaredConstructors":true,
-    "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"equals","parameterTypes":["java.lang.Object"] }, {"name":"hashCode","parameterTypes":[] }, {"name":"setId","parameterTypes":["java.lang.String"] }, {"name":"setVersion","parameterTypes":["java.lang.String"] }]
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
-    "name":"org.kie.kogito.index.model.ProcessDefinitionKey_"
+    "name":"org.kie.kogito.index.model.ProcessDefinitionKey_",
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
     "name":"org.kie.kogito.index.model.ProcessInstance",
-    "queryAllDeclaredMethods":true,
-    "methods":[{"name":"getAddons","parameterTypes":[] }, {"name":"getBusinessKey","parameterTypes":[] }, {"name":"getEnd","parameterTypes":[] }, {"name":"getEndpoint","parameterTypes":[] }, {"name":"getError","parameterTypes":[] }, {"name":"getId","parameterTypes":[] }, {"name":"getLastUpdate","parameterTypes":[] }, {"name":"getMilestones","parameterTypes":[] }, {"name":"getNodes","parameterTypes":[] }, {"name":"getParentProcessInstanceId","parameterTypes":[] }, {"name":"getProcessId","parameterTypes":[] }, {"name":"getProcessName","parameterTypes":[] }, {"name":"getRoles","parameterTypes":[] }, {"name":"getRootProcessInstanceId","parameterTypes":[] }, {"name":"getSlaDueDate","parameterTypes":[] }, {"name":"getStart","parameterTypes":[] }, {"name":"getState","parameterTypes":[] }, {"name":"getVariables","parameterTypes":[] }]
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
     "name":"org.kie.kogito.index.model.ProcessInstanceMeta",
-    "queryAllDeclaredMethods":true
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
     "name":"org.kie.kogito.index.model.Timer",
-    "queryAllDeclaredMethods":true,
-    "methods":[{"name":"getDescription","parameterTypes":[] }, {"name":"getNodeInstanceId","parameterTypes":[] }, {"name":"getTimerId","parameterTypes":[] }]
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
     "name":"org.kie.kogito.index.model.UserTaskInstance",
-    "queryAllDeclaredMethods":true,
-    "methods":[{"name":"getActualOwner","parameterTypes":[] }, {"name":"getAdminGroups","parameterTypes":[] }, {"name":"getAdminUsers","parameterTypes":[] }, {"name":"getCompleted","parameterTypes":[] }, {"name":"getDescription","parameterTypes":[] }, {"name":"getEndpoint","parameterTypes":[] }, {"name":"getExcludedUsers","parameterTypes":[] }, {"name":"getExternalReferenceId","parameterTypes":[] }, {"name":"getId","parameterTypes":[] }, {"name":"getInputs","parameterTypes":[] }, {"name":"getLastUpdate","parameterTypes":[] }, {"name":"getName","parameterTypes":[] }, {"name":"getOutputs","parameterTypes":[] }, {"name":"getPotentialGroups","parameterTypes":[] }, {"name":"getPotentialUsers","parameterTypes":[] }, {"name":"getPriority","parameterTypes":[] }, {"name":"getProcessId","parameterTypes":[] }, {"name":"getProcessInstanceId","parameterTypes":[] }, {"name":"getReferenceName","parameterTypes":[] }, {"name":"getRootProcessId","parameterTypes":[] }, {"name":"getRootProcessInstanceId","parameterTypes":[] }, {"name":"getStarted","parameterTypes":[] }, {"name":"getState","parameterTypes":[] }]
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   },
   {
     "name":"org.kie.kogito.index.model.UserTaskInstanceMeta",
-    "queryAllDeclaredMethods":true
+    "allDeclaredConstructors" : true,
+    "allPublicConstructors" : true,
+    "allDeclaredMethods" : true,
+    "allPublicMethods" : true,
+    "allDeclaredFields" : true,
+    "allPublicFields" : true
   }
 ]
