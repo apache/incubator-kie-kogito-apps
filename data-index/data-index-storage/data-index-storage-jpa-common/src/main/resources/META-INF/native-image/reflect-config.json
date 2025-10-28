@@ -13,11 +13,6 @@
          "name":"[Lorg.kie.kogito.index.jpa.model.NodeEntityId;"
      },
      {
-         "name":"java.io.Serializable",
-         "queryAllDeclaredMethods":true,
-         "methods":[{"name":"setDefinition","parameterTypes":["org.kie.kogito.index.jpa.model.ProcessDefinitionEntity"] }]
-     },
-     {
          "name":"org.kie.kogito.index.jpa.model.AbstractEntity",
          "allDeclaredFields":true,
          "queryAllDeclaredMethods":true,
@@ -148,10 +143,10 @@
          "name":"org.kie.kogito.index.jpa.model.ProcessInstanceErrorEntity_"
      },
      {
-         "name":"org.kie.kogito.index.jpa.model.UserTaskInstanceEntity",
-         "allDeclaredFields":true,
-         "queryAllDeclaredMethods":true,
-         "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"equals","parameterTypes":["java.lang.Object"] }, {"name":"setActualOwner","parameterTypes":["java.lang.String"] }, {"name":"setAdminGroups","parameterTypes":["java.util.Set"] }, {"name":"setAdminUsers","parameterTypes":["java.util.Set"] }, {"name":"setAttachments","parameterTypes":["java.util.List"] }, {"name":"setComments","parameterTypes":["java.util.List"] }, {"name":"setCompleted","parameterTypes":["java.time.ZonedDateTime"] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setEndpoint","parameterTypes":["java.lang.String"] }, {"name":"setExcludedUsers","parameterTypes":["java.util.Set"] }, {"name":"setExternalReferenceId","parameterTypes":["java.lang.String"] }, {"name":"setId","parameterTypes":["java.lang.String"] }, {"name":"setInputs","parameterTypes":["com.fasterxml.jackson.databind.node.ObjectNode"] }, {"name":"setLastUpdate","parameterTypes":["java.time.ZonedDateTime"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setOutputs","parameterTypes":["com.fasterxml.jackson.databind.node.ObjectNode"] }, {"name":"setPotentialGroups","parameterTypes":["java.util.Set"] }, {"name":"setPotentialUsers","parameterTypes":["java.util.Set"] }, {"name":"setPriority","parameterTypes":["java.lang.String"] }, {"name":"setProcessId","parameterTypes":["java.lang.String"] }, {"name":"setProcessInstanceId","parameterTypes":["java.lang.String"] }, {"name":"setReferenceName","parameterTypes":["java.lang.String"] }, {"name":"setRootProcessId","parameterTypes":["java.lang.String"] }, {"name":"setRootProcessInstanceId","parameterTypes":["java.lang.String"] }, {"name":"setSlaDueDate","parameterTypes":["java.time.ZonedDateTime"] }, {"name":"setStarted","parameterTypes":["java.time.ZonedDateTime"] }, {"name":"setState","parameterTypes":["java.lang.String"] }]
+       "name":"org.kie.kogito.index.jpa.model.UserTaskInstanceEntity",
+       "allDeclaredFields":true,
+       "queryAllDeclaredMethods":true,
+       "methods":[{"name":"<init>","parameterTypes":[] }, {"name":"equals","parameterTypes":["java.lang.Object"] }, {"name":"setActualOwner","parameterTypes":["java.lang.String"] }, {"name":"setAdminGroups","parameterTypes":["java.util.Set"] }, {"name":"setAdminUsers","parameterTypes":["java.util.Set"] }, {"name":"setAttachments","parameterTypes":["java.util.List"] }, {"name":"setComments","parameterTypes":["java.util.List"] }, {"name":"setCompleted","parameterTypes":["java.time.ZonedDateTime"] }, {"name":"setDescription","parameterTypes":["java.lang.String"] }, {"name":"setEndpoint","parameterTypes":["java.lang.String"] }, {"name":"setExcludedUsers","parameterTypes":["java.util.Set"] }, {"name":"setExternalReferenceId","parameterTypes":["java.lang.String"] }, {"name":"setId","parameterTypes":["java.lang.String"] }, {"name":"setInputs","parameterTypes":["com.fasterxml.jackson.databind.node.ObjectNode"] }, {"name":"setLastUpdate","parameterTypes":["java.time.ZonedDateTime"] }, {"name":"setName","parameterTypes":["java.lang.String"] }, {"name":"setOutputs","parameterTypes":["com.fasterxml.jackson.databind.node.ObjectNode"] }, {"name":"setPotentialGroups","parameterTypes":["java.util.Set"] }, {"name":"setPotentialUsers","parameterTypes":["java.util.Set"] }, {"name":"setPriority","parameterTypes":["java.lang.String"] }, {"name":"setProcessId","parameterTypes":["java.lang.String"] }, {"name":"setProcessInstanceId","parameterTypes":["java.lang.String"] }, {"name":"setReferenceName","parameterTypes":["java.lang.String"] }, {"name":"setRootProcessId","parameterTypes":["java.lang.String"] }, {"name":"setRootProcessInstanceId","parameterTypes":["java.lang.String"] }, {"name":"setSlaDueDate","parameterTypes":["java.time.ZonedDateTime"] }, {"name":"setStarted","parameterTypes":["java.time.ZonedDateTime"] }, {"name":"setState","parameterTypes":["java.lang.String"] }, {"name":"setUserTaskId","parameterTypes":["java.lang.String"] }]
      },
      {
          "name":"org.kie.kogito.index.jpa.model.UserTaskInstanceEntity$HibernateProxy",
