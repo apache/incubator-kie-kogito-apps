@@ -18,9 +18,44 @@
  */
 package org.kie.kogito.index.storage;
 
+import java.util.Map;
+
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.persistence.api.Storage;
 
-public interface JobInstanceStorage extends Storage<String, Job> {
-    void indexJob(Job job);
+public class ModelJobInstanceStorage extends ModelStorageFetcher<String, Job> implements JobInstanceStorage {
+
+    public ModelJobInstanceStorage(Storage<String, Job> storage) {
+        super(storage, key -> key, key -> key);
+    }
+
+    @Override
+    public void indexJob(Job job) {
+        put(job.getId(), job);
+    }
+
+    @Override
+    public Job put(String key, Job value) {
+        return storage.put(key, value);
+    }
+
+    @Override
+    public Job remove(String key) {
+        return storage.remove(key);
+    }
+
+    @Override
+    public boolean containsKey(String key) {
+        return storage.containsKey(key);
+    }
+
+    @Override
+    public Map<String, Job> entries() {
+        return storage.entries();
+    }
+
+    @Override
+    public String getRootType() {
+        return Job.class.getName();
+    }
 }

@@ -43,23 +43,30 @@ public class JobEntityStorage extends AbstractStorage<String, JobEntity, Job> im
     @Transactional
     @Override
     public void indexJob(Job job) {
-        JobEntity entity = findOrInit(job.getId());
+        JobEntity entity = findOrInit(job.getId(), job);
         updateJobEntity(entity, job);
     }
 
-    private JobEntity findOrInit(String jobId) {
-        JobEntity job = em.find(JobEntity.class, jobId);
-        if (job == null) {
-            job = new JobEntity();
-            job.setId(jobId);
-            em.persist(job);
+    private JobEntity findOrInit(String jobId, Job job) {
+        JobEntity entity = em.find(JobEntity.class, jobId);
+        if (entity == null) {
+            entity = new JobEntity();
+            entity.setId(jobId);
+            entity.setProcessId(job.getProcessId());
+            entity.setRootProcessId(job.getRootProcessId());
+            em.persist(entity);
+        } else {
+            if (entity.getProcessId() == null) {
+                entity.setProcessId(job.getProcessId());
+            }
+            if (entity.getRootProcessId() == null) {
+                entity.setRootProcessId(job.getRootProcessId());
+            }
         }
-        return job;
+        return entity;
     }
 
     private void updateJobEntity(JobEntity entity, Job job) {
-        String existingProcessId = entity.getProcessId();
-        String existingRootProcessId = entity.getRootProcessId();
         entity.setProcessInstanceId(job.getProcessInstanceId());
         entity.setNodeInstanceId(job.getNodeInstanceId());
         entity.setRootProcessInstanceId(job.getRootProcessInstanceId());
@@ -74,17 +81,5 @@ public class JobEntityStorage extends AbstractStorage<String, JobEntity, Job> im
         entity.setLastUpdate(job.getLastUpdate());
         entity.setExecutionCounter(job.getExecutionCounter());
         entity.setEndpoint(job.getEndpoint());
-
-        if (existingProcessId != null) {
-            entity.setProcessId(existingProcessId);
-        } else {
-            entity.setProcessId(job.getProcessId());
-        }
-
-        if (existingRootProcessId != null) {
-            entity.setRootProcessId(existingRootProcessId);
-        } else {
-            entity.setRootProcessId(job.getRootProcessId());
-        }
     }
 }

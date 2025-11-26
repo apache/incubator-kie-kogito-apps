@@ -21,7 +21,6 @@ package org.kie.kogito.index.storage;
 import java.util.EnumSet;
 import java.util.Set;
 
-import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
 import org.kie.kogito.persistence.api.Storage;
@@ -36,7 +35,7 @@ public interface DataIndexStorageService {
 
     UserTaskInstanceStorage getUserTaskInstanceStorage();
 
-    Storage<String, Job> getJobsStorage();
+    JobInstanceStorage getJobsStorage();
 
     Storage<String, ObjectNode> getDomainModelCache(String processId);
 
