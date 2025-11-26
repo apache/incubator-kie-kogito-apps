@@ -22,13 +22,15 @@ import org.kie.kogito.index.jpa.mapper.JobEntityMapper;
 import org.kie.kogito.index.jpa.model.AbstractEntity;
 import org.kie.kogito.index.jpa.model.JobEntity;
 import org.kie.kogito.index.model.Job;
+import org.kie.kogito.index.storage.JobInstanceStorage;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 
 @ApplicationScoped
-public class JobEntityStorage extends AbstractStorage<String, JobEntity, Job> {
+public class JobEntityStorage extends AbstractStorage<String, JobEntity, Job> implements JobInstanceStorage {
 
     protected JobEntityStorage() {
     }
@@ -36,5 +38,53 @@ public class JobEntityStorage extends AbstractStorage<String, JobEntity, Job> {
     @Inject
     public JobEntityStorage(EntityManager em) {
         super(em, Job.class, JobEntity.class, JobEntityMapper.INSTANCE::mapToModel, JobEntityMapper.INSTANCE::mapToEntity, AbstractEntity::getId);
+    }
+
+    @Transactional
+    @Override
+    public void indexJob(Job job) {
+        JobEntity entity = findOrInit(job.getId());
+        updateJobEntity(entity, job);
+    }
+
+    private JobEntity findOrInit(String jobId) {
+        JobEntity job = em.find(JobEntity.class, jobId);
+        if (job == null) {
+            job = new JobEntity();
+            job.setId(jobId);
+            em.persist(job);
+        }
+        return job;
+    }
+
+    private void updateJobEntity(JobEntity entity, Job job) {
+        String existingProcessId = entity.getProcessId();
+        String existingRootProcessId = entity.getRootProcessId();
+        entity.setProcessInstanceId(job.getProcessInstanceId());
+        entity.setNodeInstanceId(job.getNodeInstanceId());
+        entity.setRootProcessInstanceId(job.getRootProcessInstanceId());
+        entity.setExpirationTime(job.getExpirationTime());
+        entity.setPriority(job.getPriority());
+        entity.setCallbackEndpoint(job.getCallbackEndpoint());
+        entity.setRepeatInterval(job.getRepeatInterval());
+        entity.setRepeatLimit(job.getRepeatLimit());
+        entity.setScheduledId(job.getScheduledId());
+        entity.setRetries(job.getRetries());
+        entity.setStatus(job.getStatus());
+        entity.setLastUpdate(job.getLastUpdate());
+        entity.setExecutionCounter(job.getExecutionCounter());
+        entity.setEndpoint(job.getEndpoint());
+
+        if (existingProcessId != null) {
+            entity.setProcessId(existingProcessId);
+        } else {
+            entity.setProcessId(job.getProcessId());
+        }
+
+        if (existingRootProcessId != null) {
+            entity.setRootProcessId(existingRootProcessId);
+        } else {
+            entity.setRootProcessId(job.getRootProcessId());
+        }
     }
 }

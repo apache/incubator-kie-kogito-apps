@@ -43,6 +43,7 @@ import org.kie.kogito.event.usertask.UserTaskInstanceVariableDataEvent;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
 import org.kie.kogito.index.storage.DataIndexStorageService;
+import org.kie.kogito.index.storage.JobInstanceStorage;
 import org.kie.kogito.index.storage.ProcessInstanceStorage;
 import org.kie.kogito.index.storage.UserTaskInstanceStorage;
 import org.kie.kogito.persistence.api.Storage;
@@ -118,7 +119,13 @@ public class IndexingService {
     }
 
     public void indexJob(Job job) {
-        manager.getJobsStorage().put(job.getId(), job);
+        Storage<String, Job> jobsStorage = manager.getJobsStorage();
+
+        if (jobsStorage instanceof JobInstanceStorage jobInstanceStorage) {
+            jobInstanceStorage.indexJob(job);
+        } else {
+            jobsStorage.put(job.getId(), job);
+        }
     }
 
     public void indexModel(ObjectNode updateData) {
