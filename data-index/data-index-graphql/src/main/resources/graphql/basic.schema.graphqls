@@ -386,6 +386,7 @@ type Attachment {
 
 type UserTaskInstance {
     id: String!
+    userTaskId: String
     description: String
     name: String
     priority: String
@@ -437,6 +438,10 @@ input UserTaskInstanceArgument {
     comments: CommentArgument
     attachments: AttachmentArgument
     slaDueDate: DateArgument
+    rootProcessInstanceId: StringArgument
+    rootProcessId: StringArgument
+    externalReferenceId: StringArgument
+    endpoint: StringArgument
 }
 
 input CommentArgument {
