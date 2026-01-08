@@ -22,9 +22,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-import org.kie.dmn.api.core.DMNDecisionResult;
 import org.kie.dmn.api.core.event.AfterConditionalEvaluationEvent;
 import org.kie.dmn.api.core.event.AfterEvaluateAllEvent;
 import org.kie.dmn.api.core.event.AfterEvaluateBKMEvent;
@@ -46,12 +44,7 @@ public class JITDMNListener implements DMNRuntimeEventListener {
     @Override
     public void afterEvaluateDecisionTable(AfterEvaluateDecisionTableEvent event) {
         logEvent(event);
-        Optional<String> decisionName = event.getResult().getDecisionResults().stream()
-                .filter(dr -> dr.getEvaluationStatus() == DMNDecisionResult.DecisionEvaluationStatus.EVALUATING)
-                .map(DMNDecisionResult::getDecisionName)
-                .findFirst();
-        decisionName.ifPresent(name ->
-                populateDecisionAndEvaluationHitIdMaps(name, event.getSelectedIds()));
+        populateDecisionAndEvaluationHitIdMaps(event.getDecisionName(), event.getSelectedIds());
     }
 
     @Override
@@ -96,7 +89,6 @@ public class JITDMNListener implements DMNRuntimeEventListener {
 
     private void populateDecisionAndEvaluationHitIdMaps(String decisionName, Collection<String> idsToStore) {
         Map<String, Integer> evaluationHitIds;
-        System.out.println("decisionEvaluationHitIdsMap " + decisionEvaluationHitIdsMap);
         if (decisionEvaluationHitIdsMap.containsKey(decisionName)) {
             evaluationHitIds = decisionEvaluationHitIdsMap.get(decisionName);
         } else {
