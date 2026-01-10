@@ -58,17 +58,6 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>jobs-service-infinispan</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>jobs-service-infinispan</artifactId>
-                <version>${project.version}</version>
-                <classifier>sources</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
                 <artifactId>jobs-service-postgresql-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -290,11 +279,6 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-storage-infinispan</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-storage-mongodb</artifactId>
                 <version>${project.version}</version>
             </dependency>
@@ -454,17 +438,6 @@
                 <artifactId>data-index-service-quarkus-common</artifactId>
                 <version>${project.version}</version>
                 <type>test-jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-service-infinispan</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-service-infinispan</artifactId>
-                <version>${project.version}</version>
-                <classifier>sources</classifier>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -679,29 +652,6 @@
                 <classifier>javadoc</classifier>
             </dependency>
 
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-infinispan</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-infinispan</artifactId>
-                <version>${project.version}</version>
-                <classifier>sources</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-infinispan</artifactId>
-                <version>${project.version}</version>
-                <classifier>javadoc</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-infinispan</artifactId>
-                <version>${project.version}</version>
-                <type>test-jar</type>
-            </dependency>
 
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -970,23 +920,6 @@
                 <classifier>javadoc</classifier>
             </dependency>
 
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>trusty-service-infinispan</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>trusty-service-infinispan</artifactId>
-                <version>${project.version}</version>
-                <classifier>sources</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>trusty-service-infinispan</artifactId>
-                <version>${project.version}</version>
-                <classifier>javadoc</classifier>
-            </dependency>
 
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -1042,23 +975,6 @@
                 <classifier>javadoc</classifier>
             </dependency>
 
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>trusty-storage-infinispan</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>trusty-storage-infinispan</artifactId>
-                <version>${project.version}</version>
-                <classifier>sources</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>trusty-storage-infinispan</artifactId>
-                <version>${project.version}</version>
-                <classifier>javadoc</classifier>
-            </dependency>
 
             <dependency>
                 <groupId>org.kie.kogito</groupId>
