@@ -20,6 +20,7 @@ package org.kie.kogito.index.postgresql;
 
 import org.kie.kogito.index.jpa.storage.JsonPredicateBuilder;
 import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
+import org.kie.kogito.process.Processes;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -30,7 +31,7 @@ import jakarta.persistence.EntityManager;
 public class QuarkusProcessInstanceEntityStorage extends ProcessInstanceEntityStorage {
 
     @Inject
-    public QuarkusProcessInstanceEntityStorage(EntityManager em, Instance<JsonPredicateBuilder> jsonPredicateBuilder) {
-        super(em, jsonPredicateBuilder);
+    public QuarkusProcessInstanceEntityStorage(EntityManager em, Instance<JsonPredicateBuilder> jsonPredicateBuilder, Instance<Processes> processesInstance) {
+        super(em, jsonPredicateBuilder, processesInstance);
     }
 }

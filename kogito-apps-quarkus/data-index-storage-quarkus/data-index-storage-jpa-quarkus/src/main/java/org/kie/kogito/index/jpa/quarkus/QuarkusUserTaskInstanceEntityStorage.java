@@ -19,15 +19,17 @@
 package org.kie.kogito.index.jpa.quarkus;
 
 import org.kie.kogito.index.jpa.storage.UserTaskInstanceEntityStorage;
+import org.kie.kogito.process.Processes;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
 @ApplicationScoped
 public class QuarkusUserTaskInstanceEntityStorage extends UserTaskInstanceEntityStorage {
     @Inject
-    public QuarkusUserTaskInstanceEntityStorage(EntityManager em) {
-        super(em);
+    public QuarkusUserTaskInstanceEntityStorage(EntityManager em, Instance<Processes> processesInstance) {
+        super(em, processesInstance);
     }
 }

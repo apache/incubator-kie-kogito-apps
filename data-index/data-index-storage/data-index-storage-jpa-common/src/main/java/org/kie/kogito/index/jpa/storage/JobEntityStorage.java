@@ -18,22 +18,28 @@
  */
 package org.kie.kogito.index.jpa.storage;
 
+import java.util.Optional;
+
 import org.kie.kogito.index.jpa.mapper.JobEntityMapper;
 import org.kie.kogito.index.jpa.model.AbstractEntity;
 import org.kie.kogito.index.jpa.model.JobEntity;
 import org.kie.kogito.index.model.Job;
 import org.kie.kogito.index.storage.JobInstanceStorage;
+import org.kie.kogito.process.Processes;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
+
+import static org.kie.kogito.index.DependencyInjectionUtils.getInstance;
 
 public class JobEntityStorage extends AbstractStorage<String, JobEntity, Job> implements JobInstanceStorage {
 
     protected JobEntityStorage() {
     }
 
-    public JobEntityStorage(EntityManager em) {
-        super(em, Job.class, JobEntity.class, JobEntityMapper.INSTANCE::mapToModel, JobEntityMapper.INSTANCE::mapToEntity, AbstractEntity::getId);
+    public JobEntityStorage(EntityManager em, Iterable<Processes> processes) {
+        super(em, Job.class, JobEntity.class, JobEntityMapper.INSTANCE::mapToModel, JobEntityMapper.INSTANCE::mapToEntity, AbstractEntity::getId,
+                java.util.Optional.empty(), Optional.ofNullable(getInstance(processes)));
     }
 
     @Transactional

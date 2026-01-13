@@ -20,6 +20,7 @@ package org.kie.kogito.app.jobs.springboot.jpa;
 
 import org.kie.kogito.app.jobs.spi.JobContext;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
+import org.kie.kogito.process.Processes;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -31,9 +32,12 @@ public class SpringbootJPAJobContextFactory implements JobContextFactory {
     @Autowired
     protected EntityManager entityManager;
 
+    @Autowired(required = false)
+    protected Processes processes;
+
     @Override
     public JobContext newContext() {
-        return new SpringbootJPAJobContext(entityManager);
+        return new SpringbootJPAJobContext(processes, entityManager);
     }
 
 }

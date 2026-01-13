@@ -20,27 +20,47 @@ package org.kie.kogito.app.jobs.jpa;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.kie.kogito.app.jobs.jpa.model.JobDetailsEntity;
 import org.kie.kogito.app.jobs.spi.JobContext;
 import org.kie.kogito.app.jobs.spi.JobStore;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 public class JPAJobStore implements JobStore {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(JPAJobStore.class);
     private static final List<String> JOB_ACTIVE_STATUSES = List.of(JobStatus.RETRY.toString(), JobStatus.SCHEDULED.toString());
 
     @Override
     public List<JobDetails> loadActiveJobs(JobContext jobContext, OffsetDateTime maxWindowsLoad) {
-        EntityManager entityManager = jobContext.getContext();
+        JPAJobContext jpaJobContext = validateContext(jobContext);
 
-        List<JobDetailsEntity> timers = entityManager.createQuery("SELECT o FROM JobDetailsEntity o WHERE o.status IN (:activeStatus) AND o.fireTime <= :maxWindowsLoad", JobDetailsEntity.class)
+        String queryString = buildQueryWithCteWhenFiltering(jpaJobContext,
+                "SELECT o FROM JobDetailsEntity o WHERE o.status IN (:activeStatus) AND o.fireTime <= :maxWindowsLoad");
+
+        LOGGER.info("loadActiveJobs() - Query: {}", queryString);
+        LOGGER.info("loadActiveJobs() - maxWindowsLoad: {}", maxWindowsLoad);
+        LOGGER.info("loadActiveJobs() - Filtering enabled: {}", isFilterByLocalProcess(jpaJobContext));
+
+        TypedQuery<JobDetailsEntity> jobDetailsEntityTypedQuery = jpaJobContext.getEntityManager()
+                .createQuery(queryString, JobDetailsEntity.class)
                 .setParameter("activeStatus", JOB_ACTIVE_STATUSES)
-                .setParameter("maxWindowsLoad", maxWindowsLoad)
+                .setParameter("maxWindowsLoad", maxWindowsLoad);
+        bindDataIsolationKeysWhenFiltering(jpaJobContext, jobDetailsEntityTypedQuery);
+        List<JobDetailsEntity> timers = jobDetailsEntityTypedQuery
                 .getResultList();
+
+        LOGGER.info("loadActiveJobs() - Returned {} jobs", timers.size());
+
         return timers.stream()
                 .map(JobDetailsEntityHelper::from)
                 .toList();
@@ -48,25 +68,30 @@ public class JPAJobStore implements JobStore {
 
     @Override
     public JobDetails find(JobContext jobContext, String jobId) {
-        EntityManager entityManager = jobContext.getContext();
-        return JobDetailsEntityHelper.from(entityManager.find(JobDetailsEntity.class, jobId));
+        JPAJobContext jpaJobContext = validateContext(jobContext);
+        EntityManager entityManager = jpaJobContext.getEntityManager();
+        JobDetails details = JobDetailsEntityHelper.from(entityManager.find(JobDetailsEntity.class, jobId));
+        return details;
     }
 
     @Override
     public void persist(JobContext jobContext, JobDetails jobDetails) {
-        EntityManager entityManager = jobContext.getContext();
+        JPAJobContext jpaJobContext = validateContext(jobContext);
+        EntityManager entityManager = jpaJobContext.getEntityManager();
         entityManager.persist(JobDetailsEntityHelper.merge(jobDetails, new JobDetailsEntity()));
     }
 
     @Override
     public void update(JobContext jobContext, JobDetails jobDetails) {
-        EntityManager entityManager = jobContext.getContext();
+        JPAJobContext jpaJobContext = validateContext(jobContext);
+        EntityManager entityManager = jpaJobContext.getEntityManager();
         entityManager.merge(JobDetailsEntityHelper.merge(jobDetails, new JobDetailsEntity()));
     }
 
     @Override
     public void remove(JobContext jobContext, String jobId) {
-        EntityManager entityManager = jobContext.getContext();
+        JPAJobContext jpaJobContext = validateContext(jobContext);
+        EntityManager entityManager = jpaJobContext.getEntityManager();
         JobDetailsEntity entity = entityManager.find(JobDetailsEntity.class, jobId);
         if (entity != null) {
             entityManager.remove(entity);
@@ -75,13 +100,87 @@ public class JPAJobStore implements JobStore {
 
     @Override
     public boolean shouldRun(JobContext jobContext, String jobId) {
-        EntityManager entityManager = jobContext.getContext();
-        int updated = entityManager.createQuery("UPDATE JobDetailsEntity o SET status = :status WHERE o.status IN (:activeStatus) AND o.id = :jobId")
+        JPAJobContext jpaJobContext = validateContext(jobContext);
+        EntityManager entityManager = jpaJobContext.getEntityManager();
+
+        String baseQuery = "UPDATE JobDetailsEntity o SET status = :status WHERE o.status IN (:activeStatus) AND o.id = :jobId";
+
+        String queryString = buildUpdateQueryWithExistsWhenFiltering(jpaJobContext, baseQuery);
+
+        LOGGER.info("shouldRun() - jobId: {}, Query: {}", jobId, queryString);
+        LOGGER.info("shouldRun() - Filtering enabled: {}", isFilterByLocalProcess(jpaJobContext));
+
+        Query query = entityManager.createQuery(queryString)
                 .setParameter("jobId", jobId)
                 .setParameter("activeStatus", JOB_ACTIVE_STATUSES)
-                .setParameter("status", JobStatus.RUNNING.toString())
-                .executeUpdate();
+                .setParameter("status", JobStatus.RUNNING.toString());
+
+        bindDataIsolationKeysWhenFiltering(jpaJobContext, query);
+
+        int updated = query.executeUpdate();
+
+        LOGGER.info("shouldRun() - jobId: {}, updated: {}", jobId, updated);
         return updated > 0;
+    }
+
+    protected JPAJobContext validateContext(JobContext jobContext) {
+        if (!(jobContext instanceof JPAJobContext) || ((JPAJobContext) jobContext).getEntityManager() == null) {
+            throw new RuntimeException("JPAJobStore requires JPAJobContext instance with EntityManager instance.");
+        }
+        return (JPAJobContext) jobContext;
+    }
+
+    private boolean isFilterByLocalProcess(JPAJobContext context) {
+        return context.getProcesses() != null;
+    }
+
+    private String buildQueryWithCteWhenFiltering(JPAJobContext context, String baseQueryWithWhereClause) {
+        if (!isFilterByLocalProcess(context)) {
+            return baseQueryWithWhereClause;
+        }
+
+        List<DataIsolationKeyDescriptor> keys = context.getProcesses().processIds().stream()
+                .map(DataIsolationKeyDescriptor::new)
+                .toList();
+
+        String unionSelects = IntStream.range(0, keys.size())
+                .mapToObj(i -> "SELECT CAST(:processId" + i + " AS STRING) AS processId")
+                .collect(Collectors.joining(" UNION ALL "));
+
+        String cte = "WITH allowed_processes AS (" + unionSelects + ") ";
+        String existsClause = "EXISTS (SELECT 1 FROM allowed_processes ap WHERE ap.processId = o.rootProcessId OR (o.rootProcessId IS NULL AND ap.processId = o.processId))";
+
+        return cte + baseQueryWithWhereClause + " AND " + existsClause;
+    }
+
+    private String buildUpdateQueryWithExistsWhenFiltering(JPAJobContext context, String baseUpdateQuery) {
+        if (!isFilterByLocalProcess(context)) {
+            return baseUpdateQuery;
+        }
+
+        List<DataIsolationKeyDescriptor> keys = context.getProcesses().processIds().stream()
+                .map(DataIsolationKeyDescriptor::new)
+                .toList();
+
+        String unionSelects = IntStream.range(0, keys.size())
+                .mapToObj(i -> "SELECT CAST(:processId" + i + " AS STRING) AS processId")
+                .collect(Collectors.joining(" UNION ALL "));
+
+        String existsClause = "AND EXISTS (SELECT 1 FROM (" + unionSelects + ") ap WHERE ap.processId = o.rootProcessId OR (o.rootProcessId IS NULL AND ap.processId = o.processId))";
+
+        return baseUpdateQuery + " " + existsClause;
+    }
+
+    private <T extends Query> void bindDataIsolationKeysWhenFiltering(JPAJobContext context, T query) {
+        if (isFilterByLocalProcess(context)) {
+            List<DataIsolationKeyDescriptor> keys = context.getProcesses().processIds().stream()
+                    .map(DataIsolationKeyDescriptor::new)
+                    .toList();
+
+            for (int i = 0; i < keys.size(); i++) {
+                query.setParameter("processId" + i, keys.get(i).processId());
+            }
+        }
     }
 
 }

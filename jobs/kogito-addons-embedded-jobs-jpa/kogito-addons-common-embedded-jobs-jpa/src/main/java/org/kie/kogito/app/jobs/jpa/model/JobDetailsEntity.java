@@ -47,6 +47,12 @@ public class JobDetailsEntity {
     @Column(name = "correlation_id")
     private String correlationId;
 
+    @Column(name = "process_id")
+    private String processId;
+
+    @Column(name = "root_process_id")
+    private String rootProcessId;
+
     private String status;
 
     @Column(name = "last_update")
@@ -102,6 +108,22 @@ public class JobDetailsEntity {
 
     public void setCorrelationId(String correlationId) {
         this.correlationId = correlationId;
+    }
+
+    public String getProcessId() {
+        return processId;
+    }
+
+    public void setProcessId(String processId) {
+        this.processId = processId;
+    }
+
+    public String getRootProcessId() {
+        return rootProcessId;
+    }
+
+    public void setRootProcessId(String rootProcessId) {
+        this.rootProcessId = rootProcessId;
     }
 
     public String getStatus() {
