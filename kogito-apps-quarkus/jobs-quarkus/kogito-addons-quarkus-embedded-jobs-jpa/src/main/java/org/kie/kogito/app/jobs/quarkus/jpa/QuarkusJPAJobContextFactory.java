@@ -20,8 +20,10 @@ package org.kie.kogito.app.jobs.quarkus.jpa;
 
 import org.kie.kogito.app.jobs.spi.JobContext;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
+import org.kie.kogito.process.Processes;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -31,11 +33,14 @@ import jakarta.transaction.Transactional;
 public class QuarkusJPAJobContextFactory implements JobContextFactory {
 
     @Inject
+    Instance<Processes> processes;
+
+    @Inject
     protected EntityManager entityManager;
 
     @Override
     public JobContext newContext() {
-        return new QuarkusJPAJobContext(entityManager);
+        return new QuarkusJPAJobContext(processes.isResolvable() ? processes.get() : null, entityManager);
     }
 
 }

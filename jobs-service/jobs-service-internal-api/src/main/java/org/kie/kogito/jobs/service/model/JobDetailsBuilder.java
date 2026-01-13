@@ -28,6 +28,8 @@ public class JobDetailsBuilder {
 
     private String id;
     private String correlationId;
+    private String processId;
+    private String rootProcessId;
     private JobStatus status;
     private ZonedDateTime lastUpdate;
     private Integer retries = 0;
@@ -48,6 +50,16 @@ public class JobDetailsBuilder {
 
     public JobDetailsBuilder correlationId(String correlationId) {
         this.correlationId = correlationId;
+        return this;
+    }
+
+    public JobDetailsBuilder processId(String processId) {
+        this.processId = processId;
+        return this;
+    }
+
+    public JobDetailsBuilder rootProcessId(String rootProcessId) {
+        this.rootProcessId = rootProcessId;
         return this;
     }
 
@@ -112,13 +124,15 @@ public class JobDetailsBuilder {
     }
 
     public JobDetails build() {
-        return new JobDetails(id, correlationId, status, lastUpdate, retries, executionCounter, scheduledId,
+        return new JobDetails(id, correlationId, processId, rootProcessId, status, lastUpdate, retries, executionCounter, scheduledId,
                 recipient, trigger, priority, executionTimeout, executionTimeoutUnit, created, exceptionDetails);
     }
 
     public JobDetailsBuilder of(JobDetails jobDetails) {
         return id(jobDetails.getId())
                 .correlationId(jobDetails.getCorrelationId())
+                .processId(jobDetails.getProcessId())
+                .rootProcessId(jobDetails.getRootProcessId())
                 .status(jobDetails.getStatus())
                 .lastUpdate(jobDetails.getLastUpdate())
                 .retries(jobDetails.getRetries())
@@ -152,6 +166,8 @@ public class JobDetailsBuilder {
                 .trigger(j.map(JobDetails::getTrigger).orElse(trigger))
                 .recipient(j.map(JobDetails::getRecipient).orElse(recipient))
                 .correlationId(j.map(JobDetails::getCorrelationId).orElse(correlationId))
+                .processId(j.map(JobDetails::getProcessId).orElse(processId))
+                .rootProcessId(j.map(JobDetails::getRootProcessId).orElse(rootProcessId))
                 .priority(j.map(JobDetails::getPriority).orElse(priority))
                 .executionCounter(j.map(JobDetails::getExecutionCounter).orElse(executionCounter))
                 .executionTimeout(j.map(JobDetails::getExecutionTimeout).orElse(executionTimeout))
