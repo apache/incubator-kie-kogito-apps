@@ -30,7 +30,7 @@ import org.kie.kogito.trusty.storage.api.model.decision.DMNModelWithMetadata;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
+import io.quarkus.test.junit.mockito.InjectSpy;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -44,7 +44,7 @@ public class ModelEventConsumerIT {
     @QuarkusTestProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
     String kafkaBootstrapServers;
 
-    @InjectMock
+    @InjectSpy
     TrustyService trustyService;
 
     KafkaTestClient kafkaClient;
