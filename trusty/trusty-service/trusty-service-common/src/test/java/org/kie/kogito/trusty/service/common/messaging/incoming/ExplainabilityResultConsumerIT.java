@@ -35,7 +35,7 @@ import org.kie.kogito.trusty.service.common.TrustyService;
 import io.cloudevents.CloudEvent;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectMock;
+import io.quarkus.test.junit.mockito.InjectSpy;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -50,7 +50,7 @@ public class ExplainabilityResultConsumerIT {
     @QuarkusTestProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
     String kafkaBootstrapServers;
 
-    @InjectMock
+    @InjectSpy
     TrustyService trustyService;
 
     KafkaTestClient kafkaClient;
