@@ -48,6 +48,10 @@ public class ContainsSQLFunction extends StandardSQLFunction {
         this.operator = operator;
     }
 
+    // Hibernate 7: must override the 4-param render (with ReturnableType) instead of the
+    // 3-param default method from FunctionRenderer, since the rendering pipeline dispatches
+    // to the 4-param version. Without this, the function renders as "contains(a, b)" instead
+    // of the intended "a ?? b" PostgreSQL operator syntax.
     @Override
     public void render(
             SqlAppender sqlAppender,
