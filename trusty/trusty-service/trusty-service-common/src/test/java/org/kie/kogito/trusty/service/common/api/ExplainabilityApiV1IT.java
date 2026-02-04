@@ -55,7 +55,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.IntNode;
 
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectSpy;
+import io.quarkus.test.InjectMock;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 
@@ -108,7 +108,7 @@ class ExplainabilityApiV1IT {
             Collections.emptyList(),
             Collections.emptyList());
 
-    @InjectSpy
+    @InjectMock
     TrustyService executionService;
 
     private static BaseExplainabilityResult buildValidExplainabilityResult() {
