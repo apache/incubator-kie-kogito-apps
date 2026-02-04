@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.dialect.function.StandardSQLFunction;
+import org.hibernate.metamodel.model.domain.ReturnableType;
 import org.hibernate.sql.ast.SqlAstTranslator;
 import org.hibernate.sql.ast.spi.SqlAppender;
 import org.hibernate.sql.ast.tree.SqlAstNode;
@@ -51,6 +52,7 @@ public class ContainsSQLFunction extends StandardSQLFunction {
     public void render(
             SqlAppender sqlAppender,
             List<? extends SqlAstNode> args,
+            ReturnableType<?> returnType,
             SqlAstTranslator<?> translator) {
         int size = args.size();
         if (size < 2) {
