@@ -18,6 +18,8 @@
  */
 package org.kie.kogito.app.audit.jpa.queries.mapper;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -43,7 +45,7 @@ public class ProcessInstanceStateTOMapper implements DataMapper<ProcessInstanceS
                 transformedData.add(current);
             }
             current.setEventId((String) row[0]);
-            current.setEventDate(toDateTime((Date) row[1]));
+            current.setEventDate(toDateTime(row[1]));
             current.setProcessType((String) row[2]);
             current.setProcessId((String) row[3]);
             current.setProcessVersion((String) row[4]);
@@ -55,7 +57,7 @@ public class ProcessInstanceStateTOMapper implements DataMapper<ProcessInstanceS
             current.setEventType((String) row[10]);
             current.setOutcome((String) row[11]);
             current.setState((String) row[12]);
-            current.setSlaDueDate(toDateTime((Date) row[13]));
+            current.setSlaDueDate(toDateTime(row[13]));
             current.addRole((String) data.get(idx)[14]);
             current.setEventUser((String) data.get(idx)[15]);
         }
@@ -63,7 +65,23 @@ public class ProcessInstanceStateTOMapper implements DataMapper<ProcessInstanceS
         return transformedData;
     }
 
-    public OffsetDateTime toDateTime(Date date) {
-        return (date != null) ? OffsetDateTime.ofInstant(date.toInstant(), ZoneId.of("UTC")) : null;
+    // Hibernate 7 returns OffsetDateTime instead of Date for native queries
+    public OffsetDateTime toDateTime(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof OffsetDateTime) {
+            return (OffsetDateTime) value;
+        }
+        if (value instanceof Date) {
+            return OffsetDateTime.ofInstant(((Date) value).toInstant(), ZoneId.of("UTC"));
+        }
+        if (value instanceof Instant) {
+            return OffsetDateTime.ofInstant((Instant) value, ZoneId.of("UTC"));
+        }
+        if (value instanceof LocalDateTime) {
+            return ((LocalDateTime) value).atZone(ZoneId.of("UTC")).toOffsetDateTime();
+        }
+        throw new IllegalArgumentException("Cannot convert " + value.getClass() + " to OffsetDateTime");
     }
 }

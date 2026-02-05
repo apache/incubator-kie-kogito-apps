@@ -18,6 +18,8 @@
  */
 package org.kie.kogito.app.audit.jpa.queries.mapper;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class UserTaskInstanceAssignmentTOMapper implements DataMapper<UserTaskIn
                 transformedData.add(current);
             }
             current.setEventId((String) row[0]);
-            current.setEventDate(toDateTime((Date) row[1]));
+            current.setEventDate(toDateTime(row[1]));
             current.setEventUser((String) row[2]);
             current.setUserTaskDefinitionId((String) row[3]);
             current.setUserTaskInstanceId((String) row[4]);
@@ -59,7 +61,23 @@ public class UserTaskInstanceAssignmentTOMapper implements DataMapper<UserTaskIn
         return transformedData;
     }
 
-    public OffsetDateTime toDateTime(Date date) {
-        return (date != null) ? OffsetDateTime.ofInstant(date.toInstant(), ZoneId.of("UTC")) : null;
+    // Hibernate 7 returns OffsetDateTime instead of Date for native queries
+    public OffsetDateTime toDateTime(Object value) {
+        if (value == null) {
+            return null;
+        }
+        if (value instanceof OffsetDateTime) {
+            return (OffsetDateTime) value;
+        }
+        if (value instanceof Date) {
+            return OffsetDateTime.ofInstant(((Date) value).toInstant(), ZoneId.of("UTC"));
+        }
+        if (value instanceof Instant) {
+            return OffsetDateTime.ofInstant((Instant) value, ZoneId.of("UTC"));
+        }
+        if (value instanceof LocalDateTime) {
+            return ((LocalDateTime) value).atZone(ZoneId.of("UTC")).toOffsetDateTime();
+        }
+        throw new IllegalArgumentException("Cannot convert " + value.getClass() + " to OffsetDateTime");
     }
 }
