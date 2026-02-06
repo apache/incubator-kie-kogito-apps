@@ -18,12 +18,9 @@
  */
 package org.kie.kogito.app.audit.jpa.queries.mapper;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import static org.kie.kogito.app.audit.jpa.queries.mapper.DateTimeUtil.toDateTime;
+
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.kie.kogito.app.audit.graphql.type.ProcessInstanceStateTO;
@@ -63,25 +60,5 @@ public class ProcessInstanceStateTOMapper implements DataMapper<ProcessInstanceS
         }
 
         return transformedData;
-    }
-
-    // Hibernate 7 returns OffsetDateTime instead of Date for native queries
-    public OffsetDateTime toDateTime(Object value) {
-        if (value == null) {
-            return null;
-        }
-        if (value instanceof OffsetDateTime) {
-            return (OffsetDateTime) value;
-        }
-        if (value instanceof Date) {
-            return OffsetDateTime.ofInstant(((Date) value).toInstant(), ZoneId.of("UTC"));
-        }
-        if (value instanceof Instant) {
-            return OffsetDateTime.ofInstant((Instant) value, ZoneId.of("UTC"));
-        }
-        if (value instanceof LocalDateTime) {
-            return ((LocalDateTime) value).atZone(ZoneId.of("UTC")).toOffsetDateTime();
-        }
-        throw new IllegalArgumentException("Cannot convert " + value.getClass() + " to OffsetDateTime");
     }
 }
