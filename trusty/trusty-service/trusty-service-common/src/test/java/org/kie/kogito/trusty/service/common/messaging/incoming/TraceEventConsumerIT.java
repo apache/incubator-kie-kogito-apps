@@ -28,9 +28,9 @@ import org.kie.kogito.trusty.service.common.TrustyService;
 import org.kie.kogito.trusty.service.common.TrustyServiceTestUtils;
 import org.kie.kogito.trusty.storage.api.model.decision.Decision;
 
+import io.quarkus.test.InjectMock;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.mockito.InjectSpy;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -43,7 +43,7 @@ import static org.mockito.Mockito.verify;
 @QuarkusTestResource(KafkaQuarkusTestResource.class)
 public class TraceEventConsumerIT {
 
-    @InjectSpy
+    @InjectMock
     TrustyService trustyService;
 
     KafkaTestClient kafkaClient;

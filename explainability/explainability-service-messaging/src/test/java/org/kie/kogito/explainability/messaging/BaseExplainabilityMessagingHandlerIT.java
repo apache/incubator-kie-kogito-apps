@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.cloudevents.CloudEvent;
-import io.quarkus.test.junit.mockito.InjectSpy;
+import io.quarkus.test.InjectMock;
 
 import jakarta.inject.Inject;
 
@@ -64,7 +64,7 @@ abstract class BaseExplainabilityMessagingHandlerIT {
     protected static final String SERVICE_URL = "http://localhost:8080";
     protected static final ModelIdentifier MODEL_IDENTIFIER = new ModelIdentifier("dmn", "namespace:name");
 
-    @InjectSpy
+    @InjectMock
     protected ExplanationService explanationService;
 
     @ConfigProperty(name = KafkaQuarkusTestResource.KOGITO_KAFKA_PROPERTY)
