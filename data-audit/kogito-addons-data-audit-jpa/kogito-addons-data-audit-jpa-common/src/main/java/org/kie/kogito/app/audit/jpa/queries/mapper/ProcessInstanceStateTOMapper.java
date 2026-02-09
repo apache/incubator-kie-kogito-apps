@@ -18,8 +18,6 @@
  */
 package org.kie.kogito.app.audit.jpa.queries.mapper;
 
-import static org.kie.kogito.app.audit.jpa.queries.mapper.DateTimeUtil.toDateTime;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +25,8 @@ import org.kie.kogito.app.audit.graphql.type.ProcessInstanceStateTO;
 import org.kie.kogito.app.audit.jpa.queries.DataMapper;
 
 import graphql.com.google.common.base.Objects;
+
+import static org.kie.kogito.app.audit.jpa.queries.mapper.DateTimeUtil.toDateTime;
 
 public class ProcessInstanceStateTOMapper implements DataMapper<ProcessInstanceStateTO, Object[]> {
     @Override
