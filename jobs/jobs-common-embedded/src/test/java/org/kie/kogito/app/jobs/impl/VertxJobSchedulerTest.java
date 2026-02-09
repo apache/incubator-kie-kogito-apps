@@ -22,10 +22,12 @@ package org.kie.kogito.app.jobs.impl;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.app.jobs.api.JobScheduler;
 import org.kie.kogito.app.jobs.api.JobSchedulerBuilder;
+import org.kie.kogito.app.jobs.integrations.DefaultJobExceptionDetailsExtractor;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
 import org.kie.kogito.app.jobs.spi.JobStore;
 import org.kie.kogito.app.jobs.spi.memory.MemoryJobContextFactory;
@@ -35,6 +37,7 @@ import org.kie.kogito.jobs.ExactExpirationTime;
 import org.kie.kogito.jobs.ExpirationTime;
 import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
+import org.kie.kogito.jobs.service.model.ScheduledJob;
 import org.kie.kogito.timer.impl.SimpleTimerTrigger;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -379,6 +382,91 @@ public class VertxJobSchedulerTest {
         assertThat(latchJobExecutor.getJobsExecuted()).hasSize(1);
         assertThat(memoryJobStore.find(jobContextFactory.newContext(), jobId)).isNull();
         assertThat(latchExecutionJobSchedulerListener.isExecuted()).isTrue();
+        jobScheduler.close();
+    }
+
+    @Test
+    public void testExceptionDetailsPropagationThroughEvents() throws Exception {
+        // Given: A job scheduler configured with event capture and retry
+        final String jobId = "exception-test-1";
+        final int NUMBER_OF_FAILURES = 2; // First execution + 1 retry
+        final int NUMBER_OF_RETRIES = NUMBER_OF_FAILURES - 1;
+
+        JobStore memoryJobStore = new MemoryJobStore();
+        JobContextFactory jobContextFactory = new MemoryJobContextFactory();
+        TestFailureJobExecutor failureExecutor = new TestFailureJobExecutor(NUMBER_OF_FAILURES);
+        TestEventPublisherWithCapture eventPublisher = new TestEventPublisherWithCapture();
+        LatchFailureJobSchedulerListener latchListener = new LatchFailureJobSchedulerListener(NUMBER_OF_FAILURES);
+
+        JobScheduler jobScheduler = JobSchedulerBuilder.newJobSchedulerBuilder()
+                .withMaxNumberOfRetries(NUMBER_OF_RETRIES)
+                .withJobExecutors(failureExecutor)
+                .withRetryInterval(1000L)
+                .withJobEventAdapters(new TestJobDetailsEventAdapter())
+                .withEventPublishers(eventPublisher)
+                .withJobContextFactory(jobContextFactory)
+                .withJobStore(memoryJobStore)
+                .withJobSchedulerListeners(latchListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
+                .withExceptionDetailsExtractor(new DefaultJobExceptionDetailsExtractor())
+                .build();
+
+        jobScheduler.init();
+
+        // When: Schedule a job that will fail twice (initial + 1 retry)
+        jobScheduler.schedule(new TestJobDescription(jobId, ZonedDateTime.now().plus(Duration.ofSeconds(1))));
+        latchListener.waitForExecution();
+
+        // Then: Verify the job ended in ERROR status
+        JobDetails jobDetails = memoryJobStore.find(jobContextFactory.newContext(), jobId);
+        assertThat(jobDetails).isNotNull();
+        assertThat(jobDetails.getStatus()).isEqualTo(JobStatus.ERROR);
+        assertThat(jobDetails.getExceptionDetails()).isNotNull();
+        assertThat(jobDetails.getExceptionDetails().exceptionMessage()).contains("RuntimeException");
+        assertThat(jobDetails.getExceptionDetails().exceptionDetails()).contains("Failure expected");
+
+        // And: Verify exception details were propagated through events
+        List<ScheduledJob> capturedJobs = eventPublisher.getCapturedJobs();
+        assertThat(capturedJobs).isNotEmpty();
+
+        // Find RETRY status events - should have exception details
+        List<ScheduledJob> retryJobs = capturedJobs.stream()
+                .filter(job -> "RETRY".equals(job.getStatus().name()))
+                .toList();
+
+        assertThat(retryJobs).isNotEmpty()
+                .as("Should have at least one RETRY event");
+
+        for (ScheduledJob retryJob : retryJobs) {
+            assertThat(retryJob.getExceptionDetails())
+                    .as("RETRY status event should contain exception details")
+                    .isNotNull();
+            assertThat(retryJob.getExceptionMessage())
+                    .as("RETRY event exception message should be propagated")
+                    .contains("RuntimeException");
+            assertThat(retryJob.getExceptionDetails())
+                    .as("RETRY event exception details should be propagated")
+                    .contains("Failure expected");
+        }
+
+        // Find the ERROR status event - should have exception details
+        ScheduledJob errorJob = capturedJobs.stream()
+                .filter(job -> "ERROR".equals(job.getStatus().name()))
+                .findFirst()
+                .orElse(null);
+
+        assertThat(errorJob).isNotNull()
+                .as("Should have an ERROR status event");
+        assertThat(errorJob.getExceptionDetails())
+                .as("ERROR status event should contain exception details")
+                .isNotNull();
+        assertThat(errorJob.getExceptionMessage())
+                .as("ERROR event exception message should be propagated")
+                .contains("RuntimeException");
+        assertThat(errorJob.getExceptionDetails())
+                .as("ERROR event exception details should be propagated")
+                .contains("Failure expected");
+
         jobScheduler.close();
     }
 

@@ -40,6 +40,7 @@ import org.kie.kogito.app.jobs.api.JobSchedulerListener;
 import org.kie.kogito.app.jobs.api.JobSynchronization;
 import org.kie.kogito.app.jobs.api.JobTimeoutExecution;
 import org.kie.kogito.app.jobs.api.JobTimeoutInterceptor;
+import org.kie.kogito.app.jobs.integrations.JobExceptionDetailsExtractor;
 import org.kie.kogito.app.jobs.integrations.ProcessInstanceJobDescriptionMerger;
 import org.kie.kogito.app.jobs.integrations.ProcessJobDescriptionMerger;
 import org.kie.kogito.app.jobs.integrations.UserTaskInstanceJobDescriptorMerger;
@@ -52,6 +53,7 @@ import org.kie.kogito.event.DataEvent;
 import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.jobs.JobDescription;
 import org.kie.kogito.jobs.service.model.JobDetails;
+import org.kie.kogito.jobs.service.model.JobExecutionExceptionDetails;
 import org.kie.kogito.jobs.service.model.JobStatus;
 import org.kie.kogito.jobs.service.model.RecipientInstance;
 import org.kie.kogito.jobs.service.utils.DateUtil;
@@ -107,6 +109,8 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
     public Integer numberOfWorkerThreads;
 
     private JobSynchronization jobSynchronization;
+
+    private JobExceptionDetailsExtractor exceptionDetailsExtractor;
 
     public class VertxJobSchedulerBuilder implements JobSchedulerBuilder {
 
@@ -197,6 +201,12 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         @Override
         public JobSchedulerBuilder withJobDescriptorMergers(JobDescriptionMerger... jobDescriptionMergers) {
             VertxJobScheduler.this.jobDescriptionMergers.addAll(List.of(jobDescriptionMergers));
+            return this;
+        }
+
+        @Override
+        public JobSchedulerBuilder withExceptionDetailsExtractor(JobExceptionDetailsExtractor exceptionDetailsExtractor) {
+            VertxJobScheduler.this.exceptionDetailsExtractor = exceptionDetailsExtractor;
             return this;
         }
 
@@ -407,6 +417,14 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                 } catch (Exception exception) {
                     LOG.trace("Timeout {} with jobId {} will be retried if possible", timerId, jobId, exception);
                     JobDetails nextJobDetails = computeRetryIfAny(jobDetails);
+
+                    // Extract and set exception details AFTER computeRetryIfAny but BEFORE persistence
+                    // Note: computeRetryIfAny creates a new JobDetails object, so we must set exception details after it
+                    JobExecutionExceptionDetails exceptionDetails = extractExceptionDetails(exception);
+                    if (exceptionDetails != null) {
+                        nextJobDetails.setExceptionDetails(exceptionDetails);
+                    }
+
                     fireEvents(nextJobDetails);
                     removeIfFinal(timerId, jobContext, nextJobDetails);
                     jobSchedulerListeners.forEach(l -> l.onFailure(jobDetails));
@@ -597,12 +615,27 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                     .status(JobStatus.SCHEDULED)
                     .retries(0)
                     .executionTimeout(jobDetails.getTrigger().hasNextFireTime().getTime())
+                    .exceptionDetails(null) // Clear exception details on successful execution
                     .build();
             LOG.trace("computeNextJobDetailsIfAny {}", nextJobDetails);
             return nextJobDetails;
         }
         LOG.trace("computeNextJobDetailsIfAny {}", jobDetails);
         return jobDetails;
+    }
+
+    /**
+     * Extracts exception details from a failed job execution using the configured extractor.
+     * The extractor implementation controls whether details are captured based on configuration.
+     *
+     * @param exception The exception that caused the job to fail
+     * @return JobExecutionExceptionDetails containing exception information, or null if disabled/exception is null
+     */
+    private JobExecutionExceptionDetails extractExceptionDetails(Exception exception) {
+        if (exceptionDetailsExtractor != null) {
+            return exceptionDetailsExtractor.extractExceptionDetails(exception);
+        }
+        return null;
     }
 
     private void fireEvents(JobDetails jobDetails) {

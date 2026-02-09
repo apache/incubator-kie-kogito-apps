@@ -81,6 +81,11 @@ public class JobExecutionLog {
     @Temporal(TemporalType.TIMESTAMP)
     private Date eventDate;
 
+    @Column(name = "exception_message")
+    private String exceptionMessage;
+    @Column(name = "exception_details")
+    private String exceptionDetails;
+
     public Long getId() {
         return id;
     }
@@ -183,5 +188,21 @@ public class JobExecutionLog {
 
     public void setEventDate(Timestamp eventDate) {
         this.eventDate = eventDate;
+    }
+
+    public String getExceptionDetails() {
+        return exceptionDetails;
+    }
+
+    public void setExceptionDetails(String exceptionDetails) {
+        this.exceptionDetails = exceptionDetails;
+    }
+
+    public String getExceptionMessage() {
+        return exceptionMessage;
+    }
+
+    public void setExceptionMessage(String exceptionMessage) {
+        this.exceptionMessage = exceptionMessage;
     }
 }
