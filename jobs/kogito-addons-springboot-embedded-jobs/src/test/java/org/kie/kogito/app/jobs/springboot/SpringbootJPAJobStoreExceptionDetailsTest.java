@@ -139,4 +139,3 @@ public class SpringbootJPAJobStoreExceptionDetailsTest {
         return TestJobDetailsFactory.createJobDetailsWithoutException(jobId);
     }
 }
-

@@ -140,4 +140,3 @@ public class QuarkusJPAJobStoreExceptionDetailsTest {
         return TestJobDetailsFactory.createJobDetailsWithoutException(jobId);
     }
 }
-

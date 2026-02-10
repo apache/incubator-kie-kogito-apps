@@ -86,4 +86,3 @@ public class TestEventPublisherWithCapture extends TestEventPublisher {
         capturedJobs.clear();
     }
 }
-
