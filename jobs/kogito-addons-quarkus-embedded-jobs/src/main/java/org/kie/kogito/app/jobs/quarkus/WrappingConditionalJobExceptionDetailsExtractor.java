@@ -25,6 +25,7 @@ import org.kie.kogito.jobs.service.model.JobExecutionExceptionDetails;
 
 import io.quarkus.arc.All;
 
+import jakarta.annotation.PostConstruct;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
@@ -64,18 +65,27 @@ public class WrappingConditionalJobExceptionDetailsExtractor implements JobExcep
     @All // Injects all other implementations
     Instance<JobExceptionDetailsExtractor> allExtractors;
 
+    private JobExceptionDetailsExtractor delegate;
+
+    @PostConstruct
+    void init() {
+        // Resolve the delegate once during initialization
+        if (exceptionDetailsEnabled) {
+            delegate = allExtractors.stream()
+                    .filter(impl -> !(impl instanceof WrappingConditionalJobExceptionDetailsExtractor))
+                    .findFirst()
+                    .orElse(new DefaultJobExceptionDetailsExtractor());
+        }
+    }
+
     @Override
     public JobExecutionExceptionDetails extractExceptionDetails(Exception e) {
-        // Hijack logic: Check the property first
-        if (!exceptionDetailsEnabled) {
+        // If disabled or no delegate, return null
+        if (delegate == null) {
             return null;
         }
 
-        // Find the 'real' delegate, excluding this specific class
-        return allExtractors.stream()
-                .filter(impl -> !(impl instanceof WrappingConditionalJobExceptionDetailsExtractor))
-                .findFirst()
-                .map(delegate -> delegate.extractExceptionDetails(e))
-                .orElse(new DefaultJobExceptionDetailsExtractor().extractExceptionDetails(e));
+        // Use the pre-resolved delegate
+        return delegate.extractExceptionDetails(e);
     }
 }

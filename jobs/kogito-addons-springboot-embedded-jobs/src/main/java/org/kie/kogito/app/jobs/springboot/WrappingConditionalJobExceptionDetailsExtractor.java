@@ -28,6 +28,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import jakarta.annotation.PostConstruct;
+
 /**
  * Spring Boot configuration for JobExceptionDetailsExtractor.
  * This is the ONLY source of JobExceptionDetailsExtractor beans in the application.
@@ -39,7 +41,7 @@ import org.springframework.stereotype.Component;
  * This ensures sensitive exception details are never exposed unless explicitly enabled.
  *
  * To provide a custom implementation, create a Component bean:
- * 
+ *
  * <pre>
  * {
  *     &#64;code
@@ -62,17 +64,26 @@ public class WrappingConditionalJobExceptionDetailsExtractor implements JobExcep
     @Lazy
     List<JobExceptionDetailsExtractor> allExtractors;
 
+    private JobExceptionDetailsExtractor delegate;
+
+    @PostConstruct
+    void init() {
+        // Resolve the delegate once during initialization
+        if (exceptionDetailsEnabled && allExtractors != null) {
+            delegate = allExtractors.stream()
+                    .filter(impl -> impl != this) // Break the recursion
+                    .findFirst()
+                    .orElse(new DefaultJobExceptionDetailsExtractor());
+        }
+    }
+
     public JobExecutionExceptionDetails extractExceptionDetails(Exception e) {
-        // If disabled, return null (no exception details will be extracted)
-        if (!exceptionDetailsEnabled) {
+        // If disabled or no delegate, return null
+        if (delegate == null) {
             return null;
         }
 
-        // Logic to find the "real" delegate while avoiding a loop
-        return allExtractors.stream()
-                .filter(impl -> impl != this) // Break the recursion
-                .findFirst()
-                .map(delegate -> delegate.extractExceptionDetails(e))
-                .orElse(new DefaultJobExceptionDetailsExtractor().extractExceptionDetails(e));
+        // Use the pre-resolved delegate
+        return delegate.extractExceptionDetails(e);
     }
 }

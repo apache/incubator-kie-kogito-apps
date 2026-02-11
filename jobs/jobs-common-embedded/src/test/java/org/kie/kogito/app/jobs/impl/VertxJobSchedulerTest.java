@@ -326,7 +326,7 @@ public class VertxJobSchedulerTest {
     public void testEventPublishedOnErrorWithRetry() throws Exception {
         final int NUMBER_OF_FAILURES = 2; // first execution + number of retries
         final int NUMBER_OF_RETRIES = NUMBER_OF_FAILURES - 1;
-        int EXPECTED_EVENTS = 6; // SCHEDULED, RUNNING, 2xRETRY, RUNNING, ERROR
+        int EXPECTED_EVENTS = 5; // SCHEDULED, RUNNING, RETRY, RUNNING, ERROR
 
         final String jobId = "1";
         JobStore memoryJobStore = new MemoryJobStore();
@@ -455,8 +455,7 @@ public class VertxJobSchedulerTest {
                 .findFirst()
                 .orElse(null);
 
-        assertThat(errorJob).isNotNull()
-                .as("Should have an ERROR status event");
+        assertThat(errorJob).as("Should have an ERROR status event").isNotNull();
         assertThat(errorJob.getExceptionDetails())
                 .as("ERROR status event should contain exception details")
                 .isNotNull();
@@ -466,6 +465,167 @@ public class VertxJobSchedulerTest {
         assertThat(errorJob.getExceptionDetails())
                 .as("ERROR event exception details should be propagated")
                 .contains("Failure expected");
+
+        jobScheduler.close();
+    }
+
+    @Test
+    public void testExceptionDetailsClearedOnSuccessfulRetry() throws Exception {
+        // Given: A job scheduler configured with exception details extraction and retries
+        final String jobId = "retry-success-test";
+        final int NUMBER_OF_FAILURES = 2; // Fail twice, then succeed on third attempt
+
+        JobStore memoryJobStore = new MemoryJobStore();
+        JobContextFactory jobContextFactory = new MemoryJobContextFactory();
+        TestFailureJobExecutor failureExecutor = new TestFailureJobExecutor(NUMBER_OF_FAILURES);
+        TestEventPublisherWithCapture eventPublisher = new TestEventPublisherWithCapture();
+        LatchExecutionJobSchedulerListener latchListener = new LatchExecutionJobSchedulerListener();
+
+        JobScheduler jobScheduler = JobSchedulerBuilder.newJobSchedulerBuilder()
+                .withMaxNumberOfRetries(3) // Allow enough retries for success
+                .withJobExecutors(failureExecutor)
+                .withRetryInterval(1000L)
+                .withJobEventAdapters(new TestJobDetailsEventAdapter())
+                .withEventPublishers(eventPublisher)
+                .withJobContextFactory(jobContextFactory)
+                .withJobStore(memoryJobStore)
+                .withJobSchedulerListeners(latchListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
+                .withExceptionDetailsExtractor(new DefaultJobExceptionDetailsExtractor())
+                .build();
+
+        jobScheduler.init();
+
+        // When: Schedule a job that will fail twice then succeed
+        jobScheduler.schedule(new TestJobDescription(jobId, ZonedDateTime.now().plus(Duration.ofSeconds(1))));
+        latchListener.waitForExecution();
+
+        // Then: Verify the job completed successfully (removed from store)
+        JobDetails jobDetails = memoryJobStore.find(jobContextFactory.newContext(), jobId);
+        assertThat(jobDetails).as("Job should be removed from store after successful execution").isNull();
+
+        // And: Verify exception details lifecycle through events
+        List<ScheduledJob> capturedJobs = eventPublisher.getCapturedJobs();
+        assertThat(capturedJobs).isNotEmpty();
+
+        // Verify SCHEDULED event has no exception details
+        List<ScheduledJob> scheduledJobs = capturedJobs.stream()
+                .filter(job -> "SCHEDULED".equals(job.getStatus().name()))
+                .toList();
+        assertThat(scheduledJobs).hasSize(1);
+        assertThat(scheduledJobs.get(0).getExceptionDetails())
+                .as("SCHEDULED status should not have exception details")
+                .isNull();
+
+        // Verify first RUNNING event has no exception details
+        List<ScheduledJob> runningJobs = capturedJobs.stream()
+                .filter(job -> "RUNNING".equals(job.getStatus().name()))
+                .toList();
+        assertThat(runningJobs)
+                .as("Should have at least 2 RUNNING events (initial + retry)")
+                .hasSizeGreaterThanOrEqualTo(2);
+
+        for (ScheduledJob runningJob : runningJobs) {
+            assertThat(runningJob.getExceptionDetails())
+                    .as("RUNNING status should not have exception details (cleared on each attempt)")
+                    .isNull();
+        }
+
+        // Verify RETRY events have exception details
+        List<ScheduledJob> retryJobs = capturedJobs.stream()
+                .filter(job -> "RETRY".equals(job.getStatus().name()))
+                .toList();
+        assertThat(retryJobs)
+                .as("Should have " + NUMBER_OF_FAILURES + " RETRY events")
+                .hasSize(NUMBER_OF_FAILURES);
+
+        for (ScheduledJob retryJob : retryJobs) {
+            assertThat(retryJob.getExceptionDetails())
+                    .as("RETRY status should have exception details")
+                    .isNotNull();
+            assertThat(retryJob.getExceptionMessage())
+                    .as("RETRY event should have exception message")
+                    .contains("RuntimeException");
+        }
+
+        // Verify EXECUTED event has no exception details
+        List<ScheduledJob> executedJobs = capturedJobs.stream()
+                .filter(job -> "EXECUTED".equals(job.getStatus().name()))
+                .toList();
+        assertThat(executedJobs)
+                .as("Should have at least one EXECUTED event")
+                .isNotEmpty();
+
+        for (ScheduledJob executedJob : executedJobs) {
+            assertThat(executedJob.getExceptionDetails())
+                    .as("EXECUTED status should not have exception details after successful execution")
+                    .isNull();
+            assertThat(executedJob.getExceptionMessage())
+                    .as("EXECUTED status should not have exception message after successful execution")
+                    .isNull();
+        }
+
+        jobScheduler.close();
+    }
+
+    @Test
+    public void testExceptionDetailsClearedOnSuccessfulPeriodicJobRetry() throws Exception {
+        // Given: A periodic job scheduler with exception details extraction
+        final String jobId = "periodic-retry-success-test";
+        final int NUMBER_OF_FAILURES = 1; // Fail once, then succeed
+
+        JobStore memoryJobStore = new MemoryJobStore();
+        JobContextFactory jobContextFactory = new MemoryJobContextFactory();
+        TestFailureJobExecutor failureExecutor = new TestFailureJobExecutor(NUMBER_OF_FAILURES);
+        TestEventPublisherWithCapture eventPublisher = new TestEventPublisherWithCapture();
+        LatchExecutionJobSchedulerListener latchListener = new LatchExecutionJobSchedulerListener(2); // Wait for 2 executions
+
+        JobScheduler jobScheduler = JobSchedulerBuilder.newJobSchedulerBuilder()
+                .withMaxNumberOfRetries(2)
+                .withJobExecutors(failureExecutor)
+                .withRetryInterval(1000L)
+                .withJobEventAdapters(new TestJobDetailsEventAdapter())
+                .withEventPublishers(eventPublisher)
+                .withJobContextFactory(jobContextFactory)
+                .withJobStore(memoryJobStore)
+                .withJobSchedulerListeners(latchListener)
+                .withJobDescriptorMergers(new TestJobDescriptionMerger())
+                .withExceptionDetailsExtractor(new DefaultJobExceptionDetailsExtractor())
+                .build();
+
+        jobScheduler.init();
+
+        // When: Schedule a periodic job that fails once then succeeds
+        ExpirationTime expirationTime = DurationExpirationTime.repeat(1, 2000L, 2); // 2 executions
+        jobScheduler.schedule(new TestJobDescription(jobId, expirationTime));
+        latchListener.waitForExecution();
+
+        // Then: Verify the job completed all executions (removed from store)
+        JobDetails jobDetails = memoryJobStore.find(jobContextFactory.newContext(), jobId);
+        assertThat(jobDetails).as("Periodic job should be removed after all executions complete").isNull();
+
+        // And: Verify exception details are cleared when rescheduling after successful execution
+        List<ScheduledJob> capturedJobs = eventPublisher.getCapturedJobs();
+        assertThat(capturedJobs).isNotEmpty();
+
+        // Find all SCHEDULED events (initial + after first successful execution)
+        List<ScheduledJob> scheduledJobs = capturedJobs.stream()
+                .filter(job -> "SCHEDULED".equals(job.getStatus().name()))
+                .toList();
+        assertThat(scheduledJobs)
+                .as("Should have at least 2 SCHEDULED events for periodic job")
+                .hasSizeGreaterThanOrEqualTo(2);
+
+        // Verify the second SCHEDULED event (after retry and success) has no exception details
+        if (scheduledJobs.size() >= 2) {
+            ScheduledJob rescheduledJob = scheduledJobs.get(1);
+            assertThat(rescheduledJob.getExceptionDetails())
+                    .as("Rescheduled job after successful execution should not have exception details")
+                    .isNull();
+            assertThat(rescheduledJob.getExceptionMessage())
+                    .as("Rescheduled job after successful execution should not have exception message")
+                    .isNull();
+        }
 
         jobScheduler.close();
     }
