@@ -18,6 +18,8 @@
  */
 
 -- Add exception details columns to jobs table
-ALTER TABLE jobs ADD exception_message character varying(500);
-ALTER TABLE jobs ADD exception_details varchar(max);
+-- exception_message: VARCHAR without length constraint for full flexibility
+-- exception_details: TEXT type for large content without space reservation when NULL
+ALTER TABLE jobs ADD exception_message VARCHAR;
+ALTER TABLE jobs ADD exception_details TEXT;
 

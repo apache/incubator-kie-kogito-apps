@@ -83,7 +83,8 @@ public class JobExecutionLog {
 
     @Column(name = "exception_message")
     private String exceptionMessage;
-    @Column(name = "exception_details")
+
+    @Column(name = "exception_details", columnDefinition = "TEXT")
     private String exceptionDetails;
 
     public Long getId() {

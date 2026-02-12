@@ -17,6 +17,9 @@
  * under the License.
  */
 
-ALTER TABLE Job_Execution_Log ADD COLUMN exception_message VARCHAR(500);
-ALTER TABLE Job_Execution_Log ADD COLUMN exception_details VARCHAR(4000);
+-- Add exception details columns to Job_Execution_Log table
+-- exception_message: VARCHAR without length constraint for full flexibility
+-- exception_details: TEXT type for large content without space reservation when NULL
+ALTER TABLE Job_Execution_Log ADD COLUMN exception_message VARCHAR;
+ALTER TABLE Job_Execution_Log ADD COLUMN exception_details TEXT;
 

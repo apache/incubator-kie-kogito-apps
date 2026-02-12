@@ -18,6 +18,8 @@
  */
 
 -- Add exception details columns to job_details table for Embedded Jobs Addon
-ALTER TABLE job_details ADD COLUMN exception_message varchar(500);
-ALTER TABLE job_details ADD COLUMN exception_details varchar(4000);
+-- exception_message: VARCHAR without length constraint for full flexibility
+-- exception_details: TEXT type for large content without space reservation when NULL
+ALTER TABLE job_details ADD COLUMN exception_message VARCHAR;
+ALTER TABLE job_details ADD COLUMN exception_details TEXT;
 

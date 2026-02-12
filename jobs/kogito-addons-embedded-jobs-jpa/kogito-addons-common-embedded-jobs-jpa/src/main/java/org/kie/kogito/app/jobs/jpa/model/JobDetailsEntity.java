@@ -82,10 +82,10 @@ public class JobDetailsEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private OffsetDateTime created;
 
-    @Column(name = "exception_message", length = 500)
+    @Column(name = "exception_message")
     private String exceptionMessage;
 
-    @Column(name = "exception_details", length = 4000)
+    @Column(name = "exception_details", columnDefinition = "TEXT")
     private String exceptionDetails;
 
     public String getId() {
