@@ -24,6 +24,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.ServiceLoader;
 import java.util.Set;
 
 import org.kie.kogito.event.process.MultipleProcessInstanceDataEvent;
@@ -49,7 +50,9 @@ import org.kie.kogito.index.model.CancelType;
 import org.kie.kogito.index.model.MilestoneStatus;
 import org.kie.kogito.index.model.ProcessInstance;
 import org.kie.kogito.index.storage.ProcessInstanceStorage;
+import org.kie.kogito.jackson.utils.JsonObjectUtils;
 import org.kie.kogito.persistence.api.StorageServiceCapability;
+import org.kie.kogito.persistence.api.StorageServiceCapabilityProvider;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Instance;
@@ -215,6 +218,12 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
         if (body.isRetrigger() != null) {
             nodeInstance.setRetrigger(body.isRetrigger());
         }
+        if (body.getInputParameters() != null) {
+            nodeInstance.setInputArgs(JsonObjectUtils.fromValue(body.getInputParameters()));
+        }
+        if (body.getOutputParameters() != null) {
+            nodeInstance.setOutputArgs(JsonObjectUtils.fromValue(body.getOutputParameters()));
+        }
         ZonedDateTime eventDate = toZonedDateTime(body.getEventDate());
         switch (body.getEventType()) {
             case EVENT_TYPE_ABORTED:
@@ -279,6 +288,8 @@ public class ProcessInstanceEntityStorage extends AbstractJPAStorageFetcher<Stri
 
     @Override
     public Set<StorageServiceCapability> capabilities() {
-        return EnumSet.of(StorageServiceCapability.COUNT);
+        Set<StorageServiceCapability> result = EnumSet.of(StorageServiceCapability.COUNT);
+        ServiceLoader.load(StorageServiceCapabilityProvider.class).forEach(s -> result.addAll(s.capabilities()));
+        return result;
     }
 }
