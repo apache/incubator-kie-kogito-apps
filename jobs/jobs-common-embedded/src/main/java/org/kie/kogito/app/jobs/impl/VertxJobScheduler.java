@@ -65,77 +65,6 @@ import io.vertx.core.WorkerExecutor;
 
 /**
  * Vertx-based implementation of JobScheduler that manages job lifecycle and execution.
- *
- * <h2>Architecture Overview</h2>
- * <p>
- * This scheduler uses a separation of concerns pattern with two main components:
- *
- * <h3>1. Job Lifecycle Transition Methods (do* pattern)</h3>
- * <p>
- * These methods handle status transitions and event firing:
- * <ul>
- * <li>{@link #doSchedule(JobDetails)} - Transitions to SCHEDULED status</li>
- * <li>{@link #doRun(JobDetails)} - Transitions to RUNNING status</li>
- * <li>{@link #doExecute(JobDetails)} - Executes job and transitions to EXECUTED status</li>
- * <li>{@link #doCancel(JobDetails)} - Transitions to CANCELED status</li>
- * <li>{@link #doRetryOrError(JobDetails, Exception)} - Transitions to RETRY or ERROR status</li>
- * </ul>
- *
- * <p>
- * All do* methods follow a consistent pattern:
- * <ol>
- * <li>Create a new JobDetails with the target status</li>
- * <li>Fire events to notify listeners of the status change</li>
- * <li>Return the new JobDetails (caller handles infrastructure)</li>
- * </ol>
- *
- * <h3>2. Infrastructure Management</h3>
- * <p>
- * {@link #reconcileScheduling(Long, JobContext, JobDetails)} centralizes timer and storage operations:
- * <ul>
- * <li><b>EXECUTED/CANCELED:</b> Removes timer and deletes job from storage</li>
- * <li><b>SCHEDULED/RETRY:</b> Adds/updates timer and updates job in storage</li>
- * <li><b>ERROR:</b> Removes timer but keeps job in storage for tracking</li>
- * </ul>
- *
- * <h2>Benefits of This Design</h2>
- * <ul>
- * <li><b>Single Responsibility:</b> Status transitions separated from infrastructure management</li>
- * <li><b>Consistency:</b> All status transitions follow the same pattern</li>
- * <li><b>Maintainability:</b> Clear separation makes code easier to understand and modify</li>
- * <li><b>Correctness:</b> Events fired once with complete information</li>
- * </ul>
- *
- * <h2>Timer Management</h2>
- * <p>
- * Uses Vertx timers as the first-class citizen for job scheduling. Timer operations are
- * transaction-aware via {@link JobSynchronization}, ensuring that timer changes are synchronized
- * with storage transactions. The {@link #addOrUpdateTxTimer(JobDetails)} method efficiently
- * updates existing timers without requiring explicit removal.
- *
- * <h2>Event Publishing Behavior</h2>
- * <p>
- * <b>Important:</b> Event publishing is <i>transaction-aware</i>. When {@link #fireEvents(JobDetails)} is called,
- * it invokes {@link org.kie.kogito.event.EventPublisher#publish(org.kie.kogito.event.DataEvent)} methods that are
- * annotated with {@code @Transactional}. This means:
- * <ul>
- * <li><b>Events participate in the transaction:</b> The publish() call joins the existing transaction</li>
- * <li><b>Events fire after commit:</b> Events are buffered and only sent after successful transaction commit</li>
- * <li><b>Rollback safety:</b> If the transaction rolls back, events are NOT published</li>
- * </ul>
- *
- * <p>
- * This transaction-aware behavior ensures:
- * <ul>
- * <li>Data consistency: Events only reflect committed state changes</li>
- * <li>No phantom events: Failed operations don't generate misleading events</li>
- * <li>Reliable event ordering: Events correspond to actual persisted state</li>
- * </ul>
- *
- * <p>
- * <b>Implementation Note:</b> The transaction awareness comes from the {@code EventPublisher} implementations
- * (e.g., {@code QuarkusDataAuditEventPublisher}, {@code SpringbootDataAuditEventPublisher}) which have
- * {@code @Transactional} annotations on their {@code publish()} methods.
  */
 public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
@@ -508,23 +437,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         return current;
     }
 
-    /**
-     * Reconciles the scheduling infrastructure (timers and storage) based on the job's status.
-     * This method ensures that timers and persistent storage are kept in sync with the job's lifecycle state.
-     *
-     * <p>
-     * Behavior by job status:
-     * <ul>
-     * <li><b>EXECUTED/CANCELED:</b> Removes the timer and deletes the job from storage (job lifecycle complete)</li>
-     * <li><b>SCHEDULED/RETRY:</b> Adds or updates the timer and updates the job in storage (job needs to run/retry)</li>
-     * <li><b>ERROR:</b> Removes the timer but keeps the job in storage for error tracking</li>
-     * <li><b>RUNNING:</b> No action (should not occur as this is called after status transitions)</li>
-     * </ul>
-     *
-     * @param timerId the ID of the timer being processed (may be null for non-timer-triggered calls)
-     * @param jobContext the job context for storage operations
-     * @param nextJobDetails the job details with the new status to reconcile
-     */
     private void reconcileScheduling(Long timerId, JobContext jobContext, JobDetails nextJobDetails) {
         String jobId = nextJobDetails.getId();
         switch (nextJobDetails.getStatus()) {
@@ -607,13 +519,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         this.vertx.cancelTimer(timerId);
     }
 
-    /**
-     * Transitions a job to SCHEDULED status.
-     * Creates a new JobDetails with SCHEDULED status and fires the corresponding event.
-     *
-     * @param jobDetails the job to schedule
-     * @return new JobDetails with SCHEDULED status
-     */
     private JobDetails doSchedule(JobDetails jobDetails) {
         JobDetails scheduledJobDetails = JobDetails.builder()
                 .of(jobDetails)
@@ -624,13 +529,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         return scheduledJobDetails;
     }
 
-    /**
-     * Transitions a job to RUNNING status.
-     * Creates a new JobDetails with RUNNING status, clears exception details, and fires the corresponding event.
-     *
-     * @param jobDetails the job to run
-     * @return new JobDetails with RUNNING status and cleared exception details
-     */
     private JobDetails doRun(JobDetails jobDetails) {
         JobDetails runJobDetails = JobDetails.builder().of(jobDetails).status(JobStatus.RUNNING).exceptionDetails(null).build();
         LOG.trace("doRun {}", runJobDetails);
@@ -638,13 +536,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         return runJobDetails;
     }
 
-    /**
-     * Transitions a job to CANCELED status.
-     * Creates a new JobDetails with CANCELED status and fires the corresponding event.
-     *
-     * @param jobDetails the job to cancel
-     * @return new JobDetails with CANCELED status
-     */
     private JobDetails doCancel(JobDetails jobDetails) {
         JobDetails canceledJobDetails = JobDetails.builder().of(jobDetails).status(JobStatus.CANCELED).build();
         LOG.trace("doCancel {}", canceledJobDetails);
@@ -652,13 +543,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         return canceledJobDetails;
     }
 
-    /**
-     * Executes a job and transitions it to EXECUTED status.
-     * Invokes all applicable job executors, increments the execution counter, and fires the corresponding event.
-     *
-     * @param jobDetails the job to execute
-     * @return new JobDetails with EXECUTED status and incremented execution counter
-     */
     private JobDetails doExecute(JobDetails jobDetails) {
         List<JobExecutor> validExecutors = jobExecutors.stream().filter(executor -> executor.accept(jobDetails)).toList();
         LOG.trace("valid executors are: {}", validExecutors);
@@ -669,22 +553,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         return executedJobDetails;
     }
 
-    /**
-     * Handles job failure by transitioning to either RETRY or ERROR status.
-     *
-     * <p>
-     * This method differs from other do* methods as it:
-     * <ol>
-     * <li>Determines the target status (RETRY or ERROR) based on retry count</li>
-     * <li>Creates the JobDetails via helper methods (createRetryJobDetails/createErrorJobDetails)</li>
-     * <li>Extracts and sets exception details BEFORE firing events</li>
-     * <li>Fires events with exception details already populated</li>
-     * </ol>
-     *
-     * @param jobDetails the failed job
-     * @param exception the exception that caused the failure
-     * @return new JobDetails with RETRY or ERROR status and exception details
-     */
     private JobDetails doRetryOrError(JobDetails jobDetails, Exception exception) {
         Integer retryCounter = jobDetails.getRetries();
         // First, create the next JobDetails (RETRY or ERROR) without firing events
@@ -704,14 +572,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         return nextJobDetails;
     }
 
-    /**
-     * Creates JobDetails for a retry attempt.
-     * Updates the trigger to schedule the retry after the configured retry interval,
-     * increments the retry counter, and adjusts the execution timeout.
-     *
-     * @param jobDetails the job to retry
-     * @return new JobDetails with RETRY status and updated trigger/timeout
-     */
     private JobDetails createRetryJobDetails(JobDetails jobDetails) {
         Date now = Date.from(DateUtil.now().plus(Duration.ofMillis(retryInterval)).toInstant());
         Trigger newTrigger = setTriggerDate(jobDetails.getTrigger(), now);
@@ -725,12 +585,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                 .build();
     }
 
-    /**
-     * Creates JobDetails for a job that has exceeded its retry limit.
-     *
-     * @param jobDetails the job that failed all retries
-     * @return new JobDetails with ERROR status
-     */
     private JobDetails createErrorJobDetails(JobDetails jobDetails) {
         return JobDetails.builder().of(jobDetails).status(JobStatus.ERROR).build();
     }
@@ -781,18 +635,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         return jobDetails;
     }
 
-    /**
-     * Extracts exception details from a failed job execution and sets them on the JobDetails object.
-     * The extractor implementation controls whether details are captured based on configuration.
-     *
-     * <p>
-     * This method is called by {@link #doRetryOrError(JobDetails, Exception)} after creating
-     * the RETRY or ERROR JobDetails but before firing events. This ensures that exception details
-     * are included in the published events.
-     *
-     * @param jobDetails The JobDetails object to update with exception information
-     * @param exception The exception that caused the job to fail
-     */
     private void extractAndSetExceptionDetails(JobDetails jobDetails, Exception exception) {
         if (exceptionDetailsExtractor != null) {
             JobExecutionExceptionDetails exceptionDetails = exceptionDetailsExtractor.extractExceptionDetails(exception);
@@ -802,29 +644,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         }
     }
 
-    /**
-     * Publishes job status change events to all registered event publishers.
-     *
-     * <p>
-     * <b>Transaction-Aware Publishing:</b> This method calls {@link org.kie.kogito.event.EventPublisher#publish}
-     * methods that are annotated with {@code @Transactional}. This means:
-     * <ul>
-     * <li>Events participate in the current transaction</li>
-     * <li>Events are buffered and only sent after successful transaction commit</li>
-     * <li>If the transaction rolls back, events are NOT published</li>
-     * </ul>
-     *
-     * <p>
-     * This ensures data consistency - events only reflect committed state changes, and failed
-     * operations don't generate misleading events.
-     *
-     * @param jobDetails the job details to publish events for
-     * @see #doSchedule(JobDetails)
-     * @see #doRun(JobDetails)
-     * @see #doExecute(JobDetails)
-     * @see #doCancel(JobDetails)
-     * @see #doRetryOrError(JobDetails, Exception)
-     */
     private void fireEvents(JobDetails jobDetails) {
         List<DataEvent<byte[]>> jobInstanceEvents = jobEventAdapters.stream().filter(e -> e.accept(jobDetails)).map(e -> e.adapt(jobDetails)).toList();
         for (DataEvent<byte[]> jobEvent : jobInstanceEvents) {
