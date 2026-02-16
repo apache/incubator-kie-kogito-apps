@@ -23,7 +23,10 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -380,11 +383,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
     public void cancel(String jobId) {
         JobContext jobContext = jobContextFactory.newContext();
         JobDetails jobDetails = jobStore.find(jobContext, jobId);
-        if (Set.of(JobStatus.RUNNING, JobStatus.ERROR, JobStatus.EXECUTED).contains(jobDetails.getStatus())) {
-            // Skipping canceling of jobs that are already running, or finished (either executed correctly or ended in error).
-            LOG.debug("Skipping cancelling of job with id {} due to its state being {}.", jobId, jobDetails.getStatus());
-            return;
-        }
         JobDetails cancelledJobDetails = doCancel(jobDetails);
         jobSchedulerListeners.forEach(l -> l.onCancel(cancelledJobDetails));
         reconcileScheduling(null, jobContext, cancelledJobDetails);
