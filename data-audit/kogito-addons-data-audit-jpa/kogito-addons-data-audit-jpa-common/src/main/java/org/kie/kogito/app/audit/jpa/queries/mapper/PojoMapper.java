@@ -87,7 +87,7 @@ public class PojoMapper<T> implements DataMapper<T, Object[]> {
                 return Date.from((Instant) value);
             }
             if (value instanceof LocalDateTime) {
-                return Date.from(((LocalDateTime) value).atZone(ZoneId.systemDefault()).toInstant());
+                return Date.from(((LocalDateTime) value).atZone(ZoneId.of("UTC")).toInstant());
             }
         }
         // Hibernate 7 may return different numeric types for native query columns

@@ -60,6 +60,7 @@ import static org.kie.kogito.index.graphql.GraphQLObjectTypeMapper.getTypeName;
 public class GraphQLProtoSchemaMapper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLProtoSchemaMapper.class);
+    private static final JsonPropertyDataFetcher JSON_PROPERTY_DATA_FETCHER = new JsonPropertyDataFetcher();
 
     @Inject
     GraphQLSchemaManagerImpl schemaManager;
@@ -123,7 +124,7 @@ public class GraphQLProtoSchemaMapper {
                 // so PropertyDataFetcher is no longer intercepted for JsonNode-based sources (MongoDB).
                 // Set default data fetcher factory to JsonPropertyDataFetcher which handles both
                 // JsonNode (MongoDB) and POJO (PostgreSQL) sources.
-                codeBuilder.defaultDataFetcher(env -> new JsonPropertyDataFetcher());
+                codeBuilder.defaultDataFetcher(env -> JSON_PROPERTY_DATA_FETCHER);
             });
 
             builder.codeRegistry(registry);
