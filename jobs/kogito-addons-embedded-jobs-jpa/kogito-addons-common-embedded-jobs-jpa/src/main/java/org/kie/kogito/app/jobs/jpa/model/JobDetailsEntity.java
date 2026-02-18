@@ -30,6 +30,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "job_details",
@@ -48,7 +50,7 @@ public class JobDetailsEntity {
     private String status;
 
     @Column(name = "last_update")
-    // @Temporal not needed for OffsetDateTime in Hibernate 7 / JPA 3.2
+    @Temporal(TemporalType.TIMESTAMP)
     private OffsetDateTime lastUpdate;
 
     private Integer retries;
@@ -68,7 +70,7 @@ public class JobDetailsEntity {
     private ObjectNode trigger;
 
     @Column(name = "fire_time")
-    // @Temporal not needed for OffsetDateTime in Hibernate 7 / JPA 3.2
+    @Temporal(TemporalType.TIMESTAMP)
     private OffsetDateTime fireTime;
 
     @Column(name = "execution_timeout")
@@ -77,7 +79,7 @@ public class JobDetailsEntity {
     @Column(name = "execution_timeout_unit")
     private String executionTimeoutUnit;
 
-    // @Temporal not needed for OffsetDateTime in Hibernate 7 / JPA 3.2
+    @Temporal(TemporalType.TIMESTAMP)
     private OffsetDateTime created;
 
     public String getId() {
