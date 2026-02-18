@@ -39,11 +39,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
-// Note: The Hibernate 7 + Spring ORM 6.2 EntityManagerFactory workaround (BeanPostProcessor for
-// setEntityManagerFactoryInterface) is intentionally NOT in this class. This module does not have
-// spring-orm as a dependency since it supports both JPA and non-JPA configurations.
-// The workaround is located in SpringbootJPAJobStoreConfiguration in the JPA-specific module:
-// kogito-addons-springboot-embedded-jobs-jpa
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan

@@ -25,8 +25,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.kie.kogito.app.audit.api.DataAuditContext;
-import org.kie.kogito.app.audit.jpa.queries.mapper.DateTimeUtil;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQuery;
+
+import static org.kie.kogito.app.audit.jpa.queries.mapper.DateTimeUtil.toDateTime;
 
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
@@ -110,9 +111,7 @@ public class JPADynamicQuery extends JPAAbstractQuery<Object> implements GraphQL
         if (outputType instanceof GraphQLScalarType) {
             GraphQLScalarType scalarType = (GraphQLScalarType) outputType;
             if ("DateTime".equals(scalarType.getName())) {
-                // Hibernate 7 returns OffsetDateTime directly for temporal columns in native queries,
-                // not java.sql.Timestamp as in Hibernate 5/6. Use DateTimeUtil for cross-version compatibility.
-                target = DateTimeUtil.toDateTime(source);
+                target = toDateTime(source);
             }
 
         }

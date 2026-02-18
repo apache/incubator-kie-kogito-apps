@@ -35,7 +35,7 @@ public class JobServiceManagementEntity {
     private String id;
 
     @Column(name = "last_heartbeat")
-    // @Temporal not needed for OffsetDateTime in Hibernate 7 / JPA 3.2
+    @Temporal(TemporalType.TIMESTAMP)
     private OffsetDateTime lastHeartBeat;
 
     private String token;

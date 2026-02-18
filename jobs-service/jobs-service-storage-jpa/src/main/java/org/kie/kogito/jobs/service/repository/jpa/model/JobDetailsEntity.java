@@ -25,8 +25,6 @@ import org.kie.kogito.jobs.service.repository.jpa.converter.JsonBinaryConverter;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
 import jakarta.persistence.*;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 @Entity
 @Table(name = "job_details",

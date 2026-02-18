@@ -101,9 +101,6 @@ public class PojoMapper<T> implements DataMapper<T, Object[]> {
                 return ((Number) value).longValue();
             }
         }
-        if (targetType == String.class) {
-            return value.toString();
-        }
         return value;
     }
 
