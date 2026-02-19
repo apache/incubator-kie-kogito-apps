@@ -27,8 +27,6 @@ import java.util.Map;
 import org.kie.kogito.app.audit.api.DataAuditContext;
 import org.kie.kogito.app.audit.spi.GraphQLSchemaQuery;
 
-import static org.kie.kogito.app.audit.jpa.queries.mapper.DateTimeUtil.toDateTime;
-
 import graphql.schema.DataFetchingEnvironment;
 import graphql.schema.GraphQLFieldDefinition;
 import graphql.schema.GraphQLList;
@@ -37,6 +35,8 @@ import graphql.schema.GraphQLOutputType;
 import graphql.schema.GraphQLScalarType;
 import graphql.schema.GraphQLSchemaElement;
 import jakarta.persistence.EntityManager;
+
+import static org.kie.kogito.app.audit.jpa.queries.mapper.DateTimeUtil.toDateTime;
 
 public class JPADynamicQuery extends JPAAbstractQuery<Object> implements GraphQLSchemaQuery {
 
