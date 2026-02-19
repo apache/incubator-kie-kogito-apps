@@ -25,7 +25,7 @@ import org.kie.kogito.testcontainers.JobServiceContainer;
 import static java.util.Collections.singletonMap;
 
 /**
- * Infinispan spring boot resource that works within the test lifecycle.
+ * Spring boot resource that works within the test lifecycle.
  *
  */
 public class JobServiceSpringBootTestResource extends ConditionalSpringBootTestResource<JobServiceContainer> {
