@@ -37,7 +37,7 @@ public class SpringbootJPAJobStoreConfiguration {
     // EntityManagerFactory.getSchemaManager() returning jakarta.persistence.SchemaManager.
     // Force plain JPA interface to avoid JDK Proxy incompatible return type error.
     @Bean
-    public static BeanPostProcessor entityManagerFactoryInterfacePostProcessor() {
+    public static BeanPostProcessor jobStoreEmfPostProcessor() {
         return new BeanPostProcessor() {
             @Override
             public Object postProcessBeforeInitialization(Object bean, String beanName) {
