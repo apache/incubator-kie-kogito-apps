@@ -52,13 +52,15 @@ public class PojoMapper<T> implements DataMapper<T, Object[]> {
     public List<T> produce(List<Object[]> data) {
         List<T> transformed = new ArrayList<>();
         Class<?>[] paramTypes = defaultConstructor.getParameterTypes();
+
         for (Object[] row : data) {
             try {
-                // Hibernate 7 changed default return types for native queries
-                // (e.g. OffsetDateTime instead of java.util.Date, Long instead of Integer).
-                // Convert each value to match the constructor's declared parameter types.
-                Object[] convertedRow = convertTypes(row, paramTypes);
-                transformed.add(defaultConstructor.newInstance(convertedRow));
+                // Convert DB specific types to match constructor parameters
+                Object[] converted = new Object[row.length];
+                for (int i = 0; i < row.length; i++) {
+                    converted[i] = convertType(row[i], paramTypes[i]);
+                }
+                transformed.add(defaultConstructor.newInstance(converted));
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
                 LOGGER.error("Could not transform data", e);
             }
@@ -66,18 +68,15 @@ public class PojoMapper<T> implements DataMapper<T, Object[]> {
         return transformed;
     }
 
-    private static Object[] convertTypes(Object[] row, Class<?>[] paramTypes) {
-        Object[] result = new Object[row.length];
-        for (int i = 0; i < row.length; i++) {
-            result[i] = (i < paramTypes.length) ? convertValue(row[i], paramTypes[i]) : row[i];
+    private Object convertType(Object value, Class<?> targetType) {
+        if (value == null) {
+            return null;
         }
-        return result;
-    }
 
-    private static Object convertValue(Object value, Class<?> targetType) {
-        if (value == null || targetType.isInstance(value)) {
+        if (targetType.isInstance(value)) {
             return value;
         }
+
         // Hibernate 7 returns java.time types instead of java.util.Date
         if (targetType == Date.class) {
             if (value instanceof OffsetDateTime) {
@@ -90,6 +89,16 @@ public class PojoMapper<T> implements DataMapper<T, Object[]> {
                 return Date.from(((LocalDateTime) value).atZone(ZoneId.of("UTC")).toInstant());
             }
         }
+
+        // Handle BigDecimal -> Integer/Long conversion
+        if (value instanceof java.math.BigDecimal bd) {
+            if (targetType == Integer.class || targetType == int.class) {
+                return bd.intValue();
+            } else if (targetType == Long.class || targetType == long.class) {
+                return bd.longValue();
+            }
+        }
+
         // Hibernate 7 may return different numeric types for native query columns
         if (targetType == Integer.class || targetType == int.class) {
             if (value instanceof Number) {
@@ -101,6 +110,25 @@ public class PojoMapper<T> implements DataMapper<T, Object[]> {
                 return ((Number) value).longValue();
             }
         }
+
+        // Handle CLOB -> String conversion
+        if (value instanceof java.sql.Clob clob && targetType == String.class) {
+            try {
+                long length = clob.length();
+                if (length == 0) {
+                    return null;
+                }
+                if (length > Integer.MAX_VALUE) {
+                    LOGGER.warn("CLOB too large ({} bytes), truncating to Integer.MAX_VALUE", length);
+                    return clob.getSubString(1, Integer.MAX_VALUE);
+                }
+                return clob.getSubString(1, (int) length);
+            } catch (java.sql.SQLException e) {
+                LOGGER.warn("Failed to read CLOB value", e);
+                return null;
+            }
+        }
+
         return value;
     }
 
