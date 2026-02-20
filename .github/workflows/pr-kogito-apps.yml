@@ -63,6 +63,7 @@ jobs:
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
           BUILD_MVN_OPTS_CURRENT: '-Dreproducible -Dvalidate-formatting'
+          DEPENDENCY_TREE_FILE: 'mvn_dependency_tree_drools_${{ matrix.os }}.txt'
         with:
           definition-file: https://raw.githubusercontent.com/${GROUP:apache}/incubator-kie-kogito-pipelines/${BRANCH:main}/.ci/pull-request-config.yaml
           annotations-prefix: ${{ runner.os }}-${{ matrix.java-version }}/${{ matrix.maven-version }}
@@ -77,4 +78,4 @@ jobs:
         if: ${{ always() }}
         with:
           name: dependency-trees-logs
-          path: '**/mvn_dependency_tree.txt'
+          path: '**/${{ env.DEPENDENCY_TREE_FILE }}'
