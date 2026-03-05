@@ -57,7 +57,7 @@ public class ErrorHandlingJobTimeoutInterceptor implements JobTimeoutInterceptor
                         LOG.warn("there was an error in job {} but not handler were registered", execution.getJobDetails());
                     } else {
                         LOG.error("there was error in job {}. Handling error {}", execution.getJobDetails(), execution.getException().getMessage());
-                        exceptionHandlers.stream().forEach(e -> e.handle(execution.getException()));
+                        exceptionHandlers.forEach(e -> e.handle(execution.getException()));
                     }
                 }
                 return execution;
