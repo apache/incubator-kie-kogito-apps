@@ -27,7 +27,6 @@ The system supports two different types of deployment:
 Due to the nature of the system it support different types of storage
 
 *   postgresql
-*   infinispan
 *   mongodb
 *   jpa
 
@@ -59,7 +58,6 @@ As this dependency will include the storage as well and the in-vm transport.
 
 
 where storage can be:
-*   infinispan
 *   mongodb
 *   postgresql
 
