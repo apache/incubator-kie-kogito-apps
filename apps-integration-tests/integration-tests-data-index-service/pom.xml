@@ -35,9 +35,6 @@
 
   <modules>
     <module>integration-tests-data-index-service-quarkus-devservice</module>
-    <module>integration-tests-data-index-service-common</module>
-    <module>integration-tests-data-index-service-quarkus</module>
-    <module>integration-tests-data-index-service-springboot</module>
   </modules>
 
   <dependencyManagement>

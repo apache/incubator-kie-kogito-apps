@@ -44,7 +44,6 @@
     <module>data-index-mutations</module>
     <module>data-index-common-addons</module>
     <module>data-index-quarkus</module>
-    <module>data-index-springboot</module>
   </modules>
 
 </project>

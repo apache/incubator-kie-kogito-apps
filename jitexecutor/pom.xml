@@ -35,7 +35,6 @@
 
   <modules>
     <module>jitexecutor-common</module>
-    <module>jitexecutor-bpmn</module>
     <module>jitexecutor-dmn</module>
     <module>jitexecutor-runner</module>
   </modules>

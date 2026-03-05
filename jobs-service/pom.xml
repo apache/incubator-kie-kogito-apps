@@ -45,8 +45,6 @@
     <module>kogito-addons-jobs-service</module>
     <module>jobs-service-messaging-kafka</module>
     <module>jobs-service-messaging-http</module>
-    <module>jobs-service-infinispan</module>
-    <module>jobs-service-mongodb</module>
   </modules>
 
   <dependencyManagement>
