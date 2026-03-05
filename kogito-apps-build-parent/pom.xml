@@ -77,7 +77,7 @@
         <version.com.graphql-java-extended-scalars>24.0</version.com.graphql-java-extended-scalars>
 
         <!-- Explainability Toolkit version -->
-        <version.explainability-core>1.22.1.Final</version.explainability-core>
+        <version.explainability-core>1.23.0.Final</version.explainability-core>
 
         <!-- Mutiny Zero Flow Adapters -->
         <version.io.smallrye.reactive.mutiny-zero>1.1.1</version.io.smallrye.reactive.mutiny-zero>
