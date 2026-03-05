@@ -1,5 +1,4 @@
 name: Kogito Apps
-
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
@@ -11,7 +10,6 @@ on:
       - '*.txt'
       - 'docsimg/**'
       - '.ci/jenkins/**'
-
 jobs:
   build-chain:
     concurrency:
@@ -43,6 +41,7 @@ jobs:
         uses: kiegroup/kie-ci/.ci/actions/build-chain@main
         env:
           NODE_OPTIONS: "--max_old_space_size=4096"
+          BUILD_MVN_OPTS: " -Dproductized"
         with:
           definition-file: https://raw.githubusercontent.com/${GROUP:kiegroup}/kogito-pipelines/${BRANCH:main}/.ci/pull-request-config.yaml
           annotations-prefix: ${{ runner.os }}-${{ matrix.java-version }}/${{ matrix.maven-version }}

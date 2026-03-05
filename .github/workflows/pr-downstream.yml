@@ -1,5 +1,4 @@
 name: Kogito Downstream
-
 on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
@@ -11,7 +10,6 @@ on:
       - '*.txt'
       - 'docsimg/**'
       - '.ci/jenkins/**'
-
 jobs:
   kogito-downstream-build:
     concurrency:
@@ -20,7 +18,7 @@ jobs:
     timeout-minutes: 180
     strategy:
       matrix:
-        job_name: [ serverless-workflow-examples ]
+        job_name: [serverless-workflow-examples]
         os: [ubuntu-latest]
         java-version: [17]
         maven-version: ['3.9.11']
@@ -28,6 +26,7 @@ jobs:
           - job_name: serverless-workflow-examples
             repository: kogito-examples
             env_KOGITO_EXAMPLES_SUBFOLDER_POM: serverless-workflow-examples/
+            env_BUILD_MVN_OPTS: " -Dproductized"
       fail-fast: false
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.job_name }} (${{ matrix.os }} / Java-${{ matrix.java-version }} / Maven-${{ matrix.maven-version }})
@@ -51,7 +50,7 @@ jobs:
           annotations-prefix: ${{ runner.os }}-${{ matrix.java-version }}/${{ matrix.maven-version }}
           starting-project: kiegroup/${{ matrix.repository }}
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-        env: 
+        env:
           KOGITO_EXAMPLES_SUBFOLDER_POM: ${{ matrix.env_KOGITO_EXAMPLES_SUBFOLDER_POM }}
       - name: Surefire Report
         uses: kiegroup/kie-ci/.ci/actions/surefire-report@main
