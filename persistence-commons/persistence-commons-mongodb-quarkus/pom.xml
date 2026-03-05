@@ -24,7 +24,7 @@
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>persistence-commons</artifactId>
-    <version>999-SNAPSHOT</version>
+    <version>9.105.0</version>
   </parent>
   <artifactId>persistence-commons-mongodb-quarkus</artifactId>
   <properties>

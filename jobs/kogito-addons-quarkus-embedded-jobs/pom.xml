@@ -26,7 +26,7 @@
     <parent>
         <artifactId>jobs</artifactId>
         <groupId>org.kie</groupId>
-        <version>999-SNAPSHOT</version>
+        <version>9.105.0</version>
     </parent>
 
 
