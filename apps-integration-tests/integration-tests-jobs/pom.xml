@@ -33,24 +33,66 @@
   <artifactId>integration-tests-jobs</artifactId>
 
   <name>Kogito Apps :: Integration Tests :: Jobs</name>
-  <description>Processes and common classes for integration tests</description>
-
-  <properties>
-    <sonar.exclusions>**/it/*.java,**/test/resources/*.java,**/testcontainers/*.java</sonar.exclusions>
-  </properties>
+  <description>Integration tests for Embedded Jobs</description>
 
   <dependencies>
+    <!-- Ensure data-index and jobs module was built, but not added in the classpath -->
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>data-index</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>jobs</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <dependency>
       <groupId>org.jbpm</groupId>
       <artifactId>jbpm-with-drools-quarkus</artifactId>
     </dependency>
+    <!-- Persistence -->
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-agroal</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-jdbc-h2</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kie-addons-quarkus-persistence-jdbc</artifactId>
+    </dependency>
+    <!-- Jobs Service with JPA -->
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kogito-addons-quarkus-embedded-jobs</artifactId>
     </dependency>
     <dependency>
       <groupId>org.kie</groupId>
-      <artifactId>kogito-addons-quarkus-data-index-inmemory</artifactId>
+      <artifactId>kogito-addons-quarkus-embedded-jobs-jpa</artifactId>
+    </dependency>
+    <!-- Data Index with JPA -->
+    <dependency>
+      <groupId>org.kie</groupId>
+      <artifactId>kogito-addons-quarkus-data-index-jpa</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
