@@ -49,7 +49,6 @@
       <groupId>org.kie.kogito</groupId>
       <artifactId>persistence-commons-mongodb</artifactId>
     </dependency>
-
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-storage-api</artifactId>

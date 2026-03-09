@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.kie.kogito</groupId>
+    <artifactId>kogito-spring-boot-bom</artifactId>
+    <version>999-SNAPSHOT</version>
+    <relativePath />
+  </parent>
+
+  <artifactId>kogito-apps-springboot</artifactId>
+  <packaging>pom</packaging>
+  <name>Kogito Apps :: Spring Boot</name>
+  <description>Kogito Apps :: Spring Boot</description>
+
+  <properties>
+    <java.module.name>org.kie.kogito.apps.springboot</java.module.name>
+    <!-- Used to define which poms are allowed to have dependencyManagement sections. This is to enforce the convention that only the root pom should have dependencyManagement, and all other poms should inherit from it. -->
+    <allowedPomsList>org.kie.kogito:kogito-apps-springboot</allowedPomsList>
+  </properties>
+
+  <modules>
+    <module>data-index-springboot</module>
+    <module>integration-tests-data-index-service-springboot</module>
+    <module>integration-tests-jobs-service-springboot</module>
+    <module>kogito-addons-springboot-data-audit</module>
+    <module>kogito-addons-springboot-data-audit-jpa</module>
+    <module>kogito-addons-springboot-embedded-jobs</module>
+    <module>kogito-addons-springboot-embedded-jobs-jpa</module>
+  </modules>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>kogito-apps-bom</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-springboot-data-audit</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-springboot-data-audit-jpa</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <!-- Data Index SpringBoot -->
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>data-index-common-springboot</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>data-index-common-springboot</artifactId>
+        <version>${project.version}</version>
+        <classifier>sources</classifier>
+      </dependency>
+
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>data-index-storage-jpa-springboot</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>data-index-storage-jpa-springboot</artifactId>
+        <version>${project.version}</version>
+        <classifier>sources</classifier>
+      </dependency>
+
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>data-index-common-addons-springboot</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>data-index-common-addons-springboot</artifactId>
+        <version>${project.version}</version>
+        <classifier>sources</classifier>
+      </dependency>
+
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>data-index-graphql-addons-springboot</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>data-index-graphql-addons-springboot</artifactId>
+        <version>${project.version}</version>
+        <classifier>sources</classifier>
+      </dependency>
+
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-springboot-data-index-persistence-jpa</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-springboot-data-index-persistence-jpa</artifactId>
+        <version>${project.version}</version>
+        <classifier>sources</classifier>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-springboot-data-index-jpa</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-springboot-data-index-jpa</artifactId>
+        <version>${project.version}</version>
+        <classifier>sources</classifier>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+</project>

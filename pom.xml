@@ -119,6 +119,8 @@
     <module>trusty</module>
     <module>jitexecutor</module>
     <module>jobs</module>
+    <module>kogito-apps-quarkus</module>
+    <module>kogito-apps-springboot</module>
   </modules>
   <profiles>
     <profile>

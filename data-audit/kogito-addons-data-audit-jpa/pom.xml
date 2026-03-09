@@ -41,8 +41,6 @@
 
     <modules>
         <module>kogito-addons-data-audit-jpa-common</module>
-        <module>kogito-addons-data-audit-jpa-quarkus</module>
-        <module>kogito-addons-data-audit-jpa-springboot</module>
         <module>data-audit-quarkus-jpa-service</module>
     </modules>
 </project>

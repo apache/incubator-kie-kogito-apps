@@ -23,8 +23,8 @@
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <artifactId>apps-integration-tests</artifactId>
     <groupId>org.kie.kogito</groupId>
+    <artifactId>apps-integration-tests</artifactId>
     <version>999-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
@@ -34,10 +34,7 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>integration-tests-data-index-service-quarkus-devservice</module>
     <module>integration-tests-data-index-service-common</module>
-    <module>integration-tests-data-index-service-quarkus</module>
-    <module>integration-tests-data-index-service-springboot</module>
   </modules>
 
   <dependencyManagement>

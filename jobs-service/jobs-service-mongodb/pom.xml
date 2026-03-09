@@ -108,7 +108,7 @@
         </dependency>
     </dependencies>
 
-    <build>
+    <!--<build>
         <plugins>
             <plugin>
                 <groupId>io.quarkus</groupId>
@@ -126,5 +126,5 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>
+    </build>-->
 </project>

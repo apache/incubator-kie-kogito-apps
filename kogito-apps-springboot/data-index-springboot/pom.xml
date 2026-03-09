@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Licensed to the Apache Software Foundation (ASF) under one
@@ -19,21 +18,24 @@
     under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <artifactId>jobs</artifactId>
-    <groupId>org.kie</groupId>
+    <groupId>org.kie.kogito</groupId>
+    <artifactId>kogito-apps-springboot</artifactId>
     <version>999-SNAPSHOT</version>
   </parent>
 
+  <artifactId>data-index-springboot</artifactId>
+  <name>Kogito Apps :: Kogito Data Index SpringBoot</name>
 
-  <artifactId>kogito-addons-embedded-jobs-jpa</artifactId>
   <packaging>pom</packaging>
-
-  <name>Kogito Apps :: Jobs :: JPA</name>
-
   <modules>
-  	<module>kogito-addons-common-embedded-jobs-jpa</module>
+    <module>data-index-common-springboot</module>
+    <module>data-index-common-addons-springboot</module>
+    <module>data-index-storage-jpa-springboot</module>
+    <module>data-index-graphql-addons-springboot</module>
+    <module>kogito-addons-springboot-data-index-persistence</module>
+    <module>kogito-addons-springboot-data-index</module>
   </modules>
 </project>
