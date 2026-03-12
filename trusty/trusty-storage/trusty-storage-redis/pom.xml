@@ -22,12 +22,13 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <parent>
-    <artifactId>trusty-storage</artifactId>
-    <groupId>org.kie.kogito</groupId>
-    <version>999-SNAPSHOT</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.kie.kogito</groupId>
+    <artifactId>kogito-apps-quarkus</artifactId>
+    <version>999-SNAPSHOT</version>
+    <relativePath>../../../kogito-apps-quarkus/pom.xml</relativePath>
+  </parent>
 
   <artifactId>trusty-storage-redis</artifactId>
   <name>Kogito Apps :: Trusty Storage Redis</name>
@@ -57,5 +58,22 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+
+  <build>
+      <plugins>
+        <plugin>
+          <groupId>io.quarkus</groupId>
+          <artifactId>quarkus-maven-plugin</artifactId>
+          <executions>
+            <execution>
+              <phase>none</phase>
+              <goals>
+                <goal>build</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+  </build>
 
 </project>

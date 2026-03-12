@@ -26,7 +26,7 @@
         <groupId>org.kie.kogito</groupId>
         <artifactId>kogito-apps-bom</artifactId>
         <version>999-SNAPSHOT</version>
-        <relativePath>../kogito-apps-bom</relativePath>
+        <relativePath>../kogito-apps-bom/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -61,7 +61,7 @@
         <container.image.integration-tests-trusty-service-quarkus>org.kie.kogito/integration-tests-trusty-service-quarkus:${project.version}</container.image.integration-tests-trusty-service-quarkus>
 
         <!-- OptaPlanner version -->
-        <version.org.optaplanner>${project.version}</version.org.optaplanner>
+       <!-- <version.org.optaplanner>${project.version}</version.org.optaplanner>-->
 
        <!-- <version.org.hibernate>7.1.14.Final</version.org.hibernate>-->
         <!--<version.org.apache.opennlp>2.3.2</version.org.apache.opennlp>-->
@@ -77,8 +77,8 @@
         <version.com.graphql-java>24.3</version.com.graphql-java>
         <version.com.graphql-java-extended-scalars>24.0</version.com.graphql-java-extended-scalars>-->
 
-        <!-- Explainability Toolkit version -->
-        <version.explainability-core>1.22.1.Final</version.explainability-core>
+       <!-- &lt;!&ndash; Explainability Toolkit version &ndash;&gt;
+        <version.explainability-core>1.22.1.Final</version.explainability-core>-->
 
         <!-- Mutiny Zero Flow Adapters -->
      <!--   <version.io.smallrye.reactive.mutiny-zero>1.1.1</version.io.smallrye.reactive.mutiny-zero>-->
@@ -141,34 +141,34 @@
         </pluginManagement>
     </build>
 
-    <dependencyManagement>
+  <!--  <dependencyManagement>
         <dependencies>
-           <!-- &lt;!&ndash; Override Hibernate version before BOM imports (first-wins) &ndash;&gt;
+           &lt;!&ndash; &lt;!&ndash; Override Hibernate version before BOM imports (first-wins) &ndash;&gt;
             <dependency>
                 <groupId>org.hibernate.orm</groupId>
                 <artifactId>hibernate-core</artifactId>
                 <version>${version.org.hibernate}</version>
-            </dependency>-->
-<!--            <dependency>-->
-<!--                <groupId>org.kie.kogito</groupId>-->
-<!--                <artifactId>kogito-quarkus-bom</artifactId>-->
-<!--                <version>${project.version}</version>-->
-<!--                <type>pom</type>-->
-<!--                <scope>import</scope>-->
-<!--            </dependency>-->
-            <!--<dependency>
+            </dependency>&ndash;&gt;
+&lt;!&ndash;            <dependency>&ndash;&gt;
+&lt;!&ndash;                <groupId>org.kie.kogito</groupId>&ndash;&gt;
+&lt;!&ndash;                <artifactId>kogito-quarkus-bom</artifactId>&ndash;&gt;
+&lt;!&ndash;                <version>${project.version}</version>&ndash;&gt;
+&lt;!&ndash;                <type>pom</type>&ndash;&gt;
+&lt;!&ndash;                <scope>import</scope>&ndash;&gt;
+&lt;!&ndash;            </dependency>&ndash;&gt;
+            &lt;!&ndash;<dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>kogito-apps-bom</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>-->
-            <dependency>
+            </dependency>&ndash;&gt;
+            &lt;!&ndash;<dependency>
                 <groupId>org.optaplanner</groupId>
                 <artifactId>optaplanner-quarkus</artifactId>
                 <version>${version.org.optaplanner}</version>
-            </dependency>
-            <!--<dependency>
+            </dependency>&ndash;&gt;
+            &lt;!&ndash;<dependency>
                 <groupId>com.redislabs</groupId>
                 <artifactId>jredisearch</artifactId>
                 <version>${version.org.jredisearch}</version>
@@ -178,13 +178,13 @@
                         <artifactId>json</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>-->
-            <!--<dependency>
+            </dependency>&ndash;&gt;
+            &lt;!&ndash;<dependency>
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
                 <version>${version.org.json}</version>
-            </dependency>-->
-            <!--<dependency>
+            </dependency>&ndash;&gt;
+            &lt;!&ndash;<dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-csv</artifactId>
                 <version>${version.org.apache.commons.csv}</version>
@@ -198,24 +198,24 @@
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${version.org.mapstruct}</version>
-            </dependency>-->
-           <!-- <dependency>
+            </dependency>&ndash;&gt;
+           &lt;!&ndash; <dependency>
                 <groupId>io.smallrye.reactive</groupId>
                 <artifactId>mutiny-zero-flow-adapters</artifactId>
                 <version>${version.io.smallrye.reactive.mutiny-zero}</version>
-            </dependency>-->
-            <!--<dependency>
+            </dependency>&ndash;&gt;
+            &lt;!&ndash;<dependency>
                 <groupId>org.skyscreamer</groupId>
                 <artifactId>jsonassert</artifactId>
                 <version>${version.org.skyscreamer}</version>
                 <scope>test</scope>
-            </dependency>-->
-           <!-- <dependency>
+            </dependency>&ndash;&gt;
+           &lt;!&ndash; <dependency>
                 <groupId>org.hibernate.orm</groupId>
                 <artifactId>hibernate-ant</artifactId>
                 <version>${version.org.hibernate}</version>
-            </dependency>-->
-           <!-- <dependency>
+            </dependency>&ndash;&gt;
+           &lt;!&ndash; <dependency>
                 <groupId>com.graphql-java</groupId>
                 <artifactId>graphql-java</artifactId>
                 <version>${version.com.graphql-java}</version>
@@ -224,14 +224,14 @@
                 <groupId>com.graphql-java</groupId>
                 <artifactId>graphql-java-extended-scalars</artifactId>
                 <version>${version.com.graphql-java-extended-scalars}</version>
-            </dependency>-->
-            <dependency>
+            </dependency>&ndash;&gt;
+            &lt;!&ndash;<dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>explainability-core</artifactId>
                 <version>${version.explainability-core}</version>
-            </dependency>
+            </dependency>&ndash;&gt;
         </dependencies>
-    </dependencyManagement>
+    </dependencyManagement>-->
 
 
     <profiles>

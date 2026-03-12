@@ -25,7 +25,6 @@
     <artifactId>kogito-apps-bom</artifactId>
     <packaging>pom</packaging>
     <name>Kogito Apps :: BOM</name>
-
     <properties>
         <java.module.name>org.kie.kogito.apps.bom</java.module.name>
         <!-- Used to define which poms are allowed to have dependencyManagement sections. This is to enforce the convention that only the root pom should have dependencyManagement, and all other poms should inherit from it. -->
@@ -33,6 +32,13 @@
     </properties>
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.kie</groupId>
+                <artifactId>kie-ddl-runtimes</artifactId>
+                <version>${project.version}</version>
+                <classifier>db-scripts</classifier>
+                <type>zip</type>
+            </dependency>
             <!-- Data Audit JPA Implementation-->
             <dependency>
                 <groupId>org.kie</groupId>
@@ -109,12 +115,6 @@
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-service-common</artifactId>
                 <version>${project.version}</version>
-                <type>jar</type>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-service-common</artifactId>
-                <version>${project.version}</version>
                 <type>test-jar</type>
             </dependency>
             <dependency>
@@ -148,9 +148,24 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-test-utils</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-storage-api</artifactId>
                 <version>${project.version}</version>
                 <type>test-jar</type>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>data-index-storage-common</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -190,11 +205,6 @@
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-storage-mongodb</artifactId>
                 <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-storage-mongodb</artifactId>
-                <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
             <dependency>
@@ -223,12 +233,12 @@
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>data-index-test-utils</artifactId>
                 <version>${project.version}</version>
+                <classifier>sources</classifier>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
-                <artifactId>data-index-test-utils</artifactId>
+                <artifactId>explainability-api</artifactId>
                 <version>${project.version}</version>
-                <classifier>sources</classifier>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -291,10 +301,15 @@
                 <version>${project.version}</version>
                 <classifier>javadoc</classifier>
             </dependency>
-            <!-- Jobs service -->
             <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>jobs-service</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>jobs-service-internal-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -314,11 +329,6 @@
                 <artifactId>jobs-service-inmemory</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>jobs-service-internal-api</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -352,6 +362,17 @@
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
+                <artifactId>persistence-commons</artifactId>
+                <version>${project.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>persistence-commons-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
                 <artifactId>persistence-commons-api</artifactId>
                 <version>${project.version}</version>
                 <classifier>javadoc</classifier>
@@ -365,12 +386,6 @@
             <dependency>
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>persistence-commons-jpa</artifactId>
-                <version>${project.version}</version>
-                <classifier>sources</classifier>
-            </dependency>
-            <dependency>
-                <groupId>org.kie.kogito</groupId>
-                <artifactId>persistence-commons-jpa-base</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
             </dependency>
@@ -390,6 +405,11 @@
                 <artifactId>persistence-commons-postgresql</artifactId>
                 <version>${project.version}</version>
                 <classifier>sources</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>persistence-commons-protobuf</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -450,7 +470,17 @@
                 <groupId>org.kie.kogito</groupId>
                 <artifactId>trusty-storage-api</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>trusty-storage-api</artifactId>
+                <version>${project.version}</version>
                 <classifier>javadoc</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.kie.kogito</groupId>
+                <artifactId>trusty-storage-common</artifactId>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.kie.kogito</groupId>

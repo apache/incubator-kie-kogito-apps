@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.kie.kogito</groupId>
+    <artifactId>kogito-apps-quarkus</artifactId>
+    <version>999-SNAPSHOT</version>
+  </parent>
+  <packaging>pom</packaging>
+
+  <artifactId>data-index-storage-quarkus</artifactId>
+  <name>Kogito Apps :: Data Index Storage :: Quarkus</name>
+
+  <modules>
+    <module>data-index-storage-postgresql</module>
+    <module>data-index-storage-jpa-common-quarkus</module>
+    <module>data-index-storage-mongodb</module>
+    <module>data-index-storage-postgresql-reporting</module>
+    <module>data-index-storage-jpa-quarkus</module>
+  </modules>
+
+
+</project>

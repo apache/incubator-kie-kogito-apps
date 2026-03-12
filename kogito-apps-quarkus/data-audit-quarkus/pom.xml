@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.kie.kogito</groupId>
+    <artifactId>kogito-apps-quarkus</artifactId>
+    <version>999-SNAPSHOT</version>
+  </parent>
+  <packaging>pom</packaging>
+
+  <artifactId>data-audit-quarkus</artifactId>
+  <name>Kogito Apps :: Data Audit :: Quarkus :: Parent</name>
+
+  <modules>
+    <module>data-audit-quarkus-service</module>
+    <module>kogito-addons-data-audit-jpa-quarkus</module>
+    <module>kogito-addons-quarkus-data-audit</module>
+  </modules>
+
+</project>

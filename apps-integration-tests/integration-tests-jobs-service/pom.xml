@@ -38,39 +38,11 @@
     <module>integration-tests-jobs-service-common</module>
   </modules>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>integration-tests-jobs-service-common</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>integration-tests-jobs-service-common-quarkus</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>integration-tests-jobs-service-common-quarkus</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-      </dependency>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>integration-tests-jobs-service-common-quarkus</artifactId>
-        <version>${project.version}</version>
-        <type>test-jar</type>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <!-- ensure jobs-service module was built, but not added in the classpath -->
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>jobs-service</artifactId>
-      <version>${project.version}</version>
       <type>pom</type>
       <scope>provided</scope>
       <exclusions>

@@ -67,7 +67,7 @@
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
-      <artifactId>data-index-test-utils</artifactId>
+      <artifactId>data-index-test-utils-quarkus</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>

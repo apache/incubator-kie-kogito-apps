@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.kie.kogito</groupId>
+    <artifactId>kogito-apps-quarkus</artifactId>
+    <version>999-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>persistence-commons-quarkus</artifactId>
+  <name>Kogito Apps :: Persistence Commons :: Quarkus</name>
+  <packaging>pom</packaging>
+
+  <modules>
+    <module>persistence-commons-jpa-base</module>
+    <module>persistence-commons-jpa</module>
+    <module>persistence-commons-postgresql</module>
+    <module>persistence-commons-redis</module>
+    <module>persistence-commons-reporting-parent</module>
+    <module>persistence-commons-mongodb-quarkus</module>
+  </modules>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>persistence-commons</artifactId>
+      <type>pom</type>
+    </dependency>
+  </dependencies>
+
+
+</project>

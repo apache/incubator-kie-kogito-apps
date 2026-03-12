@@ -98,10 +98,6 @@
           <groupId>org.kie.kogito</groupId>
           <artifactId>data-index-common</artifactId>
         </exclusion>
-        <exclusion>
-          <groupId>org.kie.kogito</groupId>
-          <artifactId>kogito-quarkus-test-utils</artifactId>
-        </exclusion>
       </exclusions>
     </dependency>
     <dependency>

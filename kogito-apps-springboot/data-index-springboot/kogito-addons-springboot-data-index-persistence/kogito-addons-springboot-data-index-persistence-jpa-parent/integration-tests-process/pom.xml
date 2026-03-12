@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-            <version>${version.org.springframework.boot}</version>
+           <!----> <version>${version.org.springframework.boot}</version>
         </dependency>
 
         <dependency>
@@ -80,12 +80,6 @@
             <groupId>org.kie.kogito</groupId>
             <artifactId>data-index-test-utils</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.kie.kogito</groupId>
-                    <artifactId>kogito-quarkus-test-utils</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.kie.kogito</groupId>

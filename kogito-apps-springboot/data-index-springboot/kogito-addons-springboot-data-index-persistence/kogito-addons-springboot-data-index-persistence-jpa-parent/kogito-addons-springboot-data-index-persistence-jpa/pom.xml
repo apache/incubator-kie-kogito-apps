@@ -47,16 +47,6 @@
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-storage-jpa</artifactId>
-      <exclusions>
-        <exclusion>
-          <groupId>io.quarkus</groupId>
-          <artifactId>quarkus-hibernate-orm-panache</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>io.quarkus</groupId>
-          <artifactId>quarkus-jackson</artifactId>
-        </exclusion>
-      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
