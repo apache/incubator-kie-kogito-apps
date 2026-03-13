@@ -13,6 +13,10 @@
   <artifactId>data-audit-quarkus</artifactId>
   <name>Kogito Apps :: Data Audit :: Quarkus :: Parent</name>
 
+  <properties>
+    <disable.quarkus.plugin>true</disable.quarkus.plugin>
+  </properties>
+
   <modules>
     <module>data-audit-quarkus-service</module>
     <module>kogito-addons-data-audit-jpa-quarkus</module>

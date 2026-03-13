@@ -59,6 +59,12 @@
       </dependency>
       <dependency>
         <groupId>org.kie</groupId>
+        <artifactId>kie-addons-quarkus-flyway-deployment</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
         <artifactId>kogito-addons-quarkus-data-audit</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -129,6 +135,12 @@
         <artifactId>kogito-addons-quarkus-data-index-persistence-jpa-deployment</artifactId>
         <version>${project.version}</version>
         <classifier>sources</classifier>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-quarkus-data-index-persistence-postgresql-deployment</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
       </dependency>
       <dependency>
         <groupId>org.kie</groupId>
@@ -421,6 +433,7 @@
         <artifactId>quarkus-maven-plugin</artifactId>
         <configuration>
           <skipOriginalJarRename>true</skipOriginalJarRename>
+          <skip>${disable.quarkus.plugin}</skip>
         </configuration>
         <executions>
           <execution>
@@ -444,34 +457,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <!-- This is needed by modules, like trusty-storage-api, that requires quarkus dependencies but should not invoke the quarkus-maven-plugin -->
-    <profile>
-      <id>no_quarkus_plugin</id>
-      <activation>
-        <activeByDefault>false</activeByDefault>
-        <property>
-          <name>disable.quarkus.plugin</name>
-          <value>true</value>
-        </property>
-      </activation>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>io.quarkus</groupId>
-            <artifactId>quarkus-maven-plugin</artifactId>
-            <executions>
-              <execution>
-                <phase>none</phase>
-                <goals>
-                  <goal>build</goal>
-                </goals>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>

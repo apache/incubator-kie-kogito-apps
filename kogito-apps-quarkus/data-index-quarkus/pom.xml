@@ -28,6 +28,11 @@
 
   <artifactId>data-index-quarkus</artifactId>
   <packaging>pom</packaging>
+
+  <properties>
+    <disable.quarkus.plugin>true</disable.quarkus.plugin>
+  </properties>
+
   <modules>
     <module>data-index-common-quarkus</module>
     <module>data-index-graphql-quarkus</module>

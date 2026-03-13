@@ -98,7 +98,7 @@
         </dependency>
     </dependencies>
 
-    <dependencyManagement>
+    <!--<dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -108,7 +108,7 @@
                 <scope>import</scope>
             </dependency>
         </dependencies>
-    </dependencyManagement>
+    </dependencyManagement>-->
 
     <profiles>
         <profile>
@@ -116,6 +116,9 @@
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <properties>
+                <enforcer.no-managed-deps.phase>none</enforcer.no-managed-deps.phase>
+            </properties>
             <dependencies>
                 <dependency>
                     <groupId>org.kie</groupId>

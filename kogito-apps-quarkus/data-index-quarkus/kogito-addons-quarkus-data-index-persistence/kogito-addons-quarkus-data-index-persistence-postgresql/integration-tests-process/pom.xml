@@ -30,6 +30,10 @@
   <artifactId>kogito-addons-quarkus-data-index-persistence-postgresql-integration-tests-process</artifactId>
   <name>Kogito Apps :: Kogito Addons Quarkus Data Index Persistence PostgreSQL :: Integration Tests :: Process</name>
 
+  <properties>
+    <disable.quarkus.plugin>false</disable.quarkus.plugin>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jbpm</groupId>
@@ -91,22 +95,7 @@
       </exclusions>
     </dependency>
   </dependencies>
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-maven-plugin</artifactId>
-        <version>${version.io.quarkus}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+
   <profiles>
     <profile>
       <id>native</id>

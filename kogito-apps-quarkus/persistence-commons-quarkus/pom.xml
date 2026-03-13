@@ -13,6 +13,10 @@
   <name>Kogito Apps :: Persistence Commons :: Quarkus</name>
   <packaging>pom</packaging>
 
+  <properties>
+    <disable.quarkus.plugin>true</disable.quarkus.plugin>
+  </properties>
+
   <modules>
     <module>persistence-commons-jpa-base</module>
     <module>persistence-commons-jpa</module>

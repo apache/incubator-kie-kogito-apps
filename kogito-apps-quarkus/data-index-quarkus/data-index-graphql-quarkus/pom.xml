@@ -26,8 +26,9 @@
     <version>999-SNAPSHOT</version>
   </parent>
   <artifactId>data-index-graphql-quarkus</artifactId>
-    <properties>
+  <properties>
     <java.module.name>org.kie.kogito.index.graphql</java.module.name>
+    <disable.quarkus.plugin>true</disable.quarkus.plugin>
   </properties>
   <dependencies>
     <dependency>
@@ -38,10 +39,10 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-vertx-graphql</artifactId>
     </dependency>
-   <dependency>
-     <groupId>org.kie.kogito</groupId>
-     <artifactId>data-index-common-quarkus</artifactId>
-  </dependency>
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>data-index-common-quarkus</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>

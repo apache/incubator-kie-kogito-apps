@@ -52,7 +52,6 @@
        <artifactId>data-index-storage-jpa-common</artifactId>
        <type>test-jar</type>
        <scope>test</scope>
-       <version>${project.version}</version>
      </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
