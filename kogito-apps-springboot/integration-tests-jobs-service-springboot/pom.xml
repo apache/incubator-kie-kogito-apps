@@ -24,9 +24,11 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>kogito-apps-springboot</artifactId>
+    <artifactId>kogito-apps-springboot-bom</artifactId>
     <version>999-SNAPSHOT</version>
+    <relativePath>../kogito-apps-springboot-bom/pom.xml</relativePath>
   </parent>
+
   <artifactId>integration-tests-jobs-service-springboot</artifactId>
   <name>Kogito Apps :: Integration Tests :: Jobs Service :: Spring Boot</name>
 
@@ -106,7 +108,34 @@
 
   <build>
     <plugins>
+      <!-- Unpack BPMN resources -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.kie.kogito</groupId>
+                  <artifactId>integration-tests-jobs-service-common</artifactId>
+                  <version>${project.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
+                  <includes>**/*.bpmn</includes>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+     <!-- <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
@@ -127,7 +156,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

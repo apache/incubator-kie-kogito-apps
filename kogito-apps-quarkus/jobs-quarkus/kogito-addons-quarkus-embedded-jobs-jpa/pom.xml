@@ -36,7 +36,7 @@
 
 	<properties>
 		<java.module.name>org.kie.kogito.app.jobs.jpa.quarkus</java.module.name>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<disable.quarkus.plugin>true</disable.quarkus.plugin>
 	</properties>
 
 	<dependencies>

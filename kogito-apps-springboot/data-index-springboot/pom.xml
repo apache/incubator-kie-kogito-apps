@@ -22,8 +22,9 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>kogito-apps-springboot</artifactId>
+    <artifactId>kogito-apps-springboot-bom</artifactId>
     <version>999-SNAPSHOT</version>
+    <relativePath>../kogito-apps-springboot-bom/pom.xml</relativePath>
   </parent>
 
   <artifactId>data-index-springboot</artifactId>

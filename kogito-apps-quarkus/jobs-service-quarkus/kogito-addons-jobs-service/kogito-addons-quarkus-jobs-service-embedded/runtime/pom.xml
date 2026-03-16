@@ -30,6 +30,11 @@
   <artifactId>kogito-addons-quarkus-jobs-service-embedded</artifactId>
   <name>Jobs Service Embedded Quarkus Add-On - Runtime</name>
   <description>Run Jobs Service embedded with the application.</description>
+
+  <properties>
+    <disable.quarkus.plugin>true</disable.quarkus.plugin>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>

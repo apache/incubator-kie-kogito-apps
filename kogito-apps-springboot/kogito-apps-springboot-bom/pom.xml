@@ -11,7 +11,7 @@
     Unless required by applicable law or agreed to in writing,
     software distributed under the License is distributed on an
     "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-    KIND, either express or implied. See the License for the
+    KIND, either express or implied.  See the License for the
     specific language governing permissions and limitations
     under the License.
 -->
@@ -21,31 +21,21 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>kogito-spring-boot-bom</artifactId>
+    <artifactId>kogito-apps-springboot</artifactId>
     <version>999-SNAPSHOT</version>
-    <relativePath />
   </parent>
 
-  <artifactId>kogito-apps-springboot</artifactId>
+  <artifactId>kogito-apps-springboot-bom</artifactId>
   <packaging>pom</packaging>
-  <name>Kogito Apps :: Spring Boot</name>
-  <description>Kogito Apps :: Spring Boot</description>
+  <name>Kogito Apps :: Springboot :: BOM </name>
+  <description>BOM for kogito Springboot apps</description>
 
   <properties>
-    <java.module.name>org.kie.kogito.apps.springboot</java.module.name>
+    <java.module.name>org.kie.kogito.apps.springboot.bom</java.module.name>
     <!-- Used to define which poms are allowed to have dependencyManagement sections. This is to enforce the convention that only the root pom should have dependencyManagement, and all other poms should inherit from it. -->
-<!--    <allowedPomsList>org.kie.kogito:kogito-apps-springboot</allowedPomsList>-->
+    <allowedPomsList>org.kie.kogito:kogito-apps-springboot-bom</allowedPomsList>
   </properties>
 
-  <modules>
-    <module>kogito-apps-springboot-bom</module>
-    <module>data-audit-springboot</module>
-    <module>data-index-springboot</module>
-    <module>integration-tests-data-index-service-springboot</module>
-    <module>integration-tests-jobs-service-springboot</module>
-    <module>jobs-springboot</module>
-  </modules>
-<!--
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -65,7 +55,7 @@
         <artifactId>kogito-addons-springboot-data-audit-jpa</artifactId>
         <version>${project.version}</version>
       </dependency>
-      &lt;!&ndash; Data Index SpringBoot &ndash;&gt;
+      <!-- Data Index SpringBoot -->
       <dependency>
         <groupId>org.kie.kogito</groupId>
         <artifactId>data-index-common-springboot</artifactId>
@@ -137,6 +127,6 @@
         <classifier>sources</classifier>
       </dependency>
     </dependencies>
-  </dependencyManagement>-->
+  </dependencyManagement>
 
 </project>

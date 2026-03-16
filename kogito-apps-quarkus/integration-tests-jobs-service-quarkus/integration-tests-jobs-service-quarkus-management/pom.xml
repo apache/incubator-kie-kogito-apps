@@ -34,6 +34,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-transaction-spi</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kogito-addons-quarkus-jobs-management</artifactId>
     </dependency>
@@ -105,7 +109,7 @@
 
   <build>
     <plugins>
-      <plugin>
+      <!--<plugin>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
         <configuration>
@@ -118,8 +122,35 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
+      <!-- Unpack BPMN/SW resources -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.kie.kogito</groupId>
+                  <artifactId>integration-tests-jobs-service-common</artifactId>
+                  <version>${project.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.basedir}/src/main/resources/shared</outputDirectory>
+                  <includes>**/*.bpmn,**/*.sw.json</includes>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!--<plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
@@ -141,7 +172,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <configuration>

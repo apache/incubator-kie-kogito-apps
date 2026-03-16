@@ -39,7 +39,6 @@
     </properties>
 
     <dependencies>
-
         <dependency>
             <groupId>org.kie.kogito</groupId>
             <artifactId>data-audit-common</artifactId>
@@ -87,7 +86,7 @@
         </dependency>
     </dependencies>
 
-    <dependencyManagement>
+    <!--<dependencyManagement>
         <dependencies>
             <dependency>
                 <groupId>org.kie.kogito</groupId>
@@ -97,13 +96,16 @@
                 <scope>import</scope>
             </dependency>
         </dependencies>
-    </dependencyManagement>
+    </dependencyManagement>-->
     <profiles>
         <profile>
             <id>jpa-h2</id>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+            <properties>
+                <enforcer.no-managed-deps.phase>none</enforcer.no-managed-deps.phase>
+            </properties>
             <dependencies>
                 <!-- test for jpa -->
                 <dependency>

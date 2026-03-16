@@ -37,7 +37,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
-           <!----> <version>${version.org.springframework.boot}</version>
         </dependency>
 
         <dependency>
@@ -72,7 +71,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
-            <version>${version.org.springframework.boot}</version>
         </dependency>
 
         <!-- Test -->
@@ -89,7 +87,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>${version.org.springframework.boot}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -116,7 +113,43 @@
 
     <build>
         <plugins>
+            <!-- Unpack BPMN/SQL resources -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.kie.kogito</groupId>
+                                    <artifactId>integration-tests-jobs-service-common</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
+                                    <includes>**/*.bpmn</includes>
+                                </artifactItem>
+                                <artifactItem>
+                                    <groupId>org.kie.kogito</groupId>
+                                    <artifactId>integration-tests-data-index-service-quarkus</artifactId>
+                                    <version>${project.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
+                                    <includes>**/*.sql</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--<plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
                     <execution>
@@ -143,7 +176,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

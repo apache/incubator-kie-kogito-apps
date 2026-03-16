@@ -29,6 +29,10 @@
   </parent>
   <artifactId>kogito-addons-quarkus-jobs-service-embedded-deployment</artifactId>
   <name>Jobs Service Embedded Quarkus Add-On - Deployment</name>
+
+  <properties>
+    <disable.quarkus.plugin>true</disable.quarkus.plugin>
+  </properties>
   <dependencies>
     <dependency>
       <groupId>io.quarkus</groupId>

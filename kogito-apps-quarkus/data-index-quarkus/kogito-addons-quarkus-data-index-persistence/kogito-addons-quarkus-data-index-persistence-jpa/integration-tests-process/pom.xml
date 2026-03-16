@@ -30,6 +30,10 @@
   <artifactId>kogito-addons-quarkus-data-index-persistence-jpa-integration-tests-process</artifactId>
   <name>Kogito Apps :: Kogito Addons Quarkus Data Index Persistence JPA :: Integration Tests :: Process</name>
 
+  <properties>
+    <disable.quarkus.jar.rename>false</disable.quarkus.jar.rename>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jbpm</groupId>
@@ -86,7 +90,6 @@
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kogito-addons-quarkus-data-index-persistence-jpa-deployment</artifactId>
-      <version>${project.version}</version>
       <type>pom</type>
       <scope>test</scope>
       <exclusions>
@@ -97,7 +100,7 @@
       </exclusions>
     </dependency>
   </dependencies>
-  <build>
+  <!--<build>
     <plugins>
       <plugin>
         <groupId>io.quarkus</groupId>
@@ -112,7 +115,7 @@
         </executions>
       </plugin>
     </plugins>
-  </build>
+  </build>-->
   <profiles>
     <profile>
       <id>native</id>

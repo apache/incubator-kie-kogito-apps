@@ -37,22 +37,11 @@
     <module>integration-tests-data-index-service-common</module>
   </modules>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>integration-tests-data-index-service-common</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <!-- ensure data-index-service module was built, but not added in the classpath -->
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-service-common</artifactId>
-      <version>${project.version}</version>
       <type>pom</type>
       <scope>provided</scope>
       <exclusions>

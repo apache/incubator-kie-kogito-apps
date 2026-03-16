@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
     Licensed to the Apache Software Foundation (ASF) under one
     or more contributor license agreements.  See the NOTICE file
@@ -14,7 +15,9 @@
     specific language governing permissions and limitations
     under the License.
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kie.kogito</groupId>
@@ -22,40 +25,25 @@
     <version>999-SNAPSHOT</version>
     <relativePath/>
   </parent>
-  <artifactId>kogito-apps-quarkus</artifactId>
+
+  <artifactId>kogito-apps-quarkus-bom</artifactId>
   <packaging>pom</packaging>
-  <name>Kogito Apps :: Quarkus</name>
-  <description>Kogito Apps :: Quarkus</description>
+  <name>Kogito Apps :: Quarkus :: BOM</name>
+  <description>BOM for kogito Quarkus apps</description>
   <properties>
-    <java.module.name>org.kie.kogito.apps.quarkus</java.module.name>
-  </properties>
-  <!--<properties>
-    <java.module.name>org.kie.kogito.apps.quarkus</java.module.name>
-    &lt;!&ndash; Used to define which poms are allowed to have dependencyManagement sections. This is to enforce the convention that only the root pom should have dependencyManagement, and all other poms should inherit from it. &ndash;&gt;
-    <allowedPomsList>org.kie.kogito:kogito-apps-quarkus</allowedPomsList>
-    &lt;!&ndash; Explainability Toolkit version &ndash;&gt;
+    <java.module.name>org.kie.kogito.apps.quarkus.bom</java.module.name>
+    <!-- Used to define which poms are allowed to have dependencyManagement sections. This is to enforce the convention that only the root pom should have dependencyManagement, and all other poms should inherit from it. -->
+    <allowedPomsList>org.kie.kogito:kogito-apps-quarkus-bom</allowedPomsList>
+    <!-- Explainability Toolkit version -->
     <version.explainability-core>1.22.1.Final</version.explainability-core>
-    &lt;!&ndash; OptaPlanner version &ndash;&gt;
+    <!-- OptaPlanner version -->
     <version.org.optaplanner>${project.version}</version.org.optaplanner>
 
     <disable.quarkus.jar.rename>true</disable.quarkus.jar.rename>
     <disable.quarkus.plugin>false</disable.quarkus.plugin>
-  </properties>-->
-  <modules>
-    <module>kogito-apps-quarkus-bom</module>
-    <module>data-audit-quarkus</module>
-    <module>data-index-quarkus</module>
-    <module>data-index-service-common</module>
-    <module>data-index-storage-quarkus</module>
-    <module>data-index-test-utils-quarkus</module>
-    <module>integration-tests-data-index-service-quarkus-parent</module>
-    <module>integration-tests-jobs-service-quarkus</module>
-    <module>jobs-quarkus</module>
-    <module>jobs-service-quarkus</module>
-    <module>persistence-commons-quarkus</module>
-    <module>security-commons</module>
-  </modules>
-  <!--<dependencyManagement>
+  </properties>
+
+  <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>org.kie</groupId>
@@ -127,6 +115,18 @@
       </dependency>
       <dependency>
         <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-quarkus-data-index-jpa-deployment</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-quarkus-data-index-mongodb-deployment</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
         <artifactId>kogito-addons-quarkus-data-index-persistence-jpa</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -162,6 +162,12 @@
       <dependency>
         <groupId>org.kie</groupId>
         <artifactId>kogito-addons-quarkus-data-index-persistence-postgresql-deployment</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-quarkus-data-index-postgresql-deployment</artifactId>
         <version>${project.version}</version>
         <type>pom</type>
       </dependency>
@@ -233,6 +239,12 @@
         <groupId>org.kie.kogito</groupId>
         <artifactId>data-index-service-common</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>data-index-service-inmemory</artifactId>
+        <version>${project.version}</version>
+        <type>pom</type>
       </dependency>
       <dependency>
         <groupId>org.kie.kogito</groupId>
@@ -490,5 +502,6 @@
         </configuration>
       </plugin>
     </plugins>
-  </build>-->
+  </build>
+
 </project>

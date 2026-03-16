@@ -22,17 +22,21 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>integration-tests-jobs-service-quarkus</artifactId>
     <version>999-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
   <artifactId>integration-tests-jobs-service-quarkus-knative-eventing</artifactId>
   <name>Kogito Apps :: Integration Tests :: Jobs Service :: Quarkus :: Knative Eventing</name>
   <description>Quarkus jobs service integration tests based on the Jobs Knative Eventing Addon</description>
 
   <dependencies>
+    <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-transaction-spi</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kogito-addons-quarkus-jobs-knative-eventing</artifactId>
@@ -81,7 +85,7 @@
 
   <build>
     <plugins>
-      <plugin>
+      <!--<plugin>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>
         <version>${version.io.quarkus}</version>
@@ -95,8 +99,35 @@
             </goals>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
+      <!-- Unpack BPMN/SW resources -->
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.kie.kogito</groupId>
+                  <artifactId>integration-tests-jobs-service-common</artifactId>
+                  <version>${project.version}</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.basedir}/src/main/resources/shared</outputDirectory>
+                  <includes>**/*.bpmn,**/*.sw.json</includes>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <!--<plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
@@ -118,7 +149,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin>-->
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <configuration>

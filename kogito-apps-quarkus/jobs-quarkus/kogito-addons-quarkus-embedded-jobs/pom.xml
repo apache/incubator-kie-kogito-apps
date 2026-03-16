@@ -30,15 +30,12 @@
     </parent>
 
     <artifactId>kogito-addons-quarkus-embedded-jobs</artifactId>
-
-
     <name>Kogito Apps :: Addons:: Quarkus :: Embedded :: Jobs</name>
 
     <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.module.name>org.kie.kogito.app.jobs.quarkus</java.module.name>
+        <disable.quarkus.plugin>true</disable.quarkus.plugin>
     </properties>
-
 
     <dependencies>
         <dependency>

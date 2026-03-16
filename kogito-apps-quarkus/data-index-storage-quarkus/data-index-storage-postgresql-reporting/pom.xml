@@ -34,6 +34,7 @@
 
   <properties>
     <java.module.name>org.kie.kogito.index.postgresql.reporting</java.module.name>
+    <disable.quarkus.plugin>true</disable.quarkus.plugin>
   </properties>
 
   <dependencies>

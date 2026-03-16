@@ -34,6 +34,7 @@
 
     <properties>
         <java.module.name>org.kie.kogito.job.service.messaging.http</java.module.name>
+        <disable.quarkus.plugin>true</disable.quarkus.plugin>
     </properties>
 
     <dependencies>
@@ -54,7 +55,6 @@
         <dependency>
             <groupId>io.quarkiverse.reactivemessaging.http</groupId>
             <artifactId>quarkus-reactive-messaging-http</artifactId>
-            <version>${version.io.quarkiverse.reactivemessaging.http}</version>
         </dependency>
 
         <!-- Health Check -->
