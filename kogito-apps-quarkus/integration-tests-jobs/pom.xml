@@ -23,11 +23,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
          xmlns="http://maven.apache.org/POM/4.0.0">
   <modelVersion>4.0.0</modelVersion>
-
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>apps-integration-tests</artifactId>
+    <artifactId>kogito-apps-quarkus-bom</artifactId>
     <version>999-SNAPSHOT</version>
+    <relativePath>../kogito-apps-quarkus-bom/pom.xml</relativePath>
   </parent>
 
   <artifactId>integration-tests-jobs</artifactId>
@@ -40,7 +40,6 @@
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index</artifactId>
-      <version>${project.version}</version>
       <type>pom</type>
       <scope>provided</scope>
       <exclusions>
@@ -53,7 +52,6 @@
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>jobs</artifactId>
-      <version>${project.version}</version>
       <type>pom</type>
       <scope>provided</scope>
       <exclusions>
@@ -128,21 +126,6 @@
 
   <build>
     <plugins>
-      <plugin>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-maven-plugin</artifactId>
-        <version>${version.io.quarkus}</version>
-        <configuration>
-          <skipOriginalJarRename>true</skipOriginalJarRename>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-failsafe-plugin</artifactId>
