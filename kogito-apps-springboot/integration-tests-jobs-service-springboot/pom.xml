@@ -36,18 +36,6 @@
     <sonar.exclusions>**/KogitoApplication.java</sonar.exclusions>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>kogito-spring-boot-bom</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>org.jbpm</groupId>
@@ -135,28 +123,6 @@
           </execution>
         </executions>
       </plugin>
-     <!-- <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${common.test.resources.dir}</directory>
-                  <includes>
-                    <include>**/*.bpmn</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>-->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>

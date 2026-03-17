@@ -113,42 +113,10 @@
 
     <build>
         <plugins>
-            <!-- Unpack BPMN/SQL resources -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.kie.kogito</groupId>
-                                    <artifactId>integration-tests-jobs-service-common</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
-                                    <includes>**/*.bpmn</includes>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.kie.kogito</groupId>
-                                    <artifactId>integration-tests-data-index-service-quarkus</artifactId>
-                                    <version>${project.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
-                                    <includes>**/*.sql</includes>
-                                </artifactItem>
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!-- Removed because actually pointing to not existing resources -->
+
+            <!-- 2026-03-05T13:47:38.4736559Z [INFO] skip non existing resourceDirectory /home/runner/work/incubator-kie-kogito-apps/incubator-kie-kogito-apps/apache_incubator-kie-kogito-apps/data-index/data-index-springboot/kogito-addons-springboot-data-index-persistence/kogito-addons-springboot-data-index-persistence-jpa-parent/integration-tests-data-index-service-common/src/main/resources
+2026-03-05T13:47:38.4740520Z [INFO] skip non existing resourceDirectory /home/runner/work/incubator-kie-kogito-apps/incubator-kie-kogito-apps/apache_incubator-kie-kogito-apps/data-index/data-index-springboot/kogito-addons-springboot-data-index-persistence/kogito-addons-springboot-data-index-persistence-jpa-parent/integration-tests-data-index-service-quarkus/src/main/resources -->
             <!--<plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>

@@ -37,18 +37,6 @@
     <sonar.exclusions>**/KogitoApplication.java</sonar.exclusions>
   </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>kogito-spring-boot-bom</artifactId>
-        <version>${project.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
   <dependencies>
     <dependency>
       <groupId>org.jbpm</groupId>
@@ -86,7 +74,6 @@
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>integration-tests-data-index-service-common</artifactId>
-      <version>${project.version}</version>
       <type>test-jar</type>
       <scope>test</scope>
     </dependency>
@@ -136,6 +123,7 @@
       <artifactId>junit-jupiter-engine</artifactId>
       <scope>test</scope>
     </dependency>
+
   </dependencies>
 
   <build>
@@ -155,14 +143,15 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>org.kie.kogito</groupId>
-                  <artifactId>integration-tests-jobs-service-common</artifactId>
+                  <artifactId>integration-tests-data-index-service-common</artifactId>
                   <version>${project.version}</version>
                   <type>jar</type>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
                   <includes>**/*.bpmn</includes>
                 </artifactItem>
-                <artifactItem>
+                <!-- This module does not contain any sql file -->
+                <!--<artifactItem>
                   <groupId>org.kie.kogito</groupId>
                   <artifactId>integration-tests-data-index-service-quarkus</artifactId>
                   <version>${project.version}</version>
@@ -170,40 +159,13 @@
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
                   <includes>**/*.sql</includes>
-                </artifactItem>
+                </artifactItem>-->
               </artifactItems>
             </configuration>
           </execution>
         </executions>
       </plugin>
-      <!--<plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.parent.basedir}/integration-tests-data-index-service-common/src/main/resources</directory>
-                  <includes>
-                    <include>**/*.bpmn</include>
-                  </includes>
-                </resource>
-                <resource>
-                  <directory>${project.parent.basedir}/integration-tests-data-index-service-quarkus/src/main/resources</directory>
-                  <includes>
-                    <include>**/*.sql</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>-->
+
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
