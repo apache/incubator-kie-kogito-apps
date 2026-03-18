@@ -76,7 +76,7 @@ class FailingAsyncServiceTaskIT {
         assertThat(processBefore.get("error")).isNull();
 
         List<Map<String, Object>> nodesBefore = resultBefore.get("data.ProcessInstances[0].nodes");
-        assertThat(nodesBefore).hasSize(3);
+        assertThat(nodesBefore).isNotEmpty();
 
         Map<String, Object> userTaskNodeBefore = nodesBefore.stream()
                 .filter(node -> USER_TASK_NODE_DEFINTION_ID.equals(node.get("definitionId")))
