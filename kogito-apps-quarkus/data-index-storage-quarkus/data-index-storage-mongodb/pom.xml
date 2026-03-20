@@ -50,6 +50,10 @@
       <artifactId>persistence-commons-mongodb</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.mongodb</groupId>
+      <artifactId>mongodb-driver-sync</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-storage-api</artifactId>
       <type>test-jar</type>
