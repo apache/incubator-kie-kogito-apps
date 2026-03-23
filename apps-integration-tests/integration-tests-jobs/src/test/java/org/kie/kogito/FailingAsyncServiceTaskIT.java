@@ -92,7 +92,7 @@ class FailingAsyncServiceTaskIT {
         assertThat(jobBefore.get("nodeInstanceId")).isEqualTo(userTaskNodeInstanceId);
         assertThat(jobBefore.get("status")).isIn("SCHEDULED", "RETRY");
 
-        // After 2s Boundary Timer triggers
+        // After 4s Boundary Timer triggers
         JsonPath resultAfter = await()
                 .pollDelay(POLL_DELAY)
                 .atMost(TIMEOUT)
