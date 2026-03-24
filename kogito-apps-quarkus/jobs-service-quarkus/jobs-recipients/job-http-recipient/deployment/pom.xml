@@ -29,7 +29,16 @@
   </parent>
   <artifactId>kogito-addons-quarkus-job-http-recipient-deployment</artifactId>
   <name>Kogito Apps :: Jobs Service :: Kogito Add-Ons Quarkus Job Http Recipient - Deployment</name>
+
+  <properties>
+    <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
+  </properties>
+
   <dependencies>
+    <dependency>
+      <groupId>org.eclipse.jetty.toolchain</groupId>
+      <artifactId>jetty-jakarta-servlet-api</artifactId>
+    </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-arc-deployment</artifactId>

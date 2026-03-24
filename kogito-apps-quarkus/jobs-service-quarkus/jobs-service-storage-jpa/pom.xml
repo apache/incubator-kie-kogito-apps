@@ -41,6 +41,7 @@
         <path.to.migration.scripts.target>target/classes/${path.to.flyway.location}</path.to.migration.scripts.target>
         <java.module.name>org.kie.kogito.job.service.repository.jpa</java.module.name>
         <disable.quarkus.plugin>true</disable.quarkus.plugin>
+        <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
     </properties>
 
     <dependencies>
