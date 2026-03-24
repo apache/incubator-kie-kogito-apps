@@ -28,6 +28,7 @@
   <description>Kogito Apps :: Quarkus</description>
   <properties>
     <java.module.name>org.kie.kogito.apps.quarkus</java.module.name>
+    <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
   </properties>
 
   <modules>

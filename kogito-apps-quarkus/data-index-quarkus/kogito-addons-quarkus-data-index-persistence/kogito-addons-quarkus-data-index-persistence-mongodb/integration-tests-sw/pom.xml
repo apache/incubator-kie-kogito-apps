@@ -32,9 +32,15 @@
 
   <properties>
     <disable.quarkus.jar.rename>false</disable.quarkus.jar.rename>
+    <disable.quarkus.plugin>false</disable.quarkus.plugin>
+    <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
+    <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-transaction-spi</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.apache.kie.sonataflow</groupId>
       <artifactId>sonataflow-quarkus</artifactId>
@@ -92,22 +98,7 @@
       </exclusions>
     </dependency>
   </dependencies>
-  <!--<build>
-    <plugins>
-      <plugin>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-maven-plugin</artifactId>
-        <version>${version.io.quarkus}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>-->
+
   <profiles>
     <profile>
       <id>native</id>
