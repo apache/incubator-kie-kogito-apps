@@ -32,6 +32,12 @@
   <artifactId>integration-tests-data-index-service-quarkus</artifactId>
   <name>Kogito Apps :: Integration Tests :: Data Index :: Quarkus</name>
 
+  <properties>
+    <path.to.apps.integrations.tests>${project.parent.parent.basedir}/../../apps-integration-tests</path.to.apps.integrations.tests>
+    <path.to.integration.tests.data.index.service.common>${path.to.apps.integrations.tests}/integration-tests-data-index-service/integration-tests-data-index-service-common</path.to.integration.tests.data.index.service.common>
+    <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>org.jboss</groupId>
@@ -143,43 +149,7 @@
 
   <build>
     <plugins>
-      <!-- Unpack BPMN/SQL resources -->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.kie.kogito</groupId>
-                  <artifactId>integration-tests-data-index-service-common</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.basedir}/target/classes</outputDirectory>
-                  <includes>**/*.bpmn</includes>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>org.kie.kogito</groupId>
-                  <artifactId>integration-tests-data-index-service-quarkus</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.basedir}/target/classes</outputDirectory>
-                  <includes>**/*.sql</includes>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <!--<plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
@@ -191,22 +161,23 @@
               <outputDirectory>${project.basedir}/target/classes</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${apps.integration.tests.dir}/integration-tests-data-index-service/integration-tests-data-index-service-common/src/main/resources</directory>
+                  <directory>${path.to.integration.tests.data.index.service.common}/src/main/resources</directory>
                   <includes>
                     <include>**/*.bpmn</include>
                   </includes>
                 </resource>
-                <resource>
+                <!-- ? This resolve to the current module itself, that does not contains any sql -->
+                <!--<resource>
                   <directory>${project.parent.basedir}/integration-tests-data-index-service-quarkus/src/main/resources</directory>
                   <includes>
                     <include>**/*.sql</include>
                   </includes>
-                </resource>
+                </resource>-->
               </resources>
             </configuration>
           </execution>
         </executions>
-      </plugin>-->
+      </plugin>
       <!--<plugin>
         <groupId>io.quarkus</groupId>
         <artifactId>quarkus-maven-plugin</artifactId>

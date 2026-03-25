@@ -39,14 +39,9 @@
     <path.to.migration.scripts.source>${path.to.postgresql.storage}/${path.to.script.folder}</path.to.migration.scripts.source>
     <path.to.migration.scripts.target>target/classes/${path.to.flyway.location}</path.to.migration.scripts.target>
     <java.module.name>org.kie.kogito.persistence.jpa</java.module.name>
+    <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
   </properties>
 
-<!--  <dependencies>
-    &lt;!&ndash;<dependency>
-      <groupId>org.kie.kogito</groupId>
-      <artifactId>persistence-commons-jpa-base</artifactId>
-    </dependency>&ndash;&gt;
-  </dependencies>-->
   <build>
     <plugins>
       <plugin>
@@ -66,35 +61,8 @@
           </execution>
         </executions>
       </plugin>
-      <!-- Unpack SQL resources -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.kie.kogito</groupId>
-                  <artifactId>data-index-storage-postgresql</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${path.to.migration.scripts.target}</outputDirectory>
-                  <includes>${path.to.flyway.location}/*.sql</includes>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
 
-      <!--&lt;!&ndash;  The cleanest way would be to use the maven-dependency-plugin to unpack and copy scripts from the built artifact `kie-addons-persistence-jdbc` but there's a limitation to using this only in the `package` phase whereas we need that into the `generate-sources` phase. See also https://issues.apache.org/jira/browse/MDEP-98 &ndash;&gt;
+      <!--  The cleanest way would be to use the maven-dependency-plugin to unpack and copy scripts from the built artifact `kie-addons-persistence-jdbc` but there's a limitation to using this only in the `package` phase whereas we need that into the `generate-sources` phase. See also https://issues.apache.org/jira/browse/MDEP-98 -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
@@ -118,7 +86,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>-->
+      </plugin>
     </plugins>
   </build>
 </project>

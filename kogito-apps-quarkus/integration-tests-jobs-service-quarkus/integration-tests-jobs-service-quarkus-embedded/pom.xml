@@ -33,7 +33,10 @@
   <description>Quarkus jobs service integration tests based on the Jobs embedded Addon</description>
 
   <properties>
-    <common.test.resources.dir>${project.basedir}/../../apps-integration-tests/integration-tests-jobs-service/integration-tests-jobs-service-common/src/main/resources</common.test.resources.dir>
+    <path.to.apps.integrations.tests>${project.parent.parent.basedir}/../../apps-integration-tests</path.to.apps.integrations.tests>
+    <path.to.integration.tests.jobs.service.common>${path.to.apps.integrations.tests}/integration-tests-jobs-service/integration-tests-jobs-service-common</path.to.integration.tests.jobs.service.common>
+    <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
+    <disable.quarkus.plugin>false</disable.quarkus.plugin>
   </properties>
 
   <dependencies>
@@ -119,35 +122,7 @@
         </executions>
       </plugin>-->
 
-      <!-- Unpack BPMN/SW resources from from org.kie:kie-dmn-test-resources -->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack</id>
-            <phase>generate-resources</phase>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.kie.kogito</groupId>
-                  <artifactId>integration-tests-jobs-service-common</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.basedir}/src/main/resources/shared</outputDirectory>
-                  <includes>**/*.bpmn,**/*.sw.json
-                  </includes>
-                </artifactItem>
-              </artifactItems>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <!--<plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
@@ -159,7 +134,7 @@
               <outputDirectory>${project.basedir}/src/main/resources/shared</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${common.test.resources.dir}</directory>
+                  <directory>${path.to.integration.tests.jobs.service.common}/src/main/resources</directory>
                   <includes>
                     <include>**/*.bpmn</include>
                     <include>**/*.sw.json</include>
@@ -169,7 +144,7 @@
             </configuration>
           </execution>
         </executions>
-      </plugin>-->
+      </plugin>
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
         <configuration>

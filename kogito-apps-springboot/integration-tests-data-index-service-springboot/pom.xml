@@ -35,6 +35,9 @@
 
   <properties>
     <sonar.exclusions>**/KogitoApplication.java</sonar.exclusions>
+    <path.to.apps.integrations.tests>${project.parent.parent.basedir}/../apps-integration-tests</path.to.apps.integrations.tests>
+    <path.to.integration.tests.data.index.service.common>${path.to.apps.integrations.tests}/integration-tests-data-index-service/integration-tests-data-index-service-common</path.to.integration.tests.data.index.service.common>
+    <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
   </properties>
 
   <dependencies>
@@ -128,39 +131,31 @@
 
   <build>
     <plugins>
-      <!-- Unpack BPMN/SQL resources -->
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
+        <artifactId>maven-resources-plugin</artifactId>
         <executions>
           <execution>
-            <id>unpack</id>
             <phase>generate-resources</phase>
             <goals>
-              <goal>unpack</goal>
+              <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.kie.kogito</groupId>
-                  <artifactId>integration-tests-data-index-service-common</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
-                  <includes>**/*.bpmn</includes>
-                </artifactItem>
+              <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${path.to.integration.tests.data.index.service.common}/src/main/resources</directory>
+                  <includes>
+                    <include>**/*.bpmn</include>
+                  </includes>
+                </resource>
                 <!-- This module does not contain any sql file -->
-                <!--<artifactItem>
-                  <groupId>org.kie.kogito</groupId>
-                  <artifactId>integration-tests-data-index-service-quarkus</artifactId>
-                  <version>${project.version}</version>
-                  <type>jar</type>
-                  <overWrite>true</overWrite>
-                  <outputDirectory>${project.basedir}/target/generated-resources</outputDirectory>
-                  <includes>**/*.sql</includes>
-                </artifactItem>-->
-              </artifactItems>
+                <!--<resource>
+                  <directory>${project.parent.basedir}/integration-tests-data-index-service-quarkus/src/main/resources</directory>
+                  <includes>
+                    <include>**/*.sql</include>
+                  </includes>
+                </resource>-->
+              </resources>
             </configuration>
           </execution>
         </executions>
