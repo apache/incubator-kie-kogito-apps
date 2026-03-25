@@ -146,7 +146,7 @@
               <outputDirectory>${project.basedir}/src/main/resources/shared</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${common.test.resources.dir}</directory>
+                  <directory>${path.to.integration.tests.jobs.service.common}/src/main/resources</directory>
                   <includes>
                     <include>**/*.bpmn</include>
                     <include>**/*.sw.json</include>

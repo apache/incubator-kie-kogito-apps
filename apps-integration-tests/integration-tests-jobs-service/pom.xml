@@ -30,10 +30,6 @@
   <name>Kogito Apps :: Integration Tests :: Jobs Service</name>
   <packaging>pom</packaging>
 
-  <properties>
-    <common.test.resources.dir>${project.root.dir}/apps-integration-tests/integration-tests-jobs-service/integration-tests-jobs-service-common/src/main/resources</common.test.resources.dir>
-  </properties>
-
   <modules>
     <module>integration-tests-jobs-service-common</module>
   </modules>
@@ -54,34 +50,4 @@
     </dependency>
   </dependencies>
 
-  <profiles>
-    <profile>
-      <id>postgresql</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <container.image.jobs-service>org.kie.kogito/jobs-service-postgresql:${project.version}</container.image.jobs-service>
-        <container.image.data-index-service-postgresql>org.kie.kogito/data-index-service-postgresql:${project.version}</container.image.data-index-service-postgresql>
-      </properties>
-
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-failsafe-plugin</artifactId>
-            <configuration>
-              <systemPropertyVariables>
-                <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                <native.image.path>${project.build.directory}/${project.build.finalName}-runner</native.image.path>
-                <container.image.kafka>${container.image.kafka}</container.image.kafka>
-                <container.image.jobs-service>${container.image.jobs-service}</container.image.jobs-service>
-                <container.image.data-index-service-postgresql>${container.image.data-index-service-postgresql}</container.image.data-index-service-postgresql>
-              </systemPropertyVariables>
-            </configuration>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>
