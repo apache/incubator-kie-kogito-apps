@@ -39,6 +39,12 @@
     <!-- OptaPlanner version -->
     <version.org.optaplanner>${project.version}</version.org.optaplanner>
 
+    <version.rename.plugin>1.0.1</version.rename.plugin>
+    <version.frontend.plugin>1.12.1</version.frontend.plugin>
+    <version.node>v18.16.0</version.node>
+    <version.npm>6.10.3</version.npm>
+    <version.pnpm>v8.7.0</version.pnpm>
+
     <disable.quarkus.jar.rename>true</disable.quarkus.jar.rename>
     <disable.quarkus.plugin>false</disable.quarkus.plugin>
 

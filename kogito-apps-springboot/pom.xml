@@ -36,6 +36,13 @@
     <!-- This is duplicated in kogito-apps-quarkus to allow independence of the two configurations -->
     <failsafe.include>**/*IT.java</failsafe.include>
     <failsafe.exclude>**/Native*IT.java</failsafe.exclude>
+
+    <version.rename.plugin>1.0.1</version.rename.plugin>
+    <version.frontend.plugin>1.12.1</version.frontend.plugin>
+    <version.node>v18.16.0</version.node>
+    <version.npm>6.10.3</version.npm>
+    <version.pnpm>v8.7.0</version.pnpm>
+
     <!-- internal containers used for testing -->
     <container.image.explainability-service-messaging>org.kie.kogito/explainability-service-messaging:${project.version}</container.image.explainability-service-messaging>
     <container.image.jobs-service>org.kie.kogito/jobs-service-common:${project.version}</container.image.jobs-service>

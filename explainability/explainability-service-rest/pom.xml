@@ -22,18 +22,20 @@
 <project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kie.kogito</groupId>
     <artifactId>explainability</artifactId>
     <version>999-SNAPSHOT</version>
   </parent>
-  <modelVersion>4.0.0</modelVersion>
 
   <name>Kogito Apps :: Explainability Service Rest</name>
   <artifactId>explainability-service-rest</artifactId>
 
   <properties>
     <java.module.name>org.kie.kogito.explainability.rest</java.module.name>
+    <disable.quarkus.jar.rename>true</disable.quarkus.jar.rename>
+    <disable.quarkus.plugin>false</disable.quarkus.plugin>
     <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
   </properties>
 
