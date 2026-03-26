@@ -38,13 +38,14 @@
     <module>data-index-service-common</module>
     <module>data-index-storage-quarkus</module>
     <module>data-index-test-utils-quarkus</module>
-    <module>integration-tests-data-index-service-quarkus-parent</module>
-    <module>integration-tests-jobs</module>
-    <module>integration-tests-jobs-service-quarkus</module>
     <module>jobs-quarkus</module>
     <module>jobs-service-quarkus</module>
     <module>persistence-commons-quarkus</module>
     <module>security-commons</module>
+    <!-- Keep them as last modules to have them built after the others, in lack of other indication for the build order -->
+    <module>integration-tests-data-index-service-quarkus-parent</module>
+    <module>integration-tests-jobs</module>
+    <module>integration-tests-jobs-service-quarkus</module>
   </modules>
 
 </project>

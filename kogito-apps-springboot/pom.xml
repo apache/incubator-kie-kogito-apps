@@ -59,9 +59,10 @@
     <module>kogito-apps-springboot-bom</module>
     <module>data-audit-springboot</module>
     <module>data-index-springboot</module>
+    <module>jobs-springboot</module>
+    <!-- Keep them as last modules to have them built after the others, in lack of other indication for the build order -->
     <module>integration-tests-data-index-service-springboot</module>
     <module>integration-tests-jobs-service-springboot</module>
-    <module>jobs-springboot</module>
   </modules>
 
   <!-- This is duplicated in kogito-apps-quarkus to allow independence of the two configurations -->
