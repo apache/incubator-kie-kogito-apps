@@ -114,4 +114,22 @@
       </dependency>
     </dependencies>
   </dependencyManagement>-->
+
+  <dependencies>
+    <!-- It seems this one is needed because, somehow, the tests requires the presence of the
+  org.kie.kogito/jobs-service-postgresql:999-SNAPSHOT image, which is built as part of the jobs-service-quarkus, even if it's not used directly. -->
+    <!-- ensure jobs-service module was built, but not added in the classpath -->
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>jobs-service</artifactId>
+      <type>pom</type>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
 </project>
