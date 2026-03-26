@@ -34,7 +34,6 @@
 
   <properties>
     <failsafe.include>**/*IT.java</failsafe.include>
-    <!--<common.test.resources.dir>${project.basedir}/../../apps-integration-tests/integration-tests-jobs-service/integration-tests-jobs-service-common/src/main/resources</common.test.resources.dir>-->
     <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
   </properties>
 
@@ -45,6 +44,24 @@
     <module>integration-tests-jobs-service-quarkus-knative-eventing</module>
     <module>integration-tests-jobs-service-quarkus-embedded</module>
   </modules>
+
+  <dependencies>
+    <!-- It seems this one is needed because, somehow, the tests requires the presence of the
+org.kie.kogito/jobs-service-postgresql:999-SNAPSHOT image, which is built as part of the jobs-service-quarkus, even if it's not used directly. -->
+    <!-- ensure jobs-service module was built, but not added in the classpath -->
+    <dependency>
+      <groupId>org.kie.kogito</groupId>
+      <artifactId>jobs-service-quarkus</artifactId>
+      <type>pom</type>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>*</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
 
   <profiles>
     <profile>
