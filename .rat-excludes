@@ -56,3 +56,4 @@ jobs/kogito-addons-springboot-embedded-jobs/src/test/resources/application.prope
 jobs-service/kogito-addons-jobs-service/kogito-addons-quarkus-jobs/src/test/resources/application.properties
 jobs-service/kogito-addons-jobs-service/kogito-addons-quarkus-jobs-service-embedded/runtime/src/main/resources/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource
 trusty/trusty-service/trusty-service-common/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker
+kogito-apps-quarkus/data-index-service-common/src/main/resources/domain.schema.graphqls
