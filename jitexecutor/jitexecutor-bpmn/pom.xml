@@ -59,10 +59,10 @@
       <groupId>org.jbpm</groupId>
       <artifactId>jbpm-quarkus</artifactId>
     </dependency>
-    <dependency>
+    <!--<dependency>
       <groupId>org.jboss</groupId>
       <artifactId>jboss-transaction-spi</artifactId>
-    </dependency>
+    </dependency>-->
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-junit5</artifactId>

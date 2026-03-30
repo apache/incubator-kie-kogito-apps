@@ -39,10 +39,10 @@
     </properties>
 
     <dependencies>
-        <dependency>
+        <!--<dependency>
             <groupId>org.eclipse.jetty.toolchain</groupId>
             <artifactId>jetty-jakarta-servlet-api</artifactId>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>io.smallrye.reactive</groupId>
             <artifactId>mutiny-zero-flow-adapters</artifactId>
