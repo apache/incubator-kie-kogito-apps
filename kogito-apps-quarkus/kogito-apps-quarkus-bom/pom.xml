@@ -405,6 +405,11 @@
       </dependency>
       <dependency>
         <groupId>org.kie.kogito</groupId>
+        <artifactId>jobs-service-storage-jpa</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
         <artifactId>kogito-addons-quarkus-job-sink-recipient-deployment</artifactId>
         <version>${project.version}</version>
       </dependency>
