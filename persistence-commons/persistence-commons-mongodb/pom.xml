@@ -34,7 +34,19 @@
 
   <properties>
     <java.module.name>org.kie.kogito.persistence.mongodb</java.module.name>
+    <version.mongodb-driver-sync>5.5.1</version.mongodb-driver-sync>
+    <allowedPomsList>org.kie.kogito:persistence-commons-mongodb</allowedPomsList>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.mongodb</groupId>
+        <artifactId>mongodb-driver-sync</artifactId>
+        <version>${version.mongodb-driver-sync}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>
