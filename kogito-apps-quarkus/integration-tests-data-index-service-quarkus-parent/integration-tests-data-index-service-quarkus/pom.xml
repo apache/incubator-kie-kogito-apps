@@ -39,10 +39,6 @@
   </properties>
 
   <dependencies>
-    <!--<dependency>
-      <groupId>org.jboss</groupId>
-      <artifactId>jboss-transaction-spi</artifactId>
-    </dependency>-->
     <dependency>
       <groupId>org.jbpm</groupId>
       <artifactId>jbpm-with-drools-quarkus</artifactId>
@@ -178,21 +174,6 @@
           </execution>
         </executions>
       </plugin>
-      <!--<plugin>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-maven-plugin</artifactId>
-        <version>${version.io.quarkus}</version>
-        <configuration>
-          <skipOriginalJarRename>true</skipOriginalJarRename>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>-->
     </plugins>
   </build>
   <profiles>

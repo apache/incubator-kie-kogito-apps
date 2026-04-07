@@ -41,10 +41,6 @@
     </properties>
 
     <dependencies>
-        <!--<dependency>
-            <groupId>org.eclipse.jetty.toolchain</groupId>
-            <artifactId>jetty-jakarta-servlet-api</artifactId>
-        </dependency>-->
         <dependency>
             <groupId>org.kie.kogito</groupId>
             <artifactId>jobs-service-common</artifactId>
@@ -128,23 +124,4 @@
         </dependency>
     </dependencies>
 
-    <!--<build>
-        <plugins>
-            <plugin>
-                <groupId>io.quarkus</groupId>
-                <artifactId>quarkus-maven-plugin</artifactId>
-                <version>${version.io.quarkus}</version>
-                <configuration>
-                    <skipOriginalJarRename>true</skipOriginalJarRename>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>build</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>-->
 </project>

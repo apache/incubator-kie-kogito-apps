@@ -77,17 +77,6 @@
   </dependencies>
 <build>
     <plugins>
-      <!--<plugin>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-maven-plugin</artifactId>
-      <executions>
-        <execution>
-          <goals>
-            <goal>build</goal>
-          </goals>
-        </execution>
-      </executions>
-    </plugin>-->
       <plugin>
         <artifactId>maven-failsafe-plugin</artifactId>
         <executions>

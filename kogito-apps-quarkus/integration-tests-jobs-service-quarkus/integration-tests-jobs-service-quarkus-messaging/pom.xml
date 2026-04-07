@@ -40,14 +40,6 @@
   </properties>
 
   <dependencies>
-    <!--<dependency>
-      <groupId>org.eclipse.jetty.toolchain</groupId>
-      <artifactId>jetty-jakarta-servlet-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.jboss</groupId>
-      <artifactId>jboss-transaction-spi</artifactId>
-    </dependency>-->
     <dependency>
       <groupId>org.kie</groupId>
       <artifactId>kogito-addons-quarkus-jobs-messaging</artifactId>
@@ -120,20 +112,6 @@
 
   <build>
     <plugins>
-      <!--<plugin>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-maven-plugin</artifactId>
-        <configuration>
-          <skipOriginalJarRename>true</skipOriginalJarRename>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>-->
       <plugin>
         <artifactId>maven-resources-plugin</artifactId>
         <executions>
