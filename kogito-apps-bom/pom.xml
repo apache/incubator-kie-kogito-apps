@@ -29,6 +29,7 @@
     <java.module.name>org.kie.kogito.apps.bom</java.module.name>
     <!-- Used to define which poms are allowed to have dependencyManagement sections. This is to enforce the convention that only the root pom should have dependencyManagement, and all other poms should inherit from it. -->
     <allowedPomsList>org.kie.kogito:kogito-apps-bom</allowedPomsList>
+    <project.build.outputTimestamp>2026-03-18T00:00:00Z</project.build.outputTimestamp>
   </properties>
   <dependencyManagement>
     <dependencies>
