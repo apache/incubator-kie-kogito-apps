@@ -353,6 +353,13 @@
       </dependency>
       <dependency>
         <groupId>org.kie.kogito</groupId>
+        <artifactId>jitexecutor-bpmn</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
         <artifactId>jitexecutor-common</artifactId>
         <version>${project.version}</version>
       </dependency>
@@ -360,6 +367,19 @@
         <groupId>org.kie.kogito</groupId>
         <artifactId>jitexecutor-dmn</artifactId>
         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>jitexecutor-dmn</artifactId>
+        <version>${project.version}</version>
+        <type>test-jar</type>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.kie.kogito</groupId>
+        <artifactId>jitexecutor-runner</artifactId>
+        <version>${project.version}</version>
+        <classifier>javadoc</classifier>
       </dependency>
       <dependency>
         <groupId>org.kie.kogito</groupId>
