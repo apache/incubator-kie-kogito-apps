@@ -54,7 +54,7 @@ public class ProcessInstanceJobExecutor implements JobExecutor {
             processes.processByProcessInstanceId(processJobDescription.processInstanceId()).ifPresent(processes -> {
                 processes.instances().findById(processJobDescription.processInstanceId()).ifPresent(pi -> {
                     SimpleTimerTrigger timerTrigger = (SimpleTimerTrigger) jobDetails.getTrigger();
-                    int remaining = timerTrigger.getRemainingRepetitions();
+                    int remaining = timerTrigger.computeRemainingRepetitions();
                     pi.send(SignalFactory.of(SIGNAL, TimerInstance.with(jobDetails.getId(), processJobDescription.timerId(), remaining == -1 ? Integer.MAX_VALUE : remaining)));
                 });
             });
