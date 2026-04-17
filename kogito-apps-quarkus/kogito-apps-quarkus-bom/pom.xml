@@ -21,9 +21,8 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.kie.kogito</groupId>
-    <artifactId>kogito-quarkus-bom</artifactId>
+    <artifactId>kogito-apps-quarkus</artifactId>
     <version>999-SNAPSHOT</version>
-    <relativePath/>
   </parent>
 
   <artifactId>kogito-apps-quarkus-bom</artifactId>
