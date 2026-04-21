@@ -93,6 +93,10 @@ public class GraphQLInputObjectTypeMapper extends AbstractInputObjectTypeMapper 
 
     private GraphQLInputType getInputTypeByField(GraphQLFieldDefinition field) {
         String name = resolveBaseTypeName(field.getType());
+
+        // Check if this is an array field
+        boolean isArray = field.getType() instanceof GraphQLList;
+
         switch (name) {
             case "Int":
                 return getInputObjectType("NumericArgument");
@@ -108,7 +112,20 @@ public class GraphQLInputObjectTypeMapper extends AbstractInputObjectTypeMapper 
                 return getInputObjectType("BooleanArgument");
             case "DateTime":
                 return getInputObjectType("DateArgument");
+            case "StringArray":
+                return getInputObjectType("StringArrayArgument");
             default:
+                // For array fields, try to use ArrayArgument type first
+                if (isArray) {
+                    String arrayTypeName = name + "ArrayArgument";
+                    GraphQLType arraySchemaType = getExistingType(arrayTypeName);
+                    if (arraySchemaType != null) {
+                        LOGGER.debug("Using array argument type: {} for field: {}", arrayTypeName, field.getName());
+                        return (GraphQLInputType) arraySchemaType;
+                    }
+                }
+
+                // Fall back to regular Argument type
                 String typeName = name + ARGUMENT;
                 GraphQLType schemaType = getExistingType(typeName);
                 if (schemaType == null) {
