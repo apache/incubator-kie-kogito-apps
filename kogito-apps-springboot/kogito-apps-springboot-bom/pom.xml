@@ -34,6 +34,8 @@
     <java.module.name>org.kie.kogito.apps.springboot.bom</java.module.name>
     <!-- Used to define which poms are allowed to have dependencyManagement sections. This is to enforce the convention that only the root pom should have dependencyManagement, and all other poms should inherit from it. -->
     <allowedPomsList>org.kie.kogito:kogito-apps-springboot-bom</allowedPomsList>
+    <!-- To be overridden by poms with dependency management -->
+    <root_pom>../../pom.xml</root_pom>
     <skip.springboot>false</skip.springboot>
   </properties>
 
@@ -126,6 +128,16 @@
         <artifactId>kogito-addons-springboot-data-index-jpa</artifactId>
         <version>${project.version}</version>
         <classifier>sources</classifier>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-springboot-embedded-jobs</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.kie</groupId>
+        <artifactId>kogito-addons-springboot-embedded-jobs-jpa</artifactId>
+        <version>${project.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
