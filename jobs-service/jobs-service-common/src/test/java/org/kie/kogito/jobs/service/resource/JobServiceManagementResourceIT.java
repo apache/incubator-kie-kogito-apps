@@ -33,6 +33,7 @@ class JobServiceManagementResourceIT {
 
     private static final String HEALTH_ENDPOINT = "/q/health/ready";
     public static final String MANAGEMENT_SHUTDOWN_ENDPOINT = "/management/shutdown";
+    public static final String MANAGEMENT_RESIGN_ENDPOINT = "/management/resign";
 
     @Test
     public void testShutdown() {
@@ -54,6 +55,15 @@ class JobServiceManagementResourceIT {
                 .accept(ContentType.JSON)
                 .get(HEALTH_ENDPOINT)
                 .then()
-                .statusCode(503));
+                .statusCode(200));
+    }
+
+    @Test
+    public void testResign() {
+        given()
+                .when()
+                .post(MANAGEMENT_RESIGN_ENDPOINT)
+                .then()
+                .statusCode(200);
     }
 }

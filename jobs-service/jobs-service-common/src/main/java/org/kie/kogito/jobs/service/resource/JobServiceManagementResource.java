@@ -19,6 +19,7 @@
 package org.kie.kogito.jobs.service.resource;
 
 import org.kie.kogito.jobs.service.management.ReleaseLeaderEvent;
+import org.kie.kogito.jobs.service.management.ResignLeaderEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,12 +39,24 @@ public class JobServiceManagementResource {
     @Inject
     Event<ReleaseLeaderEvent> releaseLeaderEventEvent;
 
+    @Inject
+    Event<ResignLeaderEvent> resignLeaderEventEvent;
+
     @POST
     @Path("/shutdown")
     public Uni<Response> shutdownHook() {
         return Uni.createFrom().voidItem()
                 .onItem().invoke(i -> LOGGER.info("Job Service is shutting down"))
                 .onItem().invoke(() -> releaseLeaderEventEvent.fire(new ReleaseLeaderEvent()))
+                .onItem().transform(i -> Response.ok().build());
+    }
+
+    @POST
+    @Path("/resign")
+    public Uni<Response> resignLeadership() {
+        return Uni.createFrom().voidItem()
+                .onItem().invoke(i -> LOGGER.info("Job Service is resigning leadership"))
+                .onItem().invoke(() -> resignLeaderEventEvent.fire(new ResignLeaderEvent()))
                 .onItem().transform(i -> Response.ok().build());
     }
 }

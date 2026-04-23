@@ -18,6 +18,7 @@
  */
 package org.kie.kogito.jobs.service.management;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -37,13 +38,20 @@ public class HttpGatekeeperFilter {
     @ConfigProperty(name = "quarkus.smallrye-health.root-path", defaultValue = "/q/health")
     private String healthCheckPath;
 
+    @ConfigProperty(name = "kogito.jobs-service.management.http.protected-paths", defaultValue = "/jobs,/v2/jobs")
+    private List<String> protectedPaths;
+
+    @ConfigProperty(name = "kogito.jobs-service.management.http.whitelist", defaultValue = "/management")
+    private List<String> whitelistedPaths;
+
     protected void onMessagingStatusChange(@Observes MessagingChangeEvent event) {
         this.enabled.set(event.isEnabled());
     }
 
     @RouteFilter(100)
     void masterFilter(RoutingContext rc) throws Exception {
-        if (!enabled.get() && !rc.request().path().contains(healthCheckPath)) {
+        String path = rc.request().path();
+        if (!enabled.get() && isProtected(path) && !isWhitelisted(path)) {
             //block
             rc.response().setStatusCode(503);
             rc.response().setStatusMessage(ERROR_MESSAGE);
@@ -52,5 +60,30 @@ public class HttpGatekeeperFilter {
         }
         //continue
         rc.next();
+    }
+
+    private boolean isProtected(String path) {
+        return pathMatchesAny(path, protectedPaths);
+    }
+
+    private boolean isWhitelisted(String path) {
+        return pathMatches(path, healthCheckPath) || pathMatchesAny(path, whitelistedPaths);
+    }
+
+    private boolean pathMatchesAny(String path, List<String> pathPrefixes) {
+        return pathPrefixes != null && pathPrefixes.stream().anyMatch(prefix -> pathMatches(path, prefix));
+    }
+
+    private boolean pathMatches(String path, String pathPrefix) {
+        if (path == null || pathPrefix == null || pathPrefix.isBlank()) {
+            return false;
+        }
+        String normalizedPrefix = normalizePath(pathPrefix);
+        return "/".equals(normalizedPrefix) || path.equals(normalizedPrefix) || path.startsWith(normalizedPrefix + "/");
+    }
+
+    private String normalizePath(String path) {
+        String normalized = path.startsWith("/") ? path : "/" + path;
+        return normalized.length() > 1 && normalized.endsWith("/") ? normalized.substring(0, normalized.length() - 1) : normalized;
     }
 }

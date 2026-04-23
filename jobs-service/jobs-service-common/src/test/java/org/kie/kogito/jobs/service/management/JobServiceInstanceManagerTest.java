@@ -40,6 +40,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import io.quarkus.runtime.ShutdownEvent;
 import io.quarkus.runtime.StartupEvent;
+import io.smallrye.mutiny.Uni;
 import io.vertx.mutiny.core.TimeoutStream;
 import io.vertx.mutiny.core.Vertx;
 
@@ -51,6 +52,7 @@ import static org.awaitility.Awaitility.await;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -92,6 +94,7 @@ class JobServiceInstanceManagerTest {
         tested.heartbeatExpirationInSeconds = 1;
         tested.leaderCheckIntervalInSeconds = 1;
         tested.heardBeatIntervalInSeconds = 1;
+        tested.resignPauseHeartbeats = 1;
         messagingHandler = mock(MessagingHandler.class);
         Stream<MessagingHandler> handlers = Arrays.stream(new MessagingHandler[] { messagingHandler });
         lenient().doReturn(handlers).when(messagingHandlerInstance).stream();
@@ -169,5 +172,38 @@ class JobServiceInstanceManagerTest {
         assertThat(lastHeartbeat.getId()).isEqualTo(tested.getCurrentInfo().getId());
         assertThat(lastHeartbeat.getToken()).isEqualTo(tested.getCurrentInfo().getToken());
         assertThat(lastHeartbeat.getLastHeartbeat()).isNotNull();
+    }
+
+    @Test
+    void heartbeatDemotesLeaderWhenTokenWasLost() {
+        JobServiceManagementInfo info = new JobServiceManagementInfo("id", "token", OffsetDateTime.now());
+        TimeoutStream checkLeader = mock(TimeoutStream.class);
+        TimeoutStream heartbeat = mock(TimeoutStream.class);
+        tested.tryBecomeLeader(info, checkLeader, heartbeat).await().indefinitely();
+        doReturn(Uni.createFrom().nullItem()).when(repository).heartbeat(info);
+
+        tested.heartbeat(info).await().indefinitely();
+
+        assertThat(tested.isLeader()).isFalse();
+        verify(messagingHandler, atLeastOnce()).pause();
+        verify(messagingChangeEventEvent, atLeastOnce()).fire(any());
+        verify(heartbeat).pause();
+        verify(checkLeader).resume();
+    }
+
+    @Test
+    void onResignLeaderReleasesLeadership() {
+        tested.startup(startupEvent);
+        await().atMost(30, TimeUnit.SECONDS)
+                .untilAsserted(() -> assertThat(tested.isLeader()).isTrue());
+
+        tested.onResignLeader(new ResignLeaderEvent());
+
+        await().atMost(30, TimeUnit.SECONDS)
+                .untilAsserted(() -> {
+                    assertThat(tested.isLeader()).isFalse();
+                    verify(tested, times(1)).release(infoCaptor.capture());
+                    assertThat(infoCaptor.getValue()).isEqualTo(tested.getCurrentInfo());
+                });
     }
 }

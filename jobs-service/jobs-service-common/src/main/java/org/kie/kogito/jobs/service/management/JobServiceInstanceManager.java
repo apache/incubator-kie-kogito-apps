@@ -62,6 +62,9 @@ public class JobServiceInstanceManager {
     @ConfigProperty(name = "kogito.jobs-service.management.heartbeat.management-id", defaultValue = "kogito-jobs-service-leader")
     String leaderManagementId;
 
+    @ConfigProperty(name = "kogito.jobs-service.management.resign.pause-heartbeats", defaultValue = "10")
+    long resignPauseHeartbeats;
+
     @Inject
     Instance<MessagingHandler> messagingHandlerInstance;
 
@@ -131,6 +134,10 @@ public class JobServiceInstanceManager {
         shutdown();
     }
 
+    void onResignLeader(@Observes ResignLeaderEvent event) {
+        resign();
+    }
+
     private void shutdown() {
         release(currentInfo.get())
                 .onItem().invoke(i -> checkLeader.cancel())
@@ -183,7 +190,16 @@ public class JobServiceInstanceManager {
 
     protected Uni<JobServiceManagementInfo> heartbeat(JobServiceManagementInfo info) {
         if (isLeader()) {
-            return repository.heartbeat(info);
+            return repository.heartbeat(info)
+                    .onItem().invoke(updated -> {
+                        if (Objects.isNull(updated) && isLeader()) {
+                            LOGGER.warn("Heartbeat failed for token {}, demoting and resuming leader checks", info.getToken());
+                            leader.set(false);
+                            disableCommunication();
+                            heartbeat.pause();
+                            checkLeader.resume();
+                        }
+                    });
         }
         return Uni.createFrom().nullItem();
     }
@@ -207,5 +223,20 @@ public class JobServiceInstanceManager {
 
     protected TimeoutStream getHeartbeat() {
         return heartbeat;
+    }
+
+    private void resign() {
+        leader.set(false);
+        heartbeat.pause();
+        checkLeader.pause();
+        release(currentInfo.get())
+                .subscribe().with(i -> {
+                    long delayMs = TimeUnit.SECONDS.toMillis(heardBeatIntervalInSeconds * resignPauseHeartbeats);
+                    LOGGER.info("Resigned leadership; pausing leader checks for {} heartbeats ({} ms)", resignPauseHeartbeats, delayMs);
+                    vertx.setTimer(delayMs, t -> {
+                        LOGGER.info("Resign pause elapsed; resuming leader checks");
+                        checkLeader.resume();
+                    });
+                }, ex -> LOGGER.error("Error resigning leader", ex));
     }
 }
