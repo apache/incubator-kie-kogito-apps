@@ -18,7 +18,6 @@
  */
 package org.kie.kogito.index.jpa.springboot.storage;
 
-import jakarta.persistence.EntityManager;
 import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
 import org.kie.kogito.index.jpa.storage.AbstractUserTaskInstanceStorageIT;
 import org.kie.kogito.index.storage.UserTaskInstanceStorage;
@@ -28,6 +27,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+
+import jakarta.persistence.EntityManager;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = KogitoSpringBootApplication.class)
 @ContextConfiguration(initializers = PostgreSqlSpringBootTestResource.class)

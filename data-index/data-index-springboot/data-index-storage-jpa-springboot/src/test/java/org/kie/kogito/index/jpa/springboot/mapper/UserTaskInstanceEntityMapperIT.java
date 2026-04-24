@@ -18,12 +18,14 @@
  */
 package org.kie.kogito.index.jpa.springboot.mapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.inject.Inject;
 import org.kie.kogito.index.jpa.mapper.AbstractUserTaskInstanceEntityMapperIT;
 import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.inject.Inject;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = KogitoSpringBootApplication.class)
 @ActiveProfiles("h2")
