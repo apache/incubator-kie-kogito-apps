@@ -18,13 +18,18 @@
  */
 package org.kie.kogito.index.jpa.quarkus.query;
 
+import jakarta.inject.Inject;
 import org.kie.kogito.index.jpa.query.AbstractJobEntityQueryIT;
 
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import org.kie.kogito.index.jpa.storage.JobEntityStorage;
 
 @QuarkusTest
 @TestTransaction
 class H2JobEntityQueryIT extends AbstractJobEntityQueryIT {
-
+    @Inject
+    public H2JobEntityQueryIT(JobEntityStorage storage) {
+        super(storage);
+    }
 }

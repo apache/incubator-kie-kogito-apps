@@ -20,7 +20,9 @@ package org.kie.kogito.index.jpa.springboot.storage;
 
 import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
 import org.kie.kogito.index.jpa.storage.AbstractJobStorageIT;
+import org.kie.kogito.index.jpa.storage.JobEntityStorage;
 import org.kie.kogito.testcontainers.springboot.PostgreSqlSpringBootTestResource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -32,4 +34,8 @@ import org.springframework.test.context.ContextConfiguration;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class PostgreSQLJobStorageIT extends AbstractJobStorageIT {
 
+    @Autowired
+    public PostgreSQLJobStorageIT(JobEntityStorage storage) {
+        super(storage);
+    }
 }

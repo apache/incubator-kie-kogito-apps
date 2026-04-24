@@ -20,6 +20,8 @@ package org.kie.kogito.index.jpa.springboot.query;
 
 import org.kie.kogito.index.jpa.query.AbstractUserTaskInstanceEntityQueryIT;
 import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
+import org.kie.kogito.index.jpa.storage.UserTaskInstanceEntityStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -29,4 +31,8 @@ import org.springframework.test.context.ActiveProfiles;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class H2UserTaskInstanceEntityQueryIT extends AbstractUserTaskInstanceEntityQueryIT {
 
+    @Autowired
+    public H2UserTaskInstanceEntityQueryIT(UserTaskInstanceEntityStorage storage) {
+        super(storage);
+    }
 }

@@ -18,14 +18,22 @@
  */
 package org.kie.kogito.index.jpa.quarkus.query;
 
+import jakarta.inject.Inject;
 import org.kie.kogito.index.jpa.query.AbstractProcessInstanceEntityQueryIT;
 
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
+import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
 
 @QuarkusTest
 @TestTransaction
 class H2ProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT {
+
+    @Inject
+    public H2ProcessInstanceEntityQueryIT(ProcessInstanceEntityStorage storage, ProcessDefinitionEntityStorage definitionStorage) {
+        super(storage, definitionStorage);
+    }
 
     @Override
     protected Boolean isDateTimeAsLong() {

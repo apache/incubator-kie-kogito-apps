@@ -18,8 +18,11 @@
  */
 package org.kie.kogito.index.jpa.quarkus.storage;
 
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import org.kie.kogito.index.jpa.quarkus.PostgreSQLQuarkusTestProfile;
 import org.kie.kogito.index.jpa.storage.AbstractUserTaskInstanceStorageIT;
+import org.kie.kogito.index.storage.UserTaskInstanceStorage;
 import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
 
 import io.quarkus.test.TestTransaction;
@@ -32,4 +35,8 @@ import io.quarkus.test.junit.TestProfile;
 @QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
 @TestProfile(PostgreSQLQuarkusTestProfile.class)
 public class PostgreSQLUserTaskInstanceStorageIT extends AbstractUserTaskInstanceStorageIT {
+    @Inject
+    public PostgreSQLUserTaskInstanceStorageIT(UserTaskInstanceStorage storage, EntityManager em) {
+        super(storage, em);
+    }
 }

@@ -18,12 +18,19 @@
  */
 package org.kie.kogito.index.jpa.quarkus.storage;
 
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import org.kie.kogito.index.jpa.storage.AbstractUserTaskInstanceStorageIT;
 
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import org.kie.kogito.index.storage.UserTaskInstanceStorage;
 
 @QuarkusTest
 @TestTransaction
 public class H2UserTaskInstanceStorageIT extends AbstractUserTaskInstanceStorageIT {
+    @Inject
+    public H2UserTaskInstanceStorageIT(UserTaskInstanceStorage storage, EntityManager em) {
+        super(storage, em);
+    }
 }

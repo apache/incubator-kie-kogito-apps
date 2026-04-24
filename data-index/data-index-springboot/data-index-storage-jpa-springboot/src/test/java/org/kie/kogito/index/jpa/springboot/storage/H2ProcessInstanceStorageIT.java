@@ -20,6 +20,8 @@ package org.kie.kogito.index.jpa.springboot.storage;
 
 import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
 import org.kie.kogito.index.jpa.storage.AbstractProcessInstanceStorageIT;
+import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,4 +30,8 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("h2")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class H2ProcessInstanceStorageIT extends AbstractProcessInstanceStorageIT {
+    @Autowired
+    public H2ProcessInstanceStorageIT(ProcessInstanceEntityStorage storage) {
+        super(storage);
+    }
 }

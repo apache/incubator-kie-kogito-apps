@@ -18,6 +18,8 @@
  */
 package org.kie.kogito.index.jpa.springboot.mapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.inject.Inject;
 import org.kie.kogito.index.jpa.mapper.AbstractUserTaskInstanceEntityMapperIT;
 import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -27,4 +29,8 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("h2")
 class UserTaskInstanceEntityMapperIT extends AbstractUserTaskInstanceEntityMapperIT {
 
+    @Inject
+    public UserTaskInstanceEntityMapperIT(ObjectMapper jsonMapper) {
+        super(jsonMapper);
+    }
 }

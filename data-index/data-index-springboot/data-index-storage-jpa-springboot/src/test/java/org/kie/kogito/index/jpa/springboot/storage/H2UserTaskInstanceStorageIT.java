@@ -18,8 +18,11 @@
  */
 package org.kie.kogito.index.jpa.springboot.storage;
 
+import jakarta.persistence.EntityManager;
 import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
 import org.kie.kogito.index.jpa.storage.AbstractUserTaskInstanceStorageIT;
+import org.kie.kogito.index.storage.UserTaskInstanceStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,4 +31,8 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("h2")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class H2UserTaskInstanceStorageIT extends AbstractUserTaskInstanceStorageIT {
+    @Autowired
+    public H2UserTaskInstanceStorageIT(UserTaskInstanceStorage storage, EntityManager em) {
+        super(storage, em);
+    }
 }

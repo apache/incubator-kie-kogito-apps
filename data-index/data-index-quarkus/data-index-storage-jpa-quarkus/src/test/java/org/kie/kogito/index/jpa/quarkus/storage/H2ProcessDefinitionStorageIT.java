@@ -18,13 +18,18 @@
  */
 package org.kie.kogito.index.jpa.quarkus.storage;
 
+import jakarta.inject.Inject;
 import org.kie.kogito.index.jpa.storage.AbstractProcessDefinitionStorageIT;
 
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
 
 @QuarkusTest
 @TestTransaction
 class H2ProcessDefinitionStorageIT extends AbstractProcessDefinitionStorageIT {
-
+    @Inject
+    public H2ProcessDefinitionStorageIT(ProcessDefinitionEntityStorage storage) {
+        super(storage);
+    }
 }

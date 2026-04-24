@@ -18,8 +18,10 @@
  */
 package org.kie.kogito.index.jpa.quarkus.query;
 
+import jakarta.inject.Inject;
 import org.kie.kogito.index.jpa.quarkus.PostgreSQLQuarkusTestProfile;
 import org.kie.kogito.index.jpa.query.AbstractJobEntityQueryIT;
+import org.kie.kogito.index.jpa.storage.JobEntityStorage;
 import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
 
 import io.quarkus.test.TestTransaction;
@@ -32,5 +34,8 @@ import io.quarkus.test.junit.TestProfile;
 @QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
 @TestProfile(PostgreSQLQuarkusTestProfile.class)
 class PostgreSQLJobEntityQueryIT extends AbstractJobEntityQueryIT {
-
+    @Inject
+    public PostgreSQLJobEntityQueryIT(JobEntityStorage storage) {
+        super(storage);
+    }
 }

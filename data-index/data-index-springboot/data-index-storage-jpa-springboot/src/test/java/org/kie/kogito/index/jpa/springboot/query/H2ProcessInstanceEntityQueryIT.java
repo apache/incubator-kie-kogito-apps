@@ -20,6 +20,9 @@ package org.kie.kogito.index.jpa.springboot.query;
 
 import org.kie.kogito.index.jpa.query.AbstractProcessInstanceEntityQueryIT;
 import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
+import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
+import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -28,6 +31,11 @@ import org.springframework.test.context.ActiveProfiles;
 @ActiveProfiles("h2")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class H2ProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT {
+
+    @Autowired
+    public H2ProcessInstanceEntityQueryIT(ProcessInstanceEntityStorage storage, ProcessDefinitionEntityStorage definitionStorage) {
+        super(storage, definitionStorage);
+    }
 
     @Override
     protected Boolean isDateTimeAsLong() {
