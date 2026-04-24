@@ -18,12 +18,13 @@
  */
 package org.kie.kogito.index.jpa.quarkus.storage;
 
-import jakarta.inject.Inject;
 import org.kie.kogito.index.jpa.storage.AbstractProcessInstanceStorageIT;
+import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
 
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
-import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
+
+import jakarta.inject.Inject;
 
 @QuarkusTest
 @TestTransaction

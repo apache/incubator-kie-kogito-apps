@@ -18,8 +18,6 @@
  */
 package org.kie.kogito.index.jpa.quarkus.storage;
 
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
 import org.kie.kogito.index.jpa.quarkus.PostgreSQLQuarkusTestProfile;
 import org.kie.kogito.index.jpa.storage.AbstractUserTaskInstanceStorageIT;
 import org.kie.kogito.index.storage.UserTaskInstanceStorage;
@@ -29,6 +27,9 @@ import io.quarkus.test.TestTransaction;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
+
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 
 @QuarkusTest
 @TestTransaction

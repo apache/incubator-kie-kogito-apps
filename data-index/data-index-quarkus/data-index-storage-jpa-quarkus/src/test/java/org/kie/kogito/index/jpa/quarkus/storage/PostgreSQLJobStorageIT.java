@@ -18,7 +18,6 @@
  */
 package org.kie.kogito.index.jpa.quarkus.storage;
 
-import jakarta.inject.Inject;
 import org.kie.kogito.index.jpa.quarkus.PostgreSQLQuarkusTestProfile;
 import org.kie.kogito.index.jpa.storage.AbstractJobStorageIT;
 import org.kie.kogito.index.jpa.storage.JobEntityStorage;
@@ -28,6 +27,8 @@ import io.quarkus.test.TestTransaction;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
+
+import jakarta.inject.Inject;
 
 @QuarkusTest
 @TestTransaction

@@ -18,10 +18,8 @@
  */
 package org.kie.kogito.index.jpa.quarkus.query;
 
-import jakarta.inject.Inject;
 import org.kie.kogito.index.jpa.quarkus.PostgreSQLQuarkusTestProfile;
 import org.kie.kogito.index.jpa.query.AbstractProcessInstanceEntityQueryIT;
-import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
 import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
 import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
 
@@ -30,6 +28,8 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 
+import jakarta.inject.Inject;
+
 @QuarkusTest
 @TestTransaction
 @QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
@@ -37,8 +37,8 @@ import io.quarkus.test.junit.TestProfile;
 class PostgreSQLProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT {
 
     @Inject
-    public PostgreSQLProcessInstanceEntityQueryIT(ProcessInstanceEntityStorage storage, ProcessDefinitionEntityStorage definitionStorage) {
-        super(storage, definitionStorage);
+    public PostgreSQLProcessInstanceEntityQueryIT(ProcessInstanceEntityStorage storage) {
+        super(storage);
     }
 
     @Override

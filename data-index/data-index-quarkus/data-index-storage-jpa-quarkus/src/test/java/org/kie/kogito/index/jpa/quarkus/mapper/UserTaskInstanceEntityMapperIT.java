@@ -18,11 +18,13 @@
  */
 package org.kie.kogito.index.jpa.quarkus.mapper;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.inject.Inject;
 import org.kie.kogito.index.jpa.mapper.AbstractUserTaskInstanceEntityMapperIT;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.quarkus.test.junit.QuarkusTest;
+
+import jakarta.inject.Inject;
 
 @QuarkusTest
 class UserTaskInstanceEntityMapperIT extends AbstractUserTaskInstanceEntityMapperIT {

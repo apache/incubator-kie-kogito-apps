@@ -20,7 +20,6 @@ package org.kie.kogito.index.jpa.springboot.query;
 
 import org.kie.kogito.index.jpa.query.AbstractProcessInstanceEntityQueryIT;
 import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
-import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
 import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
 import org.kie.kogito.testcontainers.springboot.PostgreSqlSpringBootTestResource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +35,8 @@ import org.springframework.test.context.ContextConfiguration;
 class PostgreSQLProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT {
 
     @Autowired
-    public PostgreSQLProcessInstanceEntityQueryIT(ProcessInstanceEntityStorage storage, ProcessDefinitionEntityStorage definitionStorage) {
-        super(storage, definitionStorage);
+    public PostgreSQLProcessInstanceEntityQueryIT(ProcessInstanceEntityStorage storage) {
+        super(storage);
     }
 
     @Override
