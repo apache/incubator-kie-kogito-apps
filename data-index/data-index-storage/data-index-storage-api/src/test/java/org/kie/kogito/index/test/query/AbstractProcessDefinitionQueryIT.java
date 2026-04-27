@@ -18,8 +18,8 @@
  */
 package org.kie.kogito.index.test.query;
 
+import jakarta.transaction.Transactional;
 import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
@@ -45,6 +45,7 @@ public abstract class AbstractProcessDefinitionQueryIT extends QueryTestBase<Pro
     public abstract Storage<ProcessDefinitionKey, ProcessDefinition> getStorage();
 
     @Test
+    @Transactional
     void testProcessDefinitionQuery() {
         String processId = "travels";
         ProcessDefinition pdv1 = TestUtils.createProcessDefinition(processId, "1.0", Set.of("admin", "kogito"));

@@ -18,8 +18,8 @@
  */
 package org.kie.kogito.index.test.query;
 
+import jakarta.transaction.Transactional;
 import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
 import org.kie.kogito.index.model.ProcessInstance;
@@ -37,6 +37,7 @@ public abstract class AbstractProcessInstanceQueryIT extends QueryTestBase<Strin
     public abstract ProcessInstanceStorage getStorage();
 
     @Test
+    @Transactional
     void testProcessInstanceQuery() {
         String processId = "travels";
         String processInstanceId = UUID.randomUUID().toString();
@@ -50,6 +51,7 @@ public abstract class AbstractProcessInstanceQueryIT extends QueryTestBase<Strin
     }
 
     @Test
+    @Transactional
     void testProcessRetriggerQuery() {
         String processId = "no_retrigger";
         String processInstanceId = UUID.randomUUID().toString();

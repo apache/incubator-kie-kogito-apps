@@ -18,8 +18,8 @@
  */
 package org.kie.kogito.index.test.query;
 
+import jakarta.transaction.Transactional;
 import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateDataEvent;
 import org.kie.kogito.event.usertask.UserTaskInstanceStateEventBody;
@@ -36,6 +36,7 @@ public abstract class AbstractUserTaskInstanceQueryIT extends QueryTestBase<Stri
     public abstract UserTaskInstanceStorage getStorage();
 
     @Test
+    @Transactional
     void testUserTaskInstanceQuery() {
         String taskId = UUID.randomUUID().toString();
         String processInstanceId = UUID.randomUUID().toString();
