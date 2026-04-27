@@ -18,8 +18,8 @@
  */
 package org.kie.kogito.index.test.query;
 
-import jakarta.transaction.Transactional;
 import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
 import org.kie.kogito.index.model.ProcessInstance;

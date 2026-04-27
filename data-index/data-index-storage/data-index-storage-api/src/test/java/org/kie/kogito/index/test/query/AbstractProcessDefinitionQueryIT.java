@@ -18,8 +18,8 @@
  */
 package org.kie.kogito.index.test.query;
 
-import jakarta.transaction.Transactional;
 import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.index.model.ProcessDefinition;
 import org.kie.kogito.index.model.ProcessDefinitionKey;
