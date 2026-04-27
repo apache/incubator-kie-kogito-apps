@@ -93,6 +93,11 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
         CriteriaBuilder builder = em.getCriteriaBuilder();
         CriteriaQuery<E> criteriaQuery = builder.createQuery(entityClass);
         Root<E> root = criteriaQuery.from(entityClass);
+
+        // Use DISTINCT to avoid duplicates when JOINs are used for collection attributes
+        criteriaQuery.select(root);
+        criteriaQuery.distinct(true);
+
         addWhere(builder, criteriaQuery, root);
         if (sortBy != null && !sortBy.isEmpty()) {
             List<Order> orderBy = sortBy.stream().map(f -> {
@@ -119,15 +124,40 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
     protected final Predicate buildPredicateFunction(AttributeFilter filter, Root<E> root, CriteriaBuilder builder, CriteriaQuery<?> criteriaQuery) {
         switch (filter.getCondition()) {
             case CONTAINS:
-                return builder.isMember(filter.getValue(), getAttributePath(root, filter.getAttribute()));
+                // For collection attributes (e.g., "comments.id", "attachments.name"), use equality check
+                // which will result in a JOIN. The query will use DISTINCT to avoid duplicates.
+                // For actual collection fields (e.g., potentialUsers array), use isMember
+                if (isCollectionAttribute(filter.getAttribute())) {
+                    return builder.equal(getAttributePath(root, filter.getAttribute()), filter.getValue());
+                } else {
+                    return builder.isMember(filter.getValue(), getAttributePath(root, filter.getAttribute()));
+                }
             case CONTAINS_ALL:
-                List<Predicate> predicatesAll = (List<Predicate>) ((List) filter.getValue()).stream()
-                        .map(o -> builder.isMember(o, getAttributePath(root, filter.getAttribute()))).collect(toList());
-                return builder.and(predicatesAll.toArray(new Predicate[] {}));
+                if (isCollectionAttribute(filter.getAttribute())) {
+                    // For collection attributes, use multiple equality checks with AND
+                    // This will result in multiple JOINs. Use DISTINCT to avoid duplicates.
+                    List<Predicate> predicatesAll = ((List<?>) filter.getValue()).stream()
+                            .map(value -> builder.equal(getAttributePath(root, filter.getAttribute()), value))
+                            .collect(toList());
+                    return builder.and(predicatesAll.toArray(new Predicate[] {}));
+                } else {
+                    List<Predicate> predicatesAll = (List<Predicate>) ((List) filter.getValue()).stream()
+                            .map(o -> builder.isMember(o, getAttributePath(root, filter.getAttribute()))).collect(toList());
+                    return builder.and(predicatesAll.toArray(new Predicate[] {}));
+                }
             case CONTAINS_ANY:
-                List<Predicate> predicatesAny = (List<Predicate>) ((List) filter.getValue()).stream()
-                        .map(o -> builder.isMember(o, getAttributePath(root, filter.getAttribute()))).collect(toList());
-                return builder.or(predicatesAny.toArray(new Predicate[] {}));
+                if (isCollectionAttribute(filter.getAttribute())) {
+                    // For collection attributes, use multiple equality checks with OR
+                    // This will result in a JOIN with OR conditions. Use DISTINCT to avoid duplicates.
+                    List<Predicate> predicatesAny = ((List<?>) filter.getValue()).stream()
+                            .map(value -> builder.equal(getAttributePath(root, filter.getAttribute()), value))
+                            .collect(toList());
+                    return builder.or(predicatesAny.toArray(new Predicate[] {}));
+                } else {
+                    List<Predicate> predicatesAny = (List<Predicate>) ((List) filter.getValue()).stream()
+                            .map(o -> builder.isMember(o, getAttributePath(root, filter.getAttribute()))).collect(toList());
+                    return builder.or(predicatesAny.toArray(new Predicate[] {}));
+                }
             case IN:
                 return getAttributePath(root, filter.getAttribute()).in((Collection<?>) filter.getValue());
             case LIKE:
@@ -266,7 +296,15 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
 
                 // Build predicate for this single value
                 Path collectionPath = getAttributePath(subRoot, filter.getAttribute());
-                Predicate valuePredicate = builder.isMember(value, collectionPath);
+
+                // For collection attributes (e.g., "nodes.name"), use equality on the joined path
+                // For actual collection fields, use isMember
+                Predicate valuePredicate;
+                if (isCollectionAttribute(filter.getAttribute())) {
+                    valuePredicate = builder.equal(collectionPath, value);
+                } else {
+                    valuePredicate = builder.isMember(value, collectionPath);
+                }
 
                 subquery.select(builder.literal(1));
                 subquery.where(
@@ -277,11 +315,46 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
                 notExistsPredicates.add(builder.not(builder.exists(subquery)));
             }
 
-            // Return OR of all NOT EXISTS predicates
+            // Return OR of all NOT EXISTS predicates (at least one must not exist)
             return builder.or(notExistsPredicates.toArray(new Predicate[0]));
         }
 
-        // For other operations (CONTAINS, CONTAINS_ANY), use single subquery
+        // Special handling for CONTAINS_ANY: NOT (A OR B) = NOT A AND NOT B (De Morgan's Law)
+        if (filter.getCondition() == org.kie.kogito.persistence.api.query.FilterCondition.CONTAINS_ANY) {
+            List<?> values = (List<?>) filter.getValue();
+            List<Predicate> notExistsPredicates = new java.util.ArrayList<>();
+
+            for (Object value : values) {
+                // Create a subquery for each value: NOT EXISTS (entity with this value)
+                Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
+                Root<E> subRoot = subquery.from(entityClass);
+
+                // Build predicate for this single value
+                Path collectionPath = getAttributePath(subRoot, filter.getAttribute());
+
+                // For collection attributes (e.g., "nodes.name"), use equality on the joined path
+                // For actual collection fields, use isMember
+                Predicate valuePredicate;
+                if (isCollectionAttribute(filter.getAttribute())) {
+                    valuePredicate = builder.equal(collectionPath, value);
+                } else {
+                    valuePredicate = builder.isMember(value, collectionPath);
+                }
+
+                subquery.select(builder.literal(1));
+                subquery.where(
+                        builder.equal(subRoot.get("id"), root.get("id")),
+                        valuePredicate);
+
+                // Add NOT EXISTS for this value
+                notExistsPredicates.add(builder.not(builder.exists(subquery)));
+            }
+
+            // Return AND of all NOT EXISTS predicates (all must not exist)
+            return builder.and(notExistsPredicates.toArray(new Predicate[0]));
+        }
+
+        // For other operations (CONTAINS), use single subquery
         Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
         Root<E> subRoot = subquery.from(entityClass);
 
@@ -300,8 +373,32 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
      */
     private Predicate buildInnerPredicateForSubquery(AttributeFilter<?> filter, Root<E> subRoot,
             CriteriaBuilder builder, CriteriaQuery<?> criteriaQuery) {
-        // For collection operations, we need to build the predicate using the subquery root
-        // This will properly handle the JOIN and apply conditions at the entity level
+        // For collection operations on nested attributes (e.g., "nodes.name"),
+        // we need to convert them to equality checks on the joined path
+        if (isCollectionAttribute(filter.getAttribute())) {
+            switch (filter.getCondition()) {
+                case CONTAINS:
+                    // Convert CONTAINS to EQUAL on the joined path
+                    return builder.equal(getAttributePath(subRoot, filter.getAttribute()), filter.getValue());
+                case CONTAINS_ALL:
+                    // Convert CONTAINS_ALL to multiple EQUAL checks with AND
+                    List<Predicate> allPredicates = ((List<?>) filter.getValue()).stream()
+                            .map(value -> builder.equal(getAttributePath(subRoot, filter.getAttribute()), value))
+                            .collect(toList());
+                    return builder.and(allPredicates.toArray(new Predicate[0]));
+                case CONTAINS_ANY:
+                    // Convert CONTAINS_ANY to multiple EQUAL checks with OR
+                    List<Predicate> anyPredicates = ((List<?>) filter.getValue()).stream()
+                            .map(value -> builder.equal(getAttributePath(subRoot, filter.getAttribute()), value))
+                            .collect(toList());
+                    return builder.or(anyPredicates.toArray(new Predicate[0]));
+                default:
+                    // For other operations, use the standard predicate builder
+                    return buildPredicateFunction(filter, subRoot, builder, criteriaQuery);
+            }
+        }
+
+        // For non-collection attributes, use the standard predicate builder
         return buildPredicateFunction(filter, subRoot, builder, criteriaQuery);
     }
 

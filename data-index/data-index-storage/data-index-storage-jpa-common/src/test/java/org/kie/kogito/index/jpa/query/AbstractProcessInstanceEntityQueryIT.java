@@ -66,7 +66,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
     @Test
     void testNotContainsOnCollectionAttribute() {
         // Setup: Create process instances with different nodes
-        String processId = "testProcess";
+        String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
         String pi2 = UUID.randomUUID().toString();
         String pi3 = UUID.randomUUID().toString();
@@ -110,7 +110,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      */
     @Test
     void testNotContainsAllOnCollection() {
-        String processId = "testProcess";
+        String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
         String pi2 = UUID.randomUUID().toString();
         String pi3 = UUID.randomUUID().toString();
@@ -153,7 +153,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      */
     @Test
     void testNotContainsAnyOnCollection() {
-        String processId = "testProcess";
+        String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
         String pi2 = UUID.randomUUID().toString();
         String pi3 = UUID.randomUUID().toString();
@@ -194,7 +194,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      */
     @Test
     void testNotWithAndContainingCollectionOperations() {
-        String processId = "testProcess";
+        String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
         String pi2 = UUID.randomUUID().toString();
         String pi3 = UUID.randomUUID().toString();
@@ -235,7 +235,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      */
     @Test
     void testNotWithOrContainingCollectionOperations() {
-        String processId = "testProcess";
+        String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
         String pi2 = UUID.randomUUID().toString();
         String pi3 = UUID.randomUUID().toString();
@@ -305,7 +305,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      */
     @Test
     void testNotWithMixedCollectionAndSimpleFields() {
-        String processId = "testProcess";
+        String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
         String pi2 = UUID.randomUUID().toString();
 
@@ -338,7 +338,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      */
     @Test
     void testBackwardCompatibilityWithExistingQueries() {
-        String processId = "testProcess";
+        String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
 
         ProcessInstanceStateDataEvent event1 = TestUtils.getProcessCloudEvent(processId, pi1, ACTIVE, null, null, null, "user1");
@@ -363,7 +363,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      */
     @Test
     void testComplexNestedNotOperations() {
-        String processId = "testProcess";
+        String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
         String pi2 = UUID.randomUUID().toString();
 
