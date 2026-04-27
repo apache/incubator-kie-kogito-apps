@@ -16,10 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jdbc.storage;
+package org.kie.kogito.index.jpa.quarkus.storage;
 
-import org.kie.kogito.index.jdbc.PostgreSQLQuarkusTestProfile;
+import org.kie.kogito.index.jpa.quarkus.PostgreSQLQuarkusTestProfile;
 import org.kie.kogito.index.jpa.storage.AbstractUserTaskInstanceStorageIT;
+import org.kie.kogito.index.storage.UserTaskInstanceStorage;
 import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
 
 import io.quarkus.test.TestTransaction;
@@ -27,9 +28,16 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.quarkus.test.junit.TestProfile;
 
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+
 @QuarkusTest
 @TestTransaction
 @QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
 @TestProfile(PostgreSQLQuarkusTestProfile.class)
 public class PostgreSQLUserTaskInstanceStorageIT extends AbstractUserTaskInstanceStorageIT {
+    @Inject
+    public PostgreSQLUserTaskInstanceStorageIT(UserTaskInstanceStorage storage, EntityManager em) {
+        super(storage, em);
+    }
 }

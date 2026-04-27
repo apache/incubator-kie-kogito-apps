@@ -16,22 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jpa.quarkus.storage;
+package org.kie.kogito.index.jpa.springboot;
 
-import org.kie.kogito.index.jpa.storage.AbstractUserTaskInstanceStorageIT;
-import org.kie.kogito.index.storage.UserTaskInstanceStorage;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import io.quarkus.test.TestTransaction;
-import io.quarkus.test.junit.QuarkusTest;
+@SpringBootApplication(scanBasePackages = { "org.kie.kogito.**" })
+public class KogitoSpringBootApplication {
 
-import jakarta.inject.Inject;
-import jakarta.persistence.EntityManager;
-
-@QuarkusTest
-@TestTransaction
-public class H2UserTaskInstanceStorageIT extends AbstractUserTaskInstanceStorageIT {
-    @Inject
-    public H2UserTaskInstanceStorageIT(UserTaskInstanceStorage storage, EntityManager em) {
-        super(storage, em);
+    public static void main(String[] args) {
+        SpringApplication.run(KogitoSpringBootApplication.class, args);
     }
 }

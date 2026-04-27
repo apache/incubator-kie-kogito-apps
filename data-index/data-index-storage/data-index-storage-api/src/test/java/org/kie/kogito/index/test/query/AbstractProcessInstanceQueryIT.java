@@ -27,6 +27,8 @@ import org.kie.kogito.index.storage.ProcessInstanceStorage;
 import org.kie.kogito.index.test.QueryTestBase;
 import org.kie.kogito.index.test.TestUtils;
 
+import jakarta.transaction.Transactional;
+
 import static java.util.Collections.singletonList;
 import static org.kie.kogito.index.model.ProcessInstanceState.COMPLETED;
 import static org.kie.kogito.index.test.QueryTestUtils.assertWithId;

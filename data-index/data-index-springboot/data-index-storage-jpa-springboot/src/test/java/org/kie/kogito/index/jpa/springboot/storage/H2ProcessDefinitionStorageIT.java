@@ -16,28 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jpa.quarkus.query;
+package org.kie.kogito.index.jpa.springboot.storage;
 
-import org.kie.kogito.index.jpa.quarkus.PostgreSQLQuarkusTestProfile;
-import org.kie.kogito.index.jpa.query.AbstractProcessDefinitionEntityQueryIT;
+import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
+import org.kie.kogito.index.jpa.storage.AbstractProcessDefinitionStorageIT;
 import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
-import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 
-import io.quarkus.test.TestTransaction;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
-
-import jakarta.inject.Inject;
-
-@QuarkusTest
-@TestTransaction
-@QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
-@TestProfile(PostgreSQLQuarkusTestProfile.class)
-class PostgreSQLProcessDefinitionEntityQueryIT extends AbstractProcessDefinitionEntityQueryIT {
-
-    @Inject
-    public PostgreSQLProcessDefinitionEntityQueryIT(ProcessDefinitionEntityStorage storage) {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = KogitoSpringBootApplication.class)
+@ActiveProfiles("h2")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+class H2ProcessDefinitionStorageIT extends AbstractProcessDefinitionStorageIT {
+    @Autowired
+    public H2ProcessDefinitionStorageIT(ProcessDefinitionEntityStorage storage) {
         super(storage);
     }
 }

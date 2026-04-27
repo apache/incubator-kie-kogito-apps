@@ -16,28 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jpa.quarkus.query;
+package org.kie.kogito.index.jpa.springboot.query;
 
-import org.kie.kogito.index.jpa.quarkus.PostgreSQLQuarkusTestProfile;
 import org.kie.kogito.index.jpa.query.AbstractUserTaskInstanceEntityQueryIT;
+import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
 import org.kie.kogito.index.jpa.storage.UserTaskInstanceEntityStorage;
-import org.kie.kogito.testcontainers.quarkus.PostgreSqlQuarkusTestResource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 
-import io.quarkus.test.TestTransaction;
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
-import io.quarkus.test.junit.TestProfile;
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = KogitoSpringBootApplication.class)
+@ActiveProfiles("h2")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+class H2UserTaskInstanceEntityQueryIT extends AbstractUserTaskInstanceEntityQueryIT {
 
-import jakarta.inject.Inject;
-
-@QuarkusTest
-@TestTransaction
-@QuarkusTestResource(value = PostgreSqlQuarkusTestResource.class, restrictToAnnotatedClass = true)
-@TestProfile(PostgreSQLQuarkusTestProfile.class)
-class PostgreSQLUserTaskInstanceEntityQueryIT extends AbstractUserTaskInstanceEntityQueryIT {
-
-    @Inject
-    public PostgreSQLUserTaskInstanceEntityQueryIT(UserTaskInstanceEntityStorage storage) {
+    @Autowired
+    public H2UserTaskInstanceEntityQueryIT(UserTaskInstanceEntityStorage storage) {
         super(storage);
     }
 }

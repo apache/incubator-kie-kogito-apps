@@ -16,22 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jpa.quarkus.query;
+package org.kie.kogito.index.jpa.springboot.query;
 
 import org.kie.kogito.index.jpa.query.AbstractProcessInstanceEntityQueryIT;
+import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
 import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
+import org.kie.kogito.testcontainers.springboot.PostgreSqlSpringBootTestResource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
-import io.quarkus.test.TestTransaction;
-import io.quarkus.test.junit.QuarkusTest;
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = KogitoSpringBootApplication.class)
+@ContextConfiguration(initializers = PostgreSqlSpringBootTestResource.class)
+@ActiveProfiles("postgresql")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+class PostgreSQLProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT {
 
-import jakarta.inject.Inject;
-
-@QuarkusTest
-@TestTransaction
-class H2ProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT {
-
-    @Inject
-    public H2ProcessInstanceEntityQueryIT(ProcessInstanceEntityStorage storage) {
+    @Autowired
+    public PostgreSQLProcessInstanceEntityQueryIT(ProcessInstanceEntityStorage storage) {
         super(storage);
     }
 

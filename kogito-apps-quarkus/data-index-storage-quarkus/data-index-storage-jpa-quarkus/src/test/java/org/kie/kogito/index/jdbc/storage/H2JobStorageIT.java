@@ -16,15 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jdbc.storage;
+package org.kie.kogito.index.jpa.quarkus.storage;
 
 import org.kie.kogito.index.jpa.storage.AbstractJobStorageIT;
+import org.kie.kogito.index.jpa.storage.JobEntityStorage;
 
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 
+import jakarta.inject.Inject;
+
 @QuarkusTest
 @TestTransaction
 public class H2JobStorageIT extends AbstractJobStorageIT {
-
+    @Inject
+    public H2JobStorageIT(JobEntityStorage storage) {
+        super(storage);
+    }
 }

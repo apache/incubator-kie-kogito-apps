@@ -28,6 +28,8 @@ import org.kie.kogito.index.test.TestUtils;
 import org.kie.kogito.persistence.api.Storage;
 import org.kie.kogito.persistence.api.query.SortDirection;
 
+import jakarta.transaction.Transactional;
+
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonList;
 import static org.kie.kogito.index.test.QueryTestUtils.assertWithKey;

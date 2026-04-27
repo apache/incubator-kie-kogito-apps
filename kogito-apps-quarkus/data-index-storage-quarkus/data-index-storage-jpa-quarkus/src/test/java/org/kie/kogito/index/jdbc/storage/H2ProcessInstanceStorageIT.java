@@ -16,14 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jdbc.storage;
+package org.kie.kogito.index.jpa.quarkus.storage;
 
 import org.kie.kogito.index.jpa.storage.AbstractProcessInstanceStorageIT;
+import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
 
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
 
+import jakarta.inject.Inject;
+
 @QuarkusTest
 @TestTransaction
 public class H2ProcessInstanceStorageIT extends AbstractProcessInstanceStorageIT {
+    @Inject
+    public H2ProcessInstanceStorageIT(ProcessInstanceEntityStorage storage) {
+        super(storage);
+    }
 }

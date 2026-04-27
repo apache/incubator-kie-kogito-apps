@@ -16,15 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jdbc.query;
+package org.kie.kogito.index.jpa.quarkus.query;
 
 import org.kie.kogito.index.jpa.query.AbstractProcessDefinitionEntityQueryIT;
+import org.kie.kogito.index.jpa.storage.ProcessDefinitionEntityStorage;
 
 import io.quarkus.test.TestTransaction;
 import io.quarkus.test.junit.QuarkusTest;
+
+import jakarta.inject.Inject;
 
 @QuarkusTest
 @TestTransaction
 class H2ProcessDefinitionEntityQueryIT extends AbstractProcessDefinitionEntityQueryIT {
 
+    @Inject
+    public H2ProcessDefinitionEntityQueryIT(ProcessDefinitionEntityStorage storage) {
+        super(storage);
+    }
 }

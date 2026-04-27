@@ -16,21 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jpa.quarkus.query;
+package org.kie.kogito.index.jpa.springboot.query;
 
 import org.kie.kogito.index.jpa.query.AbstractJobEntityQueryIT;
+import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
 import org.kie.kogito.index.jpa.storage.JobEntityStorage;
+import org.kie.kogito.testcontainers.springboot.PostgreSqlSpringBootTestResource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
 
-import io.quarkus.test.TestTransaction;
-import io.quarkus.test.junit.QuarkusTest;
-
-import jakarta.inject.Inject;
-
-@QuarkusTest
-@TestTransaction
-class H2JobEntityQueryIT extends AbstractJobEntityQueryIT {
-    @Inject
-    public H2JobEntityQueryIT(JobEntityStorage storage) {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = KogitoSpringBootApplication.class)
+@ContextConfiguration(initializers = PostgreSqlSpringBootTestResource.class)
+@ActiveProfiles("postgresql")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+class PostgreSQLJobEntityQueryIT extends AbstractJobEntityQueryIT {
+    @Autowired
+    public PostgreSQLJobEntityQueryIT(JobEntityStorage storage) {
         super(storage);
     }
 }

@@ -16,27 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito.index.jpa.quarkus.query;
+package org.kie.kogito.index.jpa.springboot.query;
 
-import org.kie.kogito.index.jpa.query.AbstractProcessInstanceEntityQueryIT;
-import org.kie.kogito.index.jpa.storage.ProcessInstanceEntityStorage;
+import org.kie.kogito.index.jpa.query.AbstractJobEntityQueryIT;
+import org.kie.kogito.index.jpa.springboot.KogitoSpringBootApplication;
+import org.kie.kogito.index.jpa.storage.JobEntityStorage;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 
-import io.quarkus.test.TestTransaction;
-import io.quarkus.test.junit.QuarkusTest;
-
-import jakarta.inject.Inject;
-
-@QuarkusTest
-@TestTransaction
-class H2ProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT {
-
-    @Inject
-    public H2ProcessInstanceEntityQueryIT(ProcessInstanceEntityStorage storage) {
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = KogitoSpringBootApplication.class)
+@ActiveProfiles("h2")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+class H2JobEntityQueryIT extends AbstractJobEntityQueryIT {
+    @Autowired
+    public H2JobEntityQueryIT(JobEntityStorage storage) {
         super(storage);
-    }
-
-    @Override
-    protected Boolean isDateTimeAsLong() {
-        return false;
     }
 }

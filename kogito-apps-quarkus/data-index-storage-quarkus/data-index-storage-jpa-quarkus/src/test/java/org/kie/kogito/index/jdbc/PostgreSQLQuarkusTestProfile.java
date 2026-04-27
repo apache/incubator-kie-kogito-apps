@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package org.kie.kogito.index.jdbc;
+package org.kie.kogito.index.jpa.quarkus;
 
 import io.quarkus.test.junit.QuarkusTestProfile;
 
