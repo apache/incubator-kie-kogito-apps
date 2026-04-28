@@ -117,6 +117,15 @@
             </systemPropertyVariables>
           </configuration>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-artifact-plugin</artifactId>
+          <configuration>
+            <outputTimestamp>${project.build.outputTimestamp}</outputTimestamp>
+            <!-- Generated images in zip format are not reproducible-->
+            <ignore>image-build.zip</ignore>
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
   </build>
