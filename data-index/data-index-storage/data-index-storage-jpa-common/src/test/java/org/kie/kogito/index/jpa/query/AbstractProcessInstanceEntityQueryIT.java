@@ -194,6 +194,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      * Verifies De Morgan's Law: NOT (A AND B) = (NOT A) OR (NOT B)
      */
     @Test
+    @jakarta.transaction.Transactional
     void testNotWithAndContainingCollectionOperations() {
         String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
