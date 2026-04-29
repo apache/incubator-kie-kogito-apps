@@ -52,7 +52,6 @@
       <artifactId>quarkus-jdbc-h2</artifactId>
       <scope>test</scope>
     </dependency>
-
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-test-h2</artifactId>
@@ -78,14 +77,12 @@
       <artifactId>data-index-storage-api</artifactId>
       <type>test-jar</type>
       <scope>test</scope>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.kie.kogito</groupId>
       <artifactId>data-index-storage-jpa-common</artifactId>
       <type>test-jar</type>
       <scope>test</scope>
-      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>
