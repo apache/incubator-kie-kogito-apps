@@ -21,6 +21,7 @@ package org.kie.kogito.index.jpa.query;
 import java.util.List;
 import java.util.UUID;
 
+import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.event.process.ProcessInstanceNodeDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceNodeEventBody;
@@ -65,6 +66,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      * Verifies entity-level negation using NOT EXISTS subquery
      */
     @Test
+    @Transactional
     void testNotContainsOnCollectionAttribute() {
         // Setup: Create process instances with different nodes
         String processId = "testProcess_" + UUID.randomUUID().toString();
@@ -110,6 +112,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      * Verifies De Morgan's Law: NOT (A AND B) = (NOT A) OR (NOT B)
      */
     @Test
+    @Transactional
     void testNotContainsAllOnCollection() {
         String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
@@ -153,6 +156,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      * Verifies De Morgan's Law: NOT (A OR B) = (NOT A) AND (NOT B)
      */
     @Test
+    @Transactional
     void testNotContainsAnyOnCollection() {
         String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
@@ -194,7 +198,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      * Verifies De Morgan's Law: NOT (A AND B) = (NOT A) OR (NOT B)
      */
     @Test
-    @jakarta.transaction.Transactional
+    @Transactional
     void testNotWithAndContainingCollectionOperations() {
         String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
@@ -236,6 +240,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      * Verifies De Morgan's Law: NOT (A OR B) = (NOT A) AND (NOT B)
      */
     @Test
+    @Transactional
     void testNotWithOrContainingCollectionOperations() {
         String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
@@ -276,6 +281,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      * Verifies regular NOT is used for simple fields (no NOT EXISTS overhead)
      */
     @Test
+    @Transactional
     void testNotWithSimpleField() {
         String processId1 = "hiringProcess";
         String processId2 = "onboardingProcess";
@@ -306,6 +312,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      * Verifies correct handling of mixed filter types
      */
     @Test
+    @Transactional
     void testNotWithMixedCollectionAndSimpleFields() {
         String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
@@ -339,6 +346,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      * Verifies no breaking changes to existing functionality
      */
     @Test
+    @Transactional
     void testBackwardCompatibilityWithExistingQueries() {
         String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
@@ -364,6 +372,7 @@ public abstract class AbstractProcessInstanceEntityQueryIT extends AbstractProce
      * Verifies recursive handling of deeply nested filters
      */
     @Test
+    @Transactional
     void testComplexNestedNotOperations() {
         String processId = "testProcess_" + UUID.randomUUID().toString();
         String pi1 = UUID.randomUUID().toString();
