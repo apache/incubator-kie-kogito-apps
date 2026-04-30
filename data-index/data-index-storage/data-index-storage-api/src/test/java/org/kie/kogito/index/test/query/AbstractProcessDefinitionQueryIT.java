@@ -58,8 +58,8 @@ public abstract class AbstractProcessDefinitionQueryIT extends QueryTestBase<Pro
         ProcessDefinitionKey pdv2Key = new ProcessDefinitionKey(pdv2.getId(), pdv2.getVersion());
         storage.put(pdv2Key, pdv2);
 
-        queryAndAssert(assertWithKey(), storage, singletonList(isNull("type")), null, null, null, pdv1Key, pdv2Key);
-        queryAndAssert(assertWithKey(), storage, singletonList(notNull("version")), null, null, null, pdv1Key, pdv2Key);
+        queryAndAssert(assertWithKey(), storage, singletonList(isNull("type")), singletonList(orderBy("version", SortDirection.ASC)), null, null, pdv1Key, pdv2Key);
+        queryAndAssert(assertWithKey(), storage, singletonList(notNull("version")), singletonList(orderBy("version", SortDirection.ASC)), null, null, pdv1Key, pdv2Key);
         queryAndAssert(assertWithKey(), storage, singletonList(equalTo("version", pdv1.getVersion())), null, null, null, pdv1Key);
         queryAndAssert(assertWithKey(), storage, singletonList(contains("roles", "admin")), null, null, null, pdv1Key);
         queryAndAssert(assertWithKey(), storage, singletonList(containsAny("roles", asList("admin", "kogito"))), null, null, null, pdv1Key, pdv2Key);
