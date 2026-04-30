@@ -94,9 +94,14 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
         CriteriaQuery<E> criteriaQuery = builder.createQuery(entityClass);
         Root<E> root = criteriaQuery.from(entityClass);
 
-        // Use DISTINCT to avoid duplicates when JOINs are used for collection attributes
         criteriaQuery.select(root);
-        criteriaQuery.distinct(true);
+
+        // Only use DISTINCT when there are filters that could cause JOINs (collection attributes)
+        // to avoid duplicates. Don't use DISTINCT for simple queries as it can affect ordering
+        // and pagination behavior.
+        if (needsDistinct()) {
+            criteriaQuery.distinct(true);
+        }
 
         addWhere(builder, criteriaQuery, root);
         if (sortBy != null && !sortBy.isEmpty()) {
@@ -114,6 +119,38 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
             query.setFirstResult(offset);
         }
         return (List<T>) query.getResultList().stream().map(mapper).collect(toList());
+    }
+
+    /**
+     * Determines if DISTINCT is needed based on whether the query uses collection attributes
+     * that would result in JOINs and potential duplicate rows.
+     */
+    private boolean needsDistinct() {
+        if (filters == null || filters.isEmpty()) {
+            return false;
+        }
+        return filters.stream().anyMatch(this::filterNeedsDistinct);
+    }
+
+    /**
+     * Recursively checks if a filter needs DISTINCT due to collection operations or attributes.
+     */
+    private boolean filterNeedsDistinct(AttributeFilter<?> filter) {
+        return switch (filter.getCondition()) {
+            case CONTAINS, CONTAINS_ALL, CONTAINS_ANY ->
+                // Collection operations on collection attributes need DISTINCT
+                filter.getAttribute() != null && isCollectionAttribute(filter.getAttribute());
+            case AND, OR -> {
+                // Check nested filters recursively
+                List<AttributeFilter<?>> nestedFilters = (List<AttributeFilter<?>>) filter.getValue();
+                yield nestedFilters.stream().anyMatch(this::filterNeedsDistinct);
+            }
+            case NOT -> filterNeedsDistinct((AttributeFilter<?>) filter.getValue());
+            case EQUAL, LIKE, IN, GT, GTE, LT, LTE, BETWEEN, IS_NULL, NOT_NULL ->
+                // These operations on collection attributes need DISTINCT
+                filter.getAttribute() != null && isCollectionAttribute(filter.getAttribute());
+            default -> false;
+        };
     }
 
     protected Function<AttributeFilter<?>, Predicate> filterPredicateFunction(Root<E> root, CriteriaBuilder builder, CriteriaQuery<?> criteriaQuery) {
@@ -209,35 +246,20 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
      * or contains collection attributes that require special NOT handling with subqueries.
      */
     private boolean isCollectionNotOperation(AttributeFilter<?> filter) {
-        switch (filter.getCondition()) {
-            case CONTAINS:
-            case CONTAINS_ALL:
-            case CONTAINS_ANY:
-                return true;
-            case AND:
-            case OR:
+        return switch (filter.getCondition()) {
+            case CONTAINS, CONTAINS_ALL, CONTAINS_ANY -> true;
+            case AND, OR -> {
                 // Check if any nested filter is a collection operation or has collection attribute
                 List<AttributeFilter<?>> nestedFilters = (List<AttributeFilter<?>>) filter.getValue();
-                return nestedFilters.stream().anyMatch(f -> isCollectionNotOperation(f) ||
+                yield nestedFilters.stream().anyMatch(f -> isCollectionNotOperation(f) ||
                         (f.getAttribute() != null && isCollectionAttribute(f.getAttribute())));
-            case NOT:
-                // Recursively check the inner filter
-                return isCollectionNotOperation((AttributeFilter<?>) filter.getValue());
-            case EQUAL:
-            case LIKE:
-            case IN:
-            case GT:
-            case GTE:
-            case LT:
-            case LTE:
-            case BETWEEN:
-            case IS_NULL:
-            case NOT_NULL:
+            }
+            case NOT -> isCollectionNotOperation((AttributeFilter<?>) filter.getValue());
+            case EQUAL, LIKE, IN, GT, GTE, LT, LTE, BETWEEN, IS_NULL, NOT_NULL ->
                 // Check if this filter has a collection attribute (e.g., "nodes.name")
-                return filter.getAttribute() != null && isCollectionAttribute(filter.getAttribute());
-            default:
-                return false;
-        }
+                filter.getAttribute() != null && isCollectionAttribute(filter.getAttribute());
+            default -> false;
+        };
     }
 
     /**
@@ -250,122 +272,122 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
         // Special handling for AND/OR: Apply De Morgan's Law
         // NOT (A AND B) = NOT A OR NOT B
         // NOT (A OR B) = NOT A AND NOT B
-        if (filter.getCondition() == org.kie.kogito.persistence.api.query.FilterCondition.AND) {
-            // NOT (A AND B) = NOT A OR NOT B
-            List<AttributeFilter<?>> nestedFilters = (List<AttributeFilter<?>>) filter.getValue();
-            List<Predicate> notPredicates = new java.util.ArrayList<>();
+        switch (filter.getCondition()) {
+            case AND: {
+                // NOT (A AND B) = NOT A OR NOT B
+                List<AttributeFilter<?>> nestedFilters = (List<AttributeFilter<?>>) filter.getValue();
+                List<Predicate> notPredicates = new java.util.ArrayList<>();
 
-            for (AttributeFilter<?> nestedFilter : nestedFilters) {
-                // Recursively build NOT predicate for each nested filter
-                if (isCollectionNotOperation(nestedFilter) || isCollectionAttribute(nestedFilter.getAttribute())) {
-                    notPredicates.add(buildCollectionNotPredicate(nestedFilter, root, builder, criteriaQuery));
-                } else {
-                    notPredicates.add(builder.not(filterPredicateFunction(root, builder, criteriaQuery).apply(nestedFilter)));
+                for (AttributeFilter<?> nestedFilter : nestedFilters) {
+                    // Recursively build NOT predicate for each nested filter
+                    if (isCollectionNotOperation(nestedFilter) || isCollectionAttribute(nestedFilter.getAttribute())) {
+                        notPredicates.add(buildCollectionNotPredicate(nestedFilter, root, builder, criteriaQuery));
+                    } else {
+                        notPredicates.add(builder.not(filterPredicateFunction(root, builder, criteriaQuery).apply(nestedFilter)));
+                    }
                 }
+
+                return builder.or(notPredicates.toArray(new Predicate[0]));
             }
+            case OR: {
+                // NOT (A OR B) = NOT A AND NOT B
+                List<AttributeFilter<?>> nestedFilters = (List<AttributeFilter<?>>) filter.getValue();
+                List<Predicate> notPredicates = new java.util.ArrayList<>();
 
-            return builder.or(notPredicates.toArray(new Predicate[0]));
-        }
-
-        if (filter.getCondition() == org.kie.kogito.persistence.api.query.FilterCondition.OR) {
-            // NOT (A OR B) = NOT A AND NOT B
-            List<AttributeFilter<?>> nestedFilters = (List<AttributeFilter<?>>) filter.getValue();
-            List<Predicate> notPredicates = new java.util.ArrayList<>();
-
-            for (AttributeFilter<?> nestedFilter : nestedFilters) {
-                // Recursively build NOT predicate for each nested filter
-                if (isCollectionNotOperation(nestedFilter) || isCollectionAttribute(nestedFilter.getAttribute())) {
-                    notPredicates.add(buildCollectionNotPredicate(nestedFilter, root, builder, criteriaQuery));
-                } else {
-                    notPredicates.add(builder.not(filterPredicateFunction(root, builder, criteriaQuery).apply(nestedFilter)));
+                for (AttributeFilter<?> nestedFilter : nestedFilters) {
+                    // Recursively build NOT predicate for each nested filter
+                    if (isCollectionNotOperation(nestedFilter) || isCollectionAttribute(nestedFilter.getAttribute())) {
+                        notPredicates.add(buildCollectionNotPredicate(nestedFilter, root, builder, criteriaQuery));
+                    } else {
+                        notPredicates.add(builder.not(filterPredicateFunction(root, builder, criteriaQuery).apply(nestedFilter)));
+                    }
                 }
+
+                return builder.and(notPredicates.toArray(new Predicate[0]));
             }
+            case CONTAINS_ALL: {
+                // Special handling for CONTAINS_ALL: NOT (A AND B) = NOT A OR NOT B (De Morgan's Law)
+                List<?> values = (List<?>) filter.getValue();
+                List<Predicate> notExistsPredicates = new java.util.ArrayList<>();
 
-            return builder.and(notPredicates.toArray(new Predicate[0]));
-        }
+                for (Object value : values) {
+                    // Create a subquery for each value: NOT EXISTS (entity with this value)
+                    Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
+                    Root<E> subRoot = subquery.from(entityClass);
 
-        // Special handling for CONTAINS_ALL: NOT (A AND B) = NOT A OR NOT B (De Morgan's Law)
-        if (filter.getCondition() == org.kie.kogito.persistence.api.query.FilterCondition.CONTAINS_ALL) {
-            List<?> values = (List<?>) filter.getValue();
-            List<Predicate> notExistsPredicates = new java.util.ArrayList<>();
+                    // Build predicate for this single value
+                    Path collectionPath = getAttributePath(subRoot, filter.getAttribute());
 
-            for (Object value : values) {
-                // Create a subquery for each value: NOT EXISTS (entity with this value)
+                    // For collection attributes (e.g., "nodes.name"), use equality on the joined path
+                    // For actual collection fields, use isMember
+                    Predicate valuePredicate;
+                    if (isCollectionAttribute(filter.getAttribute())) {
+                        valuePredicate = builder.equal(collectionPath, value);
+                    } else {
+                        valuePredicate = builder.isMember(value, collectionPath);
+                    }
+
+                    subquery.select(builder.literal(1));
+                    subquery.where(
+                            builder.equal(subRoot.get("id"), root.get("id")),
+                            valuePredicate);
+
+                    // Add NOT EXISTS for this value
+                    notExistsPredicates.add(builder.not(builder.exists(subquery)));
+                }
+
+                // Return OR of all NOT EXISTS predicates (at least one must not exist)
+                return builder.or(notExistsPredicates.toArray(new Predicate[0]));
+            }
+            case CONTAINS_ANY: {
+                // Special handling for CONTAINS_ANY: NOT (A OR B) = NOT A AND NOT B (De Morgan's Law)
+                List<?> values = (List<?>) filter.getValue();
+                List<Predicate> notExistsPredicates = new java.util.ArrayList<>();
+
+                for (Object value : values) {
+                    // Create a subquery for each value: NOT EXISTS (entity with this value)
+                    Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
+                    Root<E> subRoot = subquery.from(entityClass);
+
+                    // Build predicate for this single value
+                    Path collectionPath = getAttributePath(subRoot, filter.getAttribute());
+
+                    // For collection attributes (e.g., "nodes.name"), use equality on the joined path
+                    // For actual collection fields, use isMember
+                    Predicate valuePredicate;
+                    if (isCollectionAttribute(filter.getAttribute())) {
+                        valuePredicate = builder.equal(collectionPath, value);
+                    } else {
+                        valuePredicate = builder.isMember(value, collectionPath);
+                    }
+
+                    subquery.select(builder.literal(1));
+                    subquery.where(
+                            builder.equal(subRoot.get("id"), root.get("id")),
+                            valuePredicate);
+
+                    // Add NOT EXISTS for this value
+                    notExistsPredicates.add(builder.not(builder.exists(subquery)));
+                }
+
+                // Return AND of all NOT EXISTS predicates (all must not exist)
+                return builder.and(notExistsPredicates.toArray(new Predicate[0]));
+            }
+            default: {
+                // For other operations (CONTAINS), use single subquery
                 Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
                 Root<E> subRoot = subquery.from(entityClass);
 
-                // Build predicate for this single value
-                Path collectionPath = getAttributePath(subRoot, filter.getAttribute());
-
-                // For collection attributes (e.g., "nodes.name"), use equality on the joined path
-                // For actual collection fields, use isMember
-                Predicate valuePredicate;
-                if (isCollectionAttribute(filter.getAttribute())) {
-                    valuePredicate = builder.equal(collectionPath, value);
-                } else {
-                    valuePredicate = builder.isMember(value, collectionPath);
-                }
-
+                // Correlate the subquery root with the outer query root by ID
                 subquery.select(builder.literal(1));
                 subquery.where(
                         builder.equal(subRoot.get("id"), root.get("id")),
-                        valuePredicate);
+                        buildInnerPredicateForSubquery(filter, subRoot, builder, criteriaQuery));
 
-                // Add NOT EXISTS for this value
-                notExistsPredicates.add(builder.not(builder.exists(subquery)));
+                // Return NOT EXISTS predicate
+                return builder.not(builder.exists(subquery));
             }
-
-            // Return OR of all NOT EXISTS predicates (at least one must not exist)
-            return builder.or(notExistsPredicates.toArray(new Predicate[0]));
         }
-
-        // Special handling for CONTAINS_ANY: NOT (A OR B) = NOT A AND NOT B (De Morgan's Law)
-        if (filter.getCondition() == org.kie.kogito.persistence.api.query.FilterCondition.CONTAINS_ANY) {
-            List<?> values = (List<?>) filter.getValue();
-            List<Predicate> notExistsPredicates = new java.util.ArrayList<>();
-
-            for (Object value : values) {
-                // Create a subquery for each value: NOT EXISTS (entity with this value)
-                Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
-                Root<E> subRoot = subquery.from(entityClass);
-
-                // Build predicate for this single value
-                Path collectionPath = getAttributePath(subRoot, filter.getAttribute());
-
-                // For collection attributes (e.g., "nodes.name"), use equality on the joined path
-                // For actual collection fields, use isMember
-                Predicate valuePredicate;
-                if (isCollectionAttribute(filter.getAttribute())) {
-                    valuePredicate = builder.equal(collectionPath, value);
-                } else {
-                    valuePredicate = builder.isMember(value, collectionPath);
-                }
-
-                subquery.select(builder.literal(1));
-                subquery.where(
-                        builder.equal(subRoot.get("id"), root.get("id")),
-                        valuePredicate);
-
-                // Add NOT EXISTS for this value
-                notExistsPredicates.add(builder.not(builder.exists(subquery)));
-            }
-
-            // Return AND of all NOT EXISTS predicates (all must not exist)
-            return builder.and(notExistsPredicates.toArray(new Predicate[0]));
-        }
-
-        // For other operations (CONTAINS), use single subquery
-        Subquery<Integer> subquery = criteriaQuery.subquery(Integer.class);
-        Root<E> subRoot = subquery.from(entityClass);
-
-        // Correlate the subquery root with the outer query root by ID
-        subquery.select(builder.literal(1));
-        subquery.where(
-                builder.equal(subRoot.get("id"), root.get("id")),
-                buildInnerPredicateForSubquery(filter, subRoot, builder, criteriaQuery));
-
-        // Return NOT EXISTS predicate
-        return builder.not(builder.exists(subquery));
     }
 
     /**

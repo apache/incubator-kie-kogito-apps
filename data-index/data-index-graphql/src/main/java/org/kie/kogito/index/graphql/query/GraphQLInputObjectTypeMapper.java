@@ -45,6 +45,7 @@ public class GraphQLInputObjectTypeMapper extends AbstractInputObjectTypeMapper 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GraphQLInputObjectTypeMapper.class);
     private static final String ARGUMENT = "Argument";
+    public static final String ARRAY_ARGUMENT = "ArrayArgument";
 
     private boolean mapOperators;
 
@@ -117,7 +118,7 @@ public class GraphQLInputObjectTypeMapper extends AbstractInputObjectTypeMapper 
             default:
                 // For array fields, try to use ArrayArgument type first
                 if (isArray) {
-                    String arrayTypeName = name + "ArrayArgument";
+                    String arrayTypeName = name + ARRAY_ARGUMENT;
                     GraphQLType arraySchemaType = getExistingType(arrayTypeName);
                     if (arraySchemaType != null) {
                         LOGGER.debug("Using array argument type: {} for field: {}", arrayTypeName, field.getName());
