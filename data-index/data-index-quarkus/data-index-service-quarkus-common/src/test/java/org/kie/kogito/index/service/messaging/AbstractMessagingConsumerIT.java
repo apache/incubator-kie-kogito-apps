@@ -176,7 +176,7 @@ public abstract class AbstractMessagingConsumerIT {
         await()
                 .atMost(timeout)
                 .untilAsserted(() -> given().contentType(ContentType.JSON)
-                        .body("{ \"query\" : \"{ ProcessDefinitions { id, version } }\" }")
+                        .body("{ \"query\" : \"{ ProcessDefinitions(orderBy: {version: ASC}) { id, version } }\" }")
                         .when().post("/graphql")
                         .then().log().ifValidationFails().statusCode(200)
                         .body("data.ProcessDefinitions.size()", is(2))
