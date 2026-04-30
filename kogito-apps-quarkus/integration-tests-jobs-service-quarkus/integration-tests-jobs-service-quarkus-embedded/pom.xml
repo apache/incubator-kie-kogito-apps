@@ -90,6 +90,11 @@
         <artifactId>integration-tests-jobs-service-common-quarkus</artifactId>
         <type>test-jar</type>
     </dependency>
+    <dependency>
+      <groupId>org.wiremock</groupId>
+      <artifactId>wiremock</artifactId>
+      <scope>test</scope>
+    </dependency>
     <!--  keep build order in place -->
     <dependency>
       <groupId>org.kie.kogito</groupId>
