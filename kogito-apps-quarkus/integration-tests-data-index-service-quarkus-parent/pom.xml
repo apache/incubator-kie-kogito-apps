@@ -33,7 +33,6 @@
   <name>Kogito Apps :: Integration Tests :: Data Index :: Quarkus :: Parent</name>
 
   <modules>
-    <module>integration-tests-data-index-service-quarkus-devservice</module>
     <module>integration-tests-data-index-service-quarkus</module>
   </modules>
 
