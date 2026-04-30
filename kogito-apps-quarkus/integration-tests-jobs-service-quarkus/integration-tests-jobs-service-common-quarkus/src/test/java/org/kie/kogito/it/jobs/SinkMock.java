@@ -18,13 +18,16 @@
  */
 package org.kie.kogito.it.jobs;
 
-import com.github.tomakehurst.wiremock.WireMockServer;
-import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
-import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import java.util.Collections;
 import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
