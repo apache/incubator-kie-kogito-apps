@@ -83,7 +83,7 @@
         <version.io.smallrye.reactive.mutiny-zero>1.1.1</version.io.smallrye.reactive.mutiny-zero>
         <version.drools.util>${project.version}</version.drools.util>
          <!-- Plexus Utils version -->
-        <version.plexus.utils>3.6.1</version.plexus.utils>
+        <version.plexus.utils>4.0.3</version.plexus.utils>
 
     </properties>
 
@@ -151,7 +151,7 @@
                 <artifactId>hibernate-core</artifactId>
                 <version>${version.org.hibernate}</version>
             </dependency>
-            <!-- Override plexus-utils version to 3.6.1 -->
+            <!-- Override plexus-utils version to 4.0.3 -->
             <dependency>
                 <groupId>org.codehaus.plexus</groupId>
                 <artifactId>plexus-utils</artifactId>
