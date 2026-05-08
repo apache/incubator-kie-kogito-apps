@@ -69,6 +69,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
+        <!-- Spring Boot 4.0: Health/HealthIndicator/Status SPI moved out of spring-boot-actuator into spring-boot-health -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-health</artifactId>
+        </dependency>
         <!--testing -->
         <dependency>
             <groupId>org.kie.kogito</groupId>
