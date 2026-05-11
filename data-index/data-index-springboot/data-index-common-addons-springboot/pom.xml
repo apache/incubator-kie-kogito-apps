@@ -58,7 +58,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-actuator</artifactId>
         </dependency>
-        <!-- Spring Boot 4.0: Health/HealthIndicator/Status SPI moved out of spring-boot-actuator into spring-boot-health -->
+        <!-- spring-boot-health: hosts the actuator Health SPI used by @HealthIndicator below. -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-health</artifactId>

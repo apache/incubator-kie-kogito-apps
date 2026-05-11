@@ -32,10 +32,7 @@ public class KogitoSpringBootApplication {
         SpringApplication.run(KogitoSpringBootApplication.class, args);
     }
 
-    // TODO Jackson 3 migration: Spring Boot 4 only auto-configures Jackson 3 (tools.jackson.databind);
-    // this test fixture bridges to the Jackson 2 ObjectMapper that UserTaskInstanceEntityMapperIT
-    // (and the data-index JPA mappers) inject. Remove once the data-index Spring side migrates
-    // to Jackson 3 (mirrors the kogito-runtimes GlobalObjectMapperSpringTemplate shim).
+    // TODO Jackson 3 migration: drop this Jackson 2 @Bean when the data-index Spring side moves to Jackson 3.
     @Bean
     public ObjectMapper objectMapper() {
         return Jackson2ObjectMapperBuilder.json().build();

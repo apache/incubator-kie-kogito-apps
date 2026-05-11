@@ -62,11 +62,8 @@
         <!-- OptaPlanner version -->
         <version.org.optaplanner>${project.version}</version.org.optaplanner>
 
-        <!-- Aligned with kogito-runtimes' kogito-dependencies-bom (7.1.18.Final). Pinned to the 7.1.x line
-             because Quarkus 3.27.3's quarkus-hibernate-orm references org.hibernate.internal.CoreLogging,
-             which was removed in Hibernate 7.2.x. Spring Boot 4.0.5 prefers 7.2.7 but works against 7.1.x
-             here. Revisit after the planned kogito-dependencies-bom split lets Quarkus and Spring Boot pin
-             different Hibernate versions. -->
+        <!-- Aligned with kogito-runtimes' kogito-dependencies-bom. Pinned 7.1.x because Quarkus's
+             quarkus-hibernate-orm uses org.hibernate.internal.CoreLogging, removed in 7.2.x. -->
         <version.org.hibernate>7.1.18.Final</version.org.hibernate>
         <version.org.apache.opennlp>2.3.2</version.org.apache.opennlp>
         <version.org.apache.commons.csv>1.10.0</version.org.apache.commons.csv>
@@ -75,12 +72,9 @@
         <version.org.json>20231013</version.org.json>
         <version.org.mapstruct>1.5.5.Final</version.org.mapstruct>
         <version.org.skyscreamer>1.5.1</version.org.skyscreamer>
-        <!-- graphql-java bumped to 25.0: Spring Boot 4.0.5's spring-graphql calls
-             ExecutionInput.cancel() (added in graphql-java 25.0); under 24.3 this throws
-             NoSuchMethodError at request dispatch. spring-boot-dependencies 4.0.5 also pins 25.0.
-             graphql-java-extended-scalars stays at 24.0 — there is no 25.x release on Maven Central
-             yet (only 24.0 and dev snapshots). 24.0's API is binary-compatible with graphql-java 25
-             for the scalars we use (DateTime / Long / etc). Bump together when 25.x ships. -->
+        <!-- spring-graphql in Spring Boot 4.0.5 calls ExecutionInput.cancel(), added in graphql-java 25.
+             extended-scalars stays at 24.0 (no 25.x release on Maven Central yet; binary-compatible
+             for the scalars used here). -->
         <version.com.graphql-java>25.0</version.com.graphql-java>
         <version.com.graphql-java-extended-scalars>24.0</version.com.graphql-java-extended-scalars>
 

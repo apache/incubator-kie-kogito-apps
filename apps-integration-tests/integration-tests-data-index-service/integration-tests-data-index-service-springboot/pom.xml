@@ -61,11 +61,9 @@
       <groupId>org.kie</groupId>
       <artifactId>kie-addons-springboot-events-process-kafka</artifactId>
     </dependency>
-    <!-- Spring Boot 4.0: KafkaAutoConfiguration was extracted from spring-boot-autoconfigure into
-         the opt-in spring-boot-kafka artifact. Needed for KafkaTemplate to be auto-configured for
-         KafkaEventPublisher (kie-addons-springboot-events-process-kafka).
-         TODO: move this into the kie-addons-springboot-events-process-kafka pom upstream so all
-         downstream consumers pick it up transitively. -->
+    <!-- spring-boot-kafka: hosts the KafkaTemplate auto-configure used by
+         kie-addons-springboot-events-process-kafka. TODO move this into that addon's pom upstream so
+         consumers get it transitively. -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-kafka</artifactId>
