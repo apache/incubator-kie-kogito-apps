@@ -66,8 +66,7 @@ jobs:
           NODE_OPTIONS: "--max_old_space_size=4096"
           BUILD_MVN_OPTS_CURRENT: '-Dreproducible -Dvalidate-formatting'
         with:
-          #definition-file: https://raw.githubusercontent.com/${GROUP:apache}/incubator-kie-kogito-pipelines/${BRANCH:main}/.ci/pull-request-config.yaml
-          definition-file: https://raw.githubusercontent.com/gitgabrio/incubator-kie-kogito-pipelines/incubator-kie-issues%232029/.ci/pull-request-config.yaml
+          definition-file: https://raw.githubusercontent.com/${GROUP:apache}/incubator-kie-kogito-pipelines/${BRANCH:main}/.ci/pull-request-config.yaml
           annotations-prefix: ${{ runner.os }}-${{ matrix.java-version }}/${{ matrix.maven-version }}
           github-token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Surefire Report
