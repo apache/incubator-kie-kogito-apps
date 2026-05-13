@@ -73,7 +73,7 @@ jobs:
           cache-key-prefix: ${{ runner.os }}-${{ matrix.java-version }}-maven${{ matrix.maven-version }}
       - name: Build Chain
         #uses: apache/incubator-kie-kogito-pipelines/.ci/actions/build-chain@main
-        uses: gitgabrio/incubator-kie-kogito-pipelines/.ci/actions/build-chain@incubator-kie-issues#2029
+        uses: gitgabrio/incubator-kie-kogito-pipelines/.ci/actions/build-chain@51fdc6ae17517aaf5b7a0fdef5447c8d0582b7ff
         with:
           definition-file: https://raw.githubusercontent.com/${GROUP:apache}/incubator-kie-kogito-pipelines/${BRANCH:main}/.ci/pull-request-config.yaml
           annotations-prefix: ${{ runner.os }}-${{ matrix.java-version }}/${{ matrix.maven-version }}
