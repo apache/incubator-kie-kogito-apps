@@ -72,10 +72,10 @@ jobs:
           maven-version: ${{ matrix.maven-version }}
           cache-key-prefix: ${{ runner.os }}-${{ matrix.java-version }}-maven${{ matrix.maven-version }}
       - name: Build Chain
-        #uses: apache/incubator-kie-kogito-pipelines/.ci/actions/build-chain@main
-        uses: gitgabrio/incubator-kie-kogito-pipelines/.ci/actions/build-chain@51fdc6ae17517aaf5b7a0fdef5447c8d0582b7ff
+        uses: apache/incubator-kie-kogito-pipelines/.ci/actions/build-chain@main
         with:
-          definition-file: https://raw.githubusercontent.com/${GROUP:apache}/incubator-kie-kogito-pipelines/${BRANCH:main}/.ci/pull-request-config.yaml
+          #definition-file: https://raw.githubusercontent.com/${GROUP:apache}/incubator-kie-kogito-pipelines/${BRANCH:main}/.ci/pull-request-config.yaml
+          definition-file: https://raw.githubusercontent.com/gitgabrio/incubator-kie-kogito-pipelines/incubator-kie-issues%232029/.ci/pull-request-config.yaml
           annotations-prefix: ${{ runner.os }}-${{ matrix.java-version }}/${{ matrix.maven-version }}
           starting-project: apache/${{ matrix.repository }}
           github-token: "${{ secrets.GITHUB_TOKEN }}"
