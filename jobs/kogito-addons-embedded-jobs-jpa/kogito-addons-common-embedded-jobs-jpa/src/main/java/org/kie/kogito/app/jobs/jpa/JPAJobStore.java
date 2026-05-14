@@ -47,9 +47,8 @@ public class JPAJobStore implements JobStore {
         String queryString = buildQueryWithCteWhenFiltering(jpaJobContext,
                 "SELECT o FROM JobDetailsEntity o WHERE o.status IN (:activeStatus) AND o.fireTime <= :maxWindowsLoad");
 
-        LOGGER.info("loadActiveJobs() - Query: {}", queryString);
-        LOGGER.info("loadActiveJobs() - maxWindowsLoad: {}", maxWindowsLoad);
-        LOGGER.info("loadActiveJobs() - Filtering enabled: {}", isFilterByLocalProcess(jpaJobContext));
+        LOGGER.trace("loadActiveJobs() - Query: {}", queryString);
+        LOGGER.trace("loadActiveJobs() - Filtering enabled: {}", isFilterByLocalProcess(jpaJobContext));
 
         TypedQuery<JobDetailsEntity> jobDetailsEntityTypedQuery = jpaJobContext.getEntityManager()
                 .createQuery(queryString, JobDetailsEntity.class)
@@ -59,7 +58,7 @@ public class JPAJobStore implements JobStore {
         List<JobDetailsEntity> timers = jobDetailsEntityTypedQuery
                 .getResultList();
 
-        LOGGER.info("loadActiveJobs() - Returned {} jobs", timers.size());
+        LOGGER.trace("loadActiveJobs() - Returned {} jobs", timers.size());
 
         return timers.stream()
                 .map(JobDetailsEntityHelper::from)
@@ -107,8 +106,8 @@ public class JPAJobStore implements JobStore {
 
         String queryString = buildUpdateQueryWithExistsWhenFiltering(jpaJobContext, baseQuery);
 
-        LOGGER.info("shouldRun() - jobId: {}, Query: {}", jobId, queryString);
-        LOGGER.info("shouldRun() - Filtering enabled: {}", isFilterByLocalProcess(jpaJobContext));
+        LOGGER.trace("shouldRun() - jobId: {}, Query: {}", jobId, queryString);
+        LOGGER.trace("shouldRun() - Filtering enabled: {}", isFilterByLocalProcess(jpaJobContext));
 
         Query query = entityManager.createQuery(queryString)
                 .setParameter("jobId", jobId)
@@ -119,7 +118,7 @@ public class JPAJobStore implements JobStore {
 
         int updated = query.executeUpdate();
 
-        LOGGER.info("shouldRun() - jobId: {}, updated: {}", jobId, updated);
+        LOGGER.trace("shouldRun() - jobId: {}, updated: {}", jobId, updated);
         return updated > 0;
     }
 
