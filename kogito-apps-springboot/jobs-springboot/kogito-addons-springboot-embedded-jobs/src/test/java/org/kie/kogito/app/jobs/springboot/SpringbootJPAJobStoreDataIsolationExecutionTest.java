@@ -27,14 +27,24 @@ import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kie.kogito.app.jobs.impl.JobDetailsHelper;
+import org.kie.kogito.app.jobs.jpa.JPAJobContext;
+import org.kie.kogito.app.jobs.jpa.JPAJobStore;
+import org.kie.kogito.app.jobs.springboot.jpa.SpringbootJPAJobContext;
 import org.kie.kogito.jobs.ExactExpirationTime;
 import org.kie.kogito.jobs.JobsService;
 import org.kie.kogito.jobs.descriptors.ProcessInstanceJobDescription;
+import org.kie.kogito.jobs.service.model.JobDetails;
 import org.kie.kogito.process.Processes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import jakarta.persistence.EntityManager;
 
@@ -50,6 +60,7 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class SpringbootJPAJobStoreDataIsolationExecutionTest {
+    private static final Logger LOG = LoggerFactory.getLogger(SpringbootJPAJobStoreDataIsolationExecutionTest.class);
 
     @MockitoBean
     Processes processes;
@@ -69,102 +80,49 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
     @Autowired
     EntityManager entityManager;
 
+    @Autowired
+    PlatformTransactionManager transactionManager;
+
     private static final Set<String> LOCAL_PROCESS_IDS = Set.of("localProcess1", "localProcess2");
 
     @BeforeEach
-    public void setup() {
+    public void setup() throws Exception {
+        // CRITICAL: Destroy the auto-started scheduler FIRST to prevent it from
+        // loading jobs before we insert them all. The scheduler auto-starts with the app
+        // and immediately calls loadActiveJobs() with long window (minimum is 1 minute).
+        try {
+            ((SpringbootJobsService) jobsService).destroy();
+
+        } catch (Exception e) {
+            // Log but continue - we need to proceed with test setup
+            LOG.error("Warning: Error destroying scheduler in setup: {}", e.getMessage());
+        }
+
         testJobExecutor.reset();
         exceptionHandler.reset();
 
         // Configure the mock Processes bean to return local process IDs
         when(processes.processIds()).thenReturn(LOCAL_PROCESS_IDS);
         when(processes.processById(org.mockito.ArgumentMatchers.anyString())).thenReturn(null);
-        ((SpringbootJobsService) jobsService).init();
-    }
 
-    @AfterEach
-    public void cleanup() {
-        ((SpringbootJobsService) jobsService).destroy();
-    }
+        // Schedule all jobs BEFORE init() so they're picked up during loadActiveJobs()
+        TransactionStatus transaction = transactionManager.getTransaction(new DefaultTransactionDefinition());
+        JPAJobStore jobStore = new JPAJobStore();
+        JPAJobContext context = new SpringbootJPAJobContext(null, entityManager);
 
-    /**
-     * Helper method to schedule a remote job, simulating a job created by another business service.
-     * Uses scheduleJob() which commits immediately, making the job visible to the scheduler.
-     */
-    void scheduleRemoteJob(String jobId, String processId) {
-        ProcessInstanceJobDescription remoteJob = new ProcessInstanceJobDescription(
-                jobId,
-                "-1",
-                ExactExpirationTime.of(Instant.now().plus(Duration.ofSeconds(10)).atZone(ZoneId.of("UTC"))),
-                5,
-                "remoteProcessInstanceId",
-                null,
-                processId,
-                null,
-                "remoteNodeInstanceId");
-        jobsService.scheduleJob(remoteJob);
-    }
-
-    @Test
-    public void testLocalJobIsExecuted() throws Exception {
-        // Schedule a job for a local process using jobsService
-        ProcessInstanceJobDescription localJob = new ProcessInstanceJobDescription(
+        // Local jobs that should be executed
+        ProcessInstanceJobDescription localJob1 = new ProcessInstanceJobDescription(
                 "local-job-1",
                 "-1",
                 ExactExpirationTime.of(Instant.now().plus(Duration.ofSeconds(2)).atZone(ZoneId.of("UTC"))),
                 5,
                 "processInstanceId1",
                 null,
-                "localProcess1", // This is in our local process IDs
+                "localProcess1",
                 null,
                 "nodeInstanceId1");
 
-        listener.setCount(1);
-        jobsService.scheduleJob(localJob);
-
-        // Job should be executed because it belongs to a local process
-        assertThat(listener.await(25, TimeUnit.SECONDS)).isTrue();
-    }
-
-    @Test
-    public void testRemoteJobIsNotExecuted() throws Exception {
-        // Schedule a remote job (simulating another business service)
-        scheduleRemoteJob("remote-job-1", "remoteProcess1");
-
-        // Also schedule a local job to verify the scheduler is running
-        ProcessInstanceJobDescription localJob = new ProcessInstanceJobDescription(
-                "local-job-verify",
-                "-1",
-                ExactExpirationTime.of(Instant.now().plus(Duration.ofSeconds(2)).atZone(ZoneId.of("UTC"))),
-                5,
-                "processInstanceId2",
-                null,
-                "localProcess1",
-                null,
-                "nodeInstanceId2");
-
-        listener.setCount(1);
-        jobsService.scheduleJob(localJob);
-
-        // Wait for job to execute
-        assertThat(listener.await(25, TimeUnit.SECONDS)).isTrue();
-
-        // Verify exactly 1 job was executed and it's the local one
-        Set<String> executedJobIds = listener.getExecutedJobIds();
-        assertThat(executedJobIds)
-                .hasSize(1)
-                .containsExactly("local-job-verify")
-                .doesNotContain("remote-job-1");
-    }
-
-    @Test
-    public void testMixedJobsOnlyLocalExecuted() throws Exception {
-        // Schedule remote jobs (simulating other business services)
-        scheduleRemoteJob("remote-job-2", "remoteProcess2");
-        scheduleRemoteJob("remote-job-3", "remoteProcess3");
-
-        // Schedule local jobs
-        ProcessInstanceJobDescription localJob1 = new ProcessInstanceJobDescription(
+        ProcessInstanceJobDescription localJob2 = new ProcessInstanceJobDescription(
                 "local-job-2",
                 "-1",
                 ExactExpirationTime.of(Instant.now().plus(Duration.ofSeconds(2)).atZone(ZoneId.of("UTC"))),
@@ -175,7 +133,7 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 null,
                 "nodeInstanceId3");
 
-        ProcessInstanceJobDescription localJob2 = new ProcessInstanceJobDescription(
+        ProcessInstanceJobDescription localJob3 = new ProcessInstanceJobDescription(
                 "local-job-3",
                 "-1",
                 ExactExpirationTime.of(Instant.now().plus(Duration.ofSeconds(2)).atZone(ZoneId.of("UTC"))),
@@ -186,19 +144,69 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 null,
                 "nodeInstanceId4");
 
-        // Expect only 2 local jobs to be executed
-        listener.setCount(2);
-        jobsService.scheduleJob(localJob1);
-        jobsService.scheduleJob(localJob2);
+        // Remote jobs that should NOT be executed
+        ProcessInstanceJobDescription remoteJob1 = new ProcessInstanceJobDescription(
+                "remote-job-1",
+                "-1",
+                ExactExpirationTime.of(Instant.now().plus(Duration.ofSeconds(2)).atZone(ZoneId.of("UTC"))),
+                5,
+                "processInstanceId2",
+                null,
+                "remoteProcess1",
+                null,
+                "nodeInstanceId2");
+
+        ProcessInstanceJobDescription remoteJob2 = new ProcessInstanceJobDescription(
+                "remote-job-2",
+                "-1",
+                ExactExpirationTime.of(Instant.now().plus(Duration.ofSeconds(2)).atZone(ZoneId.of("UTC"))),
+                5,
+                "remoteProcessInstanceId2",
+                null,
+                "remoteProcess2",
+                null,
+                "remoteNodeInstanceId");
+
+        // Directly persist jobs without using scheduleJob (avoids transaction synchronizations)
+        JobDetails jobDetails1 = JobDetailsHelper.newScheduledJobDetails(localJob1);
+        JobDetails jobDetails2 = JobDetailsHelper.newScheduledJobDetails(localJob2);
+        JobDetails jobDetails3 = JobDetailsHelper.newScheduledJobDetails(localJob3);
+        JobDetails jobDetails4 = JobDetailsHelper.newScheduledJobDetails(remoteJob1);
+        JobDetails jobDetails5 = JobDetailsHelper.newScheduledJobDetails(remoteJob2);
+
+        jobStore.persist(context, jobDetails1);
+        jobStore.persist(context, jobDetails2);
+        jobStore.persist(context, jobDetails3);
+        jobStore.persist(context, jobDetails4);
+        jobStore.persist(context, jobDetails5);
+
+        transactionManager.commit(transaction);
+
+        // Now init the scheduler - it will load all jobs via loadActiveJobs()
+        ((SpringbootJobsService) jobsService).init();
+    }
+
+    @AfterEach
+    public void cleanup() {
+        try {
+            ((SpringbootJobsService) jobsService).destroy();
+        } catch (Exception e) {
+            LOG.error("Warning: Error destroying scheduler in cleanup: {}", e.getMessage());
+        }
+    }
+
+    @Test
+    public void testDataIsolationJobExecution() throws Exception {
+        // Expect only the 3 local jobs to be executed
+        listener.setCount(3);
 
         // Wait for jobs to execute
         assertThat(listener.await(25, TimeUnit.SECONDS)).isTrue();
 
-        // Verify exactly 2 jobs were executed and they are the local ones
-        Set<String> executedJobIds = listener.getExecutedJobIds();
-        assertThat(executedJobIds)
-                .hasSize(2)
-                .containsExactlyInAnyOrder("local-job-2", "local-job-3")
-                .doesNotContain("remote-job-2", "remote-job-3");
+        // Verify exactly 3 local jobs were executed and remote jobs were not
+        assertThat(listener.getExecutedJobIds())
+                .hasSize(3)
+                .containsExactlyInAnyOrder("local-job-1", "local-job-2", "local-job-3")
+                .doesNotContain("remote-job-1", "remote-job-2");
     }
 }
