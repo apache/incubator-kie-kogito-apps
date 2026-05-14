@@ -35,15 +35,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ComponentScan
 public class SpringbootAuditDataConfiguration {
 
-    // TODO Jackson 3 migration: drop this Jackson 2 @Bean when the data-audit addon moves to Jackson 3.
+    // Jackson 2 @Bean for the data-audit addon. Remove together with
+    // https://github.com/apache/incubator-kie-drools/issues/6702 (Jackson 3 migration).
     @Bean
     @ConditionalOnMissingBean
     public ObjectMapper objectMapper() {
         return Jackson2ObjectMapperBuilder.json().build();
     }
 
-    // TODO Jackson 3 migration: drop together with the Jackson 2 ObjectMapper bean above.
-    // GraphQLAuditDataRouteMapping uses Jackson 2's JsonNode in @RequestBody.
+    // Jackson 2 HTTP message converter — GraphQLAuditDataRouteMapping uses Jackson 2's JsonNode in
+    // @RequestBody. Remove together with the @Bean ObjectMapper above (same issue: #6702).
     @Bean
     @ConditionalOnMissingBean(MappingJackson2HttpMessageConverter.class)
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(ObjectMapper objectMapper) {

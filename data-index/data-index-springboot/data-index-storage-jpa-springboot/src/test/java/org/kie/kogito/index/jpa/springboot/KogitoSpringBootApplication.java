@@ -32,7 +32,8 @@ public class KogitoSpringBootApplication {
         SpringApplication.run(KogitoSpringBootApplication.class, args);
     }
 
-    // TODO Jackson 3 migration: drop this Jackson 2 @Bean when the data-index Spring side moves to Jackson 3.
+    // Jackson 2 @Bean (data-index test fixture). Remove together with
+    // https://github.com/apache/incubator-kie-drools/issues/6702 (Jackson 3 migration).
     @Bean
     public ObjectMapper objectMapper() {
         return Jackson2ObjectMapperBuilder.json().build();
