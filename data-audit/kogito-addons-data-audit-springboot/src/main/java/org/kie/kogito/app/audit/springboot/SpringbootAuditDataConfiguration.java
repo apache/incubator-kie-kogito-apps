@@ -24,6 +24,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -44,11 +45,21 @@ public class SpringbootAuditDataConfiguration {
     }
 
     // Jackson 2 HTTP message converter — GraphQLAuditDataRouteMapping uses Jackson 2's JsonNode in
-    // @RequestBody. Remove together with the @Bean ObjectMapper above (same issue: #6702).
+    // @RequestBody. canWrite refuses String and byte[] so DMN's pre-serialized JSON and springdoc's
+    // /v3/api-docs are not re-encoded by Jackson. Remove together with the @Bean ObjectMapper above
+    // (same issue: #6702).
     @Bean
     @ConditionalOnMissingBean(MappingJackson2HttpMessageConverter.class)
     public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(ObjectMapper objectMapper) {
-        return new MappingJackson2HttpMessageConverter(objectMapper);
+        return new MappingJackson2HttpMessageConverter(objectMapper) {
+            @Override
+            public boolean canWrite(Class<?> clazz, MediaType mediaType) {
+                if (clazz == String.class || clazz == byte[].class) {
+                    return false;
+                }
+                return super.canWrite(clazz, mediaType);
+            }
+        };
     }
 
     // Force the plain JPA interface on the EntityManagerFactory bean. Hibernate 7's
