@@ -18,12 +18,11 @@
  */
 package org.kie.kogito.app.jobs.springboot.jpa;
 
+import jakarta.persistence.EntityManager;
 import org.kie.kogito.app.jobs.spi.JobContext;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import jakarta.persistence.EntityManager;
 
 @Component
 public class SpringbootJPAJobContextFactory implements JobContextFactory {

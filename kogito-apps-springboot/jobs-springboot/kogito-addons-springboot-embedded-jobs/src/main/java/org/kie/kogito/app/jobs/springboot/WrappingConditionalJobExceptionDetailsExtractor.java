@@ -18,8 +18,8 @@
  */
 package org.kie.kogito.app.jobs.springboot;
 
+import jakarta.annotation.PostConstruct;
 import java.util.List;
-
 import org.kie.kogito.app.jobs.integrations.DefaultJobExceptionDetailsExtractor;
 import org.kie.kogito.app.jobs.integrations.JobExceptionDetailsExtractor;
 import org.kie.kogito.jobs.service.model.JobExecutionExceptionDetails;
@@ -27,8 +27,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
-
-import jakarta.annotation.PostConstruct;
 
 /**
  * Spring Boot configuration for JobExceptionDetailsExtractor.

@@ -63,8 +63,7 @@ class KeycloakTrustyServiceIT {
 
     /* @Test */
     void shouldReturnOkWhenValidUser() {
-        when(trustyService.getExecutionHeaders(any(OffsetDateTime.class), any(OffsetDateTime.class), anyInt(),
-                anyInt(), anyString())).thenReturn(new MatchedExecutionHeaders(new ArrayList<>(), 0));
+        when(trustyService.getExecutionHeaders(any(OffsetDateTime.class), any(OffsetDateTime.class), anyInt(), anyInt(), anyString())).thenReturn(new MatchedExecutionHeaders(new ArrayList<>(), 0));
         given().auth().oauth2(getAccessToken(VALID_USER)).get(TRUSTY_ENDPOINT)
                 .then().statusCode(HttpStatus.SC_OK);
     }
