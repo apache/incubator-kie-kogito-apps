@@ -9,7 +9,6 @@ apps-integration-tests/integration-tests-jobs-service/integration-tests-jobs-ser
 apps-integration-tests/integration-tests-jobs-service/integration-tests-jobs-service-common/src/main/resources/org/acme/travels/timer-on-task.bpmn
 apps-integration-tests/integration-tests-jobs-service/integration-tests-jobs-service-common/src/main/resources/org/acme/travels/timers.bpmn
 apps-integration-tests/integration-tests-jobs-service/integration-tests-jobs-service-common/src/main/resources/org/acme/travels/timersCycle.bpmn
-apps-integration-tests/integration-tests-trusty-service/integration-tests-trusty-service-common/src/main/resources/TrafficViolation.dmn
 data-audit/data-audit-common/src/main/resources/META-INF/data-audit-job-query.graphqls
 data-audit/data-audit-common/src/main/resources/META-INF/data-audit-process-query.graphqls
 data-audit/data-audit-common/src/main/resources/META-INF/data-audit-types.graphqls
@@ -57,3 +56,4 @@ kogito-apps-springboot/jobs-springboot/kogito-addons-springboot-embedded-jobs/sr
 kogito-apps-quarkus/jobs-service-quarkus/kogito-addons-jobs-service/kogito-addons-quarkus-jobs/src/test/resources/application.properties
 kogito-apps-quarkus/jobs-service-quarkus/kogito-addons-jobs-service/kogito-addons-quarkus-jobs-service-embedded/runtime/src/main/resources/META-INF/services/org.eclipse.microprofile.config.spi.ConfigSource
 trusty/trusty-service/trusty-service-common/src/test/resources/mockito-extensions/org.mockito.plugins.MockMaker
+trusty/trusty-service/integration-tests-trusty-service/integration-tests-trusty-service-common/src/main/resources/TrafficViolation.dmn

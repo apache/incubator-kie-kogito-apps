@@ -18,7 +18,6 @@
  */
 package org.kie.kogito.app.audit.springboot;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -29,6 +28,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootConfiguration
 @EnableAutoConfiguration

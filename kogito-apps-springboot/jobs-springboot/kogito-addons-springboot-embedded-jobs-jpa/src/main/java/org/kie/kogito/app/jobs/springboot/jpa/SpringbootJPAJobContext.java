@@ -19,8 +19,9 @@
 
 package org.kie.kogito.app.jobs.springboot.jpa;
 
-import jakarta.persistence.EntityManager;
 import org.kie.kogito.app.jobs.spi.JobContext;
+
+import jakarta.persistence.EntityManager;
 
 public class SpringbootJPAJobContext implements JobContext {
 

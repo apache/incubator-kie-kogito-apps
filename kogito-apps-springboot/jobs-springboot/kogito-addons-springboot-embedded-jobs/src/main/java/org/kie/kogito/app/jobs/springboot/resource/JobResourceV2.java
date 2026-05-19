@@ -18,7 +18,6 @@
  */
 package org.kie.kogito.app.jobs.springboot.resource;
 
-import jakarta.ws.rs.NotFoundException;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import org.kie.kogito.app.jobs.impl.InVMRecipient;
@@ -36,6 +35,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.ws.rs.NotFoundException;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
