@@ -147,7 +147,7 @@ public class JPAJobStore implements JobStore {
                 .collect(Collectors.joining(" UNION ALL "));
 
         String cte = "WITH allowed_processes AS (" + unionSelects + ") ";
-        String existsClause = "EXISTS (SELECT 1 FROM allowed_processes ap WHERE ap.processId = o.rootProcessId OR (o.rootProcessId IS NULL AND ap.processId = o.processId))";
+        String existsClause = "EXISTS (SELECT 1 FROM allowed_processes ap WHERE o.processId IS NULL OR ap.processId = o.rootProcessId OR (o.rootProcessId IS NULL AND ap.processId = o.processId))";
 
         return cte + baseQueryWithWhereClause + " AND " + existsClause;
     }

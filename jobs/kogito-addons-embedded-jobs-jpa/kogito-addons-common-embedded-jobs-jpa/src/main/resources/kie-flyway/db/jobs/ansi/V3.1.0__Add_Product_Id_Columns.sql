@@ -16,15 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+
 ALTER TABLE job_details ADD COLUMN IF NOT EXISTS process_id VARCHAR(50);
 ALTER TABLE job_details ADD COLUMN IF NOT EXISTS root_process_id VARCHAR(50);
-
-UPDATE job_details
-SET process_id = JSON_VALUE(recipient, '$.processId'),
-    WHERE process_id IS NULL;
-UPDATE job_details
-SET root_process_id = JSON_VALUE(recipient, '$.rootProcessId'),
-    WHERE root_process_id IS NULL;
 
 CREATE INDEX idx_job_details_process_id ON job_details (process_id);
 CREATE INDEX idx_job_details_root_process_id ON job_details (root_process_id);
