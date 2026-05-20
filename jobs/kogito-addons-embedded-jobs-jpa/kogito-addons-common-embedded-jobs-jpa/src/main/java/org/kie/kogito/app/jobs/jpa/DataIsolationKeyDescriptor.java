@@ -18,6 +18,9 @@
  */
 package org.kie.kogito.app.jobs.jpa;
 
+import org.kie.kogito.Model;
+import org.kie.kogito.process.Process;
+
 /**
  * Represents a data isolation key for filtering jobs by process identity.
  * Currently contains only processId, but designed to support future expansion
@@ -26,12 +29,16 @@ package org.kie.kogito.app.jobs.jpa;
  * @param processId The process ID used for data isolation filtering
  */
 
-public record DataIsolationKeyDescriptor(String processId) {
+public record DataIsolationKeyDescriptor(String processId, String processVersion) {
 
     // Compact constructor for validation
     public DataIsolationKeyDescriptor {
         if (processId == null || processId.isBlank()) {
             throw new IllegalArgumentException("processId is required and cannot be blank");
         }
+    }
+
+    public static DataIsolationKeyDescriptor fromProcess(Process<? extends Model> process) {
+        return new DataIsolationKeyDescriptor(process.id(), process.version());
     }
 }

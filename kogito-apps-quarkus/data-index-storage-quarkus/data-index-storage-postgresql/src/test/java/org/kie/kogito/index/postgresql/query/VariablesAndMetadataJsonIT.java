@@ -77,7 +77,7 @@ class VariablesAndMetadataJsonIT {
                         28,
                         false,
                         List.of("A", "B"));
-        variableEvent.setKogitoProcessInstanceVersion(version);
+        variableEvent.setKogitoProcessVersion(version);
 
         storage.indexVariable(variableEvent);
 

@@ -46,8 +46,10 @@ import static org.mockito.Mockito.verifyNoInteractions;
 public class DataIndexEventPublisherTest {
     private static final String PROCESS_INSTANCE_ID = "PROCESS_INSTANCE_ID";
     private static final String PROCESS_ID = "PROCESS_ID";
+    private static final String PROCESS_VERSION = "PROCESS_VERSION";
     private static final String ROOT_PROCESS_INSTANCE_ID = "ROOT_PROCESS_INSTANCE_ID";
     private static final String ROOT_PROCESS_ID = "ROOT_PROCESS_ID";
+    private static final String ROOT_PROCESS_VERSION = "ROOT_PROCESS_VERSION";
     public static final String NODE_INSTANCE_ID = "NODE_INSTANCE_ID";
     private static final String CALLBACK_ENDPOINT = "http://my_service";
     private static final String JOB_ID = "JOB_ID";
@@ -88,7 +90,7 @@ public class DataIndexEventPublisherTest {
         byte[] jsonContent = getObjectMapper().writeValueAsBytes(buildJob());
 
         DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
-                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID);
+                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, PROCESS_VERSION, ROOT_PROCESS_ID, ROOT_PROCESS_VERSION);
         dataIndexEventPublisher.publish(event);
 
         verify(indexingService).indexJob(eventCaptor.capture());
@@ -123,7 +125,7 @@ public class DataIndexEventPublisherTest {
         byte[] jsonContent = getObjectMapper().writeValueAsBytes(jobWithException);
 
         DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
-                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID);
+                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, PROCESS_VERSION, ROOT_PROCESS_ID, ROOT_PROCESS_VERSION);
         dataIndexEventPublisher.publish(event);
 
         verify(indexingService).indexJob(eventCaptor.capture());
@@ -146,7 +148,7 @@ public class DataIndexEventPublisherTest {
         byte[] jsonContent = getObjectMapper().writeValueAsBytes(jobWithRetry);
 
         DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
-                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID);
+                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, PROCESS_VERSION, ROOT_PROCESS_ID, ROOT_PROCESS_VERSION);
         dataIndexEventPublisher.publish(event);
 
         verify(indexingService).indexJob(eventCaptor.capture());
@@ -169,7 +171,7 @@ public class DataIndexEventPublisherTest {
         byte[] jsonContent = getObjectMapper().writeValueAsBytes(jobWithoutException);
 
         DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
-                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID);
+                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, PROCESS_VERSION, ROOT_PROCESS_ID, ROOT_PROCESS_VERSION);
         dataIndexEventPublisher.publish(event);
 
         verify(indexingService).indexJob(eventCaptor.capture());
@@ -184,7 +186,7 @@ public class DataIndexEventPublisherTest {
         byte[] jsonContent = getObjectMapper().writeValueAsBytes("MalformedJob");
 
         DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
-                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, ROOT_PROCESS_ID);
+                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, PROCESS_VERSION, ROOT_PROCESS_ID, ROOT_PROCESS_VERSION);
         assertThrows(UncheckedIOException.class, () -> dataIndexEventPublisher.publish(event));
         verifyNoInteractions(indexingService);
     }
@@ -196,9 +198,11 @@ public class DataIndexEventPublisherTest {
                 String kogitoProcessInstanceId,
                 String kogitoRootProcessInstanceId,
                 String kogitoProcessId,
-                String kogitoRootProcessId) {
+                String kogitoProcessVersion,
+                String kogitoRootProcessId,
+                String kogitoRootProcessVersion) {
             super(type, source, data, kogitoProcessInstanceId, kogitoRootProcessInstanceId, kogitoProcessId,
-                    kogitoRootProcessId, null, null);
+                    kogitoProcessVersion, kogitoRootProcessId, kogitoRootProcessVersion, null, null);
         }
     }
 

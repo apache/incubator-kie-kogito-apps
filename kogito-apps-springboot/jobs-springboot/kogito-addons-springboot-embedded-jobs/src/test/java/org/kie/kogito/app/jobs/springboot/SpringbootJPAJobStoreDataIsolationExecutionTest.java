@@ -119,6 +119,8 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 "processInstanceId1",
                 null,
                 "localProcess1",
+                "v1",
+                null,
                 null,
                 "nodeInstanceId1");
 
@@ -130,6 +132,8 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 "processInstanceId3",
                 null,
                 "localProcess1",
+                "v1",
+                null,
                 null,
                 "nodeInstanceId3");
 
@@ -141,6 +145,8 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 "processInstanceId4",
                 null,
                 "localProcess2",
+                "v1",
+                null,
                 null,
                 "nodeInstanceId4");
 
@@ -153,6 +159,8 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 "processInstanceId2",
                 null,
                 "remoteProcess1",
+                "v1",
+                null,
                 null,
                 "nodeInstanceId2");
 
@@ -164,6 +172,8 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 "remoteProcessInstanceId2",
                 null,
                 "remoteProcess2",
+                "v1",
+                null,
                 null,
                 "remoteNodeInstanceId");
 

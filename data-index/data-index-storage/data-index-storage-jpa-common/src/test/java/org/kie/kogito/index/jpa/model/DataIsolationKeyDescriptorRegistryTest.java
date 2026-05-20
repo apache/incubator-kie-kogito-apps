@@ -33,8 +33,8 @@ class DataIsolationKeyDescriptorRegistryTest {
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(ProcessInstanceEntity.class);
         assertThat(descriptor.processId()).isEqualTo("processId");
         assertThat(descriptor.rootProcessId()).isEqualTo("rootProcessId");
-        assertThat(descriptor.processVersion()).isNull();
-        assertThat(descriptor.rootProcessVersion()).isNull();
+        assertThat(descriptor.processVersion()).isEqualTo("version");
+        assertThat(descriptor.rootProcessVersion()).isEqualTo("rootProcessVersion");
     }
 
     @Test
@@ -42,8 +42,8 @@ class DataIsolationKeyDescriptorRegistryTest {
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(UserTaskInstanceEntity.class);
         assertThat(descriptor.processId()).isEqualTo("processId");
         assertThat(descriptor.rootProcessId()).isEqualTo("rootProcessId");
-        assertThat(descriptor.processVersion()).isNull();
-        assertThat(descriptor.rootProcessVersion()).isNull();
+        assertThat(descriptor.processVersion()).isEqualTo("processVersion");
+        assertThat(descriptor.rootProcessVersion()).isEqualTo("rootProcessVersion");
     }
 
     @Test
@@ -51,8 +51,8 @@ class DataIsolationKeyDescriptorRegistryTest {
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(JobEntity.class);
         assertThat(descriptor.processId()).isEqualTo("processId");
         assertThat(descriptor.rootProcessId()).isEqualTo("rootProcessId");
-        assertThat(descriptor.processVersion()).isNull();
-        assertThat(descriptor.rootProcessVersion()).isNull();
+        assertThat(descriptor.processVersion()).isEqualTo("processVersion");
+        assertThat(descriptor.rootProcessVersion()).isEqualTo("rootProcessVersion");
     }
 
     @Test
@@ -60,8 +60,8 @@ class DataIsolationKeyDescriptorRegistryTest {
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(AttachmentEntity.class);
         assertThat(descriptor.processId()).isEqualTo("userTask.processId");
         assertThat(descriptor.rootProcessId()).isEqualTo("userTask.rootProcessId");
-        assertThat(descriptor.processVersion()).isNull();
-        assertThat(descriptor.rootProcessVersion()).isNull();
+        assertThat(descriptor.processVersion()).isEqualTo("userTask.processVersion");
+        assertThat(descriptor.rootProcessVersion()).isEqualTo("userTask.rootProcessVersion");
     }
 
     @Test
@@ -69,8 +69,8 @@ class DataIsolationKeyDescriptorRegistryTest {
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(CommentEntity.class);
         assertThat(descriptor.processId()).isEqualTo("userTask.processId");
         assertThat(descriptor.rootProcessId()).isEqualTo("userTask.rootProcessId");
-        assertThat(descriptor.processVersion()).isNull();
-        assertThat(descriptor.rootProcessVersion()).isNull();
+        assertThat(descriptor.processVersion()).isEqualTo("userTask.processVersion");
+        assertThat(descriptor.rootProcessVersion()).isEqualTo("userTask.rootProcessVersion");
     }
 
     @Test
@@ -78,8 +78,8 @@ class DataIsolationKeyDescriptorRegistryTest {
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(NodeInstanceEntity.class);
         assertThat(descriptor.processId()).isEqualTo("processInstance.processId");
         assertThat(descriptor.rootProcessId()).isEqualTo("processInstance.rootProcessId");
-        assertThat(descriptor.processVersion()).isNull();
-        assertThat(descriptor.rootProcessVersion()).isNull();
+        assertThat(descriptor.processVersion()).isEqualTo("processInstance.version");
+        assertThat(descriptor.rootProcessVersion()).isEqualTo("processInstance.rootProcessVersion");
     }
 
     @Test
@@ -87,8 +87,8 @@ class DataIsolationKeyDescriptorRegistryTest {
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(MilestoneEntity.class);
         assertThat(descriptor.processId()).isEqualTo("processInstance.processId");
         assertThat(descriptor.rootProcessId()).isEqualTo("processInstance.rootProcessId");
-        assertThat(descriptor.processVersion()).isNull();
-        assertThat(descriptor.rootProcessVersion()).isNull();
+        assertThat(descriptor.processVersion()).isEqualTo("processInstance.version");
+        assertThat(descriptor.rootProcessVersion()).isEqualTo("processInstance.rootProcessVersion");
     }
 
     @Test
@@ -96,7 +96,7 @@ class DataIsolationKeyDescriptorRegistryTest {
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(NodeEntity.class);
         assertThat(descriptor.processId()).isEqualTo("processDefinition.id");
         assertThat(descriptor.rootProcessId()).isNull();
-        assertThat(descriptor.processVersion()).isNull();
+        assertThat(descriptor.processVersion()).isEqualTo("processDefinition.version");
         assertThat(descriptor.rootProcessVersion()).isNull();
     }
 
@@ -105,7 +105,7 @@ class DataIsolationKeyDescriptorRegistryTest {
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(ProcessDefinitionEntity.class);
         assertThat(descriptor.processId()).isEqualTo("id");
         assertThat(descriptor.rootProcessId()).isNull();
-        assertThat(descriptor.processVersion()).isNull();
+        assertThat(descriptor.processVersion()).isEqualTo("version");
         assertThat(descriptor.rootProcessVersion()).isNull();
     }
 

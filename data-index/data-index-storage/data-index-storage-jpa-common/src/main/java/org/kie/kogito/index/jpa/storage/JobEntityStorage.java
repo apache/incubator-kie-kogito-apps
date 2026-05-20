@@ -55,14 +55,18 @@ public class JobEntityStorage extends AbstractStorage<String, JobEntity, Job> im
             entity = new JobEntity();
             entity.setId(jobId);
             entity.setProcessId(job.getProcessId());
+            entity.setProcessVersion(job.getProcessVersion());
             entity.setRootProcessId(job.getRootProcessId());
+            entity.setRootProcessVersion(job.getRootProcessVersion());
             em.persist(entity);
         } else {
             if (entity.getProcessId() == null) {
                 entity.setProcessId(job.getProcessId());
+                entity.setProcessVersion(job.getProcessVersion());
             }
             if (entity.getRootProcessId() == null) {
                 entity.setRootProcessId(job.getRootProcessId());
+                entity.setRootProcessVersion(job.getRootProcessVersion());
             }
         }
         return entity;

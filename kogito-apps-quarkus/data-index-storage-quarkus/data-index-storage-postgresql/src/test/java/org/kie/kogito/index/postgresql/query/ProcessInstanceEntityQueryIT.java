@@ -72,7 +72,7 @@ class ProcessInstanceEntityQueryIT extends AbstractProcessInstanceEntityQueryIT 
         ProcessDefinition definitionEvent = TestUtils.createProcessDefinition(processId, version, Set.of());
         definitionEvent.setAnnotations(Set.of("Javierito", "Another"));
         definitionEvent.setMetadata(Map.of("name", "Javierito", "hobbies", List.of("community", "first")));
-        variableEvent.setKogitoProcessInstanceVersion(version);
+        variableEvent.setKogitoProcessVersion(version);
         definitionStorage.put(key, definitionEvent);
         storage.indexVariable(variableEvent);
         queryAndAssert(assertWithId(), storage, singletonList(jsonFilter(equalTo("variables.traveller.name", "John"))), null, null, null,
