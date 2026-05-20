@@ -165,7 +165,7 @@ public class JPAJobStore implements JobStore {
                 .mapToObj(i -> "SELECT CAST(:processId" + i + " AS STRING) AS processId")
                 .collect(Collectors.joining(" UNION ALL "));
 
-        String existsClause = "AND EXISTS (SELECT 1 FROM (" + unionSelects + ") ap WHERE o.processId IS NULL AND ap.processId = o.rootProcessId OR (o.rootProcessId IS NULL AND ap.processId = o.processId))";
+        String existsClause = "AND EXISTS (SELECT 1 FROM (" + unionSelects + ") ap WHERE o.processId IS NULL OR ap.processId = o.rootProcessId OR (o.rootProcessId IS NULL AND ap.processId = o.processId))";
 
         return baseUpdateQuery + " " + existsClause;
     }
