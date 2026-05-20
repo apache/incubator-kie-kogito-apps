@@ -118,7 +118,7 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         return new JITBPMNValidationResult(errors);
     }
 
-    private static Collection<String> collectErrors(String modelXML, String resourceUri) {
+    static Collection<String> collectErrors(String modelXML, String resourceUri) {
         LOGGER.trace("Received\n{}", modelXML);
         Collection<String> toReturn;
         Collection<Process> processes;
@@ -150,7 +150,7 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         return toReturn;
     }
 
-    private static ProcessValidationError[] validateProcesses(Collection<Process> processes) {
+    static ProcessValidationError[] validateProcesses(Collection<Process> processes) {
         ProcessValidationError[] toReturn = new ProcessValidationError[0];
         for (Process toValidate : processes) {
             ProcessValidationError[] toAdd = PROCESS_VALIDATOR.validateProcess(toValidate);
