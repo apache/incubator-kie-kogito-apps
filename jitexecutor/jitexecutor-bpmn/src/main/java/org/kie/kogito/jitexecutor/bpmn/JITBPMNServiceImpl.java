@@ -118,7 +118,7 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         return new JITBPMNValidationResult(errors);
     }
 
-    static Collection<String> collectErrors(String modelXML, String resourceUri) {
+    private static Collection<String> collectErrors(String modelXML, String resourceUri) {
         LOGGER.trace("Received\n{}", modelXML);
         Collection<String> toReturn;
         Collection<Process> processes;
@@ -150,7 +150,7 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         return toReturn;
     }
 
-    static ProcessValidationError[] validateProcesses(Collection<Process> processes) {
+    private static ProcessValidationError[] validateProcesses(Collection<Process> processes) {
         ProcessValidationError[] toReturn = new ProcessValidationError[0];
         for (Process toValidate : processes) {
             ProcessValidationError[] toAdd = PROCESS_VALIDATOR.validateProcess(toValidate);
@@ -184,7 +184,7 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         return String.format(ERROR_TEMPLATE, uri, failed.getId(), failed.getName(), processValidationError.getMessage());
     }
 
-    static Collection<String> validateRestWorkItems(Process process, String resourceUri, Map<String, Map<String, String>> nodeParameters) {
+    private static Collection<String> validateRestWorkItems(Process process, String resourceUri, Map<String, Map<String, String>> nodeParameters) {
         Collection<String> errors = new ArrayList<>();
 
         if (process == null) {
@@ -475,7 +475,7 @@ public class JITBPMNServiceImpl implements JITBPMNService {
         return null;
     }
 
-    static Map<String, Map<String, String>> parseNodeParametersFromXml(String modelXML) {
+    private static Map<String, Map<String, String>> parseNodeParametersFromXml(String modelXML) {
         Map<String, Map<String, String>> result = new HashMap<>();
 
         try {
