@@ -62,7 +62,7 @@ public class SpringbootJPAJobStoreTest {
 
         ProcessInstanceJobDescription jobDescription = new ProcessInstanceJobDescription("test-basic-persistence", "-1",
                 ExactExpirationTime.of(Instant.now().plus(Duration.ofSeconds(2)).atZone(ZoneId.of("UTC"))), 5,
-                "processInstanceId", null, "processId", null, "nodeInstanceId");
+                "processInstanceId", null, "processId", "v1", null, null, "nodeInstanceId");
 
         listener.setCount(1);
         jobsService.scheduleJob(jobDescription);
@@ -76,7 +76,7 @@ public class SpringbootJPAJobStoreTest {
         testJobExecutor.setNumberOfFailures(4);
         ProcessInstanceJobDescription jobDescription = new ProcessInstanceJobDescription("test-basic-error", "-1",
                 ExactExpirationTime.of(Instant.now().plus(Duration.ofSeconds(2)).atZone(ZoneId.of("UTC"))), 5,
-                "processInstanceId", null, "processId", null, "nodeInstanceId");
+                "processInstanceId", null, "processId", "v1", null, null, "nodeInstanceId");
 
         listener.setCount(4);
         jobsService.scheduleJob(jobDescription);

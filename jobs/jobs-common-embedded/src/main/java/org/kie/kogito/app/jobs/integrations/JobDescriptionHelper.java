@@ -75,6 +75,18 @@ public class JobDescriptionHelper {
         return processId;
     }
 
+    public static <T extends JobDescription> String resolveProcessVersion(T jobDescription) {
+        String processVersion = null;
+        if (jobDescription instanceof ProcessJobDescription processJobDescription) {
+            processVersion = processJobDescription.processVersion();
+        } else if (jobDescription instanceof ProcessInstanceJobDescription processInstanceJobDescription) {
+            processVersion = processInstanceJobDescription.processVersion();
+        } else if (jobDescription instanceof UserTaskInstanceJobDescription userTaskInstanceJobDescription) {
+            processVersion = userTaskInstanceJobDescription.processVersion();
+        }
+        return processVersion;
+    }
+
     public static <T extends JobDescription> String resolveRootProcessId(T jobDescription) {
         String rootProcessId = null;
         if (jobDescription instanceof ProcessInstanceJobDescription processInstanceJobDescription) {
@@ -83,5 +95,15 @@ public class JobDescriptionHelper {
             rootProcessId = userTaskInstanceJobDescription.rootProcessId();
         }
         return rootProcessId;
+    }
+
+    public static <T extends JobDescription> String resolveRootProcessVersion(T jobDescription) {
+        String rootProcessVersion = null;
+        if (jobDescription instanceof ProcessInstanceJobDescription processInstanceJobDescription) {
+            rootProcessVersion = processInstanceJobDescription.rootProcessVersion();
+        } else if (jobDescription instanceof UserTaskInstanceJobDescription userTaskInstanceJobDescription) {
+            rootProcessVersion = userTaskInstanceJobDescription.rootProcessVersion();
+        }
+        return rootProcessVersion;
     }
 }

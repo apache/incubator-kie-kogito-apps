@@ -29,7 +29,9 @@ public class JobDetailsBuilder {
     private String id;
     private String correlationId;
     private String processId;
+    private String processVersion;
     private String rootProcessId;
+    private String rootProcessVersion;
     private JobStatus status;
     private ZonedDateTime lastUpdate;
     private Integer retries = 0;
@@ -58,8 +60,18 @@ public class JobDetailsBuilder {
         return this;
     }
 
+    public JobDetailsBuilder processVersion(String processVersion) {
+        this.processVersion = processVersion;
+        return this;
+    }
+
     public JobDetailsBuilder rootProcessId(String rootProcessId) {
         this.rootProcessId = rootProcessId;
+        return this;
+    }
+
+    public JobDetailsBuilder rootProcessVersion(String rootProcessVersion) {
+        this.rootProcessVersion = rootProcessVersion;
         return this;
     }
 
@@ -124,7 +136,7 @@ public class JobDetailsBuilder {
     }
 
     public JobDetails build() {
-        return new JobDetails(id, correlationId, processId, rootProcessId, status, lastUpdate, retries, executionCounter, scheduledId,
+        return new JobDetails(id, correlationId, processId, processVersion, rootProcessId, rootProcessVersion, status, lastUpdate, retries, executionCounter, scheduledId,
                 recipient, trigger, priority, executionTimeout, executionTimeoutUnit, created, exceptionDetails);
     }
 
@@ -132,7 +144,9 @@ public class JobDetailsBuilder {
         return id(jobDetails.getId())
                 .correlationId(jobDetails.getCorrelationId())
                 .processId(jobDetails.getProcessId())
+                .processVersion(jobDetails.getProcessVersion())
                 .rootProcessId(jobDetails.getRootProcessId())
+                .rootProcessVersion(jobDetails.getRootProcessVersion())
                 .status(jobDetails.getStatus())
                 .lastUpdate(jobDetails.getLastUpdate())
                 .retries(jobDetails.getRetries())
@@ -167,7 +181,9 @@ public class JobDetailsBuilder {
                 .recipient(j.map(JobDetails::getRecipient).orElse(recipient))
                 .correlationId(j.map(JobDetails::getCorrelationId).orElse(correlationId))
                 .processId(j.map(JobDetails::getProcessId).orElse(processId))
+                .processVersion(j.map(JobDetails::getProcessVersion).orElse(processVersion))
                 .rootProcessId(j.map(JobDetails::getRootProcessId).orElse(rootProcessId))
+                .rootProcessVersion(j.map(JobDetails::getRootProcessVersion).orElse(rootProcessVersion))
                 .priority(j.map(JobDetails::getPriority).orElse(priority))
                 .executionCounter(j.map(JobDetails::getExecutionCounter).orElse(executionCounter))
                 .executionTimeout(j.map(JobDetails::getExecutionTimeout).orElse(executionTimeout))

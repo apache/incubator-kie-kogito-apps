@@ -138,16 +138,19 @@ public class JPAJobStore implements JobStore {
             return baseQueryWithWhereClause;
         }
 
-        List<DataIsolationKeyDescriptor> keys = context.getProcesses().processIds().stream()
-                .map(DataIsolationKeyDescriptor::new)
+        List<DataIsolationKeyDescriptor> keys = context.getProcesses().processes().stream()
+                .map(DataIsolationKeyDescriptor::fromProcess)
                 .toList();
 
         String unionSelects = IntStream.range(0, keys.size())
-                .mapToObj(i -> "SELECT CAST(:processId" + i + " AS STRING) AS processId")
+                .mapToObj(i -> "SELECT CAST(:processId" + i + " AS STRING) AS processId, CAST(:processVersion" + i + " AS STRING) AS processVersion")
                 .collect(Collectors.joining(" UNION ALL "));
 
         String cte = "WITH allowed_processes AS (" + unionSelects + ") ";
-        String existsClause = "EXISTS (SELECT 1 FROM allowed_processes ap WHERE o.processId IS NULL OR ap.processId = o.rootProcessId OR (o.rootProcessId IS NULL AND ap.processId = o.processId))";
+        String existsClause = "EXISTS (SELECT 1 FROM allowed_processes ap WHERE " +
+                "o.processVersion IS NULL " +
+                "OR (ap.processId = o.rootProcessId AND (ap.processVersion IS NULL AND o.rootProcessVersion IS NULL OR ap.processVersion = o.rootProcessVersion) " +
+                "OR (o.rootProcessId IS NULL AND ap.processId = o.processId AND (ap.processVersion IS NULL AND o.processVersion IS NULL OR ap.processVersion = o.processVersion))))";
 
         return cte + baseQueryWithWhereClause + " AND " + existsClause;
     }
@@ -157,28 +160,33 @@ public class JPAJobStore implements JobStore {
             return baseUpdateQuery;
         }
 
-        List<DataIsolationKeyDescriptor> keys = context.getProcesses().processIds().stream()
-                .map(DataIsolationKeyDescriptor::new)
+        List<DataIsolationKeyDescriptor> keys = context.getProcesses().processes().stream()
+                .map(DataIsolationKeyDescriptor::fromProcess)
                 .toList();
 
         String unionSelects = IntStream.range(0, keys.size())
-                .mapToObj(i -> "SELECT CAST(:processId" + i + " AS STRING) AS processId")
+                .mapToObj(i -> "SELECT CAST(:processId" + i + " AS STRING) AS processId, CAST(:processVersion" + i + " AS STRING) AS processVersion")
                 .collect(Collectors.joining(" UNION ALL "));
 
-        String existsClause =
-                "AND EXISTS (SELECT 1 FROM (" + unionSelects + ") ap WHERE o.processId IS NULL OR ap.processId = o.rootProcessId OR (o.rootProcessId IS NULL AND ap.processId = o.processId))";
+        String existsClause = "EXISTS (SELECT 1 FROM (" + unionSelects + ") ap WHERE " +
+                "o.processVersion IS NULL " +
+                "OR (ap.processId = o.rootProcessId AND (ap.processVersion IS NULL AND o.rootProcessVersion IS NULL OR ap.processVersion = o.rootProcessVersion) " +
+                "OR (o.rootProcessId IS NULL AND ap.processId = o.processId AND (ap.processVersion IS NULL AND o.processVersion IS NULL OR ap.processVersion = o.processVersion))))";
 
-        return baseUpdateQuery + " " + existsClause;
+        return baseUpdateQuery + " AND " + existsClause;
     }
 
     private <T extends Query> void bindDataIsolationKeysWhenFiltering(JPAJobContext context, T query) {
         if (isFilterByLocalProcess(context)) {
-            List<DataIsolationKeyDescriptor> keys = context.getProcesses().processIds().stream()
-                    .map(DataIsolationKeyDescriptor::new)
+            List<DataIsolationKeyDescriptor> keys = context.getProcesses().processes().stream()
+                    .map(DataIsolationKeyDescriptor::fromProcess)
                     .toList();
 
             for (int i = 0; i < keys.size(); i++) {
-                query.setParameter("processId" + i, keys.get(i).processId());
+                DataIsolationKeyDescriptor key = keys.get(i);
+                query.setParameter("processId" + i, key.processId());
+                query.setParameter("processVersion" + i, key.processVersion());
+                LOGGER.trace("Local process id '{}' and version '{}'", key.processId(), key.processVersion());
             }
         }
     }

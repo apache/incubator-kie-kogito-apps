@@ -24,12 +24,14 @@ import java.time.ZoneId;
 import java.util.Collection;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.Model;
 import org.kie.kogito.app.jobs.impl.JobDetailsHelper;
+import org.kie.kogito.app.jobs.jpa.DataIsolationKeyDescriptor;
 import org.kie.kogito.app.jobs.jpa.JPAJobStore;
 import org.kie.kogito.app.jobs.quarkus.QuarkusJobsService;
 import org.kie.kogito.app.jobs.quarkus.jpa.QuarkusJPAJobContext;
@@ -55,6 +57,8 @@ import jakarta.transaction.Transactional;
 import jakarta.transaction.UserTransaction;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Test class for verifying data isolation in job execution when Processes bean is available.
@@ -83,8 +87,6 @@ public class QuarkusJPAJobStoreDataIsolationExecutionTest {
     @Inject
     UserTransaction userTransaction;
 
-    private static final Set<String> LOCAL_PROCESS_IDS = Set.of("localProcess1", "localProcess2");
-
     /**
      * Mock Processes bean that simulates locally deployed processes.
      */
@@ -92,14 +94,34 @@ public class QuarkusJPAJobStoreDataIsolationExecutionTest {
     @ApplicationScoped
     public static class MockProcesses implements Processes {
 
+        private static final Set<DataIsolationKeyDescriptor> LOCAL_PROCESS_IDS = Set.of(new DataIsolationKeyDescriptor("localProcess1", "1.0"), new DataIsolationKeyDescriptor("localProcess2", "2.0"));
+
+        // Pre-initialize the map of mocks on creation (main test thread)
+        private final java.util.Map<DataIsolationKeyDescriptor, Process<? extends Model>> mockProcessesMap =
+                LOCAL_PROCESS_IDS.stream().collect(Collectors.toMap(
+                        id -> id,
+                        it -> {
+                            Process<? extends Model> p = mock(Process.class);
+                            when(p.id()).thenReturn(it.processId());
+                            when(p.version()).thenReturn(it.processVersion());
+                            return p;
+                        }));
+
         @Override
         public Collection<String> processIds() {
-            return LOCAL_PROCESS_IDS;
+            return LOCAL_PROCESS_IDS.stream().map(DataIsolationKeyDescriptor::processId).collect(Collectors.toSet());
         }
 
         @Override
         public Process<? extends Model> processById(String processId) {
-            return null;
+            // No Mockito code executed here at runtime
+            return mockProcessesMap.values().stream().filter(it -> processId.equals(it.id())).findFirst().orElse(null);
+        }
+
+        @Override
+        public Collection<Process<? extends Model>> processes() {
+            // No Mockito code executed here at runtime
+            return mockProcessesMap.values();
         }
     }
 
@@ -140,6 +162,8 @@ public class QuarkusJPAJobStoreDataIsolationExecutionTest {
                     "processInstanceId1",
                     null,
                     "localProcess1",
+                    "1.0",
+                    null,
                     null,
                     "nodeInstanceId1");
 
@@ -151,6 +175,8 @@ public class QuarkusJPAJobStoreDataIsolationExecutionTest {
                     "processInstanceId3",
                     null,
                     "localProcess1",
+                    "1.0",
+                    null,
                     null,
                     "nodeInstanceId3");
 
@@ -162,8 +188,23 @@ public class QuarkusJPAJobStoreDataIsolationExecutionTest {
                     "processInstanceId4",
                     null,
                     "localProcess2",
+                    "2.0",
+                    null,
                     null,
                     "nodeInstanceId4");
+
+            ProcessInstanceJobDescription remoteJob3 = new ProcessInstanceJobDescription(
+                    "remote-job-3",
+                    "-1",
+                    ExactExpirationTime.of(Instant.now().plus(Duration.ofSeconds(2)).atZone(ZoneId.of("UTC"))),
+                    5,
+                    "processInstanceId4",
+                    null,
+                    "localProcess2",
+                    "2.1",
+                    null,
+                    null,
+                    "nodeInstanceId6");
 
             // Remote jobs that should NOT be executed
             ProcessInstanceJobDescription remoteJob1 = new ProcessInstanceJobDescription(
@@ -174,6 +215,8 @@ public class QuarkusJPAJobStoreDataIsolationExecutionTest {
                     "processInstanceId2",
                     null,
                     "remoteProcess1",
+                    "x",
+                    null,
                     null,
                     "nodeInstanceId2");
 
@@ -185,6 +228,8 @@ public class QuarkusJPAJobStoreDataIsolationExecutionTest {
                     "processInstanceId5",
                     null,
                     "remoteProcess2",
+                    "y",
+                    null,
                     null,
                     "nodeInstanceId5");
 
@@ -194,12 +239,14 @@ public class QuarkusJPAJobStoreDataIsolationExecutionTest {
             JobDetails jobDetails3 = JobDetailsHelper.newScheduledJobDetails(localJob3);
             JobDetails jobDetails4 = JobDetailsHelper.newScheduledJobDetails(remoteJob1);
             JobDetails jobDetails5 = JobDetailsHelper.newScheduledJobDetails(remoteJob2);
+            JobDetails jobDetails6 = JobDetailsHelper.newScheduledJobDetails(remoteJob3);
 
             jobStore.persist(context, jobDetails1);
             jobStore.persist(context, jobDetails2);
             jobStore.persist(context, jobDetails3);
             jobStore.persist(context, jobDetails4);
             jobStore.persist(context, jobDetails5);
+            jobStore.persist(context, jobDetails6);
 
             userTransaction.commit();
         } catch (Exception e) {
@@ -236,6 +283,6 @@ public class QuarkusJPAJobStoreDataIsolationExecutionTest {
         assertThat(listener.getExecutedJobIds())
                 .hasSize(3)
                 .containsExactlyInAnyOrder("local-job-1", "local-job-2", "local-job-3")
-                .doesNotContain("remote-job-1", "remote-job-2");
+                .doesNotContain("remote-job-1", "remote-job-2", "remote-job-3");
     }
 }

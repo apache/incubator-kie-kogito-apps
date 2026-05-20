@@ -111,6 +111,8 @@ public class SpringbootJPAJobStoreDataIsolationTest {
                         processInstanceId,
                         null,
                         processId,
+                        "v1",
+                        null,
                         null,
                         "node-" + jobId));
         entityManager.persist(JobDetailsEntityHelper.merge(jobDetails, new JobDetailsEntity()));
@@ -125,8 +127,10 @@ public class SpringbootJPAJobStoreDataIsolationTest {
                         ProcessInstanceJobDescription.DEFAULT_PRIORITY,
                         userTaskId,
                         processId,
+                        "v1",
                         "process-instance-" + jobId,
                         "node-" + jobId,
+                        null,
                         null,
                         null));
         entityManager.persist(JobDetailsEntityHelper.merge(jobDetails, new JobDetailsEntity()));

@@ -58,12 +58,16 @@ public final class JobDetailsHelper {
 
         String correlationId = JobDescriptionHelper.resolveCorrelationId(jobDescription);
         String processId = JobDescriptionHelper.resolveProcessId(jobDescription);
+        String processVersion = JobDescriptionHelper.resolveProcessVersion(jobDescription);
         String rootProcessId = JobDescriptionHelper.resolveRootProcessId(jobDescription);
+        String rootProcessVersion = JobDescriptionHelper.resolveRootProcessVersion(jobDescription);
 
         return JobDetails.builder().id(jobDescription.id())
                 .correlationId(correlationId)
                 .processId(processId)
+                .processVersion(processVersion)
                 .rootProcessId(rootProcessId)
+                .rootProcessVersion(rootProcessVersion)
                 .status(JobStatus.SCHEDULED).trigger(trigger)
                 .recipient(new RecipientInstance(new InVMRecipient(new InVMPayloadData(jobDescription))))
                 .executionTimeout(trigger.hasNextFireTime().getTime())

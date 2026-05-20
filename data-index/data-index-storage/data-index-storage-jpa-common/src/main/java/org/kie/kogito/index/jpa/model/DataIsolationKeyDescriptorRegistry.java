@@ -34,45 +34,61 @@ public class DataIsolationKeyDescriptorRegistry {
             Map.entry(ProcessInstanceEntity.class,
                     DataIsolationKeyDescriptor.builder()
                             .processId("processId")
+                            .processVersion("version")
                             .rootProcessId("rootProcessId")
+                            .rootProcessVersion("rootProcessVersion")
                             .build()),
             Map.entry(UserTaskInstanceEntity.class,
                     DataIsolationKeyDescriptor.builder()
                             .processId("processId")
+                            .processVersion("processVersion")
                             .rootProcessId("rootProcessId")
+                            .rootProcessVersion("rootProcessVersion")
                             .build()),
             Map.entry(JobEntity.class,
                     DataIsolationKeyDescriptor.builder()
                             .processId("processId")
+                            .processVersion("processVersion")
                             .rootProcessId("rootProcessId")
+                            .rootProcessVersion("rootProcessVersion")
                             .build()),
             Map.entry(NodeInstanceEntity.class,
                     DataIsolationKeyDescriptor.builder()
                             .processId("processInstance.processId")
+                            .processVersion("processInstance.version")
                             .rootProcessId("processInstance.rootProcessId")
+                            .rootProcessVersion("processInstance.rootProcessVersion")
                             .build()),
             Map.entry(MilestoneEntity.class,
                     DataIsolationKeyDescriptor.builder()
                             .processId("processInstance.processId")
+                            .processVersion("processInstance.version")
                             .rootProcessId("processInstance.rootProcessId")
+                            .rootProcessVersion("processInstance.rootProcessVersion")
                             .build()),
             Map.entry(AttachmentEntity.class,
                     DataIsolationKeyDescriptor.builder()
                             .processId("userTask.processId")
+                            .processVersion("userTask.processVersion")
                             .rootProcessId("userTask.rootProcessId")
+                            .rootProcessVersion("userTask.rootProcessVersion")
                             .build()),
             Map.entry(CommentEntity.class,
                     DataIsolationKeyDescriptor.builder()
                             .processId("userTask.processId")
+                            .processVersion("userTask.processVersion")
                             .rootProcessId("userTask.rootProcessId")
+                            .rootProcessVersion("userTask.rootProcessVersion")
                             .build()),
             Map.entry(ProcessDefinitionEntity.class,
                     DataIsolationKeyDescriptor.builder()
                             .processId("id")
+                            .processVersion("version")
                             .build()),
             Map.entry(NodeEntity.class,
                     DataIsolationKeyDescriptor.builder()
                             .processId("processDefinition.id")
+                            .processVersion("processDefinition.version")
                             .build()));
 
     /**

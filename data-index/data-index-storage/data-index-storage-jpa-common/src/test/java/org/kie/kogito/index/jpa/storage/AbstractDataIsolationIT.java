@@ -25,12 +25,11 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.kie.kogito.index.jpa.model.JobEntity;
-import org.kie.kogito.index.jpa.model.NodeInstanceEntity;
-import org.kie.kogito.index.jpa.model.ProcessInstanceEntity;
-import org.kie.kogito.index.jpa.model.UserTaskInstanceEntity;
+import org.kie.kogito.Model;
+import org.kie.kogito.index.jpa.model.*;
 import org.kie.kogito.index.model.ProcessInstanceState;
 import org.kie.kogito.process.Process;
 import org.kie.kogito.process.Processes;
@@ -39,6 +38,8 @@ import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Abstract integration test for data isolation filtering.
@@ -77,19 +78,23 @@ public abstract class AbstractDataIsolationIT {
     @Transactional
     public void testProcessInstanceDataIsolation() {
         // Insert process instances directly into database
-        ProcessInstanceEntity travel = createProcessInstance("travel", UUID.randomUUID().toString());
-        ProcessInstanceEntity orders = createProcessInstance("orders", UUID.randomUUID().toString());
-        ProcessInstanceEntity hiring = createProcessInstance("hiring", UUID.randomUUID().toString());
+        ProcessInstanceEntity travel = createProcessInstance("travel", "1.0", UUID.randomUUID().toString());
+        ProcessInstanceEntity orders = createProcessInstance("orders", "2.0", UUID.randomUUID().toString());
+        ProcessInstanceEntity orders2 = createProcessInstance("orders", "2.1", UUID.randomUUID().toString());
+        ProcessInstanceEntity hiring = createProcessInstance("hiring", "3.0", UUID.randomUUID().toString());
 
         executeInTransaction(() -> {
             entityManager.persist(travel);
             entityManager.persist(orders);
+            entityManager.persist(orders2);
             entityManager.persist(hiring);
             entityManager.flush();
         });
 
         // Query with data isolation for travel and orders only
-        Processes processes = createProcesses(Set.of("travel", "orders"));
+        Processes processes = createProcesses(Set.of(
+                DataIsolationKeyDescriptor.builder().processId("travel").processVersion("1.0").build(),
+                DataIsolationKeyDescriptor.builder().processId("orders").processVersion("2.0").build()));
         JPAQuery<ProcessInstanceEntity, ProcessInstanceEntity> query = new JPAQuery<>(
                 entityManager,
                 Function.identity(),
@@ -103,6 +108,8 @@ public abstract class AbstractDataIsolationIT {
         assertThat(results).hasSize(2);
         assertThat(results).extracting("processId")
                 .containsExactlyInAnyOrder("travel", "orders");
+        assertThat(results).filteredOn(entity -> entity.getProcessId().equals("orders") && entity.getVersion().equals("2.1")).isEmpty();
+        assertThat(results).filteredOn(entity -> entity.getProcessId().equals("orders") && entity.getVersion().equals("2.0")).hasSize(1);
     }
 
     /**
@@ -112,13 +119,15 @@ public abstract class AbstractDataIsolationIT {
     @Transactional
     public void testNoDataIsolationWhenProcessesNotProvided() {
         // Insert process instances directly into database
-        ProcessInstanceEntity travel = createProcessInstance("travel", UUID.randomUUID().toString());
-        ProcessInstanceEntity orders = createProcessInstance("orders", UUID.randomUUID().toString());
-        ProcessInstanceEntity hiring = createProcessInstance("hiring", UUID.randomUUID().toString());
+        ProcessInstanceEntity travel = createProcessInstance("travel", "1.0", UUID.randomUUID().toString());
+        ProcessInstanceEntity orders = createProcessInstance("orders", "2.0", UUID.randomUUID().toString());
+        ProcessInstanceEntity orders2 = createProcessInstance("orders", "2.1", UUID.randomUUID().toString());
+        ProcessInstanceEntity hiring = createProcessInstance("hiring", "3.0", UUID.randomUUID().toString());
 
         executeInTransaction(() -> {
             entityManager.persist(travel);
             entityManager.persist(orders);
+            entityManager.persist(orders2);
             entityManager.persist(hiring);
             entityManager.flush();
         });
@@ -134,9 +143,12 @@ public abstract class AbstractDataIsolationIT {
         List<ProcessInstanceEntity> results = query.execute();
 
         // Should return all three test instances
-        assertThat(results).hasSize(3);
+        assertThat(results).hasSize(4);
         assertThat(results).extracting("processId")
-                .containsExactlyInAnyOrder("travel", "orders", "hiring");
+                .containsExactlyInAnyOrder("travel", "orders", "orders", "hiring");
+
+        assertThat(results).filteredOn(entity -> entity.getProcessId().equals("orders") && entity.getVersion().equals("2.1")).hasSize(1);
+        assertThat(results).filteredOn(entity -> entity.getProcessId().equals("orders") && entity.getVersion().equals("2.0")).hasSize(1);
     }
 
     /**
@@ -167,19 +179,25 @@ public abstract class AbstractDataIsolationIT {
     @Transactional
     public void testUserTaskInstanceDataIsolation() {
         // Insert user tasks directly into database
-        UserTaskInstanceEntity travelTask = createUserTask("travel", UUID.randomUUID().toString());
-        UserTaskInstanceEntity orderTask = createUserTask("orders", UUID.randomUUID().toString());
-        UserTaskInstanceEntity hiringTask = createUserTask("hiring", UUID.randomUUID().toString());
+        UserTaskInstanceEntity travelTask = createUserTask("travel", "1.0", UUID.randomUUID().toString());
+        UserTaskInstanceEntity orderTask = createUserTask("orders", "2.0", UUID.randomUUID().toString());
+        UserTaskInstanceEntity order2Task = createUserTask("orders", "2.1", UUID.randomUUID().toString());
+        UserTaskInstanceEntity orderNullTask = createUserTask("orders", null, UUID.randomUUID().toString());
+        UserTaskInstanceEntity hiringTask = createUserTask("hiring", "3.0", UUID.randomUUID().toString());
 
         executeInTransaction(() -> {
             entityManager.persist(travelTask);
             entityManager.persist(orderTask);
+            entityManager.persist(order2Task);
+            entityManager.persist(orderNullTask);
             entityManager.persist(hiringTask);
             entityManager.flush();
         });
 
         // Query with data isolation
-        Processes processes = createProcesses(Set.of("travel", "orders"));
+        Processes processes = createProcesses(Set.of(
+                DataIsolationKeyDescriptor.builder().processId("travel").processVersion("1.0").build(),
+                DataIsolationKeyDescriptor.builder().processId("orders").processVersion("2.0").build()));
         JPAQuery<UserTaskInstanceEntity, UserTaskInstanceEntity> query = new JPAQuery<>(
                 entityManager,
                 Function.identity(),
@@ -189,9 +207,13 @@ public abstract class AbstractDataIsolationIT {
 
         List<UserTaskInstanceEntity> results = query.execute();
 
-        assertThat(results).hasSize(2);
+        assertThat(results).hasSize(3);
         assertThat(results).extracting("processId")
-                .containsExactlyInAnyOrder("travel", "orders");
+                .containsExactlyInAnyOrder("travel", "orders", "orders");
+        assertThat(results).filteredOn(entity -> entity.getProcessVersion() != null).filteredOn(entity -> entity.getProcessId().equals("orders") && entity.getProcessVersion().equals("2.1")).isEmpty();
+        assertThat(results).filteredOn(entity -> entity.getProcessVersion() != null).filteredOn(entity -> entity.getProcessId().equals("orders") && entity.getProcessVersion().equals("2.0"))
+                .hasSize(1);
+        assertThat(results).filteredOn(entity -> entity.getProcessId().equals("orders") && entity.getProcessVersion() == null).hasSize(1);
     }
 
     /**
@@ -201,19 +223,25 @@ public abstract class AbstractDataIsolationIT {
     @Transactional
     public void testJobDataIsolation() {
         // Insert jobs directly into database
-        JobEntity travelJob = createJob("travel", UUID.randomUUID().toString());
-        JobEntity orderJob = createJob("orders", UUID.randomUUID().toString());
-        JobEntity hiringJob = createJob("hiring", UUID.randomUUID().toString());
+        JobEntity travelJob = createJob("travel", "1.0", UUID.randomUUID().toString());
+        JobEntity orderJob = createJob("orders", "2.0", UUID.randomUUID().toString());
+        JobEntity order2Job = createJob("orders", "2.1", UUID.randomUUID().toString());
+        JobEntity orderNullJob = createJob("orders", null, UUID.randomUUID().toString());
+        JobEntity hiringJob = createJob("hiring", "3.0", UUID.randomUUID().toString());
 
         executeInTransaction(() -> {
             entityManager.persist(travelJob);
             entityManager.persist(orderJob);
+            entityManager.persist(order2Job);
+            entityManager.persist(orderNullJob);
             entityManager.persist(hiringJob);
             entityManager.flush();
         });
 
         // Query with data isolation
-        Processes processes = createProcesses(Set.of("travel", "orders"));
+        Processes processes = createProcesses(Set.of(
+                DataIsolationKeyDescriptor.builder().processId("travel").processVersion("1.0").build(),
+                DataIsolationKeyDescriptor.builder().processId("orders").processVersion("2.0").build()));
         JPAQuery<JobEntity, JobEntity> query = new JPAQuery<>(
                 entityManager,
                 Function.identity(),
@@ -223,9 +251,13 @@ public abstract class AbstractDataIsolationIT {
 
         List<JobEntity> results = query.execute();
 
-        assertThat(results).hasSize(2);
+        assertThat(results).hasSize(3);
         assertThat(results).extracting("processId")
-                .containsExactlyInAnyOrder("travel", "orders");
+                .containsExactlyInAnyOrder("travel", "orders", "orders");
+        assertThat(results).filteredOn(entity -> entity.getProcessVersion() != null).filteredOn(entity -> entity.getProcessId().equals("orders") && entity.getProcessVersion().equals("2.1")).isEmpty();
+        assertThat(results).filteredOn(entity -> entity.getProcessVersion() != null).filteredOn(entity -> entity.getProcessId().equals("orders") && entity.getProcessVersion().equals("2.0"))
+                .hasSize(1);
+        assertThat(results).filteredOn(entity -> entity.getProcessId().equals("orders") && entity.getProcessVersion() == null).hasSize(1);
     }
 
     /**
@@ -235,29 +267,35 @@ public abstract class AbstractDataIsolationIT {
     @Transactional
     public void testNodeInstanceDataIsolation() {
         // Insert process instances first
-        ProcessInstanceEntity travelPI = createProcessInstance("travel", UUID.randomUUID().toString());
-        ProcessInstanceEntity orderPI = createProcessInstance("orders", UUID.randomUUID().toString());
-        ProcessInstanceEntity hiringPI = createProcessInstance("hiring", UUID.randomUUID().toString());
+        ProcessInstanceEntity travelPI = createProcessInstance("travel", "1.0", UUID.randomUUID().toString());
+        ProcessInstanceEntity orderPI = createProcessInstance("orders", "2.0", UUID.randomUUID().toString());
+        ProcessInstanceEntity order2PI = createProcessInstance("orders", "2.1", UUID.randomUUID().toString());
+        ProcessInstanceEntity hiringPI = createProcessInstance("hiring", "3.0", UUID.randomUUID().toString());
 
         executeInTransaction(() -> {
             entityManager.persist(travelPI);
             entityManager.persist(orderPI);
+            entityManager.persist(order2PI);
             entityManager.persist(hiringPI);
             entityManager.flush();
 
             // Insert node instances with relationships to process instances
             NodeInstanceEntity travelNode = createNodeInstance(travelPI);
             NodeInstanceEntity orderNode = createNodeInstance(orderPI);
+            NodeInstanceEntity order2Node = createNodeInstance(order2PI);
             NodeInstanceEntity hiringNode = createNodeInstance(hiringPI);
 
             entityManager.persist(travelNode);
             entityManager.persist(orderNode);
+            entityManager.persist(order2Node);
             entityManager.persist(hiringNode);
             entityManager.flush();
         });
 
         // Query with data isolation - NodeInstance navigates via processInstance.processId
-        Processes processes = createProcesses(Set.of("travel", "orders"));
+        Processes processes = createProcesses(Set.of(
+                DataIsolationKeyDescriptor.builder().processId("travel").processVersion("1.0").build(),
+                DataIsolationKeyDescriptor.builder().processId("orders").processVersion("2.0").build()));
         JPAQuery<NodeInstanceEntity, NodeInstanceEntity> query = new JPAQuery<>(
                 entityManager,
                 Function.identity(),
@@ -273,30 +311,32 @@ public abstract class AbstractDataIsolationIT {
 
     // Helper methods to create test entities
 
-    private ProcessInstanceEntity createProcessInstance(String processId, String id) {
+    private ProcessInstanceEntity createProcessInstance(String processId, String version, String id) {
         ProcessInstanceEntity entity = new ProcessInstanceEntity();
         entity.setId(id);
         entity.setProcessId(processId);
+        entity.setVersion(version);
         entity.setState(ProcessInstanceState.ACTIVE.ordinal());
         entity.setStart(ZonedDateTime.now());
-        entity.setVersion("1.0");
         return entity;
     }
 
-    private UserTaskInstanceEntity createUserTask(String processId, String processInstanceId) {
+    private UserTaskInstanceEntity createUserTask(String processId, String version, String processInstanceId) {
         UserTaskInstanceEntity entity = new UserTaskInstanceEntity();
         entity.setId(UUID.randomUUID().toString());
         entity.setProcessId(processId);
+        entity.setProcessVersion(version);
         entity.setProcessInstanceId(processInstanceId);
         entity.setState("Ready");
         entity.setStarted(ZonedDateTime.now());
         return entity;
     }
 
-    private JobEntity createJob(String processId, String processInstanceId) {
+    private JobEntity createJob(String processId, String version, String processInstanceId) {
         JobEntity entity = new JobEntity();
         entity.setId(UUID.randomUUID().toString());
         entity.setProcessId(processId);
+        entity.setProcessVersion(version);
         entity.setProcessInstanceId(processInstanceId);
         entity.setStatus("SCHEDULED");
         entity.setExpirationTime(ZonedDateTime.now().plusHours(1));
@@ -315,16 +355,30 @@ public abstract class AbstractDataIsolationIT {
         return entity;
     }
 
-    private Processes createProcesses(Set<String> processIds) {
+    private Processes createProcesses(Set<DataIsolationKeyDescriptor> descriptors) {
         return new Processes() {
-            @Override
-            public Process<? extends org.kie.kogito.Model> processById(String processId) {
-                return null;
-            }
 
             @Override
             public Collection<String> processIds() {
-                return processIds;
+                return descriptors.stream().map(DataIsolationKeyDescriptor::processId).collect(Collectors.toSet());
+            }
+
+            @Override
+            public Process<? extends Model> processById(String processId) {
+                Process<? extends Model> process = mock(Process.class);
+                when(process.id()).thenReturn(processId);
+                when(process.version()).thenReturn("1.0");
+                return process;
+            }
+
+            @Override
+            public Collection<Process<? extends Model>> processes() {
+                return descriptors.stream().map(it -> {
+                    Process<? extends Model> p = mock(Process.class);
+                    when(p.id()).thenReturn(it.processId());
+                    when(p.version()).thenReturn(it.processVersion());
+                    return (Process<? extends Model>) p;
+                }).collect(Collectors.toSet());
             }
         };
     }

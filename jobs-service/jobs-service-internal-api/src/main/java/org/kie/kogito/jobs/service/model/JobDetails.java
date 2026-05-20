@@ -34,7 +34,9 @@ public class JobDetails {
     private String id;// the unique id internally on the job service
     private String correlationId; // the job id on the runtimes, for instance
     private String processId;
+    private String processVersion;
     private String rootProcessId;
+    private String rootProcessVersion;
     private JobStatus status;
     private ZonedDateTime lastUpdate;
     private Integer retries;
@@ -53,13 +55,16 @@ public class JobDetails {
     }
 
     @SuppressWarnings("java:S107")
-    protected JobDetails(String id, String correlationId, String processId, String rootProcessId, JobStatus status, ZonedDateTime lastUpdate, Integer retries,
+    protected JobDetails(String id, String correlationId, String processId, String processVersion, String rootProcessId, String rootProcessVersion, JobStatus status, ZonedDateTime lastUpdate,
+            Integer retries,
             Integer executionCounter, String scheduledId, Recipient recipient, Trigger trigger, Integer priority,
             Long executionTimeout, ChronoUnit executionTimeoutUnit, ZonedDateTime created, JobExecutionExceptionDetails exceptionDetails) {
         this.id = id;
         this.correlationId = correlationId;
         this.processId = processId;
+        this.processVersion = processVersion;
         this.rootProcessId = rootProcessId;
+        this.rootProcessVersion = rootProcessVersion;
         this.status = status;
         this.lastUpdate = lastUpdate;
         this.retries = retries;
@@ -86,8 +91,16 @@ public class JobDetails {
         return processId;
     }
 
+    public String getProcessVersion() {
+        return processVersion;
+    }
+
     public String getRootProcessId() {
         return rootProcessId;
+    }
+
+    public String getRootProcessVersion() {
+        return rootProcessVersion;
     }
 
     public JobStatus getStatus() {
@@ -218,7 +231,9 @@ public class JobDetails {
         return Objects.equals(getId(), that.getId())
                 && Objects.equals(getCorrelationId(), that.getCorrelationId())
                 && Objects.equals(getProcessId(), that.getProcessId())
+                && Objects.equals(getProcessVersion(), that.getProcessVersion())
                 && Objects.equals(getRootProcessId(), that.getRootProcessId())
+                && Objects.equals(getRootProcessVersion(), that.getRootProcessVersion())
                 && Objects.equals(getStatus(), that.getStatus())
                 && (Objects.equals(getLastUpdate(), that.getLastUpdate()) || Objects.isNull(getLastUpdate())
                         || Objects.isNull(that.getLastUpdate()))
@@ -235,7 +250,7 @@ public class JobDetails {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getCorrelationId(), getProcessId(), getRootProcessId(), getStatus(), getRetries(), getExecutionCounter(),
+        return Objects.hash(getId(), getCorrelationId(), getProcessId(), getProcessVersion(), getRootProcessId(), getRootProcessVersion(), getStatus(), getRetries(), getExecutionCounter(),
                 getScheduledId(), getRecipient(), getTrigger(), getExecutionTimeout(), getExecutionTimeoutUnit(),
                 getCreated(), getExceptionDetails());
     }
@@ -245,7 +260,9 @@ public class JobDetails {
         return new StringJoiner(", ", JobDetails.class.getSimpleName() + "[", "]").add("id='" + id + "'")
                 .add("correlationId='" + correlationId + "'")
                 .add("processId='" + processId + "'")
+                .add("processVersion='" + processVersion + "'")
                 .add("rootProcessId='" + rootProcessId + "'")
+                .add("rootProcessVersion='" + rootProcessVersion + "'")
                 .add("status=" + status).add("lastUpdate=" + lastUpdate)
                 .add("retries=" + retries).add("executionCounter=" + executionCounter)
                 .add("scheduledId='" + scheduledId + "'").add("recipient=" + recipient).add("trigger=" + trigger)

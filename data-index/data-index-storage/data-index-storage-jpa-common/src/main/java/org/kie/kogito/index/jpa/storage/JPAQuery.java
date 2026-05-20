@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.hibernate.query.criteria.*;
@@ -284,18 +285,34 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
 
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(entityClass);
         Path<String> rootProcessIdPath = descriptor.rootProcessId() != null ? getAttributePath(root, descriptor.rootProcessId()) : null;
+        Path<String> rootProcessVersionPath = descriptor.rootProcessVersion() != null ? getAttributePath(root, descriptor.rootProcessVersion()) : null;
         Path<String> processIdPath = getAttributePath(root, descriptor.processId());
+        Path<String> processVersionPath = getAttributePath(root, descriptor.processVersion());
 
-        Predicate correlationPredicate;
+        BiFunction<Path<String>, Path<String>, Predicate> idAndVersionPredicate = (idPath, versionPath) -> builder.and(
+                builder.equal(idPath, cteRoot.get("pid")),
+                builder.or(
+                        builder.equal(versionPath, cteRoot.get("pversion")),
+                        builder.and(builder.isNull(versionPath), builder.isNull(cteRoot.get("pversion")))));
+
+        Predicate pairCorrelationPredicate;
         if (rootProcessIdPath != null) {
-            correlationPredicate = builder.or(
-                    builder.equal(rootProcessIdPath, cteRoot.get("pid")),
+            pairCorrelationPredicate = builder.or(
+                    // Branch 1: Root ID and Version match
+                    idAndVersionPredicate.apply(rootProcessIdPath, rootProcessVersionPath),
+                    // Branch 2: Root ID is null, fallback to Process ID and Version match
                     builder.and(
                             builder.isNull(rootProcessIdPath),
-                            builder.equal(processIdPath, cteRoot.get("pid"))));
+                            idAndVersionPredicate.apply(processIdPath, processVersionPath)));
         } else {
-            correlationPredicate = builder.equal(processIdPath, cteRoot.get("pid"));
+            // Branch 3: No Root ID configured, match Process ID and Version directly
+            pairCorrelationPredicate = idAndVersionPredicate.apply(processIdPath, processVersionPath);
         }
+
+        // Final Predicate: Accept the paired matches OR any rows where process_version is null (meaning legacy DB entries).
+        Predicate correlationPredicate = builder.or(
+                builder.isNull(processVersionPath),
+                pairCorrelationPredicate);
 
         subquery.where(correlationPredicate);
         predicates.add(builder.exists(subquery));
@@ -304,10 +321,11 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
     private JpaCteCriteria<Tuple> buildDataIsolationFilteringCte(
             HibernateCriteriaBuilder builder,
             JpaCriteriaQuery<?> mainQuery) {
-        List<JpaCriteriaQuery<Tuple>> rows = processes.get().processIds().stream().map(id -> {
+        List<JpaCriteriaQuery<Tuple>> rows = processes.get().processes().stream().map(p -> {
             JpaCriteriaQuery<Tuple> row = builder.createTupleQuery();
             row.select(builder.tuple(
-                    builder.literal(id).alias("pid")));
+                    builder.literal(p.id()).alias("pid"),
+                    builder.literal(p.version()).alias("pversion")));
             return row;
         }).toList();
 
