@@ -34,7 +34,6 @@
 
   <modules>
     <module>data-index-storage-postgresql</module>
-    <module>data-index-storage-jpa-common-quarkus</module>
     <module>data-index-storage-mongodb</module>
     <module>data-index-storage-postgresql-reporting</module>
     <module>data-index-storage-jpa-quarkus</module>
