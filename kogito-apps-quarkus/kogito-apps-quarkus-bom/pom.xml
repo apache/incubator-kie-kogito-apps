@@ -441,17 +441,6 @@
       </dependency>
       <dependency>
         <groupId>org.kie.kogito</groupId>
-        <artifactId>data-index-storage-jpa-common-quarkus</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
-        <artifactId>data-index-storage-jpa-common-quarkus</artifactId>
-        <version>${project.version}</version>
-        <classifier>tests</classifier>
-      </dependency>
-      <dependency>
-        <groupId>org.kie.kogito</groupId>
         <artifactId>data-index-storage-jpa-quarkus</artifactId>
         <version>${project.version}</version>
       </dependency>
