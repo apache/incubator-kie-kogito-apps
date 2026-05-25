@@ -24,8 +24,7 @@ import java.time.ZonedDateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kie.kogito.event.AbstractDataEvent;
-import org.kie.kogito.event.DataEvent;
+import org.kie.kogito.event.job.JobInstanceDataEvent;
 import org.kie.kogito.event.process.ProcessInstanceStateDataEvent;
 import org.kie.kogito.index.addon.event.DataIndexEventPublisher;
 import org.kie.kogito.index.model.Job;
@@ -89,8 +88,18 @@ public class DataIndexEventPublisherTest {
 
         byte[] jsonContent = getObjectMapper().writeValueAsBytes(buildJob());
 
-        DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
-                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, PROCESS_VERSION, ROOT_PROCESS_ID, ROOT_PROCESS_VERSION);
+        JobInstanceDataEvent event =
+                JobInstanceDataEvent.builder()
+                        .type("JobEvent")
+                        .source("source")
+                        .data(jsonContent)
+                        .kogitoProcessInstanceId(PROCESS_INSTANCE_ID)
+                        .kogitoRootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
+                        .kogitoProcessId(PROCESS_ID)
+                        .kogitoProcessVersion(PROCESS_VERSION)
+                        .kogitoRootProcessId(ROOT_PROCESS_ID)
+                        .kogitoRootProcessVersion(ROOT_PROCESS_VERSION)
+                        .build();
         dataIndexEventPublisher.publish(event);
 
         verify(indexingService).indexJob(eventCaptor.capture());
@@ -124,8 +133,18 @@ public class DataIndexEventPublisherTest {
 
         byte[] jsonContent = getObjectMapper().writeValueAsBytes(jobWithException);
 
-        DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
-                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, PROCESS_VERSION, ROOT_PROCESS_ID, ROOT_PROCESS_VERSION);
+        JobInstanceDataEvent event =
+                JobInstanceDataEvent.builder()
+                        .type("JobEvent")
+                        .source("source")
+                        .data(jsonContent)
+                        .kogitoProcessInstanceId(PROCESS_INSTANCE_ID)
+                        .kogitoRootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
+                        .kogitoProcessId(PROCESS_ID)
+                        .kogitoProcessVersion(PROCESS_VERSION)
+                        .kogitoRootProcessId(ROOT_PROCESS_ID)
+                        .kogitoRootProcessVersion(ROOT_PROCESS_VERSION)
+                        .build();
         dataIndexEventPublisher.publish(event);
 
         verify(indexingService).indexJob(eventCaptor.capture());
@@ -147,8 +166,18 @@ public class DataIndexEventPublisherTest {
 
         byte[] jsonContent = getObjectMapper().writeValueAsBytes(jobWithRetry);
 
-        DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
-                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, PROCESS_VERSION, ROOT_PROCESS_ID, ROOT_PROCESS_VERSION);
+        JobInstanceDataEvent event =
+                JobInstanceDataEvent.builder()
+                        .type("JobEvent")
+                        .source("source")
+                        .data(jsonContent)
+                        .kogitoProcessInstanceId(PROCESS_INSTANCE_ID)
+                        .kogitoRootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
+                        .kogitoProcessId(PROCESS_ID)
+                        .kogitoProcessVersion(PROCESS_VERSION)
+                        .kogitoRootProcessId(ROOT_PROCESS_ID)
+                        .kogitoRootProcessVersion(ROOT_PROCESS_VERSION)
+                        .build();
         dataIndexEventPublisher.publish(event);
 
         verify(indexingService).indexJob(eventCaptor.capture());
@@ -170,8 +199,18 @@ public class DataIndexEventPublisherTest {
 
         byte[] jsonContent = getObjectMapper().writeValueAsBytes(jobWithoutException);
 
-        DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
-                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, PROCESS_VERSION, ROOT_PROCESS_ID, ROOT_PROCESS_VERSION);
+        JobInstanceDataEvent event =
+                JobInstanceDataEvent.builder()
+                        .type("JobEvent")
+                        .source("source")
+                        .data(jsonContent)
+                        .kogitoProcessInstanceId(PROCESS_INSTANCE_ID)
+                        .kogitoRootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
+                        .kogitoProcessId(PROCESS_ID)
+                        .kogitoProcessVersion(PROCESS_VERSION)
+                        .kogitoRootProcessId(ROOT_PROCESS_ID)
+                        .kogitoRootProcessVersion(ROOT_PROCESS_VERSION)
+                        .build();
         dataIndexEventPublisher.publish(event);
 
         verify(indexingService).indexJob(eventCaptor.capture());
@@ -185,25 +224,21 @@ public class DataIndexEventPublisherTest {
     void onMalformedJobEvent() throws Exception {
         byte[] jsonContent = getObjectMapper().writeValueAsBytes("MalformedJob");
 
-        DataEvent event = new TestingDataEvent("JobEvent", "source", jsonContent,
-                PROCESS_INSTANCE_ID, ROOT_PROCESS_INSTANCE_ID, PROCESS_ID, PROCESS_VERSION, ROOT_PROCESS_ID, ROOT_PROCESS_VERSION);
+        JobInstanceDataEvent event =
+                JobInstanceDataEvent.builder()
+                        .type("JobEvent")
+                        .source("source")
+                        .data(jsonContent)
+                        .kogitoProcessInstanceId(PROCESS_INSTANCE_ID)
+                        .kogitoRootProcessInstanceId(ROOT_PROCESS_INSTANCE_ID)
+                        .kogitoProcessId(PROCESS_ID)
+                        .kogitoProcessVersion(PROCESS_VERSION)
+                        .kogitoRootProcessId(ROOT_PROCESS_ID)
+                        .kogitoRootProcessVersion(ROOT_PROCESS_VERSION)
+                        .build();
+
         assertThrows(UncheckedIOException.class, () -> dataIndexEventPublisher.publish(event));
         verifyNoInteractions(indexingService);
-    }
-
-    public static class TestingDataEvent extends AbstractDataEvent<byte[]> {
-        public TestingDataEvent(String type,
-                String source,
-                byte[] data,
-                String kogitoProcessInstanceId,
-                String kogitoRootProcessInstanceId,
-                String kogitoProcessId,
-                String kogitoProcessVersion,
-                String kogitoRootProcessId,
-                String kogitoRootProcessVersion) {
-            super(type, source, data, kogitoProcessInstanceId, kogitoRootProcessInstanceId, kogitoProcessId,
-                    kogitoProcessVersion, kogitoRootProcessId, kogitoRootProcessVersion, null, null);
-        }
     }
 
     private Job buildJob() {

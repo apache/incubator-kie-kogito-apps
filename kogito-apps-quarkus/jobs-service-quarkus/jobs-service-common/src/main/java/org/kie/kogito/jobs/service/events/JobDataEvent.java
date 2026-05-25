@@ -40,11 +40,11 @@ public class JobDataEvent extends AbstractDataEvent<ScheduledJob> {
                 data.getProcessInstanceId(),
                 data.getRootProcessInstanceId(),
                 data.getProcessId(),
-                data.getProcessVersion(),
                 data.getRootProcessId(),
-                data.getRootProcessVersion(),
                 null,
                 identity);
+        setKogitoProcessVersion(data.getProcessVersion());
+        setKogitoRootProcessVersion(data.getRootProcessVersion());
     }
 
     public JobDataEvent(DataEventState<ScheduledJob> state) {
