@@ -23,10 +23,12 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.app.jobs.impl.JobDetailsHelper;
+import org.kie.kogito.app.jobs.jpa.DataIsolationKeyDescriptor;
 import org.kie.kogito.app.jobs.jpa.JPAJobContext;
 import org.kie.kogito.app.jobs.jpa.JPAJobStore;
 import org.kie.kogito.app.jobs.jpa.JobDetailsEntityHelper;
@@ -69,13 +71,32 @@ public class SpringbootJPAJobStoreDataIsolationTest {
 
     private JPAJobStore jobStore;
 
-    private static final Set<String> LOCAL_PROCESS_IDS = Set.of("localProcess1", "localProcess2");
+    private static final Set<DataIsolationKeyDescriptor> LOCAL_PROCESS_IDS = Set.of(
+            new DataIsolationKeyDescriptor("localProcess1", "1.0"),
+            new DataIsolationKeyDescriptor("localProcess2", "2.0"));
 
     @BeforeEach
     @Transactional
     public void init() {
         // Configure the mock Processes bean to return local process IDs
-        when(processes.processIds()).thenReturn(LOCAL_PROCESS_IDS);
+        when(processes.processIds()).thenReturn(LOCAL_PROCESS_IDS.stream()
+                .map(DataIsolationKeyDescriptor::processId)
+                .collect(Collectors.toSet()));
+
+        // Mock processes() to return Process objects with id and version matching LOCAL_PROCESS_IDS
+        java.util.Collection<org.kie.kogito.process.Process<? extends org.kie.kogito.Model>> mockProcesses =
+                LOCAL_PROCESS_IDS.stream()
+                        .map(descriptor -> {
+                            @SuppressWarnings("unchecked")
+                            org.kie.kogito.process.Process<? extends org.kie.kogito.Model> mockProcess =
+                                    (org.kie.kogito.process.Process<? extends org.kie.kogito.Model>) org.mockito.Mockito.mock(org.kie.kogito.process.Process.class);
+                            when(mockProcess.id()).thenReturn(descriptor.processId());
+                            when(mockProcess.version()).thenReturn(descriptor.processVersion());
+                            return mockProcess;
+                        })
+                        .collect(Collectors.toList());
+        when(processes.processes()).thenReturn(mockProcesses);
+
         when(processes.processById(org.mockito.ArgumentMatchers.anyString())).thenReturn(null);
 
         // Clean up any existing jobs from previous tests
@@ -90,18 +111,19 @@ public class SpringbootJPAJobStoreDataIsolationTest {
      * Helper method to directly insert a job into the database, simulating
      * a job created by another business service sharing the same database.
      */
-    void insertProcessJob(String jobId, String processId) {
+    void insertProcessJob(String jobId, String processId, String version) {
         JobDetails jobDetails = JobDetailsHelper.newScheduledJobDetails(
                 ProcessJobDescription.of(
                         ExactExpirationTime.of(OffsetDateTime.now().plusSeconds(10).atZoneSameInstant(ZoneOffset.UTC)),
                         ProcessJobDescription.DEFAULT_PRIORITY,
                         processId,
+                        version,
                         jobId));
         entityManager.persist(JobDetailsEntityHelper.merge(jobDetails, new JobDetailsEntity()));
         entityManager.flush();
     }
 
-    void insertProcessInstanceJob(String jobId, String processInstanceId, String processId) {
+    void insertProcessInstanceJob(String jobId, String processInstanceId, String processId, String version) {
         JobDetails jobDetails = JobDetailsHelper.newScheduledJobDetails(
                 new ProcessInstanceJobDescription(
                         jobId,
@@ -111,7 +133,7 @@ public class SpringbootJPAJobStoreDataIsolationTest {
                         processInstanceId,
                         null,
                         processId,
-                        "v1",
+                        version,
                         null,
                         null,
                         "node-" + jobId));
@@ -119,7 +141,7 @@ public class SpringbootJPAJobStoreDataIsolationTest {
         entityManager.flush();
     }
 
-    void insertUserTaskJob(String jobId, String userTaskId, String processId) {
+    void insertUserTaskJob(String jobId, String userTaskId, String processId, String processVersion) {
         JobDetails jobDetails = JobDetailsHelper.newScheduledJobDetails(
                 new UserTaskInstanceJobDescription(
                         jobId,
@@ -127,7 +149,7 @@ public class SpringbootJPAJobStoreDataIsolationTest {
                         ProcessInstanceJobDescription.DEFAULT_PRIORITY,
                         userTaskId,
                         processId,
-                        "v1",
+                        processVersion,
                         "process-instance-" + jobId,
                         "node-" + jobId,
                         null,
@@ -142,10 +164,11 @@ public class SpringbootJPAJobStoreDataIsolationTest {
     public void testLoadActiveJobsProcess() {
         // Given: Process jobs created through JobDetailsHelper.newScheduledJobDetails
         // where correlationId == correlationRootId == processId (stored in process_id column)
-        insertProcessJob("local-job-1", "localProcess1");
-        insertProcessJob("local-job-2", "localProcess2");
-        insertProcessJob("remote-job-1", "remoteProcess1");
-        insertProcessJob("remote-job-2", "remoteProcess2");
+        insertProcessJob("local-job-1", "localProcess1", "1.0");
+        insertProcessJob("local-job-2", "localProcess2", "2.0");
+        insertProcessJob("local-job-2-1", "localProcess2", "2.1");
+        insertProcessJob("remote-job-1", "remoteProcess1", "x");
+        insertProcessJob("remote-job-2", "remoteProcess2", "y");
         entityManager.clear();
 
         // When: Loading active jobs through JPAJobStore
@@ -163,7 +186,7 @@ public class SpringbootJPAJobStoreDataIsolationTest {
     @Transactional
     public void testFindReturnsLocalJob() {
         // Given: A local job exists
-        insertProcessJob("local-job-3", "localProcess1");
+        insertProcessJob("local-job-3", "localProcess1", "1.0");
         entityManager.clear();
 
         // When: Finding the job by ID
@@ -180,7 +203,7 @@ public class SpringbootJPAJobStoreDataIsolationTest {
     @Transactional
     public void testFindReturnsRemoteJob() {
         // Given: A remote job exists
-        insertProcessJob("remote-job-3", "remoteProcess3");
+        insertProcessJob("remote-job-3", "remoteProcess3", "x");
         entityManager.clear();
 
         // When: Finding the remote job by ID
@@ -196,12 +219,13 @@ public class SpringbootJPAJobStoreDataIsolationTest {
     @Transactional
     public void testLoadActiveJobsWithMixedJobs() {
         // Given: Multiple process jobs, where only local processId (correlationRootId) values belong to LOCAL_PROCESS_IDS
-        insertProcessJob("local-job-4", "localProcess1");
-        insertProcessJob("local-job-5", "localProcess2");
-        insertProcessJob("local-job-6", "localProcess1");
-        insertProcessJob("remote-job-4", "remoteProcess4");
-        insertProcessJob("remote-job-5", "remoteProcess5");
-        insertProcessJob("remote-job-6", "remoteProcess6");
+        insertProcessJob("local-job-4", "localProcess1", "1.0");
+        insertProcessJob("local-job-5", "localProcess2", "2.0");
+        insertProcessJob("local-job-6", "localProcess1", "1.0");
+        insertProcessJob("local-job-7", "localProcess2", "2.1");
+        insertProcessJob("remote-job-4", "remoteProcess4", "x");
+        insertProcessJob("remote-job-5", "remoteProcess5", "y");
+        insertProcessJob("remote-job-6", "remoteProcess6", "z");
         entityManager.clear();
 
         // When: Loading active jobs
@@ -222,8 +246,8 @@ public class SpringbootJPAJobStoreDataIsolationTest {
     public void testLoadActiveJobsProcessInstance() {
         // Given: Process instance jobs created through JobDetailsHelper.newScheduledJobDetails
         // where correlationId is processInstanceId and correlationRootId is processId (stored in process_id column)
-        insertProcessInstanceJob("local-instance-job-1", "processInstance-1", "localProcess1");
-        insertProcessInstanceJob("remote-instance-job-1", "processInstance-remote-1", "remoteProcess1");
+        insertProcessInstanceJob("local-instance-job-1", "processInstance-1", "localProcess1", "1.0");
+        insertProcessInstanceJob("remote-instance-job-1", "processInstance-remote-1", "remoteProcess1", "x");
         entityManager.clear();
 
         // When: Loading active jobs through JPAJobStore
@@ -246,8 +270,8 @@ public class SpringbootJPAJobStoreDataIsolationTest {
     public void testLoadActiveJobsUserTask() {
         // Given: User task jobs created through JobDetailsHelper.newScheduledJobDetails
         // where correlationId is the job description id and correlationRootId is processId (stored in process_id column)
-        insertUserTaskJob("local-usertask-job-1", "userTask-1", "localProcess2");
-        insertUserTaskJob("remote-usertask-job-1", "userTask-remote-1", "remoteProcess2");
+        insertUserTaskJob("local-usertask-job-1", "userTask-1", "localProcess2", "2.0");
+        insertUserTaskJob("remote-usertask-job-1", "userTask-remote-1", "remoteProcess2", "1.1");
         entityManager.clear();
 
         // When: Loading active jobs through JPAJobStore
@@ -284,7 +308,7 @@ public class SpringbootJPAJobStoreDataIsolationTest {
     @Transactional
     public void testShouldRunWithLocalJob() {
         // Given: A local job exists in SCHEDULED status
-        insertProcessJob("local-shouldrun-1", "localProcess1");
+        insertProcessJob("local-shouldrun-1", "localProcess1", "1.0");
         entityManager.clear();
 
         // When: Calling shouldRun for the local job
@@ -304,7 +328,7 @@ public class SpringbootJPAJobStoreDataIsolationTest {
     @Transactional
     public void testShouldRunWithRemoteJob() {
         // Given: A remote job exists in SCHEDULED status
-        insertProcessJob("remote-shouldrun-1", "remoteProcess1");
+        insertProcessJob("remote-shouldrun-1", "remoteProcess1", "x");
         entityManager.clear();
 
         // When: Calling shouldRun for the remote job

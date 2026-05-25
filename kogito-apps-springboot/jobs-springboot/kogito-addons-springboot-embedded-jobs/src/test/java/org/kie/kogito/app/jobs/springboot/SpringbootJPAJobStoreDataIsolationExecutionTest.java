@@ -23,11 +23,13 @@ import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kie.kogito.app.jobs.impl.JobDetailsHelper;
+import org.kie.kogito.app.jobs.jpa.DataIsolationKeyDescriptor;
 import org.kie.kogito.app.jobs.jpa.JPAJobContext;
 import org.kie.kogito.app.jobs.jpa.JPAJobStore;
 import org.kie.kogito.app.jobs.springboot.jpa.SpringbootJPAJobContext;
@@ -83,7 +85,9 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
     @Autowired
     PlatformTransactionManager transactionManager;
 
-    private static final Set<String> LOCAL_PROCESS_IDS = Set.of("localProcess1", "localProcess2");
+    private static final Set<DataIsolationKeyDescriptor> LOCAL_PROCESS_IDS = Set.of(
+            new DataIsolationKeyDescriptor("localProcess1", "1.0"),
+            new DataIsolationKeyDescriptor("localProcess2", "2.0"));
 
     @BeforeEach
     public void setup() throws Exception {
@@ -102,7 +106,24 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
         exceptionHandler.reset();
 
         // Configure the mock Processes bean to return local process IDs
-        when(processes.processIds()).thenReturn(LOCAL_PROCESS_IDS);
+        when(processes.processIds()).thenReturn(LOCAL_PROCESS_IDS.stream()
+                .map(DataIsolationKeyDescriptor::processId)
+                .collect(Collectors.toSet()));
+
+        // Mock processes() to return Process objects with id and version matching LOCAL_PROCESS_IDS
+        java.util.Collection<org.kie.kogito.process.Process<? extends org.kie.kogito.Model>> mockProcesses =
+                LOCAL_PROCESS_IDS.stream()
+                        .map(descriptor -> {
+                            @SuppressWarnings("unchecked")
+                            org.kie.kogito.process.Process<? extends org.kie.kogito.Model> mockProcess =
+                                    (org.kie.kogito.process.Process<? extends org.kie.kogito.Model>) org.mockito.Mockito.mock(org.kie.kogito.process.Process.class);
+                            when(mockProcess.id()).thenReturn(descriptor.processId());
+                            when(mockProcess.version()).thenReturn(descriptor.processVersion());
+                            return mockProcess;
+                        })
+                        .collect(Collectors.toList());
+        when(processes.processes()).thenReturn(mockProcesses);
+
         when(processes.processById(org.mockito.ArgumentMatchers.anyString())).thenReturn(null);
 
         // Schedule all jobs BEFORE init() so they're picked up during loadActiveJobs()
@@ -119,7 +140,7 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 "processInstanceId1",
                 null,
                 "localProcess1",
-                "v1",
+                "1.0",
                 null,
                 null,
                 "nodeInstanceId1");
@@ -132,7 +153,7 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 "processInstanceId3",
                 null,
                 "localProcess1",
-                "v1",
+                "1.0",
                 null,
                 null,
                 "nodeInstanceId3");
@@ -145,7 +166,7 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 "processInstanceId4",
                 null,
                 "localProcess2",
-                "v1",
+                "2.0",
                 null,
                 null,
                 "nodeInstanceId4");
@@ -159,7 +180,7 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 "processInstanceId2",
                 null,
                 "remoteProcess1",
-                "v1",
+                "x",
                 null,
                 null,
                 "nodeInstanceId2");
@@ -172,7 +193,7 @@ public class SpringbootJPAJobStoreDataIsolationExecutionTest {
                 "remoteProcessInstanceId2",
                 null,
                 "remoteProcess2",
-                "v1",
+                "y",
                 null,
                 null,
                 "remoteNodeInstanceId");
