@@ -73,9 +73,8 @@ public class JobEntity extends AbstractEntity {
         return processVersion;
     }
 
-    public JobEntity setProcessVersion(String processVersion) {
+    public void setProcessVersion(String processVersion) {
         this.processVersion = processVersion;
-        return this;
     }
 
     public String getProcessInstanceId() {
@@ -98,9 +97,8 @@ public class JobEntity extends AbstractEntity {
         return rootProcessVersion;
     }
 
-    public JobEntity setRootProcessVersion(String rootProcessVersion) {
+    public void setRootProcessVersion(String rootProcessVersion) {
         this.rootProcessVersion = rootProcessVersion;
-        return this;
     }
 
     public String getRootProcessInstanceId() {
