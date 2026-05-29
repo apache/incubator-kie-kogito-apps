@@ -95,14 +95,6 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
         Root<E> root = criteriaQuery.from(entityClass);
 
         criteriaQuery.select(root);
-
-        // Only use DISTINCT when there are filters that could cause JOINs (collection attributes)
-        // to avoid duplicates. Don't use DISTINCT for simple queries as it can affect ordering
-        // and pagination behavior.
-        if (needsDistinct()) {
-            criteriaQuery.distinct(true);
-        }
-
         addWhere(builder, criteriaQuery, root);
         if (sortBy != null && !sortBy.isEmpty()) {
             List<Order> orderBy = sortBy.stream().map(f -> {
@@ -122,37 +114,13 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
     }
 
     /**
-     * Determines if DISTINCT is needed based on whether the query uses collection attributes
-     * that would result in JOINs and potential duplicate rows.
+     * Creates a function that converts an AttributeFilter to a JPA Predicate.
+     * 
+     * @param root the query root
+     * @param builder the criteria builder
+     * @param criteriaQuery the criteria query
+     * @return a function that converts filters to predicates
      */
-    private boolean needsDistinct() {
-        if (filters == null || filters.isEmpty()) {
-            return false;
-        }
-        return filters.stream().anyMatch(this::filterNeedsDistinct);
-    }
-
-    /**
-     * Recursively checks if a filter needs DISTINCT due to collection operations or attributes.
-     */
-    private boolean filterNeedsDistinct(AttributeFilter<?> filter) {
-        return switch (filter.getCondition()) {
-            case CONTAINS, CONTAINS_ALL, CONTAINS_ANY ->
-                // Collection operations on collection attributes need DISTINCT
-                filter.getAttribute() != null && isCollectionAttribute(filter.getAttribute());
-            case AND, OR -> {
-                // Check nested filters recursively
-                List<AttributeFilter<?>> nestedFilters = (List<AttributeFilter<?>>) filter.getValue();
-                yield nestedFilters.stream().anyMatch(this::filterNeedsDistinct);
-            }
-            case NOT -> filterNeedsDistinct((AttributeFilter<?>) filter.getValue());
-            case EQUAL, LIKE, IN, GT, GTE, LT, LTE, BETWEEN, IS_NULL, NOT_NULL ->
-                // These operations on collection attributes need DISTINCT
-                filter.getAttribute() != null && isCollectionAttribute(filter.getAttribute());
-            default -> false;
-        };
-    }
-
     protected Function<AttributeFilter<?>, Predicate> filterPredicateFunction(Root<E> root, CriteriaBuilder builder, CriteriaQuery<?> criteriaQuery) {
         return filter -> jsonPredicateBuilder.filter(b -> filter.isJson()).map(b -> b.buildPredicate(filter, root, builder))
                 .orElseGet(() -> buildPredicateFunction(filter, root, builder, criteriaQuery));
@@ -162,8 +130,7 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
         switch (filter.getCondition()) {
             case CONTAINS:
                 // For collection attributes (e.g., "comments.id", "attachments.name"), use equality check
-                // which will result in a JOIN. The query will use DISTINCT to avoid duplicates.
-                // For actual collection fields (e.g., potentialUsers array), use isMember
+                // which will result in a JOIN. For actual collection fields (e.g., potentialUsers array), use isMember
                 if (isCollectionAttribute(filter.getAttribute())) {
                     return builder.equal(getAttributePath(root, filter.getAttribute()), filter.getValue());
                 } else {
@@ -172,7 +139,6 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
             case CONTAINS_ALL:
                 if (isCollectionAttribute(filter.getAttribute())) {
                     // For collection attributes, use multiple equality checks with AND
-                    // This will result in multiple JOINs. Use DISTINCT to avoid duplicates.
                     List<Predicate> predicatesAll = ((List<?>) filter.getValue()).stream()
                             .map(value -> builder.equal(getAttributePath(root, filter.getAttribute()), value))
                             .collect(toList());
@@ -185,7 +151,6 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
             case CONTAINS_ANY:
                 if (isCollectionAttribute(filter.getAttribute())) {
                     // For collection attributes, use multiple equality checks with OR
-                    // This will result in a JOIN with OR conditions. Use DISTINCT to avoid duplicates.
                     List<Predicate> predicatesAny = ((List<?>) filter.getValue()).stream()
                             .map(value -> builder.equal(getAttributePath(root, filter.getAttribute()), value))
                             .collect(toList());
