@@ -19,15 +19,17 @@
 package org.kie.kogito.index.postgresql;
 
 import org.kie.kogito.index.jpa.storage.JobEntityStorage;
+import org.kie.kogito.process.Processes;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
 @ApplicationScoped
 public class QuarkusJobEntityStorage extends JobEntityStorage {
     @Inject
-    public QuarkusJobEntityStorage(EntityManager em) {
-        super(em);
+    public QuarkusJobEntityStorage(EntityManager em, Instance<Processes> processesInstance) {
+        super(em, processesInstance);
     }
 }
