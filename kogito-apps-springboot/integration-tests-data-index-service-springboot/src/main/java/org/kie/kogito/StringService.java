@@ -31,5 +31,3 @@ public class StringService {
         return word.toLowerCase();
     }
 }
-
-// Made with Bob

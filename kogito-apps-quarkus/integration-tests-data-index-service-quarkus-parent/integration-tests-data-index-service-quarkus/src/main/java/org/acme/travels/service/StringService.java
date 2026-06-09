@@ -106,5 +106,3 @@ public class StringService {
         }
     }
 }
-
-// Made with Bob

@@ -54,5 +54,3 @@ public class RecordInputOutputIT extends AbstractRecordInputOutputIT {
     }
 
 }
-
-// Made with Bob

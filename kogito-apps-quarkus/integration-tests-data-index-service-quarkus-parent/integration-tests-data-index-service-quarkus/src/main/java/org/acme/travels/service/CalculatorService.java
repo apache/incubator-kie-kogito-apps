@@ -104,5 +104,3 @@ public class CalculatorService {
         }
     }
 }
-
-// Made with Bob

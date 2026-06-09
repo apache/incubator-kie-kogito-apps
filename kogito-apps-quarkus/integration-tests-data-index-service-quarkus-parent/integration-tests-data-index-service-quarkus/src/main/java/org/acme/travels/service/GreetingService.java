@@ -37,5 +37,3 @@ public class GreetingService {
         return "Hello, " + name + "!";
     }
 }
-
-// Made with Bob
