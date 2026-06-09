@@ -19,6 +19,7 @@
 
 package org.kie.kogito.index.jpa.springboot.storage;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.kie.kogito.index.api.DateTimeCoercing;
@@ -26,6 +27,8 @@ import org.kie.kogito.index.jpa.mapper.ProcessDefinitionEntityMapper;
 import org.kie.kogito.index.jpa.mapper.ProcessInstanceEntityMapper;
 import org.kie.kogito.index.jpa.storage.*;
 import org.kie.kogito.index.storage.DataIndexStorageService;
+import org.kie.kogito.process.Processes;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -35,23 +38,33 @@ import jakarta.persistence.EntityManager;
 public class DataIndexStorageProducer {
 
     @Bean
-    public JobEntityStorage jobEntityStorage(EntityManager entityManager) {
-        return new JobEntityStorage(entityManager);
+    public JobEntityStorage jobEntityStorage(EntityManager entityManager, @Autowired(required = false) List<Processes> processes) {
+        return new JobEntityStorage(entityManager, processes != null ? processes : Collections.emptyList());
     }
 
     @Bean
-    public ProcessDefinitionEntityStorage processDefinitionEntityStorage(EntityManager entityManager, List<JsonPredicateBuilder> jsonPredicateBuilders) {
-        return new ProcessDefinitionEntityStorage(entityManager, jsonPredicateBuilders, ProcessDefinitionEntityMapper.INSTANCE);
+    public ProcessDefinitionEntityStorage processDefinitionEntityStorage(EntityManager entityManager,
+            @Autowired(required = false) List<JsonPredicateBuilder> jsonPredicateBuilders,
+            @Autowired(required = false) List<Processes> processes) {
+        return new ProcessDefinitionEntityStorage(entityManager,
+                jsonPredicateBuilders != null ? jsonPredicateBuilders : Collections.emptyList(),
+                ProcessDefinitionEntityMapper.INSTANCE,
+                processes != null ? processes : Collections.emptyList());
     }
 
     @Bean
-    public ProcessInstanceEntityStorage processInstanceEntityStorage(EntityManager entityManager, List<JsonPredicateBuilder> jsonPredicateBuilders) {
-        return new ProcessInstanceEntityStorage(entityManager, jsonPredicateBuilders, ProcessInstanceEntityMapper.INSTANCE);
+    public ProcessInstanceEntityStorage processInstanceEntityStorage(EntityManager entityManager,
+            @Autowired(required = false) List<JsonPredicateBuilder> jsonPredicateBuilders,
+            @Autowired(required = false) List<Processes> processes) {
+        return new ProcessInstanceEntityStorage(entityManager,
+                jsonPredicateBuilders != null ? jsonPredicateBuilders : Collections.emptyList(),
+                ProcessInstanceEntityMapper.INSTANCE,
+                processes != null ? processes : Collections.emptyList());
     }
 
     @Bean
-    public UserTaskInstanceEntityStorage userTaskInstanceEntityStorage(EntityManager entityManager) {
-        return new UserTaskInstanceEntityStorage(entityManager);
+    public UserTaskInstanceEntityStorage userTaskInstanceEntityStorage(EntityManager entityManager, @Autowired(required = false) List<Processes> processes) {
+        return new UserTaskInstanceEntityStorage(entityManager, processes != null ? processes : Collections.emptyList());
     }
 
     @Bean
