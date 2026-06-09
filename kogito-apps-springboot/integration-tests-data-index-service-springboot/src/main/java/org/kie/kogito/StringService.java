@@ -18,13 +18,18 @@
  */
 package org.kie.kogito;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.stereotype.Component;
 
-@SpringBootApplication(scanBasePackages = { "org.kie.kogito.**", "com.example.**" })
-public class KogitoApplication {
+@Component
+public class StringService {
 
-    public static void main(String[] args) {
-        SpringApplication.run(KogitoApplication.class, args);
+    public String toUpperCase(String word) {
+        return word.toUpperCase();
+    }
+
+    public String toLowerCase(String word) {
+        return word.toLowerCase();
     }
 }
+
+// Made with Bob

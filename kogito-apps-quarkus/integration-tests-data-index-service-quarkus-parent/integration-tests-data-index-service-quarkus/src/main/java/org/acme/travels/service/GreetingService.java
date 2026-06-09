@@ -16,15 +16,26 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito;
+package org.acme.travels.service;
 
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
+import jakarta.enterprise.context.ApplicationScoped;
 
-@SpringBootApplication(scanBasePackages = { "org.kie.kogito.**", "com.example.**" })
-public class KogitoApplication {
+/**
+ * Simple greeting service for testing recordArgs feature.
+ * Used in node-level-true.bpmn and mixed-nodes.bpmn processes.
+ */
+@ApplicationScoped
+public class GreetingService {
 
-    public static void main(String[] args) {
-        SpringApplication.run(KogitoApplication.class, args);
+    /**
+     * Generates a greeting message for the given name.
+     *
+     * @param name the name to greet
+     * @return greeting message
+     */
+    public String greet(String name) {
+        return "Hello, " + name + "!";
     }
 }
+
+// Made with Bob
