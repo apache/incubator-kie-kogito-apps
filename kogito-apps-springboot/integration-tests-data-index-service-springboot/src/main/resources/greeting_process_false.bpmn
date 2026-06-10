@@ -7,7 +7,7 @@
   <bpmn2:itemDefinition id="__27DB8FD0-8299-448E-9099-E65CAEE332C1_GreetingOutputXItem" structureRef="String"/>
   <bpmn2:message id="_27DB8FD0-8299-448E-9099-E65CAEE332C1_InMessage" itemRef="_27DB8FD0-8299-448E-9099-E65CAEE332C1_InMessageType"/>
   <bpmn2:message id="_27DB8FD0-8299-448E-9099-E65CAEE332C1_OutMessage" itemRef="_27DB8FD0-8299-448E-9099-E65CAEE332C1_OutMessageType"/>
-  <bpmn2:interface id="_27DB8FD0-8299-448E-9099-E65CAEE332C1_ServiceInterface" name="org.kie.kogito.GreetingService" implementationRef="org.kie.kogito.GreetingService">
+  <bpmn2:interface id="_27DB8FD0-8299-448E-9099-E65CAEE332C1_ServiceInterface" name="com.example.GreetingService" implementationRef="com.example.GreetingService">
     <bpmn2:operation id="_27DB8FD0-8299-448E-9099-E65CAEE332C1_ServiceOperation" name="greet" implementationRef="greet">
       <bpmn2:inMessageRef>_27DB8FD0-8299-448E-9099-E65CAEE332C1_InMessage</bpmn2:inMessageRef>
       <bpmn2:outMessageRef>_27DB8FD0-8299-448E-9099-E65CAEE332C1_OutMessage</bpmn2:outMessageRef>
@@ -16,7 +16,7 @@
   <bpmn2:collaboration id="_FE96642B-C47D-4A74-9028-2C253D9C821E" name="Default Collaboration">
     <bpmn2:participant id="_FF01B111-C16C-4C98-A680-654821FECA8F" name="Pool Participant" processRef="greeting_process_false"/>
   </bpmn2:collaboration>
-  <bpmn2:process id="greeting_process_false" drools:packageName="org.kie.kogito" drools:version="1.0" drools:adHoc="false" name="greeting_process_false" isExecutable="true" processType="Public">
+  <bpmn2:process id="greeting_process_false" drools:packageName="com.example" drools:version="1.0" drools:adHoc="false" name="greeting_process_false" isExecutable="true" processType="Public">
     <bpmn2:extensionElements>
       <drools:metaData name="recordArgs">
         <drools:metaValue><![CDATA[false]]></drools:metaValue>
@@ -34,7 +34,7 @@
     <bpmn2:endEvent id="_8884D7D9-05C4-45CB-8913-44C36BE6BA41">
       <bpmn2:incoming>_1895B6D4-D898-40D6-88C7-27A0F056B1C5</bpmn2:incoming>
     </bpmn2:endEvent>
-    <bpmn2:serviceTask id="_27DB8FD0-8299-448E-9099-E65CAEE332C1" drools:serviceimplementation="Java" drools:serviceinterface="org.kie.kogito.GreetingService" drools:serviceoperation="greet" name="Task" implementation="Java" operationRef="_27DB8FD0-8299-448E-9099-E65CAEE332C1_ServiceOperation">
+    <bpmn2:serviceTask id="_27DB8FD0-8299-448E-9099-E65CAEE332C1" drools:serviceimplementation="Java" drools:serviceinterface="com.example.GreetingService" drools:serviceoperation="greet" name="Task" implementation="Java" operationRef="_27DB8FD0-8299-448E-9099-E65CAEE332C1_ServiceOperation">
       <bpmn2:extensionElements>
         <drools:metaData name="elementname">
           <drools:metaValue><![CDATA[Task]]></drools:metaValue>

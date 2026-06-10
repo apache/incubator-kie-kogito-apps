@@ -12,7 +12,7 @@
   <bpmn2:itemDefinition id="__3FFFBD4A-6534-43AC-AEEC-995E89ECD809_NewGreetingOutputXItem" structureRef="String"/>
   <bpmn2:message id="_27DB8FD0-8299-448E-9099-E65CAEE332C1_InMessage" itemRef="_27DB8FD0-8299-448E-9099-E65CAEE332C1_InMessageType"/>
   <bpmn2:message id="_27DB8FD0-8299-448E-9099-E65CAEE332C1_OutMessage" itemRef="_27DB8FD0-8299-448E-9099-E65CAEE332C1_OutMessageType"/>
-  <bpmn2:interface id="_27DB8FD0-8299-448E-9099-E65CAEE332C1_ServiceInterface" name="org.kie.kogito.GreetingService" implementationRef="org.kie.kogito.GreetingService">
+  <bpmn2:interface id="_27DB8FD0-8299-448E-9099-E65CAEE332C1_ServiceInterface" name="com.example.GreetingService" implementationRef="com.example.GreetingService">
     <bpmn2:operation id="_27DB8FD0-8299-448E-9099-E65CAEE332C1_ServiceOperation" name="greet" implementationRef="greet">
       <bpmn2:inMessageRef>_27DB8FD0-8299-448E-9099-E65CAEE332C1_InMessage</bpmn2:inMessageRef>
       <bpmn2:outMessageRef>_27DB8FD0-8299-448E-9099-E65CAEE332C1_OutMessage</bpmn2:outMessageRef>
@@ -20,7 +20,7 @@
   </bpmn2:interface>
   <bpmn2:message id="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_InMessage" itemRef="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_InMessageType"/>
   <bpmn2:message id="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_OutMessage" itemRef="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_OutMessageType"/>
-  <bpmn2:interface id="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_ServiceInterface" name="org.kie.kogito.StringService" implementationRef="org.kie.kogito.StringService">
+  <bpmn2:interface id="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_ServiceInterface" name="com.example.StringService" implementationRef="com.example.StringService">
     <bpmn2:operation id="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_ServiceOperation" name="toUpperCase" implementationRef="toUpperCase">
       <bpmn2:inMessageRef>_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_InMessage</bpmn2:inMessageRef>
       <bpmn2:outMessageRef>_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_OutMessage</bpmn2:outMessageRef>
@@ -29,7 +29,7 @@
   <bpmn2:collaboration id="_62A1940B-F370-43ED-836F-6438F43364CB" name="Default Collaboration">
     <bpmn2:participant id="_CF47E9F0-9E46-48FC-94B2-A3E6A6C3C36D" name="Pool Participant" processRef="greeting_multiple"/>
   </bpmn2:collaboration>
-  <bpmn2:process id="greeting_multiple" drools:packageName="org.kie.kogito" drools:version="1.0" drools:adHoc="false" name="greeting_multiple" isExecutable="true" processType="Public">
+  <bpmn2:process id="greeting_multiple" drools:packageName="com.example" drools:version="1.0" drools:adHoc="false" name="greeting_multiple" isExecutable="true" processType="Public">
     <bpmn2:extensionElements>
       <drools:metaData name="recordArgs">
         <drools:metaValue><![CDATA[true]]></drools:metaValue>
@@ -55,7 +55,7 @@
     <bpmn2:endEvent id="_C33E7C72-3145-483A-BB6B-3EA782608694">
       <bpmn2:incoming>_676B0D73-B8B5-4437-A20A-8FFCC47F4909</bpmn2:incoming>
     </bpmn2:endEvent>
-    <bpmn2:serviceTask id="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809" drools:serviceimplementation="Java" drools:serviceinterface="org.kie.kogito.StringService" drools:serviceoperation="toUpperCase" name="Service Task 2" implementation="Java" operationRef="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_ServiceOperation">
+    <bpmn2:serviceTask id="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809" drools:serviceimplementation="Java" drools:serviceinterface="com.example.StringService" drools:serviceoperation="toUpperCase" name="Service Task 2" implementation="Java" operationRef="_3FFFBD4A-6534-43AC-AEEC-995E89ECD809_ServiceOperation">
       <bpmn2:extensionElements>
         <drools:metaData name="elementname">
           <drools:metaValue><![CDATA[Service Task 2]]></drools:metaValue>
@@ -85,7 +85,7 @@
         <bpmn2:targetRef>newResponse</bpmn2:targetRef>
       </bpmn2:dataOutputAssociation>
     </bpmn2:serviceTask>
-    <bpmn2:serviceTask id="_27DB8FD0-8299-448E-9099-E65CAEE332C1" drools:serviceimplementation="Java" drools:serviceinterface="org.kie.kogito.GreetingService" drools:serviceoperation="greet" name="Service Task 1" implementation="Java" operationRef="_27DB8FD0-8299-448E-9099-E65CAEE332C1_ServiceOperation">
+    <bpmn2:serviceTask id="_27DB8FD0-8299-448E-9099-E65CAEE332C1" drools:serviceimplementation="Java" drools:serviceinterface="com.example.GreetingService" drools:serviceoperation="greet" name="Service Task 1" implementation="Java" operationRef="_27DB8FD0-8299-448E-9099-E65CAEE332C1_ServiceOperation">
       <bpmn2:extensionElements>
         <drools:metaData name="elementname">
           <drools:metaValue><![CDATA[Service Task 1]]></drools:metaValue>

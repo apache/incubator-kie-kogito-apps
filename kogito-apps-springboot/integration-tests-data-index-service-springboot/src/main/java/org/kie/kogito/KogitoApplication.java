@@ -21,7 +21,7 @@ package org.kie.kogito;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = { "org.kie.kogito.**", "com.example.**" })
+@SpringBootApplication(scanBasePackages = { "org.kie.kogito.**", "org.acme.travels.**", "com.example.**" })
 public class KogitoApplication {
 
     public static void main(String[] args) {

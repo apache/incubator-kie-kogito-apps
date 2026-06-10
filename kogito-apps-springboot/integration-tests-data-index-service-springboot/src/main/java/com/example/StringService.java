@@ -16,14 +16,18 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.kie.kogito;
+package com.example;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class GreetingService {
+public class StringService {
 
-    public String greet(String name) {
-        return "Hello " + name;
+    public String toUpperCase(String word) {
+        return word.toUpperCase();
+    }
+
+    public String toLowerCase(String word) {
+        return word.toLowerCase();
     }
 }

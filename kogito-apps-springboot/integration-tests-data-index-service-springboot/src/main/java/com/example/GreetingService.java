@@ -16,24 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.acme.travels.service;
+package com.example;
 
-import jakarta.enterprise.context.ApplicationScoped;
+import org.springframework.stereotype.Component;
 
-/**
- * Simple greeting service for testing recordArgs feature.
- * Used in node-level-true.bpmn and mixed-nodes.bpmn processes.
- */
-@ApplicationScoped
+@Component
 public class GreetingService {
 
-    /**
-     * Generates a greeting message for the given name.
-     *
-     * @param name the name to greet
-     * @return greeting message
-     */
     public String greet(String name) {
-        return "Hello, " + name + "!";
+        return "Hello " + name;
     }
 }
