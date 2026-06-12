@@ -422,7 +422,16 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                 } catch (Exception exception) {
                     LOG.trace("Timeout {} with jobId {} will be retried if possible", timerId, jobId, exception);
                     JobDetails nextJobDetails = doRetryOrError(jobDetails, exception);
-                    reconcileScheduling(timerId, jobContext, nextJobDetails);
+
+                    // For RETRY and ERROR status, we need to reconcile in a NEW transaction
+                    // because the current transaction may be marked for rollback due to the exception.
+                    if (nextJobDetails.getStatus() == JobStatus.RETRY || nextJobDetails.getStatus() == JobStatus.ERROR) {
+                        scheduleReconciliationInNewTransaction(timerId, nextJobDetails);
+                    } else {
+                        // For other statuses, reconcile normally
+                        reconcileScheduling(timerId, jobContext, nextJobDetails);
+                    }
+
                     jobSchedulerListeners.forEach(l -> l.onFailure(jobDetails));
                     return new JobTimeoutExecution(nextJobDetails, exception);
                 }
@@ -433,6 +442,55 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             current = interceptor.chainIntercept(current);
         }
         return current;
+    }
+
+    /**
+     * Schedules reconciliation to happen in a new transaction after the current one completes.
+     * This is necessary when the current transaction is marked for rollback due to an exception.
+     */
+    private void scheduleReconciliationInNewTransaction(Long timerId, JobDetails jobDetails) {
+        String jobId = jobDetails.getId();
+
+        // Schedule the reconciliation to run asynchronously in a new transaction
+        // Use vertx executeBlocking to run in a worker thread with a new transaction context
+        vertx.executeBlocking(promise -> {
+            try {
+                // Create a new job context for the new transaction
+                JobContext newJobContext = jobContextFactory.newContext();
+
+                // Create a callable that will be wrapped by transaction interceptors
+                Callable<Void> reconciliationTask = () -> {
+                    reconcileScheduling(timerId, newJobContext, jobDetails);
+                    return null;
+                };
+
+                // Apply transaction interceptors to ensure this runs in a new transaction
+                Callable<Void> wrappedTask = reconciliationTask;
+                for (JobTimeoutInterceptor interceptor : interceptors) {
+                    final Callable<Void> currentTask = wrappedTask;
+                    wrappedTask = () -> {
+                        // Wrap in a callable that returns Void instead of JobTimeoutExecution
+                        interceptor.chainIntercept(() -> {
+                            currentTask.call();
+                            return new JobTimeoutExecution(jobDetails);
+                        }).call();
+                        return null;
+                    };
+                }
+
+                // Execute the wrapped task
+                wrappedTask.call();
+
+                promise.complete();
+            } catch (Exception e) {
+                LOG.error("Failed to reconcile job {} in new transaction", jobId, e);
+                promise.fail(e);
+            }
+        }, false, result -> {
+            if (result.failed()) {
+                LOG.error("Async reconciliation failed for job {}", jobId, result.cause());
+            }
+        });
     }
 
     private void reconcileScheduling(Long timerId, JobContext jobContext, JobDetails nextJobDetails) {
