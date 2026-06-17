@@ -36,7 +36,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
  * Tests verify that service task input/output arguments are correctly recorded and indexed
  * based on the three-level hierarchy: node-level > process-level > global-level.
  *
- * The global property kogito.processes.service-tasks.record-io=true is set in application.properties.
+ * The global property kogito.processes.nodes.record-io=true is set in application.properties.
  */
 public abstract class AbstractRecordInputOutputIT {
 
@@ -144,7 +144,7 @@ public abstract class AbstractRecordInputOutputIT {
 
     /**
      * Configuration: No recordArgs metadata (falls back to global property)
-     * Global Property: kogito.processes.service-tasks.record-io=true
+     * Global Property: kogito.processes.nodes.record-io=true
      * Expected: inputArgs and outputArgs are recorded (global property is true)
      */
     @Test
@@ -157,7 +157,7 @@ public abstract class AbstractRecordInputOutputIT {
      * Verifies that each task respects its own configuration independently.
      *
      * Configuration:
-     * - Global-level: kogito.processes.service-tasks.record-io=true
+     * - Global-level: kogito.processes.nodes.record-io=true
      * - Process-level: recordArgs=true
      * - Service Task 1: recordArgs=true (explicit node-level)
      * - Service Task 2: recordArgs=false (explicit node-level)
