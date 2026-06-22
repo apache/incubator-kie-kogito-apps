@@ -421,10 +421,15 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                     return new JobTimeoutExecution(nextJobDetails);
                 } catch (Exception exception) {
                     LOG.trace("Timeout {} with jobId {} will be retried if possible", timerId, jobId, exception);
+
+                    // CRITICAL: Mark the current transaction for rollback FIRST
+                    // This ensures user task JPA changes are rolled back
+                    markTransactionForRollback();
+
                     JobDetails nextJobDetails = doRetryOrError(jobDetails, exception);
 
                     // For RETRY and ERROR status, we need to reconcile in a NEW transaction
-                    // because the current transaction may be marked for rollback due to the exception.
+                    // because the current transaction is now marked for rollback.
                     if (nextJobDetails.getStatus() == JobStatus.RETRY || nextJobDetails.getStatus() == JobStatus.ERROR) {
                         scheduleReconciliationInNewTransaction(timerId, nextJobDetails);
                     } else {
@@ -704,6 +709,49 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         List<DataEvent<byte[]>> jobInstanceEvents = jobEventAdapters.stream().filter(e -> e.accept(jobDetails)).map(e -> e.adapt(jobDetails)).toList();
         for (DataEvent<byte[]> jobEvent : jobInstanceEvents) {
             eventPublishers.forEach(e -> e.publish(jobEvent));
+        }
+    }
+
+    /**
+     * Marks the current transaction for rollback using reflection to support both Quarkus and Spring Boot.
+     * This ensures that any changes made in the current transaction (like user task JPA operations)
+     * are rolled back, while allowing retry logic to execute in a new transaction.
+     */
+    private void markTransactionForRollback() {
+        try {
+            // Try Quarkus/Narayana first (com.arjuna.ats.jta.TransactionManager)
+            Class<?> tmClass = Class.forName("com.arjuna.ats.jta.TransactionManager");
+            java.lang.reflect.Method getTransactionManagerMethod = tmClass.getMethod("transactionManager");
+            Object tm = getTransactionManagerMethod.invoke(null);
+
+            if (tm != null) {
+                java.lang.reflect.Method getTransactionMethod = tm.getClass().getMethod("getTransaction");
+                Object transaction = getTransactionMethod.invoke(tm);
+
+                if (transaction != null) {
+                    java.lang.reflect.Method setRollbackOnlyMethod = tm.getClass().getMethod("setRollbackOnly");
+                    setRollbackOnlyMethod.invoke(tm);
+                    LOG.debug("Marked transaction for rollback due to exception in job execution (Quarkus/Narayana)");
+                    return;
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            // Narayana not available, try Spring Boot
+            LOG.trace("Narayana TransactionManager not found, trying Spring Boot");
+        } catch (Exception e) {
+            LOG.warn("Failed to mark transaction for rollback using Narayana", e);
+        }
+
+        try {
+            // Try Spring Boot (org.springframework.transaction.support.TransactionSynchronizationManager)
+            Class<?> tsmClass = Class.forName("org.springframework.transaction.support.TransactionSynchronizationManager");
+            java.lang.reflect.Method setRollbackOnlyMethod = tsmClass.getMethod("setRollbackOnly");
+            setRollbackOnlyMethod.invoke(null);
+            LOG.debug("Marked transaction for rollback due to exception in job execution (Spring Boot)");
+        } catch (ClassNotFoundException e) {
+            LOG.trace("Spring TransactionSynchronizationManager not found");
+        } catch (Exception e) {
+            LOG.warn("Failed to mark transaction for rollback using Spring Boot", e);
         }
     }
 
