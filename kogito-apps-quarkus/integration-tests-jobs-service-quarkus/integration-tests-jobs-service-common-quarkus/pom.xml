@@ -83,8 +83,8 @@
     </dependency>
     <dependency>
       <groupId>org.wiremock</groupId>
-      <artifactId>wiremock</artifactId>
-      <scope>compile</scope>
+      <artifactId>wiremock-jetty12</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
   <build>
