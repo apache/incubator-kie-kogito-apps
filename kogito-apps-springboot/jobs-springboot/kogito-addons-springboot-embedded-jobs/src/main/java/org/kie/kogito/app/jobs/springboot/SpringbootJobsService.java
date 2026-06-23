@@ -32,6 +32,7 @@ import org.kie.kogito.app.jobs.integrations.ProcessJobDescriptionJobInstanceEven
 import org.kie.kogito.app.jobs.integrations.UserTaskInstanceJobDescriptionJobInstanceEventAdapter;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
 import org.kie.kogito.app.jobs.spi.JobStore;
+import org.kie.kogito.app.jobs.spi.TransactionRollbackMarker;
 import org.kie.kogito.app.jobs.springboot.resource.RestApiConstants;
 import org.kie.kogito.event.EventPublisher;
 import org.kie.kogito.handler.ExceptionHandler;
@@ -93,6 +94,9 @@ public class SpringbootJobsService implements JobsService {
     @Autowired
     protected WrappingConditionalJobExceptionDetailsExtractor exceptionDetailsExtractor;
 
+    @Autowired
+    protected TransactionRollbackMarker transactionRollbackMarker;
+
     @PostConstruct
     public void init() {
         this.jobScheduler = JobSchedulerBuilder.newJobSchedulerBuilder()
@@ -113,6 +117,7 @@ public class SpringbootJobsService implements JobsService {
                         new TransactionJobTimeoutInterceptor(transactionManager),
                         new ErrorHandlingJobTimeoutInterceptor(ofNullable(exceptionHandlers).stream().toList()))
                 .withExceptionDetailsExtractor(exceptionDetailsExtractor)
+                .withTransactionRollbackMarker(transactionRollbackMarker)
                 .withNumberOfWorkerThreads(numberOfWorkerThreads)
                 .withJobSynchronization(new JobSynchronization() {
 

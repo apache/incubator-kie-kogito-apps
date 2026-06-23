@@ -47,6 +47,8 @@ import org.kie.kogito.app.jobs.integrations.UserTaskInstanceJobDescriptorMerger;
 import org.kie.kogito.app.jobs.spi.JobContext;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
 import org.kie.kogito.app.jobs.spi.JobStore;
+import org.kie.kogito.app.jobs.spi.NoOpTransactionRollbackMarker;
+import org.kie.kogito.app.jobs.spi.TransactionRollbackMarker;
 import org.kie.kogito.app.jobs.spi.memory.MemoryJobContextFactory;
 import org.kie.kogito.app.jobs.spi.memory.MemoryJobStore;
 import org.kie.kogito.event.DataEvent;
@@ -114,6 +116,8 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
     private JobSynchronization jobSynchronization;
 
     private JobExceptionDetailsExtractor exceptionDetailsExtractor;
+
+    private TransactionRollbackMarker transactionRollbackMarker;
 
     public class VertxJobSchedulerBuilder implements JobSchedulerBuilder {
 
@@ -213,6 +217,12 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             return this;
         }
 
+        @Override
+        public JobSchedulerBuilder withTransactionRollbackMarker(TransactionRollbackMarker transactionRollbackMarker) {
+            VertxJobScheduler.this.transactionRollbackMarker = transactionRollbackMarker;
+            return this;
+        }
+
     }
 
     public VertxJobScheduler() {
@@ -242,6 +252,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         this.refreshJobsInterval = 1000L;
         this.retryInterval = 10 * 1000L; // ten seconds
         this.maxRefreshJobsIntervalWindow = 5 * 60 * 1000L; // every 5 minute
+        this.transactionRollbackMarker = new NoOpTransactionRollbackMarker();
     }
 
     @Override
@@ -422,22 +433,23 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                 } catch (Exception exception) {
                     LOG.trace("Timeout {} with jobId {} will be retried if possible", timerId, jobId, exception);
 
-                    // CRITICAL: Mark the current transaction for rollback FIRST
-                    // This ensures user task JPA changes are rolled back
+                    // Mark the current transaction for rollback
                     markTransactionForRollback();
 
                     JobDetails nextJobDetails = doRetryOrError(jobDetails, exception);
 
-                    // For RETRY and ERROR status, we need to reconcile in a NEW transaction
-                    // because the current transaction is now marked for rollback.
-                    if (nextJobDetails.getStatus() == JobStatus.RETRY || nextJobDetails.getStatus() == JobStatus.ERROR) {
+                    // For RETRY and ERROR status, check if we need to reconcile in a NEW transaction
+                    // Only do this if there's an active transaction that was marked for rollback
+                    if ((nextJobDetails.getStatus() == JobStatus.RETRY || nextJobDetails.getStatus() == JobStatus.ERROR)
+                            && transactionRollbackMarker != null && transactionRollbackMarker.isTransactionActive()) {
                         scheduleReconciliationInNewTransaction(timerId, nextJobDetails);
                     } else {
-                        // For other statuses, reconcile normally
+                        // For other statuses or when no transaction is active, reconcile normally
                         reconcileScheduling(timerId, jobContext, nextJobDetails);
                     }
 
                     jobSchedulerListeners.forEach(l -> l.onFailure(jobDetails));
+
                     return new JobTimeoutExecution(nextJobDetails, exception);
                 }
 
@@ -457,13 +469,10 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         String jobId = jobDetails.getId();
 
         // Schedule the reconciliation to run asynchronously in a new transaction
-        // Use vertx executeBlocking to run in a worker thread with a new transaction context
         vertx.executeBlocking(promise -> {
             try {
-                // Create a new job context for the new transaction
                 JobContext newJobContext = jobContextFactory.newContext();
 
-                // Create a callable that will be wrapped by transaction interceptors
                 Callable<Void> reconciliationTask = () -> {
                     reconcileScheduling(timerId, newJobContext, jobDetails);
                     return null;
@@ -474,7 +483,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                 for (JobTimeoutInterceptor interceptor : interceptors) {
                     final Callable<Void> currentTask = wrappedTask;
                     wrappedTask = () -> {
-                        // Wrap in a callable that returns Void instead of JobTimeoutExecution
                         interceptor.chainIntercept(() -> {
                             currentTask.call();
                             return new JobTimeoutExecution(jobDetails);
@@ -483,7 +491,6 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                     };
                 }
 
-                // Execute the wrapped task
                 wrappedTask.call();
 
                 promise.complete();
@@ -713,45 +720,13 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
     }
 
     /**
-     * Marks the current transaction for rollback using reflection to support both Quarkus and Spring Boot.
-     * This ensures that any changes made in the current transaction (like user task JPA operations)
-     * are rolled back, while allowing retry logic to execute in a new transaction.
+     * Marks the current transaction for rollback using the injected TransactionRollbackMarker.
      */
     private void markTransactionForRollback() {
-        try {
-            // Try Quarkus/Narayana first (com.arjuna.ats.jta.TransactionManager)
-            Class<?> tmClass = Class.forName("com.arjuna.ats.jta.TransactionManager");
-            java.lang.reflect.Method getTransactionManagerMethod = tmClass.getMethod("transactionManager");
-            Object tm = getTransactionManagerMethod.invoke(null);
-
-            if (tm != null) {
-                java.lang.reflect.Method getTransactionMethod = tm.getClass().getMethod("getTransaction");
-                Object transaction = getTransactionMethod.invoke(tm);
-
-                if (transaction != null) {
-                    java.lang.reflect.Method setRollbackOnlyMethod = tm.getClass().getMethod("setRollbackOnly");
-                    setRollbackOnlyMethod.invoke(tm);
-                    LOG.debug("Marked transaction for rollback due to exception in job execution (Quarkus/Narayana)");
-                    return;
-                }
-            }
-        } catch (ClassNotFoundException e) {
-            // Narayana not available, try Spring Boot
-            LOG.trace("Narayana TransactionManager not found, trying Spring Boot");
-        } catch (Exception e) {
-            LOG.warn("Failed to mark transaction for rollback using Narayana", e);
-        }
-
-        try {
-            // Try Spring Boot (org.springframework.transaction.support.TransactionSynchronizationManager)
-            Class<?> tsmClass = Class.forName("org.springframework.transaction.support.TransactionSynchronizationManager");
-            java.lang.reflect.Method setRollbackOnlyMethod = tsmClass.getMethod("setRollbackOnly");
-            setRollbackOnlyMethod.invoke(null);
-            LOG.debug("Marked transaction for rollback due to exception in job execution (Spring Boot)");
-        } catch (ClassNotFoundException e) {
-            LOG.trace("Spring TransactionSynchronizationManager not found");
-        } catch (Exception e) {
-            LOG.warn("Failed to mark transaction for rollback using Spring Boot", e);
+        if (transactionRollbackMarker != null) {
+            transactionRollbackMarker.markForRollback();
+        } else {
+            LOG.warn("No TransactionRollbackMarker configured. Transaction rollback marking is not supported.");
         }
     }
 
