@@ -26,7 +26,7 @@ package org.kie.kogito.app.jobs.spi;
 public interface TransactionRollbackMarker {
 
     /**
-     * Marks the current transaction for rollback. 
+     * Marks the current transaction for rollback.
      * If no transaction is active, this method should do nothing.
      */
     void markForRollback();
@@ -38,4 +38,3 @@ public interface TransactionRollbackMarker {
      */
     boolean isTransactionActive();
 }
-

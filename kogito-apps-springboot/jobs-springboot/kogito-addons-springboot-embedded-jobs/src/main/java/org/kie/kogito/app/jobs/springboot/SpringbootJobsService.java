@@ -114,8 +114,8 @@ public class SpringbootJobsService implements JobsService {
                 .withMaxNumberOfRetries(maxNumberOfRetries)
                 .withRefreshJobsInterval(maxRefreshJobsIntervalWindow * 60 * 1000L)
                 .withTimeoutInterceptor(
-                        new TransactionJobTimeoutInterceptor(transactionManager),
-                        new ErrorHandlingJobTimeoutInterceptor(ofNullable(exceptionHandlers).stream().toList()))
+                        new ErrorHandlingJobTimeoutInterceptor(ofNullable(exceptionHandlers).stream().toList()),
+                        new TransactionJobTimeoutInterceptor(transactionManager))
                 .withExceptionDetailsExtractor(exceptionDetailsExtractor)
                 .withTransactionRollbackMarker(transactionRollbackMarker)
                 .withNumberOfWorkerThreads(numberOfWorkerThreads)

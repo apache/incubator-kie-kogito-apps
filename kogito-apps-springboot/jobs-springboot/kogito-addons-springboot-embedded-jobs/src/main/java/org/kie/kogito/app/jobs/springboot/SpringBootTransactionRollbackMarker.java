@@ -22,7 +22,7 @@ import org.kie.kogito.app.jobs.spi.TransactionRollbackMarker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 @Component
@@ -30,17 +30,27 @@ public class SpringBootTransactionRollbackMarker implements TransactionRollbackM
 
     private static final Logger LOG = LoggerFactory.getLogger(SpringBootTransactionRollbackMarker.class);
 
+    // Thread-local to store the current TransactionStatus for TransactionTemplate usage
+    private static final ThreadLocal<TransactionStatus> CURRENT_TRANSACTION_STATUS = new ThreadLocal<>();
+
+    public static void setCurrentTransactionStatus(TransactionStatus status) {
+        CURRENT_TRANSACTION_STATUS.set(status);
+    }
+
+    public static void clearCurrentTransactionStatus() {
+        CURRENT_TRANSACTION_STATUS.remove();
+    }
+
     @Override
     public void markForRollback() {
-        try {
-            if (isTransactionActive()) {
-                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
-                LOG.debug("Marked transaction for rollback due to exception in job execution (Spring Boot)");
+        if (isTransactionActive()) {
+            TransactionStatus status = CURRENT_TRANSACTION_STATUS.get();
+            if (status != null) {
+                status.setRollbackOnly();
+                LOG.debug("Transaction marked for rollback using TransactionStatus");
             } else {
-                LOG.trace("No active transaction to mark for rollback");
+                LOG.warn("No TransactionStatus available to mark for rollback");
             }
-        } catch (Exception e) {
-            LOG.warn("Failed to mark transaction for rollback", e);
         }
     }
 
