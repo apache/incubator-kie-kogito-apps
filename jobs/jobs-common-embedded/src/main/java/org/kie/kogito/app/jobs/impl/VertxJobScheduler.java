@@ -401,7 +401,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
     private void timeout(Long timerId, String jobId) {
         LOG.debug("Executing timeout with timer Id {} and jobId {}", timerId, jobId);
-        workerExecutor.executeBlocking(newTimeoutTask(timerId, jobId));
+        workerExecutor.executeBlocking(newTimeoutTask(timerId, jobId), false);
     }
 
     private Callable<JobTimeoutExecution> newTimeoutTask(Long timerId, String jobId) {
