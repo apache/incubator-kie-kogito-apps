@@ -396,7 +396,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         JobDetails jobDetails = jobStore.find(jobContext, jobId);
         JobDetails cancelledJobDetails = doCancel(jobDetails);
         jobSchedulerListeners.forEach(l -> l.onCancel(cancelledJobDetails));
-        reconcileScheduling(null, jobContext, cancelledJobDetails);
+        reconcileScheduling(null, jobContext, cancelledJobDetails, false);
     }
 
     private void timeout(Long timerId, String jobId) {
@@ -427,7 +427,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                     JobDetails executeJobDetails = doExecute(runningJobDetails);
                     LOG.trace("Timeout {} with jobId {} will be rescheduled if required", timerId, jobId);
                     JobDetails nextJobDetails = computeAndScheduleNextJobIfAny(executeJobDetails);
-                    reconcileScheduling(timerId, jobContext, nextJobDetails);
+                    reconcileScheduling(timerId, jobContext, nextJobDetails, false);
                     jobSchedulerListeners.forEach(l -> l.onExecution(jobDetails));
                     return new JobTimeoutExecution(nextJobDetails);
                 } catch (Exception exception) {
@@ -445,7 +445,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                         scheduleReconciliationInNewTransaction(timerId, nextJobDetails);
                     } else {
                         // For other statuses or when no transaction is active, reconcile normally
-                        reconcileScheduling(timerId, jobContext, nextJobDetails);
+                        reconcileScheduling(timerId, jobContext, nextJobDetails, false);
                     }
 
                     jobSchedulerListeners.forEach(l -> l.onFailure(jobDetails));
@@ -469,12 +469,13 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         String jobId = jobDetails.getId();
 
         // Schedule the reconciliation to run asynchronously in a new transaction
+        // This must be async to avoid deadlock with the current transaction
         vertx.executeBlocking(promise -> {
             try {
                 JobContext newJobContext = jobContextFactory.newContext();
 
                 Callable<Void> reconciliationTask = () -> {
-                    reconcileScheduling(timerId, newJobContext, jobDetails);
+                    reconcileScheduling(timerId, newJobContext, jobDetails, true);
                     return null;
                 };
 
@@ -505,7 +506,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         });
     }
 
-    private void reconcileScheduling(Long timerId, JobContext jobContext, JobDetails nextJobDetails) {
+    private void reconcileScheduling(Long timerId, JobContext jobContext, JobDetails nextJobDetails, boolean afterRollback) {
         String jobId = nextJobDetails.getId();
         switch (nextJobDetails.getStatus()) {
             case EXECUTED:
@@ -518,12 +519,36 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             case RETRY:
                 LOG.trace("Timeout {} with jobId {} will be updated and scheduled", timerId, jobId);
                 addOrUpdateTxTimer(nextJobDetails);
-                jobStore.update(jobContext, nextJobDetails);
+                // Use persist instead of update to handle case where transaction was rolled back
+                // and job record no longer exists in database
+                JobDetails existing = jobStore.find(jobContext, jobId);
+                if (existing != null) {
+                    jobStore.update(jobContext, nextJobDetails);
+                } else {
+                    jobStore.persist(jobContext, nextJobDetails);
+                }
+                // Fire events only if we're reconciling after a rollback
+                // (events from original transaction were lost)
+                if (afterRollback) {
+                    fireEvents(nextJobDetails);
+                }
                 break;
             case ERROR:
                 LOG.trace("Timeout {} with jobId {} will be set to error", timerId, jobId);
                 removeTxTimer(nextJobDetails);
-                jobStore.update(jobContext, nextJobDetails);
+                // Use persist instead of update to handle case where transaction was rolled back
+                // and job record no longer exists in database
+                JobDetails existingError = jobStore.find(jobContext, jobId);
+                if (existingError != null) {
+                    jobStore.update(jobContext, nextJobDetails);
+                } else {
+                    jobStore.persist(jobContext, nextJobDetails);
+                }
+                // Fire events only if we're reconciling after a rollback
+                // (events from original transaction were lost)
+                if (afterRollback) {
+                    fireEvents(nextJobDetails);
+                }
                 break;
             default:
                 LOG.trace("Timeout {} with jobId {} is RUNNING and should not happen", timerId, jobId);
