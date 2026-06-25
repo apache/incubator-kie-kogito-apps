@@ -396,7 +396,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         JobDetails jobDetails = jobStore.find(jobContext, jobId);
         JobDetails cancelledJobDetails = doCancel(jobDetails);
         jobSchedulerListeners.forEach(l -> l.onCancel(cancelledJobDetails));
-        reconcileScheduling(null, jobContext, cancelledJobDetails, false);
+        reconcileScheduling(null, jobContext, cancelledJobDetails);
     }
 
     private void timeout(Long timerId, String jobId) {
@@ -427,7 +427,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                     JobDetails executeJobDetails = doExecute(runningJobDetails);
                     LOG.trace("Timeout {} with jobId {} will be rescheduled if required", timerId, jobId);
                     JobDetails nextJobDetails = computeAndScheduleNextJobIfAny(executeJobDetails);
-                    reconcileScheduling(timerId, jobContext, nextJobDetails, false);
+                    reconcileScheduling(timerId, jobContext, nextJobDetails);
                     jobSchedulerListeners.forEach(l -> l.onExecution(jobDetails));
                     return new JobTimeoutExecution(nextJobDetails);
                 } catch (Exception exception) {
@@ -438,11 +438,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
                     JobDetails nextJobDetails = doRetryOrError(jobDetails, exception);
 
-                    if (shouldReconcileInNewTransaction(nextJobDetails)) {
-                        scheduleReconciliationInNewTransaction(timerId, nextJobDetails);
-                    } else {
-                        reconcileScheduling(timerId, jobContext, nextJobDetails, false);
-                    }
+                    reconcileScheduling(timerId, jobContext, nextJobDetails);
 
                     jobSchedulerListeners.forEach(l -> l.onFailure(jobDetails));
 
@@ -457,60 +453,85 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
         return current;
     }
 
-    private boolean shouldReconcileInNewTransaction(JobDetails jobDetails) {
-        // For RETRY and ERROR status, check if we need to reconcile in a NEW transaction
-        // Only do this if there's an active transaction that was marked for rollback
-        return (jobDetails.getStatus() == JobStatus.RETRY || jobDetails.getStatus() == JobStatus.ERROR)
-                && transactionRollbackMarker != null
-                && transactionRollbackMarker.isTransactionActive();
-    }
-
     /**
-     * Schedules reconciliation to happen in a new transaction after the current one completes.
-     * This is necessary when the current transaction is marked for rollback due to an exception.
+     * Handles retry scheduling for RETRY and ERROR job statuses.
+     * If there's an active transaction that was marked for rollback, schedules the retry
+     * in a new transaction. Otherwise, persists the job immediately.
      */
-    private void scheduleReconciliationInNewTransaction(Long timerId, JobDetails jobDetails) {
+    private void scheduleRetry(JobContext jobContext, JobDetails jobDetails) {
         String jobId = jobDetails.getId();
+        JobStatus status = jobDetails.getStatus();
 
-        // Schedule the reconciliation to run asynchronously in a new transaction
-        // This must be async to avoid deadlock with the current transaction
-        vertx.executeBlocking(promise -> {
-            try {
-                JobContext newJobContext = jobContextFactory.newContext();
+        // Check if we need to execute in a new transaction
+        if (transactionRollbackMarker != null && transactionRollbackMarker.isTransactionActive()) {
+            // Current transaction will be rolled back, so schedule retry in a new transaction
+            LOG.trace("Job {} with status {} will be scheduled in new transaction", jobId, status);
 
-                Callable<Void> reconciliationTask = () -> {
-                    reconcileScheduling(timerId, newJobContext, jobDetails, true);
-                    return null;
-                };
+            vertx.executeBlocking(promise -> {
+                try {
+                    JobContext newJobContext = jobContextFactory.newContext();
 
-                // Apply transaction interceptors to ensure this runs in a new transaction
-                Callable<Void> wrappedTask = reconciliationTask;
-                for (JobTimeoutInterceptor interceptor : interceptors) {
-                    final Callable<Void> currentTask = wrappedTask;
-                    wrappedTask = () -> {
-                        interceptor.chainIntercept(() -> {
-                            currentTask.call();
-                            return new JobTimeoutExecution(jobDetails);
-                        }).call();
+                    Callable<Void> newTransactionTask = () -> {
+                        jobStore.update(newJobContext, jobDetails);
+                        fireEvents(jobDetails); // Fire events after rollback
+                        // Schedule timer in new transaction after persistence
+                        if (status == JobStatus.RETRY) {
+                            addOrUpdateTxTimer(jobDetails);
+                        } else {
+                            removeTxTimer(jobDetails);
+                        }
                         return null;
                     };
+
+                    // Apply transaction interceptors to ensure this runs in a new transaction
+                    Callable<Void> wrappedTask = newTransactionTask;
+                    for (JobTimeoutInterceptor interceptor : interceptors) {
+                        final Callable<Void> currentTask = wrappedTask;
+                        wrappedTask = () -> {
+                            interceptor.chainIntercept(() -> {
+                                currentTask.call();
+                                return new JobTimeoutExecution(jobDetails);
+                            }).call();
+                            return null;
+                        };
+                    }
+
+                    wrappedTask.call();
+                    promise.complete();
+                } catch (Exception e) {
+                    LOG.error("Failed to schedule retry for job {} in new transaction", jobId, e);
+                    promise.fail(e);
                 }
+            }, false, result -> {
+                if (result.failed()) {
+                    LOG.error("Async retry scheduling failed for job {}", jobId, result.cause());
+                }
+            });
+        } else {
+            // No active transaction or transaction not marked for rollback
+            LOG.trace("Job {} with status {} will be scheduled", jobId, status);
 
-                wrappedTask.call();
-
-                promise.complete();
+            try {
+                jobStore.update(jobContext, jobDetails);
+                // Fire events AFTER persistence to ensure Data Index can query the updated job
+                fireEvents(jobDetails);
+                // Schedule timer AFTER persistence (no transaction synchronization needed)
+                if (status == JobStatus.RETRY) {
+                    addTimerInfo(jobDetails);
+                } else {
+                    String mapKey = getMapKey(jobDetails);
+                    TimerInfo timerInfo = jobsScheduled.remove(mapKey);
+                    if (timerInfo != null) {
+                        removeTimerInfo(timerInfo);
+                    }
+                }
             } catch (Exception e) {
-                LOG.error("Failed to reconcile job {} in new transaction", jobId, e);
-                promise.fail(e);
+                LOG.error("Failed to schedule retry for job {}", jobId, e);
             }
-        }, false, result -> {
-            if (result.failed()) {
-                LOG.error("Async reconciliation failed for job {}", jobId, result.cause());
-            }
-        });
+        }
     }
 
-    private void reconcileScheduling(Long timerId, JobContext jobContext, JobDetails nextJobDetails, boolean afterRollback) {
+    private void reconcileScheduling(Long timerId, JobContext jobContext, JobDetails nextJobDetails) {
         String jobId = nextJobDetails.getId();
         switch (nextJobDetails.getStatus()) {
             case EXECUTED:
@@ -520,27 +541,13 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                 jobStore.remove(jobContext, jobId);
                 break;
             case SCHEDULED:
-            case RETRY:
                 LOG.trace("Timeout {} with jobId {} will be updated and scheduled", timerId, jobId);
                 addOrUpdateTxTimer(nextJobDetails);
-                // EntityManager.merge() handles both insert and update automatically
                 jobStore.update(jobContext, nextJobDetails);
-                // Fire events only if we're reconciling after a rollback
-                // (events from original transaction were lost)
-                if (afterRollback) {
-                    fireEvents(nextJobDetails);
-                }
                 break;
+            case RETRY:
             case ERROR:
-                LOG.trace("Timeout {} with jobId {} will be set to error", timerId, jobId);
-                removeTxTimer(nextJobDetails);
-                // EntityManager.merge() handles both insert and update automatically
-                jobStore.update(jobContext, nextJobDetails);
-                // Fire events only if we're reconciling after a rollback
-                // (events from original transaction were lost)
-                if (afterRollback) {
-                    fireEvents(nextJobDetails);
-                }
+                scheduleRetry(jobContext, nextJobDetails);
                 break;
             default:
                 LOG.trace("Timeout {} with jobId {} is RUNNING and should not happen", timerId, jobId);
@@ -640,7 +647,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
     private JobDetails doRetryOrError(JobDetails jobDetails, Exception exception) {
         Integer retryCounter = jobDetails.getRetries();
-        // First, create the next JobDetails (RETRY or ERROR) without firing events
+        // Create the next JobDetails (RETRY or ERROR)
         JobDetails nextJobDetails;
         if (retryCounter < this.maxNumberOfRetries) {
             LOG.trace("doRetryOrError: Job {} will be retried (retry {} of {})", jobDetails.getId(), retryCounter + 1, maxNumberOfRetries);
@@ -649,11 +656,10 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             LOG.trace("doRetryOrError: Job {} exceeded max retries ({}) and will transition to ERROR", jobDetails.getId(), maxNumberOfRetries);
             nextJobDetails = createErrorJobDetails(jobDetails);
         }
-        // Then extract and set exception details BEFORE firing events
+        // Extract and set exception details
         extractAndSetExceptionDetails(nextJobDetails, exception);
         LOG.trace("doRetryOrError: Created {} with exception details: {}", nextJobDetails.getStatus(), nextJobDetails);
-        // Finally fire events with exception details already set
-        fireEvents(nextJobDetails);
+        // Events will be fired in scheduleRetry() after persistence
         return nextJobDetails;
     }
 
