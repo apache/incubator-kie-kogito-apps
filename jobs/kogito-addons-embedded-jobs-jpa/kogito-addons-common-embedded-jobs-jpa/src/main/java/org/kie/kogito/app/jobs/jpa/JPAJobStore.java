@@ -185,7 +185,6 @@ public class JPAJobStore implements JobStore {
         return baseUpdateQuery + " AND " + existsClause;
     }
 
-
     private <T extends Query> void bindDataIsolationKeysWhenFiltering(JPAJobContext context, T query) {
         if (isFilterByLocalProcess(context)) {
             List<DataIsolationKeyDescriptor> keys = context.getProcesses().processes().stream()

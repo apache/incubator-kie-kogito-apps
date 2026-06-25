@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import org.hibernate.query.criteria.*;
@@ -302,8 +301,7 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
             subqueryRootMatch.select(builder.literal(1));
             subqueryRootMatch.where(builder.and(
                     builder.equal(rootCteRoot.get("pid"), rootProcessIdPath),
-                    builder.equal(rootCteRoot.get("pversion"), rootProcessVersionPath)
-            ));
+                    builder.equal(rootCteRoot.get("pversion"), rootProcessVersionPath)));
             isolationOrBranches.add(builder.exists(subqueryRootMatch));
         }
 
@@ -312,14 +310,12 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
         subqueryLocalMatch.select(builder.literal(1));
         subqueryLocalMatch.where(builder.and(
                 builder.equal(localCteRoot.get("pid"), processIdPath),
-                builder.equal(localCteRoot.get("pversion"), processVersionPath)
-        ));
+                builder.equal(localCteRoot.get("pversion"), processVersionPath)));
 
         if (rootProcessIdPath != null) {
             isolationOrBranches.add(builder.and(
                     builder.isNull(rootProcessIdPath),
-                    builder.exists(subqueryLocalMatch)
-            ));
+                    builder.exists(subqueryLocalMatch)));
         } else {
             isolationOrBranches.add(builder.exists(subqueryLocalMatch));
         }
