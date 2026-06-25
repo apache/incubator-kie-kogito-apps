@@ -278,49 +278,60 @@ public class JPAQuery<E extends AbstractEntity, T> implements Query<T> {
 
         JpaCteCriteria<Tuple> cte = buildDataIsolationFilteringCte(builder, query);
 
-        JpaSubQuery<Integer> subquery = query.subquery(Integer.class);
-        JpaRoot<Tuple> cteRoot = subquery.from(cte);
-
-        subquery.select(builder.literal(1));
-
         DataIsolationKeyDescriptor descriptor = DataIsolationKeyDescriptorRegistry.getDescriptor(entityClass);
         Path<String> rootProcessIdPath = descriptor.rootProcessId() != null ? getAttributePath(root, descriptor.rootProcessId()) : null;
         Path<String> rootProcessVersionPath = descriptor.rootProcessVersion() != null ? getAttributePath(root, descriptor.rootProcessVersion()) : null;
         Path<String> processIdPath = getAttributePath(root, descriptor.processId());
         Path<String> processVersionPath = getAttributePath(root, descriptor.processVersion());
 
-        BiFunction<Path<String>, Path<String>, Predicate> idAndVersionPredicate = (idPath, versionPath) -> builder.and(
-                builder.equal(idPath, cteRoot.get("pid")),
-                builder.or(
-                        builder.equal(versionPath, cteRoot.get("pversion")),
-                        builder.and(builder.isNull(versionPath), builder.isNull(cteRoot.get("pversion")))));
+        // Pre-filter based on indexed processId
+        JpaSubQuery<String> scalarSubquery = query.subquery(String.class);
+        JpaRoot<Tuple> scalarCteRoot = scalarSubquery.from(cte);
+        scalarSubquery.select(scalarCteRoot.get("pid"));
 
-        Predicate pairCorrelationPredicate;
+        predicates.add(processIdPath.in(scalarSubquery));
+
+        // Exact tuple checks wrapped inside their own isolated OR block
+        List<Predicate> isolationOrBranches = new ArrayList<>();
+
+        isolationOrBranches.add(builder.isNull(processVersionPath));
+
         if (rootProcessIdPath != null) {
-            pairCorrelationPredicate = builder.or(
-                    // Branch 1: Root ID and Version match
-                    idAndVersionPredicate.apply(rootProcessIdPath, rootProcessVersionPath),
-                    // Branch 2: Root ID is null, fallback to Process ID and Version match
-                    builder.and(
-                            builder.isNull(rootProcessIdPath),
-                            idAndVersionPredicate.apply(processIdPath, processVersionPath)));
-        } else {
-            // Branch 3: No Root ID configured, match Process ID and Version directly
-            pairCorrelationPredicate = idAndVersionPredicate.apply(processIdPath, processVersionPath);
+            JpaSubQuery<Integer> subqueryRootMatch = query.subquery(Integer.class);
+            JpaRoot<Tuple> rootCteRoot = subqueryRootMatch.from(cte);
+            subqueryRootMatch.select(builder.literal(1));
+            subqueryRootMatch.where(builder.and(
+                    builder.equal(rootCteRoot.get("pid"), rootProcessIdPath),
+                    builder.equal(rootCteRoot.get("pversion"), rootProcessVersionPath)
+            ));
+            isolationOrBranches.add(builder.exists(subqueryRootMatch));
         }
 
-        // Final Predicate: Accept the paired matches OR any rows where process_version is null (meaning legacy DB entries).
-        Predicate correlationPredicate = builder.or(
-                builder.isNull(processVersionPath),
-                pairCorrelationPredicate);
+        JpaSubQuery<Integer> subqueryLocalMatch = query.subquery(Integer.class);
+        JpaRoot<Tuple> localCteRoot = subqueryLocalMatch.from(cte);
+        subqueryLocalMatch.select(builder.literal(1));
+        subqueryLocalMatch.where(builder.and(
+                builder.equal(localCteRoot.get("pid"), processIdPath),
+                builder.equal(localCteRoot.get("pversion"), processVersionPath)
+        ));
 
-        subquery.where(correlationPredicate);
-        predicates.add(builder.exists(subquery));
+        if (rootProcessIdPath != null) {
+            isolationOrBranches.add(builder.and(
+                    builder.isNull(rootProcessIdPath),
+                    builder.exists(subqueryLocalMatch)
+            ));
+        } else {
+            isolationOrBranches.add(builder.exists(subqueryLocalMatch));
+        }
+
+        // Merge the isolated validation nodes back into a grouped tuple check statement
+        predicates.add(builder.or(isolationOrBranches.toArray(new Predicate[0])));
     }
 
     private JpaCteCriteria<Tuple> buildDataIsolationFilteringCte(
             HibernateCriteriaBuilder builder,
             JpaCriteriaQuery<?> mainQuery) {
+
         List<JpaCriteriaQuery<Tuple>> rows = processes.get().processes().stream().map(p -> {
             JpaCriteriaQuery<Tuple> row = builder.createTupleQuery();
             row.select(builder.tuple(

@@ -29,6 +29,7 @@ import org.kie.kogito.index.jpa.storage.*;
 import org.kie.kogito.index.storage.DataIndexStorageService;
 import org.kie.kogito.process.Processes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,10 +37,12 @@ import jakarta.persistence.EntityManager;
 
 @Configuration
 public class DataIndexStorageProducer {
+    @Value("${kogito.persistence.data-isolation.enabled:false}")
+    private Boolean dataIsolationEnabled;
 
     @Bean
     public JobEntityStorage jobEntityStorage(EntityManager entityManager, @Autowired(required = false) List<Processes> processes) {
-        return new JobEntityStorage(entityManager, processes != null ? processes : Collections.emptyList());
+        return new JobEntityStorage(entityManager, dataIsolationEnabled ? processes : null);
     }
 
     @Bean
@@ -49,7 +52,7 @@ public class DataIndexStorageProducer {
         return new ProcessDefinitionEntityStorage(entityManager,
                 jsonPredicateBuilders != null ? jsonPredicateBuilders : Collections.emptyList(),
                 ProcessDefinitionEntityMapper.INSTANCE,
-                processes != null ? processes : Collections.emptyList());
+                dataIsolationEnabled ? processes : null);
     }
 
     @Bean
@@ -59,12 +62,12 @@ public class DataIndexStorageProducer {
         return new ProcessInstanceEntityStorage(entityManager,
                 jsonPredicateBuilders != null ? jsonPredicateBuilders : Collections.emptyList(),
                 ProcessInstanceEntityMapper.INSTANCE,
-                processes != null ? processes : Collections.emptyList());
+                dataIsolationEnabled ? processes : null);
     }
 
     @Bean
     public UserTaskInstanceEntityStorage userTaskInstanceEntityStorage(EntityManager entityManager, @Autowired(required = false) List<Processes> processes) {
-        return new UserTaskInstanceEntityStorage(entityManager, processes != null ? processes : Collections.emptyList());
+        return new UserTaskInstanceEntityStorage(entityManager, dataIsolationEnabled ? processes : null);
     }
 
     @Bean

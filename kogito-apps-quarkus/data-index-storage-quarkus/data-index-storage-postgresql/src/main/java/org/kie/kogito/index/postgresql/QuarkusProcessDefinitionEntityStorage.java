@@ -27,12 +27,15 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
+import java.util.Collections;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 @ApplicationScoped
 public class QuarkusProcessDefinitionEntityStorage extends ProcessDefinitionEntityStorage {
 
     @Inject
-    public QuarkusProcessDefinitionEntityStorage(EntityManager em, Instance<JsonPredicateBuilder> predicateBuilder, Instance<Processes> processesInstance) {
-        super(em, predicateBuilder, processesInstance);
+    public QuarkusProcessDefinitionEntityStorage(EntityManager em, Instance<JsonPredicateBuilder> predicateBuilder, Instance<Processes> processesInstance, @ConfigProperty(name = "kogito.persistence.data-isolation.enabled", defaultValue = "false") Boolean dataIsolationEnabled) {
+        super(em, predicateBuilder, dataIsolationEnabled ? processesInstance : Collections.emptyList());
     }
 
 }

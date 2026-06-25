@@ -22,6 +22,7 @@ import org.kie.kogito.app.jobs.spi.JobContext;
 import org.kie.kogito.app.jobs.spi.JobContextFactory;
 import org.kie.kogito.process.Processes;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import jakarta.persistence.EntityManager;
@@ -35,9 +36,12 @@ public class SpringbootJPAJobContextFactory implements JobContextFactory {
     @Autowired(required = false)
     protected Processes processes;
 
+    @Value("${kogito.persistence.data-isolation.enabled:false}")
+    private Boolean dataIsolationEnabled;
+
     @Override
     public JobContext newContext() {
-        return new SpringbootJPAJobContext(processes, entityManager);
+        return new SpringbootJPAJobContext(dataIsolationEnabled ? processes : null, entityManager);
     }
 
 }

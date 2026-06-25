@@ -147,10 +147,15 @@ public class JPAJobStore implements JobStore {
                 .collect(Collectors.joining(" UNION ALL "));
 
         String cte = "WITH allowed_processes AS (" + unionSelects + ") ";
-        String existsClause = "EXISTS (SELECT 1 FROM allowed_processes ap WHERE " +
-                "o.processVersion IS NULL " +
-                "OR (ap.processId = o.rootProcessId AND (ap.processVersion IS NULL AND o.rootProcessVersion IS NULL OR ap.processVersion = o.rootProcessVersion) " +
-                "OR (o.rootProcessId IS NULL AND ap.processId = o.processId AND (ap.processVersion IS NULL AND o.processVersion IS NULL OR ap.processVersion = o.processVersion))))";
+
+        String existsClause = "o.processId IN (SELECT ap.processId FROM allowed_processes ap)" +
+                " AND (" +
+                "o.processVersion IS NULL" +
+                " OR " +
+                "EXISTS (SELECT 1 FROM allowed_processes ap1 WHERE ap1.processId = o.rootProcessId AND ap1.processVersion = o.rootProcessVersion)" +
+                " OR " +
+                "(o.rootProcessId IS NULL AND EXISTS (SELECT 1 FROM allowed_processes ap2 WHERE ap2.processId = o.processId AND ap2.processVersion = o.processVersion))" +
+                ")";
 
         return cte + baseQueryWithWhereClause + " AND " + existsClause;
     }
@@ -168,13 +173,18 @@ public class JPAJobStore implements JobStore {
                 .mapToObj(i -> "SELECT CAST(:processId" + i + " AS STRING) AS processId, CAST(:processVersion" + i + " AS STRING) AS processVersion")
                 .collect(Collectors.joining(" UNION ALL "));
 
-        String existsClause = "EXISTS (SELECT 1 FROM (" + unionSelects + ") ap WHERE " +
-                "o.processVersion IS NULL " +
-                "OR (ap.processId = o.rootProcessId AND (ap.processVersion IS NULL AND o.rootProcessVersion IS NULL OR ap.processVersion = o.rootProcessVersion) " +
-                "OR (o.rootProcessId IS NULL AND ap.processId = o.processId AND (ap.processVersion IS NULL AND o.processVersion IS NULL OR ap.processVersion = o.processVersion))))";
+        String existsClause = "o.processId IN (SELECT ap.processId FROM (" + unionSelects + ") ap)" +
+                " AND (" +
+                "o.processVersion IS NULL" +
+                " OR " +
+                "EXISTS (SELECT 1 FROM (" + unionSelects + ") ap1 WHERE ap1.processId = o.rootProcessId AND ap1.processVersion = o.rootProcessVersion)" +
+                " OR " +
+                "(o.rootProcessId IS NULL AND EXISTS (SELECT 1 FROM (" + unionSelects + ") ap2 WHERE ap2.processId = o.processId AND ap2.processVersion = o.processVersion))" +
+                ")";
 
         return baseUpdateQuery + " AND " + existsClause;
     }
+
 
     private <T extends Query> void bindDataIsolationKeysWhenFiltering(JPAJobContext context, T query) {
         if (isFilterByLocalProcess(context)) {

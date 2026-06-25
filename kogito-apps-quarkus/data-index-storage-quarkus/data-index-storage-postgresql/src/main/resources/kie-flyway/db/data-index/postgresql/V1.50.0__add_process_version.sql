@@ -17,10 +17,15 @@
  * under the License.
  */
 
+ALTER TABLE processes ADD root_process_version VARCHAR(255);
 ALTER TABLE jobs ADD process_version VARCHAR(255);
 ALTER TABLE jobs ADD root_process_version VARCHAR(255);
-ALTER TABLE processes ADD process_version VARCHAR(255);
-ALTER TABLE processes ADD root_process_version VARCHAR(255);
 ALTER TABLE tasks ADD process_version VARCHAR(255);
 ALTER TABLE tasks ADD root_process_version VARCHAR(255);
 
+CREATE INDEX IF NOT EXISTS idx_di_processes_process_version ON processes (process_id, version);
+CREATE INDEX IF NOT EXISTS idx_di_processes_root_process_version ON processes (root_process_id, root_process_version);
+CREATE INDEX IF NOT EXISTS idx_di_jobs_process_version ON jobs (process_id, process_version);
+CREATE INDEX IF NOT EXISTS idx_di_jobs_root_process_version ON jobs (root_process_id, root_process_version);
+CREATE INDEX IF NOT EXISTS idx_di_tasks_process_version ON tasks (process_id, process_version);
+CREATE INDEX IF NOT EXISTS idx_di_tasks_root_process_version ON tasks (root_process_id, root_process_version);

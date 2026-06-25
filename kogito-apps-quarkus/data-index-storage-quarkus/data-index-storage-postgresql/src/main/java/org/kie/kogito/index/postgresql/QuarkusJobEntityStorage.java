@@ -26,10 +26,13 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 
+import java.util.Collections;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+
 @ApplicationScoped
 public class QuarkusJobEntityStorage extends JobEntityStorage {
     @Inject
-    public QuarkusJobEntityStorage(EntityManager em, Instance<Processes> processesInstance) {
-        super(em, processesInstance);
+    public QuarkusJobEntityStorage(EntityManager em, Instance<Processes> processesInstance, @ConfigProperty(name = "kogito.persistence.data-isolation.enabled", defaultValue = "false") Boolean dataIsolationEnabled) {
+        super(em, dataIsolationEnabled ? processesInstance : Collections.emptyList());
     }
 }
