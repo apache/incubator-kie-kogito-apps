@@ -42,7 +42,7 @@ public class DataIndexStorageProducer {
 
     @Bean
     public JobEntityStorage jobEntityStorage(EntityManager entityManager, @Autowired(required = false) List<Processes> processes) {
-        return new JobEntityStorage(entityManager, dataIsolationEnabled ? processes : null);
+        return new JobEntityStorage(entityManager, dataIsolationEnabled ? processes : Collections.emptyList());
     }
 
     @Bean
@@ -52,7 +52,7 @@ public class DataIndexStorageProducer {
         return new ProcessDefinitionEntityStorage(entityManager,
                 jsonPredicateBuilders != null ? jsonPredicateBuilders : Collections.emptyList(),
                 ProcessDefinitionEntityMapper.INSTANCE,
-                dataIsolationEnabled ? processes : null);
+                dataIsolationEnabled ? processes : Collections.emptyList());
     }
 
     @Bean
@@ -62,12 +62,12 @@ public class DataIndexStorageProducer {
         return new ProcessInstanceEntityStorage(entityManager,
                 jsonPredicateBuilders != null ? jsonPredicateBuilders : Collections.emptyList(),
                 ProcessInstanceEntityMapper.INSTANCE,
-                dataIsolationEnabled ? processes : null);
+                dataIsolationEnabled ? processes : Collections.emptyList());
     }
 
     @Bean
     public UserTaskInstanceEntityStorage userTaskInstanceEntityStorage(EntityManager entityManager, @Autowired(required = false) List<Processes> processes) {
-        return new UserTaskInstanceEntityStorage(entityManager, dataIsolationEnabled ? processes : null);
+        return new UserTaskInstanceEntityStorage(entityManager, dataIsolationEnabled ? processes : Collections.emptyList());
     }
 
     @Bean

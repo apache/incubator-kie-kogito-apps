@@ -22,6 +22,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.util.Collection;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -132,6 +133,11 @@ public class QuarkusJPAJobStoreDataIsolationExecutionTest {
         @Override
         public Set<Class<?>> getEnabledAlternatives() {
             return Set.of(MockProcesses.class);
+        }
+
+        @Override
+        public Map<String, String> getConfigOverrides() {
+            return Map.of("kogito.persistence.data-isolation.enabled", "true");
         }
     }
 

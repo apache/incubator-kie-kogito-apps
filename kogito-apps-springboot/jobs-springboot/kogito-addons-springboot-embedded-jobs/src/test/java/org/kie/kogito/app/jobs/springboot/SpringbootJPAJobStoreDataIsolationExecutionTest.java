@@ -59,7 +59,7 @@ import static org.mockito.Mockito.when;
  *
  * Uses @MockitoBean to provide a mock Processes bean that only affects this test class.
  */
-@SpringBootTest
+@SpringBootTest(properties = { "kogito.persistence.data-isolation.enabled=true" })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class SpringbootJPAJobStoreDataIsolationExecutionTest {
     private static final Logger LOG = LoggerFactory.getLogger(SpringbootJPAJobStoreDataIsolationExecutionTest.class);

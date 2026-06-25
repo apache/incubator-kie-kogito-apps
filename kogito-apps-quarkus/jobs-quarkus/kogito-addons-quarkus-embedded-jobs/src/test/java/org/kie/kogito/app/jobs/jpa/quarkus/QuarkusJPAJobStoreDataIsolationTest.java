@@ -23,6 +23,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -120,6 +121,11 @@ public class QuarkusJPAJobStoreDataIsolationTest {
         @Override
         public Set<Class<?>> getEnabledAlternatives() {
             return Set.of(MockProcesses.class);
+        }
+
+        @Override
+        public Map<String, String> getConfigOverrides() {
+            return Map.of("kogito.persistence.data-isolation.enabled", "true");
         }
     }
 

@@ -59,7 +59,7 @@ import static org.mockito.Mockito.when;
  * complementing the execution test (SpringbootJPAJobStoreDataIsolationExecutionTest)
  * which tests end-to-end job execution.
  */
-@SpringBootTest
+@SpringBootTest(properties = { "kogito.persistence.data-isolation.enabled=true" })
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 public class SpringbootJPAJobStoreDataIsolationTest {
 
