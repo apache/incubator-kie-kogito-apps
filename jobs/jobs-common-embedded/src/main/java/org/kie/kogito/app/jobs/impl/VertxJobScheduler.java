@@ -434,17 +434,13 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                     LOG.trace("Timeout {} with jobId {} will be retried if possible", timerId, jobId, exception);
 
                     // Mark the current transaction for rollback
-                    markTransactionForRollback();
+                    markTransactionForRollbackWhenEnabled();
 
                     JobDetails nextJobDetails = doRetryOrError(jobDetails, exception);
 
-                    // For RETRY and ERROR status, check if we need to reconcile in a NEW transaction
-                    // Only do this if there's an active transaction that was marked for rollback
-                    if ((nextJobDetails.getStatus() == JobStatus.RETRY || nextJobDetails.getStatus() == JobStatus.ERROR)
-                            && transactionRollbackMarker != null && transactionRollbackMarker.isTransactionActive()) {
+                    if (shouldReconcileInNewTransaction(nextJobDetails)) {
                         scheduleReconciliationInNewTransaction(timerId, nextJobDetails);
                     } else {
-                        // For other statuses or when no transaction is active, reconcile normally
                         reconcileScheduling(timerId, jobContext, nextJobDetails, false);
                     }
 
@@ -459,6 +455,14 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             current = interceptor.chainIntercept(current);
         }
         return current;
+    }
+
+    private boolean shouldReconcileInNewTransaction(JobDetails jobDetails) {
+        // For RETRY and ERROR status, check if we need to reconcile in a NEW transaction
+        // Only do this if there's an active transaction that was marked for rollback
+        return (jobDetails.getStatus() == JobStatus.RETRY || jobDetails.getStatus() == JobStatus.ERROR)
+                && transactionRollbackMarker != null
+                && transactionRollbackMarker.isTransactionActive();
     }
 
     /**
@@ -519,14 +523,8 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             case RETRY:
                 LOG.trace("Timeout {} with jobId {} will be updated and scheduled", timerId, jobId);
                 addOrUpdateTxTimer(nextJobDetails);
-                // Use persist instead of update to handle case where transaction was rolled back
-                // and job record no longer exists in database
-                JobDetails existing = jobStore.find(jobContext, jobId);
-                if (existing != null) {
-                    jobStore.update(jobContext, nextJobDetails);
-                } else {
-                    jobStore.persist(jobContext, nextJobDetails);
-                }
+                // EntityManager.merge() handles both insert and update automatically
+                jobStore.update(jobContext, nextJobDetails);
                 // Fire events only if we're reconciling after a rollback
                 // (events from original transaction were lost)
                 if (afterRollback) {
@@ -536,14 +534,8 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             case ERROR:
                 LOG.trace("Timeout {} with jobId {} will be set to error", timerId, jobId);
                 removeTxTimer(nextJobDetails);
-                // Use persist instead of update to handle case where transaction was rolled back
-                // and job record no longer exists in database
-                JobDetails existingError = jobStore.find(jobContext, jobId);
-                if (existingError != null) {
-                    jobStore.update(jobContext, nextJobDetails);
-                } else {
-                    jobStore.persist(jobContext, nextJobDetails);
-                }
+                // EntityManager.merge() handles both insert and update automatically
+                jobStore.update(jobContext, nextJobDetails);
                 // Fire events only if we're reconciling after a rollback
                 // (events from original transaction were lost)
                 if (afterRollback) {
@@ -747,7 +739,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
     /**
      * Marks the current transaction for rollback using the injected TransactionRollbackMarker.
      */
-    private void markTransactionForRollback() {
+    private void markTransactionForRollbackWhenEnabled() {
         if (transactionRollbackMarker != null) {
             transactionRollbackMarker.markForRollback();
         } else {
