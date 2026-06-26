@@ -437,11 +437,8 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
                     markTransactionForRollbackWhenEnabled();
 
                     JobDetails nextJobDetails = doRetryOrError(jobDetails, exception);
-
                     reconcileScheduling(timerId, jobContext, nextJobDetails);
-
                     jobSchedulerListeners.forEach(l -> l.onFailure(jobDetails));
-
                     return new JobTimeoutExecution(nextJobDetails, exception);
                 }
 
@@ -467,63 +464,38 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             // Current transaction will be rolled back, so schedule retry in a new transaction
             LOG.trace("Job {} with status {} will be scheduled in new transaction", jobId, status);
 
-            vertx.executeBlocking(promise -> {
-                try {
-                    JobContext newJobContext = jobContextFactory.newContext();
+            JobContext newJobContext = jobContextFactory.newContext();
 
-                    Callable<Void> newTransactionTask = () -> {
-                        jobStore.update(newJobContext, jobDetails);
-                        fireEvents(jobDetails); // Fire events after rollback
-                        // Schedule timer in new transaction after persistence
-                        if (status == JobStatus.RETRY) {
-                            addOrUpdateTxTimer(jobDetails);
-                        } else {
-                            removeTxTimer(jobDetails);
-                        }
-                        return null;
-                    };
-
-                    // Apply transaction interceptors to ensure this runs in a new transaction
-                    Callable<Void> wrappedTask = newTransactionTask;
-                    for (JobTimeoutInterceptor interceptor : interceptors) {
-                        final Callable<Void> currentTask = wrappedTask;
-                        wrappedTask = () -> {
-                            interceptor.chainIntercept(() -> {
-                                currentTask.call();
-                                return new JobTimeoutExecution(jobDetails);
-                            }).call();
-                            return null;
-                        };
-                    }
-
-                    wrappedTask.call();
-                    promise.complete();
-                } catch (Exception e) {
-                    LOG.error("Failed to schedule retry for job {} in new transaction", jobId, e);
-                    promise.fail(e);
+            Callable<JobTimeoutExecution> newTransactionTask = () -> {
+                jobStore.update(newJobContext, jobDetails);
+                fireEvents(jobDetails); // Fire events after rollback
+                // Schedule timer in new transaction after persistence
+                if (status == JobStatus.RETRY) {
+                    addOrUpdateTxTimer(jobDetails);
+                } else {
+                    removeTxTimer(jobDetails);
                 }
-            }, false, result -> {
-                if (result.failed()) {
-                    LOG.error("Async retry scheduling failed for job {}", jobId, result.cause());
-                }
-            });
+                return new JobTimeoutExecution(jobDetails);
+            };
+
+            // Apply transaction interceptors to ensure this runs in a new transaction
+            for (JobTimeoutInterceptor interceptor : interceptors) {
+                newTransactionTask = interceptor.chainIntercept(newTransactionTask);
+            }
+
+            vertx.executeBlocking(newTransactionTask, false)
+                    .onFailure(e -> LOG.error("Async retry scheduling failed for job {}", jobId, e));
         } else {
             // No active transaction or transaction not marked for rollback
             LOG.trace("Job {} with status {} will be scheduled", jobId, status);
 
             try {
                 jobStore.update(jobContext, jobDetails);
-                // Fire events AFTER persistence to ensure Data Index can query the updated job
                 fireEvents(jobDetails);
-                // Schedule timer AFTER persistence (no transaction synchronization needed)
                 if (status == JobStatus.RETRY) {
-                    addTimerInfo(jobDetails);
+                    addOrUpdateTxTimer(jobDetails);
                 } else {
-                    String mapKey = getMapKey(jobDetails);
-                    TimerInfo timerInfo = jobsScheduled.remove(mapKey);
-                    if (timerInfo != null) {
-                        removeTimerInfo(timerInfo);
-                    }
+                    removeTxTimer(jobDetails);
                 }
             } catch (Exception e) {
                 LOG.error("Failed to schedule retry for job {}", jobId, e);
