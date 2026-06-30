@@ -466,17 +466,7 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
 
             JobContext newJobContext = jobContextFactory.newContext();
 
-            Callable<JobTimeoutExecution> newTransactionTask = () -> {
-                jobStore.update(newJobContext, jobDetails);
-                fireEvents(jobDetails); // Fire events after rollback
-                // Schedule timer in new transaction after persistence
-                if (status == JobStatus.RETRY) {
-                    addOrUpdateTxTimer(jobDetails);
-                } else {
-                    removeTxTimer(jobDetails);
-                }
-                return new JobTimeoutExecution(jobDetails);
-            };
+            Callable<JobTimeoutExecution> newTransactionTask = () -> persistAndSchedule(newJobContext, jobDetails, status);
 
             // Apply transaction interceptors to ensure this runs in a new transaction
             for (JobTimeoutInterceptor interceptor : interceptors) {
@@ -490,17 +480,23 @@ public class VertxJobScheduler implements JobScheduler, Handler<Long> {
             LOG.trace("Job {} with status {} will be scheduled", jobId, status);
 
             try {
-                jobStore.update(jobContext, jobDetails);
-                fireEvents(jobDetails);
-                if (status == JobStatus.RETRY) {
-                    addOrUpdateTxTimer(jobDetails);
-                } else {
-                    removeTxTimer(jobDetails);
-                }
+                persistAndSchedule(jobContext, jobDetails, status);
             } catch (Exception e) {
                 LOG.error("Failed to schedule retry for job {}", jobId, e);
             }
         }
+    }
+
+    private JobTimeoutExecution persistAndSchedule(JobContext jobContext, JobDetails jobDetails, JobStatus status) throws Exception {
+        jobStore.update(jobContext, jobDetails);
+        fireEvents(jobDetails);
+        // Schedule timer after persistence
+        if (status == JobStatus.RETRY) {
+            addOrUpdateTxTimer(jobDetails);
+        } else {
+            removeTxTimer(jobDetails);
+        }
+        return new JobTimeoutExecution(jobDetails);
     }
 
     private void reconcileScheduling(Long timerId, JobContext jobContext, JobDetails nextJobDetails) {
