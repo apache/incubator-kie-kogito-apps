@@ -17,10 +17,13 @@
  * under the License.
  */
 
+ALTER TABLE job_details ADD COLUMN IF NOT EXISTS process_id VARCHAR(255);
+ALTER TABLE job_details ADD COLUMN IF NOT EXISTS root_process_id VARCHAR(255);
 ALTER TABLE job_details ADD COLUMN IF NOT EXISTS process_version VARCHAR(255);
 ALTER TABLE job_details ADD COLUMN IF NOT EXISTS root_process_version VARCHAR(255);
 
+CREATE INDEX IF NOT EXISTS idx_job_details_process_id ON job_details (process_id);
+CREATE INDEX IF NOT EXISTS idx_job_details_root_process_id ON job_details (root_process_id);
 CREATE INDEX IF NOT EXISTS idx_job_details_process_version ON job_details (process_id, process_version);
 CREATE INDEX IF NOT EXISTS idx_job_details_root_process_version ON job_details (root_process_id, root_process_version);
-
 
