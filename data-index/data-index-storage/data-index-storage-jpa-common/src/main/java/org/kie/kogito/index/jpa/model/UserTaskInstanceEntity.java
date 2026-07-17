@@ -122,11 +122,11 @@ public class UserTaskInstanceEntity extends AbstractEntity {
     private String rootProcessInstanceId;
 
     @Convert(converter = JsonBinaryConverter.class)
-    @Column(name = "inputs")
+    @Column(name = "inputs", columnDefinition = "jsonb")
     private ObjectNode inputs;
 
     @Convert(converter = JsonBinaryConverter.class)
-    @Column(name = "outputs")
+    @Column(name = "outputs", columnDefinition = "jsonb")
     private ObjectNode outputs;
 
     @Column(name = "endpoint")
