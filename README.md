@@ -16,6 +16,15 @@
   specific language governing permissions and limitations
   under the License.
 -->
+
+> [!NOTE]
+> **This repository's source code has moved!**
+>
+> The Kogito codebase has been merged into the [apache/incubator-kie-drools](https://github.com/apache/incubator-kie-drools) repository.
+> Please use it for the latest source code, to file issues, and to submit contributions.
+>
+> This repository is archived.
+
 # Kogito Apps
 
 ## Contributing to Kogito
