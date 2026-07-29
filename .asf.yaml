@@ -15,7 +15,7 @@
 # specific language governing permissions and limitations
 # under the License.
 github:
-  description: Kogito Apps houses source code for addons and supporting services for Kogito Runtimes
+  description: Kogito Apps has moved to https://github.com/apache/incubator-kie-drools. This repository is archived. Kogito Apps houses source code for addons and supporting services for Kogito Runtimes
   homepage: https://kie.apache.org
   labels:
     - apache
