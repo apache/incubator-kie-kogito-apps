@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.kie.kogito.index.api.DateTimeCoercing;
-import org.kie.kogito.index.jpa.mapper.ProcessDefinitionEntityMapper;
 import org.kie.kogito.index.jpa.mapper.ProcessInstanceEntityMapper;
 import org.kie.kogito.index.jpa.storage.*;
 import org.kie.kogito.index.storage.DataIndexStorageService;
@@ -43,16 +42,6 @@ public class DataIndexStorageProducer {
     @Bean
     public JobEntityStorage jobEntityStorage(EntityManager entityManager, @Autowired(required = false) List<Processes> processes) {
         return new JobEntityStorage(entityManager, dataIsolationEnabled ? processes : Collections.emptyList());
-    }
-
-    @Bean
-    public ProcessDefinitionEntityStorage processDefinitionEntityStorage(EntityManager entityManager,
-            @Autowired(required = false) List<JsonPredicateBuilder> jsonPredicateBuilders,
-            @Autowired(required = false) List<Processes> processes) {
-        return new ProcessDefinitionEntityStorage(entityManager,
-                jsonPredicateBuilders != null ? jsonPredicateBuilders : Collections.emptyList(),
-                ProcessDefinitionEntityMapper.INSTANCE,
-                dataIsolationEnabled ? processes : Collections.emptyList());
     }
 
     @Bean
